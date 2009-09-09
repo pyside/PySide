@@ -281,9 +281,14 @@
   <primitive-type name="WId"/>
   <primitive-type name="Qt::HANDLE"/>
   <primitive-type name="QByteRef"/>
-  <primitive-type name="QBitRef"/>
+  <primitive-type name="QBitRef">
+    <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
+      <include file-name="QTextDocument" location="global"/>
+  </primitive-type>
   <primitive-type name="QBool" target-lang-api-name="PyBool">
     <conversion-rule file="qtcore_conversions.h"/>
+    <!-- FIXME This is a workaround to include some headers needed by some includes (nothing to do with QBool) -->
+    <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
   <primitive-type name="std::string"/>
   <primitive-type name="std::wstring"/>
@@ -697,76 +702,177 @@
   <rejection class="QAbstractFileEngineIterator" function-name="entryInfo"/>
   <rejection class="QAbstractFileEngineIterator" enum-name="EntryInfoType"/>
   <rejection class="QDataStream" enum-name="ByteOrder"/>
+  <namespace-type name="Qt">
+    <modify-function signature="codecForHtml(const QByteArray &amp;)" remove="all"/>
+    <modify-function signature="mightBeRichText(const QString &amp;)" remove="all"/>
+    <modify-function signature="escape(const QString&amp;)" remove="all"/>
+    <modify-function signature="convertFromPlainText(const QString &amp;, Qt::WhiteSpaceMode)" remove="all"/>
+    <extra-includes>
+      <include file-name="QTextDocument" location="global"/>
+    </extra-includes>
+  </namespace-type>
+  <enum-type name="QtMsgType"/>
+  <enum-type name="QSystemSemaphore::AccessMode"/>
+  <enum-type name="QSystemSemaphore::SystemSemaphoreError"/>
+  <enum-type name="QTextBoundaryFinder::BoundaryReason" flags="QTextBoundaryFinder::BoundaryReasons"/>
+  <enum-type name="QTextBoundaryFinder::BoundaryType"/>
+  <enum-type name="QAbstractFileEngine::Extension" extensible="yes"/>
+  <enum-type name="QAbstractFileEngine::FileFlag" flags="QAbstractFileEngine::FileFlags"/>
+  <enum-type name="QAbstractFileEngine::FileName"/>
+  <enum-type name="QAbstractFileEngine::FileOwner"/>
+  <enum-type name="QAbstractFileEngine::FileTime"/>
+  <enum-type name="QDataStream::Status"/>
+  <enum-type name="QDate::MonthNameType"/>
+  <enum-type name="QDir::Filter" flags="QDir::Filters"/>
+  <enum-type name="QEvent::Type" extensible="yes" />
+  <enum-type name="QEventLoop::ProcessEventsFlag" flags="QEventLoop::ProcessEventsFlags"/>
+  <enum-type name="QFile::FileError"/>
+  <enum-type name="QFile::MemoryMapFlags"/>
+  <enum-type name="QFile::Permission" flags="QFile::Permissions"/>
+  <enum-type name="QIODevice::OpenModeFlag" flags="QIODevice::OpenMode"/>
+  <enum-type name="QLibraryInfo::LibraryLocation"/>
+  <enum-type name="QLocale::FormatType"/>
+  <enum-type name="QLocale::NumberOption" flags="QLocale::NumberOptions"/>
+  <enum-type name="QLocale::MeasurementSystem"/>
+  <enum-type name="QMutex::RecursionMode"/>
+  <enum-type name="QMetaObject::Call"/>
+  <enum-type name="QProcess::ExitStatus"/>
+  <enum-type name="QProcess::ProcessChannel"/>
+  <enum-type name="QProcess::ProcessChannelMode"/>
+  <enum-type name="QProcess::ProcessError"/>
+  <enum-type name="QProcess::ProcessState"/>
+  <enum-type name="QRegExp::CaretMode"/>
+  <enum-type name="QRegExp::PatternSyntax"/>
+  <enum-type name="QSettings::Format"/>
+  <enum-type name="QSettings::Scope"/>
+  <enum-type name="QSettings::Status"/>
+  <enum-type name="QSocketNotifier::Type"/>
+  <enum-type name="QSystemLocale::QueryType"/>
+  <enum-type name="QTextCodec::ConversionFlag" flags="QTextCodec::ConversionFlags"/>
+  <enum-type name="QTextStream::FieldAlignment"/>
+  <enum-type name="QTextStream::NumberFlag" flags="QTextStream::NumberFlags"/>
+  <enum-type name="QTextStream::RealNumberNotation"/>
+  <enum-type name="QTextStream::Status"/>
+  <enum-type name="QTimeLine::CurveShape"/>
+  <enum-type name="QTimeLine::Direction"/>
+  <enum-type name="QTimeLine::State"/>
+  <enum-type name="QThread::Priority"/>
+  <enum-type name="QUrl::FormattingOption" flags="QUrl::FormattingOptions"/>
+  <enum-type name="QUrl::ParsingMode"/>
+  <enum-type name="QUuid::Variant"/>
+  <enum-type name="QUuid::Version"/>
+  <enum-type name="Qt::SizeHint"/>
+  <enum-type name="Qt::SizeMode"/>
+  <enum-type name="Qt::WindowFrameSection"/>
+  <enum-type name="Qt::Axis"/>
+  <enum-type name="Qt::AnchorAttribute"/>
+  <enum-type name="Qt::ApplicationAttribute"/>
+  <enum-type name="Qt::ArrowType"/>
+  <enum-type name="Qt::AspectRatioMode"/>
+  <enum-type name="Qt::BGMode"/>
+  <enum-type name="Qt::BrushStyle"/>
+  <enum-type name="Qt::CaseSensitivity"/>
+  <enum-type name="Qt::CheckState"/>
+  <enum-type name="Qt::ClipOperation"/>
+  <enum-type name="Qt::ConnectionType"/>
+  <enum-type name="Qt::ContextMenuPolicy"/>
+  <enum-type name="Qt::Corner"/>
+  <enum-type name="Qt::DayOfWeek"/>
+  <enum-type name="Qt::DockWidgetAreaSizes"/>
+  <enum-type name="Qt::DropAction" flags="Qt::DropActions"/>
+  <enum-type name="Qt::FillRule"/>
+  <enum-type name="Qt::FocusPolicy"/>
+  <enum-type name="Qt::FocusReason"/>
+  <enum-type name="Qt::GlobalColor"/>
+  <enum-type name="Qt::HitTestAccuracy"/>
+  <enum-type name="Qt::InputMethodQuery"/>
+  <enum-type name="Qt::ItemFlag" flags="Qt::ItemFlags"/>
+  <enum-type name="Qt::ItemSelectionMode"/>
+  <enum-type name="Qt::KeyboardModifier" flags="Qt::KeyboardModifiers"/>
+  <enum-type name="Qt::LayoutDirection"/>
+  <enum-type name="Qt::MatchFlag" flags="Qt::MatchFlags"/>
+  <enum-type name="Qt::Modifier"/>
+  <enum-type name="Qt::MouseButton" flags="Qt::MouseButtons"/>
+  <enum-type name="Qt::Orientation" flags="Qt::Orientations"/>
+  <enum-type name="Qt::PenCapStyle"/>
+  <enum-type name="Qt::PenJoinStyle"/>
+  <enum-type name="Qt::PenStyle"/>
+  <enum-type name="Qt::ScrollBarPolicy"/>
+  <enum-type name="Qt::ShortcutContext"/>
+  <enum-type name="Qt::SortOrder"/>
+  <enum-type name="Qt::TextElideMode"/>
+  <enum-type name="Qt::TextFlag"/>
+  <enum-type name="Qt::TextFormat"/>
+  <enum-type name="Qt::TextInteractionFlag" flags="Qt::TextInteractionFlags"/>
+  <enum-type name="Qt::TimeSpec"/>
+  <enum-type name="Qt::ToolBarAreaSizes"/>
+  <enum-type name="Qt::ToolButtonStyle"/>
+  <enum-type name="Qt::TransformationMode"/>
+  <enum-type name="Qt::UIEffect"/>
+  <enum-type name="Qt::WhiteSpaceMode" />
+  <enum-type name="Qt::WindowModality"/>
+  <enum-type name="Qt::WindowState" flags="Qt::WindowStates"/>
+  <enum-type name="Qt::WindowType" flags="Qt::WindowFlags"/>
+  <enum-type name="QDirIterator::IteratorFlag" flags="QDirIterator::IteratorFlags"/>
+  <enum-type name="Qt::EventPriority"/>
+  <enum-type name="Qt::MaskMode"/>
+  <enum-type name="QChar::Category" />
+  <enum-type name="QCryptographicHash::Algorithm"/>
+  <enum-type name="QReadWriteLock::RecursionMode"/>
+  <enum-type name="QtConcurrent::ReduceOption" flags="QtConcurrent::ReduceOptions"/>
+  <enum-type name="QtConcurrent::ThreadFunctionResult"/>
+  <enum-type name="QCoreApplication::Encoding" />
+  <enum-type name="Qt::AlignmentFlag" flags="Qt::Alignment" />
+  <enum-type name="Qt::CursorShape" />
+  <enum-type name="Qt::DateFormat" />
+  <enum-type name="Qt::ItemDataRole" force-integer="yes" />
+  <enum-type name="QDataStream::Version" />
+  <enum-type name="QDir::SortFlag" flags="QDir::SortFlags" />
+  <enum-type name="Qt::DockWidgetArea" flags="Qt::DockWidgetAreas" />
+  <enum-type name="Qt::ImageConversionFlag" flags="Qt::ImageConversionFlags" />
+  <enum-type name="Qt::Key" />
+  <enum-type name="QLocale::Language" />
+  <enum-type name="QLocale::Country" />
+  <enum-type name="Qt::ToolBarArea" flags="Qt::ToolBarAreas" />
+  <enum-type name="Qt::WidgetAttribute" />
 
-
-  <value-type name="QPoint">
-    <modify-function signature="rx()" remove="all"/>
-    <modify-function signature="ry()" remove="all"/>
-  </value-type>
-  <value-type name="QPointF">
-    <modify-function signature="rx()" remove="all"/>
-    <modify-function signature="ry()" remove="all"/>
-  </value-type>
-  <value-type name="QRect">
-    <modify-function signature="getCoords(int*,int*,int*,int*)const">
-      <remove/>
-    </modify-function>
-    <modify-function signature="getRect(int*,int*,int*,int*)const">
-      <remove/>
-    </modify-function>
-  </value-type>
-  <value-type name="QRectF">
-    <modify-function signature="getCoords(qreal*,qreal*,qreal*,qreal*)const">
-      <remove/>
-    </modify-function>
-    <modify-function signature="getRect(qreal*,qreal*,qreal*,qreal*)const">
-      <remove/>
-    </modify-function>
-  </value-type>
-  <value-type name="QSize">
-    <modify-function signature="rheight()" remove="all"/>
-    <modify-function signature="rwidth()" remove="all"/>
-  </value-type>
-  <value-type name="QSizeF">
-    <modify-function signature="rheight()" remove="all" />
-    <modify-function signature="rwidth()" remove="all" />
-  </value-type>
-
-  <value-type name="QChar" hash-function="qHash">
-    <modify-function signature="combiningClass(uint)" remove="all"/>
-    <modify-function signature="combiningClass(ushort)" remove="all"/>
-    <modify-function signature="decomposition(uint)" remove="all"/>
-    <modify-function signature="digitValue(uint)" remove="all"/>
-    <modify-function signature="digitValue(ushort)" remove="all"/>
-    <modify-function signature="mirroredChar(uint)" remove="all"/>
-    <modify-function signature="mirroredChar(ushort)" remove="all"/>
-    <modify-function signature="toCaseFolded(uint)" remove="all"/>
-    <modify-function signature="toCaseFolded(ushort)" remove="all"/>
-    <modify-function signature="toUpper(uint)" remove="all"/>
-    <modify-function signature="toUpper(ushort)" remove="all"/>
-    <modify-function signature="toLower(uint)" remove="all"/>
-    <modify-function signature="toLower(ushort)" remove="all"/>
-    <modify-function signature="toTitleCase(uint)" remove="all"/>
-    <modify-function signature="toTitleCase(ushort)" remove="all"/>
-    <modify-function signature="unicode()" remove="all"/>
-    <modify-function signature="category(uint)" remove="all"/>
-    <modify-function signature="category(ushort)" remove="all"/>
-    <modify-function signature="decompositionTag(uint)" remove="all"/>
-    <modify-function signature="direction(uint)" remove="all"/>
-    <modify-function signature="direction(ushort)" remove="all"/>
-    <modify-function signature="joining(uint)" remove="all"/>
-    <modify-function signature="joining(ushort)" remove="all"/>
-    <modify-function signature="unicodeVersion(uint)" remove="all"/>
-    <modify-function signature="unicodeVersion(ushort)" remove="all"/>
-  </value-type>
-  <value-type name="QRegExp">
+  <object-type name="QAbstractTableModel">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
+      <include file-name="QSize" location="global"/>
     </extra-includes>
+  </object-type>
+  <value-type name="QLine"/>
+  <value-type name="QLineF">
+    <!-- FIXME: Modify the return value to return a tuple -->
+    <modify-function signature="intersect(QLineF,QPointF*)const" remove="all" />
   </value-type>
+  <value-type name="QResource">
+    <modify-function signature="registerResource(const uchar*, const QString&amp;)" remove="all"/>
+    <modify-function signature="unregisterResource(const uchar*, const QString&amp;)" remove="all"/>
+    <modify-function signature="data()const" remove="all"/>
+    <!-- TODO: find a way for this mimic the PyQt4 behaviour, remove it for now.
+    <modify-function signature="unregisterResource(const uchar*, const QString&amp;)" rename="unregisterResourceData">
+      <modify-argument index="1">
+        <replace-type modified-type="const char*"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="registerResource(const uchar*, const QString&amp;)" rename="registerResourceData"/>
+      <modify-argument index="1">
+        <replace-type modified-type="const char*"/>
+      </modify-argument>
+    </modify-function>
+    -->
+    <modify-function signature="data() const">
+      <modify-argument index="return">
+        <replace-type modified-type="const char*"/>
+      </modify-argument>
+    </modify-function>
+  </value-type>
+
   <value-type name="QString" hash-function="qHash">
     <extra-includes>
-      <include file-name="qtextcodec.h" location="global"/>
+      <include file-name="QTextCodec" location="global"/>
     </extra-includes>
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[2]" />
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[3]" />
@@ -801,8 +907,6 @@
     <modify-function signature="fromUcs4(const uint*,int)" remove="all" />
     <modify-function signature="toUcs4()const" remove="all" />
 
-
-
     <!-- Remove conflict signatures in python -->
     <modify-function signature="arg(int, int, int, const QChar&amp;) const" remove="all"/>
     <modify-function signature="arg(qlonglong, int, int, const QChar&amp;) const" remove="all"/>
@@ -812,6 +916,963 @@
     <modify-function signature="arg(ulong, int, int, const QChar&amp;) const" remove="all"/>
     <modify-function signature="arg(ushort, int, int, const QChar&amp;) const" remove="all"/>
   </value-type>
+  <value-type name="QLatin1String">
+    <modify-function signature="operator!=(const char*)const" remove="all"/>
+    <modify-function signature="operator==(const char*)const" remove="all"/>
+    <modify-function signature="operator&lt;=(const char*)const" remove="all"/>
+    <modify-function signature="operator&lt;(const char*)const" remove="all"/>
+    <modify-function signature="operator&gt;=(const char*)const" remove="all"/>
+    <modify-function signature="operator&gt;(const char*)const" remove="all"/>
+  </value-type>
+  <value-type name="QStringRef">
+    <modify-function signature="QStringRef(const QString*)" remove="all" />
+    <modify-function signature="QStringRef(const QString*,int,int)" remove="all" />
+    <modify-function signature="appendTo(QString*)const" remove="all" />
+    <modify-function signature="operator=(const QString*)" remove="all" />
+  </value-type>
+  <value-type name="QChar" hash-function="qHash">
+    <modify-function signature="combiningClass(uint)" remove="all"/>
+    <modify-function signature="combiningClass(ushort)" remove="all"/>
+    <modify-function signature="decomposition(uint)" remove="all"/>
+    <modify-function signature="digitValue(uint)" remove="all"/>
+    <modify-function signature="digitValue(ushort)" remove="all"/>
+    <modify-function signature="mirroredChar(uint)" remove="all"/>
+    <modify-function signature="mirroredChar(ushort)" remove="all"/>
+    <modify-function signature="toCaseFolded(uint)" remove="all"/>
+    <modify-function signature="toCaseFolded(ushort)" remove="all"/>
+    <modify-function signature="toUpper(uint)" remove="all"/>
+    <modify-function signature="toUpper(ushort)" remove="all"/>
+    <modify-function signature="toLower(uint)" remove="all"/>
+    <modify-function signature="toLower(ushort)" remove="all"/>
+    <modify-function signature="toTitleCase(uint)" remove="all"/>
+    <modify-function signature="toTitleCase(ushort)" remove="all"/>
+    <modify-function signature="unicode()" remove="all"/>
+    <modify-function signature="category(uint)" remove="all"/>
+    <modify-function signature="category(ushort)" remove="all"/>
+    <modify-function signature="decompositionTag(uint)" remove="all"/>
+    <modify-function signature="direction(uint)" remove="all"/>
+    <modify-function signature="direction(ushort)" remove="all"/>
+    <modify-function signature="joining(uint)" remove="all"/>
+    <modify-function signature="joining(ushort)" remove="all"/>
+    <modify-function signature="unicodeVersion(uint)" remove="all"/>
+    <modify-function signature="unicodeVersion(ushort)" remove="all"/>
+  </value-type>
+  <value-type name="QLatin1Char" />
+  <value-type name="QBasicTimer"/>
+  <value-type name="QByteArrayMatcher"/>
+  <value-type name="QDate">
+    <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
+  </value-type>
+  <value-type name="QDateTime"/>
+  <value-type name="QDir"/>
+
+  <value-type name="QPoint">
+    <modify-function signature="rx()" remove="all"/>
+    <modify-function signature="ry()" remove="all"/>
+  </value-type>
+  <value-type name="QPointF">
+    <modify-function signature="rx()" remove="all"/>
+    <modify-function signature="ry()" remove="all"/>
+  </value-type>
+  <value-type name="QRect">
+    <modify-function signature="getCoords(int*,int*,int*,int*)const">
+      <remove/>
+    </modify-function>
+    <modify-function signature="getRect(int*,int*,int*,int*)const">
+      <remove/>
+    </modify-function>
+  </value-type>
+  <value-type name="QRectF">
+    <modify-function signature="getCoords(qreal*,qreal*,qreal*,qreal*)const">
+      <remove/>
+    </modify-function>
+    <modify-function signature="getRect(qreal*,qreal*,qreal*,qreal*)const">
+      <remove/>
+    </modify-function>
+  </value-type>
+  <value-type name="QSize">
+    <modify-function signature="rheight()" remove="all"/>
+    <modify-function signature="rwidth()" remove="all"/>
+  </value-type>
+  <value-type name="QSizeF">
+    <modify-function signature="rheight()" remove="all" />
+    <modify-function signature="rwidth()" remove="all" />
+  </value-type>
+
+  <value-type name="QStringMatcher"/>
+  <value-type name="QTime"/>
+  <value-type name="QPersistentModelIndex">
+    <modify-function signature="internalPointer()const" remove="all"/>
+  </value-type>
+  <value-type name="QUuid">
+    <modify-function signature="QUuid(const char*)" remove="all" />
+  </value-type>
+
+  <value-type name="QLocale">
+    <modify-function signature="toString(qulonglong) const" remove="all"/>
+    <modify-function signature="toString(ushort) const" remove="all"/>
+    <modify-function signature="toString(unsigned int) const" remove="all"/>
+    <modify-function signature="toUInt(QString,bool*,int)const" remove="all"/>
+    <modify-function signature="toULongLong(QString,bool*,int)const" remove="all"/>
+    <extra-includes>
+      <include file-name="QDate" location="global"/>
+    </extra-includes>
+    <modify-function signature="toDouble(QString,bool*)const" remove="all" />
+    <modify-function signature="toFloat(QString,bool*)const" remove="all" />
+    <modify-function signature="toInt(QString,bool*,int)const" remove="all" />
+    <modify-function signature="toLongLong(QString,bool*,int)const" remove="all" />
+    <modify-function signature="toShort(QString,bool*,int)const" remove="all" />
+    <modify-function signature="toUShort(QString,bool*,int)const" remove="all" />
+  </value-type>
+  <value-type name="QBitArray" hash-function="qHash">
+    <modify-function signature="operator&amp;=(QBitArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="operator=(QBitArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="operator^=(QBitArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="operator|=(QBitArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+  </value-type>
+  <!-- QReadWriteLock does not have a copy ctor! -->
+  <object-type name="QReadWriteLock">
+    <modify-function signature="lockForRead()" allow-thread="yes"/>
+    <modify-function signature="tryLockForRead(int)" allow-thread="yes"/>
+    <modify-function signature="lockForWrite()" allow-thread="yes"/>
+    <modify-function signature="tryLockForWrite(int)" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QReadLocker">
+    <modify-function signature="relock()" allow-thread="yes" />
+  </object-type>
+  <object-type name="QWriteLocker">
+    <modify-function signature="relock()" allow-thread="yes" />
+  </object-type>
+  <object-type name="QDirIterator"/>
+  <object-type name="QThread">
+    <modify-function signature="run()" thread="yes" />
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
+    <modify-function signature="msleep(unsigned long)" allow-thread="yes" />
+    <modify-function signature="sleep(unsigned long)" allow-thread="yes" />
+    <modify-function signature="usleep(unsigned long)" allow-thread="yes" />
+    <modify-function signature="wait(unsigned long)" allow-thread="yes" />
+    <modify-function signature="start(QThread::Priority)" allow-thread="yes" />
+    <modify-function signature="exit(int)" allow-thread="yes" />
+  </object-type>
+  <object-type name="QAbstractFileEngineIterator"/>
+  <object-type name="QAbstractItemModel">
+    <modify-function signature="createIndex(int, int, int) const" remove="all"/>
+    <modify-function signature="createIndex(int, int, unsigned int) const" remove="all"/>
+    <modify-function signature="createIndex(int, int, void*) const" remove="all"/>
+
+    <!-- These signals are private, because only QAbstractItemModel can emit then -->
+    <modify-function signature="rowsAboutToBeInserted(const QModelIndex&amp;,int,int)" remove="all" />
+    <modify-function signature="rowsInserted(const QModelIndex &amp;, int,int)" remove="all" />
+    <modify-function signature="rowsAboutToBeRemoved(const QModelIndex &amp;, int, int)" remove="all" />
+    <modify-function signature="rowsRemoved(const QModelIndex&amp;,int,int)" remove="all" />
+    <modify-function signature="columnsAboutToBeInserted(const QModelIndex&amp;,int,int)" remove="all" />
+    <modify-function signature="columnsInserted(const QModelIndex&amp;,int,int)" remove="all" />
+    <modify-function signature="columnsAboutToBeRemoved(const QModelIndex&amp;,int,int)" remove="all" />
+    <modify-function signature="columnsRemoved(const QModelIndex&amp;,int,int)" remove="all" />
+    <modify-function signature="modelAboutToBeReset()" remove="all" />
+    <modify-function signature="modelReset()" remove="all" />
+
+  </object-type>
+  <!-- QObject is created manually -->
+  <object-type name="QObject">
+    <extra-includes>
+      <include file-name="QThread" location="global"/>
+      <include file-name="signal_manager.hpp" location="local"/>
+      <include file-name="trigger.hpp" location="local"/>
+      <include file-name="pyqt_signal_slot.hpp" location="local"/>
+      <include file-name="QCoreApplication" location="global"/>
+    </extra-includes>
+    <modify-function signature="deleteLater()">
+      <modify-argument index="this">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <!-- Invalidate-after-use stuff -->
+    <modify-function signature="childEvent(QChildEvent*)">
+        <modify-argument index="1" invalidate-after-use="yes"/>
+    </modify-function>
+    <modify-function signature="customEvent(QEvent*)">
+        <modify-argument index="1" invalidate-after-use="yes"/>
+    </modify-function>
+    <modify-function signature="event(QEvent*)">
+        <modify-argument index="1" invalidate-after-use="yes"/>
+    </modify-function>
+    <modify-function signature="eventFilter(QObject*,QEvent*)">
+        <modify-argument index="2" invalidate-after-use="yes"/>
+    </modify-function>
+    <modify-function signature="timerEvent(QTimerEvent*)">
+        <modify-argument index="1" invalidate-after-use="yes"/>
+    </modify-function>
+    <!-- End of Invalidate-after-use fix -->
+    <modify-function signature="parent() const">
+       <modify-argument index="return">
+         <define-ownership owner="target"/>
+       </modify-argument>
+      <modify-argument index="this">
+        <parent index="return" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="setParent(QObject*)">
+      <modify-argument index="this">
+        <parent index="1" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="thread() const" remove="all"/>
+    <modify-function signature="connect(const QObject*, const char*, const char *, Qt::ConnectionType) const" remove="all"/>
+    <modify-function signature="connect(const QObject*, const char*, const QObject*, const char *, Qt::ConnectionType)" remove="all"/>
+    <modify-function signature="connectNotify(const char*)">
+      <modify-argument index="1">
+        <replace-type modified-type="const QByteArray&amp;"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="disconnectNotify(const char*)">
+      <modify-argument index="1">
+        <replace-type modified-type="const QByteArray&amp;"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="disconnect(const QObject*, const char*)" remove="all"/>
+    <modify-function signature="disconnect(const char*, const QObject*, const char*)" remove="all"/>
+    <modify-function signature="disconnect(const QObject*, const char*, const QObject*, const char *)" remove="all"/>
+    <modify-function signature="inherits(const char*) const" remove="all"/>
+    <!-- findChildren and findChild causes warnings using generator. They were kept
+         here to avoid generation even removing QT_NO_MEMBER_TEMPLATES and QT_NO_REGEXP
+         from #define section-->
+    <modify-function signature="findChildren(const QRegExp &amp;) const" remove="all"/>
+    <modify-function signature="findChildren(const QString &amp;) const" remove="all"/>
+    <modify-function signature="findChild(const QString &amp;) const" remove="all"/>
+   <modify-function signature="sender() const">
+      <modify-argument index="return">
+         <define-ownership owner="target"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+  <value-type name="QVariant">
+    <modify-function signature="QVariant(const char*)" remove="all"/>
+    <modify-function signature="QVariant(int, const void*)" remove="all"/>
+    <modify-function signature="QVariant(uint)" remove="all"/>
+    <!-- handled by inject code -->
+    <modify-function signature="QVariant(int)" remove="all"/>
+    <!-- handled by inject code -->
+    <modify-function signature="QVariant(double)" remove="all"/>
+    <modify-function signature="QVariant(qulonglong)" remove="all"/>
+    <modify-function signature="QVariant(qlonglong)" remove="all"/>
+    <modify-function signature="operator==(const QVariant&amp;)const" remove="all"/>
+    <modify-function signature="operator!=(const QVariant&amp;)const" remove="all"/>
+    <modify-function signature="QVariant(bool)" remove="all" />
+    <!-- QByteArray ctor MUST be declared before QString ctor -->
+    <modify-function signature="QVariant(const QByteArray&amp;)" remove="all"/>
+    <!-- Support QVariant as PyQt4.5 does -->
+    <modify-function signature="QVariant(QDataStream&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QBitArray&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QString&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QLatin1String&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QStringList&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QChar&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QDate&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QTime&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QDateTime&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QSize&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QSizeF&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QPoint&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QPointF&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QRect&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QRectF&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QUrl&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QLocale&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QRegExp&amp;)" remove="all"/>
+    <modify-function signature="toDouble(bool*)const" remove="all" />
+    <modify-function signature="toInt(bool*)const" remove="all" />
+    <modify-function signature="toLongLong(bool*)const" remove="all" />
+    <modify-function signature="toUInt(bool*)const" remove="all" />
+    <modify-function signature="toULongLong(bool*)const" remove="all" />
+  </value-type>
+  <value-type name="QStringList">
+    <modify-function signature="operator&lt;&lt;(const QString&amp;)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(const QStringList&amp;)" remove="all"/>
+  </value-type>
+  <object-type name="QAbstractListModel">
+    <extra-includes>
+      <include file-name="QStringList" location="global"/>
+      <include file-name="QSize" location="global"/>
+    </extra-includes>
+  </object-type>
+  <value-type name="QUrl">
+    <extra-includes>
+      <include file-name="QStringList" location="global"/>
+    </extra-includes>
+  </value-type>
+  <value-type name="QRegExp">
+    <extra-includes>
+      <include file-name="QStringList" location="global"/>
+    </extra-includes>
+  </value-type>
+  <value-type name="QFileInfo">
+    <extra-includes>
+      <include file-name="QDateTime" location="global"/>
+      <include file-name="QDir" location="global"/>
+    </extra-includes>
+    <modify-function signature="operator==(const QFileInfo&amp;)const" remove="all"/>
+    <modify-function signature="operator!=(const QFileInfo&amp;)const" remove="all"/>
+  </value-type>
+  <value-type name="QByteArray" hash-function="qHash">
+    <extra-includes>
+      <include file-name="QNoImplicitBoolCast" location="global"/>
+    </extra-includes>
+    <!-- removed functions -->
+    <modify-function signature="begin()" remove="all"/>
+    <modify-function signature="begin()const" remove="all"/>
+    <modify-function signature="constBegin()const" remove="all"/>
+    <modify-function signature="constData()const" remove="all"/>
+    <modify-function signature="constEnd()const" remove="all"/>
+    <modify-function signature="end()" remove="all"/>
+    <modify-function signature="end()const" remove="all"/>
+    <modify-function signature="number(uint,int)" remove="all"/>
+    <modify-function signature="number(qulonglong,int)" remove="all"/>
+    <modify-function signature="operator const char *()const" remove="all"/>
+    <modify-function signature="operator const void *()const" remove="all"/>
+    <modify-function signature="operator+=(const char*)" remove="all"/>
+    <modify-function signature="operator=(const char*)" remove="all"/>
+    <modify-function signature="operator[](int)" remove="all"/>
+    <modify-function signature="operator[](int)const" remove="all"/>
+    <modify-function signature="operator[](uint)" remove="all"/>
+    <modify-function signature="operator[](uint)const" remove="all"/>
+    <modify-function signature="push_back(char)" remove="all"/>
+    <modify-function signature="push_back(const QByteArray&amp;)" remove="all"/>
+    <modify-function signature="push_back(const char*)" remove="all"/>
+    <modify-function signature="push_front(char)" remove="all"/>
+    <modify-function signature="push_front(const QByteArray&amp;)" remove="all"/>
+    <modify-function signature="push_front(const char*)" remove="all"/>
+    <modify-function signature="setNum(uint,int)" remove="all"/>
+    <modify-function signature="setNum(qlonglong,int)" remove="all"/>
+    <modify-function signature="setNum(ushort,int)" remove="all"/>
+    <modify-function signature="toLong(bool*, int) const" remove="all"/>
+    <modify-function signature="toLongLong(bool*, int) const" remove="all"/>
+    <modify-function signature="toShort(bool*, int) const" remove="all"/>
+    <modify-function signature="toUInt(bool*, int) const" remove="all"/>
+    <modify-function signature="toULong(bool*, int) const" remove="all"/>
+    <modify-function signature="toULongLong(bool*, int) const" remove="all"/>
+    <modify-function signature="QByteArray(const char*,int)" remove="all"/>
+    <modify-function signature="append(const char *)" remove="all"/>
+    <modify-function signature="append(QByteArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="append(QString)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="append(const char *)" remove="all">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="append(char)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="appendByte"/>
+    </modify-function>
+    <modify-function signature="count(const char *)const" remove="all"/>
+    <modify-function signature="data()" remove="all"/>
+    <modify-function signature="endsWith(const char *)const" remove="all"/>
+    <modify-function signature="fill(char,int)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="indexOf(const char*,int)const" remove="all"/>
+    <modify-function signature="indexOf(char,int)const">
+      <rename to="indexOfByte"/>
+    </modify-function>
+    <modify-function signature="insert(int,QByteArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="insert(int,QString)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="insert(int,const char *)" remove="all"/>
+    <modify-function signature="insert(int,char)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="insertByte"/>
+    </modify-function>
+    <modify-function signature="lastIndexOf(const char*,int)const" remove="all"/>
+    <modify-function signature="lastIndexOf(char,int)const">
+      <rename to="lastIndexOfByte"/>
+    </modify-function>
+    <modify-function signature="prepend(QByteArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="prepend(const char *)" remove="all"/>
+    <modify-function signature="prepend(char)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="prependByte"/>
+    </modify-function>
+    <modify-function signature="remove(int,int)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="replace(int,int,QByteArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="replace(int,int,const char *)" remove="all"/>
+    <modify-function signature="replace(QByteArray,QByteArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="replace(const char*,QByteArray)" remove="all"/>
+    <modify-function signature="replace(QByteArray,const char *)" remove="all"/>
+    <modify-function signature="replace(QString,QByteArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="replace(QString,const char *)" remove="all"/>
+    <modify-function signature="replace(const char *,const char *)" remove="all"/>
+    <modify-function signature="replace(char,QByteArray)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="replace(char,QString)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="replace(char,const char *)" remove="all"/>
+    <modify-function signature="replace(char,char)">
+      <modify-argument index="0" replace-value="this"/>
+    </modify-function>
+    <modify-function signature="startsWith(const char *)const" remove="all"/>
+    <modify-function signature="fromRawData(const char*,int)" remove="all"/>
+    <modify-function signature="number(int,int)">
+      <rename to="fromInt"/>
+    </modify-function>
+    <modify-function signature="number(uint,int)">
+      <rename to="fromUInt"/>
+    </modify-function>
+    <modify-function signature="number(qlonglong,int)">
+      <rename to="fromLongLong"/>
+    </modify-function>
+    <modify-function signature="number(qulonglong,int)">
+      <rename to="fromULongLong"/>
+    </modify-function>
+    <modify-function signature="setNum(int,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setInt"/>
+    </modify-function>
+    <modify-function signature="setNum(uint,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setUInt"/>
+    </modify-function>
+    <modify-function signature="setNum(short,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setShort"/>
+    </modify-function>
+    <modify-function signature="setNum(ushort,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setUShort"/>
+    </modify-function>
+    <modify-function signature="setNum(qlonglong,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setLongLong"/>
+    </modify-function>
+    <modify-function signature="setNum(qulonglong,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setULongLong"/>
+    </modify-function>
+    <modify-function signature="setNum(double,char,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setDouble"/>
+    </modify-function>
+    <modify-function signature="setNum(float,char,int)">
+      <modify-argument index="0" replace-value="this"/>
+      <rename to="setFloat"/>
+    </modify-function>
+    <modify-function signature="toDouble(bool*)const" remove="all" />
+    <modify-function signature="toFloat(bool*)const" remove="all" />
+    <modify-function signature="toInt(bool*,int)const" remove="all" />
+    <modify-function signature="toUShort(bool*,int)const" remove="all" />
+  </value-type>
+  <value-type name="QTextBoundaryFinder">
+    <modify-function signature="QTextBoundaryFinder(QTextBoundaryFinder::BoundaryType,const QChar*,int,unsigned char*,int)" remove="all"/>
+  </value-type>
+  <object-type name="QXmlStreamEntityResolver"/>
+  <object-type name="QAbstractEventDispatcher">
+    <extra-includes>
+      <include file-name="QPair" location="global"/>
+    </extra-includes>
+    <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag>)" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QEventLoop">
+      <modify-function signature="exec(QFlags&lt;QEventLoop::ProcessEventsFlag>)" rename="exec_" allow-thread="yes" />
+      <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag>)" allow-thread="yes" />
+      <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag>, int)" allow-thread="yes" />
+  </object-type>
+  <object-type name="QFile">
+    <extra-includes>
+      <include file-name="QAbstractFileEngine" location="global"/>
+    </extra-includes>
+    <modify-function signature="unmap(uchar*)" remove="all"/>
+    <!-- Can't provide same API and performance -->
+    <modify-function signature="open(int,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+    <modify-function signature="decodeName(const char*)" remove="all"/>
+    <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)" remove="all"/>
+    <modify-function signature="unmap(uchar*)" remove="all"/>
+
+    <modify-function signature="remove()" allow-thread="yes"/>
+    <modify-function signature="remove(const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="rename(const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="rename(const QString&amp;, const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="link(const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="link(const QString&amp;, const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="copy(const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="copy(const QString&amp;, const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="flush()" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QIODevice">
+    <modify-function signature="open(QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes"/>
+    <modify-function signature="close()" allow-thread="yes"/>
+    <modify-function signature="seek(qint64)" allow-thread="yes"/>
+    <modify-function signature="readAll()" allow-thread="yes"/>
+    <modify-function signature="peek(qint64)" allow-thread="yes"/>
+    <modify-function signature="write(const QByteArray&amp;)" allow-thread="yes"/>
+    <modify-function signature="waitForReadyRead(int)" allow-thread="yes"/>
+    <modify-function signature="waitForBytesWritten(int)" allow-thread="yes"/>
+    <modify-function signature="peek(char *,qint64)" remove="all"/>
+    <modify-function signature="read(char *,qint64)" remove="all"/>
+<!--     Needed by QNetworkReply class on QtNetwork module -->
+<!--     <modify-function signature="readData(char *,qint64)" remove="all"/> -->
+    <modify-function signature="readLine(char *,qint64)" remove="all"/>
+    <modify-function signature="write(const char *,qint64)" remove="all"/>
+    <modify-function signature="getChar(char *)" remove="all" />
+  </object-type>
+  <object-type name="QCryptographicHash">
+    <modify-function signature="addData(const char*,int)" remove="all"/>
+  </object-type>
+  <object-type name="QLibraryInfo"/>
+  <value-type name="QMutexLocker" copyable="no">
+    <modify-function signature="QMutexLocker(QMutex*)" allow-thread="yes" />
+    <modify-function signature="relock()" allow-thread="yes"/>
+    <modify-function signature="mutex() const">
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+  </value-type>
+
+  <object-type name="QMutex">
+    <modify-function signature="lock()" allow-thread="yes"/>
+    <modify-function signature="tryLock(int)" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QSemaphore">
+    <modify-function signature="acquire(int)" allow-thread="yes"/>
+    <modify-function signature="tryAcquire(int, int)" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QSocketNotifier"/>
+  <object-type name="QSystemLocale"/>
+  <object-type name="QTemporaryFile">
+    <extra-includes>
+      <include file-name="QAbstractFileEngine" location="global"/>
+    </extra-includes>
+    <modify-function signature="createLocalFile(const QString&amp;)" allow-thread="yes"/>
+    <modify-function signature="createLocalFile(QFile&amp;)" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QMimeData">
+    <extra-includes>
+      <include file-name="QStringList" location="global"/>
+      <include file-name="QUrl" location="global"/>
+    </extra-includes>
+  </object-type>
+  <object-type name="QTextCodec">
+    <modify-function signature="makeDecoder()const">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForCStrings()">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForHtml(const QByteArray&amp;)">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForHtml(const QByteArray&amp;, QTextCodec*)">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForLocale()">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForMib(int)">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForName(const QByteArray&amp;)">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForName(const char*)">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="codecForTr()">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="setCodecForTr(QTextCodec*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="setCodecForCStrings(QTextCodec*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="setCodecForLocale(QTextCodec*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+  <object-type name="QTextDecoder">
+    <modify-function signature="toUnicode(const char*,int)">
+      <remove/>
+    </modify-function>
+    <modify-function signature="toUnicode(QString*,const char*,int)" remove="all"/>
+  </object-type>
+  <object-type name="QTextEncoder">
+    <modify-function signature="fromUnicode(const QChar*,int)">
+      <remove/>
+    </modify-function>
+  </object-type>
+  <object-type name="QTimeLine"/>
+  <object-type name="QTranslator">
+    <modify-function signature="translate(const char*,const char*,const char*,int)const">
+      <remove/>
+    </modify-function>
+  </object-type>
+  <object-type name="QWaitCondition">
+    <modify-function signature="wait(QMutex*, unsigned long)" allow-thread="yes"/>
+    <modify-function signature="wait(QReadWriteLock*, unsigned long)" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QFileSystemWatcher">
+    <extra-includes>
+      <include file-name="QStringList" location="global"/>
+    </extra-includes>
+  </object-type>
+  <value-type name="QTextCodec::ConverterState">
+    <include file-name="QTextCodec" location="global"/>
+    <modify-function signature="ConverterState(QFlags&lt;QTextCodec::ConversionFlag&gt;)">
+      <modify-argument index="1">
+        <replace-default-expression with="QTextCodec::DefaultConversion"/>
+      </modify-argument>
+    </modify-function>
+  </value-type>
+  <object-type name="QBuffer">
+    <!-- ### modify to return value by pointer?
+    <modify-function signature="buffer()const" remove="all"/>
+    <modify-function signature="data()const" remove="all"/>
+    -->
+    <modify-function signature="setData(const char*,int)" remove="all"/>
+  </object-type>
+  <object-type name="QTimer">
+    <extra-includes>
+      <include file-name="signal_manager.hpp" location="local"/>
+      <include file-name="pyqt_signal_slot.hpp" location="local"/>
+    </extra-includes>
+  </object-type>
+  <object-type name="QAbstractFileEngineHandler">
+    <modify-function signature="create(const QString &amp;) const">
+      <modify-argument index="return">
+        <define-ownership owner="c++" class="shell"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+  <!-- <object-type name="QAbstractFileEngine::MapExtensionOption" /> -->
+  <!-- <object-type name="QAbstractFileEngine::MapExtensionReturn" /> -->
+  <!-- <object-type name="QAbstractFileEngine::UnMapExtensionOption" /> -->
+  <object-type name="QAbstractFileEngine">
+    <extra-includes>
+      <include file-name="QDateTime" location="global"/>
+    </extra-includes>
+    <modify-function signature="unmap(uchar*)" remove="all"/>
+    <modify-function signature="open(QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
+    <modify-function signature="close()" allow-thread="yes" />
+    <modify-function signature="flush()" allow-thread="yes" />
+    <modify-function signature="seek(qint64)" allow-thread="yes" />
+    <modify-function signature="remove()" allow-thread="yes" />
+    <modify-function signature="copy(const QString&amp;)" allow-thread="yes" />
+    <modify-function signature="rename(const QString&amp;)" allow-thread="yes" />
+    <modify-function signature="link(const QString&amp;)" allow-thread="yes" />
+    <modify-function signature="mkdir(const QString&amp;, bool)const" allow-thread="yes" />
+    <modify-function signature="rmdir(const QString&amp;, bool)const" allow-thread="yes" />
+    <modify-function signature="write(const char*, qint64)" allow-thread="yes" />
+    <modify-function signature="read(char*, qint64)" allow-thread="yes" remove="all" />
+    <modify-function signature="readLine(char*, qint64)" allow-thread="yes" remove="all" />
+  </object-type>
+  <object-type name="QProcess">
+    <modify-function signature="readChannelMode()const" remove="all"/>
+    <modify-function signature="waitForStarted(int)" allow-thread="yes"/>
+    <modify-function signature="waitForBytesWritten(int)" allow-thread="yes"/>
+    <modify-function signature="waitForFinished(int)" allow-thread="yes"/>
+    <modify-function signature="readAllStandardOutput()" allow-thread="yes"/>
+    <modify-function signature="readAllStandardError()" allow-thread="yes"/>
+    <modify-function signature="execute(QString, QStringList)" allow-thread="yes"/>
+    <modify-function signature="execute(QString)" allow-thread="yes"/>
+    <!--### Obsolete in 4.3-->
+    <modify-function signature="setReadChannelMode(QProcess::ProcessChannelMode)" remove="all"/>
+    <!--### Obsolete in 4.3-->
+  </object-type>
+  <object-type name="QSignalMapper">
+    <modify-function signature="mapped(const QString &amp;)">
+      <rename to="mappedString"/>
+    </modify-function>
+    <modify-function signature="mapped(int)">
+      <rename to="mappedInteger"/>
+    </modify-function>
+    <modify-function signature="mapped(QObject *)">
+      <rename to="mappedQObject"/>
+    </modify-function>
+    <!-- ### overloads -->
+    <modify-function signature="mapping(int)const">
+      <rename to="mappingById"/>
+    </modify-function>
+    <modify-function signature="mapping(QString)const">
+      <rename to="mappingByString"/>
+    </modify-function>
+    <modify-function signature="mapping(QObject*)const">
+      <rename to="mappingByObject"/>
+    </modify-function>
+    <modify-function signature="setMapping(QObject*,int)">
+      <rename to="setMappingById"/>
+    </modify-function>
+    <modify-function signature="setMapping(QObject*,QString)">
+      <rename to="setMappingByString"/>
+    </modify-function>
+    <modify-function signature="setMapping(QObject*,QObject*)">
+      <rename to="setMappingByObject"/>
+    </modify-function>
+  </object-type>
+  <object-type name="QCoreApplication">
+    <extra-includes>
+      <include file-name="qapplication_policy.hpp" location="local"/>
+      <include file-name="QStringList" location="global"/>
+      <include file-name="QTranslator" location="global"/>
+    </extra-includes>
+    <!-- constructor documentation -->
+    <inject-documentation format="target" mode="append">
+.. class:: QCoreApplication(args)
+
+    Constructs a Qt kernel application. Kernel applications are applications
+    without a graphical user interface. These type of applications are used
+    at the console or as server processes.
+
+    The *args* argument is processed by the application, and made available
+    in a more convenient form by the :meth:`~QCoreApplication.arguments()`
+    method.
+    </inject-documentation>
+    <!-- blocking functions -->
+    <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag&gt;, int)" allow-thread="yes"/>
+    <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag&gt;)" allow-thread="yes"/>
+    <modify-function signature="flush()" allow-thread="yes"/>
+    <modify-function signature="sendEvent(QObject*, QEvent*)" allow-thread="yes"/>
+    <modify-function signature="sendPostedEvents(QObject*, int)" allow-thread="yes"/>
+    <modify-function signature="sendPostedEvents()" allow-thread="yes"/>
+
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
+    <modify-function signature="argv()" remove="all"/>
+    <!-- Obsolete -->
+    <modify-function signature="argc()" remove="all"/>
+    <!-- Obsolete -->
+    <modify-function signature="notify(QObject*,QEvent*)" allow-thread="yes">
+      <modify-argument index="2" invalidate-after-use="yes"/>
+    </modify-function>
+    <modify-function signature="QCoreApplication(int &amp;, char  **)" remove="all"/>
+    <modify-function signature="installTranslator(QTranslator *)" remove="all"/>
+    <modify-function signature="removeTranslator(QTranslator *)" remove="all"/>
+    <modify-function signature="postEvent(QObject*,QEvent*)">
+      <modify-argument index="2">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="postEvent(QObject*,QEvent*, int)">
+      <modify-argument index="2">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="arguments()" remove="all"/>
+  </object-type>
+  <object-type name="QSettings">
+    <extra-includes>
+      <include file-name="QStringList" location="global"/>
+    </extra-includes>
+    <modify-function signature="setSystemIniPath(const QString&amp;)" remove="all"/>
+    <!--### Obsolete in 4.3-->
+    <modify-function signature="setUserIniPath(const QString&amp;)" remove="all"/>
+    <!--### Obsolete in 4.3-->
+    <modify-function signature="iniCodec()const" remove="all"/>
+    <!--TODO-->
+  </object-type>
+  <object-type name="QEvent" polymorphic-base="yes" polymorphic-id-expression="%1-&gt;type() == QEvent::None"/>
+  <object-type name="QChildEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ChildAdded || %1-&gt;type() == QEvent::ChildPolished || %1-&gt;type() == QEvent::ChildRemoved">
+    <modify-field name="c" read="false" write="false"/>
+    <modify-function signature="child() const">
+      <modify-argument index="return">
+         <define-ownership owner="target"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+  <object-type name="QTimerEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Timer"/>
+  <object-type name="QDynamicPropertyChangeEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DynamicPropertyChange"/>
+  <object-type name="QDataStream">
+    <extra-includes>
+      <include file-name="QtCore/QtCore" location="global"/>
+    </extra-includes>
+
+    <modify-function signature="setDevice(QIODevice*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <!-- remove primitive operators -->
+    <modify-function signature="operator&gt;&gt;(bool&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(char&amp;*)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(int&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(qint64&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(short&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(signed char&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned char&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned int&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned long long&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned short&amp;)" remove="all"/>
+
+    <modify-function signature="operator&lt;&lt;(bool)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(signed char)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(unsigned char)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(unsigned short)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(short)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(unsigned int)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(int)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(unsigned long long)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(qint64)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(float)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(double)" remove="all"/>
+
+    <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
+    <modify-function signature="readRawData(char*,int)" remove="all"/>
+    <modify-function signature="readBytes(char&amp;*,uint&amp;)" remove="all"/>
+    <modify-function signature="writeRawData(const char*,int)" remove="all"/>
+    <modify-function signature="writeBytes(const char*,uint)" remove="all"/>
+  </object-type>
+  <object-type name="QFSFileEngine">
+    <extra-includes>
+      <include file-name="QDateTime" location="global"/>
+    </extra-includes>
+  </object-type>
+  <value-type name="QTextStreamManipulator">
+    <modify-function signature="exec(QTextStream &amp;)" rename="exec_"/>
+  </value-type>
+  <object-type name="QTextStream">
+    <modify-function signature="QTextStream(QByteArray *, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+    <modify-function signature="QTextStream(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+    <modify-function signature="setString(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+    <modify-function signature="string()const" remove="all"/>
+    <modify-function signature="codec()const" remove="all"/>
+
+    <!-- remove operators -->
+    <modify-function signature="operator&lt;&lt;(char)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(const void*)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(double)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(qlonglong)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(qulonglong)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(signed short)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(unsigned int)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(unsigned short)" remove="all"/>
+
+    <modify-function signature="operator&gt;&gt;(char&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(char*)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(qlonglong&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(qulonglong&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(signed int&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(signed long&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(signed short&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned int&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned long&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned short&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(QByteArray&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(QChar&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(QString&amp;)" remove="all"/>
+
+    <!--TODO-->
+    <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
+    <modify-function signature="flush()" allow-thread="yes"/>
+    <modify-function signature="read(qint64)" allow-thread="yes"/>
+    <modify-function signature="readLine(qint64)" allow-thread="yes"/>
+    <modify-function signature="readAll()" allow-thread="yes"/>
+  </object-type>
+  <object-type name="QSystemSemaphore"/>
+  <namespace-type name="QtConcurrent" target-type="class">
+    <extra-includes>
+      <include file-name="qtconcurrentreducekernel.h" location="global"/>
+      <include file-name="qtconcurrentthreadengine.h" location="global"/>
+    </extra-includes>
+  </namespace-type>
+  <!-- <object-type name="QThreadPool"/> -->
+  <value-type name="QXmlStreamAttribute"/>
+  <value-type name="QXmlStreamAttributes">
+    <modify-function signature="push_back(QXmlStreamAttribute)" remove="all"/>
+    <modify-function signature="pop_back()" remove="all"/>
+    <modify-function signature="push_front(QXmlStreamAttribute)" remove="all"/>
+    <modify-function signature="pop_front()" remove="all"/>
+    <modify-function signature="at(int) const" remove="all"/>
+    <modify-function signature="contains(const QXmlStreamAttribute &amp;)const" remove="all"/>
+    <modify-function signature="fill(QXmlStreamAttribute, int)" remove="all"/>
+    <modify-function signature="mid(int, int) const" remove="all"/>
+    <modify-function signature="toList() const" remove="all"/>
+    <modify-function signature="fromList(const QList&lt;QXmlStreamAttribute&gt; &amp;)" remove="all"/>
+    <modify-function signature="value(const QString &amp;, const QLatin1String &amp;)const" remove="all" />
+    <modify-function signature="value(const QLatin1String &amp;, const QLatin1String &amp;)const" remove="all" />
+    <modify-function signature="value(const QLatin1String &amp;)const" remove="all" />
+    <modify-function signature="hasAttribute(const QLatin1String &amp;)const" remove="all" />
+  </value-type>
+  <value-type name="QXmlStreamNamespaceDeclaration"/>
+  <value-type name="QXmlStreamNotationDeclaration"/>
+  <value-type name="QXmlStreamEntityDeclaration"/>
+  <object-type name="QXmlStreamReader">
+    <modify-function signature="QXmlStreamReader(const char*)" remove="all"/>
+    <modify-function signature="addData(const char*)" remove="all"/>
+  </object-type>
+  <object-type name="QXmlStreamWriter">
+    <modify-function signature="QXmlStreamWriter(QString *)">
+      <remove/>
+    </modify-function>
+    <modify-function signature="codec()const" remove="all"/>
+    <!--TODO-->
+  </object-type>
+  <value-type name="QModelIndex">
+    <modify-function signature="internalPointer()const" remove="all"/>
+  </value-type>
+
+  <value-type name="QGenericArgument">
+    <include file-name="qobjectdefs.h" location="global" />
+
+    <modify-function signature="data()const" remove="all" />
+  </value-type>
+  <object-type name="QMetaObject">
+    <include file-name="qobjectdefs.h" location="global" />
+  </object-type>
+  <value-type name="QMetaProperty" />
+  <value-type name="QMetaClassInfo" />
+  <value-type name="QMetaEnum" />
 
 
 
