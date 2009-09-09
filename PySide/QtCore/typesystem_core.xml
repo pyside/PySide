@@ -1,0 +1,838 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtCore">
+    <!-- Rejections due to shiboken bugs -->
+    <rejection class="QString" function-name="replace"/> <!-- A bug in overload method decisor -->
+
+    <!-- A bug when we have global functions with just one parameter -->
+    <rejection class="" function-name="bin" />
+    <rejection class="" function-name="bom" />
+    <rejection class="" function-name="center" />
+    <rejection class="" function-name="dec" />
+    <rejection class="" function-name="endl" />
+    <rejection class="" function-name="fixed" />
+    <rejection class="" function-name="flush" />
+    <rejection class="" function-name="forcepoint" />
+    <rejection class="" function-name="forcesign" />
+    <rejection class="" function-name="hex" />
+    <rejection class="" function-name="left" />
+    <rejection class="" function-name="lowercasebase" />
+    <rejection class="" function-name="lowercasedigits" />
+    <rejection class="" function-name="noforcepoint" />
+    <rejection class="" function-name="noforcesign" />
+    <rejection class="" function-name="noshowbase" />
+    <rejection class="" function-name="oct" />
+    <rejection class="" function-name="qAddPostRoutine" />
+    <rejection class="" function-name="qCompress" />
+    <rejection class="" function-name="qInf" />
+    <rejection class="" function-name="qUncompress" />
+    <rejection class="" function-name="qRemovePostRoutine" />
+    <rejection class="" function-name="qSetRealNumberPrecision" />
+    <rejection class="" function-name="reset" />
+    <rejection class="" function-name="right" />
+    <rejection class="" function-name="scientific" />
+    <rejection class="" function-name="showbase" />
+    <rejection class="" function-name="uppercasebase" />
+    <rejection class="" function-name="uppercasedigits" />
+    <rejection class="" function-name="ws" />
+    <rejection class="" function-name="" />
+    <rejection class="" function-name="" />
+    <rejection class="" function-name="" />
+    <!-- End of rejections due to shiboken bugs -->
+
+
+  <rejection class="QFutureSynchronizer"/>
+  <rejection class="QByteArray" function-name="contains"/>
+  <rejection class="QRunnable"/>
+  <rejection class="QSharedPointer"/>
+  <rejection class="QWeakPointer"/>
+  <rejection class="*" function-name="tr" />
+  <rejection class="*" function-name="trUtf8" />
+  <rejection class="*" function-name="qt_metacast" />
+  <rejection class="*" function-name="qt_metacall" />
+  <rejection class="" function-name="qSharedPointerDynamicCast"/>
+  <rejection class="" function-name="qSharedPointerConstCast"/>
+  <rejection class="" function-name="qSharedPointerCast"/>
+  <rejection class="" function-name="qWeakPointerCast"/>
+  <rejection class="" function-name="qDebug"/>
+  <rejection class="" function-name="qFatal"/>
+  <rejection class="" function-name="qCritical"/>
+  <rejection class="" function-name="qAbs"/>
+  <rejection class="" function-name="qErrnoWarning"/>
+  <rejection class="" function-name="qstrcpy"/>
+  <rejection class="" function-name="qstrcmp"/>
+  <rejection class="" function-name="qstrdup"/>
+  <rejection class="" function-name="qstrncpy"/>
+  <rejection class="" function-name="qAbs"/>
+  <rejection class="" function-name="qAccessibleEditableTextCastHelper"/>
+  <rejection class="" function-name="qAccessibleTableCastHelper"/>
+  <rejection class="" function-name="qAccessibleTextCastHelper"/>
+  <rejection class="" function-name="qAccessibleValueCastHelper"/>
+  <rejection class="" function-name="qAppName"/>
+  <rejection class="" function-name="qAtomicAssign"/>
+  <rejection class="" function-name="q_atomic_decrement"/>
+  <rejection class="" function-name="qAtomicDetach"/>
+  <rejection class="" function-name="q_atomic_fetch_and_add_int"/>
+  <rejection class="" function-name="q_atomic_fetch_and_add_ptr"/>
+  <rejection class="" function-name="q_atomic_increment"/>
+  <rejection class="" function-name="q_atomic_set_int"/>
+  <rejection class="" function-name="q_atomic_set_ptr"/>
+  <rejection class="" function-name="q_atomic_test_and_set_int"/>
+  <rejection class="" function-name="q_atomic_test_and_set_ptr"/>
+  <rejection class="" function-name="qBinaryFind"/>
+  <rejection class="" function-name="qBound"/>
+  <rejection class="" function-name="qbswap"/>
+  <rejection class="" function-name="qbswap_helper"/>
+  <rejection class="" function-name="qbswap&lt;qint16&gt;"/>
+  <rejection class="" function-name="qbswap&lt;qint32&gt;"/>
+  <rejection class="" function-name="qbswap&lt;qint64&gt;"/>
+  <rejection class="" function-name="qbswap&lt;quint16&gt;"/>
+  <rejection class="" function-name="qbswap&lt;quint32&gt;"/>
+  <rejection class="" function-name="qbswap&lt;quint64&gt;"/>
+  <rejection class="" function-name="qCeil"/>
+  <rejection class="" function-name="qCopy"/>
+  <rejection class="" function-name="qCopyBackward"/>
+  <rejection class="" function-name="qCos"/>
+  <rejection class="" function-name="qCount"/>
+  <rejection class="" function-name="qDeleteAll"/>
+  <rejection class="" function-name="qDrawPlainRect"/>
+  <rejection class="" function-name="qDrawShadeLine"/>
+  <rejection class="" function-name="qDrawShadePanel"/>
+  <rejection class="" function-name="qDrawShadeRect"/>
+  <rejection class="" function-name="qDrawWinButton"/>
+  <rejection class="" function-name="qDrawWinPanel"/>
+  <rejection class="" function-name="qEqual"/>
+  <rejection class="" function-name="qFatal"/>
+  <rejection class="" function-name="qFill"/>
+  <rejection class="" function-name="qFind"/>
+  <rejection class="" function-name="qFindChild"/>
+  <rejection class="" function-name="qFindChildren"/>
+  <rejection class="" function-name="qFindString"/>
+  <rejection class="" function-name="qFindStringBoyerMoore"/>
+  <rejection class="" function-name="qFloor"/>
+  <rejection class="" function-name="qForeachContainer"/>
+  <rejection class="" function-name="qForeachContainerNew"/>
+  <rejection class="" function-name="qForeachPointer"/>
+  <rejection class="" function-name="qFree"/>
+  <rejection class="" function-name="qFromBigEndian"/>
+  <rejection class="" function-name="qFromBigEndian&lt;qint16&gt;"/>
+  <rejection class="" function-name="qFromBigEndian&lt;qint32&gt;"/>
+  <rejection class="" function-name="qFromBigEndian&lt;qint64&gt;"/>
+  <rejection class="" function-name="qFromBigEndian&lt;quint16&gt;"/>
+  <rejection class="" function-name="qFromBigEndian&lt;quint32&gt;"/>
+  <rejection class="" function-name="qFromBigEndian&lt;quint64&gt;"/>
+  <rejection class="" function-name="qFromLittleEndian"/>
+  <rejection class="" function-name="qFromLittleEndian&lt;qint16&gt;"/>
+  <rejection class="" function-name="qFromLittleEndian&lt;qint32&gt;"/>
+  <rejection class="" function-name="qFromLittleEndian&lt;qint64&gt;"/>
+  <rejection class="" function-name="qFromLittleEndian&lt;quint16&gt;"/>
+  <rejection class="" function-name="qFromLittleEndian&lt;quint32&gt;"/>
+  <rejection class="" function-name="qFromLittleEndian&lt;quint64&gt;"/>
+  <rejection class="" function-name="qgetenv"/>
+  <rejection class="" function-name="qgraphicsitem_cast"/>
+  <rejection class="" function-name="qGreater"/>
+  <rejection class="" function-name="qHash"/>
+  <rejection class="" function-name="qInstallMsgHandler"/>
+  <rejection class="" function-name="qIntCast"/>
+  <rejection class="" function-name="qIsDetached"/>
+  <rejection class="" function-name="qIsDetached&lt;QBitArray&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QBitmap&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QBrush&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QByteArray&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QIcon&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QImage&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QKeySequence&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QPen&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QPicture&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QPixmap&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QString&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QUrl&gt;"/>
+  <rejection class="" function-name="qIsDetached&lt;QVariant&gt;"/>
+  <rejection class="" function-name="qLess"/>
+  <rejection class="" function-name="qLn"/>
+  <rejection class="" function-name="qLowerBound"/>
+  <rejection class="" function-name="qMakePair"/>
+  <rejection class="" function-name="qMalloc"/>
+  <rejection class="" function-name="qMapLessThanKey"/>
+  <rejection class="" function-name="qMax"/>
+  <rejection class="" function-name="qMemCopy"/>
+  <rejection class="" function-name="qMemSet"/>
+  <rejection class="" function-name="qMetaTypeConstructHelper"/>
+  <rejection class="" function-name="qMetaTypeDeleteHelper"/>
+  <rejection class="" function-name="qMetaTypeId"/>
+  <rejection class="" function-name="qMetaTypeLoadHelper"/>
+  <rejection class="" function-name="qMetaTypeSaveHelper"/>
+  <rejection class="" function-name="qMin"/>
+  <rejection class="" function-name="qobject_cast"/>
+  <rejection class="" function-name="qobject_cast&lt;const QWidget*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QAccessibleBridgeFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QAccessibleBridgeFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QAccessibleFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QAccessibleInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterfaceV2*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterfaceV2*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QImageIOHandlerFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QInputContextFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QPictureFormatInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QPictureFormatInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QStyleFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QTextCodecFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QTextObjectInterface*&gt;"/>
+  <rejection class="" function-name="qobject_cast&lt;QWidget*&gt;"/>
+  <rejection class="" function-name="qPow"/>
+  <rejection class="" function-name="qputenv"/>
+  <rejection class="" function-name="qRealloc"/>
+  <rejection class="" function-name="qRegisterMetaType"/>
+  <rejection class="" function-name="qRegisterMetaTypeStreamOperators"/>
+  <rejection class="" function-name="qRegisterStaticPluginInstanceFunction"/>
+  <rejection class="" function-name="qRound64"/>
+  <rejection class="" function-name="qSetFieldWidth"/>
+  <rejection class="" function-name="qSetPadChar"/>
+  <rejection class="" function-name="qSin"/>
+  <rejection class="" function-name="qsnprintf"/>
+  <rejection class="" function-name="qSort"/>
+  <rejection class="" function-name="qSqrt"/>
+  <rejection class="" function-name="qStableSort"/>
+  <rejection class="" function-name="qStringComparisonHelper"/>
+  <rejection class="" function-name="qstyleoption_cast"/>
+  <rejection class="" function-name="qSwap"/>
+  <rejection class="" function-name="qSwap&lt;QBitArray&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QBitmap&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QBrush&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QByteArray&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QIcon&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QImage&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QKeySequence&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QPen&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QPicture&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QPixmap&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QString&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QUrl&gt;"/>
+  <rejection class="" function-name="qSwap&lt;QVariant&gt;"/>
+  <rejection class="" function-name="qt_assert"/>
+  <rejection class="" function-name="qt_assert_x"/>
+  <rejection class="" function-name="qt_check_pointer"/>
+  <rejection class="" function-name="qt_error_string"/>
+  <rejection class="" function-name="qThreadStorage_localData"/>
+  <rejection class="" function-name="qThreadStorage_localData_const"/>
+  <rejection class="" function-name="qThreadStorage_setLocalData"/>
+  <rejection class="" function-name="qt_message_output"/>
+  <rejection class="" function-name="qt_noop"/>
+  <rejection class="" function-name="qToBigEndian"/>
+  <rejection class="" function-name="qToLittleEndian"/>
+  <rejection class="" function-name="qToUnaligned"/>
+  <rejection class="" function-name="qToVoidFuture"/>
+  <rejection class="" function-name="qt_qFindChild_helper"/>
+  <rejection class="" function-name="qt_qFindChildren_helper"/>
+  <rejection class="" function-name="qt_set_sequence_auto_mnemonic"/>
+  <rejection class="" function-name="qUpperBound"/>
+  <rejection class="" function-name="qVariantCanConvert"/>
+  <rejection class="" function-name="qvariant_cast"/>
+  <rejection class="" function-name="qvariant_cast_helper"/>
+  <rejection class="" function-name="qVariantFromValue"/>
+  <rejection class="" function-name="qVariantSetValue"/>
+  <rejection class="" function-name="qVariantValue"/>
+  <rejection class="" function-name="qvsnprintf"/>
+  <rejection class="" function-name="qWarning"/>
+  <rejection class="QThreadPool"/>
+  <enum-type name="QXmlStreamReader::Error"/>
+  <enum-type name="QXmlStreamReader::TokenType"/>
+  <enum-type name="QString::NormalizationForm" />
+  <enum-type name="QString::SectionFlag" />
+  <enum-type name="QString::SplitBehavior"/>
+  <enum-type name="QChar::Decomposition" />
+  <enum-type name="QChar::Direction" />
+  <enum-type name="QChar::Joining" />
+  <enum-type name="QChar::SpecialCharacter" />
+  <enum-type name="QChar::UnicodeVersion" />
+  <enum-type name="QChar::CombiningClass" />
+  <enum-type name="QLineF::IntersectType" />
+  <enum-type name="QVariant::Type" />
+  <primitive-type name="bool"/>
+  <primitive-type name="double"/>
+  <primitive-type name="qreal"/>
+  <primitive-type name="float"/>
+  <primitive-type name="qint64"/>
+  <primitive-type name="__int64"/>
+  <primitive-type name="unsigned __int64"/>
+  <primitive-type name="unsigned long long"/>
+  <primitive-type name="long long"/>
+  <primitive-type name="qlonglong" target-lang-api-name="PyLong" />
+  <primitive-type name="qulonglong" target-lang-api-name="PyLong" />
+  <primitive-type name="short"/>
+  <primitive-type name="signed short"/>
+  <primitive-type name="ushort" target-lang-api-name="PyInt" />
+  <primitive-type name="unsigned short"/>
+  <primitive-type name="char"/>
+  <primitive-type name="signed char"/>
+  <primitive-type name="uchar"/>
+  <primitive-type name="unsigned char"/>
+  <primitive-type name="int"/>
+  <primitive-type name="signed int"/>
+  <primitive-type name="uint"/>
+  <primitive-type name="ulong"/>
+  <primitive-type name="unsigned int"/>
+  <primitive-type name="signed long"/>
+  <primitive-type name="long"/>
+  <primitive-type name="unsigned long"/>
+  <primitive-type name="WId"/>
+  <primitive-type name="Qt::HANDLE"/>
+  <primitive-type name="QByteRef"/>
+  <primitive-type name="QBitRef"/>
+  <primitive-type name="QBool" target-lang-api-name="PyBool">
+    <conversion-rule file="qtcore_conversions.h"/>
+  </primitive-type>
+  <primitive-type name="std::string"/>
+  <primitive-type name="std::wstring"/>
+  <primitive-type name="QStdWString"/>
+
+  <container-type name="QList" type="list"/>
+  <rejection class="QList" function-name="back"/>
+  <rejection class="QList" function-name="begin"/>
+  <rejection class="QList" function-name="constBegin"/>
+  <rejection class="QList" function-name="constData"/>
+  <rejection class="QList" function-name="constEnd"/>
+  <rejection class="QList" function-name="data"/>
+  <rejection class="QList" function-name="end"/>
+  <rejection class="QList" function-name="erase"/>
+  <rejection class="QList" function-name="erase"/>
+  <rejection class="QList" function-name="free"/>
+  <rejection class="QList" function-name="fromList"/>
+  <rejection class="QList" function-name="fromSet"/>
+  <rejection class="QList" function-name="fromSet"/>
+  <rejection class="QList" function-name="fromStdList" />
+  <rejection class="QList" function-name="front" />
+  <rejection class="QList" function-name="first" />
+  <rejection class="QList" function-name="insert"/>
+  <rejection class="QList" function-name="last"/>
+  <rejection class="QList" function-name="malloc"/>
+  <rejection class="QList" function-name="node_construct"/>
+  <rejection class="QList" function-name="node_copy"/>
+  <rejection class="QList" function-name="node_destruct"/>
+  <rejection class="QList" function-name="operator[]"/>
+  <rejection class="QList" function-name="operator="/>
+  <rejection class="QList" function-name="toSet"/>
+  <rejection class="QList" function-name="toStdList" />
+
+  <container-type name="QVector" type="vector"/>
+  <rejection class="QVector" function-name="back"/>
+  <rejection class="QVector" function-name="begin"/>
+  <rejection class="QVector" function-name="constBegin"/>
+  <rejection class="QVector" function-name="constData"/>
+  <rejection class="QVector" function-name="constEnd"/>
+  <rejection class="QVector" function-name="data"/>
+  <rejection class="QVector" function-name="end"/>
+  <rejection class="QVector" function-name="erase"/>
+  <rejection class="QVector" function-name="first"/>
+  <rejection class="QVector" function-name="free"/>
+  <rejection class="QVector" function-name="front"/>
+  <rejection class="QVector" function-name="insert"/>
+  <rejection class="QVector" function-name="last"/>
+  <rejection class="QVector" function-name="malloc"/>
+  <rejection class="QVector" function-name="alloc"/>
+  <rejection class="QVector" function-name="operator+="/>
+  <rejection class="QVector" function-name="operator[]"/>
+  <rejection class="QVector" function-name="operator="/>
+  <rejection class="QVector" function-name="toStdVector"/>
+  <rejection class="QVector" function-name="fromStdVector"/>
+
+  <container-type name="QQueue" type="queue"/>
+  <rejection class="QQueue" function-name="head"/>
+
+  <container-type name="QHash" type="hash"/>
+  <container-type name="QLinkedList" type="linked-list"/>
+  <container-type name="QMap" type="map"/>
+  <container-type name="QMultiMap" type="multi-map"/>
+  <container-type name="QPair" type="pair"/>
+  <container-type name="QSet" type="set"/>
+  <container-type name="QStack" type="stack"/>
+
+  <rejection class="*" function-name="d_func"/>
+  <rejection class="*" function-name="data_ptr"/>
+  <rejection class="*" function-name="detach"/>
+  <rejection class="*" function-name="isDetached"/>
+  <rejection class="*" field-name="d_ptr"/>
+  <rejection class="*" field-name="d"/>
+  <rejection class="*" field-name="staticMetaObject"/>
+  <!-- not support array in property -->
+  <rejection class="QTextCodec::ConverterState" field-name="state_data"/>
+  <rejection class="QString" field-name="null"/>
+  <rejection class="QVariant" field-name="handler"/>
+  <rejection class="QUuid" field-name="data1"/>
+  <rejection class="QUuid" field-name="data2"/>
+  <rejection class="QUuid" field-name="data3"/>
+  <rejection class="QUuid" field-name="data4"/>
+  <rejection class="" enum-name="QtValidLicenseForTestModule"/>
+  <rejection class="" enum-name="QtValidLicenseForDBusModule"/>
+  <rejection class="" enum-name="QtValidLicenseForSqlModule"/>
+  <rejection class="" enum-name="QtValidLicenseForOpenGLModule"/>
+  <rejection class="" enum-name="QtValidLicenseForScriptToolsModule"/>
+  <rejection class="" enum-name="__codecvt_result"/>
+  <rejection class="" enum-name="enum_1"/>
+  <rejection class="" enum-name="enum_2"/>
+  <rejection class="" enum-name="QtValidLicenseForXmlModule"/>
+  <rejection class="" enum-name="QtValidLicenseForXmlPatternsModule"/>
+  <rejection class="" enum-name="QtValidLicenseForActiveQtModule"/>
+  <rejection class="" enum-name="QtValidLicenseForCoreModule"/>
+  <rejection class="" enum-name="QtValidLicenseForQt3SupportLightModule"/>
+  <rejection class="" enum-name="QtValidLicenseForQt3SupportModule"/>
+  <rejection class="" enum-name="QtValidLicenseForNetworkModule"/>
+  <rejection class="" enum-name="QtValidLicenseForSvgModule"/>
+  <rejection class="" enum-name="QtValidLicenseForGuiModule"/>
+  <rejection class="" enum-name="QtValidLicenseForScriptModule"/>
+  <rejection class="" enum-name="QtValidLicenseForHelpModule"/>
+  <rejection class="QtConcurrent" enum-name="enum_1"/>
+  <rejection class="QFuture::const_iterator"/>
+  <rejection class="QFutureInterface"/>
+  <rejection class="QFutureInterfaceBase"/>
+  <rejection class="QtConcurrent::BlockSizeManager"/>
+  <rejection class="QtConcurrent::ConstMemberFunctionWrapper"/>
+  <rejection class="QtConcurrent::Exception"/>
+  <rejection class="QtConcurrent::FilterKernel"/>
+  <rejection class="QtConcurrent::FilteredEachKernel"/>
+  <rejection class="QtConcurrent::FilteredReducedKernel"/>
+  <rejection class="QtConcurrent::FunctionWrapper0"/>
+  <rejection class="QtConcurrent::FunctionWrapper1"/>
+  <rejection class="QtConcurrent::FunctionWrapper2"/>
+  <rejection class="QtConcurrent::IntermediateResults"/>
+  <rejection class="QtConcurrent::IterateKernel"/>
+  <rejection class="QtConcurrent::MapKernel"/>
+  <rejection class="QtConcurrent::MappedEachKernel"/>
+  <rejection class="QtConcurrent::MappedReducedKernel"/>
+  <rejection class="QtConcurrent::Median"/>
+  <rejection class="QtConcurrent::MemberFunctionWrapper"/>
+  <rejection class="QtConcurrent::MemberFunctionWrapper1"/>
+  <rejection class="QtConcurrent::ReduceKernel"/>
+  <rejection class="QtConcurrent::ResultItem"/>
+  <rejection class="QtConcurrent::ResultIterator"/>
+  <rejection class="QtConcurrent::ResultIteratorBase"/>
+  <rejection class="QtConcurrent::ResultReporter"/>
+  <rejection class="QtConcurrent::ResultStore"/>
+  <rejection class="QtConcurrent::ResultStoreBase"/>
+  <rejection class="QtConcurrent::RunFunctionTask"/>
+  <rejection class="QtConcurrent::RunFunctionTaskBase"/>
+  <rejection class="QtConcurrent::SelectSpecialization"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall0"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall1"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall2"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall3"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall4"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall5"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall0"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall1"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall2"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall3"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall4"/>
+  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall5"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorCall0"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorCall1"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorCall2"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorCall3"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorCall4"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorCall5"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall0"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall1"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall2"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall3"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall4"/>
+  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall5"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall0"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall1"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall2"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall3"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall4"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall5"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall0"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall1"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall2"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall3"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall4"/>
+  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall5"/>
+  <rejection class="QtConcurrent::SequenceHolder1"/>
+  <rejection class="QtConcurrent::SequenceHolder2"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionCall0"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionCall1"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionCall2"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionCall3"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionCall4"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionCall5"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall0"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall1"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall2"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall3"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall4"/>
+  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall5"/>
+  <rejection class="QtConcurrent::StoredFunctorCall0"/>
+  <rejection class="QtConcurrent::StoredFunctorCall1"/>
+  <rejection class="QtConcurrent::StoredFunctorCall2"/>
+  <rejection class="QtConcurrent::StoredFunctorCall3"/>
+  <rejection class="QtConcurrent::StoredFunctorCall4"/>
+  <rejection class="QtConcurrent::StoredFunctorCall5"/>
+  <rejection class="QtConcurrent::StoredFunctorPointerCall0"/>
+  <rejection class="QtConcurrent::StoredFunctorPointerCall1"/>
+  <rejection class="QtConcurrent::StoredFunctorPointerCall2"/>
+  <rejection class="QtConcurrent::StoredFunctorPointerCall3"/>
+  <rejection class="QtConcurrent::StoredFunctorPointerCall4"/>
+  <rejection class="QtConcurrent::StoredFunctorPointerCall5"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionCall0"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionCall1"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionCall2"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionCall3"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionCall4"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionCall5"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall0"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall1"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall2"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall3"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall4"/>
+  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall5"/>
+  <rejection class="QtConcurrent::ThreadEngine"/>
+  <rejection class="QtConcurrent::ThreadEngineBase"/>
+  <rejection class="QtConcurrent::ThreadEngineSemaphore"/>
+  <rejection class="QtConcurrent::ThreadEngineStarter"/>
+  <rejection class="QtConcurrent::ThreadEngineStarterBase"/>
+  <rejection class="QtConcurrent::UnhandledException"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall0"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall1"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall2"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall3"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall4"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall5"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall0"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall1"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall2"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall3"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall4"/>
+  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall5"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorCall0"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorCall1"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorCall2"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorCall3"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorCall4"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorCall5"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall0"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall1"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall2"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall3"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall4"/>
+  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall5"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall0"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall1"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall2"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall3"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall4"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall5"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall0"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall1"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall2"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall3"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall4"/>
+  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall5"/>
+  <rejection class="QMdi"/>
+  <rejection class="stdext"/>
+  <rejection class="QAlgorithmsPrivate"/>
+  <rejection class="QAtomic"/>
+  <rejection class="QAtomicPointer"/>
+  <rejection class="QAtomicInt"/>
+  <rejection class="QBasicAtomicInt"/>
+  <rejection class="QBasicAtomic"/>
+  <rejection class="QBasicAtomicPointer"/>
+  <rejection class="QBitRef"/>
+  <rejection class="QCache"/>
+  <rejection class="QCharRef"/>
+  <rejection class="QDebug"/>
+  <rejection class="QExplicitlySharedDataPointer"/>
+  <rejection class="QFlag"/>
+  <rejection class="QFlags"/>
+  <rejection class="QForeachContainer"/>
+  <rejection class="QForeachContainerBase"/>
+  <rejection class="QGlobalStatic"/>
+  <rejection class="QHash"/>
+  <rejection class="QHashData"/>
+  <rejection class="QHashDummyNode"/>
+  <rejection class="QHashDummyNode"/>
+  <rejection class="QHashDummyNode"/>
+  <rejection class="QHashDummyNode"/>
+  <rejection class="QHashDummyNode"/>
+  <rejection class="QHashDummyValue"/>
+  <rejection class="QHashIterator"/>
+  <rejection class="QHashNode"/>
+  <rejection class="QHashNode"/>
+  <rejection class="QHashNode"/>
+  <rejection class="QHashNode"/>
+  <rejection class="QHashNode"/>
+  <rejection class="QInternal"/>
+  <rejection class="QLibrary"/>
+  <rejection class="QLinkedList"/>
+  <rejection class="QLinkedListData"/>
+  <rejection class="QLinkedListIterator"/>
+  <rejection class="QLinkedListNode"/>
+  <rejection class="QListData"/>
+  <rejection class="QListIterator"/>
+  <rejection class="QMap"/>
+  <rejection class="QMapData"/>
+  <rejection class="QMapIterator"/>
+  <rejection class="QMetaType"/>
+  <rejection class="QMetaTypeId"/>
+  <rejection class="QMultiHash"/>
+  <rejection class="QMultiMap"/>
+  <rejection class="QMutableHashIterator"/>
+  <rejection class="QMutableLinkedListIterator"/>
+  <rejection class="QMutableListIterator"/>
+  <rejection class="QMutableMapIterator"/>
+  <rejection class="QMutableVectorIterator"/>
+  <rejection class="QNoImplicitBoolCast"/>
+  <rejection class="QObjectCleanupHandler"/>
+  <rejection class="QObjectData"/>
+  <rejection class="QObjectUserData"/>
+  <rejection class="QPluginLoader"/>
+  <rejection class="QPointer"/>
+  <rejection class="QSet"/>
+  <rejection class="QSetIterator"/>
+  <rejection class="QSharedData"/>
+  <rejection class="QSharedDataPointer"/>
+  <rejection class="QStack"/>
+  <rejection class="QSysInfo"/>
+  <rejection class="QThreadStorage"/>
+  <rejection class="QThreadStorageData"/>
+  <rejection class="QTypeInfo"/>
+  <rejection class="QTypeInfo"/>
+  <rejection class="QVFbKeyData"/>
+  <rejection class="QVariantComparisonHelper"/>
+  <rejection class="QVectorData"/>
+  <rejection class="QVectorIterator"/>
+  <rejection class="QVectorTypedData"/>
+  <rejection class="QtPrivate"/>
+  <rejection class="qGreater"/>
+  <rejection class="qLess"/>
+  <rejection class="std"/>
+  <rejection class="QAbstractFileEngine::ExtensionOption"/>
+  <rejection class="QAbstractFileEngine::ExtensionReturn"/>
+  <rejection class="QByteArray::Data"/>
+  <rejection class="QIntForType"/>
+  <rejection class="QList::Node"/>
+  <rejection class="QList::const_iterator"/>
+  <rejection class="QList::iterator"/>
+  <rejection class="QMetaTypeId2"/>
+  <rejection class="QMutableSetIterator"/>
+  <rejection class="QSubString"/>
+  <rejection class="QUintForType"/>
+  <rejection class="QtConcurrent::internal"/>
+  <rejection class="QLocale::Data"/>
+  <rejection class="QGlobalStaticDeleter"/>
+  <rejection class="QSharedMemory"/>
+  <!-- Temporarily until we know how to implement it in Java -->
+  <rejection class="QVarLengthArray"/>
+  <!-- DBus -->
+  <rejection class="QDBusAbstractAdaptor"/>
+  <rejection class="QDBusAbstractInterface"/>
+  <rejection class="QDBusArgument"/>
+  <rejection class="QDBusConnection"/>
+  <rejection class="QDBusConnectionInterface"/>
+  <rejection class="QDBusContext"/>
+  <rejection class="QDBusError"/>
+  <rejection class="QDBusInterface"/>
+  <rejection class="QDBusMessage"/>
+  <rejection class="QDBusMetaType"/>
+  <rejection class="QDBusObjectPath"/>
+  <rejection class="QDBusReply"/>
+  <rejection class="QDBusServer"/>
+  <rejection class="QDBusSignature"/>
+  <rejection class="QDBusVariant"/>
+  <rejection class="_Revbidit"/>
+  <rejection class="_complex"/>
+  <rejection class="_exception"/>
+  <rejection class="_iobuf"/>
+  <rejection class="_stat"/>
+  <rejection class="_wfinddata_t"/>
+  <rejection class="exception"/>
+  <rejection class="istreambuf_iterator"/>
+  <rejection class="ostreambuf_iterator"/>
+  <rejection class="reverse_bidirectional_iterator"/>
+  <rejection class="reverse_iterator"/>
+  <rejection class="stat"/>
+  <rejection class="tm"/>
+  <rejection class="*" function-name="metaObject"/>
+  <rejection class="QVariant" function-name="canConvert"/>
+  <rejection class="QVariant" function-name="fromValue"/>
+  <rejection class="QVariant" function-name="value"/>
+  <rejection class="QVariant" function-name="setValue"/>
+  <rejection class="QVariant" function-name="data"/>
+  <rejection class="QVariant" function-name="constData"/>
+  <rejection class="QString" function-name="constData"/>
+  <rejection class="QString" function-name="constBegin"/>
+  <rejection class="QString" function-name="constEnd"/>
+  <rejection class="QString" function-name="begin"/>
+  <rejection class="QString" function-name="end"/>
+  <rejection class="QString" function-name="data"/>
+  <rejection class="QString" function-name="unicode"/>
+  <rejection class="QString" function-name="utf16"/>
+  <rejection class="QString" function-name="fromLatin1_helper"/>
+  <rejection class="QString" function-name="fromAscii_helper"/>
+  <rejection class="QString" function-name="toWCharArray"/>
+  <rejection class="QString" function-name="vsprintf"/>
+  <rejection class="QString" function-name="fromStdWString"/>
+  <rejection class="QStringRef" function-name="constData"/>
+  <rejection class="QStringRef" function-name="data"/>
+  <rejection class="QStringRef" function-name="unicode"/>
+  <rejection class="QStringRef" function-name="string"/>
+  <rejection class="QAbstractEventDispatcher" function-name="filterEvent"/>
+  <rejection class="QAbstractEventDispatcher" function-name="setEventFilter"/>
+  <rejection class="QAbstractFileEngine" function-name="beginEntryList"/>
+  <rejection class="QAbstractFileEngine" function-name="endEntryList"/>
+  <rejection class="QAbstractFileEngine" function-name="extension"/>
+  <rejection class="QAbstractFileEngine" function-name="map"/>
+  <rejection class="QCoreApplication" function-name="compressEvent"/>
+  <rejection class="QCoreApplication" function-name="eventFilter"/>
+  <rejection class="QCoreApplication" function-name="filterEvent"/>
+  <rejection class="QCoreApplication" function-name="setEventFilter"/>
+  <rejection class="QFile" function-name="setDecodingFunction"/>
+  <rejection class="QFile" function-name="setEncodingFunction"/>
+  <rejection class="QProcess" function-name="pid"/>
+  <rejection class="QRegion" function-name="cleanUp"/>
+  <rejection class="QSettings" function-name="registerFormat"/>
+  <rejection class="QAbstractFileEngineIterator" function-name="entryInfo"/>
+  <rejection class="QAbstractFileEngineIterator" enum-name="EntryInfoType"/>
+  <rejection class="QDataStream" enum-name="ByteOrder"/>
+
+
+  <value-type name="QPoint">
+    <modify-function signature="rx()" remove="all"/>
+    <modify-function signature="ry()" remove="all"/>
+  </value-type>
+  <value-type name="QPointF">
+    <modify-function signature="rx()" remove="all"/>
+    <modify-function signature="ry()" remove="all"/>
+  </value-type>
+  <value-type name="QRect">
+    <modify-function signature="getCoords(int*,int*,int*,int*)const">
+      <remove/>
+    </modify-function>
+    <modify-function signature="getRect(int*,int*,int*,int*)const">
+      <remove/>
+    </modify-function>
+  </value-type>
+  <value-type name="QRectF">
+    <modify-function signature="getCoords(qreal*,qreal*,qreal*,qreal*)const">
+      <remove/>
+    </modify-function>
+    <modify-function signature="getRect(qreal*,qreal*,qreal*,qreal*)const">
+      <remove/>
+    </modify-function>
+  </value-type>
+  <value-type name="QSize">
+    <modify-function signature="rheight()" remove="all"/>
+    <modify-function signature="rwidth()" remove="all"/>
+  </value-type>
+  <value-type name="QSizeF">
+    <modify-function signature="rheight()" remove="all" />
+    <modify-function signature="rwidth()" remove="all" />
+  </value-type>
+
+  <value-type name="QChar" hash-function="qHash">
+    <modify-function signature="combiningClass(uint)" remove="all"/>
+    <modify-function signature="combiningClass(ushort)" remove="all"/>
+    <modify-function signature="decomposition(uint)" remove="all"/>
+    <modify-function signature="digitValue(uint)" remove="all"/>
+    <modify-function signature="digitValue(ushort)" remove="all"/>
+    <modify-function signature="mirroredChar(uint)" remove="all"/>
+    <modify-function signature="mirroredChar(ushort)" remove="all"/>
+    <modify-function signature="toCaseFolded(uint)" remove="all"/>
+    <modify-function signature="toCaseFolded(ushort)" remove="all"/>
+    <modify-function signature="toUpper(uint)" remove="all"/>
+    <modify-function signature="toUpper(ushort)" remove="all"/>
+    <modify-function signature="toLower(uint)" remove="all"/>
+    <modify-function signature="toLower(ushort)" remove="all"/>
+    <modify-function signature="toTitleCase(uint)" remove="all"/>
+    <modify-function signature="toTitleCase(ushort)" remove="all"/>
+    <modify-function signature="unicode()" remove="all"/>
+    <modify-function signature="category(uint)" remove="all"/>
+    <modify-function signature="category(ushort)" remove="all"/>
+    <modify-function signature="decompositionTag(uint)" remove="all"/>
+    <modify-function signature="direction(uint)" remove="all"/>
+    <modify-function signature="direction(ushort)" remove="all"/>
+    <modify-function signature="joining(uint)" remove="all"/>
+    <modify-function signature="joining(ushort)" remove="all"/>
+    <modify-function signature="unicodeVersion(uint)" remove="all"/>
+    <modify-function signature="unicodeVersion(ushort)" remove="all"/>
+  </value-type>
+  <value-type name="QRegExp">
+    <extra-includes>
+      <include file-name="QStringList" location="global"/>
+    </extra-includes>
+  </value-type>
+  <value-type name="QString" hash-function="qHash">
+    <extra-includes>
+      <include file-name="qtextcodec.h" location="global"/>
+    </extra-includes>
+    <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[2]" />
+    <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[3]" />
+
+    <modify-function signature="insert(int,const QChar*,int)" remove="all" />
+    <modify-function signature="QString(const QChar*, int)" remove="all" />
+    <modify-function signature="fromStdString(std::string)" remove="all"/>
+    <modify-function signature="toStdString()const" remove="all"/>
+    <modify-function signature="toStdWString()const" remove="all"/>
+    <modify-function signature="operator!=(const char*)const" remove="all"/>
+    <modify-function signature="operator+=(const char*)" remove="all"/>
+    <modify-function signature="operator+=(char)" remove="all"/>
+    <modify-function signature="operator&lt;(const char*)const" remove="all"/>
+    <modify-function signature="operator&lt;=(const char*)const" remove="all"/>
+    <modify-function signature="operator==(const char*)const" remove="all"/>
+    <modify-function signature="operator&gt;(const char*)const" remove="all"/>
+    <modify-function signature="operator&gt;=(const char*)const" remove="all"/>
+    <modify-function signature="toUShort(bool*,int)const" remove="all" />
+    <modify-function signature="toDouble(bool*)const" remove="all" />
+    <modify-function signature="toFloat(bool*)const" remove="all" />
+    <modify-function signature="toInt(bool*,int)const" remove="all" />
+    <modify-function signature="toLong(bool*,int)const" remove="all" />
+    <modify-function signature="toLongLong(bool*,int)const" remove="all" />
+    <modify-function signature="toShort(bool*,int)const" remove="all" />
+    <modify-function signature="toUInt(bool*,int)const" remove="all" />
+    <modify-function signature="toULong(bool*,int)const" remove="all" />
+    <modify-function signature="toULongLong(bool*,int)const" remove="all" />
+    <modify-function signature="setUtf16(const ushort*,int)" remove="all" />
+    <modify-function signature="fromUtf16(const ushort*,int)" remove="all" />
+    <modify-function signature="fromRawData(const QChar*,int)" remove="all" />
+    <modify-function signature="setUnicode(const QChar*,int)" remove="all" />
+    <modify-function signature="fromUcs4(const uint*,int)" remove="all" />
+    <modify-function signature="toUcs4()const" remove="all" />
+
+
+
+    <!-- Remove conflict signatures in python -->
+    <modify-function signature="arg(int, int, int, const QChar&amp;) const" remove="all"/>
+    <modify-function signature="arg(qlonglong, int, int, const QChar&amp;) const" remove="all"/>
+    <modify-function signature="arg(qulonglong, int, int, const QChar&amp;) const" remove="all"/>
+    <modify-function signature="arg(short, int, int, const QChar&amp;) const" remove="all"/>
+    <modify-function signature="arg(uint, int, int, const QChar&amp;) const" remove="all"/>
+    <modify-function signature="arg(ulong, int, int, const QChar&amp;) const" remove="all"/>
+    <modify-function signature="arg(ushort, int, int, const QChar&amp;) const" remove="all"/>
+  </value-type>
+
+
+
+
+  <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
+  <suppress-warning text="signature 'findChildren(QRegExp)const' for function modification in 'QObject' not found"/>
+  <suppress-warning text="signature 'findChildren(QString)const' for function modification in 'QObject' not found."/>
+  <suppress-warning text="signature 'findChild(QString)const' for function modification in 'QObject' not found."/>
+  <suppress-warning text="skipping function '*'"/>
+  <suppress-warning text="visibility of function '*' modified in class '*'"/>
+  <suppress-warning text="hiding of function '*' in class '*'"/>
+  <suppress-warning text="namespace '*' does not have a type entry"/>
+  <suppress-warning text="Shadowing: QObject::parent() const and QAbstractItemModel::parent() const"/>
+  <suppress-warning text="namespace '*' for enum 'QtMsgType' is not declared"/>
+  <suppress-warning text="horribly broken type 'imaxdiv_t'"/>
+  <suppress-warning text="horribly broken type '__off64_t'"/>
+  <suppress-warning text="horribly broken type 'div_t'"/>
+  <suppress-warning text="horribly broken type 'fd_set*'"/>
+  <suppress-warning text="horribly broken type 'ldiv_t'"/>
+  <suppress-warning text="horribly broken type 'lldiv_t'"/>
+  <suppress-warning text="signal '*' in class '*' is overloaded."/>
+  <suppress-warning text="enum 'enum_3' does not have a type entry or is not an enum"/>
+  <suppress-warning text="Shadowing: QFile::fileName() const and QTemporaryFile::fileName() const"/>
+</typesystem>
