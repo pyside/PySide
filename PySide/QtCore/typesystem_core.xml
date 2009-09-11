@@ -964,7 +964,9 @@
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
   </value-type>
   <value-type name="QDateTime"/>
-  <value-type name="QDir"/>
+  <value-type name="QDir">
+    <modify-function signature="QDir(QString,QString,QFlags&lt;QDir::SortFlag>,QFlags&lt;QDir::Filter>)" remove="all" />
+  </value-type>
 
   <value-type name="QPoint">
     <modify-function signature="rx()" remove="all"/>
@@ -1003,6 +1005,7 @@
   <value-type name="QTime"/>
   <value-type name="QPersistentModelIndex">
     <modify-function signature="internalPointer()const" remove="all"/>
+    <modify-function signature="operator const QModelIndex&amp;()const" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
   </value-type>
   <value-type name="QUuid">
     <modify-function signature="QUuid(const char*)" remove="all" />
@@ -1024,19 +1027,8 @@
     <modify-function signature="toShort(QString,bool*,int)const" remove="all" />
     <modify-function signature="toUShort(QString,bool*,int)const" remove="all" />
   </value-type>
-  <value-type name="QBitArray" hash-function="qHash">
-    <modify-function signature="operator&amp;=(QBitArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="operator=(QBitArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="operator^=(QBitArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="operator|=(QBitArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
+  <value-type name="QBitArray" hash-function="qHash" >
+      <modify-function signature="fill(bool,int)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
   </value-type>
   <!-- QReadWriteLock does not have a copy ctor! -->
   <object-type name="QReadWriteLock">
@@ -1051,7 +1043,8 @@
   <object-type name="QWriteLocker">
     <modify-function signature="relock()" allow-thread="yes" />
   </object-type>
-  <object-type name="QDirIterator"/>
+  <!-- FIXME Removed due to a shiboken bug-->
+<!--   <object-type name="QDirIterator"/> -->
   <object-type name="QThread">
     <modify-function signature="run()" thread="yes" />
     <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
@@ -1064,6 +1057,12 @@
   </object-type>
   <object-type name="QAbstractFileEngineIterator"/>
   <object-type name="QAbstractItemModel">
+    <modify-function signature="mimeData(const QList&lt;QModelIndex >&amp;) const" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="setItemData(const QModelIndex&amp;, const QMap&lt;int, QVariant>&amp;)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="changePersistentIndexList(QList&lt;QModelIndex>,QList&lt;QModelIndex>)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="encodeData(QList&lt;QModelIndex>,QDataStream&amp;)const" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="decodeData(int,int,QModelIndex,QDataStream&amp;)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
+
     <modify-function signature="createIndex(int, int, int) const" remove="all"/>
     <modify-function signature="createIndex(int, int, unsigned int) const" remove="all"/>
     <modify-function signature="createIndex(int, int, void*) const" remove="all"/>
@@ -1085,11 +1084,10 @@
   <object-type name="QObject">
     <extra-includes>
       <include file-name="QThread" location="global"/>
-      <include file-name="signal_manager.hpp" location="local"/>
-      <include file-name="trigger.hpp" location="local"/>
-      <include file-name="pyqt_signal_slot.hpp" location="local"/>
       <include file-name="QCoreApplication" location="global"/>
     </extra-includes>
+    <modify-function signature="children()const" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+
     <modify-function signature="deleteLater()">
       <modify-argument index="this">
         <define-ownership owner="c++"/>
@@ -1155,6 +1153,15 @@
     </modify-function>
   </object-type>
   <value-type name="QVariant">
+    <modify-function signature="QVariant(QHash&lt;QString,QVariant>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="QVariant(QList&lt;QVariant>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="QVariant(QMap&lt;QString,QVariant>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="operator=(QVariant)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+
+
+
+    <modify-function signature="create(int,const void*)" remove="all" />
+
     <modify-function signature="QVariant(const char*)" remove="all"/>
     <modify-function signature="QVariant(int, const void*)" remove="all"/>
     <modify-function signature="QVariant(uint)" remove="all"/>
@@ -1195,6 +1202,11 @@
     <modify-function signature="toULongLong(bool*)const" remove="all" />
   </value-type>
   <value-type name="QStringList">
+    <modify-function signature="QStringList(const QList&lt;QString>&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="append(const QList&lt;QString>&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="operator+=(QList&lt;QString>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+
+    <modify-function signature="fromVector(QVector&lt;QString>)" remove="all" />
     <modify-function signature="operator&lt;&lt;(const QString&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const QStringList&amp;)" remove="all"/>
   </value-type>
@@ -1208,6 +1220,9 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
+    <modify-function signature="setEncodedQueryItems(QList&lt;QPair&lt;QByteArray,QByteArray> >)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="setQueryItems(QList&lt;QPair&lt;QString,QString> >)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+
   </value-type>
   <value-type name="QRegExp">
     <extra-includes>
@@ -1221,6 +1236,8 @@
     </extra-includes>
     <modify-function signature="operator==(const QFileInfo&amp;)const" remove="all"/>
     <modify-function signature="operator!=(const QFileInfo&amp;)const" remove="all"/>
+    <modify-function signature="QFileInfo(const QFile&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="setFile(const QFile&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
   </value-type>
   <value-type name="QByteArray" hash-function="qHash">
     <extra-includes>
@@ -1260,7 +1277,7 @@
     <modify-function signature="toULong(bool*, int) const" remove="all"/>
     <modify-function signature="toULongLong(bool*, int) const" remove="all"/>
     <modify-function signature="QByteArray(const char*,int)" remove="all"/>
-    <modify-function signature="append(const char *)" remove="all"/>
+    <modify-function signature="replace(const char*,int,const char*,int)" remove="all"/>
     <modify-function signature="append(QByteArray)">
       <modify-argument index="0" replace-value="this"/>
     </modify-function>
@@ -1467,15 +1484,17 @@
       <include file-name="QAbstractFileEngine" location="global"/>
     </extra-includes>
     <modify-function signature="createLocalFile(const QString&amp;)" allow-thread="yes"/>
-    <modify-function signature="createLocalFile(QFile&amp;)" allow-thread="yes"/>
+    <modify-function signature="createLocalFile(QFile&amp;)" allow-thread="yes" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
   </object-type>
   <object-type name="QMimeData">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
       <include file-name="QUrl" location="global"/>
     </extra-includes>
+    <modify-function signature="setUrls(QList&lt;QUrl>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
   </object-type>
-  <object-type name="QTextCodec">
+  <!-- FIXME Removed due to a shiboken bug-->
+<!--  <object-type name="QTextCodec">
     <modify-function signature="makeDecoder()const">
       <modify-argument index="return">
         <define-ownership owner="c++"/>
@@ -1537,7 +1556,7 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-  </object-type>
+  </object-type>-->
   <object-type name="QTextDecoder">
     <modify-function signature="toUnicode(const char*,int)">
       <remove/>
@@ -1564,14 +1583,15 @@
       <include file-name="QStringList" location="global"/>
     </extra-includes>
   </object-type>
-  <value-type name="QTextCodec::ConverterState">
+  <!-- FIXME Removed due to a shiboken bug-->
+<!--  <value-type name="QTextCodec::ConverterState">
     <include file-name="QTextCodec" location="global"/>
     <modify-function signature="ConverterState(QFlags&lt;QTextCodec::ConversionFlag&gt;)">
       <modify-argument index="1">
         <replace-default-expression with="QTextCodec::DefaultConversion"/>
       </modify-argument>
     </modify-function>
-  </value-type>
+  </value-type>-->
   <object-type name="QBuffer">
     <!-- ### modify to return value by pointer?
     <modify-function signature="buffer()const" remove="all"/>
@@ -1580,10 +1600,6 @@
     <modify-function signature="setData(const char*,int)" remove="all"/>
   </object-type>
   <object-type name="QTimer">
-    <extra-includes>
-      <include file-name="signal_manager.hpp" location="local"/>
-      <include file-name="pyqt_signal_slot.hpp" location="local"/>
-    </extra-includes>
   </object-type>
   <object-type name="QAbstractFileEngineHandler">
     <modify-function signature="create(const QString &amp;) const">
@@ -1659,7 +1675,6 @@
   </object-type>
   <object-type name="QCoreApplication">
     <extra-includes>
-      <include file-name="qapplication_policy.hpp" location="local"/>
       <include file-name="QStringList" location="global"/>
       <include file-name="QTranslator" location="global"/>
     </extra-includes>
@@ -1728,10 +1743,14 @@
   </object-type>
   <object-type name="QTimerEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Timer"/>
   <object-type name="QDynamicPropertyChangeEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DynamicPropertyChange"/>
+  <!-- FIXME Removed due to a shiboken bug-->
+  <!--
   <object-type name="QDataStream">
     <extra-includes>
       <include file-name="QtCore/QtCore" location="global"/>
     </extra-includes>
+
+    <modify-function signature="QDataStream(QByteArray*,QFlags&amp;QIODevice::OpenModeFlag>)" remove="all" />
 
     <modify-function signature="setDevice(QIODevice*)">
       <modify-argument index="1">
@@ -1739,7 +1758,7 @@
       </modify-argument>
     </modify-function>
 
-    <!-- remove primitive operators -->
+    <!- - remove primitive operators - ->
     <modify-function signature="operator&gt;&gt;(bool&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(char&amp;*)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
@@ -1771,6 +1790,7 @@
     <modify-function signature="writeRawData(const char*,int)" remove="all"/>
     <modify-function signature="writeBytes(const char*,uint)" remove="all"/>
   </object-type>
+  -->
   <object-type name="QFSFileEngine">
     <extra-includes>
       <include file-name="QDateTime" location="global"/>
@@ -1779,14 +1799,15 @@
   <value-type name="QTextStreamManipulator">
     <modify-function signature="exec(QTextStream &amp;)" rename="exec_"/>
   </value-type>
-  <object-type name="QTextStream">
+  <!-- FIXME Removed due to a shiboken bug-->
+<!--  <object-type name="QTextStream">
     <modify-function signature="QTextStream(QByteArray *, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
     <modify-function signature="QTextStream(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
     <modify-function signature="setString(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
     <modify-function signature="string()const" remove="all"/>
     <modify-function signature="codec()const" remove="all"/>
 
-    <!-- remove operators -->
+    <!- - remove operators - ->
     <modify-function signature="operator&lt;&lt;(char)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const void*)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(double)" remove="all"/>
@@ -1812,13 +1833,13 @@
     <modify-function signature="operator&gt;&gt;(QChar&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(QString&amp;)" remove="all"/>
 
-    <!--TODO-->
+    <!- -TODO- ->
     <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
     <modify-function signature="flush()" allow-thread="yes"/>
     <modify-function signature="read(qint64)" allow-thread="yes"/>
     <modify-function signature="readLine(qint64)" allow-thread="yes"/>
     <modify-function signature="readAll()" allow-thread="yes"/>
-  </object-type>
+  </object-type>-->
   <object-type name="QSystemSemaphore"/>
   <namespace-type name="QtConcurrent" target-type="class">
     <extra-includes>
@@ -1828,7 +1849,8 @@
   </namespace-type>
   <!-- <object-type name="QThreadPool"/> -->
   <value-type name="QXmlStreamAttribute"/>
-  <value-type name="QXmlStreamAttributes">
+  <!-- FIXME Removed due to a shiboken bug-->
+<!--  <value-type name="QXmlStreamAttributes">
     <modify-function signature="push_back(QXmlStreamAttribute)" remove="all"/>
     <modify-function signature="pop_back()" remove="all"/>
     <modify-function signature="push_front(QXmlStreamAttribute)" remove="all"/>
@@ -1843,18 +1865,19 @@
     <modify-function signature="value(const QLatin1String &amp;, const QLatin1String &amp;)const" remove="all" />
     <modify-function signature="value(const QLatin1String &amp;)const" remove="all" />
     <modify-function signature="hasAttribute(const QLatin1String &amp;)const" remove="all" />
-  </value-type>
+  </value-type>-->
   <value-type name="QXmlStreamNamespaceDeclaration"/>
   <value-type name="QXmlStreamNotationDeclaration"/>
   <value-type name="QXmlStreamEntityDeclaration"/>
   <object-type name="QXmlStreamReader">
+    <modify-function signature="addExtraNamespaceDeclarations(QVector&lt;QXmlStreamNamespaceDeclaration>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+
     <modify-function signature="QXmlStreamReader(const char*)" remove="all"/>
     <modify-function signature="addData(const char*)" remove="all"/>
   </object-type>
   <object-type name="QXmlStreamWriter">
-    <modify-function signature="QXmlStreamWriter(QString *)">
-      <remove/>
-    </modify-function>
+    <modify-function signature="writeCurrentToken(QXmlStreamReader)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="QXmlStreamWriter(QString *)" remove="all" />
     <modify-function signature="codec()const" remove="all"/>
     <!--TODO-->
   </object-type>
@@ -1870,9 +1893,15 @@
   <object-type name="QMetaObject">
     <include file-name="qobjectdefs.h" location="global" />
   </object-type>
-  <value-type name="QMetaProperty" />
-  <value-type name="QMetaClassInfo" />
-  <value-type name="QMetaEnum" />
+  <value-type name="QMetaProperty" >
+    <modify-function signature="enclosingMetaObject()const" remove="all" />
+  </value-type>
+  <value-type name="QMetaClassInfo">
+    <modify-function signature="enclosingMetaObject()const" remove="all" />
+  </value-type>
+  <value-type name="QMetaEnum">
+    <modify-function signature="enclosingMetaObject()const" remove="all" />
+  </value-type>
 
 
 
