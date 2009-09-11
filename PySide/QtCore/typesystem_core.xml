@@ -1442,7 +1442,7 @@
     <modify-function signature="addData(const char*,int)" remove="all"/>
   </object-type>
   <object-type name="QLibraryInfo"/>
-  <value-type name="QMutexLocker" copyable="no">
+  <object-type name="QMutexLocker" copyable="no">
     <modify-function signature="QMutexLocker(QMutex*)" allow-thread="yes" />
     <modify-function signature="relock()" allow-thread="yes"/>
     <modify-function signature="mutex() const">
@@ -1450,7 +1450,7 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-  </value-type>
+  </object-type>
 
   <object-type name="QMutex">
     <modify-function signature="lock()" allow-thread="yes"/>
