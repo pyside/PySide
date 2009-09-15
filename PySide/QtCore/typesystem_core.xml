@@ -1599,10 +1599,10 @@
     </modify-function>
   </value-type>-->
   <object-type name="QBuffer">
-    <!-- ### modify to return value by pointer?
+    <modify-function signature="QBuffer(QByteArray*, QObject*)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="setBuffer(QByteArray*)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
     <modify-function signature="buffer()const" remove="all"/>
     <modify-function signature="data()const" remove="all"/>
-    -->
     <modify-function signature="setData(const char*,int)" remove="all"/>
   </object-type>
   <object-type name="QTimer">
