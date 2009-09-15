@@ -286,15 +286,19 @@
       <include file-name="QTextDocument" location="global"/>
   </primitive-type>
   <primitive-type name="QBool" target-lang-api-name="PyBool">
-    <conversion-rule file="qtcore_conversions.h"/>
+    <conversion-rule file="qbool_conversions.h"/>
     <!-- FIXME This is a workaround to include some headers needed by some includes (nothing to do with QBool) -->
     <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
+
   <primitive-type name="std::string"/>
   <primitive-type name="std::wstring"/>
   <primitive-type name="QStdWString"/>
 
-  <container-type name="QList" type="list"/>
+  <container-type name="QList" type="list">
+    <conversion-rule file="qlist_conversions.h"/>
+    <include file-name="QList" location="global"/>
+  </container-type>
   <rejection class="QList" function-name="back"/>
   <rejection class="QList" function-name="begin"/>
   <rejection class="QList" function-name="constBegin"/>
@@ -351,7 +355,10 @@
   <container-type name="QLinkedList" type="linked-list"/>
   <container-type name="QMap" type="map"/>
   <container-type name="QMultiMap" type="multi-map"/>
-  <container-type name="QPair" type="pair"/>
+  <container-type name="QPair" type="pair">
+    <conversion-rule file="qpair_conversions.h"/>
+    <include file-name="QPair" location="global"/>
+  </container-type>
   <container-type name="QSet" type="set"/>
   <container-type name="QStack" type="stack"/>
 
