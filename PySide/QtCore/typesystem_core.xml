@@ -975,6 +975,8 @@
   <value-type name="QByteArrayMatcher"/>
   <value-type name="QDate">
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
+    <modify-function signature="weekNumber(int*)const" remove="all" /> <!-- FIXME: return a tuple -->
+    <modify-function signature="getDate(int*, int*, int*)" remove="all" /> <!-- FIXME: return a tuple -->
   </value-type>
   <value-type name="QDateTime"/>
   <value-type name="QDir">
