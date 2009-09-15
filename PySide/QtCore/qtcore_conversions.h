@@ -2,9 +2,9 @@
 template <>
 struct Converter<QBool>
 {
-    static PyObject* toPython(ValueHolder<QBool> holder)
+    static PyObject* toPython(QBool holder)
     {
-        return PyBool_FromLong((bool)holder.value);
+        return PyBool_FromLong(bool(holder));
     }
     static QBool toCpp(PyObject* pyobj)
     {
