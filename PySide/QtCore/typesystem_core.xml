@@ -326,7 +326,10 @@
   <rejection class="QList" function-name="toSet"/>
   <rejection class="QList" function-name="toStdList" />
 
-  <container-type name="QVector" type="vector"/>
+  <container-type name="QVector" type="vector">
+    <conversion-rule file="qvector_conversions.h"/>
+    <include file-name="QVector" location="global"/>
+  </container-type>
   <rejection class="QVector" function-name="back"/>
   <rejection class="QVector" function-name="begin"/>
   <rejection class="QVector" function-name="constBegin"/>
@@ -353,7 +356,10 @@
 
   <container-type name="QHash" type="hash"/>
   <container-type name="QLinkedList" type="linked-list"/>
-  <container-type name="QMap" type="map"/>
+  <container-type name="QMap" type="map">
+    <conversion-rule file="qmap_conversions.h"/>
+    <include file-name="QMap" location="global"/>
+  </container-type>
   <container-type name="QMultiMap" type="multi-map"/>
   <container-type name="QPair" type="pair">
     <conversion-rule file="qpair_conversions.h"/>
