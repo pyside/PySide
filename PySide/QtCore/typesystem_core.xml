@@ -1577,9 +1577,8 @@
   </object-type>
   <object-type name="QTimeLine"/>
   <object-type name="QTranslator">
-    <modify-function signature="translate(const char*,const char*,const char*,int)const">
-      <remove/>
-    </modify-function>
+    <modify-function signature="translate(const char*,const char*,const char*,int)const" remove="all" />
+    <modify-function signature="load(const uchar*, int)" remove="all" />
   </object-type>
   <object-type name="QWaitCondition">
     <modify-function signature="wait(QMutex*, unsigned long)" allow-thread="yes"/>
