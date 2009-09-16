@@ -354,7 +354,10 @@
   <container-type name="QQueue" type="queue"/>
   <rejection class="QQueue" function-name="head"/>
 
-  <container-type name="QHash" type="hash"/>
+  <container-type name="QHash" type="hash">
+    <conversion-rule file="qhash_conversions.h"/>
+    <include file-name="QHash" location="global"/>
+  </container-type>
   <container-type name="QLinkedList" type="linked-list"/>
   <container-type name="QMap" type="map">
     <conversion-rule file="qmap_conversions.h"/>
