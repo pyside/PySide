@@ -1893,6 +1893,7 @@
     <modify-function signature="addData(const char*)" remove="all"/>
   </object-type>
   <object-type name="QXmlStreamWriter">
+    <modify-function signature="QXmlStreamWriter(QByteArray*)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
     <modify-function signature="writeCurrentToken(QXmlStreamReader)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
     <modify-function signature="QXmlStreamWriter(QString *)" remove="all" />
     <modify-function signature="codec()const" remove="all"/>
