@@ -1724,6 +1724,7 @@
       <modify-argument index="2" invalidate-after-use="yes"/>
     </modify-function>
     <modify-function signature="QCoreApplication(int &amp;, char  **)" remove="all"/>
+    <inject-code class="native" file="glue/qcoreapplication_impl.cpp" position="beginning" />
     <modify-function signature="installTranslator(QTranslator *)" remove="all"/>
     <modify-function signature="removeTranslator(QTranslator *)" remove="all"/>
     <modify-function signature="postEvent(QObject*,QEvent*)">
