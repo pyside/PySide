@@ -1870,8 +1870,6 @@
   <value-type name="QXmlStreamNotationDeclaration"/>
   <value-type name="QXmlStreamEntityDeclaration"/>
   <object-type name="QXmlStreamReader">
-    <modify-function signature="addExtraNamespaceDeclarations(QVector&lt;QXmlStreamNamespaceDeclaration>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-
     <modify-function signature="QXmlStreamReader(const char*)" remove="all"/>
     <modify-function signature="addData(const char*)" remove="all"/>
   </object-type>
