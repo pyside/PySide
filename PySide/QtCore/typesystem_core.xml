@@ -1220,9 +1220,6 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
-    <modify-function signature="setEncodedQueryItems(QList&lt;QPair&lt;QByteArray,QByteArray> >)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="setQueryItems(QList&lt;QPair&lt;QString,QString> >)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-
   </value-type>
   <value-type name="QRegExp">
     <extra-includes>
