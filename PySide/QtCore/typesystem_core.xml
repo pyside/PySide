@@ -1481,7 +1481,8 @@
       <include file-name="QAbstractFileEngine" location="global"/>
     </extra-includes>
     <modify-function signature="createLocalFile(const QString&amp;)" allow-thread="yes"/>
-    <modify-function signature="createLocalFile(QFile&amp;)" allow-thread="yes" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <!--
+    <modify-function signature="createLocalFile(QFile&amp;)" allow-thread="yes" remove="all" />--> <!-- FIXME Removed due to a shiboken bug-->
   </object-type>
   <object-type name="QMimeData">
     <extra-includes>
