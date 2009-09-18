@@ -1153,13 +1153,6 @@
     </modify-function>
   </object-type>
   <value-type name="QVariant">
-    <modify-function signature="QVariant(QHash&lt;QString,QVariant>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="QVariant(QList&lt;QVariant>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="QVariant(QMap&lt;QString,QVariant>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="operator=(QVariant)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-
-
-
     <modify-function signature="create(int,const void*)" remove="all" />
 
     <modify-function signature="QVariant(const char*)" remove="all"/>
@@ -1202,10 +1195,6 @@
     <modify-function signature="toULongLong(bool*)const" remove="all" />
   </value-type>
   <value-type name="QStringList">
-    <modify-function signature="QStringList(const QList&lt;QString>&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="append(const QList&lt;QString>&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="operator+=(QList&lt;QString>)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-
     <modify-function signature="fromVector(QVector&lt;QString>)" remove="all" />
     <modify-function signature="operator&lt;&lt;(const QString&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const QStringList&amp;)" remove="all"/>
@@ -1481,8 +1470,6 @@
       <include file-name="QAbstractFileEngine" location="global"/>
     </extra-includes>
     <modify-function signature="createLocalFile(const QString&amp;)" allow-thread="yes"/>
-    <!--
-    <modify-function signature="createLocalFile(QFile&amp;)" allow-thread="yes" remove="all" />--> <!-- FIXME Removed due to a shiboken bug-->
   </object-type>
   <object-type name="QMimeData">
     <extra-includes>
