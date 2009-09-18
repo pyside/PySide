@@ -1064,8 +1064,7 @@
   <object-type name="QWriteLocker">
     <modify-function signature="relock()" allow-thread="yes" />
   </object-type>
-  <!-- FIXME Removed due to a shiboken bug-->
-<!--   <object-type name="QDirIterator"/> -->
+  <object-type name="QDirIterator"/>
   <object-type name="QThread">
     <modify-function signature="run()" thread="yes" />
     <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
