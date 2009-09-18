@@ -1074,12 +1074,6 @@
   </object-type>
   <object-type name="QAbstractFileEngineIterator"/>
   <object-type name="QAbstractItemModel">
-    <modify-function signature="mimeData(const QList&lt;QModelIndex >&amp;) const" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="setItemData(const QModelIndex&amp;, const QMap&lt;int, QVariant>&amp;)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="changePersistentIndexList(QList&lt;QModelIndex>,QList&lt;QModelIndex>)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="encodeData(QList&lt;QModelIndex>,QDataStream&amp;)const" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="decodeData(int,int,QModelIndex,QDataStream&amp;)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
-
     <modify-function signature="createIndex(int, int, int) const" remove="all"/>
     <modify-function signature="createIndex(int, int, unsigned int) const" remove="all"/>
     <modify-function signature="createIndex(int, int, void*) const" remove="all"/>
@@ -1103,7 +1097,6 @@
       <include file-name="QThread" location="global"/>
       <include file-name="QCoreApplication" location="global"/>
     </extra-includes>
-    <modify-function signature="children()const" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
 
     <modify-function signature="deleteLater()">
       <modify-argument index="this">
@@ -1598,8 +1591,6 @@
     </modify-function>
   </value-type>-->
   <object-type name="QBuffer">
-    <modify-function signature="QBuffer(QByteArray*, QObject*)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="setBuffer(QByteArray*)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
     <modify-function signature="buffer()const" remove="all"/>
     <modify-function signature="data()const" remove="all"/>
     <modify-function signature="setData(const char*,int)" remove="all"/>
