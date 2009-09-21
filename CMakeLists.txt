@@ -2,8 +2,8 @@ project(pyside)
 
 cmake_minimum_required(VERSION 2.6)
 
-set(CMAKE_CXX_FLAGS_RELEASE "-Wall -DNDEBUG -Os -Wl,-O1 -Wl,--hash-style=gnu")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-common -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-Wall -DNDEBUG -Os -Wl,-O1 -Wl,--hash-style=gnu -fno-strict-aliasing")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-common -Wall -fno-strict-aliasing")
 
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterp REQUIRED)
