@@ -3,7 +3,10 @@
     <!-- Rejections due to shiboken bugs -->
     <rejection class="QString" function-name="replace"/> <!-- A bug in overload method decisor -->
 
-    <!-- A bug when we have global functions with just one parameter -->
+    <!--
+        Stream manipulators does not fits into python language,
+        so we need to do a lot of inject code to handle them.
+    -->
     <rejection class="" function-name="bin" />
     <rejection class="" function-name="bom" />
     <rejection class="" function-name="center" />
@@ -21,12 +24,6 @@
     <rejection class="" function-name="noforcesign" />
     <rejection class="" function-name="noshowbase" />
     <rejection class="" function-name="oct" />
-    <rejection class="" function-name="qAddPostRoutine" />
-    <rejection class="" function-name="qCompress" />
-    <rejection class="" function-name="qInf" />
-    <rejection class="" function-name="qUncompress" />
-    <rejection class="" function-name="qRemovePostRoutine" />
-    <rejection class="" function-name="qSetRealNumberPrecision" />
     <rejection class="" function-name="reset" />
     <rejection class="" function-name="right" />
     <rejection class="" function-name="scientific" />
@@ -34,10 +31,17 @@
     <rejection class="" function-name="uppercasebase" />
     <rejection class="" function-name="uppercasedigits" />
     <rejection class="" function-name="ws" />
-    <rejection class="" function-name="" />
-    <rejection class="" function-name="" />
-    <rejection class="" function-name="" />
-    <!-- End of rejections due to shiboken bugs -->
+    <!-- End of rejections -->
+    <rejection class="" function-name="qAddPostRoutine" />
+    <rejection class="" function-name="qRemovePostRoutine" />
+    <!-- Removed because it have uchar* in their arguments-->
+    <rejection class="" function-name="qCompress" />
+    <!-- Removed because it's nto part of the public API, I guess -->
+    <rejection class="" function-name="qInf" />
+    <!-- Same as qCompress -->
+    <rejection class="" function-name="qUncompress" />
+    <!-- We do not export QStreamManipulator, so use QTextStream.setRealNumberPrecision instead of this -->
+    <rejection class="" function-name="qSetRealNumberPrecision" />
 
 
   <rejection class="QFutureSynchronizer"/>

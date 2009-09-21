@@ -63,3 +63,4 @@ enable_testing()
 
 # project directories
 add_subdirectory(${BINDING_NAME})
+add_subdirectory(tests)
