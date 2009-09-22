@@ -1481,7 +1481,7 @@
     </extra-includes>
   </object-type>
   <!-- FIXME Removed due to a shiboken bug-->
-<!--  <object-type name="QTextCodec">
+  <object-type name="QTextCodec">
     <modify-function signature="makeDecoder()const">
       <modify-argument index="return">
         <define-ownership owner="c++"/>
@@ -1543,7 +1543,7 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-  </object-type>-->
+  </object-type>
   <object-type name="QTextDecoder">
     <modify-function signature="toUnicode(const char*,int)">
       <remove/>
@@ -1570,14 +1570,14 @@
     </extra-includes>
   </object-type>
   <!-- FIXME Removed due to a shiboken bug-->
-<!--  <value-type name="QTextCodec::ConverterState">
+  <object-type name="QTextCodec::ConverterState">
     <include file-name="QTextCodec" location="global"/>
     <modify-function signature="ConverterState(QFlags&lt;QTextCodec::ConversionFlag&gt;)">
       <modify-argument index="1">
         <replace-default-expression with="QTextCodec::DefaultConversion"/>
       </modify-argument>
     </modify-function>
-  </value-type>-->
+  </object-type>
   <object-type name="QBuffer">
     <modify-function signature="buffer()const" remove="all"/>
     <modify-function signature="data()const" remove="all"/>
