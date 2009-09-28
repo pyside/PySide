@@ -1167,8 +1167,6 @@
     <modify-function signature="QVariant(double)" remove="all"/>
     <modify-function signature="QVariant(qulonglong)" remove="all"/>
     <modify-function signature="QVariant(qlonglong)" remove="all"/>
-    <modify-function signature="operator==(const QVariant&amp;)const" remove="all"/>
-    <modify-function signature="operator!=(const QVariant&amp;)const" remove="all"/>
     <modify-function signature="QVariant(bool)" remove="all" />
     <!-- QByteArray ctor MUST be declared before QString ctor -->
     <modify-function signature="QVariant(const QByteArray&amp;)" remove="all"/>
