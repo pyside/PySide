@@ -901,14 +901,7 @@
     <modify-function signature="fromStdString(std::string)" remove="all"/>
     <modify-function signature="toStdString()const" remove="all"/>
     <modify-function signature="toStdWString()const" remove="all"/>
-    <modify-function signature="operator!=(const char*)const" remove="all"/>
-    <modify-function signature="operator+=(const char*)" remove="all"/>
-    <modify-function signature="operator+=(char)" remove="all"/>
-    <modify-function signature="operator&lt;(const char*)const" remove="all"/>
-    <modify-function signature="operator&lt;=(const char*)const" remove="all"/>
-    <modify-function signature="operator==(const char*)const" remove="all"/>
-    <modify-function signature="operator&gt;(const char*)const" remove="all"/>
-    <modify-function signature="operator&gt;=(const char*)const" remove="all"/>
+<!--     <modify-function signature="operator+=(char)" remove="all"/> -->
     <modify-function signature="toUShort(bool*,int)const" remove="all" />
     <modify-function signature="toDouble(bool*)const" remove="all" />
     <modify-function signature="toFloat(bool*)const" remove="all" />
@@ -935,14 +928,7 @@
     <modify-function signature="arg(ulong, int, int, const QChar&amp;) const" remove="all"/>
     <modify-function signature="arg(ushort, int, int, const QChar&amp;) const" remove="all"/>
   </value-type>
-  <value-type name="QLatin1String">
-    <modify-function signature="operator!=(const char*)const" remove="all"/>
-    <modify-function signature="operator==(const char*)const" remove="all"/>
-    <modify-function signature="operator&lt;=(const char*)const" remove="all"/>
-    <modify-function signature="operator&lt;(const char*)const" remove="all"/>
-    <modify-function signature="operator&gt;=(const char*)const" remove="all"/>
-    <modify-function signature="operator&gt;(const char*)const" remove="all"/>
-  </value-type>
+  <value-type name="QLatin1String" />
   <value-type name="QStringRef">
     <modify-function signature="QStringRef(const QString*)" remove="all" />
     <modify-function signature="QStringRef(const QString*,int,int)" remove="all" />
@@ -1221,8 +1207,6 @@
       <include file-name="QDateTime" location="global"/>
       <include file-name="QDir" location="global"/>
     </extra-includes>
-    <modify-function signature="operator==(const QFileInfo&amp;)const" remove="all"/>
-    <modify-function signature="operator!=(const QFileInfo&amp;)const" remove="all"/>
     <modify-function signature="QFileInfo(const QFile&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
     <modify-function signature="setFile(const QFile&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
   </value-type>
