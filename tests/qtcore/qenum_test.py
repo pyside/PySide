@@ -22,7 +22,7 @@ class TestEnum(unittest.TestCase):
 
 class TestQFlags(unittest.TestCase):
     def testToItn(self):
-        om = QIODevice.OpenMode(QIODevice.NotOpen)
+        om = QIODevice.NotOpen
 
         self.assertEqual(om, QIODevice.NotOpen)
         self.assertTrue(om == 0)
@@ -31,8 +31,15 @@ class TestQFlags(unittest.TestCase):
         self.assertTrue(om != 1)
 
     def testToIntInFunction(self):
-        om = QIODevice.OpenMode(QIODevice.WriteOnly)
-        self.assertEqual(QString.number(int(om)), "2")
+        om = QIODevice.WriteOnly
+        self.assertEqual(int(om), 2)
+
+    def testNonExtensibleEnums(self):
+        try:
+            om = QIODevice.OpenMode(QIODevice.WriteOnly)
+            self.assertFail()
+        except:
+            pass
 
 class TestDuplicatedValues(unittest.TestCase):
     def testQVariant(self):
