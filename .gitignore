@@ -3,3 +3,4 @@ build
 .kdev4
 *~
 *.log
+*.pyc
