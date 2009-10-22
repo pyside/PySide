@@ -927,6 +927,13 @@
     <modify-function signature="arg(uint, int, int, const QChar&amp;) const" remove="all"/>
     <modify-function signature="arg(ulong, int, int, const QChar&amp;) const" remove="all"/>
     <modify-function signature="arg(ushort, int, int, const QChar&amp;) const" remove="all"/>
+
+    <add-function signature="__str__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            QByteArray utf8 = %SELF.toUtf8();
+            %0 = PyUnicode_DecodeUTF8(utf8.data(), utf8.count(), 0);
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QLatin1String" />
   <value-type name="QStringRef">
