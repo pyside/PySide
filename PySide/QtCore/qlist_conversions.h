@@ -1,7 +1,11 @@
 template <typename qlist>
 struct Converter_qlist
 {
-    static PyObject* toPython(qlist holder)
+    static bool isConvertible(const PyObject* pyObj) {
+        return PySequence_Check(const_cast<PyObject*>(pyObj));
+    }
+
+    static PyObject* toPython(const qlist holder)
     {
         PyObject* result = PyList_New(holder.size());
         for (int i = 0; i < holder.size(); i++) {

@@ -893,6 +893,7 @@
     <extra-includes>
       <include file-name="QTextCodec" location="global"/>
     </extra-includes>
+    <conversion-rule file="qstring_conversions.h" />
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[2]" />
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[3]" />
 
