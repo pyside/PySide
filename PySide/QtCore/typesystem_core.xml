@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtCore">
-    <!-- Rejections due to shiboken bugs -->
-    <rejection class="QString" function-name="replace"/> <!-- A bug in overload method decisor -->
-
     <!--
         Stream manipulators does not fits into python language,
         so we need to do a lot of inject code to handle them.
