@@ -1,8 +1,8 @@
 template <typename qvector>
 struct Converter_qvector
 {
-    static bool isConvertible(const PyObject* pyObj) {
-        return PySequence_Check(const_cast<PyObject*>(pyObj));
+    static bool isConvertible(PyObject* pyObj) {
+        return PySequence_Check(pyObj);
     }
     static PyObject* toPython(qvector vector)
     {

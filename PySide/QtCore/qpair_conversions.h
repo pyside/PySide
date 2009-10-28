@@ -1,8 +1,8 @@
 template <typename qpair>
 struct Converter_qpair
 {
-    static bool isConvertible(const PyObject* pyObj) {
-        return PySequence_Check(const_cast<PyObject*>(pyObj));
+    static bool isConvertible(PyObject* pyObj) {
+        return PySequence_Check(pyObj);
     }
     static PyObject* toPython(qpair holder)
     {

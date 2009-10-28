@@ -1,9 +1,9 @@
-inline bool Converter< QString >::isConvertible(const PyObject* pyObj)
+inline bool Converter< QString >::isConvertible(PyObject* pyObj)
 {
     return PyObject_TypeCheck(pyObj, &PyQString_Type) || PyUnicode_Check(pyObj) || PyString_Check(pyObj);
 }
 
-inline PyObject* Converter< QString >::toPython(const QString cppobj)
+inline PyObject* Converter< QString >::toPython(QString cppobj)
 {
     PyObject* pyobj;
     void* holder = (void*) new QString(cppobj);
@@ -13,11 +13,11 @@ inline PyObject* Converter< QString >::toPython(const QString cppobj)
 
 inline QString Converter< QString >::toCpp(PyObject* pyobj)
 {
-    if (Converter<QChar>::isConvertible(pyobj)) {
+    if (PyQChar_Check(pyobj)) {
         return QString(Converter< QChar >::toCpp(pyobj));
-    } else if (Converter<QByteArray>::isConvertible(pyobj)) {
+    } else if (PyQByteArray_Check(pyobj)) {
         return QString(Converter< QByteArray >::toCpp(pyobj));
-    } else if (Converter<QLatin1String>::isConvertible(pyobj)) {
+    } else if (PyQLatin1String_Check(pyobj)) {
         return QString(Converter< QLatin1String >::toCpp(pyobj));
     } else if (PyUnicode_Check(pyobj)) {
 #if defined(Py_UNICODE_WIDE)
