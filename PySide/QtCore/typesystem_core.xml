@@ -694,6 +694,7 @@
   <rejection class="QString" function-name="fromLatin1_helper"/>
   <rejection class="QString" function-name="fromAscii_helper"/>
   <rejection class="QString" function-name="toWCharArray"/>
+  <rejection class="QString" function-name="sprintf"/>
   <rejection class="QString" function-name="vsprintf"/>
   <rejection class="QString" function-name="fromStdWString"/>
   <rejection class="QStringRef" function-name="constData"/>
