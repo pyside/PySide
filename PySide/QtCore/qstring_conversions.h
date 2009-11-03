@@ -1,14 +1,21 @@
-inline bool Converter< QString >::isConvertible(PyObject* pyObj)
+inline bool Converter< QString >::isConvertible(PyObject* pyobj)
 {
-    return PyObject_TypeCheck(pyObj, &PyQString_Type) || PyUnicode_Check(pyObj) || PyString_Check(pyObj);
+    return PyUnicode_Check(pyobj) || PyString_Check(pyobj);
 }
 
-inline PyObject* Converter< QString >::toPython(QString cppobj)
+inline PyObject* Converter< QString >::createWrapper(const QString* cppobj)
 {
-    PyObject* pyobj;
-    void* holder = (void*) new QString(cppobj);
-    pyobj = Shiboken::PyBaseWrapper_New(&PyQString_Type, &PyQString_Type, holder);
-    return pyobj;
+    return PyBaseWrapper_New(&PyQString_Type, &PyQString_Type, cppobj);
+}
+
+inline QString* Converter<QString >::copyCppObject(const QString& cppobj)
+{
+    return new QString(cppobj);
+}
+
+inline PyObject* Converter< QString >::toPython(const QString& cppobj)
+{
+    return Converter< QString >::createWrapper(new QString(cppobj));
 }
 
 inline QString Converter< QString >::toCpp(PyObject* pyobj)
@@ -31,5 +38,5 @@ inline QString Converter< QString >::toCpp(PyObject* pyobj)
 #endif
     } else if (PyString_Check(pyobj))
         return QString(Converter< char * >::toCpp(pyobj));
-    return *((QString*) ((Shiboken::PyBaseWrapper*)pyobj)->cptr);
+    return *Converter< QString* >::toCpp(pyobj);
 }

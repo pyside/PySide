@@ -1,13 +1,13 @@
 template <typename qpair>
 struct Converter_qpair
 {
-    static bool isConvertible(PyObject* pyObj) {
-        return PySequence_Check(pyObj);
+    static bool isConvertible(PyObject* pyobj) {
+        return PySequence_Check(pyobj);
     }
-    static PyObject* toPython(qpair holder)
+    static PyObject* toPython(const qpair& pair)
     {
-        typename qpair::first_type first(holder.first);
-        typename qpair::second_type second(holder.second);
+        typename qpair::first_type first(pair.first);
+        typename qpair::second_type second(pair.second);
         PyObject* tuple = PyTuple_New(2);
         PyTuple_SET_ITEM(tuple, 0, Converter<typename qpair::first_type>::toPython(first));
         PyTuple_SET_ITEM(tuple, 1, Converter<typename qpair::second_type>::toPython(second));

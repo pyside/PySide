@@ -1,4 +1,3 @@
-
 template <>
 struct Converter<QBool>
 {

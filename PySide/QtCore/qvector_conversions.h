@@ -1,10 +1,10 @@
 template <typename qvector>
 struct Converter_qvector
 {
-    static bool isConvertible(PyObject* pyObj) {
-        return PySequence_Check(pyObj);
+    static bool isConvertible(PyObject* pyobj) {
+        return PySequence_Check(pyobj);
     }
-    static PyObject* toPython(qvector vector)
+    static PyObject* toPython(const qvector& vector)
     {
         PyObject* result = PyList_New(vector.size());
         for (int i = 0; i < vector.size(); i++) {

@@ -1,11 +1,11 @@
 template <typename qhash>
 struct Converter_qhash
 {
-    static bool isConvertible(PyObject* pyObj) {
-        return PyDict_Check(pyObj);
+    static bool isConvertible(PyObject* pyobj) {
+        return PyDict_Check(pyobj);
     }
 
-    static PyObject* toPython(qhash hash)
+    static PyObject* toPython(const qhash& hash)
     {
         PyObject* result = PyDict_New();
 

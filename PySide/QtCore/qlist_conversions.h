@@ -1,15 +1,15 @@
 template <typename qlist>
 struct Converter_qlist
 {
-    static bool isConvertible(PyObject* pyObj) {
-        return PySequence_Check(pyObj);
+    static bool isConvertible(PyObject* pyobj) {
+        return PySequence_Check(pyobj);
     }
 
-    static PyObject* toPython(qlist holder)
+    static PyObject* toPython(const qlist& list)
     {
-        PyObject* result = PyList_New(holder.size());
-        for (int i = 0; i < holder.size(); i++) {
-            PyList_SET_ITEM(result, i, Converter<typename qlist::value_type>::toPython(holder.at(i)));
+        PyObject* result = PyList_New(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            PyList_SET_ITEM(result, i, Converter<typename qlist::value_type>::toPython(list.at(i)));
         }
         return result;
     }

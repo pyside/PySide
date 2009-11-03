@@ -1,11 +1,11 @@
 template <typename qmap>
 struct Converter_qmap
 {
-    static bool isConvertible(PyObject* pyObj) {
-        return PyDict_Check(pyObj);
+    static bool isConvertible(PyObject* pyobj) {
+        return PyDict_Check(pyobj);
     }
 
-    static PyObject* toPython(qmap map)
+    static PyObject* toPython(const qmap& map)
     {
         PyObject* result = PyDict_New();
 
