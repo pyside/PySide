@@ -27,14 +27,11 @@ inline QString Converter< QString >::toCpp(PyObject* pyobj)
     } else if (PyQLatin1String_Check(pyobj)) {
         return QString(Converter< QLatin1String >::toCpp(pyobj));
     } else if (PyUnicode_Check(pyobj)) {
-#if defined(Py_UNICODE_WIDE)
         Py_UNICODE* unicode = PyUnicode_AS_UNICODE(pyobj);
+#if defined(Py_UNICODE_WIDE)
         return QString::fromUcs4(unicode);
 #else
-        PyObject* str = PyUnicode_AsUTF8String(pyobj);
-        QString result = QString::fromUtf8(PyString_AS_STRING(str));
-        Py_DECREF(str);
-        return result;
+        return QString::fromUtf16(unicode, PyUnicode_GET_SIZE(pyobj));
 #endif
     } else if (PyString_Check(pyobj))
         return QString(Converter< char * >::toCpp(pyobj));
