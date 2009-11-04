@@ -934,6 +934,32 @@
             %0 = PyUnicode_DecodeUTF8(utf8.data(), utf8.count(), 0);
         </inject-code>
     </add-function>
+    <add-function signature="__len__">
+        <inject-code class="target" position="beginning">
+            return %CPPSELF.count();
+        </inject-code>
+    </add-function>
+    <add-function signature="__getitem__">
+        <inject-code class="target" position="beginning">
+                if (_i &lt; 0 || _i >= %CPPSELF.size()) {
+                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                    return 0;
+                } else {
+                    return Converter&lt;QString>::createWrapper(new QString(%CPPSELF.at(_i)));
+                }
+        </inject-code>
+    </add-function>
+    <add-function signature="__setitem__">
+        <inject-code class="target" position="beginning">
+                PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
+                PyObject* result = PyQString_replace(self, args);
+                Py_DECREF(args);
+                if (result) {
+                    Py_DECREF(result);
+                }
+                return !result ? -1 : 0;
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QLatin1String" />
   <value-type name="QStringRef">
