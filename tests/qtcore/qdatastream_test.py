@@ -21,10 +21,35 @@ class QDataStreamWrite(unittest.TestCase):
         self.write = QDataStream(self.ba, QIODevice.WriteOnly)
 
     def testWriteUInt8(self):
-        '''QDataStream.writeUInt8'''
+        '''QDataStream.writeUInt8 (accepting str of size 1)'''
         x = 0xFF
         self.write.writeUInt8(chr(x))
         y = ord(self.read.readUInt8())
+        self.assertEqual(x, y)
+
+        self.assertRaises(TypeError, self.write.writeUInt8, 'aaaaa')
+
+    def testWriteInt8(self):
+        '''QDataStream.writeInt8 (accepting str of size 1)'''
+        x = 0xFF
+        self.write.writeInt8(chr(x))
+        y = ord(self.read.readInt8())
+        self.assertEqual(x, y)
+
+        self.assertRaises(TypeError, self.write.writeInt8, 'aaaaa')
+
+    def testWriteUInt8Int(self):
+        '''QDataStream.writeUInt8 (accepting integer)'''
+        x = 0xFF
+        self.write.writeUInt8(x)
+        y = self.read.readUInt8()
+        self.assertEqual(x, y)
+
+    def testWriteInt8Int(self):
+        '''QDataStream.writeInt8 (accepting integer)'''
+        x = 0xFF
+        self.write.writeInt8(x)
+        y = self.read.readInt8()
         self.assertEqual(x, y)
 
     def testWriteUInt16(self):
