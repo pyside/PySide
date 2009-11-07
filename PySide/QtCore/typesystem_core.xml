@@ -1910,7 +1910,12 @@
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
-    <add-function signature="writeUInt8(const char*)">
+    <add-function signature="writeUInt8(char)">
+        <inject-code class="native" position="end">
+            <insert-template name="stream_write_method"/>
+        </inject-code>
+    </add-function>
+    <add-function signature="writeUInt8(const char *)">
         <inject-code class="native" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
