@@ -1254,6 +1254,13 @@
     <extra-includes>
       <include file-name="QNoImplicitBoolCast" location="global"/>
     </extra-includes>
+    <modify-function signature="QByteArray(const char *)">
+        <!-- Keep \x00 bytes passed in python strings -->
+        <inject-code class="target" position="beginning">
+            int size = PyString_Size(pyargs[0]);
+            cptr = new QByteArray(cpp_arg0, size);
+        </inject-code>
+    </modify-function>
     <!-- removed functions -->
     <modify-function signature="begin()" remove="all"/>
     <modify-function signature="begin()const" remove="all"/>
