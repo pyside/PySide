@@ -1918,13 +1918,13 @@
   <template name="stream_read_method">
       %RETURN_TYPE _result;
       PyObject *_pyresult;
-      *( %CPPSELF ) &gt;&gt; _result;
+      (*%CPPSELF) &gt;&gt; _result;
       _pyresult = Shiboken::Converter&lt; %RETURN_TYPE &gt;::toPython(_result);
       return _pyresult;
   </template>
 
   <template name="stream_write_method">
-      *( %CPPSELF ) &lt;&lt; cpp_arg0;
+      (*%CPPSELF) &lt;&lt; cpp_arg0;
   </template>
 
   <object-type name="QDataStream" stream="yes">
@@ -1972,128 +1972,128 @@
     <!-- Extra functions for primitive type handling -->
 
     <add-function signature="readBool()" return-type="bool">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readInt8()" return-type="qint8">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readUInt8()" return-type="quint8">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readUInt16()" return-type="quint16">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readInt16()" return-type="qint16">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readInt32()" return-type="qint32">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readUInt32()" return-type="quint32">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readInt64()" return-type="qint64">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readUInt64()" return-type="quint64">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readFloat()" return-type="float">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readDouble()" return-type="qreal">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readString()" return-type="QString">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
 
     <add-function signature="writeBool(bool)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeInt8(qint8)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeUInt8(char)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeUInt8(const char *)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeUInt16(quint16)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeInt16(qint16)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeInt32(qint32)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeUInt32(quint32)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeInt64(qint64)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeUInt64(quint64)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeFloat(float)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeDouble(qreal)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeString(QString)">
-        <inject-code class="native" position="end">
+        <inject-code class="target" position="end">
             <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
