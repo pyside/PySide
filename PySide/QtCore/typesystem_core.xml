@@ -1170,9 +1170,18 @@
   </object-type>
   <object-type name="QAbstractFileEngineIterator"/>
   <object-type name="QAbstractItemModel">
-    <modify-function signature="createIndex(int, int, int) const" remove="all"/>
-    <modify-function signature="createIndex(int, int, unsigned int) const" remove="all"/>
     <modify-function signature="createIndex(int, int, void*) const" remove="all"/>
+    <modify-function signature="createIndex(int,int,quint32)const" remove="all" />
+    <modify-function signature="createIndex(int, int, int) const">
+        <modify-argument index="3">
+            <replace-default-expression with="0" />
+        </modify-argument>
+    </modify-function>
+    <add-function signature="createIndex(int,int,PyObject*)const" return-type="QModelIndex">
+        <inject-code class="target" position="beginning">
+        %0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.createIndex(%1, %2, %PYARG_3));
+        </inject-code>
+    </add-function>
 
     <!-- These signals are private, because only QAbstractItemModel can emit then -->
     <modify-function signature="rowsAboutToBeInserted(const QModelIndex&amp;,int,int)" remove="all" />
@@ -2183,7 +2192,14 @@
     <!--TODO-->
   </object-type>
   <value-type name="QModelIndex">
-    <modify-function signature="internalPointer()const" remove="all"/>
+    <modify-function signature="internalPointer()const">
+        <inject-code class="target" position="beginning">
+            %0 = (PyObject*)%CPPSELF.%FUNCTION_NAME();
+            if (!%0)
+                %0 = Py_None;
+            Py_XINCREF(%0);
+        </inject-code>
+    </modify-function>
   </value-type>
 
   <value-type name="QGenericArgument">
