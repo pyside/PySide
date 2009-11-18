@@ -915,7 +915,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toFloat(bool*)const">
@@ -923,7 +923,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toInt(bool*,int)const" remove="all" />
@@ -1082,9 +1082,35 @@
     <extra-includes>
       <include file-name="QDate" location="global"/>
     </extra-includes>
-    <modify-function signature="toDouble(QString,bool*)const" remove="all" />
-    <modify-function signature="toFloat(QString,bool*)const" remove="all" />
+    <modify-function signature="toDouble(QString,bool*)const">
+        <modify-argument index="2">
+            <remove-argument />
+            <remove-default-expression />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,bool*" />
+        </inject-code>
+    </modify-function>
+    <modify-function signature="toFloat(QString,bool*)const">
+        <modify-argument index="2">
+            <remove-argument />
+            <remove-default-expression />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,bool*" />
+        </inject-code>
+    </modify-function>
     <modify-function signature="toInt(QString,bool*,int)const" remove="all" />
+    <!--
+    <modify-function signature="toInt(QString,bool*,int)const">
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_arg,bool*,arg" />
+        </inject-code>
+    </modify-function>
+    -->
     <modify-function signature="toLongLong(QString,bool*,int)const" remove="all" />
     <modify-function signature="toShort(QString,bool*,int)const" remove="all" />
     <modify-function signature="toUShort(QString,bool*,int)const" remove="all" />
@@ -1261,7 +1287,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toInt(bool*)const">
@@ -1269,7 +1295,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toLongLong(bool*)const">
@@ -1277,7 +1303,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toUInt(bool*)const">
@@ -1285,7 +1311,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toULongLong(bool*)const">
@@ -1293,7 +1319,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
   </value-type>
@@ -1496,7 +1522,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toFloat(bool*)const">
@@ -1504,7 +1530,7 @@
         <remove-argument/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="only_bool*_fix"/>
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
     <modify-function signature="toInt(bool*,int)const" remove="all" />
