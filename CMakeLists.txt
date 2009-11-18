@@ -1,7 +1,5 @@
 include(icecc.cmake) # this must be the first line!
 
-project(pyside)
-
 cmake_minimum_required(VERSION 2.6)
 
 set(CMAKE_CXX_FLAGS_RELEASE "-Wall -DNDEBUG -Os -Wl,-O1 -Wl,--hash-style=gnu -Wno-strict-aliasing")

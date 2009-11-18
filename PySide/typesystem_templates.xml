@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<typesystem>
+    <!-- Templates to fix bool* parameters -->
+
+    <template name="only_bool*_fix">
+        bool ok_;
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_);
+        %0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
+    </template>
+
+</typesystem>
+

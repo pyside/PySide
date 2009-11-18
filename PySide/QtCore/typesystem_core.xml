@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtCore">
+   <load-typesystem name="typesystem_templates.xml" generate="no"/>
     <!--
         Stream manipulators does not fits into python language,
         so we need to do a lot of inject code to handle them.
@@ -907,10 +908,24 @@
     <modify-function signature="fromStdString(std::string)" remove="all"/>
     <modify-function signature="toStdString()const" remove="all"/>
     <modify-function signature="toStdWString()const" remove="all"/>
-<!--     <modify-function signature="operator+=(char)" remove="all"/> -->
+    <modify-function signature="operator+=(char)" remove="all"/>
     <modify-function signature="toUShort(bool*,int)const" remove="all" />
-    <modify-function signature="toDouble(bool*)const" remove="all" />
-    <modify-function signature="toFloat(bool*)const" remove="all" />
+    <modify-function signature="toDouble(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="toFloat(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
     <modify-function signature="toInt(bool*,int)const" remove="all" />
     <modify-function signature="toLong(bool*,int)const" remove="all" />
     <modify-function signature="toLongLong(bool*,int)const" remove="all" />
@@ -1215,11 +1230,46 @@
     <modify-function signature="QVariant(const QUrl&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QLocale&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QRegExp&amp;)" remove="all"/>
-    <modify-function signature="toDouble(bool*)const" remove="all" />
-    <modify-function signature="toInt(bool*)const" remove="all" />
-    <modify-function signature="toLongLong(bool*)const" remove="all" />
-    <modify-function signature="toUInt(bool*)const" remove="all" />
-    <modify-function signature="toULongLong(bool*)const" remove="all" />
+    <modify-function signature="toDouble(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="toInt(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="toLongLong(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="toUInt(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="toULongLong(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
   </value-type>
   <value-type name="QStringList">
     <modify-function signature="fromVector(QVector&lt;QString>)" remove="all" />
@@ -1415,8 +1465,22 @@
       <modify-argument index="0" replace-value="this"/>
       <rename to="setFloat"/>
     </modify-function>
-    <modify-function signature="toDouble(bool*)const" remove="all" />
-    <modify-function signature="toFloat(bool*)const" remove="all" />
+    <modify-function signature="toDouble(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="toFloat(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="only_bool*_fix"/>
+      </inject-code>
+    </modify-function>
     <modify-function signature="toInt(bool*,int)const" remove="all" />
     <modify-function signature="toUShort(bool*,int)const" remove="all" />
     <add-function signature="__len__">
