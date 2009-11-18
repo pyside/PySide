@@ -1091,6 +1091,32 @@
   </value-type>
   <value-type name="QBitArray" hash-function="qHash" >
       <modify-function signature="fill(bool,int)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
+    <add-function signature="__len__">
+        <inject-code class="target" position="beginning">
+            return %CPPSELF.size();
+        </inject-code>
+    </add-function>
+    <add-function signature="__getitem__">
+        <inject-code class="target" position="beginning">
+                if (_i &lt; 0 || _i >= %CPPSELF.size()) {
+                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                    return 0;
+                } else {
+                    return %CONVERTTOPYTHON[bool](%CPPSELF.at(_i));
+                }
+        </inject-code>
+    </add-function>
+    <add-function signature="__setitem__">
+        <inject-code class="target" position="beginning">
+                PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
+                PyObject* result = PyQBitArray_setBit(self, args);
+                Py_DECREF(args);
+                if (result) {
+                    Py_DECREF(result);
+                }
+                return !result ? -1 : 0;
+        </inject-code>
+    </add-function>
   </value-type>
   <!-- QReadWriteLock does not have a copy ctor! -->
   <object-type name="QReadWriteLock">
