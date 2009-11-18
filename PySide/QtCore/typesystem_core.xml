@@ -966,14 +966,13 @@
                 if (_i &lt; 0 || _i >= %CPPSELF.size()) {
                     PyErr_SetString(PyExc_IndexError, "index out of bounds");
                     return 0;
-                } else {
-                    return Converter&lt;QString>::createWrapper(new QString(%CPPSELF.at(_i)));
                 }
+                return %CONVERTTOPYTHON[%TYPE](%CPPSELF.at(_i));
         </inject-code>
     </add-function>
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
-                PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
+                PyObject* args = Py_BuildValue("(nO)", _i, _value);
                 PyObject* result = PyQString_replace(self, args);
                 Py_DECREF(args);
                 if (result) {
@@ -1381,6 +1380,32 @@
     <modify-function signature="fromVector(QVector&lt;QString>)" remove="all" />
     <modify-function signature="operator&lt;&lt;(const QString&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const QStringList&amp;)" remove="all"/>
+    <add-function signature="__len__">
+        <inject-code class="target" position="beginning">
+            return %CPPSELF.count();
+        </inject-code>
+    </add-function>
+    <add-function signature="__getitem__">
+        <inject-code class="target" position="beginning">
+                if (_i &lt; 0 || _i >= %CPPSELF.size()) {
+                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                    return 0;
+                } else {
+                    return Converter&lt;QString>::createWrapper(new QString(%CPPSELF.at(_i)));
+                }
+        </inject-code>
+    </add-function>
+    <add-function signature="__setitem__">
+        <inject-code class="target" position="beginning">
+                PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
+                PyObject* result = PyQStringList_replace(self, args);
+                Py_DECREF(args);
+                if (result) {
+                    Py_DECREF(result);
+                }
+                return !result ? -1 : 0;
+        </inject-code>
+    </add-function>
   </value-type>
   <object-type name="QAbstractListModel">
     <extra-includes>
