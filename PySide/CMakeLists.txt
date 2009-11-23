@@ -1,6 +1,6 @@
 project(pyside)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py
-        DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
+        DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}")
 
 macro(execute_generator module sources)
 add_custom_command(OUTPUT ${${sources}}
@@ -20,8 +20,8 @@ endmacro(execute_generator)
 macro(HAS_QT_MODULE var name)
 IF (${var})
     add_subdirectory(${name})
-    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_BINARY_DIR}/${name}/${name}.so"
-                                                               "${CMAKE_BINARY_DIR}/PySide/${name}.so")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_BINARY_DIR}/${name}/${name}${CMAKE_SHARED_MODULE_SUFFIX}"
+                                                               "${CMAKE_BINARY_DIR}/PySide/${name}${CMAKE_SHARED_MODULE_SUFFIX}")
 else (${var})
     message(STATUS "${name} NOT found. ${name} support disabled.")
 endif (${var})
