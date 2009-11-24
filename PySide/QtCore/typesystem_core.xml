@@ -1179,7 +1179,7 @@
     </modify-function>
     <add-function signature="createIndex(int,int,PyObject*)const" return-type="QModelIndex">
         <inject-code class="target" position="beginning">
-        %0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.createIndex(%1, %2, %PYARG_3));
+        %0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %3));
         </inject-code>
     </add-function>
 
