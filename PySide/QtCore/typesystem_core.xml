@@ -1177,7 +1177,7 @@
     </modify-function>
     <add-function signature="createIndex(int,int,PyObject*)const" return-type="QModelIndex">
         <inject-code class="target" position="beginning">
-        %0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %3));
+        %0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3));
         </inject-code>
     </add-function>
 
@@ -1263,7 +1263,39 @@
          from #define section-->
     <modify-function signature="findChildren(const QRegExp &amp;) const" remove="all"/>
     <modify-function signature="findChildren(const QString &amp;) const" remove="all"/>
-    <modify-function signature="findChild(const QString &amp;) const" remove="all"/>
+    <modify-function signature="findChild(const QString &amp;) const" remove="all" />
+    <add-function signature="findChild(PyTypeObject*, const QString&amp;)" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            const char* type_name =  %PYARG_1->ob_type->tp_name;
+            const bool isEmpty = %2.isEmpty();
+            foreach(QObject* o, %CPPSELF.children()) {
+                if (isEmpty || %2 == o->objectName()) {
+                    PyObject* obj = %CONVERTTOPYTHON[QObject*](o);
+                    Shiboken::setParent(self, obj);
+                    if (PyType_IsSubtype(obj->ob_type, (PyTypeObject*)%PYARG_1))
+                        %0 = obj;
+                    else
+                        Py_DECREF(obj);
+                }
+            }
+        </inject-code>
+    </add-function>
+    <add-function signature="findChildren(PyTypeObject*, const QString&amp;)" return-type="PySequence*" >
+        <inject-code class="target" position="beginning">
+            %0 = PyList_New(0);
+            const char* type_name =  %PYARG_1->ob_type->tp_name;
+            const bool isEmpty = %2.isEmpty();
+            foreach(QObject* o, %CPPSELF.children()) {
+                if (isEmpty || %2 == o->objectName()) {
+                    PyObject* obj = %CONVERTTOPYTHON[QObject*](o);
+                    Shiboken::setParent(self, obj);
+                    if (PyType_IsSubtype(obj->ob_type, (PyTypeObject*)%PYARG_1))
+                        PyList_Append(%0, obj);
+                    Py_DECREF(obj);
+                }
+            }
+        </inject-code>
+    </add-function>
    <modify-function signature="sender() const">
       <modify-argument index="return">
          <define-ownership owner="target"/>
