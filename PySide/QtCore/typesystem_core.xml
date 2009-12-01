@@ -1100,8 +1100,6 @@
             <insert-template name="fix_args,bool*" />
         </inject-code>
     </modify-function>
-    <modify-function signature="toInt(QString,bool*,int)const" remove="all" />
-    <!--
     <modify-function signature="toInt(QString,bool*,int)const">
         <modify-argument index="2">
             <remove-argument />
@@ -1110,7 +1108,7 @@
             <insert-template name="fix_arg,bool*,arg" />
         </inject-code>
     </modify-function>
-    -->
+
     <modify-function signature="toLongLong(QString,bool*,int)const" remove="all" />
     <modify-function signature="toShort(QString,bool*,int)const" remove="all" />
     <modify-function signature="toUShort(QString,bool*,int)const" remove="all" />
@@ -1226,9 +1224,6 @@
     </modify-function>
     <!-- End of Invalidate-after-use fix -->
     <modify-function signature="parent() const">
-       <modify-argument index="return">
-         <define-ownership owner="target"/>
-       </modify-argument>
       <modify-argument index="this">
         <parent index="return" action="add"/>
       </modify-argument>
@@ -1244,7 +1239,25 @@
     <modify-function signature="disconnect(const QObject*, const char*)" remove="all"/>
     <modify-function signature="disconnect(const char*, const QObject*, const char*)" remove="all"/>
     <modify-function signature="disconnect(const QObject*, const char*, const QObject*, const char *)" remove="all"/>
-    <modify-function signature="inherits(const char*) const" remove="all"/>
+    <inject-code class="native" position="beginning">
+        static bool
+        PyObject_inherits_internal(PyTypeObject *objType, const char *class_name)
+        {
+            if (strcmp(objType->tp_name, class_name) == 0)
+                return true;
+
+            PyTypeObject* base = (objType)->tp_base;
+            if (base == 0)
+                return false;
+            return PyObject_inherits_internal(base, class_name);
+        }
+    </inject-code>
+    <modify-function signature="inherits(const char*) const">
+        <inject-code class="target" position="beginning">
+            bool retval =  PyObject_inherits_internal(self->ob_type, %1) ? true : %CPPSELF.%FUNCTION_NAME(%1);
+            %0 = %CONVERTTOPYTHON[bool](retval);
+        </inject-code>
+    </modify-function>
     <!-- findChildren and findChild causes warnings using generator. They were kept
          here to avoid generation even removing QT_NO_MEMBER_TEMPLATES and QT_NO_REGEXP
          from #define section-->
