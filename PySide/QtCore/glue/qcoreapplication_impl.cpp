@@ -15,7 +15,7 @@ PyObject* PyQCoreApplication_New(PyTypeObject *type, PyObject *args, PyObject*)
     }
 
     QCoreApplication* cptr = new QCoreApplication(argc, argv);
-    PyObject* self = Shiboken::PyBaseWrapper_New(type, &PyQCoreApplication_Type, cptr);
+    PyObject* self = Shiboken::PyBaseWrapper_New(type, cptr);
 
     if (!self) {
         if (cptr) delete cptr;
