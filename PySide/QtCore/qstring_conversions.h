@@ -7,11 +7,6 @@ inline bool Converter< QString >::isConvertible(PyObject* pyobj)
             || PyQChar_Check(pyobj);
 }
 
-inline PyObject* Converter< QString >::createWrapper(const QString* cppobj)
-{
-    return PyBaseWrapper_New((PyTypeObject*)&PyQString_Type, cppobj);
-}
-
 inline QString* Converter<QString >::copyCppObject(const QString& cppobj)
 {
     return new QString(cppobj);
