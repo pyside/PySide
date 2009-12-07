@@ -1297,21 +1297,14 @@
     </modify-function>
   </object-type>
   <value-type name="QVariant">
+    <conversion-rule file="qvariant_conversions.h" />
     <modify-function signature="create(int,const void*)" remove="all" />
 
-    <modify-function signature="QVariant(const char*)" remove="all"/>
     <modify-function signature="QVariant(int, const void*)" remove="all"/>
+    <!-- handled by inject code -->
     <modify-function signature="QVariant(uint)" remove="all"/>
-    <!-- handled by inject code -->
-    <modify-function signature="QVariant(int)" remove="all"/>
-    <!-- handled by inject code -->
-    <modify-function signature="QVariant(double)" remove="all"/>
     <modify-function signature="QVariant(qulonglong)" remove="all"/>
-    <modify-function signature="QVariant(qlonglong)" remove="all"/>
-    <modify-function signature="QVariant(bool)" remove="all" />
-    <!-- QByteArray ctor MUST be declared before QString ctor -->
     <modify-function signature="QVariant(const QByteArray&amp;)" remove="all"/>
-    <!-- Support QVariant as PyQt4.5 does -->
     <modify-function signature="QVariant(QDataStream&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QBitArray&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QString&amp;)" remove="all"/>
@@ -1330,6 +1323,46 @@
     <modify-function signature="QVariant(const QUrl&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QLocale&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QRegExp&amp;)" remove="all"/>
+    <modify-function signature="QVariant(QHash&lt;QString,QVariant>)" remove="all" />
+    <modify-function signature="QVariant(QMap&lt;QString,QVariant>)" remove="all" />
+    <modify-function signature="QVariant(QList&lt;QVariant>)" remove="all" />
+    <modify-function signature="QVariant(QVariant)" remove="all" />
+    <modify-function signature="QVariant(QLine)" remove="all" />
+    <modify-function signature="QVariant(QLineF)" remove="all" />
+
+    <inject-code class="native" position="beginning" file="glue/qvariant_converter_impl.cpp" />
+    <add-function signature="QVariant(PyObject*)">
+        <inject-code class="target" position="beginning">
+        cptr = new QVariant(Shiboken::Converter&lt;QVariant>::toCpp(%PYARG_1));
+        </inject-code>
+    </add-function>
+    <add-function signature="toPyObject()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            const char* type_name = %CPPSELF.typeName();
+            uint type_id = QMetaType::type(type_name);
+            if (!type_id || type_id > QVariant::UserType) {
+                %PYARG_0 = %CPPSELF.value&lt;PyObjectHolder>();
+            } else {
+                %PYARG_0 = Py_None;
+                Py_INCREF(Py_None);
+            }
+        </inject-code>
+    </add-function>
+    <modify-function signature="typeName()const">
+      <inject-code class="target" position="beginning">
+        if (%CPPSELF.isNull()) {
+            %PYARG_0 = Py_None;
+            Py_INCREF(Py_None);
+        } else if (%CPPSELF.userType() == QMetaTypeId&lt;PyObjectHolder>::qt_metatype_id()) {
+            // emulate PyQt4 behaviour
+            PyObject* obj = %CPPSELF.value&lt;PyObjectHolder>();
+            if (PySequence_Check(obj))
+                %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE]("QVariantList");
+        }
+        if (!%PYARG_0)
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.typeName());
+      </inject-code>
+    </modify-function>
     <modify-function signature="toDouble(bool*)const">
       <modify-argument index="1">
         <remove-argument/>
@@ -1386,7 +1419,7 @@
                 PyErr_SetString(PyExc_IndexError, "index out of bounds");
                 return 0;
             }
-            return %CONVERTTOPYTHON[%TYPE](%CPPSELF.at(_i));
+            return %CONVERTTOPYTHON[QString](%CPPSELF.at(_i));
         </inject-code>
     </add-function>
     <add-function signature="__setitem__">
