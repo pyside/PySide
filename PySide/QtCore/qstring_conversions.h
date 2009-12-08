@@ -2,9 +2,9 @@ inline bool Converter< QString >::isConvertible(PyObject* pyobj)
 {
     return PyString_Check(pyobj)
             || PyUnicode_Check(pyobj)
-            || PyQByteArray_Check(pyobj)
-            || PyQLatin1String_Check(pyobj)
-            || PyQChar_Check(pyobj);
+            || SbkQByteArray_Check(pyobj)
+            || SbkQLatin1String_Check(pyobj)
+            || SbkQChar_Check(pyobj);
 }
 
 inline QString* Converter<QString >::copyCppObject(const QString& cppobj)
@@ -19,11 +19,11 @@ inline PyObject* Converter< QString >::toPython(const QString& cppobj)
 
 inline QString Converter< QString >::toCpp(PyObject* pyobj)
 {
-    if (PyQChar_Check(pyobj)) {
+    if (SbkQChar_Check(pyobj)) {
         return QString(Converter< QChar >::toCpp(pyobj));
-    } else if (PyQByteArray_Check(pyobj)) {
+    } else if (SbkQByteArray_Check(pyobj)) {
         return QString(Converter< QByteArray >::toCpp(pyobj));
-    } else if (PyQLatin1String_Check(pyobj)) {
+    } else if (SbkQLatin1String_Check(pyobj)) {
         return QString(Converter< QLatin1String >::toCpp(pyobj));
     } else if (PyUnicode_Check(pyobj)) {
         Py_UNICODE* unicode = PyUnicode_AS_UNICODE(pyobj);
@@ -34,5 +34,5 @@ inline QString Converter< QString >::toCpp(PyObject* pyobj)
 #endif
     } else if (PyString_Check(pyobj))
         return QString(Converter< char * >::toCpp(pyobj));
-    return *PyQString_cptr(pyobj);
+    return *SbkQString_cptr(pyobj);
 }

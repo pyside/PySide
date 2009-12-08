@@ -953,7 +953,7 @@
     <add-function signature="__str__()" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             QByteArray utf8 = %CPPSELF.toUtf8();
-            %0 = PyUnicode_DecodeUTF8(utf8.data(), utf8.count(), 0);
+            %PYARG_0 = PyUnicode_DecodeUTF8(utf8.data(), utf8.count(), 0);
         </inject-code>
     </add-function>
     <add-function signature="__len__">
@@ -973,11 +973,9 @@
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
                 PyObject* args = Py_BuildValue("(nO)", _i, _value);
-                PyObject* result = PyQString_replace(self, args);
+                PyObject* result = SbkQString_replace(self, args);
                 Py_DECREF(args);
-                if (result) {
-                    Py_DECREF(result);
-                }
+                Py_XDECREF(result);
                 return !result ? -1 : 0;
         </inject-code>
     </add-function>
@@ -1121,23 +1119,20 @@
     </add-function>
     <add-function signature="__getitem__">
         <inject-code class="target" position="beginning">
-                if (_i &lt; 0 || _i >= %CPPSELF.size()) {
-                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                    return 0;
-                } else {
-                    return %CONVERTTOPYTHON[bool](%CPPSELF.at(_i));
-                }
+            if (_i &lt; 0 || _i >= %CPPSELF.size()) {
+                PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                return 0;
+            }
+            return %CONVERTTOPYTHON[bool](%CPPSELF.at(_i));
         </inject-code>
     </add-function>
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
-                PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
-                PyObject* result = PyQBitArray_setBit(self, args);
-                Py_DECREF(args);
-                if (result) {
-                    Py_DECREF(result);
-                }
-                return !result ? -1 : 0;
+            PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
+            PyObject* result = SbkQBitArray_setBit(self, args);
+            Py_DECREF(args);
+            Py_XDECREF(result);
+            return !result ? -1 : 0;
         </inject-code>
     </add-function>
   </value-type>
@@ -1176,7 +1171,7 @@
     </modify-function>
     <add-function signature="createIndex(int,int,PyObject*)const" return-type="QModelIndex">
         <inject-code class="target" position="beginning">
-        %0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3));
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3));
         </inject-code>
     </add-function>
 
@@ -1254,7 +1249,7 @@
     <modify-function signature="inherits(const char*) const">
         <inject-code class="target" position="beginning">
             bool retval =  PyObject_inherits_internal(self->ob_type, %1) ? true : %CPPSELF.%FUNCTION_NAME(%1);
-            %0 = %CONVERTTOPYTHON[bool](retval);
+            %PYARG_0 = %CONVERTTOPYTHON[bool](retval);
         </inject-code>
     </modify-function>
     <!-- findChildren and findChild causes warnings using generator. They were kept
@@ -1272,7 +1267,7 @@
                     PyObject* obj = %CONVERTTOPYTHON[QObject*](o);
                     Shiboken::setParent(self, obj);
                     if (PyType_IsSubtype(obj->ob_type, (PyTypeObject*)%PYARG_1))
-                        %0 = obj;
+                        %PYARG_0 = obj;
                     else
                         Py_DECREF(obj);
                 }
@@ -1281,7 +1276,7 @@
     </add-function>
     <add-function signature="findChildren(PyTypeObject*, const QString&amp;)" return-type="PySequence*" >
         <inject-code class="target" position="beginning">
-            %0 = PyList_New(0);
+            %PYARG_0 = PyList_New(0);
             const char* type_name =  %PYARG_1->ob_type->tp_name;
             const bool isEmpty = %2.isEmpty();
             foreach(QObject* o, %CPPSELF.children()) {
@@ -1289,7 +1284,7 @@
                     PyObject* obj = %CONVERTTOPYTHON[QObject*](o);
                     Shiboken::setParent(self, obj);
                     if (PyType_IsSubtype(obj->ob_type, (PyTypeObject*)%PYARG_1))
-                        PyList_Append(%0, obj);
+                        PyList_Append(%PYARG_0, obj);
                     Py_DECREF(obj);
                 }
             }
@@ -1387,23 +1382,20 @@
     </add-function>
     <add-function signature="__getitem__">
         <inject-code class="target" position="beginning">
-                if (_i &lt; 0 || _i >= %CPPSELF.size()) {
-                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                    return 0;
-                } else {
-                    return Converter&lt;QString>::createWrapper(new QString(%CPPSELF.at(_i)));
-                }
+            if (_i &lt; 0 || _i >= %CPPSELF.size()) {
+                PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                return 0;
+            }
+            return %CONVERTTOPYTHON[%TYPE](%CPPSELF.at(_i));
         </inject-code>
     </add-function>
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
-                PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
-                PyObject* result = PyQStringList_replace(self, args);
-                Py_DECREF(args);
-                if (result) {
-                    Py_DECREF(result);
-                }
-                return !result ? -1 : 0;
+            PyObject* args = Py_BuildValue("(nO)", _i, _value);
+            PyObject* result = SbkQStringList_replace(self, args);
+            Py_DECREF(args);
+            Py_XDECREF(result);
+            return !result ? -1 : 0;
         </inject-code>
     </add-function>
   </value-type>
@@ -1635,11 +1627,9 @@
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
                 PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
-                PyObject* result = PyQByteArray_replace(self, args);
+                PyObject* result = SbkQByteArray_replace(self, args);
                 Py_DECREF(args);
-                if (result) {
-                    Py_DECREF(result);
-                }
+                Py_XDECREF(result);
                 return !result ? -1 : 0;
         </inject-code>
     </add-function>
@@ -1986,11 +1976,9 @@
   <object-type name="QDynamicPropertyChangeEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DynamicPropertyChange"/>
 
   <template name="stream_read_method">
-      %RETURN_TYPE _result;
-      PyObject *_pyresult;
-      (*%CPPSELF) &gt;&gt; _result;
-      _pyresult = Shiboken::Converter&lt; %RETURN_TYPE &gt;::toPython(_result);
-      return _pyresult;
+      %RETURN_TYPE _cpp_result;
+      (*%CPPSELF) &gt;&gt; _cpp_result;
+      %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](_cpp_result);
   </template>
 
   <template name="stream_write_method">
@@ -2264,10 +2252,10 @@
   <value-type name="QModelIndex">
     <modify-function signature="internalPointer()const">
         <inject-code class="target" position="beginning">
-            %0 = (PyObject*)%CPPSELF.%FUNCTION_NAME();
-            if (!%0)
-                %0 = Py_None;
-            Py_XINCREF(%0);
+            %PYARG_0 = (PyObject*)%CPPSELF.%FUNCTION_NAME();
+            if (!%PYARG_0)
+                %PYARG_0 = Py_None;
+            Py_XINCREF(%PYARG_0);
         </inject-code>
     </modify-function>
   </value-type>

@@ -1,11 +1,10 @@
-PyObject* PyQCoreApplication_New(PyTypeObject *type, PyObject *args, PyObject*)
+PyObject* SbkQCoreApplication_New(PyTypeObject *type, PyObject *args, PyObject*)
 {
     int numArgs = PyTuple_GET_SIZE(args);
     if (numArgs != 1) {
         PyErr_BadArgument();
         return 0;
     }
-
 
     char** argv;
     int argc;
@@ -15,7 +14,7 @@ PyObject* PyQCoreApplication_New(PyTypeObject *type, PyObject *args, PyObject*)
     }
 
     QCoreApplication* cptr = new QCoreApplication(argc, argv);
-    PyObject* self = Shiboken::PyBaseWrapper_New(type, cptr);
+    PyObject* self = Shiboken::SbkBaseWrapper_New(type, cptr);
 
     if (!self) {
         if (cptr) delete cptr;
