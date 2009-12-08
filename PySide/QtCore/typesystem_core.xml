@@ -1036,6 +1036,11 @@
                 return !result ? -1 : 0;
         </inject-code>
     </add-function>
+    <add-function signature="__getslice__">
+        <inject-code class="target" position="beginning">
+            <insert-template name="get_slice"/>
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QLatin1String" />
   <value-type name="QStringRef">
@@ -1511,8 +1516,6 @@
   </value-type>
   <value-type name="QStringList">
     <modify-function signature="fromVector(QVector&lt;QString>)" remove="all" />
-    <modify-function signature="operator&lt;&lt;(const QString&amp;)" remove="all"/>
-    <modify-function signature="operator&lt;&lt;(const QStringList&amp;)" remove="all"/>
     <add-function signature="__len__">
         <inject-code class="target" position="beginning">
             return %CPPSELF.count();
@@ -1534,6 +1537,48 @@
             Py_DECREF(args);
             Py_XDECREF(result);
             return !result ? -1 : 0;
+        </inject-code>
+    </add-function>
+    <add-function signature="__getslice__">
+        <inject-code class="target" position="beginning">
+            <insert-template name="get_slice"/>
+        </inject-code>
+    </add-function>
+    <add-function signature="__setslice__">
+        <inject-code class="target" position="beginning">
+            <!--
+            PyObject* result = 0;
+            Py_ssize_t start, end;
+            Py_ssize_t len = %CPPSELF->count();
+
+            if (_i1 &gt; len)
+               start = len;
+            else if (_i1 &lt; 0)
+               start = 0;
+            else
+               start = _i1;
+
+            if (_i2 &gt; len)
+               end = len;
+            else if (_i2 &lt; 0)
+               end = 0;
+            else
+               end = _i2;
+
+            if (start &lt; end) {
+                Py_ssize_t i;
+                for (Py_ssize_t i = _value->count(); i &gt; -1; i++) {
+                    PyObject* args = Py_BuildValue("(nO)", start, %CPPSELF->at(i));
+                    result = SbkQStringList_insert(self, args);
+                    Py_XDECREF(args);
+                    Py_XDECREF(result);
+                }
+                for (i = start; i &lt; end; i++)
+                    SbkQStringList_removeAt(self, Py_BuildValue("(n)", i));
+            }
+            return !result ? -1 : 0;
+            -->
+            return 0;
         </inject-code>
     </add-function>
   </value-type>

@@ -22,6 +22,30 @@
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_, %1);
         %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
     </template>
+    <template name="get_slice">
+        %TYPE* sequence;
+        Py_ssize_t start, end;
+        Py_ssize_t len = %CPPSELF->count();
 
+        if (_i1 &gt; len)
+            start = len;
+        else if (_i1 &lt; 0)
+            start = 0;
+        else
+            start = _i1;
+
+        if (_i2 &gt; len)
+            end = len;
+        else if (_i2 &lt; 0)
+           end = 0;
+        else
+           end = _i2;
+
+        sequence = new %TYPE();
+        for (Py_ssize_t i = start; i &lt; end; i++)
+            sequence->append(%CPPSELF->at(i));
+
+        return %CONVERTTOPYTHON[%TYPE](*sequence);
+    </template>
 </typesystem>
 
