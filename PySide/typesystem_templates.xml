@@ -17,6 +17,11 @@
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, &amp;ok_, %3);
         %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
     </template>
+    <template name="fix_bool*,arg">
+        bool ok_;
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_, %1);
+        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
+    </template>
 
 </typesystem>
 
