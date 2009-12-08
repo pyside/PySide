@@ -1347,6 +1347,54 @@
             }
         </inject-code>
     </add-function>
+
+    <add-function signature="tr(const char *, const char *, int)" return-type="QString">
+        <modify-argument index="2">
+          <replace-default-expression with="0"/>
+        </modify-argument>
+        <modify-argument index="3">
+          <replace-default-expression with="-1"/>
+        </modify-argument>
+
+        <inject-code class="target" position="beginning">
+            QString result;
+            if (QCoreApplication::instance()) {
+                PyObject *klass = PyObject_GetAttrString(%PYSELF, "__class__");
+                PyObject *cname = PyObject_GetAttrString(klass, "__name__");
+                result = QString(QCoreApplication::instance()->translate(PyString_AsString(cname), %1, %2, QCoreApplication::CodecForTr, %3));
+
+                Py_DECREF(klass);
+                Py_DECREF(cname);
+            } else {
+                result = QString(QString::fromLatin1(%1));
+            }
+            %PYARG_0 = %CONVERTTOPYTHON[QString](result);
+        </inject-code>
+    </add-function>
+
+    <add-function signature="trUtf8(const char *, const char *, int)" return-type="QString">
+        <modify-argument index="2">
+          <replace-default-expression with="0"/>
+        </modify-argument>
+        <modify-argument index="3">
+          <replace-default-expression with="-1"/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            QString result;
+            if (QCoreApplication::instance()) {
+                PyObject *klass = PyObject_GetAttrString(%PYSELF, "__class__");
+                PyObject *cname = PyObject_GetAttrString(klass, "__name__");
+                result = QString(QCoreApplication::instance()->translate(PyString_AsString(cname), %1, %2, QCoreApplication::UnicodeUTF8, %3));
+
+                Py_DECREF(klass);
+                Py_DECREF(cname);
+            } else {
+                result = QString(QString::fromLatin1(%1));
+            }
+            %PYARG_0 = %CONVERTTOPYTHON[QString](result);
+        </inject-code>
+    </add-function>
+
    <modify-function signature="sender() const">
       <modify-argument index="return">
          <define-ownership owner="target"/>
