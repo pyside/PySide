@@ -35,16 +35,6 @@ bool Shiboken::Converter<QVariant>::isConvertible(PyObject* pyobj)
     return true;
 }
 
-PyObject* Shiboken::Converter<QVariant>::toPython(const QVariant& cppobj)
-{
-    return Converter<QVariant>::createWrapper(new QVariant(cppobj));
-}
-
-QVariant* Shiboken::Converter<QVariant>::copyCppObject(const QVariant& cppobj)
-{
-    return new QVariant(cppobj);
-}
-
 QVariant Shiboken::Converter<QVariant>::toCpp(PyObject* pyobj)
 {
     if (SbkQVariant_Check(pyobj))
