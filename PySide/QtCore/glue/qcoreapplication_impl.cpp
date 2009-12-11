@@ -1,4 +1,4 @@
-PyObject* SbkQCoreApplication_New(PyTypeObject *type, PyObject *args, PyObject*)
+PyObject* SbkQCoreApplication_New(Shiboken::SbkBaseWrapperType* type, PyObject* args, PyObject*)
 {
     int numArgs = PyTuple_GET_SIZE(args);
     if (numArgs != 1) {
