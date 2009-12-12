@@ -5,7 +5,7 @@
 import sys
 import unittest
 
-from PySide.QtCore import QObject, QTimer, QCoreApplication, SIGNAL, SLOT
+from PySide.QtCore import QObject, QTimer, QCoreApplication, SIGNAL, SLOT, QProcess
 
 try:
     from PySide.QtGui import QSpinBox, QPushButton, QApplication
@@ -14,7 +14,7 @@ except ImportError:
     QPushButton = object
     QApplication = object
 
-from helper import BasicPySlotCase, UsesQApplication
+from helper import BasicPySlotCase, UsesQApplication, UsesQCoreApplication
 from helper.decorators import requires
 
 @requires('PySide.QtGui')
@@ -33,14 +33,6 @@ class ButtonPySlot(UsesQApplication, BasicPySlotCase):
         QObject.connect(button, SIGNAL('clicked()'), self.cb)
         self.args = tuple()
         button.emit(SIGNAL('clicked()'))
-        self.assert_(self.called)
-
-    def testButtonClickedWrongArgs(self):
-        """Python slot connected to QPushButton.clicked() and more args"""
-        button = QPushButton('Mylabel')
-        QObject.connect(button, SIGNAL('clicked()'), self.cb)
-        self.args = tuple()
-        button.emit(SIGNAL('clicked()'), 44)
         self.assert_(self.called)
 
     def testButtonClick(self):
@@ -124,6 +116,24 @@ class QSpinBoxQtSlots(UsesQApplication):
         spinSend.emit(SIGNAL('valueChanged(int)'), 66)
         self.assertEqual(spinRec.value(), 66)
         self.assertEqual(spinSend.value(), 42)
+
+
+class ArgsOnEmptySignal(UsesQCoreApplication):
+    '''Trying to emit a signal without arguments passing some arguments'''
+
+    def testArgsToNoArgsSignal(self):
+        '''Passing arguments to a signal without arguments'''
+        process = QProcess()
+        self.assertRaises(TypeError, process.emit, SIGNAL('started()'), 42)
+
+
+class MoreArgsOnEmit(UsesQCoreApplication):
+    '''Trying to pass more args than needed to emit (signals with args)'''
+
+    def testMoreArgs(self):
+        '''Passing more arguments than needed'''
+        process = QProcess()
+        self.assertRaises(TypeError, process.emit, SIGNAL('finished(int)'), 55, 55)
 
 
 if __name__ == '__main__':
