@@ -9,5 +9,5 @@
 # $4: test file
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$1
-export PYTHONPATH=$PYTHON_PATH:$2
+export PYTHONPATH=$PYTHONPATH:$2
 $3 $4
