@@ -32,7 +32,7 @@ class slotTest(unittest.TestCase):
 
         my_obj = objTest()
         my_slot = QtCore.SLOT("slot()")
-        timer.connect(QtCore.SIGNAL("timeout()"), my_obj, my_slot)
+        QtCore.QObject.connect(timer, QtCore.SIGNAL("timeout()"), my_obj, my_slot)
         timer.start(100)
 
         QtCore.QTimer.singleShot(1000, self.quit_app)
