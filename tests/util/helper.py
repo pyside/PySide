@@ -19,6 +19,10 @@ def adjust_filename(filename, orig_mod_filename):
     dirpath = os.path.dirname(os.path.abspath(orig_mod_filename))
     return os.path.join(dirpath, filename)
 
+class NoQtGuiError(Exception):
+    def __init__(self):
+        Exception.__init__(self, 'No QtGui found')
+
 class BasicPySlotCase(object):
     '''Base class that tests python slots and signal emissions.
 
@@ -71,6 +75,7 @@ if has_gui:
             del self.app
             super(UsesQApplication, self).tearDown()
 
+
     class TimedQApplication(unittest.TestCase):
         '''Helper class with timed QApplication exec loop'''
 
@@ -88,6 +93,14 @@ if has_gui:
         def tearDown(self):
             '''Delete resources'''
             del self.app
+else:
+    class UsesQApplication(unittest.TestCase):
+        def setUp(self):
+            raise NoQtGuiError()
+    class TimedQapplication(unittest.TestCase):
+        def setUp(self):
+            raise NoQtGuiError()
+
 
 _core_instance = None
 
