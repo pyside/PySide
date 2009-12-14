@@ -2,9 +2,10 @@
 
 '''Connecting lambda to signals'''
 
+import sys
 import unittest
 
-from PySide.QtCore import QObject, SIGNAL
+from PySide.QtCore import QObject, SIGNAL, QProcess
 from PySide.QtGui import QApplication, QSpinBox, QPushButton
 
 from helper import UsesQApplication
@@ -33,6 +34,24 @@ class BasicCase(unittest.TestCase):
 class QtSigLambda(UsesQApplication):
 
     qapplication = True
+
+    def testNoArgs(self):
+        '''Connecting a lambda to a signal without arguments'''
+        proc = QProcess()
+        dummy = Dummy()
+        QObject.connect(proc, SIGNAL('started()'), lambda : setattr(dummy, 'called', True))
+        proc.start(sys.executable, ['-c', '""'])
+        proc.waitForFinished()
+        self.assert_(dummy.called)
+
+    def testWithArgs(self):
+        '''Connecting a lambda to a signal with arguments'''
+        proc = QProcess()
+        dummy = Dummy()
+        QObject.connect(proc, SIGNAL('finished(int)'), lambda x: setattr(dummy, 'called', x))
+        proc.start(sys.executable, ['-c', '""'])
+        proc.waitForFinished()
+        self.assertEqual(dummy.called, proc.exitCode())
 
     def testButton(self):
         #Connecting a lambda to a QPushButton.clicked()
