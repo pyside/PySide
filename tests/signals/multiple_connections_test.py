@@ -13,6 +13,7 @@ except ImportError:
     QSpinBox = object
 
 from helper import BasicPySlotCase, UsesQApplication, UsesQCoreApplication
+from helper.decorators import requires
 
 
 def random_gen(count=100, largest=99, lowest=0):
@@ -46,6 +47,7 @@ class MultipleSignalConnections(unittest.TestCase):
             self.assert_(rec.called)
 
 
+@requires('PySide.QtGui')
 class QtGuiMultipleSlots(UsesQApplication, MultipleSignalConnections):
     '''Multiple connections to QtGui signals'''
 

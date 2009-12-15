@@ -6,13 +6,20 @@ import sys
 import unittest
 
 from PySide.QtCore import QObject, QTimer, QCoreApplication, SIGNAL, SLOT
-from PySide.QtGui import QSpinBox, QPushButton, QApplication
-from helper import BasicPySlotCase, UsesQApplication
 
+try:
+    from PySide.QtGui import QSpinBox, QPushButton, QApplication
+except ImportError:
+    QSpinBox = object
+    QPushButton = object
+    QApplication = object
+
+from helper import BasicPySlotCase, UsesQApplication
+from helper.decorators import requires
+
+@requires('PySide.QtGui')
 class ButtonPySlot(UsesQApplication, BasicPySlotCase):
     """Tests the connection of python slots to QPushButton signals"""
-
-    qapplication = True
 
     def setUp(self):
         super(ButtonPySlot, self).setUp()
@@ -45,10 +52,9 @@ class ButtonPySlot(UsesQApplication, BasicPySlotCase):
         self.assert_(self.called)
 
 
+@requires('PySide.QtGui')
 class SpinBoxPySlot(UsesQApplication, BasicPySlotCase):
     """Tests the connection of python slots to QSpinBox signals"""
-
-    qapplication = True
 
     def setUp(self):
         super(SpinBoxPySlot, self).setUp()
@@ -79,6 +85,7 @@ class SpinBoxPySlot(UsesQApplication, BasicPySlotCase):
         self.args = (554,)
         self.assertRaises(TypeError, self.spin.emit, SIGNAL('valueChanged(int)'))
 
+@requires('PySide.QtGui')
 class QSpinBoxQtSlots(UsesQApplication):
     """Tests the connection to QSpinBox qt slots"""
 
