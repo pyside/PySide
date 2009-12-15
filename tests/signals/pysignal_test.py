@@ -1,7 +1,16 @@
 
 import unittest
 from PySide.QtCore import QObject, SIGNAL, SLOT
-from PySide.QtGui import QSpinBox, QApplication, QWidget
+
+try:
+    from PySide.QtGui import QSpinBox, QApplication, QWidget
+except ImportError:
+    QSpinBox = object
+    QApplication = object
+    QWidget = object
+
+from helper import UsesQApplication
+from helper.decorators import requires
 
 class Dummy(QObject):
     """Dummy class used in this test."""
@@ -42,19 +51,19 @@ class PythonSigSlot(unittest.TestCase):
 
         self.assert_(self.called)
 
-app = QApplication([])
 
-class SpinBoxPySignal(unittest.TestCase):
+@requires('PySide.QtGui')
+class SpinBoxPySignal(UsesQApplication):
     """Tests the connection of python signals to QSpinBox qt slots."""
 
-    qapplication = True
-
     def setUp(self):
+        super(SpinBoxPySignal, self).setUp()
         self.obj = Dummy()
         self.spin = QSpinBox()
         self.spin.setValue(0)
 
     def tearDown(self):
+        super(SpinBoxPySignal, self).tearDown()
         del self.obj
         del self.spin
 
@@ -78,16 +87,17 @@ class SpinBoxPySignal(unittest.TestCase):
         self.assertEqual(self.spin.value(), 77)
 
 
-class WidgetPySignal(unittest.TestCase):
+@requires('PySide.QtGui')
+class WidgetPySignal(UsesQApplication):
     """Tests the connection of python signals to QWidget qt slots."""
 
-    qapplication = True
-
     def setUp(self):
+        super(WidgetPySignal, self).setUp()
         self.obj = Dummy()
         self.widget = QWidget()
 
     def tearDown(self):
+        super(WidgetPySignal, self).tearDown()
         del self.obj
         del self.widget
 
