@@ -139,7 +139,7 @@ class ItemRetrieve(UsesQApplication):
     def testItems(self):
         #QGraphicsScene.items()
         items = self.scene.items()
-        self.assertEqual(items, self.items)
+        self.assertEqual(items.sort(), self.items.sort())
 
     def testItemAt(self):
         #QGraphicsScene.itemAt()

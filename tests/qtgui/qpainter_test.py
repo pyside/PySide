@@ -1,6 +1,6 @@
 import unittest
 
-from PySide.QtGui import QPainter
+from PySide.QtGui import QPainter, QBrush, QLinearGradient
 from PySide.QtCore import QRect, Qt
 
 class QPainterDrawText(unittest.TestCase):
@@ -25,6 +25,14 @@ class QPainterDrawText(unittest.TestCase):
         rect = QRect(100, 100, 100, 100)
         self.painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap,
                               self.text)
+
+class SetBrushWithOtherArgs(unittest.TestCase):
+    '''Using qpainter.setBrush with args other than QBrush'''
+
+    def testSetBrushGradient(self):
+        painter = QPainter()
+        gradient = QLinearGradient(0, 0, 0, 0)
+        painter.setBrush(gradient)
 
 if __name__ == '__main__':
     unittest.main()

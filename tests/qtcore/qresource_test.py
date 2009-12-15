@@ -11,11 +11,7 @@ class ResourcesUsage(unittest.TestCase):
     '''Test case for resources usage'''
 
     def setUp(self):
-        try:
-            f = open('quoteEnUS.txt')
-        except IOError:
-            f = open(os.path.join('qtcore', 'quoteEnUS.txt'))
-
+        f = open(os.path.join(os.path.dirname(__file__), 'quoteEnUS.txt'))
         self.text = f.read()
         f.close()
 
