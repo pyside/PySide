@@ -59,10 +59,11 @@ if (NOT SITE_PACKAGE)
     message(FATAL_ERROR "Could not detect Python module installation directory.")
 endif (NOT SITE_PACKAGE)
 
-set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic)
+set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions)
 
 enable_testing()
 
+add_subdirectory(libpyside)
 # project directories
 add_subdirectory(${BINDING_NAME})
 add_subdirectory(tests)

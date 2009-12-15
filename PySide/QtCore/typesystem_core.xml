@@ -1255,6 +1255,7 @@
     <extra-includes>
       <include file-name="QThread" location="global"/>
       <include file-name="QCoreApplication" location="global"/>
+      <include file-name="signalmanager.h" location="local" />
     </extra-includes>
 
     <modify-function signature="deleteLater()">
@@ -1291,7 +1292,33 @@
     </modify-function>
     <modify-function signature="thread() const" remove="all"/>
     <modify-function signature="connect(const QObject*, const char*, const char *, Qt::ConnectionType) const" remove="all"/>
-    <modify-function signature="connect(const QObject*, const char*, const QObject*, const char *, Qt::ConnectionType)" remove="all"/>
+    <modify-function signature="connect(const QObject*, const char*, const QObject*, const char *, Qt::ConnectionType)">
+        <inject-code class="target" position="beginning">
+        %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%1, %2, %3, %4, %5));
+        </inject-code>
+    </modify-function>
+    <add-function signature="connect(const QObject*, const char*, PyCallable*, Qt::ConnectionType)" return-type="bool">
+        <modify-argument index="4">
+            <replace-default-expression with="Qt::AutoConnection" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+        %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%1, %2, %PYARG_3, %4));
+        </inject-code>
+    </add-function>
+    <!-- static version -->
+    <add-function signature="connect(const char*, PyCallable*, Qt::ConnectionType)" return-type="bool">
+        <modify-argument index="3">
+            <replace-default-expression with="Qt::AutoConnection" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+        %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%CPPSELF, %1, %PYARG_2, %3));
+        </inject-code>
+    </add-function>
+    <add-function signature="emit(const char*, PySequence*)" return-type="bool">
+        <inject-code class="target" position="beginning">
+            %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().emitSignal(%CPPSELF, %1, %PYARG_2));
+        </inject-code>
+    </add-function>
     <modify-function signature="disconnect(const QObject*, const char*)" remove="all"/>
     <modify-function signature="disconnect(const char*, const QObject*, const char*)" remove="all"/>
     <modify-function signature="disconnect(const QObject*, const char*, const QObject*, const char *)" remove="all"/>
