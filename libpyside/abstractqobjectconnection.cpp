@@ -35,6 +35,7 @@
 #include "abstractqobjectconnection.h"
 #include "typeresolver.h"
 #include "signalmanager.h"
+#include <QDebug>
 
 using namespace PySide;
 
@@ -50,7 +51,7 @@ void AbstractQObjectConnection::trigger(void** args)
     int numArgs = m_signalArgs.count();
     PyObject* pyArgs = PyTuple_New(numArgs);
     for (int i = 0; i < numArgs; ++i) {
-        PyObject* arg = TypeResolver::get(m_signalArgs[i])->toPython(args[i+1]);
+        PyObject* arg = TypeResolver::get(m_signalArgs[i])->toPython(args[i]);
         PyTuple_SET_ITEM(pyArgs, i, arg);
     }
     trigger(pyArgs);

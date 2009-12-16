@@ -1,12 +1,13 @@
 project(libpyside)
 
 set(libpyside_SRC
-typeresolver.cpp
-proxyslot.cpp
 abstractqobjectconnection.cpp
+dynamicqmetaobject.cpp
+proxyslot.cpp
 signalmanager.cpp
 signalsignalconnection.cpp
 signalslotconnection.cpp
+typeresolver.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}

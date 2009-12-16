@@ -32,39 +32,40 @@
 * 02110-1301 USA
 */
 
-#ifndef SIGNALMANAGER_H
-#define SIGNALMANAGER_H
+#ifndef DYNAMICQMETAOBJECT_H
+#define DYNAMICQMETAOBJECT_H
 
-#include "pysidemacros.h"
-#include <Python.h>
-#include <Qt>
-#include <QStringList>
+#include <QMetaObject>
+#include <QLinkedList>
+#include <QByteArray>
 
 class QObject;
 
 namespace PySide
 {
 
-QStringList getArgsFromSignature(const char* signature);
-
-class PYSIDE_API SignalManager
+class DynamicQMetaObject
 {
 public:
-    static SignalManager& instance();
-    bool connect(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType type = Qt::AutoConnection);
-    bool connect(QObject* source, const char* signal, QObject* receiver, const char* slot, Qt::ConnectionType type = Qt::AutoConnection);
-    bool emitSignal(QObject* source, const char* signal, PyObject* args);
-    void removeProxySlot(const QObject* signalSource);
-    const QMetaObject* getMetaObject(const QObject* object) const;
-private:
-    struct SignalManagerPrivate;
-    SignalManagerPrivate* m_d;
-    SignalManager();
-    ~SignalManager();
+    DynamicQMetaObject(const QObject* object);
+    ~DynamicQMetaObject();
+    void addSignal(const char* signal);
+    void addSlot(const char* slot);
 
-    // disable copy
-    SignalManager(const SignalManager&);
-    SignalManager operator=(const SignalManager&);
+    const QMetaObject* metaObject() const
+    {
+        return &m_metaObject;
+    }
+private:
+    const QMetaObject* m_originalMetaObject;
+    QMetaObject m_metaObject;
+
+    QLinkedList<QByteArray> m_signals;
+    QLinkedList<QByteArray> m_slots;
+    unsigned int* m_data;
+    char* m_stringData;
+
+    void updateMetaObject();
 };
 
 }

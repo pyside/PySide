@@ -34,6 +34,7 @@
 
 #include <QObject>
 #include <QHash>
+#include "dynamicqmetaobject.h"
 
 namespace PySide
 {
@@ -43,8 +44,13 @@ class AbstractQObjectConnection;
 class ProxySlot : public QObject
 {
 public:
-    ProxySlot(QObject* signalSource);
+    ProxySlot(const QObject* signalSource);
     bool connect(AbstractQObjectConnection* connection);
+    DynamicQMetaObject* dynamicQMetaObject()
+    {
+        return &m_metaObject;
+    }
+
 protected:
     /**
     *   Qt's meta-object system uses the qt_metacall() function to access the
@@ -69,7 +75,8 @@ protected:
     int qt_metacall(QMetaObject::Call call, int id, void **args);
 
 private:
-    QObject* m_signalSource;
+    DynamicQMetaObject m_metaObject;
+    const QObject* m_signalSource;
     int m_nextSlotIndex;
     // slot_index => connection_info, used by qt_metacall
     // to recover the connection_info

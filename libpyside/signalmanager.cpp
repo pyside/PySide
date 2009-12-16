@@ -75,11 +75,16 @@ QStringList PySide::getArgsFromSignature(const char* signature)
 
 struct SignalManager::SignalManagerPrivate
 {
-    QHash<QObject*, ProxySlot*> m_proxies;
+    QHash<const QObject*, ProxySlot*> m_proxies;
 
-    ProxySlot* findProxy(QObject* signalSource)
+    ProxySlot* findProxy(const QObject* signalSource) const
     {
-        ProxySlot* proxy = m_proxies.value(signalSource);
+        return m_proxies.value(signalSource);
+    }
+
+    ProxySlot* getProxy(const QObject* signalSource)
+    {
+        ProxySlot* proxy = findProxy(signalSource);
         if (!proxy) {
             proxy = new ProxySlot(signalSource);
             m_proxies[signalSource] = proxy;
@@ -110,7 +115,9 @@ bool SignalManager::connect(QObject* source, const char* signal, PyObject* callb
         return false;
     signal++;
 
-    ProxySlot* proxy = m_d->findProxy(source);
+    ProxySlot* proxy = m_d->getProxy(source);
+    if (source->metaObject()->indexOfSignal(signal) == -1)
+        proxy->dynamicQMetaObject()->addSignal(signal);
     AbstractQObjectConnection* connection = new SignalSlotConnection(source, signal, callback, type);
     return proxy->connect(connection);
 }
@@ -132,7 +139,7 @@ bool SignalManager::connect(QObject* source, const char* signal, QObject* receiv
                                       receiver, slot_index, type);
     } else {
         // We have a python slot or signal
-        ProxySlot* proxy = m_d->findProxy(source);
+        ProxySlot* proxy = m_d->getProxy(source);
         AbstractQObjectConnection* connection = 0;
         retval = proxy->connect(connection);
     }
@@ -142,18 +149,14 @@ bool SignalManager::connect(QObject* source, const char* signal, QObject* receiv
 
 bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* args)
 {
-    if (checkSignal(signal))
+    if (!checkSignal(signal))
         return false;
+    signal++;
 
     int argsGiven = PySequence_Size(args);
 
-    //search native signal
-    int signalIndex = source->metaObject()->indexOfSignal(signal+1);
-    if (signalIndex == -1) {
-        // dynamic signal
-        qDebug() << "Dynamic signal not implemented yet!";
-    } else {
-        // a C++ signal
+    int signalIndex = source->metaObject()->indexOfSignal(signal);
+    if (signalIndex != -1) {
         QStringList argTypes = getArgsFromSignature(signal);
         void* signalArgs[argsGiven+1];
 
@@ -166,7 +169,15 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
     return false;
 }
 
-void PySide::SignalManager::removeProxySlot(QObject* signalSource)
+void PySide::SignalManager::removeProxySlot(const QObject* signalSource)
 {
     m_d->m_proxies.remove(signalSource);
+}
+
+const QMetaObject* PySide::SignalManager::getMetaObject(const QObject* object) const
+{
+    ProxySlot* proxy = m_d->findProxy(object);
+    if (proxy)
+        return proxy->dynamicQMetaObject()->metaObject();
+    return 0;
 }

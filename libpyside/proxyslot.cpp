@@ -40,7 +40,7 @@
 
 using namespace PySide;
 
-ProxySlot::ProxySlot(QObject* signalSource) : m_signalSource(signalSource)
+ProxySlot::ProxySlot(const QObject* signalSource) : m_metaObject(signalSource), m_signalSource(signalSource)
 {
     m_nextSlotIndex = m_signalSource->metaObject()->methodCount()-1;
 }

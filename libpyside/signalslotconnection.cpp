@@ -59,21 +59,15 @@ SignalSlotConnection::~SignalSlotConnection()
 
 void SignalSlotConnection::trigger(PyObject* args)
 {
-    int useSelf = m_receiver ? 1 : 0;
-    int numArgs = PySequence_Size(args);
-    PyObject* preparedArgs = PyTuple_New(numArgs + useSelf);
+    Q_ASSERT(PySequence_Size(args) >= m_numSlotArgs);
+    const int useSelf = m_receiver ? 1 : 0;
+
+    PyObject* preparedArgs = PyTuple_New(m_numSlotArgs);
     if (m_receiver)
         PyTuple_SetItem(preparedArgs, 0, m_receiver);
-    for (int i = 0; i < numArgs; ++i)
+    for (int i = 0; i < m_numSlotArgs; ++i)
         PyTuple_SET_ITEM(preparedArgs, i + useSelf, PyTuple_GET_ITEM(args, i));
 
-    qDebug() << "num args: " << m_numSlotArgs;
-    // sliceamento
-//     if (m_num_slot_args != -1 && m_num_slot_args < python::len(args)) {
-//         args = python::list(args.slice(0, m_num_slot_args));
-//     }
-    qDebug() << "Receiver" << m_receiver;
-    qDebug() << "numargs" << numArgs;
     PyObject* retval = PyObject_CallObject(m_function, preparedArgs);
     if (retval) {
         Py_DECREF(retval);
@@ -81,4 +75,5 @@ void SignalSlotConnection::trigger(PyObject* args)
         qWarning(qPrintable(QString("Error calling slot ")+
                  PyString_AS_STRING(reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(m_function))->co_name)));
     }
+    Py_DECREF(preparedArgs);
 }
