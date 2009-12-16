@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtCore">
-   <load-typesystem name="typesystem_templates.xml" generate="no"/>
+    <load-typesystem name="typesystem_templates.xml" generate="no"/>
     <!--
         Stream manipulators does not fits into python language,
         so we need to do a lot of inject code to handle them.
@@ -2528,7 +2528,17 @@
     <modify-function signature="enclosingMetaObject()const" remove="all" />
   </value-type>
 
+  <add-function signature="SIGNAL(const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">
+      %PYARG_0 = PyString_FromFormat("2%s", QMetaObject::normalizedSignature(%1).constData());
+    </inject-code>
+  </add-function>
 
+  <add-function signature="SLOT(const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">
+      %PYARG_0 = PyString_FromFormat("1%s", QMetaObject::normalizedSignature(%1).constData());
+    </inject-code>
+  </add-function>
 
 
   <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
