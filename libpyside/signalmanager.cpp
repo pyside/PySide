@@ -159,9 +159,9 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
     if (signalIndex != -1) {
         QStringList argTypes = getArgsFromSignature(signal);
         void* signalArgs[argsGiven+1];
-
-        for (int i = 0; i < argsGiven; i++)
-            signalArgs[i] = TypeResolver::get(argTypes[i])->toCpp(PySequence_GetItem(args, i));
+        signalArgs[0] = 0;
+        for (int i = 0; i < argsGiven; ++i)
+            signalArgs[i+1] = TypeResolver::get(argTypes[i])->toCpp(PySequence_GetItem(args, i));
 
         QMetaObject::activate(source, signalIndex, signalArgs);
         return true;
