@@ -60,20 +60,25 @@ SignalSlotConnection::~SignalSlotConnection()
 void SignalSlotConnection::trigger(PyObject* args)
 {
     Q_ASSERT(PySequence_Size(args) >= m_numSlotArgs);
-    const int useSelf = m_receiver ? 1 : 0;
 
-    PyObject* preparedArgs = PyTuple_New(m_numSlotArgs);
+    const int useSelf = m_receiver ? 1 : 0;
+    int numSlotArgs = m_numSlotArgs;
+
+    if (numSlotArgs == -1)
+        numSlotArgs = PySequence_Size(args) + useSelf;
+
+    PyObject* preparedArgs = PyTuple_New(numSlotArgs);
     if (m_receiver)
         PyTuple_SetItem(preparedArgs, 0, m_receiver);
-    for (int i = 0; i < m_numSlotArgs; ++i)
+    for (int i = 0, max = numSlotArgs - useSelf; i < max; ++i) {
         PyTuple_SET_ITEM(preparedArgs, i + useSelf, PyTuple_GET_ITEM(args, i));
+    }
 
     PyObject* retval = PyObject_CallObject(m_function, preparedArgs);
     if (retval) {
         Py_DECREF(retval);
     } else {
-        qWarning(qPrintable(QString("Error calling slot ")+
-                 PyString_AS_STRING(reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(m_function))->co_name)));
+        qWarning("Error calling slot");
     }
     Py_DECREF(preparedArgs);
 }
