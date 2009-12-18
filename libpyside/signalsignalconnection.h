@@ -42,7 +42,11 @@ namespace PySide
 class SignalSignalConnection : public AbstractQObjectConnection
 {
 public:
+    SignalSignalConnection(QObject* source, const char* signal, QObject* receiver, const char* otherSignal, Qt::ConnectionType connectionType);
     virtual void trigger(PyObject* args);
+private:
+    QObject* m_receiver;
+    QByteArray m_signal;
 };
 
 }

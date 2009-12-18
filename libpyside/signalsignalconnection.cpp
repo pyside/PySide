@@ -33,11 +33,19 @@
 */
 
 #include "signalsignalconnection.h"
+#include <QDebug>
+#include "signalmanager.h"
 
 using namespace PySide;
 
+SignalSignalConnection::SignalSignalConnection(QObject* source, const char* signal, QObject* receiver, const char* otherSignal, Qt::ConnectionType connectionType)
+ : AbstractQObjectConnection(source, signal, connectionType), m_receiver(receiver), m_signal(otherSignal)
+{
+    m_signal.prepend('2');
+}
+
 void SignalSignalConnection::trigger(PyObject* args)
 {
-
+    SignalManager::instance().emitSignal(m_receiver, m_signal.constData(), args);
 }
 

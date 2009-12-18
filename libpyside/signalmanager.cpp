@@ -45,6 +45,7 @@
 #define PYSIDE_SIGNAL '2'
 #include "typeresolver.h"
 #include "signalslotconnection.h"
+#include "signalsignalconnection.h"
 
 using namespace PySide;
 
@@ -126,25 +127,40 @@ bool SignalManager::connect(QObject* source, const char* signal, QObject* receiv
 {
     if (!checkSignal(signal))
         return false;
+    signal++;
 
     if (!QMetaObject::checkConnectArgs(signal, slot))
         return false;
-    int signal_index = source->metaObject()->indexOfSignal(signal);
-    int slot_index = receiver->metaObject()->indexOfSlot(slot);
 
-    bool retval;
-    if (signal_index != -1 && slot_index != -1) {
-        // C++ -> C++ connection
-        retval = QMetaObject::connect(source, signal_index,
-                                      receiver, slot_index, type);
-    } else {
-        // We have a python slot or signal
-        ProxySlot* proxy = m_d->getProxy(source);
-        AbstractQObjectConnection* connection = 0;
-        retval = proxy->connect(connection);
+    // Check if is a dynamic signal
+    ProxySlot* proxy = m_d->getProxy(source);
+    int signalIndex = source->metaObject()->indexOfSignal(signal);
+    if (signalIndex == -1) {
+        proxy->dynamicQMetaObject()->addSignal(signal);
+        signalIndex = source->metaObject()->indexOfSignal(signal);
     }
-    return retval;
 
+    int slotIndex;
+    bool slotIsSignal = checkSignal(slot);
+    slot++;
+    // Signal -> Signal connection
+    if (slotIsSignal) {
+        slotIndex = receiver->metaObject()->indexOfSignal(slot);
+        if (slotIndex == -1) {
+            ProxySlot* proxy = m_d->getProxy(receiver);
+            proxy->dynamicQMetaObject()->addSignal(slot);
+            slotIndex = receiver->metaObject()->indexOfSignal(slot);
+        }
+        AbstractQObjectConnection* connection = new SignalSignalConnection(source, signal, receiver, slot, type);
+        proxy->connect(connection);
+    } else {
+        // Signal -> Slot connection
+        slotIndex = receiver->metaObject()->indexOfSlot(slot);
+        if (slotIndex == -1)
+            return false;
+    }
+
+    return QMetaObject::connect(source, signalIndex, receiver, slotIndex, type);
 }
 
 bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* args)
@@ -162,7 +178,6 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
         signalArgs[0] = 0;
         for (int i = 0; i < argsGiven; ++i)
             signalArgs[i+1] = TypeResolver::get(argTypes[i])->toCpp(PySequence_GetItem(args, i));
-
         QMetaObject::activate(source, signalIndex, signalArgs);
         return true;
     }
