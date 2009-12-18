@@ -1322,7 +1322,7 @@
         %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%CPPSELF, %1, %2, %3, %4));
         </inject-code>
     </add-function>
-    <add-function signature="emit(const char*, PySequence*)" return-type="bool">
+    <add-function signature="emit(const char*, ...)" return-type="bool">
         <inject-code class="target" position="beginning">
             %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().emitSignal(%CPPSELF, %1, %PYARG_2));
         </inject-code>
