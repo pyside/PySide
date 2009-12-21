@@ -43,35 +43,21 @@
 namespace PySide
 {
 
-/* value type convertion functions */
-template <class T>
-inline PyObject* objectToPython(void* p)
-{
-    return Shiboken::SbkBaseWrapper_New(reinterpret_cast<Shiboken::SbkBaseWrapperType*>(Shiboken::SbkType<T>()), p);
-}
-
-template <>
-inline PyObject* objectToPython<int>(void* p)
-{
-    return PyInt_FromLong(*reinterpret_cast<int*>(p));
-}
-
+/* To C++ convertion functions. */
 template <class T>
 inline void* pythonToValueType(PyObject* pyobj)
 {
-    return new T(Shiboken::Converter<T>::toCpp(pyobj));
+    return Shiboken::SbkCopyCppObject<T>(Shiboken::Converter<T>::toCpp(pyobj));
 }
 
 template <class T>
 inline void* pythonToObjectType(PyObject* pyobj)
 {
-    // TODO: Check if we could just check if this type is a shibotype and use the ptr
-    // buuuuut.... what if it's a primitive type!?
-    return Shiboken::Converter<T*>::toCpp(pyobj);
+    return Shiboken::Converter<T>::toCpp(pyobj);
 }
 
 template <class T>
-inline void objectDeleter(void *data)
+inline void objectDeleter(void* data)
 {
     delete reinterpret_cast<T*>(data);
 }
@@ -88,13 +74,13 @@ public:
     template<typename T>
     static TypeResolver* createValueTypeResolver(const char* typeName)
     {
-        return new TypeResolver(typeName, &objectToPython<T>, &pythonToValueType<T>, &objectDeleter<T>);
+        return new TypeResolver(typeName, &Shiboken::Converter<T>::toPython, &pythonToValueType<T>, &objectDeleter<T>);
     }
 
     template<typename T>
     static TypeResolver* createObjectTypeResolver(const char* typeName)
     {
-        return new TypeResolver(typeName, &objectToPython<T>, &pythonToObjectType<T>, &objectDeleter<T>);
+        return new TypeResolver(typeName, &Shiboken::Converter<T>::toPython, &pythonToObjectType<T>);
     }
 
     static TypeResolver* get(const char* typeName);
@@ -111,7 +97,7 @@ private:
     TypeResolver(const TypeResolver&);
     TypeResolver& operator=(const TypeResolver&);
 
-    TypeResolver(const char* typeName, CppToPythonFunc cppToPy, PythonToCppFunc pyToCpp, DeleteObjectFunc deleter);
+    TypeResolver(const char* typeName, CppToPythonFunc cppToPy, PythonToCppFunc pyToCpp, DeleteObjectFunc deleter = 0);
 };
 }
 
