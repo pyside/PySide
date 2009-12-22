@@ -47,7 +47,7 @@ namespace PySide
 template <class T>
 inline void* pythonToValueType(PyObject* pyobj)
 {
-    return Shiboken::SbkCopyCppObject<T>(Shiboken::Converter<T>::toCpp(pyobj));
+    return Shiboken::CppObjectCopier<T>::copy(Shiboken::Converter<T>::toCpp(pyobj));
 }
 
 template <class T>
