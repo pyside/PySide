@@ -6,13 +6,7 @@ from functools import partial
 
 from PySide.QtCore import QObject, SIGNAL, QProcess
 
-try:
-    from PySide.QtGui import QPushButton, QSpinBox
-except ImportError:
-    QPushButton = object
-    QSpinBox = object
-
-from helper import BasicPySlotCase, UsesQApplication, UsesQCoreApplication
+from helper import BasicPySlotCase, UsesQCoreApplication
 from helper.decorators import requires
 
 
@@ -45,26 +39,6 @@ class MultipleSignalConnections(unittest.TestCase):
 
         for rec in receivers:
             self.assert_(rec.called)
-
-
-@requires('PySide.QtGui')
-class QtGuiMultipleSlots(UsesQApplication, MultipleSignalConnections):
-    '''Multiple connections to QtGui signals'''
-
-    def testButtonClick(self):
-        """Multiple connections to QPushButton.clicked()"""
-        sender = QPushButton('button')
-        receivers = [BasicPySlotCase() for x in range(30)]
-        self.run_many(sender, 'clicked()', sender.click, receivers)
-
-    def testSpinBoxValueChanged(self):
-        """Multiple connections to QSpinBox.valueChanged(int)"""
-        for test in random_gen(10):
-            sender = QSpinBox()
-            #FIXME if number of receivers if higher than 50, segfaults
-            receivers = [BasicPySlotCase() for x in range(10)]
-            self.run_many(sender, 'valueChanged(int)', sender.setValue,
-                          receivers, (test,))
 
 
 class PythonMultipleSlots(UsesQCoreApplication, MultipleSignalConnections):

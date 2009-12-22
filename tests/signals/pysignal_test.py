@@ -5,9 +5,7 @@ from PySide.QtCore import QObject, SIGNAL, SLOT
 try:
     from PySide.QtGui import QSpinBox, QApplication, QWidget
 except ImportError:
-    QSpinBox = object
-    QApplication = object
-    QWidget = object
+    pass
 
 from helper import UsesQApplication
 from helper.decorators import requires
