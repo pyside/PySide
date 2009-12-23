@@ -1,12 +1,9 @@
 project(libpyside)
 
 set(libpyside_SRC
-abstractqobjectconnection.cpp
 dynamicqmetaobject.cpp
-proxyslot.cpp
 signalmanager.cpp
-signalsignalconnection.cpp
-signalslotconnection.cpp
+globalreceiver.cpp
 typeresolver.cpp
 )
 

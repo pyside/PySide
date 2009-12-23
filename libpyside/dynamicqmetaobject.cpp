@@ -38,6 +38,7 @@
 #include <QList>
 #include <QObject>
 #include <cstring>
+#include <QDebug>
 
 using namespace PySide;
 
@@ -54,21 +55,19 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
     return idx;
 }
 
-DynamicQMetaObject::DynamicQMetaObject(const QObject* object) : m_originalMetaObject(object->metaObject())
+DynamicQMetaObject::DynamicQMetaObject(const QMetaObject* metaObject)
 {
-    m_metaObject.d.superdata = m_originalMetaObject;
-    m_metaObject.d.stringdata = 0;
-    m_metaObject.d.data = 0;
-    m_metaObject.d.extradata = 0;
-    m_stringData = 0;
-    m_data = 0;
+    d.superdata = metaObject;
+    d.stringdata = 0;
+    d.data = 0;
+    d.extradata = 0;
     updateMetaObject();
 }
 
 DynamicQMetaObject::~DynamicQMetaObject()
 {
-    delete[] m_stringData;
-    delete[] m_data;
+    delete[] d.stringdata;
+    delete[] d.data;
 }
 
 void DynamicQMetaObject::addSignal(const char* signal)
@@ -79,7 +78,7 @@ void DynamicQMetaObject::addSignal(const char* signal)
 
 void DynamicQMetaObject::addSlot(const char* slot)
 {
-    m_signals << QByteArray(slot);
+    m_slots << QByteArray(slot);
     updateMetaObject();
 }
 
@@ -112,32 +111,33 @@ void DynamicQMetaObject::updateMetaObject()
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
     // header size + 5 indexes per method + an ending zero
-    delete[] m_data;
-    m_data = new uint[HEADER_LENGHT + n_methods*5 + 1];
-    std::memcpy(m_data, header, sizeof(header));
+    delete[] d.data;
+    unsigned int* data;
+    data = new unsigned int[HEADER_LENGHT + n_methods*5 + 1];
+    std::memcpy(data, header, sizeof(header));
 
     QList<QByteArray> strings;
-    registerString(m_originalMetaObject->className(), &strings); // register class string
+    registerString(d.superdata->className(), &strings); // register class string
     const int NULL_INDEX = registerString("", &strings); // register a null string
     int index = HEADER_LENGHT;
 
     //write signals
     foreach(QByteArray signal, m_signals) {
-        m_data[index++] = registerString(signal, &strings); // func name
-        m_data[index++] = NULL_INDEX; // arguments
-        m_data[index++] = NULL_INDEX; // normalized type
-        m_data[index++] = NULL_INDEX; // tags
-        m_data[index++] = AccessPublic | MethodSignal; // flags
+        data[index++] = registerString(signal, &strings); // func name
+        data[index++] = NULL_INDEX; // arguments
+        data[index++] = NULL_INDEX; // normalized type
+        data[index++] = NULL_INDEX; // tags
+        data[index++] = AccessPublic | MethodSignal; // flags
     }
     //write slots
     foreach(QByteArray slot, m_slots) {
-        m_data[index++] = registerString(slot, &strings); // func name
-        m_data[index++] = NULL_INDEX; // arguments
-        m_data[index++] = NULL_INDEX; // normalized type
-        m_data[index++] = NULL_INDEX; // tags
-        m_data[index++] = AccessPublic | MethodSlot; // flags
+        data[index++] = registerString(slot, &strings); // func name
+        data[index++] = NULL_INDEX; // arguments
+        data[index++] = NULL_INDEX; // normalized type
+        data[index++] = NULL_INDEX; // tags
+        data[index++] = AccessPublic | MethodSlot; // flags
     }
-    m_data[index++] = 0; // the end
+    data[index++] = 0; // the end
 
     // create the m_metadata string
     QByteArray str;
@@ -145,11 +145,9 @@ void DynamicQMetaObject::updateMetaObject()
         str.append(signature);
         str.append(char(0));
     }
-    delete[] m_stringData;
-    m_stringData = new char[str.count()];
-    std::copy(str.begin(), str.end(), m_stringData);
-
-    // create metaobject
-    m_metaObject.d.stringdata = m_stringData;
-    m_metaObject.d.data = m_data;
+    delete[] d.stringdata;
+    char* stringData = new char[str.count()];
+    std::copy(str.begin(), str.end(), stringData);
+    d.data = data;
+    d.stringdata = stringData;
 }

@@ -89,6 +89,7 @@ public:
     const char* typeName() const;
     PyObject* toPython(void* cppObj);
     void* toCpp(PyObject* pyObj);
+    void deleteObject(void* object);
 private:
     struct TypeResolverPrivate;
     TypeResolverPrivate* m_d;

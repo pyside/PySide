@@ -33,10 +33,13 @@
 */
 
 #include "signalmanager.h"
-#include "proxyslot.h"
+
 #include <QHash>
 #include <QStringList>
+#include <QMetaMethod>
+#include <autodecref.h>
 #include <QDebug>
+#include <limits>
 
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
 #error QSLOT_CODE and/or QSIGNAL_CODE changed! change the hardcoded stuff to the correct value!
@@ -44,18 +47,49 @@
 #define PYSIDE_SLOT '1'
 #define PYSIDE_SIGNAL '2'
 #include "typeresolver.h"
-#include "signalslotconnection.h"
-#include "signalsignalconnection.h"
+#include "globalreceiver.h"
 
 using namespace PySide;
 
-static bool checkSignal(const char* signal)
+bool PySide::isSignal(const char* signal)
+{
+    return signal[0] == PYSIDE_SIGNAL;
+}
+
+bool PySide::checkSignal(const char* signal)
 {
     if (signal[0] != PYSIDE_SIGNAL) {
         PyErr_SetString(PyExc_TypeError, "Use the function PySide.QtCore.SIGNAL on signals");
         return false;
     }
     return true;
+}
+
+QString PySide::getCallbackSignature(const char* signal, PyObject* callback)
+{
+    PyObject* function;
+    int useSelf = PyMethod_Check(callback);
+    if (useSelf) {
+        function = PyMethod_GET_FUNCTION(callback);
+    } else {
+        function = callback;
+    }
+
+    PyCodeObject* objCode = reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(function));
+    QString signature(PyString_AS_STRING(objCode->co_name));
+    signature.append(QString::number(quint64(callback), 16));
+    signature.append('(');
+    int numArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
+
+    QStringList args = getArgsFromSignature(signal);
+    if (numArgs == -1)
+        numArgs = std::numeric_limits<int>::max();
+    while (args.count() > numArgs - useSelf) {
+        args.removeLast();
+    }
+    signature.append(args.join(","));
+    signature.append(')');
+    return signature;
 }
 
 QStringList PySide::getArgsFromSignature(const char* signature)
@@ -76,23 +110,7 @@ QStringList PySide::getArgsFromSignature(const char* signature)
 
 struct SignalManager::SignalManagerPrivate
 {
-    QHash<const QObject*, ProxySlot*> m_proxies;
-
-    ProxySlot* findProxy(const QObject* signalSource) const
-    {
-        return m_proxies.value(signalSource);
-    }
-
-    ProxySlot* getProxy(const QObject* signalSource)
-    {
-        ProxySlot* proxy = findProxy(signalSource);
-        if (!proxy) {
-            proxy = new ProxySlot(signalSource);
-            m_proxies[signalSource] = proxy;
-            QObject::connect(signalSource, SIGNAL(destroyed()), proxy, SLOT(deleteLater()));
-        }
-        return proxy;
-    }
+    GlobalReceiver m_globalReceiver;
 };
 
 SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
@@ -110,57 +128,14 @@ SignalManager& SignalManager::instance()
     return me;
 }
 
-bool SignalManager::connect(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType type)
+QObject* SignalManager::globalReceiver()
 {
-    if (!checkSignal(signal))
-        return false;
-    signal++;
-
-    ProxySlot* proxy = m_d->getProxy(source);
-    if (source->metaObject()->indexOfSignal(signal) == -1)
-        proxy->dynamicQMetaObject()->addSignal(signal);
-    AbstractQObjectConnection* connection = new SignalSlotConnection(source, signal, callback, type);
-    return proxy->connect(connection);
+    return &m_d->m_globalReceiver;
 }
 
-bool SignalManager::connect(QObject* source, const char* signal, QObject* receiver, const char* slot, Qt::ConnectionType type)
+void SignalManager::addGlobalSlot(const char* slot, PyObject* callback)
 {
-    if (!checkSignal(signal))
-        return false;
-    signal++;
-
-    if (!QMetaObject::checkConnectArgs(signal, slot))
-        return false;
-
-    // Check if is a dynamic signal
-    ProxySlot* proxy = m_d->getProxy(source);
-    int signalIndex = source->metaObject()->indexOfSignal(signal);
-    if (signalIndex == -1) {
-        proxy->dynamicQMetaObject()->addSignal(signal);
-        signalIndex = source->metaObject()->indexOfSignal(signal);
-    }
-
-    int slotIndex;
-    bool slotIsSignal = checkSignal(slot);
-    slot++;
-    // Signal -> Signal connection
-    if (slotIsSignal) {
-        slotIndex = receiver->metaObject()->indexOfSignal(slot);
-        if (slotIndex == -1) {
-            ProxySlot* proxy = m_d->getProxy(receiver);
-            proxy->dynamicQMetaObject()->addSignal(slot);
-            slotIndex = receiver->metaObject()->indexOfSignal(slot);
-        }
-        AbstractQObjectConnection* connection = new SignalSignalConnection(source, signal, receiver, slot, type);
-        proxy->connect(connection);
-    } else {
-        // Signal -> Slot connection
-        slotIndex = receiver->metaObject()->indexOfSlot(slot);
-        if (slotIndex == -1)
-            return false;
-    }
-
-    return QMetaObject::connect(source, signalIndex, receiver, slotIndex, type);
+    m_d->m_globalReceiver.addSlot(slot, callback);
 }
 
 bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* args)
@@ -174,25 +149,56 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
     int signalIndex = source->metaObject()->indexOfSignal(signal);
     if (signalIndex != -1) {
         QStringList argTypes = getArgsFromSignature(signal);
+        if (argsGiven > argTypes.count()) {
+            PyErr_SetString(PyExc_TypeError, "Too many arguments for this signal.");
+            return false;
+        }
         void* signalArgs[argsGiven+1];
         signalArgs[0] = 0;
         for (int i = 0; i < argsGiven; ++i)
             signalArgs[i+1] = TypeResolver::get(argTypes[i])->toCpp(PySequence_GetItem(args, i));
         QMetaObject::activate(source, signalIndex, signalArgs);
+        // FIXME: This will cause troubles with non-direct connections.
+        for (int i = 0; i < argsGiven; ++i)
+            TypeResolver::get(argTypes[i])->deleteObject(signalArgs[i+1]);
         return true;
     }
     return false;
 }
 
-void PySide::SignalManager::removeProxySlot(const QObject* signalSource)
+int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args)
 {
-    m_d->m_proxies.remove(signalSource);
-}
+    const QMetaObject* metaObject = object->metaObject();
+    // only meta method invocation is supported right now.
+    if (call != QMetaObject::InvokeMetaMethod) {
+        qWarning("Only meta method invocation is supported right now by PySide.");
+        return id - metaObject->methodCount();
+    }
+    QMetaMethod method = metaObject->method(id);
 
-const QMetaObject* PySide::SignalManager::getMetaObject(const QObject* object) const
-{
-    ProxySlot* proxy = m_d->findProxy(object);
-    if (proxy)
-        return proxy->dynamicQMetaObject()->metaObject();
-    return 0;
+    if (method.methodType() == QMetaMethod::Signal) {
+        // emit python signal
+        QMetaObject::activate(object, id, args);
+    } else {
+        // call python slot
+        QList<QByteArray> paramTypes = method.parameterTypes();
+        PyObject* self = Shiboken::BindingManager::instance().retrieveWrapper(object);
+        Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()+1));
+
+        PyTuple_SET_ITEM(preparedArgs.object(), 0, self);
+        for (int i = 0, max = paramTypes.count(); i < max; ++i) {
+            PyObject* arg = TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
+            PyTuple_SET_ITEM(preparedArgs.object(), i + 1, arg);
+        }
+
+        QString methodName = method.signature();
+        methodName = methodName.left(methodName.indexOf('('));
+
+        Shiboken::AutoDecRef pyMethodName(PyString_FromString(qPrintable(methodName)));
+        Shiboken::AutoDecRef pyMethod(PyObject_GetAttr(self, pyMethodName));
+        Shiboken::AutoDecRef retval(PyObject_CallObject(pyMethod, preparedArgs));
+        if (!retval)
+            qWarning("Error calling slot");
+    }
+    return -1;
 }

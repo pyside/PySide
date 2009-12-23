@@ -35,6 +35,7 @@
 #ifndef DYNAMICQMETAOBJECT_H
 #define DYNAMICQMETAOBJECT_H
 
+#include "pysidemacros.h"
 #include <QMetaObject>
 #include <QLinkedList>
 #include <QByteArray>
@@ -44,26 +45,17 @@ class QObject;
 namespace PySide
 {
 
-class DynamicQMetaObject
+class PYSIDE_API DynamicQMetaObject : public QMetaObject
 {
 public:
-    DynamicQMetaObject(const QObject* object);
+    DynamicQMetaObject(const QMetaObject* metaObject);
     ~DynamicQMetaObject();
     void addSignal(const char* signal);
     void addSlot(const char* slot);
 
-    const QMetaObject* metaObject() const
-    {
-        return &m_metaObject;
-    }
 private:
-    const QMetaObject* m_originalMetaObject;
-    QMetaObject m_metaObject;
-
     QLinkedList<QByteArray> m_signals;
     QLinkedList<QByteArray> m_slots;
-    unsigned int* m_data;
-    char* m_stringData;
 
     void updateMetaObject();
 };

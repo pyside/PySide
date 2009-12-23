@@ -1293,16 +1293,19 @@
     <modify-function signature="thread() const" remove="all"/>
     <modify-function signature="connect(const QObject*, const char*, const char *, Qt::ConnectionType) const" remove="all"/>
     <modify-function signature="connect(const QObject*, const char*, const QObject*, const char *, Qt::ConnectionType)">
-        <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%1, %2, %3, %4, %5));
+        <inject-code class="target" position="beginning" file="">
+        // %FUNCTION_NAME() - disable generation of function call.
+        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnect(%1, %2, %3, %4, %5));
         </inject-code>
     </modify-function>
+    <inject-code class="native" position="beginning" file="glue/qobject_connect.cpp" />
     <add-function signature="connect(const QObject*, const char*, PyCallable*, Qt::ConnectionType)" return-type="bool">
         <modify-argument index="4">
             <replace-default-expression with="Qt::AutoConnection" />
         </modify-argument>
         <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%1, %2, %PYARG_3, %4));
+        // %FUNCTION_NAME() - disable generation of function call.
+        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnectCallback(%1, %2, %PYARG_3, %4));
         </inject-code>
     </add-function>
     <!-- static version -->
@@ -1311,7 +1314,8 @@
             <replace-default-expression with="Qt::AutoConnection" />
         </modify-argument>
         <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%CPPSELF, %1, %PYARG_2, %3));
+        // %FUNCTION_NAME() - disable generation of function call.
+        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnectCallback(%CPPSELF, %1, %PYARG_2, %3));
         </inject-code>
     </add-function>
     <add-function signature="connect(const char*, const QObject*, const char *, Qt::ConnectionType)" return-type="bool">
@@ -1319,7 +1323,8 @@
             <replace-default-expression with="Qt::AutoConnection" />
         </modify-argument>
         <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().connect(%CPPSELF, %1, %2, %3, %4));
+        // %FUNCTION_NAME() - disable generation of function call.
+        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnect(%CPPSELF, %1, %2, %3, %4));
         </inject-code>
     </add-function>
     <add-function signature="emit(const char*, ...)" return-type="bool">
@@ -1327,12 +1332,12 @@
             %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().emitSignal(%CPPSELF, %1, %PYARG_2));
         </inject-code>
     </add-function>
-    <modify-function signature="disconnect(const QObject*, const char*)" remove="all"/>
-    <modify-function signature="disconnect(const char*, const QObject*, const char*)" remove="all"/>
-    <modify-function signature="disconnect(const QObject*, const char*, const QObject*, const char *)" remove="all"/>
+<!--     <modify-function signature="disconnect(const QObject*, const char*)" remove="all"/> -->
+<!--     <modify-function signature="disconnect(const char*, const QObject*, const char*)" remove="all"/> -->
+<!--     <modify-function signature="disconnect(const QObject*, const char*, const QObject*, const char *)" remove="all"/> -->
     <inject-code class="native" position="beginning">
         static bool
-        PyObject_inherits_internal(PyTypeObject *objType, const char *class_name)
+        qobjectInheritsInternal(PyTypeObject *objType, const char *class_name)
         {
             if (strcmp(objType->tp_name, class_name) == 0)
                 return true;
@@ -1340,12 +1345,12 @@
             PyTypeObject* base = (objType)->tp_base;
             if (base == 0)
                 return false;
-            return PyObject_inherits_internal(base, class_name);
+            return qobjectInheritsInternal(base, class_name);
         }
     </inject-code>
     <modify-function signature="inherits(const char*) const">
         <inject-code class="target" position="beginning">
-            bool retval =  PyObject_inherits_internal(self->ob_type, %1) ? true : %CPPSELF.%FUNCTION_NAME(%1);
+            bool retval =  qobjectInheritsInternal(self->ob_type, %1) ? true : %CPPSELF.%FUNCTION_NAME(%1);
             %PYARG_0 = %CONVERTTOPYTHON[bool](retval);
         </inject-code>
     </modify-function>

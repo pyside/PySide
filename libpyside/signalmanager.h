@@ -45,17 +45,20 @@ class QObject;
 namespace PySide
 {
 
+PYSIDE_API bool isSignal(const char* signal);
+PYSIDE_API bool checkSignal(const char* signal);
+PYSIDE_API QString getCallbackSignature(const char* signal, PyObject* callback);
 QStringList getArgsFromSignature(const char* signature);
 
 class PYSIDE_API SignalManager
 {
 public:
     static SignalManager& instance();
-    bool connect(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType type = Qt::AutoConnection);
-    bool connect(QObject* source, const char* signal, QObject* receiver, const char* slot, Qt::ConnectionType type = Qt::AutoConnection);
+    QObject* globalReceiver();
     bool emitSignal(QObject* source, const char* signal, PyObject* args);
-    void removeProxySlot(const QObject* signalSource);
-    const QMetaObject* getMetaObject(const QObject* object) const;
+
+    static int qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args);
+    void addGlobalSlot(const char* slot, PyObject* callback);
 private:
     struct SignalManagerPrivate;
     SignalManagerPrivate* m_d;

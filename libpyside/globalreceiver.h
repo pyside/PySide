@@ -32,53 +32,31 @@
 * 02110-1301 USA
 */
 
-#include "signalslotconnection.h"
-#include <QDebug>
+#ifndef GLOBALRECEIVER_H
+#define GLOBALRECEIVER_H
 
-using namespace PySide;
+#include <Python.h>
+#include <QObject>
+#include <QHash>
+#include "dynamicqmetaobject.h"
 
-SignalSlotConnection::SignalSlotConnection(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType connectionType)
- : AbstractQObjectConnection(source, signal, connectionType), m_receiver(0)
+namespace PySide
 {
-    if (PyMethod_Check(callback)) {
-        m_function = PyMethod_GET_FUNCTION(callback);
-        if (PyObject* self = PyMethod_GET_SELF(callback))
-            m_receiver = self;
-    } else {
-        m_function = callback;
-    }
-    Py_INCREF(m_function);
-    PyCodeObject* objCode = reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(m_function));
-    m_numSlotArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
+
+class GlobalReceiver : public QObject
+{
+public:
+    GlobalReceiver();
+    ~GlobalReceiver();
+    int qt_metacall(QMetaObject::Call call, int id, void** args);
+    const QMetaObject* metaObject() const;
+    void addSlot(const char* slot, PyObject* callback);
+    void removeSlot(int slotId);
+private:
+    DynamicQMetaObject m_metaObject;
+    QHash<int, PyObject* > m_slotReceivers;
+};
+
 }
 
-SignalSlotConnection::~SignalSlotConnection()
-{
-    Py_DECREF(m_function);
-}
-
-void SignalSlotConnection::trigger(PyObject* args)
-{
-    Q_ASSERT(PySequence_Size(args) >= m_numSlotArgs);
-
-    const int useSelf = m_receiver ? 1 : 0;
-    int numSlotArgs = m_numSlotArgs;
-
-    if (numSlotArgs == -1)
-        numSlotArgs = PySequence_Size(args) + useSelf;
-
-    PyObject* preparedArgs = PyTuple_New(numSlotArgs);
-    if (m_receiver)
-        PyTuple_SetItem(preparedArgs, 0, m_receiver);
-    for (int i = 0, max = numSlotArgs - useSelf; i < max; ++i) {
-        PyTuple_SET_ITEM(preparedArgs, i + useSelf, PyTuple_GET_ITEM(args, i));
-    }
-
-    PyObject* retval = PyObject_CallObject(m_function, preparedArgs);
-    if (retval) {
-        Py_DECREF(retval);
-    } else {
-        qWarning("Error calling slot");
-    }
-    Py_DECREF(preparedArgs);
-}
+#endif

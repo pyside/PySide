@@ -116,3 +116,9 @@ PyObject* TypeResolver::toPython(void* cppObj)
     return m_d->cppToPython(cppObj);
 }
 
+void TypeResolver::deleteObject(void* object)
+{
+    if (m_d->deleteObject)
+        m_d->deleteObject(object);
+}
+
