@@ -41,6 +41,17 @@
     <!-- We do not export QStreamManipulator, so use QTextStream.setRealNumberPrecision instead of this -->
     <rejection class="" function-name="qSetRealNumberPrecision" />
 
+    <!-- TODO: We do not support void* or const void* as arg -->
+    <rejection class="QGenericArgument"/>
+    <rejection class="QMetaObject" function-name="activate"/>
+    <rejection class="QMetaObject" function-name="invokeMethod"/>
+    <rejection class="QMetaObject" function-name="newInstance"/>
+    <rejection class="QMetaObject" function-name="metacall"/>
+    <rejection class="QMetaObject" function-name="static_metacall"/>
+    <!-- TODO: Support to addGuard(QObject**) -->
+    <rejection class="QMetaObject" function-name="addGuard"/>
+    <rejection class="QMetaObject" function-name="changeGuard"/>
+    <rejection class="QMetaObject" function-name="removeGuard"/>
 
   <rejection class="QFutureSynchronizer"/>
   <rejection class="QByteArray" function-name="contains"/>
@@ -684,7 +695,6 @@
   <rejection class="reverse_iterator"/>
   <rejection class="stat"/>
   <rejection class="tm"/>
-  <rejection class="*" function-name="metaObject"/>
   <rejection class="QVariant" function-name="canConvert"/>
   <rejection class="QVariant" function-name="fromValue"/>
   <rejection class="QVariant" function-name="value"/>
@@ -1257,7 +1267,11 @@
       <include file-name="QCoreApplication" location="global"/>
       <include file-name="signalmanager.h" location="local" />
     </extra-includes>
-
+    <modify-function signature="metaObject() const">
+      <inject-code class="target" position="beginning">
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
+      </inject-code>
+    </modify-function>
     <modify-function signature="deleteLater()">
       <modify-argument index="this">
         <define-ownership owner="c++"/>
@@ -2557,6 +2571,7 @@
   </value-type>
   <object-type name="QMetaObject">
     <include file-name="qobjectdefs.h" location="global" />
+    <modify-function signature="connect(const QObject*, int, const QObject*, int, int, int*)" remove="all" />
   </object-type>
   <value-type name="QMetaProperty" >
     <modify-function signature="enclosingMetaObject()const" remove="all" />

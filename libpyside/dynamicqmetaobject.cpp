@@ -55,12 +55,13 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
     return idx;
 }
 
-DynamicQMetaObject::DynamicQMetaObject(const QMetaObject* metaObject)
+DynamicQMetaObject::DynamicQMetaObject(const char *className, const QMetaObject* metaObject)
 {
     d.superdata = metaObject;
     d.stringdata = 0;
     d.data = 0;
     d.extradata = 0;
+    m_className = QByteArray(className);
     updateMetaObject();
 }
 
@@ -100,13 +101,16 @@ void DynamicQMetaObject::updateMetaObject()
 
     uint n_signals = m_signals.count();
     uint n_methods = n_signals + m_slots.count();
-    int header[] = {2,            // revision
-    0,            // class name index in m_metadata
-    0, 0,         // classinfo and classinfo index, not used by us
-    n_methods, 0, // method count and method list index
-    0, 0,         // prop count and prop indexes
-    0, 0          // enum count and enum index
-    };
+    int header[] = {5,            // revision
+                    0,            // class name index in m_metadata
+                    0, 0,         // classinfo and classinfo index, not used by us
+                    n_methods, 0, // method count and method list index
+                    0, 0,         // prop count and prop indexes
+                    0, 0,         // enum count and enum index
+                    0, 0,         // constructors
+                    0,            // flags
+                    n_signals     // signalCount
+                    };
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
@@ -117,7 +121,7 @@ void DynamicQMetaObject::updateMetaObject()
     std::memcpy(data, header, sizeof(header));
 
     QList<QByteArray> strings;
-    registerString(d.superdata->className(), &strings); // register class string
+    registerString(m_className, &strings); // register class string
     const int NULL_INDEX = registerString("", &strings); // register a null string
     int index = HEADER_LENGHT;
 

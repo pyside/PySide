@@ -41,7 +41,8 @@
 
 using namespace PySide;
 
-GlobalReceiver::GlobalReceiver() : m_metaObject(&QObject::staticMetaObject)
+GlobalReceiver::GlobalReceiver() 
+    : m_metaObject("GlobalReceiver", &QObject::staticMetaObject)
 {
 }
 

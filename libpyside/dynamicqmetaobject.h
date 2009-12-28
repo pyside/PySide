@@ -48,7 +48,7 @@ namespace PySide
 class PYSIDE_API DynamicQMetaObject : public QMetaObject
 {
 public:
-    DynamicQMetaObject(const QMetaObject* metaObject);
+    DynamicQMetaObject(const char* className, const QMetaObject* metaObject);
     ~DynamicQMetaObject();
     void addSignal(const char* signal);
     void addSlot(const char* slot);
@@ -56,6 +56,7 @@ public:
 private:
     QLinkedList<QByteArray> m_signals;
     QLinkedList<QByteArray> m_slots;
+    QByteArray m_className;
 
     void updateMetaObject();
 };

@@ -3,7 +3,7 @@
 
 #include "qobjectdefs_pyside.h"
 //#define Q_QDOC
-//#define qdoc
+#define qdoc
 //#undef Q_MOC_RUN
 
 //Export X11 related functions
