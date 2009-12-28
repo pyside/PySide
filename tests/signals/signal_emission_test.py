@@ -6,7 +6,6 @@ import sys
 import unittest
 
 from PySide.QtCore import QObject, SIGNAL, SLOT, QProcess, QTimeLine
-from PySide.QtCore import QTimer, QThread
 
 from helper import BasicPySlotCase, UsesQCoreApplication
 
@@ -68,23 +67,17 @@ class CppSignalsToCppSlots(UsesQCoreApplication):
     '''Connection between C++ slots and signals'''
 
     def testWithoutArgs(self):
-        '''Connect QThread.started() to QTimeLine.togglePaused()'''
-        thread = QThread()
+        '''Connect QProcess.started() to QTimeLine.togglePaused()'''
+        process = QProcess()
         timeline = QTimeLine()
 
-        QObject.connect(thread, SIGNAL('started()'),
+        QObject.connect(process, SIGNAL('finished(int, QProcess::ExitStatus)'),
                         timeline, SLOT('toggleDirection()'))
-        QObject.connect(thread, SIGNAL('started()'),
-                        self.exit_app_cb)
 
         orig_dir = timeline.direction()
 
-        timer = QTimer.singleShot(1000, self.exit_app_cb) # Just for safety
-
-        thread.start()
-        self.app.exec_()
-        thread.exit(0)
-        thread.wait()
+        process.start(sys.executable, ['-c', '"print 42"'])
+        process.waitForFinished()
 
         new_dir = timeline.direction()
 
