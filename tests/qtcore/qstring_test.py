@@ -9,9 +9,24 @@ import sys
 from PySide.QtCore import QString, QByteArray
 
 class QStringToNumber(unittest.TestCase):
+    def testReturnValueTypes(self):
+        obj = QString('37')
+        val, ok = obj.toInt()
+        self.assertEqual(type(val), int)
+        self.assertEqual(type(ok), bool)
+
     def testToNumberInt(self):
         obj = QString('37')
         self.assertEqual(37, obj.toInt()[0])
+
+    def testToNumberIntUsingHex(self):
+        obj = QString('2A')
+        self.assertEquals((0, False), obj.toInt())
+        self.assertEqual((int(str(obj), 16), True), obj.toInt(16))
+
+    def testToNumberIntUsingHex(self):
+        obj = QString('101010')
+        self.assertEqual((int(str(obj), 2), True), obj.toInt(2))
 
     def testToNumberFloat(self):
         obj = QString('37.109')

@@ -5,22 +5,22 @@
     <template name="fix_bool*">
         bool ok_;
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_);
-        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
+        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[bool](ok_));
     </template>
     <template name="fix_args,bool*">
         bool ok_;
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;ok_);
-        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
+        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[bool](ok_));
     </template>
     <template name="fix_arg,bool*,arg">
         bool ok_;
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, &amp;ok_, %3);
-        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
+        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[bool](ok_));
     </template>
     <template name="fix_bool*,arg">
         bool ok_;
-        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_, %1);
-        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[%RETURN_TYPE](ok_));
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_, %2);
+        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[bool](ok_));
     </template>
     <template name="get_slice">
         %TYPE* sequence;
