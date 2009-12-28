@@ -2131,6 +2131,32 @@
     <modify-function signature="setData(const char*,int)" remove="all"/>
   </object-type>
   <object-type name="QTimer">
+    <modify-function signature="singleShot(int,QObject*,const char*)">
+      <inject-code class="target" position="beginning">
+        // %FUNCTION_NAME() - disable generation of c++ function call
+        Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
+        PyObject* pyTimer = SbkQTimer_New(&amp;SbkQTimer_Type, emptyTuple, 0);
+        QTimer* timer = SbkQTimer_cptr(pyTimer);
+        PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsOs", pyTimer, SIGNAL("timeout()"), %PYARG_2, %3);
+        Py_DECREF(result);
+        timer->setSingleShot(true);
+        timer->connect(timer, SIGNAL("timeout()"), timer, SLOT("deleteLater()"));
+        timer->start(%1);
+      </inject-code>
+    </modify-function>
+    <add-function signature="singleShot(int, PyCallable*)" static="yes">
+        <inject-code class="target" position="beginning">
+        // %FUNCTION_NAME() - disable generation of c++ function call
+        Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
+        PyObject* pyTimer = SbkQTimer_New(&amp;SbkQTimer_Type, emptyTuple, 0);
+        QTimer* timer = SbkQTimer_cptr(pyTimer);
+        timer->setSingleShot(true);
+        timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
+        PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsO", pyTimer, SIGNAL(timeout()), pyargs[2-1]);
+        Py_DECREF(result);
+        timer->start(cpp_arg0);
+        </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QAbstractFileEngineHandler">
     <modify-function signature="create(const QString &amp;) const">
