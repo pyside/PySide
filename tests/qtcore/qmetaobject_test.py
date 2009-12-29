@@ -23,7 +23,9 @@ class qmetaobject_test(unittest.TestCase):
         obj = Foo()
         m = obj.metaObject()
         self.assertEqual(m.className(), "Foo")
-        self.assertEqual(m.methodCount(), QFile().metaObject().methodCount())
+        f = QFile()
+        fm = f.metaObject()
+        self.assertEqual(m.methodCount(), fm.methodCount())
 
 
 if __name__ == '__main__':
