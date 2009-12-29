@@ -54,13 +54,17 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         self = PyMethod_GET_SELF(callback);
         if (SbkQObject_Check(self))
             receiver = SbkQObject_cptr(self);
+    } else if (PyCFunction_Check(callback)) {
+        self = PyCFunction_GET_SELF(callback);
+        if (self && SbkQObject_Check(self))
+            receiver = SbkQObject_cptr(self);
     }
     usingGlobalReceiver = !receiver;
     if (usingGlobalReceiver)
         receiver = signalManager.globalReceiver();
 
     metaObject = receiver->metaObject();
-    const QByteArray callbackSig = PySide::getCallbackSignature(signal, callback).toAscii();
+    const QByteArray callbackSig = PySide::getCallbackSignature(signal, callback, usingGlobalReceiver).toAscii();
     const char* slot = callbackSig.constData();
     int slotIndex = metaObject->indexOfSlot(slot);
     if (slotIndex == -1) {

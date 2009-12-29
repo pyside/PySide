@@ -38,6 +38,7 @@
 #include <Python.h>
 #include <QObject>
 #include <QHash>
+#include <QSet>
 #include "dynamicqmetaobject.h"
 
 namespace PySide
@@ -55,6 +56,7 @@ public:
 private:
     DynamicQMetaObject m_metaObject;
     QHash<int, PyObject* > m_slotReceivers;
+    QSet<int> m_shortCircuitSlots;
 };
 
 }

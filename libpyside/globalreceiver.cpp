@@ -41,8 +41,7 @@
 
 using namespace PySide;
 
-GlobalReceiver::GlobalReceiver() 
-    : m_metaObject("GlobalReceiver", &QObject::staticMetaObject)
+GlobalReceiver::GlobalReceiver() : m_metaObject("GlobalReceiver", &QObject::staticMetaObject)
 {
 }
 
@@ -64,6 +63,16 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
     Py_INCREF(callback);
     m_slotReceivers[slotId] = callback;
 
+    bool isShortCircuit = true;
+    for (int i = 0; slot[i]; ++i) {
+        if (slot[i] == '(') {
+            isShortCircuit = false;
+            break;
+        }
+    }
+    if (isShortCircuit)
+        m_shortCircuitSlots << slotId;
+
     Q_ASSERT(slotId >= QObject::staticMetaObject.methodCount());
 }
 
@@ -79,22 +88,32 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
     Q_ASSERT(id >= QObject::staticMetaObject.methodCount());
     QMetaMethod slot = m_metaObject.method(id);
     Q_ASSERT(slot.methodType() == QMetaMethod::Slot);
-    QList<QByteArray> paramTypes = slot.parameterTypes();
 
     PyObject* callback = m_slotReceivers.value(id);
     if (!callback) {
-        qWarning("Unknown global slot.");
+        qWarning() << "Unknown global slot, id:" << id;
         return -1;
     }
 
-    Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
-    for (int i = 0, max = paramTypes.count(); i < max; ++i) {
-        PyObject* arg = TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
-        PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
+    int numArgs;
+    PyObject* retval = 0;
+    if (m_shortCircuitSlots.contains(id)) {
+        retval = PyObject_CallObject(callback, reinterpret_cast<PyObject*>(args[1]));
+    } else {
+        QList<QByteArray> paramTypes = slot.parameterTypes();
+        numArgs = paramTypes.count();
+        Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
+        for (int i = 0, max = paramTypes.count(); i < max; ++i) {
+            PyObject* arg = TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
+            PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
+        }
+
+        retval = PyObject_CallObject(callback, preparedArgs);
     }
 
-    Shiboken::AutoDecRef retval(PyObject_CallObject(callback, preparedArgs));
     if (!retval)
-        qWarning("Error calling slot");
+        qWarning() << "Error calling slot" << m_metaObject.method(id).signature();
+    else
+        Py_DECREF(retval);
     return -1;
 }
