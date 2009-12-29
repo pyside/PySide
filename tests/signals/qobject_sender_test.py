@@ -56,7 +56,7 @@ class ObjectSenderWithQAppTest(UsesQCoreApplication):
         recv = Receiver()
         QTimer.singleShot(10, recv.callback)
         self.app.exec_()
-        self.assertEquals(QObject, type(recv.the_sender))
+        self.assertTrue(isinstance(recv.the_sender, QObject))
 
     def testSenderCppSignalWithPythonExtendedClass(self):
         sender = ExtQTimer()
