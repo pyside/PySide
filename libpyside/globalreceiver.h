@@ -44,6 +44,8 @@
 namespace PySide
 {
 
+class DynamicSlotData;
+
 class GlobalReceiver : public QObject
 {
 public:
@@ -53,10 +55,12 @@ public:
     const QMetaObject* metaObject() const;
     void addSlot(const char* slot, PyObject* callback);
     void removeSlot(int slotId);
+    void connectNotify(int slotId);
+    void disconnectNotify(int slotId);
 private:
     DynamicQMetaObject m_metaObject;
-    QHash<int, PyObject* > m_slotReceivers;
     QSet<int> m_shortCircuitSlots;
+    QHash<int, DynamicSlotData* > m_slotReceivers;
 };
 
 }

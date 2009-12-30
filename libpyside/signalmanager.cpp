@@ -164,6 +164,16 @@ QObject* SignalManager::globalReceiver()
     return &m_d->m_globalReceiver;
 }
 
+void SignalManager::globalReceiverConnectNotify(int slotIndex)
+{
+    m_d->m_globalReceiver.connectNotify(slotIndex);
+}
+
+void SignalManager::globalReceiverDisconnectNotify(int slotIndex)
+{
+    m_d->m_globalReceiver.disconnectNotify(slotIndex);
+}
+
 void SignalManager::addGlobalSlot(const char* slot, PyObject* callback)
 {
     m_d->m_globalReceiver.addSlot(slot, callback);

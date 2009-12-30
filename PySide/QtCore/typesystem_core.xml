@@ -1346,9 +1346,18 @@
             %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().emitSignal(%CPPSELF, %1, %PYARG_2));
         </inject-code>
     </add-function>
-<!--     <modify-function signature="disconnect(const QObject*, const char*)" remove="all"/> -->
-<!--     <modify-function signature="disconnect(const char*, const QObject*, const char*)" remove="all"/> -->
-<!--     <modify-function signature="disconnect(const QObject*, const char*, const QObject*, const char *)" remove="all"/> -->
+    <add-function signature="disconnect(const char *, PyCallable*)" return-type="bool">
+         <inject-code class="target" position="beginning">
+        // %FUNCTION_NAME() - disable generation of function call.
+        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectDisconnectCallback(%CPPSELF, %1, %2));
+        </inject-code>
+    </add-function>
+    <add-function signature="disconnect(const QObject*, const char*, PyCallable*)" return-type="bool">
+         <inject-code class="target" position="beginning">
+        // %FUNCTION_NAME() - disable generation of function call.
+        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectDisconnectCallback(%1, %2, %3));
+        </inject-code>
+    </add-function>
     <inject-code class="native" position="beginning">
         static bool
         qobjectInheritsInternal(PyTypeObject *objType, const char *class_name)

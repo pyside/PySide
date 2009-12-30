@@ -50,8 +50,12 @@ class PYSIDE_API DynamicQMetaObject : public QMetaObject
 public:
     DynamicQMetaObject(const char* className, const QMetaObject* metaObject);
     ~DynamicQMetaObject();
+
     void addSignal(const char* signal);
     void addSlot(const char* slot);
+
+    void removeSignal(uint idex);
+    void removeSlot(uint index);
 
 private:
     QLinkedList<QByteArray> m_signals;

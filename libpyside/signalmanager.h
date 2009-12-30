@@ -59,6 +59,9 @@ public:
 
     static int qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args);
     void addGlobalSlot(const char* slot, PyObject* callback);
+
+    void globalReceiverConnectNotify(int slotIndex);
+    void globalReceiverDisconnectNotify(int slotIndex);
 private:
     struct SignalManagerPrivate;
     SignalManagerPrivate* m_d;

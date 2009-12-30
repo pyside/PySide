@@ -39,6 +39,7 @@
 #include <QObject>
 #include <cstring>
 #include <QDebug>
+#include <QMetaMethod>
 
 using namespace PySide;
 
@@ -81,6 +82,20 @@ void DynamicQMetaObject::addSlot(const char* slot)
 {
     m_slots << QByteArray(slot);
     updateMetaObject();
+}
+
+void DynamicQMetaObject::removeSlot(uint index)
+{
+    QMetaMethod m = method(index);
+    if (m_slots.removeAll(m.signature()))
+        updateMetaObject();
+}
+
+void DynamicQMetaObject::removeSignal(uint index)
+{
+    QMetaMethod m = method(index);
+    if (m_signals.removeAll(m.signature()))
+        updateMetaObject();
 }
 
 void DynamicQMetaObject::updateMetaObject()
