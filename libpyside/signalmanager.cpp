@@ -111,7 +111,7 @@ QString PySide::getCallbackSignature(const char* signal, PyObject* callback, boo
         signature.append('(');
         if (numArgs == -1)
             numArgs = std::numeric_limits<int>::max();
-        while (args.count() > numArgs - useSelf) {
+        while (args.count() && args.count() > numArgs - useSelf) {
             args.removeLast();
         }
         signature.append(args.join(","));
