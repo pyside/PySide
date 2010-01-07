@@ -62,6 +62,12 @@ inline void objectDeleter(void* data)
     delete reinterpret_cast<T*>(data);
 }
 
+template <typename T>
+inline PyObject* objectTypeToPython(void* cptr)
+{
+    return Shiboken::Converter<T>::toPython(*(T*)cptr);
+}
+
 class PYSIDE_API TypeResolver
 {
 public:
@@ -80,7 +86,7 @@ public:
     template<typename T>
     static TypeResolver* createObjectTypeResolver(const char* typeName)
     {
-        return new TypeResolver(typeName, &Shiboken::Converter<T>::toPython, &pythonToObjectType<T>);
+        return new TypeResolver(typeName, &objectTypeToPython<T>, &pythonToObjectType<T>);
     }
 
     static TypeResolver* get(const char* typeName);
