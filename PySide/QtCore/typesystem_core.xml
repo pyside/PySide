@@ -1550,6 +1550,8 @@
             uint type_id = QMetaType::type(type_name);
             if (!type_id || type_id > QVariant::UserType) {
                 %PYARG_0 = %CPPSELF.value&lt;PyObjectHolder>();
+            } else if (type_id == QVariant::String) {
+                %PYARG_0 = %CONVERTTOPYTHON[QString](%CPPSELF.toString());
             } else {
                 %PYARG_0 = Py_None;
                 Py_INCREF(Py_None);
