@@ -879,8 +879,16 @@
   </object-type>
   <value-type name="QLine"/>
   <value-type name="QLineF">
-    <!-- FIXME: Modify the return value to return a tuple -->
-    <modify-function signature="intersect(QLineF,QPointF*)const" remove="all" />
+    <modify-function signature="intersect(QLineF, QPointF*)const">
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            QPointF p;
+            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;p);
+            %PYARG_0 = Shiboken::makeTuple(retval, p);
+        </inject-code>
+    </modify-function>
   </value-type>
   <value-type name="QResource">
     <modify-function signature="registerResource(const uchar*, const QString&amp;)" remove="all"/>
