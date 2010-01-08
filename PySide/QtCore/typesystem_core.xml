@@ -1306,6 +1306,9 @@
       <inject-code class="target" position="beginning">
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
       </inject-code>
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
     </modify-function>
     <modify-function signature="deleteLater()">
       <modify-argument index="this">
