@@ -99,7 +99,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamreader_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamwriter_wrapper.cpp
 )
 
-execute_generator(core QtCore_SRC)
+execute_generator(core QtCore_SRC "")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/
