@@ -2184,7 +2184,9 @@
       <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of c++ function call
         Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
-        PyObject* pyTimer = SbkQTimer_New(&amp;SbkQTimer_Type, emptyTuple, 0);
+        PyObject* pyTimer = SbkQTimer_Type.super.ht_type.tp_new((PyTypeObject*)&amp;SbkQTimer_Type, emptyTuple, 0);
+        SbkQTimer_Type.super.ht_type.tp_init(pyTimer, emptyTuple, 0);
+
         QTimer* timer = SbkQTimer_cptr(pyTimer);
         PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsOs", pyTimer, SIGNAL("timeout()"), %PYARG_2, %3);
         Py_DECREF(result);
@@ -2197,7 +2199,8 @@
         <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of c++ function call
         Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
-        PyObject* pyTimer = SbkQTimer_New(&amp;SbkQTimer_Type, emptyTuple, 0);
+        PyObject* pyTimer = SbkQTimer_Type.super.ht_type.tp_new((PyTypeObject*)&amp;SbkQTimer_Type, emptyTuple, 0);
+        SbkQTimer_Type.super.ht_type.tp_init(pyTimer, emptyTuple, 0);
         QTimer* timer = SbkQTimer_cptr(pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
