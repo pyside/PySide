@@ -2690,6 +2690,30 @@
     <inject-code class="target" position="beginning">%PYARG_0 = %PYARG_1;</inject-code>
   </add-function>
 
+  <inject-code class="native" position="beginning">
+    extern bool
+    qRegisterResourceData(int,
+                        const unsigned char *,
+                        const unsigned char *,
+                        const unsigned char *);
+
+    extern bool
+    qUnregisterResourceData(int,
+                            const unsigned char *,
+                            const unsigned char *,
+                            const unsigned char *);
+  </inject-code>
+  <add-function signature="qRegisterResourceData(int, const char *, const char *, const char *)" return-type="bool">
+    <inject-code class="target" position="beginning">
+    %PYARG_0 = %CONVERTTOPYTHON[bool](%FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4));
+    </inject-code>
+  </add-function>
+  <add-function signature="qUnregisterResourceData(int, const char *, const char *, const char *)" return-type="bool">
+    <inject-code class="target" position="beginning">
+    %PYARG_0 = %CONVERTTOPYTHON[bool](%FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4));
+    </inject-code>
+  </add-function>
+
   <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
   <suppress-warning text="signature 'findChildren(QRegExp)const' for function modification in 'QObject' not found"/>
   <suppress-warning text="signature 'findChildren(QString)const' for function modification in 'QObject' not found."/>
