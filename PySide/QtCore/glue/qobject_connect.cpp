@@ -1,4 +1,4 @@
-static int qobjectGetMethodIndex(QObject* source, const char* signature, QMetaMethod::MethodType type)
+static void registerDynSignalSlot(QObject* source, const char* signature, QMetaMethod::MethodType type)
 {
     const QMetaObject* metaObject = source->metaObject();
     int methodIndex = metaObject->indexOfMethod(signature);
@@ -7,16 +7,14 @@ static int qobjectGetMethodIndex(QObject* source, const char* signature, QMetaMe
         SbkBaseWrapper* self = (SbkBaseWrapper*) BindingManager::instance().retrieveWrapper(source);
         if (!self->containsCppWrapper) {
             qWarning() << "You can't add dynamic signals or slots on an object originated from C++.";
-            return false;
+        } else {
+            PySide::DynamicQMetaObject* dynMetaObj = reinterpret_cast<PySide::DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
+            if (type == QMetaMethod::Signal)
+                dynMetaObj->addSignal(signature);
+            else
+                dynMetaObj->addSlot(signature);
         }
-        PySide::DynamicQMetaObject* dynMetaObj = reinterpret_cast<PySide::DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
-        if (type == QMetaMethod::Signal)
-            dynMetaObj->addSignal(signature);
-        else
-            dynMetaObj->addSlot(signature);
-        methodIndex = metaObject->indexOfMethod(signature);
     }
-    return methodIndex;
 }
 
 static bool qobjectConnect(QObject* source, const char* signal, QObject* receiver, const char* slot, Qt::ConnectionType type)
@@ -25,14 +23,12 @@ static bool qobjectConnect(QObject* source, const char* signal, QObject* receive
         return false;
     signal++;
 
-    const QMetaObject* metaObject = source->metaObject();
-    int signalIndex = qobjectGetMethodIndex(source, signal, QMetaMethod::Signal);
+    registerDynSignalSlot(source, signal, QMetaMethod::Signal);
 
     bool isSignal = PySide::isSignal(slot);
     slot++;
-    metaObject = receiver->metaObject();
-    int slotIndex = qobjectGetMethodIndex(receiver, slot, isSignal ? QMetaMethod::Signal : QMetaMethod::Slot);
-    return QMetaObject::connect(source, signalIndex, receiver, slotIndex, type);
+    registerDynSignalSlot(receiver, slot, isSignal ? QMetaMethod::Signal : QMetaMethod::Slot);
+    return QObject::connect(source, signal - 1, receiver, slot - 1, type);
 }
 
 static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType type)
@@ -41,8 +37,8 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         return false;
     signal++;
 
-    const QMetaObject* metaObject = source->metaObject();
-    int signalIndex = qobjectGetMethodIndex(source, signal, QMetaMethod::Signal);
+    registerDynSignalSlot(source, signal, QMetaMethod::Signal);
+    int signalIndex = source->metaObject()->indexOfMethod(signal);
 
     PySide::SignalManager& signalManager = PySide::SignalManager::instance();
 
@@ -63,13 +59,13 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     if (usingGlobalReceiver)
         receiver = signalManager.globalReceiver();
 
-    metaObject = receiver->metaObject();
+    const QMetaObject* metaObject = receiver->metaObject();
     const QByteArray callbackSig = PySide::getCallbackSignature(signal, callback, usingGlobalReceiver).toAscii();
     const char* slot = callbackSig.constData();
     int slotIndex = metaObject->indexOfSlot(slot);
     if (slotIndex == -1) {
         if (!usingGlobalReceiver and !((SbkBaseWrapper*)self)->containsCppWrapper) {
-            qWarning() << "You cant add dynamic slots on an object originated from C++.";
+            qWarning() << "You can't add dynamic slots on an object originated from C++.";
             return false;
         }
         if (usingGlobalReceiver) {
@@ -81,6 +77,13 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         slotIndex = metaObject->indexOfSlot(slot);
     }
     if (QMetaObject::connect(source, signalIndex, receiver, slotIndex, type)) {
+        // FIXME: Need to cast to QObjectWrapper* and call the public version of connectNotify
+        //        when avoiding the protected hack.
+        #ifndef AVOID_PROTECTED_HACK
+            source->connectNotify(signal);
+        #else
+            reinterpret_cast<QObjectWrapper*>(source)->connectNotify_protected(signal);
+        #endif
         if (usingGlobalReceiver)
             signalManager.globalReceiverConnectNotify(slotIndex);
 
