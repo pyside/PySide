@@ -17,6 +17,7 @@ class QTextStreamShiftTest(unittest.TestCase):
         '''QTextStream << number'''
 
         self.write << QString('4')
+        self.write.flush()
         res = self.read.readLine()
         self.assert_(isinstance(res, QString))
         self.assertEqual(res, QString('4'))

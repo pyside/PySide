@@ -2076,7 +2076,6 @@
       <include file-name="QUrl" location="global"/>
     </extra-includes>
   </object-type>
-  <!-- FIXME Removed due to a shiboken bug-->
   <object-type name="QTextCodec">
     <modify-function signature="makeDecoder()const">
       <modify-argument index="return">
@@ -2553,11 +2552,13 @@
     <modify-function signature="exec(QTextStream &amp;)" rename="exec_"/>
   </value-type>
   <object-type name="QTextStream" stream="yes">
-    <modify-function signature="QTextStream(QByteArray *, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
-    <modify-function signature="QTextStream(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+    <modify-function signature="QTextStream(const QByteArray&amp;, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
     <modify-function signature="setString(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
-    <modify-function signature="string()const" remove="all"/>
-    <modify-function signature="codec()const" remove="all"/>
+    <modify-function signature="codec()const">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
 
     <modify-function signature="operator&lt;&lt;(char)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const void*)" remove="all"/>
