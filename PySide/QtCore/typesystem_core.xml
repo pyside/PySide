@@ -2677,6 +2677,18 @@
     </inject-code>
   </add-function>
 
+  <add-function signature="QT_TR_NOOP(const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">%PYARG_0 = %PYARG_1;</inject-code>
+  </add-function>
+  <add-function signature="QT_TR_NOOP_UTF8(const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">%PYARG_0 = %PYARG_1;</inject-code>
+  </add-function>
+  <add-function signature="QT_TRANSLATE_NOOP(const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">%PYARG_0 = %PYARG_1;</inject-code>
+  </add-function>
+  <add-function signature="QT_TRANSLATE_NOOP_UTF8(const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">%PYARG_0 = %PYARG_1;</inject-code>
+  </add-function>
 
   <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
   <suppress-warning text="signature 'findChildren(QRegExp)const' for function modification in 'QObject' not found"/>
