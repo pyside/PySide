@@ -2348,8 +2348,8 @@
     <modify-function signature="iniCodec()const" remove="all"/>
     <!--TODO-->
   </object-type>
-  <object-type name="QEvent" polymorphic-base="yes" polymorphic-id-expression="%1-&gt;type() == QEvent::None"/>
-  <object-type name="QChildEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ChildAdded || %1-&gt;type() == QEvent::ChildPolished || %1-&gt;type() == QEvent::ChildRemoved">
+  <object-type name="QEvent" />
+  <object-type name="QChildEvent">
     <modify-field name="c" read="false" write="false"/>
     <modify-function signature="child() const">
       <modify-argument index="return">
@@ -2357,8 +2357,8 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QTimerEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Timer"/>
-  <object-type name="QDynamicPropertyChangeEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DynamicPropertyChange"/>
+  <object-type name="QTimerEvent" />
+  <object-type name="QDynamicPropertyChangeEvent" />
 
   <template name="stream_read_method">
       %RETURN_TYPE _cpp_result;
