@@ -40,13 +40,13 @@
 #include <autodecref.h>
 #include <QDebug>
 #include <limits>
+#include <typeresolver.h>
 
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
 #error QSLOT_CODE and/or QSIGNAL_CODE changed! change the hardcoded stuff to the correct value!
 #endif
 #define PYSIDE_SLOT '1'
 #define PYSIDE_SIGNAL '2'
-#include "typeresolver.h"
 #include "globalreceiver.h"
 
 using namespace PySide;
@@ -199,11 +199,11 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     signalArgs[0] = 0;
 
     for (int i = 0; i < argsGiven; ++i)
-        signalArgs[i+1] = TypeResolver::get(argTypes[i])->toCpp(PySequence_GetItem(args, i));
+        signalArgs[i+1] = Shiboken::TypeResolver::get(qPrintable(argTypes[i]))->toCpp(PySequence_GetItem(args, i));
     QMetaObject::activate(source, signalIndex, signalArgs);
     // FIXME: This will cause troubles with non-direct connections.
     for (int i = 0; i < argsGiven; ++i)
-        TypeResolver::get(argTypes[i])->deleteObject(signalArgs[i+1]);
+        Shiboken::TypeResolver::get(qPrintable(argTypes[i]))->deleteObject(signalArgs[i+1]);
     return true;
 }
 
@@ -248,7 +248,7 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
 
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {
-            PyObject* arg = TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
+            PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
             PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
         }
 

@@ -4,7 +4,6 @@ set(libpyside_SRC
 dynamicqmetaobject.cpp
 signalmanager.cpp
 globalreceiver.cpp
-typeresolver.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}

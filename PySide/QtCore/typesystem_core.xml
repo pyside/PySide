@@ -1048,7 +1048,7 @@
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
                 PyObject* args = Py_BuildValue("(nO)", _i, _value);
-                PyObject* result = SbkQString_replace(self, args);
+                PyObject* result = SbkQStringFunc_replace(self, args);
                 Py_DECREF(args);
                 Py_XDECREF(result);
                 return !result ? -1 : 0;
@@ -1236,7 +1236,7 @@
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
             PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
-            PyObject* result = SbkQBitArray_setBit(self, args);
+            PyObject* result = SbkQBitArrayFunc_setBit(self, args);
             Py_DECREF(args);
             Py_XDECREF(result);
             return !result ? -1 : 0;
@@ -1636,7 +1636,7 @@
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
             PyObject* args = Py_BuildValue("(nO)", _i, _value);
-            PyObject* result = SbkQStringList_replace(self, args);
+            PyObject* result = SbkQStringListFunc_replace(self, args);
             Py_DECREF(args);
             Py_XDECREF(result);
             return !result ? -1 : 0;
@@ -1980,7 +1980,7 @@
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
                 PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
-                PyObject* result = SbkQByteArray_replace(self, args);
+                PyObject* result = SbkQByteArrayFunc_replace(self, args);
                 Py_DECREF(args);
                 Py_XDECREF(result);
                 return !result ? -1 : 0;
