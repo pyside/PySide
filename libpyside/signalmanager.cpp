@@ -146,6 +146,25 @@ struct SignalManager::SignalManagerPrivate
 
 SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
 {
+    // Register Qt primitive typedefs used on signals.
+    using namespace Shiboken;
+    TypeResolver::createValueTypeResolver<qint8>("qint8");
+    TypeResolver::createValueTypeResolver<qint16>("qint16");
+    TypeResolver::createValueTypeResolver<qint32>("qint32");
+    TypeResolver::createValueTypeResolver<qint64>("qint64");
+    TypeResolver::createValueTypeResolver<qlonglong>("qlonglong");
+    TypeResolver::createValueTypeResolver<qptrdiff>("qptrdiff");
+    TypeResolver::createValueTypeResolver<qreal>("qreal");
+    TypeResolver::createValueTypeResolver<quint8>("quint8");
+    TypeResolver::createValueTypeResolver<quint16>("quint16");
+    TypeResolver::createValueTypeResolver<quint32>("quint32");
+    TypeResolver::createValueTypeResolver<quint64>("quint64");
+    TypeResolver::createValueTypeResolver<quintptr>("quintptr");
+    TypeResolver::createValueTypeResolver<qulonglong>("qulonglong");
+    TypeResolver::createValueTypeResolver<uchar>("uchar");
+    TypeResolver::createValueTypeResolver<uint>("uint");
+    TypeResolver::createValueTypeResolver<ulong>("ulong");
+    TypeResolver::createValueTypeResolver<ushort>("ushort");
 }
 
 SignalManager::~SignalManager()
