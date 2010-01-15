@@ -1,7 +1,9 @@
 template <>
-struct Converter<QBool>
+struct Converter<QBool> : public ConverterBase<QBool>
 {
-    static PyObject* toPython(QBool cppobj)
+    using ConverterBase<QBool>::toPython;
+
+    static PyObject* toPython(const QBool& cppobj)
     {
         return PyBool_FromLong((bool) cppobj);
     }
