@@ -38,6 +38,7 @@
 #include <QStringList>
 #include <QMetaMethod>
 #include <autodecref.h>
+#include <gilstate.h>
 #include <QDebug>
 #include <limits>
 #include <typeresolver.h>
@@ -262,6 +263,7 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
         QMetaObject::activate(object, id, args);
     } else {
         // call python slot
+        Shiboken::GilState gil;
         QList<QByteArray> paramTypes = method.parameterTypes();
         PyObject* self = Shiboken::BindingManager::instance().retrieveWrapper(object);
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));

@@ -37,6 +37,7 @@
 #include <QDebug>
 #include "signalmanager.h"
 #include <autodecref.h>
+#include <gilstate.h>
 #include "typeresolver.h"
 
 
@@ -168,6 +169,7 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         return -1;
     }
 
+    Shiboken::GilState gil;
     int numArgs;
     PyObject* retval = 0;
     PyObject* callback = data->callback();
