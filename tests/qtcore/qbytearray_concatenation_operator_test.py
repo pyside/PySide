@@ -35,17 +35,19 @@ class QByteArrayConcatenationOperatorTest(unittest.TestCase):
         self.assertTrue(concat_python_string_add_qbytearray_worked)
         self.assertEqual(result.__class__.__name__, 'QByteArray')
 
-    def testConcatPythonUnicodeAndQByteArray(self):
-        #Test concatenation of a Python unicode object with a QByteArray, in this order
-        concat_python_unicode_add_qbytearray_worked = True
-        qba = QByteArray('foo')
-        result = None
-        try:
-            result = u'ümlaut' + qba
-        except:
-            concat_python_unicode_add_qbytearray_worked = False
-        self.assertTrue(concat_python_unicode_add_qbytearray_worked)
-        self.assertEqual(result.__class__.__name__, 'unicode')
+    # NOTICE: Does not makes sense concat a unicode string with a QByteArray, because the
+    # user does not know nothing about the internal representation of the unicode string.
+    #def testConcatPythonUnicodeAndQByteArray(self):
+        ##Test concatenation of a Python unicode object with a QByteArray, in this order
+        #concat_python_unicode_add_qbytearray_worked = True
+        #qba = QByteArray('foo')
+        #result = None
+        #try:
+            #result = u'ümlaut' + qba
+        #except:
+            #concat_python_unicode_add_qbytearray_worked = False
+        #self.assertTrue(concat_python_unicode_add_qbytearray_worked)
+        #self.assertEqual(result.__class__.__name__, 'unicode')
 
 if __name__ == '__main__':
     unittest.main()
