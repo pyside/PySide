@@ -1351,7 +1351,7 @@
         </inject-code>
     </modify-function>
     <inject-code class="native" position="beginning" file="glue/qobject_connect.cpp" />
-    <add-function signature="connect(const QObject*, const char*, PyCallable*, Qt::ConnectionType)" return-type="bool">
+    <add-function signature="connect(const QObject*, const char*, PyCallable*, Qt::ConnectionType)" return-type="bool" static="yes">
         <modify-argument index="4">
             <replace-default-expression with="Qt::AutoConnection" />
         </modify-argument>
@@ -1390,7 +1390,7 @@
         %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectDisconnectCallback(%CPPSELF, %1, %2));
         </inject-code>
     </add-function>
-    <add-function signature="disconnect(const QObject*, const char*, PyCallable*)" return-type="bool">
+    <add-function signature="disconnect(const QObject*, const char*, PyCallable*)" return-type="bool" static="yes">
          <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of function call.
         %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectDisconnectCallback(%1, %2, %3));
