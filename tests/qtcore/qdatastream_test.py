@@ -24,16 +24,16 @@ class QDataStreamWrite(unittest.TestCase):
         '''QDataStream.writeUInt8 (accepting str of size 1)'''
         x = 0xFF
         self.write.writeUInt8(chr(x))
-        y = ord(self.read.readUInt8())
+        y = self.read.readUInt8()
         self.assertEqual(x, y)
 
         self.assertRaises(TypeError, self.write.writeUInt8, 'aaaaa')
 
     def testWriteInt8(self):
         '''QDataStream.writeInt8 (accepting str of size 1)'''
-        x = 0xFF
+        x = 65
         self.write.writeInt8(chr(x))
-        y = ord(self.read.readInt8())
+        y = self.read.readInt8()
         self.assertEqual(x, y)
 
         self.assertRaises(TypeError, self.write.writeInt8, 'aaaaa')
@@ -47,7 +47,7 @@ class QDataStreamWrite(unittest.TestCase):
 
     def testWriteInt8Int(self):
         '''QDataStream.writeInt8 (accepting integer)'''
-        x = 0xFF
+        x = 65
         self.write.writeInt8(x)
         y = self.read.readInt8()
         self.assertEqual(x, y)
