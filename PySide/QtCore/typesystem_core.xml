@@ -1720,6 +1720,14 @@
             cptr = new QByteArray(cpp_arg0, size);
         </inject-code>
     </modify-function>
+    <!-- buffer protocol -->
+    <inject-code class="native" position="beginning" file="glue/qbytearray_bufferprotocol.cpp" />
+    <inject-code class="target" position="end">
+        #if PY_VERSION_HEX &lt; 0x03000000
+            SbkQByteArray_Type.super.ht_type.tp_as_buffer = &amp;SbkQByteArrayBufferProc;
+            SbkQByteArray_Type.super.ht_type.tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
+        #endif
+    </inject-code>
     <!-- removed functions -->
     <modify-function signature="begin()" remove="all"/>
     <modify-function signature="begin()const" remove="all"/>
