@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
-'''Test case for duck puching new implementations of C++ virtual methods into object instances.'''
+'''Test case for duck punching new implementations of C++ virtual methods into object instances.'''
 
 import unittest
-import new
-from PySide.QtCore import QObject
+import types
+from PySide.QtCore import QObject, QEvent
 from helper import UsesQCoreApplication
 
 class Duck(QObject):
@@ -14,7 +14,7 @@ class Duck(QObject):
         QObject.childEvent(self, event)
 
 class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
-    '''Test case for duck puching new implementations of C++ virtual methods into object instances.'''
+    '''Test case for duck punching new implementations of C++ virtual methods into object instances.'''
 
     def setUp(self):
         #Acquire resources
@@ -33,7 +33,7 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
         def childEvent(obj, event):
             self.duck_childEvent_called = True
             QObject.childEvent(obj, event)
-        parent.event = new.instancemethod(childEvent, parent, QObject)
+        parent.event = types.MethodType(childEvent, parent, QObject)
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)
@@ -46,7 +46,7 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
             self.duck_childEvent_called = True
         child = QObject()
         child.setParent(parent)
-        parent.event = new.instancemethod(childEvent, parent, QObject)
+        parent.event = types.MethodType(childEvent, parent, QObject)
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)
