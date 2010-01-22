@@ -29,6 +29,25 @@
     <rejection class="" function-name="uppercasebase" />
     <rejection class="" function-name="uppercasedigits" />
     <rejection class="" function-name="ws" />
+    <!-- Qt4.6 functions -->
+    <rejection class="" function-name="qGetPtrHelper" />
+    <rejection class="" function-name="qMallocAligned" />
+    <rejection class="" function-name="qReallocAligned" />
+    <rejection class="" function-name="qRegisterAnimationInterpolator" />
+    <rejection class="" function-name="qVariantSetValue&lt;QVariant>" />
+    <rejection class="" function-name="q_check_ptr" />
+    <rejection class="" function-name="qobject_interface_iid" />
+    <rejection class="" function-name="qobject_interface_iid&lt;QFactoryInterface*>" />
+    <rejection class="" function-name="qobject_interface_iid&lt;QTextCodecFactoryInterface*>" />
+    <rejection class="" function-name="qstricmp" />
+    <rejection class="" function-name="qstrlen" />
+    <rejection class="" function-name="qstrncmp" />
+    <rejection class="" function-name="qstrnicmp" />
+    <rejection class="" function-name="qstrnlen" />
+    <rejection class="" function-name="qtTrId" />
+    <rejection class="" function-name="qvariant_cast&lt;QVariant>" />
+    <rejection class="" function-name="qFreeAligned" />
+    <rejection class="" function-name="qSharedBuild" />
     <!-- End of rejections -->
     <rejection class="" function-name="qAddPostRoutine" />
     <rejection class="" function-name="qRemovePostRoutine" />
@@ -890,7 +909,7 @@
         </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QResource">
+  <object-type name="QResource">
     <modify-function signature="registerResource(const uchar*, const QString&amp;)" remove="all"/>
     <modify-function signature="unregisterResource(const uchar*, const QString&amp;)" remove="all"/>
     <modify-function signature="data()const" remove="all"/>
@@ -911,7 +930,7 @@
         <replace-type modified-type="const char*"/>
       </modify-argument>
     </modify-function>
-  </value-type>
+  </object-type>
 
   <value-type name="QString" hash-function="qHash">
     <extra-includes>
@@ -1516,6 +1535,7 @@
     <modify-function signature="create(int,const void*)" remove="all" />
 
     <modify-function signature="QVariant(int, const void*)" remove="all"/>
+    <modify-function signature="QVariant(int,const void*,uint)" remove="all"/>
     <!-- handled by inject code -->
     <modify-function signature="QVariant(uint)" remove="all"/>
     <modify-function signature="QVariant(qulonglong)" remove="all"/>
