@@ -41,10 +41,5 @@ class TestQFlags(unittest.TestCase):
         except:
             pass
 
-class TestDuplicatedValues(unittest.TestCase):
-    def testQVariant(self):
-        self.assertEqual(QVariant.LastCoreType, QVariant.Hash)
-        self.assertEqual(QVariant.LastGuiType, QVariant.Transform)
-
 if __name__ == '__main__':
     unittest.main()
