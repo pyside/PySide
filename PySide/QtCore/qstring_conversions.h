@@ -23,7 +23,8 @@ inline QString Converter< QString >::toCpp(PyObject* pyobj)
     } else if (PyUnicode_Check(pyobj)) {
         Py_UNICODE* unicode = PyUnicode_AS_UNICODE(pyobj);
 #if defined(Py_UNICODE_WIDE)
-        return QString::fromUcs4(unicode);
+        // cast as Py_UNICODE can be a different type
+        return QString::fromUcs4(reinterpret_cast<const uint*>(unicode));
 #else
         return QString::fromUtf16(unicode, PyUnicode_GET_SIZE(pyobj));
 #endif
