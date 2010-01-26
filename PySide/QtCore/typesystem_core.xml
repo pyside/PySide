@@ -318,7 +318,7 @@
   <primitive-type name="long"/>
   <primitive-type name="unsigned long"/>
   <primitive-type name="WId"/>
-  <primitive-type name="Qt::HANDLE"/>
+  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyLong"/>
   <primitive-type name="QByteRef">
     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
       <include file-name="QTextDocument" location="global"/>
