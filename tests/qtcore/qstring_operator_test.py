@@ -42,8 +42,65 @@ class QStringOperatorEqual(unittest.TestCase):
         string = 'another test string'
         self.assertEqual(QString(string), QByteArray(string))
 
+
+class QStringOperatorAtSetter(unittest.TestCase):
+    '''Test case for operator QString[] - __setitem__'''
+
+    def testSetterString(self):
+        '''QString[x] = pythonstring'''
+        obj = QString('123456')
+        obj[1] = '0'
+        self.assertEqual(obj, QString('103456'))
+
+    def testSetterStringLarge(self):
+        '''QString[x] = pythonstring (larget than 1 char)'''
+        obj = QString('123456')
+        obj[3] = 'abba'
+        self.assertEqual(obj, QString('123abba56'))
+
+    def testSetterQString(self):
+        '''QString[x] = QString'''
+        obj = QString('123456')
+        obj[3] = QString('string')
+        self.assertEqual(obj, QString('123string56'))
+
+    def testSetterQByteArray(self):
+        '''QString[x] = qbytearray'''
+        obj = QString('123456')
+        obj[3] = QByteArray('array')
+        self.assertEqual(obj, QString('123array56'))
+
+
+class QStringOperatorAtSetterNegativeIndex(unittest.TestCase):
+    '''Test case for QString[] - __setitem__ - for negative index'''
+
+    def testSetterNegativeIndex(self):
+        '''QString[x] = string - negative index'''
+        obj = QString('123456')
+        obj[-3] = 'array'
+        self.assertEqual(obj, QString('123array56'))
+
+
+class QStringOperatorAtSetterLargeIndex(unittest.TestCase):
+    '''Test case for QString[] - __setitem__ - for 'overflown' index'''
+
+    def testSetterLargeIndexEmpty(self):
+        '''QString[x] = somestring - Overflow index on empty string'''
+        # should pad with spaces if the index is larger
+        obj = QString('')
+        obj[2] = 'a'
+        self.assertEqual(obj, QString('  a'))
+
+    def testSetterLargeIndexNormal(self):
+        '''QString[x] = somestring - Overflow index on normal string'''
+        # should pad with spaces if the index is larger
+        obj = QString('mystring')
+        obj[10] = 'normal'
+        self.assertEqual(obj, QString('mystring  normal'))
+
+
 class QStringOperatorAt(unittest.TestCase):
-    '''TestCase for operator QString[]'''
+    '''TestCase for operator QString[] - __getitem__'''
 
     def testInRange(self):
         #QString[x] where x is a valid index

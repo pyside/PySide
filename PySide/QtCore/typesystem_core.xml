@@ -1071,8 +1071,9 @@
     </add-function>
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
+                %CPPSELF.remove(_i, 1);
                 PyObject* args = Py_BuildValue("(nO)", _i, _value);
-                PyObject* result = SbkQStringFunc_replace(self, args);
+                PyObject* result = SbkQStringFunc_insert(self, args);
                 Py_DECREF(args);
                 Py_XDECREF(result);
                 return !result ? -1 : 0;
