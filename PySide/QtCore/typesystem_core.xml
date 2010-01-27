@@ -939,6 +939,14 @@
     <conversion-rule file="qstring_conversions.h" />
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[2]" />
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[3]" />
+    <!-- buffer protocol -->
+    <inject-code class="native" position="beginning" file="glue/qstring_bufferprotocol.cpp" />
+    <inject-code class="target" position="end">
+        #if PY_VERSION_HEX &lt; 0x03000000
+            SbkQString_Type.super.ht_type.tp_as_buffer = &amp;SbkQStringBufferProc;
+            SbkQString_Type.super.ht_type.tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
+        #endif
+    </inject-code>
 
     <modify-function signature="insert(int,const QChar*,int)" remove="all" />
     <modify-function signature="QString(const QChar*, int)" remove="all" />
