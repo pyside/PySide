@@ -6,7 +6,7 @@ import unittest
 import ctypes
 import sys
 
-from PySide.QtCore import QString, QByteArray
+from PySide.QtCore import QString, QByteArray, QObject
 
 class QStringToNumber(unittest.TestCase):
     def testReturnValueTypes(self):
@@ -17,7 +17,59 @@ class QStringToNumber(unittest.TestCase):
 
     def testToNumberInt(self):
         obj = QString('37')
-        self.assertEqual(37, obj.toInt()[0])
+        self.assertEqual((37, True), obj.toInt())
+
+    def testToNumberLong(self):
+        obj = QString('3700000')
+        self.assertEqual((3700000, True), obj.toInt())
+
+    def testToNumberShort(self):
+        obj = QString('33')
+        self.assertEqual((ctypes.c_short(33).value, True), obj.toShort())
+
+    def testToNumberShortNegative(self):
+        obj = QString('-4')
+        self.assertEqual((ctypes.c_short(-4).value, True), obj.toShort())
+
+    def testToNumberShortOverflow(self):
+        obj = QString('1000000')
+        self.assertEqual(False, obj.toShort()[1])
+
+    def testToNumberUInt(self):
+        obj = QString('33')
+        self.assertEqual((ctypes.c_uint(33).value, True), obj.toUInt())
+
+    def testToNumberUIntNegative(self):
+        obj = QString('-4')
+        self.assertEqual(False, obj.toUInt()[1])
+
+    def testToNumberUIntOverflow(self):
+        obj = QString('10000000000000')
+        self.assertEqual(False, obj.toUInt()[1])
+
+    def testToNumberULong(self):
+        obj = QString('33')
+        self.assertEqual((ctypes.c_ulong(33).value, True), obj.toULong())
+
+    def testToNumberULongNegative(self):
+        obj = QString('-4')
+        self.assertEqual(False, obj.toULong()[1])
+
+    def testToNumberUShort(self):
+        obj = QString('33')
+        self.assertEqual((ctypes.c_ushort(33).value, True), obj.toUShort())
+
+    def testToNumberUShortLarge(self):
+        obj = QString('128')
+        self.assertEqual((ctypes.c_ushort(128).value, True), obj.toUShort())
+
+    def testToNumberUShortOverflow(self):
+        obj = QString('205000')
+        self.assertEqual(False, obj.toUShort()[1])
+
+    def testToNumberUShortNegative(self):
+        obj = QString('-4')
+        self.assertEqual(False, obj.toUShort()[1])
 
     def testToNumberIntUsingHex(self):
         obj = QString('2A')
@@ -116,6 +168,16 @@ class QStringIndexOf(unittest.TestCase):
     def testString(self):
         string = QString("the quick brown fox")
         self.assertEqual(string.indexOf("quick", 0), 4)
+
+
+class QStringImplicitConvertion(unittest.TestCase):
+    '''Implicit conversions for QString'''
+
+    def testQByteArray(self):
+        '''QString implicitly conversion: QByteArray'''
+        obj = QObject()
+        obj.setObjectName(QByteArray('foobar'))
+        self.assertEqual(obj.objectName(), QString('foobar'))
 
 if __name__ == '__main__':
     unittest.main()
