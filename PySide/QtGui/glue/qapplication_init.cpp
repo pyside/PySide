@@ -3,6 +3,11 @@ extern PyObject* moduleQtGui;
 
 int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
+    if (QApplication::instance()) {
+        PyErr_SetString(PyExc_RuntimeError, "A QApplication instance already exists.");
+        return -1;
+    }
+
     int numArgs = PyTuple_GET_SIZE(args);
     if (numArgs != 1) {
         PyErr_BadArgument();
