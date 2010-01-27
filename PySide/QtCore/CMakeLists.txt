@@ -108,7 +108,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${libpyside_SOURCE_DIR}
                     ${PYTHON_INCLUDE_PATH}
                     )
-add_library(QtCore MODULE ${QtCore_SRC})
+add_library(QtCore SHARED ${QtCore_SRC})
 set_property(TARGET QtCore PROPERTY PREFIX "")
 target_link_libraries(QtCore
                       pyside
