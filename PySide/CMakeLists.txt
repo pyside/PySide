@@ -31,3 +31,4 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_SOUR
                                                            "${CMAKE_BINARY_DIR}/PySide/__init__.py")
 
 HAS_QT_MODULE(QT_QTCORE_FOUND QtCore)
+HAS_QT_MODULE(QT_QTGUI_FOUND QtGui)

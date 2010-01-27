@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtGui">
+  <load-typesystem name="typesystem_core.xml" generate="no"/>
+  <!-- TODO: Replace x11 for a proper variable which identifies the current platform -->
+  <load-typesystem name="typesystem_gui_x11.xml" generate="yes"/>
+</typesystem>

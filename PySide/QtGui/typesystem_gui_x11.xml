@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtGui">
+
+  <rejection class="" function-name="qt_x11_getX11InfoForWindow"/>
+  <rejection class="QX11Info" field-name="x11data"/>
+  <value-type name="QX11Info">
+    <modify-function signature="visual()const" remove="all"/>
+    <modify-function signature="appVisual(int)" remove="all"/>
+  </value-type>
+
+  <load-typesystem name="typesystem_gui_common.xml" generate="yes"/>
+</typesystem>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtGui">
+
+  <rejection class="*" function-name="qt_mac_set_cursor"/>
+  <rejection class="*" function-name="macMenu"/>
+
+  <!-- qApp macro register -->
+  <inject-code class="target" file="glue/qtgui_boost.cpp" position="end"/>
+  <inject-code class="native" file="glue/qtgui_glue.cpp" position="beginning"/>
+
+  <load-typesystem name="typesystem_gui.xml" generate="yes"/>
+</typesystem>
