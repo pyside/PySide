@@ -2827,8 +2827,22 @@
     </modify-function>
 
     <!-- This function need be re-implemented in inject code -->
-    <modify-function signature="removeTab(int)" remove="all"/>
-    <modify-function signature="clear()" remove="all"/>
+    <modify-function signature="removeTab(int)">
+    <inject-code class="target" position="beginning">
+        QWidget* tab = %CPPSELF.widget(%1);
+        if (tab) {
+            Shiboken::setParent(0, %CONVERTTOPYTHON[QWidget*](tab));
+            %CPPSELF.%FUNCTION_NAME(%1);
+        }
+    </inject-code>
+    </modify-function>
+    <modify-function signature="clear()">
+        <inject-code class="target" position="beginning">
+            for (int i=0; i &lt; %CPPSELF.count(); i++)
+                Shiboken::setParent(0, %CONVERTTOPYTHON[QWidget*](%CPPSELF.widget(i)));
+            %CPPSELF.%FUNCTION_NAME();
+        </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QDrag">
     <extra-includes>
