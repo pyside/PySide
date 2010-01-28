@@ -3599,6 +3599,7 @@
       <include file-name="QStyle" location="global"/>
     </extra-includes>
     <modify-function signature="QApplication(int &amp;, char  **)" remove="all" />
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
     <inject-code class="native" file="glue/qapplication_init.cpp" position="beginning" />
 
     <!-- Causes warnings using generator. They were kept here to avoid generation even
