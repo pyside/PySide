@@ -1,5 +1,10 @@
 int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
+    if (QCoreApplication::instance()) {
+        PyErr_SetString(PyExc_RuntimeError, "A QCoreApplication instance already exists.");
+        return -1;
+    }
+
     int numArgs = PyTuple_GET_SIZE(args);
     if (numArgs != 1) {
         PyErr_BadArgument();
