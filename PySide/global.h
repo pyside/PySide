@@ -2,6 +2,7 @@
 #undef QT_NO_STL_WCHAR
 
 #include "qobjectdefs_pyside.h"
+
 //#define Q_QDOC
 #define qdoc
 //#undef Q_MOC_RUN

@@ -5,8 +5,8 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
 macro(execute_generator module sources typesystem_path)
 add_custom_command(OUTPUT ${${sources}}
 COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../global.h
-        --include-paths=${QT_INCLUDE_DIR}
+        ${pyside_SOURCE_DIR}/global.h
+        --include-paths=${pyside_SOURCE_DIR}:${QT_INCLUDE_DIR}
         --typesystem-paths=${pyside_SOURCE_DIR}:${typesystem_path}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
         --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt

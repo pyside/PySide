@@ -61,7 +61,6 @@
     <rejection class="" function-name="qSetRealNumberPrecision" />
 
     <!-- TODO: We do not support void* or const void* as arg -->
-    <rejection class="QGenericArgument"/>
     <rejection class="QMetaObject" function-name="activate"/>
     <rejection class="QMetaObject" function-name="invokeMethod"/>
     <rejection class="QMetaObject" function-name="newInstance"/>
@@ -2684,9 +2683,12 @@
 
   <value-type name="QGenericArgument">
     <include file-name="qobjectdefs.h" location="global" />
-
-    <modify-function signature="data()const" remove="all" />
   </value-type>
+
+  <value-type name="QGenericReturnArgument">
+    <include file-name="qobjectdefs.h" location="global" />
+  </value-type>
+
   <object-type name="QMetaObject">
     <include file-name="qobjectdefs.h" location="global" />
     <modify-function signature="connect(const QObject*, int, const QObject*, int, int, int*)" remove="all" />
