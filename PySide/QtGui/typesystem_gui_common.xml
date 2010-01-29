@@ -875,6 +875,10 @@
   <interface-type name="QLayoutItem"/>
   <interface-type name="QPaintDevice"/>
   <interface-type name="QGraphicsItem">
+    <inject-code class="target" position="end">
+        PyObject* userTypeConstant =  PyInt_FromLong(QGraphicsItem::UserType);
+        PyDict_SetItemString(SbkQGraphicsItem_Type.super.ht_type.tp_dict, "UserType", userTypeConstant);
+    </inject-code>
     <modify-function signature="setParentItem(QGraphicsItem *)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
