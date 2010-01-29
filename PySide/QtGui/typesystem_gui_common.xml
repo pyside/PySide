@@ -3726,14 +3726,6 @@
     <modify-function signature="setStyle(QStyle*)" remove="all"/>
     <modify-function signature="style()" remove="all"/>
     <modify-function signature="setStyle(const QString &amp;)" remove="all"/>
-
-    <!-- Causes warnings using generator. They were kept here to avoid generation even
-    removing QT_NO_QWS_MANAGER from #define section-->
-    <modify-function signature="qwsSetDecoration(QDecoration*)" remove="all"/>
-    <modify-function signature="qwsSetDecoratiom(QString&amp;)" remove="all"/>
-    <modify-function signature="commitData(QSessionManager&amp;)" remove="all"/>
-    <modify-function signature="saveState(QSessionManager&amp;)" remove="all"/>
-    <modify-function signature="fontMetrics()" remove="all"/>
   </object-type>
   <object-type name="QCommandLinkButton"/>
   <object-type name="QFileSystemModel">
@@ -4112,8 +4104,6 @@
   <suppress-warning text="signature 'QApplication(int&amp;,char**)' for function modification in 'QApplication' not found."/>
   <suppress-warning text="signature 'QApplication(int&amp;,char**,bool)' for function modification in 'QApplication' not found."/>
   <suppress-warning text="signature 'QApplication(int&amp;,char**,QApplication::Type)' for function modification in 'QApplication' not found."/>
-  <suppress-warning text="signature 'qwsSetDecoration(QDecoration*)' for function modification in 'QApplication' not found."/>
-  <suppress-warning text="signature 'qwsSetDecoratiom(QString&amp;)' for function modification in 'QApplication' not found."/>
   <suppress-warning text="signature 'addToolbar(Qt::ToolBarArea,QToolBar*)' for function modification in 'QMainWindow' not found."/>
   <suppress-warning text="signature 'addToolbar(QToolBar*)' for function modification in 'QMainWindow' not found."/>
   <suppress-warning text="signature 'addToolbar(QString)' for function modification in 'QMainWindow' not found."/>
