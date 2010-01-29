@@ -6,10 +6,6 @@ class Properties(unittest.TestCase):
     def testStaticProperty(self):
         self.assertEqual(QtGui.QGraphicsItem.UserType, 65536)
 
-    def testMemberProperty(self):
-        i = QtGui.QGraphicsItem()
-        self.assertEqual(i.UserType, 65536)
-
     def testInstanceProperty(self):
         p = QtGui.QStyleOptionViewItemV3()
         self.assert_(isinstance(p.locale, QtCore.QLocale))
