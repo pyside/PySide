@@ -872,9 +872,9 @@
   <value-type name="QPrinterInfo">
     <modify-function signature="operator=(const QPrinterInfo &amp;)" remove="all"/>
   </value-type>
-  <interface-type name="QLayoutItem"/>
-  <interface-type name="QPaintDevice"/>
-  <interface-type name="QGraphicsItem">
+  <object-type name="QLayoutItem"/>
+  <object-type name="QPaintDevice"/>
+  <object-type name="QGraphicsItem">
     <inject-code class="target" position="end">
         PyObject* userTypeConstant =  PyInt_FromLong(QGraphicsItem::UserType);
         PyDict_SetItemString(SbkQGraphicsItem_Type.super.ht_type.tp_dict, "UserType", userTypeConstant);
@@ -991,7 +991,7 @@
     <!--### Obsolete in 4.3-->
     <modify-function signature="supportsExtension(QGraphicsItem::Extension)const" remove="all"/>
     <modify-function signature="setExtension(QGraphicsItem::Extension,QVariant)" remove="all"/>
-  </interface-type>
+  </object-type>
   <object-type name="QAbstractGraphicsShapeItem"/>
   <object-type name="QAbstractItemView">
     <modify-function signature="setIndexWidget(const QModelIndex &amp;, QWidget *)">
@@ -3864,14 +3864,14 @@
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
   </object-type>
-  <interface-type name="QGraphicsLayoutItem" copyable="false">
+  <object-type name="QGraphicsLayoutItem" copyable="false">
     <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
     <modify-function signature="setParentLayoutItem(QGraphicsLayoutItem*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-  </interface-type>
+  </object-type>
   <object-type name="QGraphicsLinearLayout" >
     <modify-function signature="addItem(QGraphicsLayoutItem*)">
       <modify-argument index="1">
