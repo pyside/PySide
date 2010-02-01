@@ -2222,7 +2222,7 @@
         SbkQTimer_Type.super.ht_type.tp_init(pyTimer, emptyTuple, 0);
 
         QTimer* timer = SbkQTimer_cptr(pyTimer);
-        PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsOs", pyTimer, SIGNAL("timeout()"), %PYARG_2, %3);
+        PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsOs", pyTimer, SIGNAL(timeout()), %PYARG_2, %3);
         Py_DECREF(result);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL("timeout()"), timer, SLOT("deleteLater()"));
