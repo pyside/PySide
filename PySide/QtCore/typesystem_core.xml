@@ -2031,6 +2031,11 @@
         <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
+    <add-function signature="__str__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            %PYARG_0 = PyString_FromString(%CPPSELF.data());
+        </inject-code>
+    </add-function>
     <add-function signature="__len__">
         <inject-code class="target" position="beginning">
             return %CPPSELF.count();
