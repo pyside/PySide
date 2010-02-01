@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <typesystem>
     <!-- Templates to fix bool* parameters -->
-
     <template name="fix_bool*">
         bool ok_;
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_);
@@ -47,5 +46,18 @@
 
         return %CONVERTTOPYTHON[%TYPE](*sequence);
     </template>
+
+    <template name="fix_args,QRectF*">
+        QRectF rect_;
+        %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;rect_);
+        return %CONVERTTOPYTHON[QRectF](rect_);
+    </template>
+
+    <template name="fix_args,QRect*">
+        QRect rect_;
+        %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;rect_);
+        return %CONVERTTOPYTHON[QRectF](rect_);
+    </template>
+
 </typesystem>
 

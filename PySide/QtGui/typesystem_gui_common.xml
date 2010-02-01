@@ -3579,12 +3579,33 @@
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="drawText(QRectF,int,QString,QRectF*)" remove="all" />
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="drawText(QRect,int,QString,QRect*)" remove="all" />
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="drawText(int,int,int,int,int,QString,QRect*)" remove="all" />
+    <modify-function signature="drawText(QRectF,int,QString,QRectF*)">
+      <modify-argument index="4">
+        <remove-argument/>
+        <remove-default-expression/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_args,QRectF*"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="drawText(QRect,int,QString,QRect*)">
+      <modify-argument index="4">
+        <remove-argument/>
+        <remove-default-expression/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_args,QRect*"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="drawText(int,int,int,int,int,QString,QRect*)">
+      <modify-argument index="7">
+        <remove-argument/>
+        <remove-default-expression/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_args,QRect*"/>
+      </inject-code>
+    </modify-function>
     <modify-function signature="redirected(const QPaintDevice*,QPoint*)" remove="all" />
     <modify-function signature="matrix()const" remove="all"/>
     <!--### Obsolete in 4.3-->
