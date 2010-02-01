@@ -1210,11 +1210,27 @@
     <modify-function signature="toString(qulonglong) const" remove="all"/>
     <modify-function signature="toString(ushort) const" remove="all"/>
     <modify-function signature="toString(unsigned int) const" remove="all"/>
-    <modify-function signature="toUInt(QString,bool*,int)const" remove="all"/>
-    <modify-function signature="toULongLong(QString,bool*,int)const" remove="all"/>
     <extra-includes>
       <include file-name="QDate" location="global"/>
     </extra-includes>
+    <modify-function signature="toUInt(QString,bool*,int)const">
+        <modify-argument index="2">
+            <remove-argument />
+            <remove-default-expression />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_arg,bool*,arg" />
+        </inject-code>
+    </modify-function>
+    <modify-function signature="toULongLong(QString,bool*,int)const">
+        <modify-argument index="2">
+            <remove-argument />
+            <remove-default-expression />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_arg,bool*,arg" />
+        </inject-code>
+    </modify-function>
     <modify-function signature="toDouble(QString,bool*)const">
         <modify-argument index="2">
             <remove-argument />
@@ -1241,10 +1257,30 @@
             <insert-template name="fix_arg,bool*,arg" />
         </inject-code>
     </modify-function>
-
-    <modify-function signature="toLongLong(QString,bool*,int)const" remove="all" />
-    <modify-function signature="toShort(QString,bool*,int)const" remove="all" />
-    <modify-function signature="toUShort(QString,bool*,int)const" remove="all" />
+    <modify-function signature="toLongLong(QString,bool*,int)const">
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_arg,bool*,arg" />
+        </inject-code>
+    </modify-function>
+    <modify-function signature="toShort(QString,bool*,int)const">
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_arg,bool*,arg" />
+        </inject-code>
+    </modify-function>
+    <modify-function signature="toUShort(QString,bool*,int)const">
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_arg,bool*,arg" />
+        </inject-code>
+    </modify-function>
   </value-type>
   <value-type name="QBitArray" hash-function="qHash" >
       <modify-function signature="fill(bool,int)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
@@ -2015,8 +2051,9 @@
     </add-function>
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
-                PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
-                PyObject* result = SbkQByteArrayFunc_replace(self, args);
+                %CPPSELF.remove(_i, 1);
+                PyObject* args = Py_BuildValue("(nO)", _i, _value);
+                PyObject* result = SbkQByteArrayFunc_insert(self, args);
                 Py_DECREF(args);
                 Py_XDECREF(result);
                 return !result ? -1 : 0;

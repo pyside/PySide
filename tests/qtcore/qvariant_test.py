@@ -16,11 +16,31 @@ class MySize(QSize):
 class QVariantToNumber(unittest.TestCase):
     def testToNumberInt(self):
         obj = QVariant('37')
-        self.assertEqual(37, obj.toInt()[0])
+        self.assertEqual((37, True), obj.toInt())
+
+    def testToNumberLongLong(self):
+        obj = QVariant('37')
+        self.assertEqual((37, True), obj.toLongLong())
+
+    def testToNumberUInt(self):
+        obj = QVariant('37')
+        self.assertEqual((37, True), obj.toUInt())
+
+    def testToNumberUIntNegative(self):
+        obj = QVariant('-37')
+        self.assert_(not obj.toUInt()[1])
+
+    def testToNumberULongLong(self):
+        obj = QVariant('37')
+        self.assertEqual((37, True), obj.toULongLong())
+
+    def testToNumberULongLongNegative(self):
+        obj = QVariant('-37')
+        self.assert_(not obj.toULongLong()[1])
 
     def testToNumberFloat(self):
         obj = QVariant('37.109')
-        self.assertEqual(37.109, obj.toDouble()[0])
+        self.assertEqual((37.109, True), obj.toDouble())
 
 class QVariantTypeName(unittest.TestCase):
     def testTypeNameQString(self):

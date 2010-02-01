@@ -42,6 +42,16 @@ class TranslationTest(UsesQCoreApplication):
         obj.setObjectName(obj.tr('Hello World!'))
         self.assertEqual(obj.objectName(), u'привет мир!')
 
+    def testUtf8(self):
+        translator = QTranslator()
+        translator.load(os.path.join(self.trdir, 'trans_russian.qm'))
+        self.app.installTranslator(translator)
+
+        obj = QObject()
+        obj.setObjectName(obj.trUtf8('Hello World!'))
+        self.assertEqual(obj.objectName(), u'привет мир!')
+
+
 
 if __name__ == '__main__':
     unittest.main()

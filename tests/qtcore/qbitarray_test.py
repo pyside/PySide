@@ -95,6 +95,25 @@ class QBitArrayIsIterableTest(unittest.TestCase):
         self.assertTrue(has_xor_bitwise_operator)
         self.assertEqual(bool_list_from_qbitarray(xored_qbitarray), xored_bool_list)
 
+
+class QBitArrayGetItemTest(unittest.TestCase):
+    '''Test case for []/__getitem__ operator'''
+
+    def create_bitarray(self, values):
+        '''helper function to create a bit array'''
+        obj = QBitArray(len(values))
+        for i, value in enumerate(values):
+            obj.setBit(i, value)
+        return obj
+
+    def testSequenceProtocol(self):
+        '''QBitArray sequence protocol'''
+        data = [True, False, True]
+        obj = self.create_bitarray(data)
+        for reference, value in zip(data, obj):
+            self.assertEqual(reference, value)
+
+
 if __name__ == '__main__':
     unittest.main()
 

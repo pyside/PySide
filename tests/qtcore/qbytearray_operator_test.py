@@ -57,5 +57,26 @@ class QByteArrayOperatorAt(unittest.TestCase):
         self.assertRaises(IndexError, lambda :obj[len(string)])
 
 
+class QByteArrayOperatorLen(unittest.TestCase):
+    '''Test case for __len__ operator of QByteArray'''
+
+    def testBasic(self):
+        '''QByteArray __len__'''
+        self.assertEqual(len(QByteArray()), 0)
+        self.assertEqual(len(QByteArray('')), 0)
+        self.assertEqual(len(QByteArray(' ')), 1)
+        self.assertEqual(len(QByteArray('yabadaba')), 8)
+
+
+class QByteArrayOperatorStr(unittest.TestCase):
+    '''Test case for __str__ operator of QByteArray'''
+
+    def testBasic(self):
+        '''QByteArray __str__'''
+        self.assertEqual(QByteArray().__str__(), '')
+        self.assertEqual(QByteArray('').__str__(), '')
+        self.assertEqual(QByteArray('aaa').__str__(), 'aaa')
+
+
 if __name__ == '__main__':
     unittest.main()
