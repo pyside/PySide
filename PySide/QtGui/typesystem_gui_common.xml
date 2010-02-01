@@ -3727,9 +3727,16 @@
     </modify-function>
 
     <!-- ownership control transfer to qApp -->
-    <modify-function signature="setStyle(QStyle*)" remove="all"/>
-    <modify-function signature="style()" remove="all"/>
-    <modify-function signature="setStyle(const QString &amp;)" remove="all"/>
+    <modify-function signature="setStyle(QStyle*)">
+        <inject-code class="target" position="end">
+            Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_1);
+        </inject-code>
+    </modify-function>
+    <modify-function signature="style()">
+        <inject-code class="target" position="end">
+            Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
+        </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QCommandLinkButton"/>
   <object-type name="QFileSystemModel">
