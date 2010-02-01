@@ -628,6 +628,7 @@
   </value-type>
   <value-type name="QAbstractTextDocumentLayout::Selection" />
   <value-type name="QPixmap" >
+    <conversion-rule file="qpixmap_conversion.h" />
     <extra-includes>
       <include file-name="QVariant" location="global"/>
     </extra-includes>
