@@ -62,8 +62,6 @@
 
     <!-- TODO: We do not support void* or const void* as arg -->
     <rejection class="QMetaObject" function-name="activate"/>
-    <rejection class="QMetaObject" function-name="invokeMethod"/>
-    <rejection class="QMetaObject" function-name="newInstance"/>
     <rejection class="QMetaObject" function-name="metacall"/>
     <rejection class="QMetaObject" function-name="static_metacall"/>
     <!-- TODO: Support to addGuard(QObject**) -->
@@ -2638,7 +2636,7 @@
   <!-- <object-type name="QThreadPool"/> -->
   <value-type name="QXmlStreamAttribute"/>
   <!-- FIXME Removed due to a shiboken bug-->
-<!--  <value-type name="QXmlStreamAttributes">
+  <value-type name="QXmlStreamAttributes">
     <modify-function signature="push_back(QXmlStreamAttribute)" remove="all"/>
     <modify-function signature="pop_back()" remove="all"/>
     <modify-function signature="push_front(QXmlStreamAttribute)" remove="all"/>
@@ -2653,7 +2651,7 @@
     <modify-function signature="value(const QLatin1String &amp;, const QLatin1String &amp;)const" remove="all" />
     <modify-function signature="value(const QLatin1String &amp;)const" remove="all" />
     <modify-function signature="hasAttribute(const QLatin1String &amp;)const" remove="all" />
-  </value-type>-->
+  </value-type>
   <value-type name="QXmlStreamNamespaceDeclaration"/>
   <value-type name="QXmlStreamNotationDeclaration"/>
   <value-type name="QXmlStreamEntityDeclaration"/>
@@ -2662,11 +2660,8 @@
     <modify-function signature="addData(const char*)" remove="all"/>
   </object-type>
   <object-type name="QXmlStreamWriter">
-    <modify-function signature="QXmlStreamWriter(QByteArray*)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="writeCurrentToken(QXmlStreamReader)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
     <modify-function signature="QXmlStreamWriter(QString *)" remove="all" />
     <modify-function signature="codec()const" remove="all"/>
-    <!--TODO-->
   </object-type>
   <value-type name="QModelIndex">
     <modify-function signature="internalPointer()const">

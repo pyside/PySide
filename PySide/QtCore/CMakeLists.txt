@@ -92,7 +92,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qvariant_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qwaitcondition_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qwritelocker_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamattribute_wrapper.cpp
-# ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamattributes_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamattributes_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamentitydeclaration_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamentityresolver_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamnamespacedeclaration_wrapper.cpp
