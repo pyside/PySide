@@ -1382,6 +1382,10 @@
     </modify-function>
   </object-type>
   <object-type name="QMenu">
+    <extra-includes>
+      <include file-name="glue/qmenu_glue.h" location="local"/>
+    </extra-includes>
+
     <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
     <modify-function signature="exec(const QPoint&amp;, QAction*)" rename="exec_" allow-thread="yes" />
     <modify-function signature="exec(QList&lt;QAction*>, const QPoint&amp;, QAction*)" rename="exec_" allow-thread="yes" />
@@ -1428,9 +1432,27 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="setNoReplayFor(QWidget*)" remove="all" />
-    <modify-function signature="addAction(QString,const QObject*,const char*,QKeySequence)" remove="all" />
-    <modify-function signature="addAction(QIcon,QString,const QObject*,const char*,QKeySequence)" remove="all" />
+
+    <add-function signature="addAction(const QString&amp;, PyObject*, const QKeySequence&amp;)">
+      <modify-argument index="3">
+        <replace-default-expression with="0" />
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        %PYARG_0 = addActionWithPyObject(%CPPSELF, QIcon(), %1, %2, %3);
+      </inject-code>
+    </add-function>
+
+    <add-function signature="addAction(const QIcon&amp;, const QString&amp;, PyObject*, const QKeySequence&amp;)">
+      <modify-argument index="4">
+        <replace-default-expression with="0" />
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        %PYARG_0 = addActionWithPyObject(%CPPSELF, %1, %2, %3, %4);
+      </inject-code>
+    </add-function>
+
   </object-type>
+
   <object-type name="QMenuBar">
     <modify-function signature="addAction(const QString&amp;)">
       <modify-argument index="return">
@@ -1513,16 +1535,20 @@
   </object-type>
 
   <object-type name="QShortcut">
-    <modify-function signature="QShortcut(QKeySequence,QWidget*,const char*,const char*,Qt::ShortcutContext)" remove="all">
-<!--      <modify-argument index="3">
-        <remove-default-expression/>
-        <replace-type modified-type="const pyqt_slot&amp;"/>
-      </modify-argument>
+    <add-function signature="QShortcut(const QKeySequence&amp;, QWidget*, PyObject*, Qt::ShortcutContext)">
       <modify-argument index="4">
-        <remove-default-expression/>
-        <replace-type modified-type="const pyqt_slot&amp;"/>
-      </modify-argument>-->
-    </modify-function>
+        <replace-default-expression with="Qt::WindowShortcut"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        cptr = new QShortcutWrapper(%1, %2);
+        PyObject* result = PyObject_CallMethod(%PYSELF, "connect", "OsO", %PYSELF, SIGNAL(activated()), %PYARG_3);
+        if (result == 0) {
+            delete cptr;
+            return 0;
+        }
+        Shiboken::setParent(%PYARG_2, %PYSELF);
+      </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QSizeGrip"/>
   <object-type name="QSound"/>
