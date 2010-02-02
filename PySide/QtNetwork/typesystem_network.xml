@@ -108,19 +108,9 @@
             <modify-argument index="return">
                 <replace-type modified-type="PyTuple*"/>
             </modify-argument>
-            <!--
-            <modify-argument index="return">
-                <replace-type modified-type="python::object" />
-            </modify-argument>
-            -->
             <inject-code class="target" position="beginning">
                 <insert-template name="fix_args,bool*"/>
             </inject-code>
-             <!-- 
-            <inject-code class="target" position="end">
-                <insert-template name="bool*_fix_end" />
-            </inject-code>
-            -->
         </modify-function>
     </object-type>
     <object-type name="QTcpSocket"/>

@@ -66,8 +66,8 @@
     </template>
 
     <template name="read_wrapper">
-        char _data[%ARGUMENT_NAMES];
-        qint64 _size = %CPPSELF.%FUNCTION_NAME(_data, %ARGUMENT_NAMES);
+        char _data[%2];
+        qint64 _size = %CPPSELF.%FUNCTION_NAME(_data, %2);
         if (_size > 0)
             return %CONVERTTOPYTHON[QByteArray](QByteArray(_data, _size));
         else
