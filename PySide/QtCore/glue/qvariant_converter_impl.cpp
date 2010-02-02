@@ -42,8 +42,40 @@ QVariant Shiboken::Converter<QVariant>::toCpp(PyObject* pyobj)
     // voodoo stuff to avoid linking qtcore bindings with qtgui bindings
     uint typeCode = QMetaType::type(pyobj->ob_type->tp_name);
     if (!typeCode || typeCode > QVariant::UserType) {
-        Py_INCREF(pyobj);
-        return QVariant::fromValue<PyObjectHolder>(pyobj);
+
+            // Check the implicit conversion stuff for most python-native types
+            if (SbkPySide_QtCore_QVariant_Type_CheckExact(pyobj)) {
+                QVariant::Type cpp_arg0 = Shiboken::Converter<QVariant::Type >::toCpp(pyobj);
+                // QVariant(QVariant::Type)
+                return QVariant(cpp_arg0);
+            } else if (SbkPySide_QtCore_Qt_GlobalColor_CheckExact(pyobj)) {
+                Qt::GlobalColor cpp_arg0 = Shiboken::Converter<Qt::GlobalColor >::toCpp(pyobj);
+                // QVariant(Qt::GlobalColor)
+                return QVariant(cpp_arg0);
+            } else if (PyBool_Check(pyobj)) {
+                bool cpp_arg0 = Shiboken::Converter<bool >::toCpp(pyobj);
+                // QVariant(bool)
+                return QVariant(cpp_arg0);
+            } else if (PyString_Check(pyobj)) {
+                const char * cpp_arg0 = Shiboken::Converter<const char * >::toCpp(pyobj);
+                // QVariant(const char*)
+                return QVariant(cpp_arg0);
+            } else if (PyFloat_Check(pyobj)) {
+                double cpp_arg0 = Shiboken::Converter<double >::toCpp(pyobj);
+                // QVariant(double)
+                return QVariant(cpp_arg0);
+            } else if (PyNumber_Check(pyobj)) {
+                int cpp_arg0 = Shiboken::Converter<int >::toCpp(pyobj);
+                // QVariant(int)
+                return QVariant(cpp_arg0);
+            } else if (PyLong_Check(pyobj)) {
+                qlonglong cpp_arg0 = Shiboken::Converter<qlonglong >::toCpp(pyobj);
+                // QVariant(qlonglong)
+                return QVariant(cpp_arg0);
+            } else {
+                Py_INCREF(pyobj);
+                return QVariant::fromValue<PyObjectHolder>(pyobj);
+            }
     } else {
         // Is a known Qt type
         return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyobj)->cptr);
