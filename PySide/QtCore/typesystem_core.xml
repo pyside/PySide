@@ -2247,7 +2247,7 @@
   <object-type name="QAbstractFileEngineHandler">
     <modify-function signature="create(const QString &amp;) const">
       <modify-argument index="return">
-        <define-ownership owner="c++" class="shell"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
   </object-type>

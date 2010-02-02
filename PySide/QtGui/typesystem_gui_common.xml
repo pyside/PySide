@@ -1223,7 +1223,7 @@
     <modify-function signature="virtual_hook(int,void*)" remove="all"/>
     <modify-function signature="clone()const">
       <modify-argument index="return">
-        <define-ownership class="shell" owner="c++"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
   </object-type>
@@ -1751,7 +1751,7 @@
   <object-type name="QWidgetAction">
     <modify-function signature="createWidget(QWidget*)">
       <modify-argument index="return">
-        <define-ownership class="shell" owner="c++"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setDefaultWidget(QWidget*)">
@@ -1965,7 +1965,7 @@
     </modify-function>
     <modify-function signature="addItem(QLayoutItem *)">
       <modify-argument index="1">
-        <define-ownership class="target" owner="c++"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="insertWidget(int, QWidget *, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
@@ -2306,7 +2306,7 @@
     <modify-function signature="operator=(const QTableWidgetItem&amp;)" remove="all"/>
     <modify-function signature="clone() const">
       <modify-argument index="return">
-        <define-ownership class="shell" owner="c++"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="backgroundColor()const" remove="all"/>
@@ -2360,7 +2360,7 @@
     <modify-function signature="operator=(const QListWidgetItem&amp;)" remove="all"/>
     <modify-function signature="clone() const">
       <modify-argument index="return">
-        <define-ownership class="shell" owner="c++"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="backgroundColor()const" remove="all"/>
@@ -2455,7 +2455,7 @@
     </modify-function>
     <modify-function signature="clone() const">
       <modify-argument index="return">
-        <define-ownership class="shell" owner="c++"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="addChild(QTreeWidgetItem *)">
@@ -2534,7 +2534,7 @@
     <modify-function signature="isItemSelected(const QListWidgetItem*)const" remove="all"/>
     <modify-function signature="takeItem(int)">
       <modify-argument index="return">
-        <define-ownership class="target" owner="default"/>
+        <define-ownership owner="default"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="mimeData(const QList&lt;QListWidgetItem*&gt;)const" remove="all"/>
@@ -2637,7 +2637,7 @@
     </modify-function>
     <modify-function signature="setInputContext(QInputContext*)">
       <modify-argument index="1">
-        <define-ownership class="target" owner="c++"/>
+        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setStyle(QStyle*)">
@@ -3451,7 +3451,7 @@
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate *)">
       <modify-argument index="1">
-        <define-ownership class="target" owner="c++"/>
+        <define-ownership owner="c++"/>
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
