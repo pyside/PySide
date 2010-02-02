@@ -1,0 +1,280 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtNetwork">
+    <load-typesystem name="typesystem_templates.xml" generate="no" />
+    <load-typesystem name="typesystem_core.xml" generate="no" />
+
+    <namespace-type name="QSsl">
+        <extra-includes>
+            <include file-name="qssl.h" location="global"/>
+        </extra-includes>
+    </namespace-type>
+
+    <rejection class="QIPv6Address" field-name="c"/>
+    <rejection class="QSslCertificate"/>
+    <enum-type name="QAbstractSocket::NetworkLayerProtocol"/>
+    <enum-type name="QAbstractSocket::SocketError"/>
+    <enum-type name="QAbstractSocket::SocketState"/>
+    <enum-type name="QAbstractSocket::SocketType"/>
+    <enum-type name="QFtp::Command"/>
+    <enum-type name="QFtp::Error"/>
+    <enum-type name="QFtp::State"/>
+    <enum-type name="QFtp::TransferMode"/>
+    <enum-type name="QFtp::TransferType"/>
+    <enum-type name="QHostAddress::SpecialAddress"/>
+    <enum-type name="QHttp::Error"/>
+    <enum-type name="QHttp::State"/>
+    <enum-type name="QHttp::ConnectionMode"/>
+    <enum-type name="QNetworkInterface::InterfaceFlag" flags="QNetworkInterface::InterfaceFlags"/>
+    <enum-type name="QNetworkProxy::Capability"/>
+    <enum-type name="QNetworkProxy::ProxyType"/>
+    <enum-type name="QUdpSocket::BindFlag" flags="QUdpSocket::BindMode"/>
+    <enum-type name="QUrlInfo::PermissionSpec"/>
+    <enum-type name="QHostInfo::HostInfoError"/>
+    <enum-type name="QSsl::KeyType"/>
+    <enum-type name="QSsl::EncodingFormat"/>
+    <enum-type name="QSsl::KeyAlgorithm"/>
+    <enum-type name="QSsl::AlternateNameEntryType"/>
+    <enum-type name="QSsl::SslProtocol"/>
+    <enum-type name="QLocalSocket::LocalSocketError"/>
+    <enum-type name="QLocalSocket::LocalSocketState"/>
+    <enum-type name="QNetworkAccessManager::Operation"/>
+    <enum-type name="QNetworkCookie::RawForm"/>
+    <enum-type name="QNetworkReply::NetworkError"/>
+    <enum-type name="QNetworkRequest::Attribute" extensible="yes"/>
+    <enum-type name="QNetworkRequest::CacheLoadControl"/>
+    <enum-type name="QNetworkRequest::KnownHeaders"/>
+
+    <object-type name="QAbstractSocket">
+        <modify-function signature="connectToHost(const QString&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
+        <modify-function signature="connectToHost(const QHostAddress&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
+        <modify-function signature="disconnectFromHost()" allow-thread="yes" />
+        <modify-function signature="waitForConnected(int)" allow-thread="yes" />
+        <modify-function signature="waitForDisconnected(int)" allow-thread="yes" />
+    </object-type>
+
+    <object-type name="QFtp">
+        <modify-function signature="connectToHost(const QString&amp;, quint16)" allow-thread="yes" />
+        <modify-function signature="login(const QString&amp;, const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="close()" allow-thread="yes" />
+        <modify-function signature="list(const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="cd(const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="get(const QString&amp;, QIODevice*, QFtp::TransferType)" allow-thread="yes" />
+        <modify-function signature="put(const QByteArray&amp;, const QString&amp;, QFtp::TransferType)" allow-thread="yes" />
+        <modify-function signature="put(QIODevice*, const QString&amp;, QFtp::TransferType)" allow-thread="yes" />
+        <modify-function signature="remove(const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="mkdir(const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="rmdir(const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="rename(const QString&amp;, const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="rawCommand(const QString&amp;)" allow-thread="yes" />
+        <modify-function signature="readAll()" allow-thread="yes" />
+        <modify-function signature="read(char*, qint64)" allow-thread="yes">
+          <modify-argument index="return">
+            <replace-type modified-type="QByteArray"/>
+          </modify-argument>
+          <modify-argument index="1">
+            <remove-argument />
+          </modify-argument>
+          <inject-code class="target" position="beginning">
+            <insert-template name="read_wrapper"/>
+          </inject-code>
+        </modify-function>
+    </object-type>
+
+    <object-type name="QHttp">
+        <modify-function signature="closeConnection()" remove="all"/>
+        <modify-function signature="readAll()" allow-thread="yes"/>
+        <modify-function signature="read(char*, qint64)" allow-thread="yes">
+          <modify-argument index="return">
+            <replace-type modified-type="QByteArray"/>
+          </modify-argument>
+          <modify-argument index="1">
+            <remove-argument />
+          </modify-argument>
+          <inject-code class="target" position="beginning">
+            <insert-template name="read_wrapper"/>
+          </inject-code>
+        </modify-function>
+    </object-type>
+    <object-type name="QTcpServer">
+        <modify-function signature="waitForNewConnection(int,bool*)" allow-thread="yes">
+            <!-- FIXME removing default expression means user will always have to pass a value, but he wouldn't have to -->
+            <modify-argument index="1">
+                <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="2">
+                <remove-default-expression/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PyTuple*"/>
+            </modify-argument>
+            <!--
+            <modify-argument index="return">
+                <replace-type modified-type="python::object" />
+            </modify-argument>
+            -->
+            <inject-code class="target" position="beginning">
+                <insert-template name="fix_args,bool*"/>
+            </inject-code>
+             <!-- 
+            <inject-code class="target" position="end">
+                <insert-template name="bool*_fix_end" />
+            </inject-code>
+            -->
+        </modify-function>
+    </object-type>
+    <object-type name="QTcpSocket"/>
+    <object-type name="QUdpSocket">
+        <modify-function signature="readDatagram(char*, qint64, QHostAddress*, quint16*)" allow-thread="yes">
+            <modify-argument index="1">
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="3">
+                <remove-default-expression/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="4">
+                <remove-default-expression/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PyTuple*"/>
+            </modify-argument>
+            <inject-code class="target" position="beginning" file="glue/qudpsocket_read_datagram_glue.cpp"/>
+        </modify-function>
+        <modify-function signature="writeDatagram(const char*,qint64,QHostAddress,quint16)" remove="all"/>
+        <modify-function signature="writeDatagram(const QByteArray&amp;, const QHostAddress&amp;, quint16)" allow-thread="yes"/>
+    </object-type>
+
+    <object-type name="QHttpHeader">
+        <modify-function signature="operator=(QHttpHeader)" remove="all"/>
+
+        <modify-function signature="QHttpHeader(QHttpHeader)" remove="all"/>
+    </object-type>
+    <object-type name="QLocalServer">
+        <modify-function signature="waitForNewConnection(int,bool*)" allow-thread="yes">
+            <!-- FIXME --> 
+            <modify-argument index="1">
+                <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="2">
+                <remove-default-expression/>
+                <remove-argument/>
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                <insert-template name="fix_args,bool*"/>
+            </inject-code>
+            <modify-argument index="return">
+                <replace-type modified-type="PyTuple*"/>
+            </modify-argument>
+
+        </modify-function>
+    </object-type>
+    <object-type name="QLocalSocket"/>
+    <object-type name="QNetworkAccessManager">
+        <modify-function signature="setCookieJar(QNetworkCookieJar*)">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </modify-function>
+    </object-type>
+    <object-type name="QNetworkCookieJar"/>
+    <object-type name="QNetworkReply"/>
+
+    <value-type name="QHostAddress" hash-function="qHash">
+        <modify-function signature="operator=(QString)" remove="all"/>
+        <modify-function signature="operator=(QHostAddress)" remove="all"/>
+        <!--
+        <inject-code class="target" position="end">
+            python::implicitly_convertible&lt;QHostAddress::SpecialAddress,QHostAddress&gt;();
+        </inject-code>
+          -->
+    </value-type>
+
+    <value-type name="QHostInfo">
+        <modify-function signature="operator=(QHostInfo)" remove="all"/>
+        <modify-function signature="lookupHost(QString,QObject*,const char*)" access="private"/>
+    </value-type>
+
+    <value-type name="QHttpRequestHeader">
+        <modify-function signature="operator=(QHttpRequestHeader)" remove="all"/>
+    </value-type>
+
+    <value-type name="QHttpResponseHeader">
+        <modify-function signature="operator=(QHttpResponseHeader)" remove="all"/>
+    </value-type>
+
+    <value-type name="QNetworkAddressEntry">
+        <modify-function signature="operator=(QNetworkAddressEntry)" remove="all"/>
+    </value-type>
+
+    <value-type name="QNetworkInterface">
+        <modify-function signature="operator=(QNetworkInterface)" remove="all"/>
+    </value-type>
+
+    <value-type name="QNetworkProxy">
+        <modify-function signature="operator=(QNetworkProxy)" remove="all"/>
+    </value-type>
+
+    <value-type name="QUrlInfo">
+        <modify-function signature="operator=(QUrlInfo)" remove="all"/>
+    </value-type>
+
+    <value-type name="QIPv6Address">
+        <modify-function signature="operator[](int)const">
+            <remove/>
+        </modify-function>
+        <modify-function signature="operator[](int)">
+            <remove/>
+        </modify-function>
+    </value-type>
+
+    <value-type name="QAuthenticator">
+        <modify-function signature="operator=(QAuthenticator)" remove="all"/>
+    </value-type>
+    <value-type name="QNetworkCookie">
+        <modify-function signature="operator=(QNetworkCookie)" remove="all"/>
+
+        <extra-includes>
+            <include file-name="QDateTime" location="global"/>
+        </extra-includes>
+    </value-type>
+    <value-type name="QNetworkRequest">
+        <modify-function signature="operator=(QNetworkRequest)" remove="all"/>
+    </value-type>
+
+    <enum-type name="QSslError::SslError"/>
+    <enum-type name="QSslCertificate::SubjectInfo"/>
+    <enum-type name="QSslSocket::SslMode"/>
+    <enum-type name="QSslSocket::PeerVerifyMode"/>
+
+    <value-type name="QSslCipher"/>
+    <value-type name="QSslError"/>
+    <value-type name="QSslKey"/>
+    <!-- TODO QSslCertificate requires QMultiMap which isn't implemented yet
+    <value-type name="QSslCertificate"/>
+    -->
+    <value-type name="QSslConfiguration"/>
+
+    <object-type name="QSslSocket">
+        <modify-function signature="connectToHostEncrypted(const QString&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
+        <modify-function signature="waitForEncrypted(int)" allow-thread="yes" />
+    </object-type>
+
+    <suppress-warning text="Shadowing: QAbstractSocket::*"/>
+
+    <!-- For people building without SSL support -->
+    <!--
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslSocket' for enum 'SslMode' is not declared"/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslError' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslCipher' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslKey' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslError' for enum 'SslError' is not declared"/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslCertificate' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslSocket' for enum 'PeerVerifyMode' is not declared"/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslCertificate' for enum 'SubjectInfo' is not declared"/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslConfiguration' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
+    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslSocket' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
+    -->
+
+</typesystem>
