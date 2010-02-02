@@ -59,5 +59,10 @@
         return %CONVERTTOPYTHON[QRectF](rect_);
     </template>
 
+    <template name="fix_char*">
+        char val_;
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;val_);
+        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[char](val_));
+    </template>
 </typesystem>
 

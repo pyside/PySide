@@ -2116,7 +2116,15 @@
 <!--     <modify-function signature="readData(char *,qint64)" remove="all"/> -->
     <modify-function signature="readLine(char *,qint64)" remove="all"/>
     <modify-function signature="write(const char *,qint64)" remove="all"/>
-    <modify-function signature="getChar(char *)" remove="all" />
+    <modify-function signature="getChar(char *)">
+        <modify-argument index="1">
+            <remove-argument />
+            <remove-default-expression />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_char*" />
+        </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QCryptographicHash">
     <modify-function signature="addData(const char*,int)" remove="all"/>
