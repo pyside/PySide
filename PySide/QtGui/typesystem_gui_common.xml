@@ -835,12 +835,183 @@
     <modify-function signature="operator=(QColor)" remove="all"/>
     <modify-function signature="operator=(Qt::GlobalColor)" remove="all"/>
     <modify-function signature="QColor(const char*)" remove="all" />
-    <modify-function signature="getCmyk(int*,int*,int*,int*,int*)" remove="all" />
-    <modify-function signature="getCmykF(qreal*,qreal*,qreal*,qreal*,qreal*)" remove="all" />
-    <modify-function signature="getHsv(int*,int*,int*,int*)const" remove="all" />
-    <modify-function signature="getHsvF(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
-    <modify-function signature="getRgb(int*,int*,int*,int*)const" remove="all" />
-    <modify-function signature="getRgbF(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
+    <!-- get* methods. Inject code -->
+    <modify-function signature="getCmyk(int*,int*,int*,int*,int*)">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="5">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_int*,int*,int*,int*,int*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getCmykF(qreal*,qreal*,qreal*,qreal*,qreal*)">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="5">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*,qreal*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getHsl(int*,int*,int*,int*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_int*,int*,int*,int*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getHslF(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getHsv(int*,int*,int*,int*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_int*,int*,int*,int*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getHsvF(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getRgb(int*,int*,int*,int*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_int*,int*,int*,int*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getRgbF(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+        </inject-code>
+    </modify-function>
     <modify-function signature="dark(int)const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="light(int)const" remove="all"/>

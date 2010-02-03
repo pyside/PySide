@@ -64,5 +64,28 @@
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;val_);
         %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[char](val_));
     </template>
+
+    <template name="fix_int*,int*,int*,int*">
+        int a, b, c, d;
+        %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
+        %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+    </template>
+    <template name="fix_qreal*,qreal*,qreal*,qreal*">
+        qreal a, b, c, d;
+        %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
+        %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+    </template>
+
+    <template name="fix_int*,int*,int*,int*,int*">
+        int a, b, c, d, e;
+        %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d, &amp;e);
+        %PYARG_0 = Shiboken::makeTuple(a, b, c, d, e);
+    </template>
+    <template name="fix_qreal*,qreal*,qreal*,qreal*,qreal*">
+        qreal a, b, c, d, e;
+        %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d, &amp;e);
+        %PYARG_0 = Shiboken::makeTuple(a, b, c, d, e);
+    </template>
+
 </typesystem>
 
