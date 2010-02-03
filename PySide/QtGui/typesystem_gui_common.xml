@@ -2568,6 +2568,7 @@
     <extra-includes>
       <include file-name="QIcon" location="global"/>
       <include file-name="QMessageBox" location="global"/>
+      <include file-name="glue/qwidget_glue.h" location="local"/>
     </extra-includes>
 
     <modify-function signature="actionEvent(QActionEvent*)">
@@ -2682,8 +2683,11 @@
       </modify-argument>
     </modify-function>
 
-    <!-- Will use glue code -->
-    <modify-function signature="setLayout(QLayout *)" remove="all"/>
+    <modify-function signature="setLayout(QLayout *)">
+      <inject-code class="target" position="beginning">
+        qwidgetSetLayout(%CPPSELF, %1);
+      </inject-code>
+    </modify-function>
     <modify-function signature="enabledChange(bool)" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="fontChange(QFont)" remove="all"/>
