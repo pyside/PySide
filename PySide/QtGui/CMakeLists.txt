@@ -397,7 +397,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qwindowstatechangeevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qwizardpage_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qwizard_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qworkspace_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11info_wrapper.cpp
 
 ${SPECIFIC_OS_FILES}
 ${QtGui_46_SRC}
