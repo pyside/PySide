@@ -33,7 +33,7 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
         def childEvent(obj, event):
             self.duck_childEvent_called = True
             QObject.childEvent(obj, event)
-        parent.event = types.MethodType(childEvent, parent, QObject)
+        parent.childEvent = types.MethodType(childEvent, parent, QObject)
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)
@@ -46,7 +46,7 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
             self.duck_childEvent_called = True
         child = QObject()
         child.setParent(parent)
-        parent.event = types.MethodType(childEvent, parent, QObject)
+        parent.childEvent = types.MethodType(childEvent, parent, QObject)
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)
