@@ -47,12 +47,12 @@ else(Q_WS_MAC)
     message(FATAL_ERROR "OS not supported")
 endif(Q_WS_X11)
 
-if ((${QT_VERSION_MAJOR} EQUAL 4) AND (${QT_VERSION_MINOR} LESS 6))
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set (QtNetwork_46_SRC )
-else ((${QT_VERSION_MAJOR} EQUAL 4) AND (${QT_VERSION_MINOR} LESS 6))
+else (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set(QtNetwork_46_SRC
        )
-endif ((${QT_VERSION_MAJOR} EQUAL 4) AND (${QT_VERSION_MINOR} LESS 6))
+endif (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
 
 set(QtNetwork_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qabstractsocket_wrapper.cpp
