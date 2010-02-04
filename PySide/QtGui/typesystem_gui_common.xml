@@ -1030,14 +1030,51 @@
   </value-type>
   <value-type name="QTextOption::Tab"/>
   <value-type name="QFontMetrics" >
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="boundingRect(int,int,int,int,int,QString,int,int*)const" remove="all" />
+    <modify-function signature="boundingRect(int,int,int,int,int,QString,int,int*)const">
+      <modify-argument index="8">
+        <remove-argument />
+        <remove-default-expression />
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple" />
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_return_args,int*">
+          <replace from="RETURNTYPE" to="QRect" />
+        </insert-template>
+      </inject-code>
+    </modify-function>
 
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="boundingRect(QRect,int,QString,int,int*)const" remove="all" />
+    <modify-function signature="boundingRect(QRect,int,QString,int,int*)const">
+      <modify-argument index="5">
+        <remove-argument />
+        <remove-default-expression />
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple" />
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_return_args,int*">
+          <replace from="RETURNTYPE" to="QRect" />
+        </insert-template>
+      </inject-code>
+    </modify-function>
 
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="size(int,QString,int,int*)const" remove="all" />
+    <modify-function signature="size(int,QString,int,int*)const">
+      <modify-argument index="4">
+        <remove-argument />
+        <remove-default-expression />
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple" />
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_return_args,int*">
+          <replace from="RETURNTYPE" to="QSize" />
+        </insert-template>
+      </inject-code>
+    </modify-function>
+
     <modify-function signature="operator=(QFontMetrics)" remove="all"/>
   </value-type>
   <value-type name="QGradient" force-abstract="yes"  />

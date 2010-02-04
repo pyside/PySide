@@ -109,6 +109,11 @@
         else
             return %CONVERTTOPYTHON[QByteArray](QByteArray());
     </template>
-
+    <template name="fix_return_args,int*">
+        RETURNTYPE _ret;
+        int _arg;
+        _ret = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_arg);
+        %PYARG_0 = Shiboken::makeTuple(_ret, _arg);
+    </template>
 </typesystem>
 
