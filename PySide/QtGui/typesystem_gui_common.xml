@@ -2267,16 +2267,51 @@
     <modify-function signature="drawItems(QPainter*, int, QGraphicsItem**, const QStyleOptionGraphicsItem*)" remove="all" />
   </object-type>
   <object-type name="QInputDialog">
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getInteger(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes" remove="all" />
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getInt(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes" remove="all" />
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getItem(QWidget *, const QString &amp;, const QString &amp;, const QStringList &amp;, int, bool, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes" remove="all" />
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getText(QWidget *, const QString &amp;, const QString &amp;, QLineEdit::EchoMode, const QString &amp;, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes" remove="all" />
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getDouble(QWidget *, const QString &amp;, const QString &amp;, double, double, double, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes" remove="all" />
+    <modify-function signature="getInteger(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+      <modify-argument index="8">
+        <remove-default-expression/>
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_arg,arg,arg,arg,arg,arg,arg,bool*,arg"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="getInt(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+      <modify-argument index="8">
+        <remove-default-expression/>
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_arg,arg,arg,arg,arg,arg,arg,bool*,arg"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="getItem(QWidget *, const QString &amp;, const QString &amp;, const QStringList &amp;, int, bool, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+      <modify-argument index="7">
+        <remove-default-expression/>
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_arg,arg,arg,arg,arg,arg,bool*,arg"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="getText(QWidget *, const QString &amp;, const QString &amp;, QLineEdit::EchoMode, const QString &amp;, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+      <modify-argument index="6">
+        <remove-default-expression/>
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_arg,arg,arg,arg,arg,bool*,arg"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="getDouble(QWidget *, const QString &amp;, const QString &amp;, double, double, double, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+      <modify-argument index="8">
+        <remove-default-expression/>
+        <remove-argument/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_arg,arg,arg,arg,arg,arg,arg,bool*,arg"/>
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QGraphicsScene">
     <extra-includes>
