@@ -86,6 +86,14 @@
         %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d, &amp;e);
         %PYARG_0 = Shiboken::makeTuple(a, b, c, d, e);
     </template>
+    <template name="read_wrapper">
+        char _data[%2];
+        qint64 _size = %CPPSELF.%FUNCTION_NAME(_data, %2);
+        if (_size > 0)
+            return %CONVERTTOPYTHON[QByteArray](QByteArray(_data, _size));
+        else
+            return %CONVERTTOPYTHON[QByteArray](QByteArray());
+    </template>
 
 </typesystem>
 
