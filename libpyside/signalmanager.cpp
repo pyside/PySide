@@ -279,8 +279,10 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
         Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(self, qPrintable(methodName)));
         if (!pyMethod.isNull()) {
             Shiboken::AutoDecRef retval(PyObject_CallObject(pyMethod, preparedArgs));
-            if (retval.isNull())
+            if (retval.isNull()) {
                 qWarning() << "Error calling slot" << methodName;
+                PyErr_Print();
+            }
         } else {
             qWarning() << "Dynamic slot" << methodName << "not found!";
         }
