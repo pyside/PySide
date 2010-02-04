@@ -1,33 +1,14 @@
-static void registerDynSignalSlot(QObject* source, const char* signature, QMetaMethod::MethodType type)
-{
-    const QMetaObject* metaObject = source->metaObject();
-    int methodIndex = metaObject->indexOfMethod(signature);
-    // Create the dynamic signal is needed
-    if (methodIndex == -1) {
-        SbkBaseWrapper* self = (SbkBaseWrapper*) BindingManager::instance().retrieveWrapper(source);
-        if (!self->containsCppWrapper) {
-            qWarning() << "You can't add dynamic signals or slots on an object originated from C++.";
-        } else {
-            PySide::DynamicQMetaObject* dynMetaObj = reinterpret_cast<PySide::DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
-            if (type == QMetaMethod::Signal)
-                dynMetaObj->addSignal(signature);
-            else
-                dynMetaObj->addSlot(signature);
-        }
-    }
-}
-
 static bool qobjectConnect(QObject* source, const char* signal, QObject* receiver, const char* slot, Qt::ConnectionType type)
 {
     if (!PySide::checkSignal(signal))
         return false;
     signal++;
 
-    registerDynSignalSlot(source, signal, QMetaMethod::Signal);
+    PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal);
 
     bool isSignal = PySide::isSignal(slot);
     slot++;
-    registerDynSignalSlot(receiver, slot, isSignal ? QMetaMethod::Signal : QMetaMethod::Slot);
+    PySide::SignalManager::registerMetaMethod(receiver, slot, isSignal ? QMetaMethod::Signal : QMetaMethod::Slot);
     return QObject::connect(source, signal - 1, receiver, slot - 1, type);
 }
 
@@ -37,7 +18,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         return false;
     signal++;
 
-    registerDynSignalSlot(source, signal, QMetaMethod::Signal);
+    PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal);
     int signalIndex = source->metaObject()->indexOfMethod(signal);
 
     PySide::SignalManager& signalManager = PySide::SignalManager::instance();

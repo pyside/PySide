@@ -39,6 +39,7 @@
 #include <Python.h>
 #include <Qt>
 #include <QStringList>
+#include <QMetaMethod>
 
 class QObject;
 
@@ -62,6 +63,9 @@ public:
 
     void globalReceiverConnectNotify(int slotIndex);
     void globalReceiverDisconnectNotify(int slotIndex);
+
+    // Used to register a new signal/slot on QMetaobjc of source.
+    static bool registerMetaMethod(QObject* source, const char* signature, QMetaMethod::MethodType type);
 private:
     struct SignalManagerPrivate;
     SignalManagerPrivate* m_d;

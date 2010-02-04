@@ -42,6 +42,7 @@
 #include <QDebug>
 #include <limits>
 #include <typeresolver.h>
+#include <basewrapper.h>
 
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
 #error QSLOT_CODE and/or QSIGNAL_CODE changed! change the hardcoded stuff to the correct value!
@@ -288,4 +289,25 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
         }
     }
     return -1;
+}
+
+bool SignalManager::registerMetaMethod(QObject* source, const char* signature, QMetaMethod::MethodType type)
+{
+    const QMetaObject* metaObject = source->metaObject();
+    int methodIndex = metaObject->indexOfMethod(signature);
+    // Create the dynamic signal is needed
+    if (methodIndex == -1) {
+        Shiboken::SbkBaseWrapper* self = (Shiboken::SbkBaseWrapper*) Shiboken::BindingManager::instance().retrieveWrapper(source);
+        if (!self->containsCppWrapper) {
+            qWarning() << "You can't add dynamic signals or slots on an object originated from C++.";
+            return false;
+        } else {
+            PySide::DynamicQMetaObject* dynMetaObj = reinterpret_cast<PySide::DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
+            if (type == QMetaMethod::Signal)
+                dynMetaObj->addSignal(signature);
+            else
+                dynMetaObj->addSlot(signature);
+        }
+    }
+    return true;
 }

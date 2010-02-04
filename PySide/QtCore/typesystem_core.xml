@@ -267,6 +267,20 @@
   <rejection class="" function-name="qvsnprintf"/>
   <rejection class="" function-name="qWarning"/>
   <rejection class="QThreadPool"/>
+  <!-- From Qt4.6 -->
+  <rejection class="*" field-name="d_ptr"/>
+  <rejection class="*" function-name="qobject_interface_iid"/>
+  <rejection class="*" function-name="qGetPtrHelper"/>
+  <rejection class="*" function-name="q_check_ptr"/>
+  <rejection class="*" function-name="qobject_interface_iid&lt;QTextCodecFactoryInterface*&gt;"/>
+  <rejection class="*" function-name="qobject_interface_iid&lt;QFactoryInterface*&gt;"/>
+  <rejection class="*" function-name="qRegisterAnimationInterpolator"/>
+  <rejection class="*" function-name="qvariant_cast&lt;QVariant&gt;"/>
+  <rejection class="*" function-name="qVariantSetValue&lt;QVariant&gt;"/>
+  <rejection class="*" function-name="qReallocAligned"/>
+  <rejection class="*" function-name="qMallocAligned"/>
+  <rejection class="*" function-name="qFreeAligned"/>
+  <!-- From Qt4.6 ^^^ -->
   <enum-type name="QXmlStreamReader::Error"/>
   <enum-type name="QXmlStreamReader::TokenType"/>
   <enum-type name="QString::NormalizationForm" />
@@ -280,6 +294,26 @@
   <enum-type name="QChar::CombiningClass" />
   <enum-type name="QLineF::IntersectType" />
   <enum-type name="QVariant::Type" />
+  <!-- From Qt4.6 -->
+  <enum-type name="QXmlStreamReader::ReadElementTextBehaviour"/>
+  <enum-type name="QDataStream::FloatingPointPrecision"/>
+  <enum-type name="QtValidLicenseForOpenVGModule"/>
+  <enum-type name="QtValidLicenseForMultimediaModule"/>
+  <enum-type name="Qt::GestureFlag" flags="Qt::GestureFlags"/>
+  <enum-type name="Qt::GestureType"/>
+  <enum-type name="Qt::GestureState"/>
+  <enum-type name="Qt::CoordinateSystem"/>
+  <enum-type name="Qt::TileRule"/>
+  <enum-type name="Qt::Initialization"/>
+  <enum-type name="Qt::AnchorPoint"/>
+  <enum-type name="Qt::NavigationMode"/>
+  <enum-type name="Qt::InputMethodHint"/>
+  <enum-type name="Qt::TouchPointState"/>
+  <enum-type name="QEasingCurve::Type"/>
+  <enum-type name="QAbstractAnimation::DeletionPolicy"/>
+  <enum-type name="QAbstractAnimation::Direction"/>
+  <enum-type name="QAbstractAnimation::State"/>
+  <!-- From Qt4.6 ^^^ -->
   <primitive-type name="qint8"/>
   <primitive-type name="qint16"/>
   <primitive-type name="qint32"/>
@@ -2746,6 +2780,197 @@
   <value-type name="QMetaEnum">
     <modify-function signature="enclosingMetaObject()const" remove="all" />
   </value-type>
+  <!-- From Qt4.6 -->
+  <object-type name="QAbstractAnimation"/>
+
+  <object-type name="QAbstractState"/>
+
+  <object-type name="QAbstractTransition">
+    <modify-function signature="QAbstractTransition(QState*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="addAnimation(QAbstractAnimation*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="removeAnimation(QAbstractAnimation*)">
+      <modify-argument index="1">
+        <parent index="this" action="remove"/>
+      </modify-argument>
+    </modify-function>
+
+    <!-- http://bugs.openbossa.org/show_bug.cgi?id=123
+    <modify-function signature="setTargetStates(QList&lt;QAbstractState*&gt;)" remove="all"/>
+    <modify-function signature="targetStates() const " remove="all"/>-->
+  </object-type>
+
+  <object-type name="QAnimationGroup">
+    <modify-function signature="addAnimation(QAbstractAnimation*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="insertAnimation(int, QAbstractAnimation*)">
+      <modify-argument index="2">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="removeAnimation(QAbstractAnimation*)">
+      <modify-argument index="1">
+        <parent index="this" action="remove"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="takeAnimation(int)">
+      <modify-argument index="return">
+        <parent index="this" action="remove"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="clear()" >
+        <inject-code class="target" position="beginning">
+            for(int counter = 0; counter &lt; %CPPSELF.animationCount(); ++counter ) {
+                    PyObject* obj = %CONVERTTOPYTHON[QAbstractAnimation*](%CPPSELF.animationAt(counter));
+                    Shiboken::setParent(NULL, obj);
+                    Py_DECREF(obj);
+            }
+            %CPPSELF.clear();
+        </inject-code>
+    </modify-function>
+  </object-type>
+
+  <rejection class="QContiguousCache"/>
+
+  <value-type name="QEasingCurve">
+    <modify-function signature="customType() const" remove="all"/>
+    <modify-function signature="setCustomType(double)" remove="all"/>
+  </value-type>
+
+  <object-type name="QEventTransition">
+    <modify-function signature="QEventTransition(QState*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="QEventTransition(QObject*, QEvent::Type, QState*)">
+      <modify-argument index="3">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+  </object-type>
+
+  <object-type name="QFinalState"/>
+
+  <enum-type name="QHistoryState::HistoryType" />
+  <object-type name="QHistoryState"/>
+
+  <value-type name="QMargins"/>
+
+  <object-type name="QParallelAnimationGroup"/>
+
+  <object-type name="QPauseAnimation"/>
+
+  <value-type name="QProcessEnvironment"/>
+
+  <object-type name="QPropertyAnimation"/>
+
+  <rejection class="QScopedPointer"/>
+
+  <object-type name="QSequentialAnimationGroup"/>
+
+  <object-type name="QSignalTransition"/>
+
+  <enum-type name="QState::ChildMode"/>
+  <object-type name="QState">
+    <modify-function signature="addTransition(QAbstractTransition*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="addTransition(QObject*, const char*, QAbstractState*)">
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        QString signalName(%2);
+        if (PySide::SignalManager::registerMetaMethod(%1, signalName.mid(1).toAscii().data(), QMetaMethod::Signal)) {
+          %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->addTransition(%1, %2, %3));
+        } else {
+          %PYARG_0 = Py_None;
+        }
+      </inject-code>
+    </modify-function>
+
+    <modify-function signature="addTransition(QAbstractState*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="removeTransition(QAbstractTransition*)">
+      <modify-argument index="1">
+        <parent index="this" action="remove"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <enum-type name="QStateMachine::Error"/>
+  <enum-type name="QStateMachine::EventPriority"/>
+  <enum-type name="QStateMachine::RestorePolicy"/>
+  <object-type name="QStateMachine">
+    <modify-function signature="addState(QAbstractState *)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="removeState(QAbstractState *)">
+      <modify-argument index="1">
+        <parent index="this" action="remove"/>
+      </modify-argument>
+    </modify-function>
+
+    <!-- http://bugs.openbossa.org/show_bug.cgi?id=123 -->
+    <modify-function signature="configuration() const" remove="all"/>
+    <modify-function signature="defaultAnimations() const" remove="all"/>
+
+    <add-function signature="configuration()" return-type="PySequence*" >
+        <inject-code class="target" position="beginning">
+            %PYARG_0 = PySet_New(0);
+            foreach(QAbstractState* abs_state, %CPPSELF.configuration()) {
+                    Shiboken::AutoDecRef obj(%CONVERTTOPYTHON[QAbstractState*](abs_state));
+                    Shiboken::setParent(self, obj);
+                    PySet_Add(%PYARG_0, obj);
+            }
+        </inject-code>
+    </add-function>
+
+    <add-function signature="defaultAnimations()" return-type="PySequence*" >
+        <inject-code class="target" position="beginning">
+            %PYARG_0 = PyList_New(0);
+            foreach(QAbstractAnimation* abs_anim, %CPPSELF.defaultAnimations()) {
+                    Shiboken::AutoDecRef obj(%CONVERTTOPYTHON[QAbstractAnimation*](abs_anim));
+                    Shiboken::setParent(self, obj);
+                    PyList_Append(%PYARG_0, obj);
+            }
+        </inject-code>
+    </add-function>
+  </object-type>
+  <value-type name="QStateMachine::SignalEvent"/>
+  <value-type name="QStateMachine::WrappedEvent"/>
+
+  <object-type name="QVariantAnimation"/>
+
+  <!-- From Qt4.6 ^^^ -->
 
   <add-function signature="SIGNAL(const char*)" return-type="PyString*">
     <inject-code class="target" position="beginning">
