@@ -55,74 +55,37 @@ else ((${QT_VERSION_MAJOR} EQUAL 4) AND (${QT_VERSION_MINOR} LESS 6))
 endif ((${QT_VERSION_MAJOR} EQUAL 4) AND (${QT_VERSION_MINOR} LESS 6))
 
 set(QtNetwork_SRC
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/converter_register_qtnetwork.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qabstractsocket_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qabstractsocket_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qauthenticator_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qauthenticator_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qftp_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qftp_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhostaddress_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhostaddress_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhostinfo_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhostinfo_wrapper.hpp
-# Obsoletes since Qt 4.6
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttpheader_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttpheader_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttprequestheader_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttprequestheader_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttpresponseheader_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttpresponseheader_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttp_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qhttp_wrapper.hpp
-# End of obsoletes since Qt 4.6
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qipv6address_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qipv6address_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qlocalserver_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qlocalserver_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qlocalsocket_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qlocalsocket_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkaccessmanager_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkaccessmanager_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkaddressentry_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkaddressentry_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkcookiejar_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkcookiejar_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkcookie_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkcookie_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkinterface_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkinterface_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkproxy_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkproxy_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkreply_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkreply_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkrequest_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qnetworkrequest_wrapper.hpp
-#${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslcertificate_wrapper.cpp
-#${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslcertificate_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslcipher_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslcipher_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslconfiguration_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslconfiguration_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslerror_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslerror_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslkey_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslkey_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslsocket_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qsslsocket_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qssl_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qssl_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qtcpserver_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qtcpserver_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qtcpsocket_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qtcpsocket_wrapper.hpp
-#${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qtnetwork_globals_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qtnetwork_module_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qudpsocket_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qudpsocket_wrapper.hpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qurlinfo_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/qurlinfo_wrapper.hpp
-
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qabstractsocket_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qauthenticator_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qftp_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhostaddress_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhostinfo_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttpheader_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttprequestheader_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttpresponseheader_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttp_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qipv6address_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qlocalserver_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qlocalsocket_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkaccessmanager_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkaddressentry_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkcookiejar_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkcookie_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkinterface_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkproxy_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkreply_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkrequest_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslcipher_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslconfiguration_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslerror_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslkey_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslsocket_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qssl_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtcpserver_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtcpsocket_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtnetwork_module_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qudpsocket_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
 ${SPECIFIC_OS_FILES}
 ${QtNetwork_46_SRC}
 )
@@ -130,7 +93,7 @@ ${QtNetwork_46_SRC}
 execute_generator(network QtNetwork_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtNetwork/
+                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/
                     ${QT_INCLUDE_DIR}
                     ${QT_QTNETWORK_INCLUDE_DIR}
                     ${SHIBOKEN_INCLUDE_DIR}
@@ -151,4 +114,4 @@ target_link_libraries(QtNetwork
 
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtNetwork.so
-        DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
+        DESTINATION ${SITE_PACKAGE}/PySide)
