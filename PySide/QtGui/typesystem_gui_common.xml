@@ -401,14 +401,17 @@
     <modify-function signature="operator=(QTransform)" remove="all"/>
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
-<!--     <modify-function signature="operator*=(qreal)" remove="all"/> -->
-<!--     <modify-function signature="operator+=(qreal)" remove="all"/> -->
-<!--     <modify-function signature="operator-=(qreal)" remove="all"/> -->
-<!--     <modify-function signature="operator/=(qreal)" remove="all"/> -->
-<!--     <modify-function signature="operator*(QTransform)const" rename="multiplied"/> -->
-<!--     <modify-function signature="operator*=(QTransform)" remove="all"/> -->
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="inverted(bool*)const" remove="all" />
+    <modify-function signature="inverted(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_bool*"/>
+      </inject-code>
+    </modify-function>
   </value-type>
   <enum-type name="QTextOption::TabType"/>
   <enum-type name="QTextOption::WrapMode"/>
@@ -726,8 +729,17 @@
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
     <modify-function signature="operator=(QMatrix)" remove="all"/>
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="inverted(bool*)const" remove="all" />
+    <modify-function signature="inverted(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_bool*"/>
+      </inject-code>
+    </modify-function>
   </value-type>
   <value-type name="QConicalGradient"/>
   <value-type name="QFontInfo" >
@@ -1018,15 +1030,39 @@
     <modify-function signature="light(int)const" remove="all"/>
   </value-type>
   <value-type name="QFontMetricsF" >
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="boundingRect(QRectF,int,QString,int,int*)const" remove="all" />
 
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="size(int,QString,int,int*)const" remove="all" />
+    <modify-function signature="boundingRect(QRect,int,QString,int,int*)const">
+      <modify-argument index="5">
+        <remove-argument />
+        <remove-default-expression />
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple" />
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_return_args,int*">
+          <replace from="RETURNTYPE" to="QRect" />
+        </insert-template>
+      </inject-code>
+    </modify-function>
 
-    <modify-function signature="operator=(QFontMetrics)" remove="all"/>
+    <modify-function signature="size(int,QString,int,int*)const">
+      <modify-argument index="4">
+        <remove-argument />
+        <remove-default-expression />
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple" />
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_return_args,int*">
+          <replace from="RETURNTYPE" to="QSizeF" />
+        </insert-template>
+      </inject-code>
+    </modify-function>
+
     <modify-function signature="operator=(QFontMetricsF)" remove="all"/>
-
+    <modify-function signature="operator=(QFontMetricsF)" remove="all"/>
   </value-type>
   <value-type name="QTextOption::Tab"/>
   <value-type name="QFontMetrics" >
@@ -1896,8 +1932,13 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="removeItem(int)" remove="all" />
+    <modify-function signature="removeItem(int)">
+      <inject-code class="target" position="beginning">
+        QWidget *_widget = %CPPSELF.widget(%1);
+        if (_widget)
+            Shiboken::setParent(0, _widget);
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QToolButton">
     <modify-function signature="setDefaultAction(QAction *)">
