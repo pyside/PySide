@@ -9,7 +9,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-common -Wall -fno-strict-aliasing -fvisibilit
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-endif (NOT CMAKE_BUILD_TYPE)
+endif()
 
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterp REQUIRED)
@@ -26,19 +26,19 @@ set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE PATH "The s
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-endif (NOT CMAKE_BUILD_TYPE)
+endif()
 
 include(${QT_USE_FILE})
 if (${QTVERSION} VERSION_LESS 4.5.0)
     message(FATAL_ERROR "You need Qt4.5, found ${QTVERSION}.")
-endif (${QTVERSION} VERSION_LESS 4.5.0)
+endif()
 
 set(BINDING_VERSION ${BINDING_API_VERSION}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR})
 find_program(GENERATOR generatorrunner REQUIRED)
 
 if (NOT GENERATOR)
     message(FATAL_ERROR "You need to specify GENERATOR variable (-DGENERATOR=value)")
-endif (NOT GENERATOR)
+endif()
 
 # uninstall target
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake"
@@ -61,7 +61,7 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 if (NOT SITE_PACKAGE)
     message(FATAL_ERROR "Could not detect Python module installation directory.")
-endif (NOT SITE_PACKAGE)
+endif()
 
 set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
 

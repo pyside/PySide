@@ -2,7 +2,7 @@ project(QtCore)
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set (QtCore_46_SRC )
-else (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+else()
     set(QtCore_46_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qeasingcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qabstractanimation_wrapper.cpp
@@ -25,7 +25,7 @@ else (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qstatemachine_wrappedevent_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qvariantanimation_wrapper.cpp
     )
-endif (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+endif()
 
 set(QtCore_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qabstracteventdispatcher_wrapper.cpp

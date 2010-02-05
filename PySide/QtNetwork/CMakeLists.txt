@@ -43,13 +43,13 @@ elseif(Q_WS_MAC)
     set(MODULE_NAME network_mac)
     set(SPECIFIC_OS_FILES
        )
-else(Q_WS_MAC)
+else()
     message(FATAL_ERROR "OS not supported")
 endif(Q_WS_X11)
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set (QtNetwork_46_SRC )
-else (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+else()
     set(QtNetwork_46_SRC
        )
 endif (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)

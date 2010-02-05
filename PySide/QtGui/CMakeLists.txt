@@ -44,13 +44,13 @@ elseif(Q_WS_MAC)
     set(MODULE_NAME gui_mac)
     set(SPECIFIC_OS_FILES
        )
-else(Q_WS_MAC)
+else()
     message(FATAL_ERROR "OS not supported")
 endif(Q_WS_X11)
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set (QtGui_46_SRC )
-else (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+else()
     set(QtGui_46_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qmatrix2x2_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qmatrix2x3_wrapper.cpp
