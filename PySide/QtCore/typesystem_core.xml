@@ -307,7 +307,7 @@
   <enum-type name="Qt::Initialization"/>
   <enum-type name="Qt::AnchorPoint"/>
   <enum-type name="Qt::NavigationMode"/>
-  <enum-type name="Qt::InputMethodHint"/>
+  <enum-type name="Qt::InputMethodHint" flags="Qt::InputMethodHints"/>
   <enum-type name="Qt::TouchPointState"/>
   <enum-type name="QEasingCurve::Type"/>
   <enum-type name="QAbstractAnimation::DeletionPolicy"/>

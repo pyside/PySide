@@ -1031,7 +1031,7 @@
   </value-type>
   <value-type name="QFontMetricsF" >
 
-    <modify-function signature="boundingRect(QRect,int,QString,int,int*)const">
+    <modify-function signature="boundingRect(QRectF,int,QString,int,int*)const">
       <modify-argument index="5">
         <remove-argument />
         <remove-default-expression />
@@ -1041,7 +1041,7 @@
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="fix_return_args,int*">
-          <replace from="RETURNTYPE" to="QRect" />
+          <replace from="RETURNTYPE" to="QRectF" />
         </insert-template>
       </inject-code>
     </modify-function>
