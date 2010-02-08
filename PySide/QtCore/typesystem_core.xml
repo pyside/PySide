@@ -1613,31 +1613,67 @@
     <!-- handled by inject code -->
     <modify-function signature="QVariant(uint)" remove="all"/>
     <modify-function signature="QVariant(qulonglong)" remove="all"/>
-    <modify-function signature="QVariant(const QByteArray&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QByteArray&amp;)">
+        <access modifier="private" />
+    </modify-function>
     <modify-function signature="QVariant(QDataStream&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QBitArray&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QString&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QBitArray&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QString&amp;)">
+        <access modifier="private" />
+    </modify-function>
     <modify-function signature="QVariant(const QLatin1String&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QStringList&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QChar&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QDate&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QTime&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QDateTime&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QSize&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QSizeF&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QPoint&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QPointF&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QRect&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QRectF&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QUrl&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QLocale&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QRegExp&amp;)" remove="all"/>
+    <modify-function signature="QVariant(const QChar&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QDate&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QTime&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QDateTime&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QSize&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QSizeF&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QPoint&amp;)">
+        <access modifier="private" />
+    </modify-function>>
+    <modify-function signature="QVariant(const QPointF&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QRect&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QRectF&amp;)" >
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QUrl&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QLocale&amp;)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(const QRegExp&amp;)">
+        <access modifier="private" />
+    </modify-function>
     <modify-function signature="QVariant(QHash&lt;QString,QVariant>)" remove="all" />
     <modify-function signature="QVariant(QMap&lt;QString,QVariant>)" remove="all" />
     <modify-function signature="QVariant(QList&lt;QVariant>)" remove="all" />
     <modify-function signature="QVariant(QVariant)" remove="all" />
-    <modify-function signature="QVariant(QLine)" remove="all" />
-    <modify-function signature="QVariant(QLineF)" remove="all" />
+    <modify-function signature="QVariant(QLine)">
+        <access modifier="private" />
+    </modify-function>
+    <modify-function signature="QVariant(QLineF)">
+        <access modifier="private" />
+    </modify-function>
 
     <inject-code class="native" position="beginning" file="glue/qvariant_converter_impl.cpp" />
     <add-function signature="QVariant(PyObject*)">
