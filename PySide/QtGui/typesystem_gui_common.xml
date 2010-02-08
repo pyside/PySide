@@ -1426,15 +1426,33 @@
   </object-type>
   <object-type name="QFontComboBox"/>
   <object-type name="QFontDialog">
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getFont(bool*,QWidget*)" allow-thread="yes" remove="all" />
-
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getFont(bool*,QFont,QWidget*)" allow-thread="yes" remove="all" />
-
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="getFont(bool*,QFont,QWidget*,QString)" allow-thread="yes" remove="all" />
-
+    <modify-function signature="getFont(bool*,QWidget*)" allow-thread="yes">
+        <modify-argument index="1" action="remove"/>
+        <modify-argument index="return">
+            <replace-type modified-type="PyTuple" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_bool*,arg"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getFont(bool*,QFont,QWidget*)" allow-thread="yes">
+        <modify-argument index="1" action="remove"/>
+        <modify-argument index="return">
+            <replace-type modified-type="PyTuple" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_bool*,arg,arg"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getFont(bool*,QFont,QWidget*,QString)" allow-thread="yes">
+        <modify-argument index="1" action="remove"/>
+        <modify-argument index="return">
+            <replace-type modified-type="PyTuple" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_bool*,arg,arg,arg"/>
+        </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QGraphicsEllipseItem">
   </object-type>
