@@ -1935,8 +1935,10 @@
     <modify-function signature="removeItem(int)">
       <inject-code class="target" position="beginning">
         QWidget *_widget = %CPPSELF.widget(%1);
-        if (_widget)
-            Shiboken::setParent(0, _widget);
+        if (_widget) { 
+            Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](_widget));
+            Shiboken::setParent(0, pyWidget);
+        }
       </inject-code>
     </modify-function>
   </object-type>
@@ -2341,8 +2343,8 @@
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
 
-    <!-- TODO Replace inject code! -->
-    <modify-function signature="drawItems(QPainter*, int, QGraphicsItem**, const QStyleOptionGraphicsItem*)" remove="all" />
+    <!-- TODO: Support conversions on virtual function -->
+    <modify-function signature="drawItems(QPainter*, int, QGraphicsItem**, const QStyleOptionGraphicsItem*)" remove="all"/>
   </object-type>
   <object-type name="QInputDialog">
     <modify-function signature="getInteger(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
