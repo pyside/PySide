@@ -848,6 +848,14 @@
     <modify-function signature="operator=(QColor)" remove="all"/>
     <modify-function signature="operator=(Qt::GlobalColor)" remove="all"/>
     <modify-function signature="QColor(const char*)" remove="all" />
+    <add-function signature="QColor(QVariant)">
+        <inject-code class="target" position="beginning">
+        if (%1.type() == QVariant::Color)
+            %0 = new %TYPE(%1.value&lt;QColor>());
+        else
+            PyErr_SetString(PyExc_TypeError, "QVariant must be holding a QColor");
+        </inject-code>
+    </add-function>
     <!-- get* methods. Inject code -->
     <modify-function signature="getCmyk(int*,int*,int*,int*,int*)">
         <modify-argument index="0">
