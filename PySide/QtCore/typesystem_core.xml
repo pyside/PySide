@@ -1848,8 +1848,6 @@
       <include file-name="QDateTime" location="global"/>
       <include file-name="QDir" location="global"/>
     </extra-includes>
-    <modify-function signature="QFileInfo(const QFile&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
-    <modify-function signature="setFile(const QFile&amp;)" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
   </value-type>
   <value-type name="QByteArray" hash-function="qHash">
     <extra-includes>
