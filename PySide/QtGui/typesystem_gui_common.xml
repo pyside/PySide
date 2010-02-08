@@ -829,7 +829,6 @@
     <modify-function signature="operator=(QPen)" remove="all"/>
   </value-type>
   <value-type name="QBrush">
-    <modify-function signature="QBrush(Qt::GlobalColor, Qt::BrushStyle)" remove="all"/>
     <modify-function signature="operator=(const QBrush &amp;)" remove="all"/>
     <modify-function signature="gradient() const">
       <modify-argument index="return">
@@ -1961,7 +1960,7 @@
     <modify-function signature="removeItem(int)">
       <inject-code class="target" position="beginning">
         QWidget *_widget = %CPPSELF.widget(%1);
-        if (_widget) { 
+        if (_widget) {
             Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](_widget));
             Shiboken::setParent(0, pyWidget);
         }
