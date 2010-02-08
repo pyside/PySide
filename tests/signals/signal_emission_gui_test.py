@@ -23,7 +23,7 @@ class ButtonPySlot(UsesQApplication, BasicPySlotCase):
         button = QPushButton('Mylabel')
         QObject.connect(button, SIGNAL('clicked()'), self.cb)
         self.args = tuple()
-        button.emit(SIGNAL('clicked()'))
+        button.emit(SIGNAL('clicked(bool)'), False)
         self.assert_(self.called)
 
     def testButtonClick(self):
