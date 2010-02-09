@@ -1426,7 +1426,9 @@
   <object-type name="QFontComboBox"/>
   <object-type name="QFontDialog">
     <modify-function signature="getFont(bool*,QWidget*)" allow-thread="yes">
-        <modify-argument index="1" action="remove"/>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
         <modify-argument index="return">
             <replace-type modified-type="PyTuple" />
         </modify-argument>
@@ -1435,7 +1437,9 @@
         </inject-code>
     </modify-function>
     <modify-function signature="getFont(bool*,QFont,QWidget*)" allow-thread="yes">
-        <modify-argument index="1" action="remove"/>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
         <modify-argument index="return">
             <replace-type modified-type="PyTuple" />
         </modify-argument>
@@ -1444,7 +1448,9 @@
         </inject-code>
     </modify-function>
     <modify-function signature="getFont(bool*,QFont,QWidget*,QString)" allow-thread="yes">
-        <modify-argument index="1" action="remove"/>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
         <modify-argument index="return">
             <replace-type modified-type="PyTuple" />
         </modify-argument>
