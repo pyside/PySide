@@ -796,6 +796,11 @@
       <include file-name="QTextDocument" location="global"/>
     </extra-includes>
   </namespace-type>
+  <add-function signature="qAbs(long)" return-type="long">
+    <inject-code class="target" position="beginning">
+        %PYARG_0 = %CONVERTTOPYTHON[long](qAbs(%1));
+    </inject-code>
+  </add-function>
   <enum-type name="QtMsgType"/>
   <enum-type name="QSystemSemaphore::AccessMode"/>
   <enum-type name="QSystemSemaphore::SystemSemaphoreError"/>
