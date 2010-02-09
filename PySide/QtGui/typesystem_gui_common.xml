@@ -2375,7 +2375,53 @@
     </modify-function>
 
     <!-- TODO: Support conversions on virtual function -->
-    <modify-function signature="drawItems(QPainter*, int, QGraphicsItem**, const QStyleOptionGraphicsItem*)" remove="all"/>
+    <modify-function signature="drawItems(QPainter*, int, QGraphicsItem**, const QStyleOptionGraphicsItem*)">
+
+        <modify-argument index="2">
+            <remove-argument/>
+            <conversion-rule class="native">
+              int %out = PySequence_Size(%PYARG_1);
+            </conversion-rule>
+        </modify-argument>
+
+        <modify-argument index="3">
+            <replace-type modified-type="PySequence"/>
+            <conversion-rule class="native">
+                int numItems = PySequence_Size(%PYARG_1);
+                QGraphicsItem *%out[numItems];
+                for (int i=0; i &lt; numItems; i++) {
+                    %out[i] = %CONVERTTOCPP[QGraphicsItem*](PySequence_Fast_GET_ITEM(%PYARG_1, i));
+                }
+            </conversion-rule>
+
+            <conversion-rule class="target">
+                Shiboken::AutoDecRef object(PyList_New(0));
+                for (int i=0, max=numItems; i &lt; max; i++) {
+                    PyList_Append(object, %CONVERTTOPYTHON[QGraphicsItem*](%in[i]));
+                }
+                PyObject *%out = object.object();
+            </conversion-rule>
+        </modify-argument>
+
+        <modify-argument index="4">
+            <replace-type modified-type="PySequence"/>
+            <conversion-rule class="target">
+                Shiboken::AutoDecRef option_object(PyList_New(0));
+                for (int i=0, max=numItems; i &lt; max; i++) {
+                    PyList_Append(option_object, %CONVERTTOPYTHON[QStyleOptionGraphicsItem](%in[i]));
+                }
+                PyObject *%out = option_object.object();
+            </conversion-rule>
+
+            <conversion-rule class="native">
+                int numOptions = PySequence_Size(%PYARG_2);
+                QStyleOptionGraphicsItem %out[numOptions];
+                for (int i=0; i &lt; numOptions; i++) {
+                    %out[i] = %CONVERTTOCPP[QStyleOptionGraphicsItem](PySequence_Fast_GET_ITEM(%PYARG_1, i));
+                }
+            </conversion-rule>
+        </modify-argument>
+    </modify-function>
   </object-type>
   <object-type name="QInputDialog">
     <modify-function signature="getInteger(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
