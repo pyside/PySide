@@ -269,6 +269,7 @@
   <rejection class="QThreadPool"/>
   <!-- From Qt4.6 -->
   <rejection class="*" field-name="d_ptr"/>
+  <rejection class="*" field-name="staticQtMetaObject"/>
   <rejection class="*" function-name="qobject_interface_iid"/>
   <rejection class="*" function-name="qGetPtrHelper"/>
   <rejection class="*" function-name="q_check_ptr"/>
