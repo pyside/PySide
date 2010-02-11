@@ -1,8 +1,22 @@
 #!/usr/bin/python
 import unittest
-from PySide.QtCore import QObject, QState, QFinalState, SIGNAL, QCoreApplication, QTimer, QStateMachine, QSignalTransition, QVariant, QParallelAnimationGroup, QPropertyAnimation
+from PySide.QtCore import QObject, QState, QFinalState, SIGNAL
+from PySide.QtCore import QTimer, QStateMachine
+from PySide.QtCore import QParallelAnimationGroup
 
 from helper import UsesQCoreApplication
+
+
+class StateMachineTest(unittest.TestCase):
+    '''Check presence of State Machine classes'''
+
+    def testBasic(self):
+        '''State machine classes'''
+        import PySide.QtCore
+        PySide.QtCore.QSignalTransition
+        PySide.QtCore.QPropertyAnimation
+
+
 
 class QStateMachineTest(UsesQCoreApplication):
 
