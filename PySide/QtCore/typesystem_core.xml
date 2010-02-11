@@ -365,6 +365,11 @@
   <primitive-type name="std::wstring"/>
   <primitive-type name="QStdWString"/>
 
+  <container-type name="QSet" type="set">
+    <conversion-rule file="qset_conversions.h"/>
+    <include file-name="QSet" location="global"/>
+  </container-type>
+
   <container-type name="QList" type="list">
     <conversion-rule file="qlist_conversions.h"/>
     <include file-name="QList" location="global"/>
@@ -438,7 +443,6 @@
     <conversion-rule file="qpair_conversions.h"/>
     <include file-name="QPair" location="global"/>
   </container-type>
-  <container-type name="QSet" type="set"/>
   <container-type name="QStack" type="stack"/>
 
   <rejection class="*" function-name="d_func"/>
@@ -681,7 +685,6 @@
   <rejection class="QObjectUserData"/>
   <rejection class="QPluginLoader"/>
   <rejection class="QPointer"/>
-  <rejection class="QSet"/>
   <rejection class="QSetIterator"/>
   <rejection class="QSharedData"/>
   <rejection class="QSharedDataPointer"/>
@@ -2982,8 +2985,6 @@
       </modify-argument>
     </modify-function>
 
-    <!-- http://bugs.openbossa.org/show_bug.cgi?id=123 -->
-    <modify-function signature="configuration() const" remove="all"/>
     <modify-function signature="defaultAnimations() const" remove="all"/>
 
     <add-function signature="configuration()" return-type="PySequence*" >

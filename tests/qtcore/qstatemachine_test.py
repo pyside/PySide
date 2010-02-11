@@ -43,5 +43,26 @@ class QStateMachineTest(UsesQCoreApplication):
         QTimer.singleShot(100, self.app.quit)
         self.app.exec_()
 
+
+class QSetConverterTest(UsesQCoreApplication):
+    '''Test converter of QSet toPython using QStateAnimation.configuration'''
+
+    def testBasic(self):
+        '''QStateMachine.configuration converting QSet to python set'''
+        machine = QStateMachine()
+        s1 = QState()
+        machine.addState(s1)
+        machine.setInitialState(s1)
+        machine.start()
+
+        QTimer.singleShot(100, self.app.quit)
+        self.app.exec_()
+
+        configuration = machine.configuration()
+
+        self.assert_(isinstance(configuration, set))
+        self.assert_(s1 in configuration)
+
+
 if __name__ == '__main__':
     unittest.main()
