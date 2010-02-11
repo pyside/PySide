@@ -4451,17 +4451,16 @@
   <value-type name="QMatrix4x3"/>
   <value-type name="QMatrix4x4">
     <modify-function signature="QMatrix4x4(const qreal*,int,int)" remove="all"/>
-    <modify-function signature="copyDataTo(qreal*)const" remove="all"/>
 
     <modify-function signature="QMatrix4x4(const qreal*)">
       <modify-argument index="1">
-        <replace-type modified-type="PyTuple" />
+        <replace-type modified-type="PySequence" />
       </modify-argument>
       <inject-code class="target" position="beginning">
-        if (PyTuple_Size(%PYARG_1) == 16) {
+        if (PySequence_Size(%PYARG_1) == 16) {
             qreal values[16];
             for(int i=0; i &lt; 16; i++) {
-                PyObject *pv = PyTuple_GetItem(%PYARG_1, i);
+                PyObject *pv = PySequence_Fast_GET_ITEM(%PYARG_1, i);
                 values[i] = PyFloat_AsDouble(pv);
             }
 
@@ -4473,7 +4472,7 @@
       </inject-code>
     </modify-function>
 
-    <modify-function signature="data() const">
+    <modify-function signature="constData() const" rename="data">
       <modify-argument index="return">
         <replace-type modified-type="PyTupleObject*"/>
       </modify-argument>
@@ -4497,11 +4496,11 @@
 
       <inject-code class="target" position="beginning">
         qreal values[16];
-        %CPPSELF.copyDataTo(values);
+        %CPPSELF.%FUNCTION_NAME(values);
         %PYARG_0 = PyTuple_New(16);
         for(int i=0; i &lt; 16; i++) {
           PyObject *v = PyFloat_FromDouble(values[i]);
-          PyTuple_SET_ITEM(%PYARG_0, v);
+          PyTuple_SET_ITEM(%PYARG_0, i, v);
         }
       </inject-code>
     </modify-function>
@@ -4509,7 +4508,7 @@
     <modify-function signature="operator()(int, int)" remove="all"/>
     <modify-function signature="operator()(int, int)const" remove="all"/>
     <modify-function signature="data()" remove="all"/>
-    <modify-function signature="constData()const" remove="all"/>
+    <modify-function signature="data() const" remove="all"/>
   </value-type>
 
   <object-type name="QGesture"/>
