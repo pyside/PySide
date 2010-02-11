@@ -2,14 +2,14 @@
 import unittest
 from PySide.QtCore import QObject, QState, QFinalState, SIGNAL, QCoreApplication, QTimer, QStateMachine, QSignalTransition, QVariant, QParallelAnimationGroup, QPropertyAnimation
 
-class QStateMachineTest(unittest.TestCase):
+from helper import UsesQCoreApplication
+
+class QStateMachineTest(UsesQCoreApplication):
 
     def cb(self, *args):
         self.assertEqual(self.machine.defaultAnimations(), [self.anim])
 
     def testBasic(self):
-        app = QCoreApplication([])
-
         self.machine = QStateMachine()
         s1 = QState()
         s2 = QState()
@@ -26,8 +26,8 @@ class QStateMachineTest(unittest.TestCase):
         self.machine.addDefaultAnimation(self.anim)
         self.machine.start()
 
-        QTimer.singleShot(100, app.quit)
-        app.exec_()
+        QTimer.singleShot(100, self.app.quit)
+        self.app.exec_()
 
 if __name__ == '__main__':
     unittest.main()
