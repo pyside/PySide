@@ -1,7 +1,7 @@
 import unittest
 
 from PySide.QtGui import QPainter, QBrush, QLinearGradient
-from PySide.QtCore import QRect, Qt
+from PySide.QtCore import QRect, QRectF, Qt
 
 class QPainterDrawText(unittest.TestCase):
 
@@ -18,13 +18,23 @@ class QPainterDrawText(unittest.TestCase):
         rect = self.painter.drawText(100, 100, 100, 100,
                                     Qt.AlignCenter | Qt.TextWordWrap,
                                     self.text)
-        self.assertNotEqual(rect, None)
+        self.assert_(isinstance(rect, QRect))
 
     def testDrawTextWithRect(self):
         # bug #225
         rect = QRect(100, 100, 100, 100)
-        self.painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap,
+        newRect = self.painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap,
                               self.text)
+
+        self.assert_(isinstance(newRect, QRect))
+
+    def testDrawTextWithRectF(self):
+        '''QPainter.drawText(QRectF, ... ,QRectF*) inject code'''
+        rect = QRectF(100, 52.3, 100, 100)
+        newRect = self.painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap,
+                              self.text)
+
+        self.assert_(isinstance(newRect, QRectF))
 
 class SetBrushWithOtherArgs(unittest.TestCase):
     '''Using qpainter.setBrush with args other than QBrush'''
