@@ -983,8 +983,8 @@
     <inject-code class="native" position="beginning" file="glue/qstring_bufferprotocol.cpp" />
     <inject-code class="target" position="end">
         #if PY_VERSION_HEX &lt; 0x03000000
-            SbkQString_Type.super.ht_type.tp_as_buffer = &amp;SbkQStringBufferProc;
-            SbkQString_Type.super.ht_type.tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
+            Shiboken::SbkType&lt;QString>()->tp_as_buffer = &amp;SbkQStringBufferProc;
+            Shiboken::SbkType&lt;QString>()->tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
         #endif
     </inject-code>
 
@@ -1868,8 +1868,8 @@
     <inject-code class="native" position="beginning" file="glue/qbytearray_bufferprotocol.cpp" />
     <inject-code class="target" position="end">
         #if PY_VERSION_HEX &lt; 0x03000000
-            SbkQByteArray_Type.super.ht_type.tp_as_buffer = &amp;SbkQByteArrayBufferProc;
-            SbkQByteArray_Type.super.ht_type.tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
+            Shiboken::SbkType&lt;QByteArray>()->tp_as_buffer = &amp;SbkQByteArrayBufferProc;
+            Shiboken::SbkType&lt;QByteArray>()->tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
         #endif
     </inject-code>
     <!-- removed functions -->
@@ -2349,8 +2349,8 @@
       <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of c++ function call
         Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
-        PyObject* pyTimer = SbkQTimer_Type.super.ht_type.tp_new((PyTypeObject*)&amp;SbkQTimer_Type, emptyTuple, 0);
-        SbkQTimer_Type.super.ht_type.tp_init(pyTimer, emptyTuple, 0);
+        PyObject* pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
+        Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
 
         QTimer* timer = SbkQTimer_cptr(pyTimer);
         PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsOs", pyTimer, SIGNAL(timeout()), %PYARG_2, %3);
@@ -2364,8 +2364,8 @@
         <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of c++ function call
         Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
-        PyObject* pyTimer = SbkQTimer_Type.super.ht_type.tp_new((PyTypeObject*)&amp;SbkQTimer_Type, emptyTuple, 0);
-        SbkQTimer_Type.super.ht_type.tp_init(pyTimer, emptyTuple, 0);
+        PyObject* pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
+        Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
         QTimer* timer = SbkQTimer_cptr(pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
