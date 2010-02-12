@@ -2243,52 +2243,6 @@
     </extra-includes>
   </object-type>
   <object-type name="QTextCodec">
-    <modify-function signature="makeDecoder()const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForCStrings()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForHtml(const QByteArray&amp;)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForHtml(const QByteArray&amp;, QTextCodec*)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForLocale()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForMib(int)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForName(const QByteArray&amp;)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForName(const char*)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="codecForTr()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
     <modify-function signature="setCodecForTr(QTextCodec*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -2375,13 +2329,7 @@
         </inject-code>
     </add-function>
   </object-type>
-  <object-type name="QAbstractFileEngineHandler">
-    <modify-function signature="create(const QString &amp;) const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-  </object-type>
+  <object-type name="QAbstractFileEngineHandler"/>
   <!-- <object-type name="QAbstractFileEngine::MapExtensionOption" /> -->
   <!-- <object-type name="QAbstractFileEngine::MapExtensionReturn" /> -->
   <!-- <object-type name="QAbstractFileEngine::UnMapExtensionOption" /> -->
@@ -2715,11 +2663,6 @@
   <object-type name="QTextStream" stream="yes">
     <modify-function signature="QTextStream(const QByteArray&amp;, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
     <modify-function signature="setString(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
-    <modify-function signature="codec()const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
 
     <modify-function signature="operator&lt;&lt;(char)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const void*)" remove="all"/>

@@ -651,59 +651,6 @@
     </extra-includes>
     <modify-function signature="operator=(QTextCursor)" remove="all"/>
     <modify-function signature="selectedTableCells(int*,int*,int*,int*)const" remove="all" />
-
-    <!-- TODO: define the parent of these functions return -->
-    <modify-function signature="createList(const QTextListFormat&amp;)">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="createList(QTextListFormat::Style)">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="currentFrame() const">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="currentList() const">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="currentTable() const">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="insertFrame(const QTextFrameFormat&amp;)">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="insertList(const QTextListFormat&amp;)">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="insertList(QTextListFormat::Style)">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="insertTable(int, int, const QTextTableFormat&amp;)">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="insertTable(int, int)">
-      <modify-argument index="return">
-       <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <!-- END -->
   </value-type>
   <value-type name="QTextLayout::FormatRange">
     <include file-name="QTextLayout" location="global"/>
@@ -806,16 +753,6 @@
       <include file-name="Qt" location="global"/>
     </extra-includes>
     <modify-function signature="operator=(QCursor)" remove="all"/>
-    <modify-function signature="mask() const">
-      <modify-argument index="return">
-        <define-ownership class="target" owner="c++"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="bitmap() const">
-      <modify-argument index="return">
-        <define-ownership class="target" owner="c++"/>
-      </modify-argument>
-    </modify-function>
   </value-type>
   <value-type name="QFontDatabase" >
     <extra-includes>
@@ -830,11 +767,6 @@
   </value-type>
   <value-type name="QBrush">
     <modify-function signature="operator=(const QBrush &amp;)" remove="all"/>
-    <modify-function signature="gradient() const">
-      <modify-argument index="return">
-        <define-ownership class="target" owner="c++"/>
-      </modify-argument>
-    </modify-function>
     <extra-includes>
       <include file-name="QPixmap" location="global"/>
     </extra-includes>
@@ -1507,11 +1439,6 @@
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
     <modify-function signature="virtual_hook(int,void*)" remove="all"/>
-    <modify-function signature="clone()const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
   </object-type>
   <object-type name="QImageWriter">
     <modify-function signature="setDevice(QIODevice*)">
@@ -2067,11 +1994,6 @@
   <object-type name="QValidator"/>
   <object-type name="QWhatsThis"/>
   <object-type name="QWidgetAction">
-    <modify-function signature="createWidget(QWidget*)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
     <modify-function signature="setDefaultWidget(QWidget*)">
       <modify-argument index="1">
         <parent index="this" action="add" />
@@ -2122,11 +2044,6 @@
     <modify-function signature="setSource(QWidget *)" remove="all"/>
   </object-type>
   <object-type name="QGraphicsSceneEvent" copyable="false">
-    <modify-function signature="widget() const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
     <modify-function signature="setWidget(QWidget *)" remove="all"/>
   </object-type>
   <object-type name="QGraphicsSceneMoveEvent" copyable="false" />
@@ -2703,11 +2620,6 @@
   </object-type>
   <object-type name="QTableWidgetItem" >
     <modify-function signature="operator=(const QTableWidgetItem&amp;)" remove="all"/>
-    <modify-function signature="clone() const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
     <modify-function signature="backgroundColor()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(QColor)" remove="all"/>
@@ -2757,11 +2669,6 @@
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
     <modify-function signature="operator=(const QListWidgetItem&amp;)" remove="all"/>
-    <modify-function signature="clone() const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
     <modify-function signature="backgroundColor()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(QColor)" remove="all"/>
@@ -2850,11 +2757,6 @@
     <modify-function signature="QTreeWidgetItem(QTreeWidgetItem *,QTreeWidgetItem *,int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="clone() const">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="addChild(QTreeWidgetItem *)">
@@ -4056,79 +3958,6 @@
     <modify-function signature="font(const char*)" remove="all"/>
     <modify-function signature="setFont(QFont,const char*)" remove="all"/>
     <modify-function signature="palette(const char*)" remove="all" />
-
-    <!-- not get ownership of object -->
-    <modify-function signature="activeModalWidget()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="activePopupWidget()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="activeWindow()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="clipboard()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="desktop()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="focusWidget()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="overrideCursor()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="topLevelAt(const QPoint &amp;)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="topLevelAt(int,int)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="widgetAt(const QPoint &amp;)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="widgetAt(int,int)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="widgetAt(int,int)">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
-    </modify-function>
 
     <!-- ownership control transfer to qApp -->
     <modify-function signature="setStyle(QStyle*)">
