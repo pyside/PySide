@@ -81,7 +81,7 @@
     <template name="fix_args,QRect*">
         QRect rect_;
         %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;rect_);
-        return %CONVERTTOPYTHON[QRectF](rect_);
+        return %CONVERTTOPYTHON[QRect](rect_);
     </template>
 
     <template name="fix_char*">
