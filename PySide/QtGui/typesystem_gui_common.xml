@@ -1189,6 +1189,13 @@
   </object-type>
   <object-type name="QAbstractGraphicsShapeItem"/>
   <object-type name="QAbstractItemView">
+    <modify-function signature="model() const">
+      <modify-argument index="return">
+        <!-- Defining ownership as "default" avoids the object to be automatically
+             set as parent of the returned pointer. -->
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
     <modify-function signature="setIndexWidget(const QModelIndex &amp;, QWidget *)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
@@ -1289,7 +1296,7 @@
     </modify-function>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
   </object-type>
@@ -1422,7 +1429,7 @@
     </modify-function>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
   </object-type>
@@ -1493,7 +1500,7 @@
   <object-type name="QColumnView">
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setSelectionModel(QItemSelectionModel*)">
@@ -1842,7 +1849,7 @@
     </modify-function>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setSelectionModel(QItemSelectionModel*)">
@@ -1922,7 +1929,7 @@
     </modify-function>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setSelectionModel(QItemSelectionModel*)">
@@ -2703,7 +2710,7 @@
     </modify-function>
     <modify-function signature="setModel(QAbstractItemModel *)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setPopup(QAbstractItemView *)">
@@ -3065,7 +3072,7 @@
     </extra-includes>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
   </object-type>
@@ -3520,7 +3527,7 @@
     <modify-function signature="isItemSelected(const QTableWidgetItem*)const" remove="all"/>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="mimeData(const QList&lt;QTableWidgetItem*&gt;)const" remove="all"/>
@@ -3773,7 +3780,7 @@
     <modify-function signature="setModel(QAbstractItemModel *)">
       <modify-argument index="1">
         <no-null-pointer/>
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="activated(int)">&gt;
@@ -4253,7 +4260,7 @@
     </modify-function>
     <modify-function signature="setModelData(QWidget*,QAbstractItemModel*,QModelIndex)const">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
   </object-type>
