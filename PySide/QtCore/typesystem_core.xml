@@ -2793,6 +2793,18 @@
       </modify-argument>
     </modify-function>
 
+    <modify-function signature="setTargetState(QAbstractState*)">
+      <modify-argument index="1">
+        <reference-count action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="targetState() const">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+
     <!-- http://bugs.openbossa.org/show_bug.cgi?id=123
     <modify-function signature="setTargetStates(QList&lt;QAbstractState*&gt;)" remove="all"/>
     <modify-function signature="targetStates() const " remove="all"/>-->
