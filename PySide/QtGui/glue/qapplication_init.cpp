@@ -1,9 +1,16 @@
 // Borrowed reference to QtGui module
 extern PyObject* moduleQtGui;
-// Global variables used to store argc and argv values, defined in QtCore binding
-extern int QCoreApplicationArgCount;
-extern char** QCoreApplicationArgValues;
-extern void DeleteQCoreApplicationAtExit();
+
+static int QApplicationArgCount;
+static char** QApplicationArgValues;
+
+void DeleteQApplicationAtExit() {
+    if (QApplication::instance()) {
+        delete QApplication::instance();
+        for (int i = 0; i < QApplicationArgCount; ++i)
+            delete[] QApplicationArgValues[i];
+    }
+}
 
 int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
@@ -18,12 +25,12 @@ int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
         return -1;
     }
 
-    if (!PySequenceToArgcArgv(PyTuple_GET_ITEM(args, 0), &QCoreApplicationArgCount, &QCoreApplicationArgValues, "PySideApp")) {
+    if (!PySequenceToArgcArgv(PyTuple_GET_ITEM(args, 0), &QApplicationArgCount, &QApplicationArgValues, "PySideApp")) {
         PyErr_BadArgument();
         return -1;
     }
 
-    SbkBaseWrapper_setCptr(self, new QApplication(QCoreApplicationArgCount, QCoreApplicationArgValues));
+    SbkBaseWrapper_setCptr(self, new QApplication(QApplicationArgCount, QApplicationArgValues));
     SbkBaseWrapper_setValidCppObject(self, 1);
     Shiboken::BindingManager::instance().registerWrapper(reinterpret_cast<SbkBaseWrapper*>(self));
 
@@ -38,7 +45,7 @@ int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
     PyObject_SetAttrString(moduleQtGui, QAPP_MACRO, self);
 
     Py_INCREF(self);
-    Py_AtExit(DeleteQCoreApplicationAtExit);
+    Py_AtExit(DeleteQApplicationAtExit);
 
     return 1;
 }

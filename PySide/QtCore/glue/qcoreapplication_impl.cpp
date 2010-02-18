@@ -1,11 +1,11 @@
 // Global variables used to store argc and argv values
-SHIBOKEN_QTCORE_API int QCoreApplicationArgCount;
-SHIBOKEN_QTCORE_API char** QCoreApplicationArgValues;
+static int QCoreApplicationArgCount;
+static char** QCoreApplicationArgValues;
 
 /**
  * Called at QtCore module exit
  */
-SHIBOKEN_QTCORE_API void DeleteQCoreApplicationAtExit() {
+void DeleteQCoreApplicationAtExit() {
     if (QCoreApplication::instance()) {
         delete QCoreApplication::instance();
         for (int i = 0; i < QCoreApplicationArgCount; ++i)
