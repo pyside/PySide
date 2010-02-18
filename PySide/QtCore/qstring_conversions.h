@@ -1,3 +1,4 @@
+namespace Shiboken {
 inline bool Converter< QString >::isConvertible(PyObject* pyobj)
 {
     return PyString_Check(pyobj)
@@ -50,4 +51,5 @@ inline QString Converter< QString >::toCpp(PyObject* pyobj)
     }
 #endif
     return *SbkQString_cptr(pyobj);
+}
 }

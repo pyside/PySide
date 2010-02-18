@@ -1,3 +1,4 @@
+namespace Shiboken {
 template <typename qset>
 struct Converter_qset
 {
@@ -40,3 +41,4 @@ struct Converter_qset
 
 template<typename T>
 struct Converter<QSet<T> > : Converter_qset<QSet<T> > {};
+}

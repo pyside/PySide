@@ -1,3 +1,4 @@
+namespace Shiboken {
 template <typename qhash>
 struct Converter_qhash
 {
@@ -42,3 +43,4 @@ struct Converter_qhash
 
 template<typename KT, typename VT>
 struct Converter<QHash<KT, VT> > : Converter_qhash<QHash<KT, VT> > {};
+}

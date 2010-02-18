@@ -1,3 +1,4 @@
+namespace Shiboken {
 inline bool Converter< QPixmap >::isConvertible(PyObject* pyobj)
 {
     bool isVariant = SbkQVariant_Check(pyobj);
@@ -24,4 +25,5 @@ inline QPixmap Converter< QPixmap >::toCpp(PyObject* pyobj)
     }
 
     return *SbkQPixmap_cptr(pyobj);
+}
 }

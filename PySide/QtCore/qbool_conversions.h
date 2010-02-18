@@ -1,3 +1,4 @@
+namespace Shiboken {
 template <>
 struct Converter<QBool> : public ConverterBase<QBool>
 {
@@ -12,3 +13,4 @@ struct Converter<QBool> : public ConverterBase<QBool>
         return QBool(pyobj == Py_True);
     }
 };
+}

@@ -1,3 +1,4 @@
+namespace Shiboken {
 template <typename qmap>
 struct Converter_qmap
 {
@@ -42,3 +43,4 @@ struct Converter_qmap
 
 template<typename KT, typename VT>
 struct Converter<QMap<KT, VT> > : Converter_qmap<QMap<KT, VT> > {};
+}
