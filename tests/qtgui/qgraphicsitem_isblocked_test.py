@@ -2,7 +2,8 @@
 
 import unittest
 
-from PySide import QtGui, QtCore
+from PySide import QtCore
+from PySide import QtGui
 from helper import UsesQApplication
 
 class Item(QtGui.QGraphicsItem):
@@ -21,8 +22,8 @@ class Item(QtGui.QGraphicsItem):
 class QGraphicsViewIsBlockedTest(UsesQApplication):
 
     def testIsBlockedByModalPanel(self):
-        item = Item()
-        item.isBlockedByModalPanel()
+        (bool, object) = Item().isBlockedByModalPanel()
+        self.assertFalse(bool)
 
 if __name__ == "__main__":
     unittest.main()

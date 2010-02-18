@@ -6,19 +6,21 @@ from helper import UsesQApplication, TimedQApplication
 class TestInputDialog(TimedQApplication):
 
     def testGetDouble(self):
-        QtGui.QInputDialog.getDouble(None, "title", "label")
+        self.assertEquals(QtGui.QInputDialog.getDouble(None, "title", "label"), (0.0, False))
 
     def testGetInt(self):
-        QtGui.QInputDialog.getInt(None, "title", "label")
+        self.assertEquals(QtGui.QInputDialog.getInt(None, "title", "label"), (0, False))
 
     def testGetInteger(self):
-        QtGui.QInputDialog.getInteger(None, "title", "label")
+        self.assertEquals(QtGui.QInputDialog.getInteger(None, "title", "label"), (0, False))
 
     def testGetItem(self):
-        QtGui.QInputDialog.getItem(None, "title", "label", QtCore.QStringList(["1", "2", "3"]))
+        (item, bool) = QtGui.QInputDialog.getItem(None, "title", "label", QtCore.QStringList(["1", "2", "3"]))
+        self.assertEquals(str(item), "1")
 
     def testGetText(self):
-        QtGui.QInputDialog.getText(None, "title", "label")
+        (text, bool) = QtGui.QInputDialog.getText(None, "title", "label")
+        self.assertEquals(str(text),"")
 
 if __name__ == '__main__':
     unittest.main()
