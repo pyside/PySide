@@ -972,31 +972,57 @@
 
     <modify-function signature="boundingRect(QRectF,int,QString,int,int*)const">
       <modify-argument index="5">
-        <remove-argument />
-        <remove-default-expression />
-      </modify-argument>
-      <modify-argument index="return">
-        <replace-type modified-type="PyTuple" />
+          <replace-type modified-type="PyObject"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="fix_return_args,int*">
-          <replace from="RETURNTYPE" to="QRectF" />
-        </insert-template>
+        int* array = NULL;
+        bool errorOccurred = false;
+
+        if (numArgs == 5) {
+            array = Shiboken::sequenceToIntArray(%PYARG_5, true);
+            if (PyErr_Occurred()) {
+                if (array)
+                    delete array;
+                errorOccurred = true;
+            }
+        }
+
+        if (!errorOccurred) {
+            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, array);
+
+            if (array)
+                delete array;
+
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
+        }
       </inject-code>
     </modify-function>
 
     <modify-function signature="size(int,QString,int,int*)const">
       <modify-argument index="4">
-        <remove-argument />
-        <remove-default-expression />
-      </modify-argument>
-      <modify-argument index="return">
-        <replace-type modified-type="PyTuple" />
+          <replace-type modified-type="PyObject"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="fix_return_args,int*">
-          <replace from="RETURNTYPE" to="QSizeF" />
-        </insert-template>
+        int* array = NULL;
+        bool errorOccurred = false;
+
+        if (numArgs == 4) {
+            array = Shiboken::sequenceToIntArray(%PYARG_4, true);
+            if (PyErr_Occurred()) {
+                if (array)
+                    delete array;
+                errorOccurred = true;
+            }
+        }
+
+        if (!errorOccurred) {
+            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, array);
+
+            if (array)
+                delete array;
+
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
+        }
       </inject-code>
     </modify-function>
 
@@ -1007,46 +1033,86 @@
   <value-type name="QFontMetrics" >
     <modify-function signature="boundingRect(int,int,int,int,int,QString,int,int*)const">
       <modify-argument index="8">
-        <remove-argument />
-        <remove-default-expression />
-      </modify-argument>
-      <modify-argument index="return">
-        <replace-type modified-type="PyTuple" />
+        <replace-type modified-type="PyObject"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="fix_return_args,int*">
-          <replace from="RETURNTYPE" to="QRect" />
-        </insert-template>
+        int* array = NULL;
+        bool errorOccurred = false;
+
+        if (numArgs == 8) {
+            array = Shiboken::sequenceToIntArray(%PYARG_8, true);
+            if (PyErr_Occurred()) {
+                if (array)
+                    delete array;
+                errorOccurred = true;
+            }
+        }
+
+        if (!errorOccurred) {
+            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, %5, %6, %7, array);
+
+            if (array)
+                delete array;
+
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
+        }
       </inject-code>
     </modify-function>
 
     <modify-function signature="boundingRect(QRect,int,QString,int,int*)const">
       <modify-argument index="5">
-        <remove-argument />
-        <remove-default-expression />
-      </modify-argument>
-      <modify-argument index="return">
-        <replace-type modified-type="PyTuple" />
+          <replace-type modified-type="PyObject"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="fix_return_args,int*">
-          <replace from="RETURNTYPE" to="QRect" />
-        </insert-template>
+        int* array = NULL;
+        bool errorOccurred = false;
+
+        if (numArgs == 5) {
+            array = Shiboken::sequenceToIntArray(%PYARG_5, true);
+            if (PyErr_Occurred()) {
+                if (array)
+                    delete array;
+                errorOccurred = true;
+            }
+        }
+
+        if (!errorOccurred) {
+            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, array);
+
+            if (array)
+                delete array;
+
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
+        }
       </inject-code>
     </modify-function>
 
     <modify-function signature="size(int,QString,int,int*)const">
       <modify-argument index="4">
-        <remove-argument />
-        <remove-default-expression />
-      </modify-argument>
-      <modify-argument index="return">
-        <replace-type modified-type="PyTuple" />
+          <replace-type modified-type="PyObject"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        <insert-template name="fix_return_args,int*">
-          <replace from="RETURNTYPE" to="QSize" />
-        </insert-template>
+        int* array = NULL;
+        bool errorOccurred = false;
+
+        if (numArgs == 4) {
+            array = Shiboken::sequenceToIntArray(%PYARG_4, true);
+            if (PyErr_Occurred()) {
+                if (array)
+                    delete array;
+                errorOccurred = true;
+            }
+        }
+
+        if (!errorOccurred) {
+            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, array);
+
+            if (array)
+                delete array;
+
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
+        }
+
       </inject-code>
     </modify-function>
 
