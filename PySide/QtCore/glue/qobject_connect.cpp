@@ -56,8 +56,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         if (usingGlobalReceiver) {
             signalManager.addGlobalSlot(slot, callback);
         } else {
-            PySide::DynamicQMetaObject* dynMetaObj = reinterpret_cast<PySide::DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
-            dynMetaObj->addSlot(slot);
+            PySide::SignalManager::registerMetaMethod(receiver, slot, QMetaMethod::Slot);
         }
         slotIndex = metaObject->indexOfSlot(slot);
     }

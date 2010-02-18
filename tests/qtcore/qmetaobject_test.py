@@ -9,6 +9,10 @@ from PySide.QtCore import *
 class Foo(QFile):
   pass
 
+class DynObject(QObject):
+    def slot(self):
+        pass
+
 class qmetaobject_test(unittest.TestCase):
     def test_QMetaObject(self):
         qobj = QObject()
@@ -26,6 +30,20 @@ class qmetaobject_test(unittest.TestCase):
         f = QFile()
         fm = f.metaObject()
         self.assertEqual(m.methodCount(), fm.methodCount())
+
+    def test_DynamicSlotSignal(self):
+        o = DynObject()
+        o2 = QObject()
+
+        method_count_base  = o.metaObject().methodCount()
+
+        o.connect(o2, SIGNAL("bar()"), o.slot)
+        slot_index = o.metaObject().indexOfMethod("slot()")
+
+        o.connect(o, SIGNAL("foo()"), o2, SIGNAL("bar()"))
+        signal_index = o.metaObject().indexOfMethod("foo()");
+
+        self.assert_(slot_index != signal_index)
 
 
 if __name__ == '__main__':

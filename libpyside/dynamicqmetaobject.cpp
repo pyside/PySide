@@ -41,6 +41,8 @@
 #include <QDebug>
 #include <QMetaMethod>
 
+#define MAX_SIGNALS_COUNT 50
+
 using namespace PySide;
 
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
@@ -74,6 +76,11 @@ DynamicQMetaObject::~DynamicQMetaObject()
 
 void DynamicQMetaObject::addSignal(const char* signal)
 {
+    if (m_signals.size() >= MAX_SIGNALS_COUNT) {
+        qWarning() << "Fail to add dynamic signal to QObject. PySide support at most" << MAX_SIGNALS_COUNT << "dynamic signals.";
+        return;
+    }
+
     m_signals << QByteArray(signal);
     updateMetaObject();
 }
@@ -93,9 +100,12 @@ void DynamicQMetaObject::removeSlot(uint index)
 
 void DynamicQMetaObject::removeSignal(uint index)
 {
+    //Current Qt implementation does not support runtime remove signal
+    /*
     QMetaMethod m = method(index);
     if (m_signals.removeAll(m.signature()))
         updateMetaObject();
+    */
 }
 
 void DynamicQMetaObject::updateMetaObject()
@@ -114,7 +124,7 @@ void DynamicQMetaObject::updateMetaObject()
         MethodScriptable = 0x40
     };
 
-    uint n_signals = m_signals.count();
+    uint n_signals = MAX_SIGNALS_COUNT;
     uint n_methods = n_signals + m_slots.count();
     int header[] = {5,            // revision
                     0,            // class name index in m_metadata
@@ -123,9 +133,7 @@ void DynamicQMetaObject::updateMetaObject()
                     0, 0,         // prop count and prop indexes
                     0, 0,         // enum count and enum index
                     0, 0,         // constructors
-                    0,            // flags
-                    n_signals     // signalCount
-                    };
+                    MAX_SIGNALS_COUNT};
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
@@ -141,13 +149,21 @@ void DynamicQMetaObject::updateMetaObject()
     int index = HEADER_LENGHT;
 
     //write signals
-    foreach(QByteArray signal, m_signals) {
-        data[index++] = registerString(signal, &strings); // func name
+    QLinkedList<QByteArray>::iterator iSignal = m_signals.begin();
+    for(int i=0; i < MAX_SIGNALS_COUNT; i++) {
+        if (iSignal != m_signals.end()) {
+            data[index++] = registerString(*iSignal, &strings); // func name
+            iSignal++;
+        } else {
+            data[index++] = NULL_INDEX; // func name
+        }
         data[index++] = NULL_INDEX; // arguments
         data[index++] = NULL_INDEX; // normalized type
         data[index++] = NULL_INDEX; // tags
         data[index++] = AccessPublic | MethodSignal; // flags
     }
+
+
     //write slots
     foreach(QByteArray slot, m_slots) {
         data[index++] = registerString(slot, &strings); // func name
@@ -164,6 +180,7 @@ void DynamicQMetaObject::updateMetaObject()
         str.append(signature);
         str.append(char(0));
     }
+
     delete[] d.stringdata;
     char* stringData = new char[str.count()];
     std::copy(str.begin(), str.end(), stringData);
