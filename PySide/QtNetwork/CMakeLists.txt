@@ -102,11 +102,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${QtCore_BINARY_DIR}/PySide/QtCore/
                     )
 
-add_library(QtNetwork SHARED ${QtNetwork_SRC})
+add_library(QtNetwork MODULE ${QtNetwork_SRC})
 set_property(TARGET QtNetwork PROPERTY PREFIX "")
 target_link_libraries(QtNetwork
                       pyside
-                      QtCore
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTNETWORK_LIBRARY}

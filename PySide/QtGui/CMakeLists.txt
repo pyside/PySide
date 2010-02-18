@@ -462,11 +462,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${PYTHON_INCLUDE_PATH}
                     ${QtCore_BINARY_DIR}/PySide/QtCore/
                     )
-add_library(QtGui SHARED ${QtGui_SRC})
+add_library(QtGui MODULE ${QtGui_SRC})
 set_property(TARGET QtGui PROPERTY PREFIX "")
 target_link_libraries(QtGui
                       pyside
-                      QtCore
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
