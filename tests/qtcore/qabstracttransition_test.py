@@ -53,18 +53,102 @@ class QAbstractTransitionTest(unittest.TestCase):
         transition = QEventTransition()
         state1 = QState()
         refcount1 = getrefcount(state1)
+
         transition.setTargetState(state1)
+
         self.assertEqual(transition.targetState(), state1)
         self.assertEqual(getrefcount(transition.targetState()), refcount1 + 1)
 
         state2 = QState()
         refcount2 = getrefcount(state2)
+
         transition.setTargetState(state2)
+
         self.assertEqual(transition.targetState(), state2)
         self.assertEqual(getrefcount(transition.targetState()), refcount2 + 1)
         self.assertEqual(getrefcount(state1), refcount1)
 
         del transition
+
+        self.assertEqual(getrefcount(state2), refcount2)
+
+    def testRefCountOfTargetStates(self):
+        transition = QEventTransition()
+        state1 = QState()
+        state2 = QState()
+        states = [state1, state2]
+        refcount1 = getrefcount(state1)
+        refcount2 = getrefcount(state2)
+
+        transition.setTargetStates(states)
+
+        self.assertEqual(transition.targetStates(), states)
+        self.assertEqual(transition.targetState(), state1)
+        self.assertEqual(getrefcount(transition.targetStates()[0]), refcount1 + 1)
+        self.assertEqual(getrefcount(transition.targetStates()[1]), refcount2 + 1)
+
+        del states
+        del transition
+
+        self.assertEqual(getrefcount(state1), refcount1)
+        self.assertEqual(getrefcount(state2), refcount2)
+
+    def testRefCountOfTargetStatesAfterSingleTargetState(self):
+        transition = QEventTransition()
+        state0 = QState()
+        refcount0 = getrefcount(state0)
+
+        transition.setTargetState(state0)
+
+        self.assertEqual(transition.targetState(), state0)
+        self.assertEqual(getrefcount(transition.targetState()), refcount0 + 1)
+
+        state1 = QState()
+        state2 = QState()
+        states = [state1, state2]
+        refcount1 = getrefcount(state1)
+        refcount2 = getrefcount(state2)
+
+        transition.setTargetStates(states)
+
+        self.assertEqual(getrefcount(state0), refcount0)
+        self.assertEqual(transition.targetStates(), states)
+        self.assertEqual(transition.targetState(), state1)
+        self.assertEqual(getrefcount(transition.targetStates()[0]), refcount1 + 1)
+        self.assertEqual(getrefcount(transition.targetStates()[1]), refcount2 + 1)
+
+        del states
+        del transition
+
+        self.assertEqual(getrefcount(state1), refcount1)
+        self.assertEqual(getrefcount(state2), refcount2)
+
+    def testRefCountOfTargetStatesBeforeSingleTargetState(self):
+        transition = QEventTransition()
+        state1 = QState()
+        state2 = QState()
+        states = [state1, state2]
+        refcount1 = getrefcount(state1)
+        refcount2 = getrefcount(state2)
+
+        transition.setTargetStates(states)
+
+        self.assertEqual(transition.targetStates(), states)
+        self.assertEqual(transition.targetState(), state1)
+        self.assertEqual(getrefcount(transition.targetStates()[0]), refcount1 + 1)
+        self.assertEqual(getrefcount(transition.targetStates()[1]), refcount2 + 1)
+
+        state3 = QState()
+        refcount3 = getrefcount(state3)
+
+        transition.setTargetState(state3)
+
+        self.assertEqual(transition.targetState(), state3)
+        self.assertEqual(getrefcount(transition.targetState()), refcount3 + 1)
+
+        del states
+
+        self.assertEqual(getrefcount(state1), refcount1)
         self.assertEqual(getrefcount(state2), refcount2)
 
 if __name__ == '__main__':
