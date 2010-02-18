@@ -1687,7 +1687,6 @@
         <access modifier="private" />
     </modify-function>
 
-    <inject-code class="native" position="beginning" file="glue/qvariant_converter_impl.cpp" />
     <add-function signature="QVariant(PyObject*)">
         <inject-code class="target" position="beginning">
         cptr = new %TYPE(%CONVERTTOCPP[QVariant](%PYARG_1));
