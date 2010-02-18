@@ -2438,7 +2438,7 @@
       <modify-argument index="2" invalidate-after-use="yes"/>
     </modify-function>
     <modify-function signature="QCoreApplication(int &amp;, char  **)" remove="all"/>
-    <inject-code class="native" file="glue/qcoreapplication_impl.cpp" position="beginning" />
+    <inject-code class="native" file="glue/qcoreapplication_init.cpp" position="beginning" />
     <modify-function signature="postEvent(QObject*,QEvent*)">
       <modify-argument index="2">
         <define-ownership owner="c++"/>
