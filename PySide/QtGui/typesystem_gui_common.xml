@@ -636,6 +636,16 @@
     <extra-includes>
       <include file-name="QVariant" location="global"/>
     </extra-includes>
+    <add-function signature="QPixmap(QVariant)">
+        <inject-code class="target" position="beginning">
+        if (%1.type() == QVariant::Pixmap)
+            %0 = new %TYPE(%1.value&lt;QPixmap>());
+        else if (%1.type() == QVariant::Image)
+            %0 = new %TYPE(QPixmap::fromImage(%1.value&lt;QImage>()));
+        else
+            PyErr_SetString(PyExc_TypeError, "QVariant must be holding a QPixmap");
+        </inject-code>
+    </add-function>
 
     <modify-function signature="operator=(QPixmap)" remove="all"/>
     <modify-function signature="operator!()const" remove="all"/>

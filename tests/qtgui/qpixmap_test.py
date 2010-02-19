@@ -1,8 +1,8 @@
 import unittest
 
 from helper import UsesQApplication
-from PySide.QtGui import QPixmap
-from PySide.QtCore import QVariant, QSize, QString
+from PySide.QtGui import *
+from PySide.QtCore import *
 
 class QPixmapTest(UsesQApplication):
     def testQVariantConstructor(self):
@@ -16,6 +16,12 @@ class QPixmapTest(UsesQApplication):
 
     def testQStringConstructor(self):
         pixmap = QPixmap(QString("Testing!"))
+
+    def testQVariantConstructor(self):
+        v = QVariant(QPixmap())
+        pixmap2 = QPixmap(v)
+        v = QVariant(QImage())
+        pixmap2 = QPixmap(v)
 
 if __name__ == '__main__':
     unittest.main()
