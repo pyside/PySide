@@ -110,6 +110,7 @@ target_link_libraries(QtNetwork
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTNETWORK_LIBRARY}
                       )
+add_dependencies(QtNetwork QtCore)
 
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtNetwork.so

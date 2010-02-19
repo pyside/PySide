@@ -470,6 +470,7 @@ target_link_libraries(QtGui
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       )
+add_dependencies(QtGui QtCore)
 
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtGui.so DESTINATION "${SITE_PACKAGE}/PySide")
