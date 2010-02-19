@@ -22,8 +22,8 @@ class Item(QtGui.QGraphicsItem):
 class QGraphicsViewIsBlockedTest(UsesQApplication):
 
     def testIsBlockedByModalPanel(self):
-        (bool, object) = Item().isBlockedByModalPanel()
-        self.assertFalse(bool)
+        (first, second) = Item().isBlockedByModalPanel()
+        self.assertFalse(first)
 
 if __name__ == "__main__":
     unittest.main()
