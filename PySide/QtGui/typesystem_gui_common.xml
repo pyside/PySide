@@ -982,7 +982,7 @@
             array = Shiboken::sequenceToIntArray(%PYARG_5, true);
             if (PyErr_Occurred()) {
                 if (array)
-                    delete array;
+                    delete []array;
                 errorOccurred = true;
             }
         }
@@ -991,7 +991,7 @@
             %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, array);
 
             if (array)
-                delete array;
+                delete []array;
 
             %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
         }
@@ -1010,7 +1010,7 @@
             array = Shiboken::sequenceToIntArray(%PYARG_4, true);
             if (PyErr_Occurred()) {
                 if (array)
-                    delete array;
+                    delete []array;
                 errorOccurred = true;
             }
         }
@@ -1019,7 +1019,7 @@
             %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, array);
 
             if (array)
-                delete array;
+                delete []array;
 
             %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
         }
@@ -1043,7 +1043,7 @@
             array = Shiboken::sequenceToIntArray(%PYARG_8, true);
             if (PyErr_Occurred()) {
                 if (array)
-                    delete array;
+                    delete []array;
                 errorOccurred = true;
             }
         }
@@ -1052,7 +1052,7 @@
             %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, %5, %6, %7, array);
 
             if (array)
-                delete array;
+                delete []array;
 
             %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
         }
@@ -1071,7 +1071,7 @@
             array = Shiboken::sequenceToIntArray(%PYARG_5, true);
             if (PyErr_Occurred()) {
                 if (array)
-                    delete array;
+                    delete []array;
                 errorOccurred = true;
             }
         }
@@ -1080,7 +1080,7 @@
             %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, array);
 
             if (array)
-                delete array;
+                delete []array;
 
             %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
         }
@@ -1099,7 +1099,7 @@
             array = Shiboken::sequenceToIntArray(%PYARG_4, true);
             if (PyErr_Occurred()) {
                 if (array)
-                    delete array;
+                    delete []array;
                 errorOccurred = true;
             }
         }
@@ -1108,7 +1108,7 @@
             %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, array);
 
             if (array)
-                delete array;
+                delete []array;
 
             %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](retval);
         }
