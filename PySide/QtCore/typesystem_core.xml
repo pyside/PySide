@@ -2373,36 +2373,7 @@
         </inject-code>
     </modify-function>
   </object-type>
-  <object-type name="QSignalMapper">
-    <modify-function signature="mapped(const QString &amp;)">
-      <rename to="mappedString"/>
-    </modify-function>
-    <modify-function signature="mapped(int)">
-      <rename to="mappedInteger"/>
-    </modify-function>
-    <modify-function signature="mapped(QObject *)">
-      <rename to="mappedQObject"/>
-    </modify-function>
-    <!-- ### overloads -->
-    <modify-function signature="mapping(int)const">
-      <rename to="mappingById"/>
-    </modify-function>
-    <modify-function signature="mapping(QString)const">
-      <rename to="mappingByString"/>
-    </modify-function>
-    <modify-function signature="mapping(QObject*)const">
-      <rename to="mappingByObject"/>
-    </modify-function>
-    <modify-function signature="setMapping(QObject*,int)">
-      <rename to="setMappingById"/>
-    </modify-function>
-    <modify-function signature="setMapping(QObject*,QString)">
-      <rename to="setMappingByString"/>
-    </modify-function>
-    <modify-function signature="setMapping(QObject*,QObject*)">
-      <rename to="setMappingByObject"/>
-    </modify-function>
-  </object-type>
+  <object-type name="QSignalMapper" />
   <object-type name="QCoreApplication">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
