@@ -61,11 +61,14 @@ public:
     static int qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args);
     void addGlobalSlot(const char* slot, PyObject* callback);
 
-    void globalReceiverConnectNotify(int slotIndex);
-    void globalReceiverDisconnectNotify(int slotIndex);
+    void globalReceiverConnectNotify(QObject *sender, int slotIndex);
+    void globalReceiverDisconnectNotify(QObject *sender, int slotIndex);
 
-    // Used to register a new signal/slot on QMetaobjc of source.
+    // Used to register a new signal/slot on QMetaobject of source.
     static bool registerMetaMethod(QObject* source, const char* signature, QMetaMethod::MethodType type);
+
+    // Used to discovery if SignalManager was connected with object "destroyed()" signal.
+    bool hasConnectionWith(const QObject *object);
 private:
     struct SignalManagerPrivate;
     SignalManagerPrivate* m_d;

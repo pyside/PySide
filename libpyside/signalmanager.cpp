@@ -69,7 +69,12 @@ bool PySide::checkSignal(const char* signal)
 
 static QString codeCallbackName(PyObject* callback, const QString& funcName)
 {
-    return funcName+QString::number(quint64(callback), 16);
+    if (PyMethod_Check(callback)) {
+        PyObject *self = PyMethod_GET_SELF(callback);
+        PyObject *func = PyMethod_GET_FUNCTION(callback);
+        return funcName + QString::number(quint64(self), 16) + QString::number(quint64(func), 16);
+    } else
+        return funcName+QString::number(quint64(callback), 16);
 }
 
 QString PySide::getCallbackSignature(const char* signal, PyObject* callback, bool encodeName)
@@ -185,14 +190,14 @@ QObject* SignalManager::globalReceiver()
     return &m_d->m_globalReceiver;
 }
 
-void SignalManager::globalReceiverConnectNotify(int slotIndex)
+void SignalManager::globalReceiverConnectNotify(QObject* source, int slotIndex)
 {
-    m_d->m_globalReceiver.connectNotify(slotIndex);
+    m_d->m_globalReceiver.connectNotify(source, slotIndex);
 }
 
-void SignalManager::globalReceiverDisconnectNotify(int slotIndex)
+void SignalManager::globalReceiverDisconnectNotify(QObject* source, int slotIndex)
 {
-    m_d->m_globalReceiver.disconnectNotify(slotIndex);
+    m_d->m_globalReceiver.disconnectNotify(source, slotIndex);
 }
 
 void SignalManager::addGlobalSlot(const char* slot, PyObject* callback)
@@ -233,7 +238,6 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
     if (!checkSignal(signal))
         return false;
     signal++;
-
 
     int signalIndex = source->metaObject()->indexOfSignal(signal);
     if (signalIndex != -1) {
@@ -310,4 +314,9 @@ bool SignalManager::registerMetaMethod(QObject* source, const char* signature, Q
         }
     }
     return true;
+}
+
+bool SignalManager::hasConnectionWith(const QObject *object)
+{
+    return m_d->m_globalReceiver.hasConnectionWith(object);
 }

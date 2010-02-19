@@ -32,94 +32,125 @@
 * 02110-1301 USA
 */
 
-#include "globalreceiver.h"
 #include <QMetaMethod>
 #include <QDebug>
-#include "signalmanager.h"
+#include <QEvent>
 #include <autodecref.h>
 #include <gilstate.h>
-#include "typeresolver.h"
 
+#include "globalreceiver.h"
+#include "typeresolver.h"
+#include "signalmanager.h"
+#include "weakref.h"
+
+#define RECEIVER_DESTROYED_SLOT_NAME "__receiverDestroyed__(QObject*)"
 
 namespace PySide
 {
-
 class DynamicSlotData
 {
     public:
-        DynamicSlotData(PyObject *callback);
-        void incRef();
-        void decRef();
+        DynamicSlotData(int id, PyObject* callback);
+        void addRef(const QObject* o);
+        void decRef(const QObject* o);
+        void clear();
+        bool hasRefTo(const QObject* o) const;
         int refCount() const;
-        PyObject *callback() const;
+        int id() const;
+        PyObject* callback() const;
         ~DynamicSlotData();
 
     private:
-        int m_refCount;
-        PyObject *m_callback;
+        int m_id;
+        PyObject* m_callback;
+        QSet<const QObject*> m_refs;
 };
 
 }
 
 using namespace PySide;
 
-DynamicSlotData::DynamicSlotData(PyObject *callback)
-    : m_refCount(0)
+DynamicSlotData::DynamicSlotData(int id, PyObject* callback)
+    : m_id(id)
 {
     m_callback = callback;
     Py_INCREF(callback);
 }
 
-void DynamicSlotData::incRef()
+void DynamicSlotData::addRef(const QObject *o)
 {
-    m_refCount++;
+    m_refs.insert(o);
 }
 
-void DynamicSlotData::decRef()
+void DynamicSlotData::decRef(const QObject *o)
 {
-    m_refCount--;
+    m_refs.remove(o);
 }
 
 int DynamicSlotData::refCount() const
 {
-    return m_refCount;
+    return m_refs.size();
 }
 
-PyObject *DynamicSlotData::callback() const
+
+PyObject* DynamicSlotData::callback() const
 {
     return m_callback;
 }
 
+int DynamicSlotData::id() const
+{
+    return m_id;
+}
+
+bool DynamicSlotData::hasRefTo(const QObject *o) const
+{
+    return m_refs.contains(o);
+}
+
+void DynamicSlotData::clear()
+{
+    m_refs.clear();
+}
+
 DynamicSlotData::~DynamicSlotData()
 {
-    Py_XDECREF(m_callback);
+    Py_DECREF(m_callback);
 }
 
 
 GlobalReceiver::GlobalReceiver()
     : m_metaObject("GlobalReceiver", &QObject::staticMetaObject)
 {
+    //slot used to be notifyed of object destrouction
+    m_metaObject.addSlot(RECEIVER_DESTROYED_SLOT_NAME);
 }
 
 GlobalReceiver::~GlobalReceiver()
 {
-    foreach(DynamicSlotData* data, m_slotReceivers)
+    foreach(DynamicSlotData* data, m_slotReceivers) {
+        data->clear();
         delete data;
+    }
 }
 
-void GlobalReceiver::connectNotify(int slotId)
-{
-    if (m_slotReceivers.contains(slotId))
-        m_slotReceivers[slotId]->incRef();
-}
-
-void GlobalReceiver::disconnectNotify(int slotId)
+void GlobalReceiver::connectNotify(QObject* source, int slotId)
 {
     if (m_slotReceivers.contains(slotId)) {
+        m_slotReceivers[slotId]->addRef(source);
+    }
+}
+
+void GlobalReceiver::disconnectNotify(QObject* source, int slotId)
+{
+    if (m_slotReceivers.contains(slotId)) {
+        QObject::disconnect(source, SIGNAL(destroyed(QObject*)), this, "1"RECEIVER_DESTROYED_SLOT_NAME);
+
         DynamicSlotData *data = m_slotReceivers[slotId];
-        data->decRef();
-        if (data->refCount() == 0)
+        data->decRef(source);
+        if (data->refCount() == 0) {
             removeSlot(slotId);
+        }
     }
 }
 
@@ -133,7 +164,7 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
     m_metaObject.addSlot(slot);
     int slotId = m_metaObject.indexOfSlot(slot);
     if (!m_slotReceivers.contains(slotId)) {
-        m_slotReceivers[slotId] = new DynamicSlotData(callback);
+        m_slotReceivers[slotId] = new DynamicSlotData(slotId, callback);
     }
 
     bool isShortCircuit = true;
@@ -143,6 +174,7 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
             break;
         }
     }
+
     if (isShortCircuit)
         m_shortCircuitSlots << slotId;
 
@@ -151,9 +183,23 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
 
 void GlobalReceiver::removeSlot(int slotId)
 {
-    delete m_slotReceivers.take(slotId);
-    m_metaObject.removeSlot(slotId);
-    m_shortCircuitSlots.remove(slotId);
+    if (m_slotReceivers.contains(slotId)) {
+        delete m_slotReceivers.take(slotId);
+        m_metaObject.removeSlot(slotId);
+        m_shortCircuitSlots.remove(slotId);
+    }
+}
+
+bool GlobalReceiver::hasConnectionWith(const QObject *object)
+{
+    QHash<int, DynamicSlotData*>::iterator i = m_slotReceivers.begin();
+    while(i != m_slotReceivers.end()) {
+        if (i.value()->hasRefTo(object)) {
+            return true;
+        }
+        i++;
+    }
+    return false;
 }
 
 int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
@@ -162,6 +208,20 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
     Q_ASSERT(id >= QObject::staticMetaObject.methodCount());
     QMetaMethod slot = m_metaObject.method(id);
     Q_ASSERT(slot.methodType() == QMetaMethod::Slot);
+
+    if (strcmp(slot.signature(), RECEIVER_DESTROYED_SLOT_NAME) == 0) {
+        QObject *arg = *(QObject**)args[1];
+
+        QHash<int, DynamicSlotData*>::iterator i = m_slotReceivers.begin();
+        while(i != m_slotReceivers.end()) {
+            if (i.value()->hasRefTo(arg)) {
+                disconnectNotify(arg, i.key());
+                break;
+            }
+            i++;
+        }
+        return -1;
+    }
 
     DynamicSlotData* data = m_slotReceivers.value(id);
     if (!data) {
@@ -191,5 +251,6 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         qWarning() << "Error calling slot" << m_metaObject.method(id).signature();
     else
         Py_DECREF(retval);
+
     return -1;
 }

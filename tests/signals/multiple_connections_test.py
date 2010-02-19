@@ -10,7 +10,7 @@ from helper import BasicPySlotCase, UsesQCoreApplication
 from helper.decorators import requires
 
 
-def random_gen(count=100, largest=99, lowest=0):
+def random_gen(count=50, largest=49, lowest=0):
     for i in range(count):
         yield random.randint(lowest, largest)
 
@@ -50,7 +50,7 @@ class PythonMultipleSlots(UsesQCoreApplication, MultipleSignalConnections):
         class Dummy(QObject):
             pass
 
-        for test in random_gen(30):
+        for test in random_gen(20):
             sender = Dummy()
             receivers = [BasicPySlotCase() for x in range(10)]
             self.run_many(sender, 'foobar', partial(sender.emit,

@@ -58,6 +58,13 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
     return idx;
 }
 
+static void clearItem(QLinkedList<QByteArray> &l, const QByteArray &value)
+{
+    QLinkedList<QByteArray>::iterator i = qFind(l.begin(), l.end(), value);
+    if (i != l.end())
+        *i = QByteArray();
+}
+
 DynamicQMetaObject::DynamicQMetaObject(const char *className, const QMetaObject* metaObject)
 {
     d.superdata = metaObject;
@@ -76,6 +83,15 @@ DynamicQMetaObject::~DynamicQMetaObject()
 
 void DynamicQMetaObject::addSignal(const char* signal)
 {
+    //search for a empty space
+    QByteArray blank;
+    QLinkedList<QByteArray>::iterator i = qFind(m_signals.begin(), m_signals.end(), blank);
+    if (i != m_signals.end()) {
+        *i = QByteArray(signal);
+        updateMetaObject();
+        return;
+    }
+
     if (m_signals.size() >= MAX_SIGNALS_COUNT) {
         qWarning() << "Fail to add dynamic signal to QObject. PySide support at most" << MAX_SIGNALS_COUNT << "dynamic signals.";
         return;
@@ -87,25 +103,34 @@ void DynamicQMetaObject::addSignal(const char* signal)
 
 void DynamicQMetaObject::addSlot(const char* slot)
 {
-    m_slots << QByteArray(slot);
+    //search for a empty space
+    QByteArray blank;
+    QLinkedList<QByteArray>::iterator i = qFind(m_slots.begin(), m_slots.end(), blank);
+    if (i != m_slots.end()) {
+        *i = QByteArray(slot);
+    } else {
+        m_slots << QByteArray(slot);
+    }
     updateMetaObject();
 }
 
 void DynamicQMetaObject::removeSlot(uint index)
 {
     QMetaMethod m = method(index);
-    if (m_slots.removeAll(m.signature()))
+    if (m_slots.contains(m.signature())) {
+        clearItem(m_slots, m.signature());
         updateMetaObject();
+    }
 }
 
 void DynamicQMetaObject::removeSignal(uint index)
 {
     //Current Qt implementation does not support runtime remove signal
-    /*
     QMetaMethod m = method(index);
-    if (m_signals.removeAll(m.signature()))
+    if (m_signals.contains(m.signature())) {
+        clearItem(m_signals, m.signature());
         updateMetaObject();
-    */
+    }
 }
 
 void DynamicQMetaObject::updateMetaObject()

@@ -1,3 +1,29 @@
+static bool getReceiver(PyObject *callback, QObject **receiver, PyObject **self)
+{
+    if (PyMethod_Check(callback)) {
+        *self = PyMethod_GET_SELF(callback);
+        if (SbkQObject_Check(*self))
+            *receiver = SbkQObject_cptr(*self);
+    } else if (PyCFunction_Check(callback)) {
+        *self = PyCFunction_GET_SELF(callback);
+        if (*self && SbkQObject_Check(*self))
+            *receiver = SbkQObject_cptr(*self);
+    } else if (!PyFunction_Check(callback)) {
+        *receiver = 0;
+        *self = 0;
+        qWarning() << "Invalid callback object.";
+        return false;
+    }
+
+    bool usingGlobalReceiver = !*receiver;
+    if (usingGlobalReceiver) {
+        PySide::SignalManager& signalManager = PySide::SignalManager::instance();
+        *receiver = signalManager.globalReceiver();
+    }
+
+    return usingGlobalReceiver;
+}
+
 static bool qobjectConnect(QObject* source, const char* signal, QObject* receiver, const char* slot, Qt::ConnectionType type)
 {
     if (!PySide::checkSignal(signal))
@@ -24,25 +50,11 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     PySide::SignalManager& signalManager = PySide::SignalManager::instance();
 
     // Extract receiver from callback
-    bool usingGlobalReceiver;
     QObject* receiver = 0;
     PyObject* self = 0;
-    if (PyMethod_Check(callback)) {
-        self = PyMethod_GET_SELF(callback);
-        if (SbkQObject_Check(self))
-            receiver = SbkQObject_cptr(self);
-    } else if (PyCFunction_Check(callback)) {
-        self = PyCFunction_GET_SELF(callback);
-        if (self && SbkQObject_Check(self))
-            receiver = SbkQObject_cptr(self);
-    } else if (!PyFunction_Check(callback)) {
-        qWarning() << "Invalid callback object.";
+    bool usingGlobalReceiver = getReceiver(callback, &receiver, &self);
+    if (receiver == 0 and self == 0)
         return false;
-    }
-
-    usingGlobalReceiver = !receiver;
-    if (usingGlobalReceiver)
-        receiver = signalManager.globalReceiver();
 
     const QMetaObject* metaObject = receiver->metaObject();
     const QByteArray callbackSig = PySide::getCallbackSignature(signal, callback, usingGlobalReceiver).toAscii();
@@ -66,10 +78,10 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         #ifndef AVOID_PROTECTED_HACK
             source->connectNotify(signal);
         #else
-            reinterpret_cast<QObjectWrapper*>(source)->connectNotify_protected(signal);
+            reinterpret_cast<QObjectWrapper*>(source)->connectNotify_protected(source, signal);
         #endif
         if (usingGlobalReceiver)
-            signalManager.globalReceiverConnectNotify(slotIndex);
+            signalManager.globalReceiverConnectNotify(source, slotIndex);
 
         return true;
     }
@@ -85,17 +97,11 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
     PySide::SignalManager& signalManager = PySide::SignalManager::instance();
 
     // Extract receiver from callback
-    bool usingGlobalReceiver;
     QObject* receiver = 0;
-    PyObject* self;
-    if (PyMethod_Check(callback)) {
-        self = PyMethod_GET_SELF(callback);
-        if (SbkQObject_Check(self))
-            receiver = SbkQObject_cptr(self);
-    }
-    usingGlobalReceiver = !receiver;
-    if (usingGlobalReceiver)
-        receiver = signalManager.globalReceiver();
+    PyObject* self = 0;
+    bool usingGlobalReceiver = getReceiver(callback, &receiver, &self);
+    if (receiver == 0 and self == 0)
+        return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
     const QByteArray callbackSig = PySide::getCallbackSignature(signal, callback, usingGlobalReceiver).toAscii();
@@ -105,7 +111,7 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
     if (QObject::disconnect(source, signal, receiver, qtSlotName.constData())) {
         if (usingGlobalReceiver) {
             int slotIndex = metaObject->indexOfSlot(callbackSig.constData());
-            signalManager.globalReceiverDisconnectNotify(slotIndex);
+            signalManager.globalReceiverDisconnectNotify(source, slotIndex);
         }
         return true;
     }

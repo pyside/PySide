@@ -1631,6 +1631,16 @@
         </inject-code>
     </add-function>
 
+   <modify-function signature="receivers(const char*) const">
+     <inject-code class="target" position="beginning">
+       //Avoid return +1 because SignalManager connect to "destroyed()" signal to control object timelife
+       int ret = %CPPSELF.%FUNCTION_NAME(%1);
+       if ((strcmp(%1, SIGNAL(destroyed())) == 0) &amp;&amp; (PySide::SignalManager::instance().hasConnectionWith(%CPPSELF)))
+         ret--;
+       %PYARG_0 = %CONVERTTOPYTHON[int](ret);
+     </inject-code>
+   </modify-function>
+
    <modify-function signature="sender() const">
       <modify-argument index="return">
          <define-ownership owner="target"/>

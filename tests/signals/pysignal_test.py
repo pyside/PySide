@@ -50,6 +50,18 @@ class PythonSigSlot(unittest.TestCase):
         self.assert_(self.called)
 
 
+    def testDisconnect(self):
+        obj1 = Dummy()
+
+        QObject.connect(obj1, SIGNAL('foo(int)'), self.callback)
+        QObject.disconnect(obj1, SIGNAL('foo(int)'), self.callback)
+
+        self.args = (42, )
+        obj1.emit(SIGNAL('foo(int)'), *self.args)
+
+        self.assert_(not self.called)
+
+
 @requires('PySide.QtGui')
 class SpinBoxPySignal(UsesQApplication):
     """Tests the connection of python signals to QSpinBox qt slots."""

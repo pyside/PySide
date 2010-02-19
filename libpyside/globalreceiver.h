@@ -55,8 +55,10 @@ public:
     const QMetaObject* metaObject() const;
     void addSlot(const char* slot, PyObject* callback);
     void removeSlot(int slotId);
-    void connectNotify(int slotId);
-    void disconnectNotify(int slotId);
+    void connectNotify(QObject* sender, int slotId);
+    void disconnectNotify(QObject* sender, int slotId);
+    bool hasConnectionWith(const QObject* object);
+
 private:
     DynamicQMetaObject m_metaObject;
     QSet<int> m_shortCircuitSlots;
