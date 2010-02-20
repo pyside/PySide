@@ -5,7 +5,7 @@
 
 import os
 import unittest
-from PySide.QtCore import QObject, QTranslator, QCoreApplication
+from PySide.QtCore import QObject, QTranslator, QCoreApplication, QString
 
 from helper import UsesQCoreApplication
 
@@ -51,7 +51,11 @@ class TranslationTest(UsesQCoreApplication):
         obj.setObjectName(obj.trUtf8('Hello World!'))
         self.assertEqual(obj.objectName(), u'привет мир!')
 
-
+    def testTranslateWithNoneDisambiguation(self):
+        value = 'String here'
+        obj = QCoreApplication.translate('context', value, None, QCoreApplication.UnicodeUTF8)
+        self.assert_(isinstance(obj, QString))
+        self.assertEqual(obj, value)
 
 if __name__ == '__main__':
     unittest.main()
