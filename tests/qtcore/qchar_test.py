@@ -28,6 +28,17 @@ class ImplicitConvQLatin1Char(unittest.TestCase):
         self.assertEqual(QChar('-'), stream.padChar())
 
 
+class QCharCtorBigNumber(unittest.TestCase):
+    '''QChar constructors receiving ints'''
+
+    def testInt(self):
+        '''QChar(int)'''
+        codepoint = 512
+        qchar = QChar(codepoint)
+        reference = unichr(codepoint)
+        self.assertEqual(qchar.unicode(), codepoint)
+
+
 if __name__ == '__main__':
     unittest.main()
 
