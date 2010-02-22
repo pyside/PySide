@@ -2667,35 +2667,30 @@
 
     <modify-function signature="operator&lt;&lt;(char)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const void*)" remove="all"/>
-    <modify-function signature="operator&lt;&lt;(double)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(float)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(qlonglong)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(qulonglong)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(signed short)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(signed int)" remove="all"/>
-    <modify-function signature="operator&lt;&lt;(signed long)" remove="all"/>
-    <modify-function signature="operator&lt;&lt;(unsigned long)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QBool)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(unsigned int)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(unsigned short)" remove="all"/>
 
     <modify-function signature="operator&gt;&gt;(char&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(char*)" remove="all"/>
-    <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(qlonglong&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(qulonglong&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(signed int&amp;)" remove="all"/>
-    <modify-function signature="operator&gt;&gt;(signed long&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(signed short&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned int&amp;)" remove="all"/>
-    <modify-function signature="operator&gt;&gt;(unsigned long&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned short&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(QByteArray&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(QChar&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(QString&amp;)" remove="all"/>
 
     <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
+
     <modify-function signature="flush()" allow-thread="yes"/>
     <modify-function signature="read(qint64)" allow-thread="yes"/>
     <modify-function signature="readLine(qint64)" allow-thread="yes"/>

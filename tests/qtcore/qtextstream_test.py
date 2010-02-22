@@ -22,6 +22,13 @@ class QTextStreamShiftTest(unittest.TestCase):
         self.assert_(isinstance(res, QString))
         self.assertEqual(res, QString('4'))
 
+    def testString(self):
+        self.write << QString('Test_it!')
+        self.write.flush()
+        res = QString()
+        self.read >> res
+        self.assertEqual(res, QString('Test_it!'))
+
 class QTextStreamGetSet(unittest.TestCase):
 
     def setUp(self):
