@@ -39,6 +39,21 @@ class QCharCtorBigNumber(unittest.TestCase):
         self.assertEqual(qchar.unicode(), codepoint)
 
 
+class QCharCtorString(unittest.TestCase):
+    '''QChar constructor receiving strings'''
+
+    def testBasic(self):
+        '''QChar(char)'''
+        reference = 'a'
+        qchar = QChar(reference)
+        self.assertEqual(ord(reference), ord(qchar.toAscii()))
+
+    def testError(self):
+        '''QChar(char)'''
+        reference = 'aaaaaa'
+        self.assertRaises(TypeError, QChar, reference)
+
+
 if __name__ == '__main__':
     unittest.main()
 
