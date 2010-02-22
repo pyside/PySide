@@ -75,19 +75,19 @@
     <template name="fix_args,QRectF*">
         QRectF rect_;
         %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;rect_);
-        return %CONVERTTOPYTHON[QRectF](rect_);
+        %PYARG_0 = %CONVERTTOPYTHON[QRectF](rect_);
     </template>
 
     <template name="fix_args,QRect*">
         QRect rect_;
         %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;rect_);
-        return %CONVERTTOPYTHON[QRect](rect_);
+        %PYARG_0 = %CONVERTTOPYTHON[QRect](rect_);
     </template>
 
     <template name="fix_char*">
         char val_;
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;val_);
-        %PYARG_0 = PyTuple_Pack(2, %CONVERTTOPYTHON[%RETURN_TYPE](retval_), %CONVERTTOPYTHON[char](val_));
+        %PYARG_0 = Shiboken::makeTuple(retval_, val_);
     </template>
 
     <template name="fix_int*,int*,int*,int*">
@@ -115,9 +115,9 @@
         char _data[%2];
         qint64 _size = %CPPSELF.%FUNCTION_NAME(_data, %2);
         if (_size > 0)
-            return %CONVERTTOPYTHON[QByteArray](QByteArray(_data, _size));
+            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](QByteArray(_data, _size));
         else
-            return %CONVERTTOPYTHON[QByteArray](QByteArray());
+            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](QByteArray());
     </template>
     <template name="fix_return_args,int*">
         RETURNTYPE _ret;

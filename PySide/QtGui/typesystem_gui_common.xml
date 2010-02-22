@@ -3977,6 +3977,9 @@
         <remove-argument/>
         <remove-default-expression/>
       </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="QRectF"/>
+      </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="fix_args,QRectF*"/>
       </inject-code>
@@ -3985,6 +3988,9 @@
       <modify-argument index="4">
         <remove-argument/>
         <remove-default-expression/>
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="QRect"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="fix_args,QRect*"/>
