@@ -1141,6 +1141,20 @@
     <modify-function signature="QChar(short)" remove="all"/>
     <modify-function signature="QChar(ushort)" remove="all"/>
     <modify-function signature="QChar(uint)" remove="all"/>
+    <modify-function signature="QChar(char)" remove="all"/>
+    Implementation note: This constructor is a replacement for
+         QChar(char), as the char type check also catches numbers,
+         conflicting with QChar(int).
+    <add-function signature="QChar(PyString*)">
+        <inject-code class="target" position="beginning">
+            if (PyString_Size(%PYARG_1) == 1) {
+                char value = %CONVERTTOCPP[char](%PYARG_1);
+                cptr = new %TYPE(value);
+            } else {
+                PyErr_SetString(PyExc_TypeError, "expected string of size 1");
+            }
+        </inject-code>
+    </add-function>
     <modify-function signature="combiningClass(uint)" remove="all"/>
     <modify-function signature="combiningClass(ushort)" remove="all"/>
     <modify-function signature="decomposition(uint)" remove="all"/>
