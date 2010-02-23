@@ -1149,7 +1149,7 @@
         <inject-code class="target" position="beginning">
             if (PyString_Size(%PYARG_1) == 1) {
                 char value = %CONVERTTOCPP[char](%PYARG_1);
-                cptr = new %TYPE(value);
+                %0 = new %TYPE(value);
             } else {
                 PyErr_SetString(PyExc_TypeError, "expected string of size 1");
             }
@@ -1225,7 +1225,7 @@
     <add-function signature="QPoint(PyObject*)">
         <inject-code class="target" position="beginning">
         %TYPE ptr = %CONVERTTOCPP[%TYPE](%PYARG_1);
-        cptr = new %TYPE(ptr.x(), ptr.y());
+        %0 = new %TYPE(ptr.x(), ptr.y());
         </inject-code>
     </add-function>
     <modify-function signature="rx()" remove="all"/>
@@ -1710,7 +1710,7 @@
 
     <add-function signature="QVariant(PyObject*)">
         <inject-code class="target" position="beginning">
-        cptr = new %TYPE(%CONVERTTOCPP[QVariant](%PYARG_1));
+        %0 = new %TYPE(%CONVERTTOCPP[QVariant](%PYARG_1));
         </inject-code>
     </add-function>
     <add-function signature="toPyObject()" return-type="PyObject*">
@@ -1881,7 +1881,7 @@
         <!-- Keep \x00 bytes passed in python strings -->
         <inject-code class="target" position="beginning">
             int size = PyString_Size(pyargs[0]);
-            cptr = new QByteArray(cpp_arg0, size);
+            %0 = new QByteArray(cpp_arg0, size);
         </inject-code>
     </modify-function>
     <!-- buffer protocol -->
