@@ -32,16 +32,16 @@
 * 02110-1301 USA
 */
 
+#include "globalreceiver.h"
+
 #include <QMetaMethod>
 #include <QDebug>
 #include <QEvent>
 #include <autodecref.h>
 #include <gilstate.h>
 
-#include "globalreceiver.h"
 #include "typeresolver.h"
 #include "signalmanager.h"
-#include "weakref.h"
 
 #define RECEIVER_DESTROYED_SLOT_NAME "__receiverDestroyed__(QObject*)"
 
