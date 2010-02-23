@@ -661,6 +661,21 @@
     </extra-includes>
     <modify-function signature="operator=(QTextCursor)" remove="all"/>
     <modify-function signature="selectedTableCells(int*,int*,int*,int*)const" remove="all" />
+    <modify-function signature="currentFrame()const">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="insertTable(int,int,const QTextTableFormat &amp;)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="insertTable(int,int)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QTextLayout::FormatRange">
     <include file-name="QTextLayout" location="global"/>
