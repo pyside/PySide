@@ -1812,7 +1812,9 @@
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
     <modify-function signature="layoutSpacingImplementation(QSizePolicy::ControlType, QSizePolicy::ControlType, Qt::Orientation, const QStyleOption *, const QWidget *) const" virtual-slot="yes"/>
   </object-type>
-  <object-type name="QPrintDialog" />
+  <object-type name="QPrintDialog">
+      <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
+  </object-type>
   <object-type name="QPrintEngine"/>
   <object-type name="QProgressBar" />
   <object-type name="QPushButton" />
