@@ -41,7 +41,9 @@ inline QVariant Converter<QVariant>::toCpp(PyObject* pyobj)
     if (SbkQVariant_Check(pyobj))
         return *Converter<QVariant*>::toCpp(pyobj);
     // voodoo stuff to avoid linking qtcore bindings with qtgui bindings
-    uint typeCode = QMetaType::type(pyobj->ob_type->tp_name);
+    QString className(pyobj->ob_type->tp_name);
+    className = className.mid(className.lastIndexOf(".") + 1);
+    uint typeCode = QMetaType::type(className.toAscii());
     if (!typeCode || typeCode > QVariant::UserType) {
 
             // Check the implicit conversion stuff for most python-native types
