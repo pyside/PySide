@@ -693,6 +693,11 @@
     <modify-function signature="operator+=(const QItemSelectionRange&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const QList&lt;QItemSelectionRange&gt;&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QItemSelectionRange)" remove="all"/>
+    <add-function signature="__len__">
+        <inject-code class="target" position="beginning">
+            return %CPPSELF.count();
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QMatrix">
     <extra-includes>
