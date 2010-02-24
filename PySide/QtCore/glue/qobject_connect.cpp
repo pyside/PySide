@@ -3,11 +3,11 @@ static bool getReceiver(PyObject *callback, QObject **receiver, PyObject **self)
     if (PyMethod_Check(callback)) {
         *self = PyMethod_GET_SELF(callback);
         if (SbkQObject_Check(*self))
-            *receiver = SbkQObject_cptr(*self);
+            *receiver = Converter<QObject*>::toCpp(*self);
     } else if (PyCFunction_Check(callback)) {
         *self = PyCFunction_GET_SELF(callback);
         if (*self && SbkQObject_Check(*self))
-            *receiver = SbkQObject_cptr(*self);
+            *receiver = Converter<QObject*>::toCpp(*self);
     } else if (!PyFunction_Check(callback)) {
         *receiver = 0;
         *self = 0;

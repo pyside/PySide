@@ -18,7 +18,7 @@ static Py_ssize_t SbkQString_readbufferproc(PyObject* self, Py_ssize_t segment, 
     if (segment || Shiboken::cppObjectIsInvalid(self))
         return -1;
 
-    QString* cppSelf = SbkQString_cptr(self);
+    QString* cppSelf = Converter<QString*>::toCpp(self);
     QByteArray decodedData = cppSelf->toLocal8Bit();
     Shiboken::AutoDecRef decodedString(PyString_FromStringAndSize(decodedData.constData(), decodedData.size()));
 

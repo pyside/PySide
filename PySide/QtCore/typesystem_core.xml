@@ -2336,7 +2336,7 @@
         PyObject* pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
         Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
 
-        QTimer* timer = SbkQTimer_cptr(pyTimer);
+        QTimer* timer = Converter&lt;QTimer*>::toCpp(pyTimer);
         PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsOs", pyTimer, SIGNAL(timeout()), %PYARG_2, %3);
         Py_DECREF(result);
         timer->setSingleShot(true);
@@ -2350,7 +2350,7 @@
         Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
         PyObject* pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
         Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
-        QTimer* timer = SbkQTimer_cptr(pyTimer);
+        QTimer* timer = Converter&lt;QTimer*>::toCpp(pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
         PyObject* result = PyObject_CallMethod(pyTimer, "connect", "OsO", pyTimer, SIGNAL(timeout()), pyargs[2-1]);

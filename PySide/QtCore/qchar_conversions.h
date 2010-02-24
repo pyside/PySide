@@ -20,6 +20,6 @@ inline QChar Shiboken::Converter<QChar >::toCpp(PyObject* pyobj)
         else if (PyInt_Check(pyobj))
             return QChar(Shiboken::Converter<int >::toCpp(pyobj));
     }
-    return *SbkQChar_cptr(pyobj);
+    return *Converter<QChar*>::toCpp(pyobj);
 }
 }

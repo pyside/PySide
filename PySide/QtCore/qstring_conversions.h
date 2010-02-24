@@ -50,6 +50,6 @@ inline QString Converter< QString >::toCpp(PyObject* pyobj)
         return QString(data);
     }
 #endif
-    return *SbkQString_cptr(pyobj);
+    return *Converter<QString*>::toCpp(pyobj);
 }
 }

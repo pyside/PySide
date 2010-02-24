@@ -24,6 +24,6 @@ inline QPixmap Converter< QPixmap >::toCpp(PyObject* pyobj)
         return QPixmap(Shiboken::Converter<QString& >::toCpp(pyobj));
     }
 
-    return *SbkQPixmap_cptr(pyobj);
+    return *Converter<QPixmap*>::toCpp(pyobj);
 }
 }

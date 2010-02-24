@@ -39,7 +39,7 @@ inline bool Converter<QVariant>::isConvertible(PyObject* pyobj)
 inline QVariant Converter<QVariant>::toCpp(PyObject* pyobj)
 {
     if (SbkQVariant_Check(pyobj))
-        return *SbkQVariant_cptr(pyobj);
+        return *Converter<QVariant*>::toCpp(pyobj);
     // voodoo stuff to avoid linking qtcore bindings with qtgui bindings
     uint typeCode = QMetaType::type(pyobj->ob_type->tp_name);
     if (!typeCode || typeCode > QVariant::UserType) {
