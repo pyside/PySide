@@ -6,12 +6,11 @@ from PySide.QtCore import QObject, SIGNAL
 
 try:
     from PySide.QtGui import QPushButton, QSpinBox
+    hasQtGui = True
 except ImportError:
-    pass
+    hasQtGui = False
 
 from helper import BasicPySlotCase, UsesQApplication
-from helper.decorators import requires
-
 
 def random_gen(count=100, largest=99, lowest=0):
     for i in range(count):
@@ -44,25 +43,24 @@ class MultipleSignalConnections(unittest.TestCase):
             self.assert_(rec.called)
 
 
-@requires('PySide.QtGui')
-class QtGuiMultipleSlots(UsesQApplication, MultipleSignalConnections):
-    '''Multiple connections to QtGui signals'''
+if hasQtGui:
+    class QtGuiMultipleSlots(UsesQApplication, MultipleSignalConnections):
+        '''Multiple connections to QtGui signals'''
 
-    def testButtonClick(self):
-        """Multiple connections to QPushButton.clicked()"""
-        sender = QPushButton('button')
-        receivers = [BasicPySlotCase() for x in range(30)]
-        self.run_many(sender, 'clicked()', sender.click, receivers)
+        def testButtonClick(self):
+            """Multiple connections to QPushButton.clicked()"""
+            sender = QPushButton('button')
+            receivers = [BasicPySlotCase() for x in range(30)]
+            self.run_many(sender, 'clicked()', sender.click, receivers)
 
-    def testSpinBoxValueChanged(self):
-        """Multiple connections to QSpinBox.valueChanged(int)"""
-        for test in random_gen(10):
-            sender = QSpinBox()
-            #FIXME if number of receivers if higher than 50, segfaults
-            receivers = [BasicPySlotCase() for x in range(10)]
-            self.run_many(sender, 'valueChanged(int)', sender.setValue,
-                          receivers, (test,))
-
+        def testSpinBoxValueChanged(self):
+            """Multiple connections to QSpinBox.valueChanged(int)"""
+            for test in random_gen(10):
+                sender = QSpinBox()
+                #FIXME if number of receivers if higher than 50, segfaults
+                receivers = [BasicPySlotCase() for x in range(10)]
+                self.run_many(sender, 'valueChanged(int)', sender.setValue,
+                              receivers, (test,))
 
 if __name__ == '__main__':
     unittest.main()

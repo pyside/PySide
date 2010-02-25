@@ -7,7 +7,6 @@ from functools import partial
 from PySide.QtCore import QObject, SIGNAL, QProcess
 
 from helper import BasicPySlotCase, UsesQCoreApplication
-from helper.decorators import requires
 
 
 def random_gen(count=50, largest=49, lowest=0):

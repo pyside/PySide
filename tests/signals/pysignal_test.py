@@ -4,11 +4,11 @@ from PySide.QtCore import QObject, SIGNAL, SLOT
 
 try:
     from PySide.QtGui import QSpinBox, QApplication, QWidget
+    hasQtGui = True
 except ImportError:
-    pass
+    hasQtGui = False
 
 from helper import UsesQApplication
-from helper.decorators import requires
 
 class Dummy(QObject):
     """Dummy class used in this test."""
@@ -62,64 +62,64 @@ class PythonSigSlot(unittest.TestCase):
         self.assert_(not self.called)
 
 
-@requires('PySide.QtGui')
-class SpinBoxPySignal(UsesQApplication):
-    """Tests the connection of python signals to QSpinBox qt slots."""
+if hasQtGui:
+    class SpinBoxPySignal(UsesQApplication):
+        """Tests the connection of python signals to QSpinBox qt slots."""
 
-    def setUp(self):
-        super(SpinBoxPySignal, self).setUp()
-        self.obj = Dummy()
-        self.spin = QSpinBox()
-        self.spin.setValue(0)
+        def setUp(self):
+            super(SpinBoxPySignal, self).setUp()
+            self.obj = Dummy()
+            self.spin = QSpinBox()
+            self.spin.setValue(0)
 
-    def tearDown(self):
-        super(SpinBoxPySignal, self).tearDown()
-        del self.obj
-        del self.spin
+        def tearDown(self):
+            super(SpinBoxPySignal, self).tearDown()
+            del self.obj
+            del self.spin
 
-    def testValueChanged(self):
-        """Emission of a python signal to QSpinBox setValue(int)"""
-        QObject.connect(self.obj, SIGNAL('dummy(int)'), self.spin, SLOT('setValue(int)'))
-        self.assertEqual(self.spin.value(), 0)
+        def testValueChanged(self):
+            """Emission of a python signal to QSpinBox setValue(int)"""
+            QObject.connect(self.obj, SIGNAL('dummy(int)'), self.spin, SLOT('setValue(int)'))
+            self.assertEqual(self.spin.value(), 0)
 
-        self.obj.emit(SIGNAL('dummy(int)'), 4)
-        self.assertEqual(self.spin.value(), 4)
+            self.obj.emit(SIGNAL('dummy(int)'), 4)
+            self.assertEqual(self.spin.value(), 4)
 
-    def testValueChangedMultiple(self):
-        """Multiple emissions of a python signal to QSpinBox setValue(int)"""
-        QObject.connect(self.obj, SIGNAL('dummy(int)'), self.spin, SLOT('setValue(int)'))
-        self.assertEqual(self.spin.value(), 0)
+        def testValueChangedMultiple(self):
+            """Multiple emissions of a python signal to QSpinBox setValue(int)"""
+            QObject.connect(self.obj, SIGNAL('dummy(int)'), self.spin, SLOT('setValue(int)'))
+            self.assertEqual(self.spin.value(), 0)
 
-        self.obj.emit(SIGNAL('dummy(int)'), 4)
-        self.assertEqual(self.spin.value(), 4)
+            self.obj.emit(SIGNAL('dummy(int)'), 4)
+            self.assertEqual(self.spin.value(), 4)
 
-        self.obj.emit(SIGNAL('dummy(int)'), 77)
-        self.assertEqual(self.spin.value(), 77)
+            self.obj.emit(SIGNAL('dummy(int)'), 77)
+            self.assertEqual(self.spin.value(), 77)
 
 
-@requires('PySide.QtGui')
-class WidgetPySignal(UsesQApplication):
-    """Tests the connection of python signals to QWidget qt slots."""
+if hasQtGui:
+    class WidgetPySignal(UsesQApplication):
+        """Tests the connection of python signals to QWidget qt slots."""
 
-    def setUp(self):
-        super(WidgetPySignal, self).setUp()
-        self.obj = Dummy()
-        self.widget = QWidget()
+        def setUp(self):
+            super(WidgetPySignal, self).setUp()
+            self.obj = Dummy()
+            self.widget = QWidget()
 
-    def tearDown(self):
-        super(WidgetPySignal, self).tearDown()
-        del self.obj
-        del self.widget
+        def tearDown(self):
+            super(WidgetPySignal, self).tearDown()
+            del self.obj
+            del self.widget
 
-    def testShow(self):
-        """Emission of a python signal to QWidget slot show()"""
-        self.widget.hide()
+        def testShow(self):
+            """Emission of a python signal to QWidget slot show()"""
+            self.widget.hide()
 
-        QObject.connect(self.obj, SIGNAL('dummy()'), self.widget, SLOT('show()'))
-        self.assert_(not self.widget.isVisible())
+            QObject.connect(self.obj, SIGNAL('dummy()'), self.widget, SLOT('show()'))
+            self.assert_(not self.widget.isVisible())
 
-        self.obj.emit(SIGNAL('dummy()'))
-        self.assert_(self.widget.isVisible())
+            self.obj.emit(SIGNAL('dummy()'))
+            self.assert_(self.widget.isVisible())
 
 if __name__ == '__main__':
     unittest.main()
