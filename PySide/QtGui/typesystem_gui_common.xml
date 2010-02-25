@@ -1905,7 +1905,13 @@
     </modify-function>
   </object-type>
   <object-type name="QStringListModel"/>
-  <object-type name="QStyleFactory"/>
+  <object-type name="QStyleFactory">
+    <modify-function signature="create(const QString&amp;)">
+      <modify-argument index="return">
+        <define-ownership owner="target"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
   <object-type name="QStyleHintReturn"/>
   <object-type name="QStyleHintReturnVariant"/>
   <object-type name="QStyleHintReturnMask"/>
