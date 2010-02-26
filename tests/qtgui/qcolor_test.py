@@ -2,6 +2,7 @@
 import unittest
 import colorsys
 
+from PySide.QtCore import Qt
 from PySide.QtGui import QColor
 
 
@@ -43,6 +44,19 @@ class QColorGetTest(unittest.TestCase):
     def testGetCmykF(self): # not supported by colorsys
         for x, y in zip(self.color.getCmykF(), (170/255.0, 85/255.0, 0, 195/255.0, 80/255.0)):
             self.assert_(x - y < 1/10000.0)
+
+
+class QColorQRgbConstructor(unittest.TestCase):
+    '''QColor(QRgb) constructor'''
+    # Affected by bug #170 - QColor(QVariant) coming before QColor(uint)
+    # in overload sorting
+
+    def testBasic(self):
+        '''QColor(QRgb)'''
+        color = QColor(255, 0, 0)
+        #QRgb format #AARRGGBB
+        rgb = 0x00FF0000
+        self.assertEqual(QColor(rgb), color)
 
 
 if __name__ == '__main__':
