@@ -61,17 +61,16 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${QtNetwork_BINARY_DIR}/PySide/QtNetwork/
                     )
 
-add_library(QtWebKit SHARED ${QtWebKit_SRC})
+add_library(QtWebKit MODULE ${QtWebKit_SRC})
 set_property(TARGET QtWebKit PROPERTY PREFIX "")
 target_link_libraries(QtWebKit
                       pyside
-                      QtCore
-                      QtGui
-                      QtNetwork
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTWEBKIT_LIBRARY}
                       )
+add_dependencies(QtWebKit QtGui)
+add_dependencies(QtWebKit QtNetwork)
 
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtWebKit.so
