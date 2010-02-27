@@ -59,5 +59,12 @@ class QColorQRgbConstructor(unittest.TestCase):
         self.assertEqual(QColor(rgb), color)
 
 
+class QColorEqualGlobalColor(unittest.TestCase):
+
+    def testEqualGlobalColor(self):
+        '''QColor == Qt::GlobalColor'''
+        self.assertEqual(QColor(255, 0, 0), Qt.red)
+
+
 if __name__ == '__main__':
     unittest.main()
