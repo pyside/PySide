@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtSvg">
+  <load-typesystem name="typesystem_gui.xml.in" generate="no"/>
+  
+  <object-type name="QSvgRenderer" />
+  <object-type name="QSvgWidget" />
+
+  <object-type name="QSvgGenerator">
+    <modify-function signature="setOutputDevice(QIODevice*)">
+      <modify-argument index="1">
+          <reference-count action="add"/>
+      </modify-argument>
+    </modify-function>
+    
+    <modify-function signature="outputDevice() const">
+      <modify-argument index="return">
+          <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <object-type name="QGraphicsSvgItem">
+    <modify-function signature="QGraphicsSvgItem(QGraphicsItem*)">
+      <modify-argument index="this">
+          <parent index="1" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="QGraphicsSvgItem(const QString&amp;, QGraphicsItem*)">
+      <modify-argument index="this">
+          <parent index="2" action="add"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+</typesystem>
