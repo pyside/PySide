@@ -114,6 +114,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qcdestyle_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qcheckbox_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qcleanlooksstyle_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qclipboard_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qclipboardevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qcloseevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qcolordialog_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qcolor_wrapper.cpp
@@ -300,6 +301,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiondockwidgetv2_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiondockwidget_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptionfocusrect_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptionframev2_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptionframev3_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptionframe_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiongraphicsitem_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiongroupbox_wrapper.cpp
@@ -312,7 +314,9 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptionsizegrip_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptionslider_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptionspinbox_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiontabbarbase_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiontabbarbasev2_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiontabv2_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiontabv3_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiontabwidgetframe_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiontab_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qstyleoptiontitlebar_wrapper.cpp
@@ -372,6 +376,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtexttable_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtgui_module_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtimeedit_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtoolbar_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtoolbarchangeevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtoolbox_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtoolbutton_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtooltip_wrapper.cpp

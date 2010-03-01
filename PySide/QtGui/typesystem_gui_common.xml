@@ -416,57 +416,66 @@
   <enum-type name="QTextOption::TabType"/>
   <enum-type name="QTextOption::WrapMode"/>
   <enum-type name="QTextOption::Flag" flags="QTextOption::Flags"/>
-  <value-type name="QStyleOption"   >
+  <value-type name="QStyleOption" polymorphic-id-expression="%1-&gt;type == QStyleOption::SO_Default">
     <modify-function signature="operator=(QStyleOption)" remove="all"/>
     <modify-function signature="init(const QWidget*)" remove="all"/>
     <!--### Obsolete in 4.3-->
   </value-type>
   <enum-type name="QPixmap::ShareMode"/>
-  <value-type name="QStyleOptionGraphicsItem"  />
-  <value-type name="QStyleOptionSizeGrip"  />
-  <value-type name="QStyleOptionButton"  />
-  <value-type name="QStyleOptionComboBox"  />
-  <value-type name="QStyleOptionComplex"  />
-  <value-type name="QStyleOptionDockWidget"  />
-  <value-type name="QStyleOptionDockWidgetV2"  >
+  <value-type name="QStyleOptionGraphicsItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionGraphicsItem::Type &amp;&amp; %1-&gt;version == QStyleOptionGraphicsItem::Version" />
+  <value-type name="QStyleOptionSizeGrip" polymorphic-id-expression="%1-&gt;type == QStyleOptionSizeGrip::Type &amp;&amp; %1-&gt;version == QStyleOptionSizeGrip::Version" />
+  <value-type name="QStyleOptionButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionButton::Type &amp;&amp; %1-&gt;version == QStyleOptionButton::Version" />
+  <value-type name="QStyleOptionComboBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionComboBox::Type &amp;&amp; %1-&gt;version == QStyleOptionComboBox::Version" />
+  <value-type name="QStyleOptionComplex" polymorphic-id-expression="%1-&gt;type == QStyleOptionComplex::Type &amp;&amp; %1-&gt;version == QStyleOptionComplex::Version" />
+  <value-type name="QStyleOptionDockWidget" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidget::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidget::Version" />
+  <value-type name="QStyleOptionDockWidgetV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidgetV2::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidgetV2::Version" >
     <modify-function signature="operator=(QStyleOptionDockWidget)" remove="all"/>
   </value-type>
-  <value-type name="QStyleOptionFocusRect"  />
-  <value-type name="QStyleOptionFrame"  />
-  <value-type name="QStyleOptionFrameV2"  >
+  <value-type name="QStyleOptionFocusRect" polymorphic-id-expression="%1-&gt;type == QStyleOptionFocusRect::Type &amp;&amp; %1-&gt;version == QStyleOptionFocusRect::Version" />
+  <value-type name="QStyleOptionFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionFrame::Version" />
+  <value-type name="QStyleOptionFrameV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV2::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV2::Version" >
     <modify-function signature="operator=(QStyleOptionFrame)" remove="all"/>
   </value-type>
-  <value-type name="QStyleOptionGroupBox"  />
-  <value-type name="QStyleOptionHeader"  />
-  <value-type name="QStyleOptionMenuItem"  />
-  <value-type name="QStyleOptionProgressBar"  />
-  <value-type name="QStyleOptionProgressBarV2"  >
+  <value-type name="QStyleOptionFrameV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV3::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV3::Version">
+    <modify-function signature="operator=(QStyleOptionFrame)" remove="all"/>
+  </value-type>
+  <value-type name="QStyleOptionGroupBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionGroupBox::Type &amp;&amp; %1-&gt;version == QStyleOptionGroupBox::Version" />
+  <value-type name="QStyleOptionHeader" polymorphic-id-expression="%1-&gt;type == QStyleOptionHeader::Type &amp;&amp; %1-&gt;version == QStyleOptionHeader::Version" />
+  <value-type name="QStyleOptionMenuItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionMenuItem::Type &amp;&amp; %1-&gt;version == QStyleOptionMenuItem::Version" />
+  <value-type name="QStyleOptionProgressBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBar::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBar::Version" />
+  <value-type name="QStyleOptionProgressBarV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBarV2::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBarV2::Version" >
     <modify-function signature="operator=(QStyleOptionProgressBar)" remove="all"/>
   </value-type>
-  <value-type name="QStyleOptionRubberBand"  />
-  <value-type name="QStyleOptionSlider"  />
-  <value-type name="QStyleOptionSpinBox"  />
-  <value-type name="QStyleOptionTab"  />
-  <value-type name="QStyleOptionTabV2"  >
+  <value-type name="QStyleOptionRubberBand" polymorphic-id-expression="%1-&gt;type == QStyleOptionRubberBand::Type &amp;&amp; %1-&gt;version == QStyleOptionRubberBand::Version" />
+  <value-type name="QStyleOptionSlider" polymorphic-id-expression="%1-&gt;type == QStyleOptionSlider::Type &amp;&amp; %1-&gt;version == QStyleOptionSlider::Version" />
+  <value-type name="QStyleOptionSpinBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionSpinBox::Type &amp;&amp; %1-&gt;version == QStyleOptionSpinBox::Version" />
+  <value-type name="QStyleOptionTab" polymorphic-id-expression="%1-&gt;type == QStyleOptionTab::Type &amp;&amp; %1-&gt;version == QStyleOptionTab::Version" />
+  <value-type name="QStyleOptionTabV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV2::Version" >
     <modify-function signature="operator=(const QStyleOptionTab &amp;)" remove="all"/>
   </value-type>
-  <value-type name="QStyleOptionTabBarBase"  />
-  <value-type name="QStyleOptionTabWidgetFrame"  />
-  <value-type name="QStyleOptionTitleBar"  />
-  <value-type name="QStyleOptionToolBar"  />
-  <value-type name="QStyleOptionToolBox"  />
-  <value-type name="QStyleOptionToolBoxV2"  >
+  <value-type name="QStyleOptionTabV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV3::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV3::Version">
+    <modify-function signature="operator=(QStyleOptionTab)" remove="all" />
+  </value-type>
+  <value-type name="QStyleOptionTabBarBase" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBase::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBase::Version" />
+  <value-type name="QStyleOptionTabBarBaseV2" delete-in-main-thread="yes" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBaseV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBaseV2::Version">
+    <modify-function signature="operator=(QStyleOptionTabBarBase)" remove="all" />
+  </value-type>
+  <value-type name="QStyleOptionTabWidgetFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabWidgetFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionTabWidgetFrame::Version" />
+  <value-type name="QStyleOptionTitleBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionTitleBar::Type &amp;&amp; %1-&gt;version == QStyleOptionTitleBar::Version" />
+  <value-type name="QStyleOptionToolBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBar::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBar::Version" />
+  <value-type name="QStyleOptionToolBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBox::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBox::Version" />
+  <value-type name="QStyleOptionToolBoxV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBoxV2::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBoxV2::Version" >
     <modify-function signature="operator=(QStyleOptionToolBox)" remove="all"/>
   </value-type>
-  <value-type name="QStyleOptionToolButton"  />
-  <value-type name="QStyleOptionViewItem"  />
-  <value-type name="QStyleOptionViewItemV2"  >
+  <value-type name="QStyleOptionToolButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolButton::Type &amp;&amp; %1-&gt;version == QStyleOptionToolButton::Version" />
+  <value-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version" />
+  <value-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version" >
     <modify-function signature="operator=(QStyleOptionViewItem)" remove="all"/>
   </value-type>
-  <value-type name="QStyleOptionViewItemV3"  >
+  <value-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version" >
     <modify-function signature="operator=(QStyleOptionViewItem)" remove="all"/>
   </value-type>
-  <value-type name="QStyleOptionViewItemV4"  >
+  <value-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" >
     <modify-function signature="operator=(QStyleOptionViewItem)" remove="all"/>
   </value-type>
   <value-type name="QTextFragment" >
@@ -718,11 +727,11 @@
       </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QConicalGradient"/>
+  <value-type name="QConicalGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::ConicalGradient" />
   <value-type name="QFontInfo" >
     <modify-function signature="operator=(QFontInfo)" remove="all"/>
   </value-type>
-  <value-type name="QRadialGradient" />
+  <value-type name="QRadialGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::RadialGradient" />
   <value-type name="QPainterPath::Element">
     <modify-field name="x" write="false"/>
     <modify-field name="y" write="false"/>
@@ -1148,8 +1157,8 @@
 
     <modify-function signature="operator=(QFontMetrics)" remove="all"/>
   </value-type>
-  <value-type name="QGradient" force-abstract="yes"  />
-  <value-type name="QLinearGradient" />
+  <value-type name="QGradient" force-abstract="yes" polymorphic-id-expression="%1-&gt;type() == QGradient::NoGradient" />
+  <value-type name="QLinearGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::LinearGradient" />
   <value-type name="QPrinterInfo">
     <modify-function signature="operator=(const QPrinterInfo &amp;)" remove="all"/>
   </value-type>
@@ -2129,13 +2138,13 @@
         </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QActionEvent" />
-  <object-type name="QCloseEvent" />
-  <object-type name="QContextMenuEvent" />
-  <object-type name="QDragEnterEvent" />
-  <object-type name="QDragLeaveEvent" />
-  <object-type name="QDragMoveEvent" />
-  <object-type name="QDropEvent" >
+  <object-type name="QActionEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ActionAdded || %1-&gt;type() == QEvent::ActionRemoved || %1-&gt;type() == QEvent::ActionChanged" />
+  <object-type name="QClipboardEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Clipboard"/>
+  <object-type name="QCloseEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Close"/>
+  <object-type name="QContextMenuEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ContextMenu"/>
+  <object-type name="QDragEnterEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragEnter"/>
+  <object-type name="QDragLeaveEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragLeave"/>
+  <object-type name="QDragMoveEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragMove">
     <modify-function signature="source() const">
       <modify-argument index="return">
         <define-ownership owner="target"/>
@@ -2145,49 +2154,50 @@
     <modify-function signature="format(int)const" remove="all"/>
     <modify-function signature="provides(const char*)const" remove="all"/>
   </object-type>
-  <object-type name="QFileOpenEvent" />
-  <object-type name="QFocusEvent" >
-    <modify-function signature="reason()const" remove="all"/>
-  </object-type>
-  <object-type name="QGraphicsSceneContextMenuEvent" copyable="false"/>
-  <object-type name="QGraphicsSceneDragDropEvent" copyable="false" >
+  <object-type name="QDropEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Drop" />
+  <object-type name="QFileOpenEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FileOpen" />
+  <object-type name="QFocusEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FocusIn || %1-&gt;type() == QEvent::FocusOut" />
+  <object-type name="QGraphicsSceneContextMenuEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneContextMenu" />
+  <object-type name="QGraphicsSceneDragDropEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneDragEnter || %1-&gt;type() == QEvent::GraphicsSceneDragLeave || %1-&gt;type() == QEvent::GraphicsSceneDragMove || %1-&gt;type() == QEvent::GraphicsSceneDrop" >
     <modify-function signature="setMimeData(const QMimeData *)" remove="all"/>
     <modify-function signature="setSource(QWidget *)" remove="all"/>
   </object-type>
   <object-type name="QGraphicsSceneEvent" copyable="false">
     <modify-function signature="setWidget(QWidget *)" remove="all"/>
   </object-type>
-  <object-type name="QGraphicsSceneMoveEvent" copyable="false" />
-  <object-type name="QGraphicsSceneResizeEvent" copyable="false" />
-  <object-type name="QGraphicsSceneHelpEvent" copyable="false" />
-  <object-type name="QGraphicsSceneHoverEvent" copyable="false" />
-  <object-type name="QGraphicsSceneMouseEvent" copyable="false" />
-  <object-type name="QGraphicsSceneWheelEvent" copyable="false"/>
-  <object-type name="QHelpEvent" copyable="false"/>
-  <object-type name="QHideEvent" copyable="false"/>
-  <object-type name="QHoverEvent" copyable="false"/>
-  <object-type name="QIconDragEvent" copyable="false"/>
-  <object-type name="QInputMethodEvent" copyable="no"/>
-  <object-type name="QMoveEvent" copyable = "false" />
-  <object-type name="QResizeEvent" copyable = "false"/>
-  <object-type name="QShortcutEvent" copyable = "false" >
+  <object-type name="QGraphicsSceneMoveEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneMove" />
+  <object-type name="QGraphicsSceneResizeEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneResize" />
+  <object-type name="QGraphicsSceneHelpEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneHelp" />
+  <object-type name="QGraphicsSceneHoverEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneHoverEnter || %1-&gt;type() == QEvent::GraphicsSceneHoverLeave || %1-&gt;type() == QEvent::GraphicsSceneHoverMove" />
+  <object-type name="QGraphicsSceneMouseEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneMouseDoubleClick || %1-&gt;type() == QEvent::GraphicsSceneMouseMove || %1-&gt;type() == QEvent::GraphicsSceneMousePress || %1-&gt;type() == QEvent::GraphicsSceneMouseRelease"/>
+  <object-type name="QGraphicsSceneWheelEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneWheel"/>
+  <object-type name="QHelpEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::ToolTip || %1-&gt;type() == QEvent::WhatsThis"/>
+  <object-type name="QHideEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::Hide"/>
+  <object-type name="QHoverEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::HoverEnter || %1-&gt;type() == QEvent::HoverLeave || %1-&gt;type() == QEvent::HoverMove"/>
+  <object-type name="QIconDragEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::IconDrag"/>
+  <object-type name="QInputMethodEvent" copyable="no" polymorphic-id-expression="%1-&gt;type() == QEvent::InputMethod"/>
+  <object-type name="QMoveEvent" copyable = "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Move" />
+  <object-type name="QResizeEvent" copyable = "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Resize"/>
+  <object-type name="QShortcutEvent" copyable = "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Shortcut">
     <!-- All these have const overloads that are used instead -->
     <modify-function signature="isAmbiguous()" remove="all"/>
     <modify-function signature="shortcutId()" remove="all"/>
     <modify-function signature="key()" remove="all"/>
   </object-type>
-  <object-type name="QShowEvent" copyable= "false"/>
-  <object-type name="QStatusTipEvent" copyable= "false"/>
-  <object-type name="QTabletEvent" copyable= "false"/>
-  <object-type name="QWhatsThisClickedEvent" copyable="false"/>
-  <object-type name="QWheelEvent" copyable= "false" />
-  <object-type name="QWindowStateChangeEvent" copyable="false"/>
+  <object-type name="QShowEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Show"/>
+  <object-type name="QStatusTipEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::StatusTip"/>
+  <object-type name="QTabletEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::TabletMove || %1-&gt;type() == QEvent::TabletPress || %1-&gt;type() == QEvent::TabletRelease"/>
+  <object-type name="QToolBarChangeEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ToolBarChange"/>
+  <object-type name="QWhatsThisClickedEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::WhatsThisClicked"/>
+  <object-type name="QWheelEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Wheel"/>
+  <object-type name="QWindowStateChangeEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::WindowStateChange"/>
   <object-type name="QInputEvent" copyable="false">
     <modify-function signature="modifiers()const" access="non-final"/>
   </object-type>
-  <object-type name="QKeyEvent" copyable= "false"/>
-  <object-type name="QMouseEvent" copyable= "false"/>
-  <object-type name="QPaintEvent" copyable= "false"/>
+  <object-type name="QKeyEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::KeyPress || %1-&gt;type() == QEvent::KeyRelease"/>
+  <object-type name="QMouseEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::MouseButtonDblClick || %1-&gt;type() == QEvent::MouseButtonPress || %1-&gt;type() == QEvent::MouseButtonRelease || %1-&gt;type() == QEvent::MouseMove"/>
+  <object-type name="QPaintEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Paint"/>
+  <object-type name="QAccessibleEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::AccessibilityDescription || %1-&gt;type() == QEvent::AccessibilityHelp"/>
   <object-type name="QAbstractButton"/>
   <object-type name="QStyle">
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
