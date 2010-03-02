@@ -525,6 +525,8 @@
   </value-type>
   <value-type name="QKeySequence">
     <modify-function signature="operator=(QKeySequence)" remove="all"/>
+    <!-- TODO: QVariant operator temporarily removed due to compilation problems. -->
+    <modify-function signature="operator QVariant()const" remove="all"/>
     <modify-function signature="operator int()const" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
   </value-type>

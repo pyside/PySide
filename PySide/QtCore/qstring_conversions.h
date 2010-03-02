@@ -1,6 +1,7 @@
 namespace Shiboken {
 inline bool Converter< QString >::isConvertible(PyObject* pyobj)
 {
+    SbkBaseWrapperType* shiboType = reinterpret_cast<SbkBaseWrapperType*>(SbkType<QString>());
     return PyString_Check(pyobj)
             || PyUnicode_Check(pyobj)
             || SbkQByteArray_Check(pyobj)
@@ -10,11 +11,13 @@ inline bool Converter< QString >::isConvertible(PyObject* pyobj)
                && PyType_HasFeature(pyobj->ob_type, Py_TPFLAGS_HAVE_GETCHARBUFFER)
                && pyobj->ob_type->tp_as_buffer->bf_getcharbuffer)
 #endif
-            || SbkQChar_Check(pyobj);
+            || SbkQChar_Check(pyobj)
+            || (shiboType->ext_isconvertible && shiboType->ext_isconvertible(pyobj));
 }
 
 inline QString Converter< QString >::toCpp(PyObject* pyobj)
 {
+    SbkBaseWrapperType* shiboType = reinterpret_cast<SbkBaseWrapperType*>(SbkType<QString>());
     if (SbkQChar_Check(pyobj)) {
         return QString(Converter< QChar >::toCpp(pyobj));
     } else if (SbkQByteArray_Check(pyobj)) {
@@ -50,6 +53,11 @@ inline QString Converter< QString >::toCpp(PyObject* pyobj)
         return QString(data);
     }
 #endif
+    else if (shiboType->ext_isconvertible && shiboType->ext_tocpp && shiboType->ext_isconvertible(pyobj)) {
+        QString* cptr = reinterpret_cast<QString*>(shiboType->ext_tocpp(pyobj));
+        std::auto_ptr<QString> cptr_auto_ptr(cptr);
+        return *cptr;
+    }
     return *Converter<QString*>::toCpp(pyobj);
 }
 }
