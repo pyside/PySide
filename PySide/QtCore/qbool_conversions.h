@@ -1,8 +1,8 @@
 namespace Shiboken {
 template <>
-struct Converter<QBool> : public ConverterBase<QBool>
+struct Converter<QBool> : public ValueTypeConverter<QBool>
 {
-    using ConverterBase<QBool>::toPython;
+    using ValueTypeConverter<QBool>::toPython;
 
     static PyObject* toPython(const QBool& cppobj)
     {
