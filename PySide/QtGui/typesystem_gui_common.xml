@@ -282,6 +282,7 @@
   <enum-type name="QStyleOptionFrame::StyleOptionVersion"/>
   <enum-type name="QStyleOptionFrameV2::FrameFeature" flags="QStyleOptionFrameV2::FrameFeatures"/>
   <enum-type name="QStyleOptionFrameV2::StyleOptionVersion"/>
+  <enum-type name="QStyleOptionFrameV3::StyleOptionVersion"/>
   <enum-type name="QStyleOptionGraphicsItem::StyleOptionType"/>
   <enum-type name="QStyleOptionGraphicsItem::StyleOptionVersion"/>
   <enum-type name="QStyleOptionGroupBox::StyleOptionType"/>
@@ -314,7 +315,9 @@
   <enum-type name="QStyleOptionTab::TabPosition"/>
   <enum-type name="QStyleOptionTabBarBase::StyleOptionType"/>
   <enum-type name="QStyleOptionTabBarBase::StyleOptionVersion"/>
+  <enum-type name="QStyleOptionTabBarBaseV2::StyleOptionVersion"/>
   <enum-type name="QStyleOptionTabV2::StyleOptionVersion"/>
+  <enum-type name="QStyleOptionTabV3::StyleOptionVersion"/>
   <enum-type name="QStyleOptionTabWidgetFrame::StyleOptionType"/>
   <enum-type name="QStyleOptionTabWidgetFrame::StyleOptionVersion"/>
   <enum-type name="QStyleOptionTitleBar::StyleOptionType"/>
