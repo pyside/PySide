@@ -78,7 +78,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         #ifndef AVOID_PROTECTED_HACK
             source->connectNotify(signal);
         #else
-            reinterpret_cast<QObjectWrapper*>(source)->connectNotify_protected(source, signal);
+            reinterpret_cast<QObjectWrapper*>(source)->connectNotify_protected(signal);
         #endif
         if (usingGlobalReceiver)
             signalManager.globalReceiverConnectNotify(source, slotIndex);

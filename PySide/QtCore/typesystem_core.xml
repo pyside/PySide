@@ -74,6 +74,9 @@
   <rejection class="QRunnable"/>
   <rejection class="QSharedPointer"/>
   <rejection class="QWeakPointer"/>
+  <rejection class="QChildEvent" field-name="c"/>
+  <rejection class="QTimerEvent" field-name="id"/>
+  <rejection class="QEvent" field-name="t"/>
   <rejection class="*" function-name="tr" />
   <rejection class="*" function-name="trUtf8" />
   <rejection class="*" function-name="qt_metacast" />

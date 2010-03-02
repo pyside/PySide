@@ -11,6 +11,12 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
+option(AVOID_PROTECTED_HACK "Avoid protected hack on generated bindings." FALSE)
+if (AVOID_PROTECTED_HACK OR WIN32)
+    add_definitions(-DAVOID_PROTECTED_HACK)
+    message(STATUS "Avoiding protected hack!")
+endif()
+
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterp REQUIRED)
 find_package(Shiboken REQUIRED)
