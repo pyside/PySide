@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtTest">
+  <load-typesystem name="typesystem_core.xml" generate="no"/>
+  <load-typesystem name="typesystem_gui.xml.in" generate="no"/> <!-- FIXME -->
+
+  <rejection class="QTest" function-name="qCompare&lt;char&gt;"/>
+  <rejection class="QTest" function-name="qCompare&lt;char*&gt;"/>
+  <rejection class="QTest" function-name="qCompare&lt;double&gt;"/>
+  <rejection class="QTest" function-name="qCompare&lt;float&gt;"/>
+  <rejection class="QTest" function-name="qCompare"/>
+  <rejection class="QTest" function-name="qVerify"/>
+  <rejection class="QTest" function-name="qSleep"/>
+  <rejection class="QTest" function-name="toHexRepresentation"/>
+  <rejection class="QTest" function-name="qWait"/>
+  <rejection class="QTest" function-name="qFail"/>
+  <rejection class="QTest" function-name="qExec"/>
+  <rejection class="QTest" function-name="qData"/>
+  <rejection class="QTest" function-name="qWarn"/>
+  <rejection class="QTest" function-name="toString"/>
+  <rejection class="QTest" function-name="compare_helper"/>
+
+  <namespace-type name="QTest">
+    <extra-includes>
+        <include file-name="QtTest" location="global"/>
+    </extra-includes>
+    <!--<modify-function signature="qCompare<char>(char">-->
+  </namespace-type>
+
+  <rejection class="QTouchEventSequence"/>
+
+  <!--<enum-type name="QTest::AttributeIndex"/>
+  <enum-type name="QTest::KeyAction"/>
+  <enum-type name="QTest::LogElementType"/>
+  <enum-type name="QTest::MouseAction"/>
+  <enum-type name="QTest::SkipMode"/>
+  <enum-type name="QTest::TestFailMode"/>-->
+
+  <rejection class="QSignalSpy"/>
+  <rejection class="QTestEventList"/>
+</typesystem>

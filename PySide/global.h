@@ -37,6 +37,10 @@
 #  include <QtWebKit/QtWebKit>
 #endif
 
+#ifndef QT_NO_TEST
+#  include <QtTest/QtTest>
+#endif
+
 // Phonon
 #include<phonon/abstractaudiooutput.h>
 #include<phonon/abstractmediastream.h>
