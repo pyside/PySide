@@ -19,11 +19,11 @@ else ()
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebelementcollection_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebinspector_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qgraphicswebview_wrapper.cpp
     )
 endif (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
 
 set(QtWebKit_SRC
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qgraphicswebview_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qtwebkit_module_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebdatabase_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebframe_wrapper.cpp
