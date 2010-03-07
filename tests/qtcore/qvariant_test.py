@@ -5,131 +5,132 @@
 import unittest
 import sys
 
-from PySide.QtCore import QSize, QVariant, QByteArray, QStringList
+from PySide.QtCore import QSize, QVariant, QByteArray, QStringList, QString
 
-class Dummy(object):
-    pass
-
-class MySize(QSize):
-    pass
 
 class QVariantToNumber(unittest.TestCase):
+    '''QVariant of number types'''
+
     def testToNumberInt(self):
+        '''QVariant(int).toInt()'''
         obj = QVariant('37')
         self.assertEqual((37, True), obj.toInt())
 
     def testToNumberLongLong(self):
+        '''QVariant(int).toLongLong()'''
         obj = QVariant('37')
         self.assertEqual((37, True), obj.toLongLong())
 
     def testToNumberUInt(self):
+        '''QVariant(int).toUInt()'''
         obj = QVariant('37')
         self.assertEqual((37, True), obj.toUInt())
 
     def testToNumberUIntNegative(self):
+        '''QVariant(negative int).toUInt()'''
         obj = QVariant('-37')
         self.assert_(not obj.toUInt()[1])
 
     def testToNumberULongLong(self):
+        '''QVariant(int).toULongLong()'''
         obj = QVariant('37')
         self.assertEqual((37, True), obj.toULongLong())
 
     def testToNumberULongLongNegative(self):
+        '''QVariant(negative int).toULongLong()'''
         obj = QVariant('-37')
         self.assert_(not obj.toULongLong()[1])
 
     def testToNumberFloat(self):
+        '''QVariant(double).toFloat()'''
         obj = QVariant('37.109')
         self.assertEqual((37.109, True), obj.toDouble())
 
+
 class QVariantTypeName(unittest.TestCase):
+    '''QVariant.typeName()'''
+
     def testTypeNameQString(self):
-        #QVariant.typeName()
+        '''QVariant(QString).typeName()'''
+        obj = QVariant(QString('aaaa'))
+        self.assertEqual('QString', obj.typeName())
+
+    def testTypeNameString(self):
+        '''QVariant(PyString).typeName()'''
         obj = QVariant('aaaa')
         self.assertEqual('QString', obj.typeName())
 
     def testTypeNameInt(self):
+        '''QVariant(int).typeName()'''
         obj = QVariant(34)
         self.assertEqual('int', obj.typeName())
 
     def testTypeNameDouble(self):
+        '''QVariant(double).typeName()'''
         obj = QVariant(3.14)
         self.assertEqual('double', obj.typeName())
 
     def testTypeNameBool(self):
+        '''QVariant(bool).typeName()'''
         obj = QVariant(True)
         self.assertEqual('bool', obj.typeName())
 
     def testTypeNameQByteArray(self):
+        '''QVariant(QByteArray).typeName()'''
         obj = QVariant(QByteArray('aaaa'))
         self.assertEqual('QByteArray', obj.typeName())
 
     def testTypeNameNone(self):
+        '''QVariant().typeName()'''
         obj = QVariant()
         self.assertEqual(None, obj.typeName())
 
     def testTypeNameQVariantList(self):
-        obj = QVariant([1,Dummy(),3,4])
+        '''QVariant(QVariantList).typeName()'''
+        obj = QVariant([1, 2, 3, 4])
+        self.assertEqual('QVariantList', obj.typeName())
+
+        obj = QVariant([1.0, 2.2, 3.3, 4.2])
+        self.assertEqual('QVariantList', obj.typeName())
+
+        obj = QVariant(['aaa', 'bbb', 'ccc', 'dddd'])
+        self.assertEqual('QVariantList', obj.typeName())
+
+        obj = QVariant([QString('aaa'), QString('bbb'),
+                        QString('ccc'), QString('dddd')])
         self.assertEqual('QVariantList', obj.typeName())
 
     def testTypeNameQStringList(self):
+        '''QVariant(QStringList).typeName()'''
         obj = QVariant(QStringList())
         self.assertEqual('QStringList', obj.typeName())
+        obj = QVariant(QStringList(['aaa', 'bbb', 'ccc']))
+        self.assertEqual('QStringList', obj.typeName())
 
-    def testTypeNamePythonClasses(self):
-        ## QVariant of python classes
-        d = Dummy()
-        obj = QVariant(d)
-        self.assertEqual('PyQt_PyObject', obj.typeName())
-
-    # This works only on PyQt4 4.5.x, not on PyQt4 4.4.x or PySide
-    def testSubClassConvertion(self):
-        mysize = MySize(0, 0)
-        variant = QVariant(mysize)
-
-        assert(variant.type() != QVariant.Size)
-        assert(variant.toPyObject() is mysize)
 
 class QVariantConstructor(unittest.TestCase):
+    '''More qvariant constructions'''
+
     def testCopyConstructor(self):
+        '''QVariant copy constructor'''
         obj = QVariant(1)
         cpy = QVariant(obj)
 
         self.assertEqual(obj.type(), cpy.type())
 
     def testQStringConstructor(self):
+        '''QVariant(PyString).type == QVariant.string'''
         obj = QVariant("PySide")
         self.assertEqual(obj.type(), QVariant.String)
 
-class QVariantToPyObject(unittest.TestCase):
-    def testQVariantPyList(self):
-        obj = QVariant([1, 'two', 3])
-        self.assertEqual(obj.toPyObject(), [1, 'two', 3])
-
-    def testPyObject(self):
-        d = Dummy()
-        obj = QVariant(d)
-        self.assertEqual(d, obj.toPyObject())
-
-    def atestNoneToPyObject(self):
-        # XXX Do not run by default because segfaults with PyQt4
-        obj = QVariant()
-        self.assertEqual(None, obj.toPyObject())
-
-    def testQStringToPyObject(self):
-        d = 'abc'
-        obj = QVariant('abc')
-        self.assertEqual(d, obj.toPyObject())
-
-class QVartiantTypeTest(unittest.TestCase):
-    def testQSize(self):
-        class MySize(QSize):
-            pass
-
-        mysize = MySize(5, 5)
+    def testQSizeConstructor(self):
+        '''QVariant(QSize).type == QVariant.Size'''
+        mysize = QSize(0, 0)
         variant = QVariant(mysize)
-        self.assert_(variant.type() != QVariant.Size)
-        self.assert_(variant.toPyObject() is mysize)
+
+        self.assertEqual(variant.type(), QVariant.Size)
+        self.assertEqual(variant.toSize(), mysize)
+
 
 if __name__ == '__main__':
     unittest.main()
