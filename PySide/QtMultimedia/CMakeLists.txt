@@ -1,0 +1,64 @@
+project(QtMultimedia)
+
+if(Q_WS_X11)
+    set(MODULE_NAME multimedia_x11)
+    set(SPECIFIC_OS_FILES
+       )
+elseif(Q_WS_MAC)
+    set(MODULE_NAME multimedia_mac)
+    set(SPECIFIC_OS_FILES
+       )
+else()
+    message(FATAL_ERROR "OS not supported")
+endif(Q_WS_X11)
+
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+    set (QtMultimedia_46_SRC )
+else ()
+    set(QtMultimedia_46_SRC
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qaudio_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qabstractvideobuffer_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qabstractvideosurface_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qaudiodeviceinfo_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qaudioformat_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qaudioinput_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qaudiooutput_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qvideoframe_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qvideosurfaceformat_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qtmultimedia_module_wrapper.cpp
+    )
+endif (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+
+set(QtMultimedia_SRC
+${SPECIFIC_OS_FILES}
+${QtMultimedia_46_SRC}
+)
+
+execute_generator(multimedia QtMultimedia_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}")
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/
+                    ${QT_INCLUDE_DIR}
+                    ${QT_QTCORE_INCLUDE_DIR}
+                    ${QT_QTGUI_INCLUDE_DIR}
+                    ${QT_QTMULTIMEDIA_INCLUDE_DIR}
+                    ${SHIBOKEN_INCLUDE_DIR}
+                    ${libpyside_SOURCE_DIR}
+                    ${PYTHON_INCLUDE_PATH}
+                    ${QtCore_BINARY_DIR}/PySide/QtCore/
+                    ${QtGui_BINARY_DIR}/PySide/QtGui/
+                    )
+
+add_library(QtMultimedia MODULE ${QtMultimedia_SRC})
+set_property(TARGET QtMultimedia PROPERTY PREFIX "")
+target_link_libraries(QtMultimedia
+                      pyside
+                      ${PYTHON_LIBRARIES}
+                      ${SHIBOKEN_LIBRARY}
+                      ${QT_QTMULTIMEDIA_LIBRARY}
+                      )
+add_dependencies(QtMultimedia QtGui)
+
+# install
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMultimedia.so
+        DESTINATION ${SITE_PACKAGE}/PySide)

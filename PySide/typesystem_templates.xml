@@ -133,5 +133,11 @@
         *%2 = %CONVERTTOCPP[bool](_py_ok_);
     </template>
 
+    <template name="fix_arg,int*,int*">
+        %RETURN_TYPE _ret;
+        int a, b;
+        _ret = %CPPSELF.%FUNCTION_NAME(%1, &amp;a, &amp;b);
+        %PYARG_0 = Shiboken::makeTuple(_ret, a, b);
+    </template>
 </typesystem>
 

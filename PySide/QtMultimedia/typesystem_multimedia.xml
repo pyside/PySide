@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtMultimedia">
+  <load-typesystem name="typesystem_gui.xml.in" generate="no" />
+  
+  <rejection class="" function-name="qobject_cast&lt;QAudioEngineFactoryInterface*&gt;"/>
+  <rejection class="" function-name="qobject_interface_iid&lt;QAudioEngineFactoryInterface*&gt;"/>
+
+  <namespace-type name="QAudio"/>
+  <enum-type name="QAudio::Error"/>
+  <enum-type name="QAudio::Mode"/>
+  <enum-type name="QAudio::State"/>
+  <enum-type name="QAbstractVideoBuffer::HandleType"/>
+  <enum-type name="QAbstractVideoBuffer::MapMode"/>
+  <enum-type name="QAbstractVideoSurface::Error"/>
+  <enum-type name="QAudioFormat::Endian"/>
+  <enum-type name="QAudioFormat::SampleType"/>
+  <enum-type name="QVideoFrame::FieldType"/>
+  <enum-type name="QVideoFrame::PixelFormat"/>
+  <enum-type name="QVideoSurfaceFormat::Direction"/>
+  <enum-type name="QVideoSurfaceFormat::YCbCrColorSpace"/>
+
+  <object-type name="QAbstractVideoBuffer">
+      <modify-function signature="map(QAbstractVideoBuffer::MapMode, int*, int*)">
+          <modify-argument index="0">
+              <replace-type modified-type="PyObject *"/>
+          </modify-argument>
+          <modify-argument index="2">
+              <remove-argument/>
+          </modify-argument>
+          <modify-argument index="3">
+              <remove-argument/>
+          </modify-argument>
+          <inject-code class="target" position="beginning">
+              <insert-template name="fix_arg,int*,int*"/>
+          </inject-code>
+      </modify-function>
+  </object-type>
+
+  <object-type name="QVideoSurfaceFormat"/>
+  <object-type name="QAbstractVideoSurface">
+      <modify-function signature="nearestFormat(const QVideoSurfaceFormat&amp;)const" remove="all"/>
+      <modify-function signature="surfaceFormat()const" remove="all"/>
+  </object-type>
+  <object-type name="QAudioDeviceInfo">
+      <modify-function signature="defaultInputDevice()" remove="all"/>
+      <modify-function signature="defaultOutputDevice()" remove="all"/>
+      <modify-function signature="nearestFormat(const QAudioFormat&amp;)const" remove="all"/>
+      <modify-function signature="preferredFormat()const" remove="all"/>
+      <modify-function signature="availableDevices(QAudio::Mode)" remove="all"/>
+  </object-type>
+  <object-type name="QAudioFormat"/>
+  <!-- DONE TODO TESTCASE check ctor setParent() -->
+  <!-- TODO TESTCASE start() check reference-count -->
+  <object-type name="QAudioInput">
+      <modify-function signature="format()const" remove="all"/>
+  </object-type>
+  <!-- DONE TODO TESTCASE check ctor setParent() -->
+  <!-- TODO TESTCASE start() check reference-count -->
+  <object-type name="QAudioOutput">
+      <modify-function signature="format()const" remove="all"/>
+  </object-type>
+  <!-- TODO TESTCASE don't increment the reference count of the video buffer -->
+  <object-type name="QVideoFrame"/>
+
+</typesystem>
