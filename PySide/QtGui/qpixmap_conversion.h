@@ -1,6 +1,8 @@
 namespace Shiboken {
 inline bool Converter< QPixmap >::isConvertible(PyObject* pyobj)
 {
+    if (ValueTypeConverter<QPixmap>::isConvertible(pyobj))
+        return true;
     SbkBaseWrapperType* shiboType = reinterpret_cast<SbkBaseWrapperType*>(SbkType<QPixmap>());
     bool isVariant = SbkQVariant_Check(pyobj);
     if (isVariant) {
@@ -33,5 +35,10 @@ inline QPixmap Converter< QPixmap >::toCpp(PyObject* pyobj)
     }
 
     return *Converter<QPixmap*>::toCpp(pyobj);
+}
+
+inline PyObject* Converter<QPixmap>::toPython(const QPixmap& cppObj)
+{
+    return ValueTypeConverter<QPixmap>::toPython(cppObj);
 }
 }

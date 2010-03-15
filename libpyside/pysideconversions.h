@@ -35,11 +35,14 @@
 #ifndef PYSIDECONVERSIONS_H
 #define PYSIDECONVERSIONS_H
 
-template <typename StdMap>
+template <typename QtDict>
 struct QtDictConverter
 {
-    static inline bool checkType(PyObject* pyObj)
+    static inline bool isConvertible(PyObject* pyObj)
     {
+        if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<QtDict>()))
+            return true;
+
         if (!PyDict_Check(pyObj))
             return false;
 
@@ -48,44 +51,37 @@ struct QtDictConverter
         Py_ssize_t pos = 0;
 
         while (PyDict_Next(pyObj, &pos, &key, &value)) {
-            if (!Shiboken::Converter<typename StdMap::key_type>::checkType(key)
-                && !Shiboken::Converter<typename StdMap::mapped_type>::checkType(value)
-                && !Shiboken::Converter<typename StdMap::key_type>::isConvertible(key)
-                && !Shiboken::Converter<typename StdMap::mapped_type>::isConvertible(value)) {
+            if (!Shiboken::Converter<typename QtDict::key_type>::isConvertible(key)
+                && !Shiboken::Converter<typename QtDict::mapped_type>::isConvertible(value)) {
                 return false;
             }
         }
         return true;
     }
 
-    static inline bool isConvertible(PyObject* pyObj)
-    {
-        return checkType(pyObj);
-    }
-
-    static inline PyObject* toPython(const StdMap& cppobj)
+    static inline PyObject* toPython(const QtDict& cppobj)
     {
         PyObject* result = PyDict_New();
-        typename StdMap::const_iterator it = cppobj.begin();
+        typename QtDict::const_iterator it = cppobj.begin();
 
         for (; it != cppobj.end(); ++it) {
             PyDict_SetItem(result,
-                           Shiboken::Converter<typename StdMap::key_type>::toPython(it.key()),
-                           Shiboken::Converter<typename StdMap::mapped_type>::toPython(it.value()));
+                           Shiboken::Converter<typename QtDict::key_type>::toPython(it.key()),
+                           Shiboken::Converter<typename QtDict::mapped_type>::toPython(it.value()));
         }
 
         return result;
     }
-    static inline StdMap toCpp(PyObject* pyobj)
+    static inline QtDict toCpp(PyObject* pyobj)
     {
-        StdMap result;
+        QtDict result;
 
         PyObject* key;
         PyObject* value;
         Py_ssize_t pos = 0;
 
         while (PyDict_Next(pyobj, &pos, &key, &value))
-            result[Shiboken::Converter<typename StdMap::key_type>::toCpp(key)] = Shiboken::Converter<typename StdMap::mapped_type>::toCpp(value);
+            result[Shiboken::Converter<typename QtDict::key_type>::toCpp(key)] = Shiboken::Converter<typename QtDict::mapped_type>::toCpp(value);
         return result;
     }
 };

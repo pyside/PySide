@@ -435,6 +435,7 @@
   <container-type name="QHash" type="hash">
     <conversion-rule file="qhash_conversions.h"/>
     <include file-name="QHash" location="global"/>
+    <include file-name="pysideconversions.h" location="global"/>
   </container-type>
   <container-type name="QLinkedList" type="linked-list"/>
   <container-type name="QMap" type="map">

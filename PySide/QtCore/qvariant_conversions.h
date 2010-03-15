@@ -30,6 +30,7 @@ struct QMetaTypeId< PyObjectHolder >
 QT_END_NAMESPACE
 
 namespace Shiboken {
+
 // all types are convertible to QVariant
 inline bool Converter<QVariant>::isConvertible(PyObject* pyobj)
 {
@@ -84,4 +85,10 @@ inline QVariant Converter<QVariant>::toCpp(PyObject* pyobj)
         return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyobj)->cptr);
     }
 }
+
+inline PyObject* Converter<QVariant>::toPython(const QVariant& cppObj)
+{
+    return ValueTypeConverter<QVariant>::toPython(cppObj);
+}
+
 }
