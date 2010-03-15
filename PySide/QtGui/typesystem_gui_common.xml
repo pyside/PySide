@@ -666,7 +666,20 @@
     <modify-function signature="QPixmap(const char **)" remove="all"/>
     <modify-function signature="serialNumber()const" remove="all"/>
     <!--### Obsolete in 4.3-->
-    <modify-function signature="loadFromData(const uchar *,uint,const char *,QFlags&lt;Qt::ImageConversionFlag&gt;)" remove="all"/>
+    <modify-function signature="loadFromData(const uchar*,uint,const char*,QFlags&lt;Qt::ImageConversionFlag&gt;)">
+      <modify-argument index="1">
+        <replace-type modified-type="const char*"/>
+        <conversion-rule class="native">
+          const uchar* %out = reinterpret_cast&lt;const uchar*>(PyString_AS_STRING(%PYARG_1));
+        </conversion-rule>
+      </modify-argument>
+      <modify-argument index="2">
+        <remove-argument/>
+        <conversion-rule class="native">
+          uint %out = static_cast&lt;uint>(PyString_GET_SIZE(%PYARG_1));
+        </conversion-rule>
+      </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QTextCursor" >
     <extra-includes>

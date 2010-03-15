@@ -1,5 +1,6 @@
 import unittest
 
+import os
 from helper import UsesQApplication
 from PySide.QtGui import *
 from PySide.QtCore import *
@@ -17,11 +18,24 @@ class QPixmapTest(UsesQApplication):
     def testQStringConstructor(self):
         pixmap = QPixmap(QString("Testing!"))
 
-    def testQVariantConstructor(self):
+    def testQVariantConstructor2(self):
         v = QVariant(QPixmap())
         pixmap2 = QPixmap(v)
         v = QVariant(QImage())
         pixmap2 = QPixmap(v)
+
+    def testQPixmapLoadFromDataWithQFile(self):
+        f = QFile(os.path.join(os.path.dirname(__file__), 'sample.png'))
+        self.assert_(f.open(QIODevice.ReadOnly))
+        data = f.read(f.size())
+        f.close()
+        pixmap = QPixmap()
+        self.assert_(pixmap.loadFromData(data))
+
+    def testQPixmapLoadFromDataWithPython(self):
+        data = open(os.path.join(os.path.dirname(__file__),'sample.png'),'rb').read()
+        pixmap = QPixmap()
+        self.assert_(pixmap.loadFromData(data))
 
 if __name__ == '__main__':
     unittest.main()
