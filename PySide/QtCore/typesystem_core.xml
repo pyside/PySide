@@ -1797,6 +1797,7 @@
     </modify-function>
   </value-type>
   <value-type name="QStringList">
+    <conversion-rule file="qstringlist_conversions.h"/>
     <modify-function signature="fromVector(QVector&lt;QString>)" remove="all" />
     <add-function signature="__len__">
         <inject-code class="target" position="beginning">
