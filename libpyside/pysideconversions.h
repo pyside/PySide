@@ -35,6 +35,9 @@
 #ifndef PYSIDECONVERSIONS_H
 #define PYSIDECONVERSIONS_H
 
+#include <Python.h>
+#include <conversions.h>
+
 template <typename QtDict>
 struct QtDictConverter
 {
@@ -43,7 +46,7 @@ struct QtDictConverter
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<QtDict>()))
             return true;
 
-        if (!PyDict_Check(pyObj))
+        if ((Shiboken::SbkType<QtDict>() && Shiboken::isShibokenType(pyObj)) || !PyDict_Check(pyObj))
             return false;
 
         PyObject* key;
@@ -74,6 +77,9 @@ struct QtDictConverter
     }
     static inline QtDict toCpp(PyObject* pyobj)
     {
+        if (PyObject_TypeCheck(pyobj, Shiboken::SbkType<QtDict>()))
+            return *reinterpret_cast<QtDict*>(SbkBaseWrapper_cptr(pyobj));
+
         QtDict result;
 
         PyObject* key;
@@ -82,6 +88,46 @@ struct QtDictConverter
 
         while (PyDict_Next(pyobj, &pos, &key, &value))
             result[Shiboken::Converter<typename QtDict::key_type>::toCpp(key)] = Shiboken::Converter<typename QtDict::mapped_type>::toCpp(value);
+        return result;
+    }
+};
+
+template <typename T>
+struct QSequenceConverter
+{
+    static inline bool isConvertible(PyObject* pyObj)
+    {
+        if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<T>()))
+            return true;
+        if ((Shiboken::SbkType<T>() && Shiboken::isShibokenType(pyObj)) || !PySequence_Check(pyObj))
+            return false;
+        for (int i = 0, max = PySequence_Length(pyObj); i < max; ++i) {
+            Shiboken::AutoDecRef item(PySequence_GetItem(pyObj, i));
+            if (!Shiboken::Converter<typename T::value_type>::isConvertible(item))
+                return false;
+        }
+        return true;
+    }
+    static PyObject* toPython(const T& cppobj)
+    {
+        PyObject* result = PyList_New((int) cppobj.size());
+        typename T::const_iterator it = cppobj.begin();
+        for (int idx = 0; it != cppobj.end(); ++it, ++idx) {
+            typename T::value_type vh(*it);
+            PyList_SET_ITEM(result, idx, Shiboken::Converter<typename T::value_type>::toPython(vh));
+        }
+        return result;
+    }
+    static T toCpp(PyObject* pyobj)
+    {
+        if (PyObject_TypeCheck(pyobj, Shiboken::SbkType<T>()))
+            return *reinterpret_cast<T*>(SbkBaseWrapper_cptr(pyobj));
+
+        T result;
+        for (int i = 0; i < PySequence_Size(pyobj); i++) {
+            PyObject* pyItem = PySequence_GetItem(pyobj, i);
+            result << Shiboken::Converter<typename T::value_type>::toCpp(pyItem);
+        }
         return result;
     }
 };
