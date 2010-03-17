@@ -161,5 +161,11 @@ class TestShiftOperator(UsesManyStrings):
         a << b << c
         self.assertEquals(9, a.count())
 
+    def testShiftOperator(self):
+        #QStringList lshift
+        a = QStringList()
+        b = ["1", 2, "3"]
+        self.assertRaises(TypeError, a.__lshift__, b)
+
 if __name__ == '__main__':
     unittest.main()
