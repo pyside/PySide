@@ -1655,6 +1655,7 @@
     <conversion-rule file="qvariant_conversions.h" />
     <modify-function signature="create(int,const void*)" remove="all" />
 
+    <modify-function signature="QVariant(float)" remove="all"/>
     <modify-function signature="QVariant(int, const void*)" remove="all"/>
     <modify-function signature="QVariant(int,const void*,uint)" remove="all"/>
     <!-- handled by inject code -->
