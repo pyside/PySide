@@ -7,6 +7,8 @@ import unittest
 from PySide.QtCore import *
 from PySide.QtGui import *
 
+from helper import UsesQApplication
+
 class Dummy(object):
     pass
 
@@ -34,6 +36,18 @@ class QVariantQColorImplicitlyConvertion(unittest.TestCase):
         v = QVariant(c1)
         c2 = QColor(v)
         self.assertEqual(c1, c2)
+
+class QVariantQPixmap(UsesQApplication):
+    '''QVariant(QPixmap)'''
+
+    def testBasic(self):
+        '''QVariant(QPixmap)'''
+        pixmap = QPixmap(10,20)
+        pixmap.fill(Qt.blue)
+        variant = QVariant(pixmap)
+
+        self.assertEqual(variant.typeName(), "QPixmap")
+
 
 if __name__ == '__main__':
     unittest.main()
