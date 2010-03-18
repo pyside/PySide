@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtXmlPatterns">
+    <load-typesystem name="typesystem_core.xml" generate="no"/>
+
+    <enum-type name="QAbstractXmlNodeModel::SimpleAxis" />
+    <enum-type name="QAbstractXmlNodeModel::NodeCopySetting" />
+    <enum-type name="QXmlNodeModelIndex::NodeKind" />
+    <enum-type name="QXmlNodeModelIndex::DocumentOrder" />
+    <enum-type name="QXmlNodeModelIndex::Axis" />
+    <enum-type name="QXmlQuery::QueryLanguage" />
+
+    <value-type name="QXmlSchema"/>
+    <object-type name="QXmlSchemaValidator"/>
+    <object-type name="QAbstractMessageHandler" />
+    <object-type name="QAbstractUriResolver" />
+    <object-type name="QAbstractXmlNodeModel" />
+    <object-type name="QAbstractXmlReceiver" />
+    <value-type name="QSourceLocation" />
+    <object-type name="QXmlFormatter" />
+    <value-type name="QXmlItem" />
+    <value-type name="QXmlName">
+        <modify-function signature="QXmlName(short, short, short)" remove="all" />
+        <modify-function signature="setNamespaceURI(short)" remove="all" />
+        <modify-function signature="localName()const" remove="all" />
+        <modify-function signature="prefix()const" remove="all" />
+        <modify-function signature="hasPrefix()const" remove="all" />
+        <modify-function signature="hasNamespace()const" remove="all" />
+        <modify-function signature="namespaceURI()const" remove="all" />
+        <modify-function signature="isLexicallyEqual(const QXmlName&amp;)const" remove="all" />
+        <modify-function signature="setPrefix(short)" remove="all" />
+        <modify-function signature="setLocalName(short)" remove="all" />
+        <modify-function signature="code()const" remove="all" />
+    </value-type>
+    <value-type name="QXmlNamePool" />
+    <value-type name="QXmlNodeModelIndex">
+        <modify-function signature="internalPointer()const" remove="all" />
+        <!-- Qt internal methods -->
+        <modify-function signature="name()const" remove="all" />
+        <modify-function signature="root()const" remove="all" />
+        <modify-function signature="documentUri()const" remove="all" />
+        <modify-function signature="baseUri()const" remove="all" />
+        <modify-function signature="kind()const" remove="all" />
+        <modify-function signature="isDeepEqual(const QXmlNodeModelIndex&amp;)const" remove="all" />
+        <modify-function signature="compareOrder(const QXmlNodeModelIndex &amp;)const" remove="all" />
+        <modify-function signature="sendNamespaces(QAbstractXmlReceiver *)const" remove="all" />
+        <modify-function signature="namespaceBindings()const" remove="all" />
+        <modify-function signature="namespaceForPrefix(short)const" remove="all" />
+        <modify-function signature="stringValue()const" remove="all" />
+        <modify-function signature="type()const" remove="all" />
+        <modify-function signature="is(const QXmlNodeModelIndex &amp;)const" remove="all" />
+        <modify-function signature="reset()" remove="all" />
+    </value-type>
+
+    <value-type name="QXmlQuery" />
+    <object-type name="QXmlResultItems" />
+    <object-type name="QXmlSerializer" />
+</typesystem>
