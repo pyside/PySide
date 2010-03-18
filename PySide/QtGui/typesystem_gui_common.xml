@@ -3316,8 +3316,6 @@
     </modify-function>
     <modify-function signature="exec(QFlags&lt;Qt::DropAction&gt;)" rename="exec_" allow-thread="yes"/>
     <modify-function signature="exec(QFlags&lt;Qt::DropAction&gt;, Qt::DropAction)" rename="exec_" allow-thread="yes"/>
-    <!-- start is not part of the public API (not even documented) -->
-    <modify-function signature="start(QFlags&lt;Qt::DropAction&gt;)" remove="all"/>
   </object-type>
   <object-type name="QDateTimeEdit">
     <modify-function signature="setCalendarWidget(QCalendarWidget *)">
