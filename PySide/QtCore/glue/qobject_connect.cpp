@@ -52,7 +52,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     QObject* receiver = 0;
     PyObject* self = 0;
     bool usingGlobalReceiver = getReceiver(callback, &receiver, &self);
-    if (receiver == 0 and self == 0)
+    if (receiver == 0 && self == 0)
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
@@ -60,7 +60,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     const char* slot = callbackSig.constData();
     int slotIndex = metaObject->indexOfSlot(slot);
     if (slotIndex == -1) {
-        if (!usingGlobalReceiver and self and !((SbkBaseWrapper*)self)->containsCppWrapper) {
+        if (!usingGlobalReceiver && self && !((SbkBaseWrapper*)self)->containsCppWrapper) {
             qWarning() << "You can't add dynamic slots on an object originated from C++.";
             return false;
         }
@@ -99,7 +99,7 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
     QObject* receiver = 0;
     PyObject* self = 0;
     bool usingGlobalReceiver = getReceiver(callback, &receiver, &self);
-    if (receiver == 0 and self == 0)
+    if (receiver == 0 && self == 0)
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
