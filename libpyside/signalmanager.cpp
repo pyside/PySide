@@ -223,7 +223,7 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
         return false;
     }
 
-    void* signalArgs[argsGiven+1];
+    void** signalArgs = new void*[argsGiven+1];
     signalArgs[0] = 0;
 
     for (int i = 0; i < argsGiven; ++i)
@@ -232,6 +232,7 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     // FIXME: This will cause troubles with non-direct connections.
     for (int i = 0; i < argsGiven; ++i)
         Shiboken::TypeResolver::get(qPrintable(argTypes[i]))->deleteObject(signalArgs[i+1]);
+    delete[] signalArgs;
     return true;
 }
 
