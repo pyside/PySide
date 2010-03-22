@@ -1,0 +1,5 @@
+#  PYSIDE_INCLUDE_DIR   - Directories to include to use PySide
+#  PYSIDE_LIBRARIES     - Files to link against to use PySide
+
+SET(PYSIDE_INCLUDE_DIR "@CMAKE_INSTALL_PREFIX@/include/PySide")
+SET(PYSIDE_LIBRARY "@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@pyside@CMAKE_SHARED_LIBRARY_SUFFIX@")

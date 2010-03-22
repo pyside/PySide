@@ -35,8 +35,15 @@ set(libpyside_HEADERS
 # create pkg-config file
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pyside.pc.in"
                "${CMAKE_CURRENT_BINARY_DIR}/pyside.pc" @ONLY)
+# create cmake-config files
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/PySideConfig.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/PySideConfig.cmake" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/PySideVersion.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/PySideVersion.cmake" @ONLY)
 
 install(FILES ${libpyside_HEADERS}
         DESTINATION include/${BINDING_NAME})
 install(TARGETS pyside LIBRARY DESTINATION ${LIB_INSTALL_DIR})
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pyside.pc" DESTINATION "${LIB_INSTALL_DIR}/pkgconfig")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/PySideConfig.cmake"
+        DESTINATION "${LIB_INSTALL_DIR}/cmake/PySide-${BINDING_API_VERSION}")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/PySideVersion.cmake"
+        DESTINATION "${LIB_INSTALL_DIR}/cmake/PySide-${BINDING_API_VERSION}")
