@@ -1,1 +1,1 @@
-__all__ = ['QtCore']
+__all__ = ['QtCore', 'QtGui', 'QtNetwork', 'QtOpenGL', 'QtSql', 'QtSvg', 'QtTest', 'QtWebKit']
