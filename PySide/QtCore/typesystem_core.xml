@@ -2513,7 +2513,7 @@
     <modify-function signature="operator&gt;&gt;(quint64&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
-    <modify-function signature="operator&gt;&gt;(char&amp;*)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(char*&amp;)" remove="all"/>
 
     <modify-function signature="operator&lt;&lt;(qint8)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(bool)" remove="all"/>
@@ -2529,7 +2529,7 @@
 
     <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
     <modify-function signature="readRawData(char*,int)" remove="all"/>
-    <modify-function signature="readBytes(char&amp;*,uint&amp;)" remove="all"/>
+    <modify-function signature="readBytes(char*&amp;,uint&amp;)" remove="all"/>
     <modify-function signature="writeRawData(const char*,int)" remove="all"/>
     <modify-function signature="writeBytes(const char*,uint)" remove="all"/>
 
