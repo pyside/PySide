@@ -32,6 +32,11 @@ set(libpyside_HEADERS
     signalmanager.h
 )
 
+# create pkg-config file
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pyside.pc.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/pyside.pc" @ONLY)
+
 install(FILES ${libpyside_HEADERS}
         DESTINATION include/${BINDING_NAME})
 install(TARGETS pyside LIBRARY DESTINATION ${LIB_INSTALL_DIR})
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pyside.pc" DESTINATION "${LIB_INSTALL_DIR}/pkgconfig")

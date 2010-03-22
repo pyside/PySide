@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=@LIB_INSTALL_DIR@
+includedir=@CMAKE_INSTALL_PREFIX@/include/PySide
+
+Name: PySide
+Description: Support library for Python bindings of Qt-based libraries.
+Requires: Python
+Version: @BINDING_API_VERSION@
+Libs: -L${libdir} -lpython -lpyside
+Cflags: -I${includedir}
+
