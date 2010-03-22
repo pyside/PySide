@@ -12,6 +12,6 @@ inline QStringList Converter<QStringList>::toCpp(PyObject* pyObj)
 
 inline PyObject* Converter<QStringList>::toPython(const QStringList& cppObj)
 {
-    return StdListConverter<QStringList>::toPython(cppObj);
+    return ValueTypeConverter<QStringList>::toPython(cppObj);
 }
 }
