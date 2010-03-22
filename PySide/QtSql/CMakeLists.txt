@@ -47,4 +47,6 @@ add_dependencies(QtSql QtGui)
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtSql.so
         DESTINATION ${SITE_PACKAGE}/PySide)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/pyside_qtsql_python.h
+        DESTINATION include/PySide/QtSql/)
 

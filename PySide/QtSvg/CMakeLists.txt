@@ -58,3 +58,5 @@ add_dependencies(QtSvg QtGui)
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtSvg.so
         DESTINATION ${SITE_PACKAGE}/PySide)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSvg/pyside_qtsvg_python.h
+        DESTINATION include/PySide/QtSvg/)

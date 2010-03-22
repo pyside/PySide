@@ -47,3 +47,5 @@ add_dependencies(QtTest QtGui)
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtTest.so
         DESTINATION ${SITE_PACKAGE}/PySide)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/pyside_qttest_python.h
+        DESTINATION include/PySide/QtTest/)

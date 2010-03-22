@@ -479,3 +479,5 @@ add_dependencies(QtGui QtCore)
 
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtGui.so DESTINATION "${SITE_PACKAGE}/PySide")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/pyside_qtgui_python.h
+        DESTINATION include/PySide/QtGui/)
