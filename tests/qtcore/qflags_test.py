@@ -4,7 +4,7 @@
 import unittest
 from PySide.QtCore import QIODevice, Qt, QFile
 
-class QFLagTest(unittest.TestCase):
+class QFlagTest(unittest.TestCase):
     '''Test case for usage of flags'''
 
     def testCallFunction(self):
@@ -39,6 +39,10 @@ class QFlagOperatorTest(unittest.TestCase):
         self.assert_(flag & Qt.Widget == 0)
         flag |= Qt.WindowMinimizeButtonHint
         self.assert_(flag & Qt.WindowMinimizeButtonHint)
+
+    def testInvertOr(self):
+        '''QFlags ~ (invert) operator over the result of an | (or) operator'''
+        self.assert_(isinstance(~(Qt.ItemIsSelectable | Qt.ItemIsEditable), Qt.ItemFlags))
 
     def testEqual(self):
         '''QFlags == operator'''
