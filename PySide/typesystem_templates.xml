@@ -125,5 +125,13 @@
         _ret = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_arg);
         %PYARG_0 = Shiboken::makeTuple(_ret, _arg);
     </template>
+
+    <template name="fix_virtual_method_return_value_and_bool*">
+        AutoDecRef _py_ret_(PySequence_GetItem(%PYARG_0, 0));
+        AutoDecRef _py_ok_(PySequence_GetItem(%PYARG_0, 1));
+        %RETURN_TYPE %out = %CONVERTTOCPP[%RETURN_TYPE](_py_ret_);
+        *%2 = %CONVERTTOCPP[bool](_py_ok_);
+    </template>
+
 </typesystem>
 

@@ -259,30 +259,113 @@
 
     <value-type name="QDomElement"/>
 
-    <interface-type name="QXmlContentHandler">
-        <modify-function signature="setDocumentLocator(QXmlLocator*)">
-            <modify-argument index="1">
-                <define-ownership owner="c++"/>
-            </modify-argument>
-        </modify-function>
-    </interface-type>
-    <interface-type name="QXmlDTDHandler"/>
-    <interface-type name="QXmlDeclHandler"/>
-    <interface-type name="QXmlEntityResolver"/>
-    <interface-type name="QXmlErrorHandler"/>
-    <interface-type name="QXmlLexicalHandler"/>
-
-    <object-type name="QXmlDefaultHandler">
+    <object-type name="QXmlContentHandler">
         <modify-function signature="setDocumentLocator(QXmlLocator*)">
             <modify-argument index="1">
                 <define-ownership owner="c++"/>
             </modify-argument>
         </modify-function>
     </object-type>
+    <object-type name="QXmlDTDHandler"/>
+    <object-type name="QXmlDeclHandler"/>
+    <object-type name="QXmlErrorHandler"/>
+    <object-type name="QXmlLexicalHandler"/>
+
+    <template name="QXmlEntityResolver_resolveEntity_return_conversion_native">
+        AutoDecRef _py_ok_(PySequence_GetItem(%PYARG_0, 0));
+        AutoDecRef _py_ret_(PySequence_GetItem(%PYARG_0, 1));
+        %RETURN_TYPE %out = %CONVERTTOCPP[%RETURN_TYPE](_py_ok_);
+        %3 = %CONVERTTOCPP[QXmlInputSource*](_py_ret_);
+    </template>
+
+    <object-type name="QXmlEntityResolver">
+        <modify-function signature="resolveEntity(const QString&amp;, const QString&amp;, QXmlInputSource*&amp;)">
+            <modify-argument index="3">
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PySequence"/>
+                <conversion-rule class="native">
+                    <insert-template name="QXmlEntityResolver_resolveEntity_return_conversion_native"/>
+                </conversion-rule>
+            </modify-argument>
+            <inject-code class="target" position="end">
+                QXmlInputSource* _qxmlinputsource_arg_ = 0;
+                %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, %2, _qxmlinputsource_arg_);
+                %PYARG_0 = Shiboken::makeTuple(%0, _qxmlinputsource_arg_);
+            </inject-code>
+        </modify-function>
+    </object-type>
+    <object-type name="QXmlDefaultHandler">
+        <modify-function signature="setDocumentLocator(QXmlLocator*)">
+            <modify-argument index="1">
+                <define-ownership owner="c++"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="resolveEntity(const QString&amp;, const QString&amp;, QXmlInputSource*&amp;)">
+            <modify-argument index="3">
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PySequence"/>
+                <conversion-rule class="native">
+                    <insert-template name="QXmlEntityResolver_resolveEntity_return_conversion_native"/>
+                </conversion-rule>
+            </modify-argument>
+            <inject-code class="target" position="end">
+                QXmlInputSource* _qxmlinputsource_arg_ = 0;
+                %RETURN_TYPE %0 = %CPPSELF.%TYPE::%FUNCTION_NAME(%1, %2, _qxmlinputsource_arg_);
+                %PYARG_0 = Shiboken::makeTuple(%0, _qxmlinputsource_arg_);
+            </inject-code>
+        </modify-function>
+    </object-type>
     <object-type name="QXmlInputSource"/>
     <object-type name="QXmlLocator"/>
+
+<!-- These are defined already in QtCore
+    <object-type name="QXmlStreamReader">
+    </object-type>
+
+    <object-type name="QXmlStreamWriter">
+    </object-type>
+-->
+
+    <object-type name="QXmlReader">
+        <modify-function signature="parse(const QXmlInputSource*)">
+            <modify-argument index="1" invalidate-after-use="yes"/>
+        </modify-function>
+        <modify-function signature="feature(QString,bool*)const">
+            <modify-argument index="2">
+                <remove-default-expression/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PySequence" />
+                <conversion-rule class="native">
+                    <insert-template name="fix_virtual_method_return_value_and_bool*"/>
+                </conversion-rule>
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                <insert-template name="fix_args,bool*"/>
+            </inject-code>
+        </modify-function>
+        <modify-function signature="property(QString,bool*)const">
+            <modify-argument index="2">
+                <remove-default-expression/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PySequence" />
+                <conversion-rule class="native">
+                    <insert-template name="fix_virtual_method_return_value_and_bool*"/>
+                </conversion-rule>
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                <insert-template name="fix_args,bool*"/>
+            </inject-code>
+        </modify-function>
+    </object-type>
     <object-type name="QXmlSimpleReader">
-        <modify-function signature="property(QString,bool*)const" remove="all"/>
         <modify-function signature="parse(const QXmlInputSource*,bool)">
             <modify-argument index="1" invalidate-after-use="yes"/>
         </modify-function>
@@ -317,55 +400,39 @@
                 <parent index="this" action="add"/>
             </modify-argument>
         </modify-function>
-    </object-type>
 
-<!-- These are defined already in QtCore
-    <object-type name="QXmlStreamReader">
-    </object-type>
-
-    <object-type name="QXmlStreamWriter">
-    </object-type>
--->
-
-    <object-type name="QXmlReader">
-        <modify-function signature="parse(const QXmlInputSource*)">
-            <modify-argument index="1" invalidate-after-use="yes"/>
-        </modify-function>
-
-<!-- FIXME
         <modify-function signature="feature(QString,bool*)const">
             <modify-argument index="2">
                 <remove-default-expression/>
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="boost::python::object" />
+                <replace-type modified-type="PySequence" />
+                <conversion-rule class="native">
+                    <insert-template name="fix_virtual_method_return_value_and_bool*"/>
+                </conversion-rule>
             </modify-argument>
-            <inject-code class="native" position="beginning">
-                <insert-template name="bool*_at_end_fix_beginning"/>
-            </inject-code>
-            <inject-code class="native" position="end">
-                <insert-template name="bool*_fix_end" />
+            <inject-code class="target" position="beginning">
+                <insert-template name="fix_args,bool*"/>
             </inject-code>
         </modify-function>
--->
-<!-- FIXME
-        <modify-function signature="property(QString,bool*)const" remove="all">
+        <modify-function signature="property(QString,bool*)const">
             <modify-argument index="2">
                 <remove-default-expression/>
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="boost::python::object" />
+                <replace-type modified-type="PySequence" />
+                <conversion-rule class="native">
+                    <insert-template name="fix_virtual_method_return_value_and_bool*"/>
+                </conversion-rule>
             </modify-argument>
-            <inject-code class="native" position="beginning">
-                <insert-template name="bool*_at_end_fix_beginning"/>
-            </inject-code>
-            <inject-code class="native" position="end">
-                <insert-template name="bool*_fix_end" />
+            <inject-code class="target" position="beginning">
+                <insert-template name="fix_args,bool*"/>
             </inject-code>
         </modify-function>
--->
     </object-type>
 
+
 </typesystem>
+
