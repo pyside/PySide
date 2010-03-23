@@ -56,9 +56,13 @@ add_custom_target(uninstall "${CMAKE_COMMAND}"
 
 set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${BINDING_API_VERSION})
 add_custom_target(dist
-    COMMAND git archive --prefix=${ARCHIVE_NAME}/ HEAD
-        | bzip2 > ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+    COMMAND mkdir -p "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}" &&
+            git log > "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}/ChangeLog" &&
+            git archive --prefix=${ARCHIVE_NAME}/ HEAD --format=tar -o "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar" &&
+            tar -C "${CMAKE_BINARY_DIR}" --owner=root --group=root -r "${ARCHIVE_NAME}/ChangeLog" -f "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar" &&
+            bzip2 -f9 "${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar" &&
+            echo "Source package created at ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2.\n"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 execute_process(
     COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; \\
