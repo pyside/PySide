@@ -1797,12 +1797,27 @@
   </object-type>
 
   <object-type name="QMenuBar">
+    <extra-includes>
+      <include file-name="glue/qmenubar_glue.h" location="local"/>
+    </extra-includes>
     <modify-function signature="addAction(const QString&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="addAction(QString,const QObject*,const char*)" remove="all"/>
+    <modify-function signature="addAction(QString,const QObject*,const char*)">
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <add-function signature="addAction(const QString&amp;, PyObject*)">
+      <inject-code class="target" position="beginning">
+        %PYARG_0 = addActionWithPyObject(%CPPSELF, %1, %2);
+      </inject-code>
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </add-function>
     <modify-function signature="addMenu(QMenu*)">
       <modify-argument index="return">
         <parent index="1" action="add"/>
