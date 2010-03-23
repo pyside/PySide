@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtWebKit">
   <load-typesystem name="typesystem_core.xml" generate="no"/>
-  <load-typesystem name="typesystem_gui.xml.in" generate="no"/> <!-- FIXME -->
+  <load-typesystem name="typesystem_gui.xml" generate="no"/>
   <load-typesystem name="typesystem_network.xml" generate="no"/>
 
   <namespace-type name="WebCore"/>

@@ -44,7 +44,7 @@ ${SPECIFIC_OS_FILES}
 ${QtWebKit_46_SRC}
 )
 
-execute_generator(webkit QtWebKit_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtNetwork_SOURCE_DIR}")
+execute_generator(webkit QtWebKit_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtNetwork_SOURCE_DIR}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebkit/
