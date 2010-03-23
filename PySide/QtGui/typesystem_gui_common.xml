@@ -2856,7 +2856,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QTreeWidgetItem" >
+  <object-type name="QTreeWidgetItem" hash-function="qHash">
     <modify-function signature="operator&lt;(QTreeWidgetItem)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
