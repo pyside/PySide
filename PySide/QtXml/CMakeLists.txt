@@ -60,4 +60,6 @@ add_dependencies(QtXml QtCore)
 
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtXml.so DESTINATION ${SITE_PACKAGE}/PySide)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml/pyside_qtxml_python.h
+        DESTINATION include/PySide/QtXml/)
 
