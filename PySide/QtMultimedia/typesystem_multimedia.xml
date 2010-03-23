@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtMultimedia">
-  <load-typesystem name="typesystem_gui.xml.in" generate="no" />
-  
+  <load-typesystem name="typesystem_gui.xml" generate="no" />
+
   <rejection class="" function-name="qobject_cast&lt;QAudioEngineFactoryInterface*&gt;"/>
   <rejection class="" function-name="qobject_interface_iid&lt;QAudioEngineFactoryInterface*&gt;"/>
 
@@ -48,18 +48,15 @@
       <modify-function signature="preferredFormat()const" remove="all"/>
       <modify-function signature="availableDevices(QAudio::Mode)" remove="all"/>
   </object-type>
-  <object-type name="QAudioFormat"/>
-  <!-- DONE TODO TESTCASE check ctor setParent() -->
+  <value-type name="QAudioFormat"/>
   <!-- TODO TESTCASE start() check reference-count -->
   <object-type name="QAudioInput">
       <modify-function signature="format()const" remove="all"/>
   </object-type>
-  <!-- DONE TODO TESTCASE check ctor setParent() -->
   <!-- TODO TESTCASE start() check reference-count -->
   <object-type name="QAudioOutput">
       <modify-function signature="format()const" remove="all"/>
   </object-type>
   <!-- TODO TESTCASE don't increment the reference count of the video buffer -->
   <object-type name="QVideoFrame"/>
-
 </typesystem>
