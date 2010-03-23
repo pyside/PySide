@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtSvg">
-  <load-typesystem name="typesystem_gui.xml.in" generate="no"/>
-  
+  <load-typesystem name="typesystem_gui.xml" generate="no"/>
+
   <object-type name="QSvgRenderer" />
   <object-type name="QSvgWidget" />
 
@@ -11,7 +11,7 @@
           <reference-count action="add"/>
       </modify-argument>
     </modify-function>
-    
+
     <modify-function signature="outputDevice() const">
       <modify-argument index="return">
           <define-ownership class="target" owner="default"/>

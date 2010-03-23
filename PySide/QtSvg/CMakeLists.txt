@@ -30,7 +30,7 @@ ${SPECIFIC_OS_FILES}
 ${QtSvg_46_SRC}
 )
 
-execute_generator(svg QtSvg_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}")
+execute_generator(svg QtSvg_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSvg/

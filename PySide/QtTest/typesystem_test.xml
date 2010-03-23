@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtTest">
-  <load-typesystem name="typesystem_core.xml" generate="no"/>
-  <load-typesystem name="typesystem_gui.xml.in" generate="no"/> <!-- FIXME -->
+  <load-typesystem name="typesystem_gui.xml" generate="no"/>
 
   <rejection class="QTest" function-name="qCompare&lt;char&gt;"/>
   <rejection class="QTest" function-name="qCompare&lt;char*&gt;"/>
