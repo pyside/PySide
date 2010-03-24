@@ -1,0 +1,52 @@
+<typesystem package="PySide.QtUiTools">
+
+    <load-typesystem name="typesystem_gui.xml" generate="no" />
+    <load-typesystem name="typesystem_xml.xml" generate="no" />
+
+    <object-type name="QUiLoader">
+      <modify-function signature="createAction(QObject *, const QString&amp;)">
+        <modify-argument index="return">
+          <parent index="1" action="add"/>
+        </modify-argument>
+      </modify-function>
+
+      <modify-function signature="createActionGroup(QObject *, const QString&amp;)">
+        <modify-argument index="return">
+          <parent index="1" action="add"/>
+        </modify-argument>
+      </modify-function>
+
+      <modify-function signature="createLayout(const QString&amp;,QObject *, const QString&amp;)">
+        <modify-argument index="return">
+          <parent index="2" action="add"/>
+        </modify-argument>
+      </modify-function>
+
+      <modify-function signature="createWidget(const QString&amp;,QWidget*, const QString&amp;)">
+        <modify-argument index="return">
+          <parent index="2" action="add"/>
+        </modify-argument>
+      </modify-function>
+
+      <modify-function signature="load(QIODevice*, QWidget*)">
+        <modify-argument index="return">
+          <parent index="2" action="add"/>
+        </modify-argument>
+      </modify-function>
+
+      <!-- Syntax sugar -->
+      <add-function signature="load(const char*, QWidget*)" return-type="QWidget*">
+        <modify-argument index="return">
+          <parent index="2" action="add"/>
+        </modify-argument>
+        <inject-code>
+            QFile f(%1);
+            if (f.open(QIODevice::ReadOnly | QIODevice::Text))
+                %PYARG_0 = %CONVERTTOPYTHON[QWidget*](%CPPSELF.load(&amp;f, %2));
+            else
+                PyErr_SetString(PyExc_RuntimeError, "Unable to open ui file");
+        </inject-code>
+      </add-function>
+    </object-type>
+
+</typesystem>
