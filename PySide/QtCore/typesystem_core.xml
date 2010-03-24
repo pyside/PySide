@@ -1551,35 +1551,23 @@
     <modify-function signature="findChildren(const QRegExp &amp;) const" remove="all"/>
     <modify-function signature="findChildren(const QString &amp;) const" remove="all"/>
     <modify-function signature="findChild(const QString &amp;) const" remove="all" />
+    <inject-code class="native" file="glue/qobject_findchild.cpp"/>
     <add-function signature="findChild(PyTypeObject*, const QString&amp;)" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            const bool isEmpty = %2.isEmpty();
-            foreach(QObject* o, %CPPSELF.children()) {
-                if (isEmpty || %2 == o->objectName()) {
-                    PyObject* obj = %CONVERTTOPYTHON[QObject*](o);
-                    Shiboken::setParent(self, obj);
-                    if (PyType_IsSubtype(obj->ob_type, (PyTypeObject*)%PYARG_1))
-                        %PYARG_0 = obj;
-                    else
-                        Py_DECREF(obj);
-                }
-            }
+            %PYARG_0 = %CONVERTTOPYTHON[QObject*](_findChildHelper(%CPPSELF, %2, (PyTypeObject*)%PYARG_1));
         </inject-code>
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
     </add-function>
     <add-function signature="findChildren(PyTypeObject*, const QString&amp;)" return-type="PySequence*" >
         <inject-code class="target" position="beginning">
             %PYARG_0 = PyList_New(0);
-            const bool isEmpty = %2.isEmpty();
-            foreach(QObject* o, %CPPSELF.children()) {
-                if (isEmpty || %2 == o->objectName()) {
-                    PyObject* obj = %CONVERTTOPYTHON[QObject*](o);
-                    Shiboken::setParent(self, obj);
-                    if (PyType_IsSubtype(obj->ob_type, (PyTypeObject*)%PYARG_1))
-                        PyList_Append(%PYARG_0, obj);
-                    Py_DECREF(obj);
-                }
-            }
+            _findChildrenHelper(%CPPSELF, %2, (PyTypeObject*)%PYARG_1, %PYARG_0);
         </inject-code>
+        <modify-argument index="return">
+            <parent index="this" action="add"/>
+        </modify-argument>
     </add-function>
 
     <add-function signature="tr(const char *, const char *, int)" return-type="QString">
