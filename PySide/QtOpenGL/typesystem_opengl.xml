@@ -6,8 +6,10 @@
   <rejection class="QGLWidget" function-name="setMouseTracking"/>
 
   <enum-type name="QGL::FormatOption" flags="QGL::FormatOptions" force-integer="yes"/>
+  <enum-type name="QGLContext::BindOption" flags="QGLContext::BindOptions"/>
   <enum-type name="QGLFormat::OpenGLVersionFlag" flags="QGLFormat::OpenGLVersionFlags"/>
   <enum-type name="QGLFramebufferObject::Attachment"/>
+  <enum-type name="QGLShader::ShaderTypeBit" flags="QGLShader::ShaderType"/>
 
   <namespace-type name="QGL">
     <extra-includes>
