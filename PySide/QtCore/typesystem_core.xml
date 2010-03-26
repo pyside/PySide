@@ -1226,12 +1226,6 @@
   </value-type>
 
   <value-type name="QPoint">
-    <add-function signature="QPoint(PyObject*)">
-        <inject-code class="target" position="beginning">
-        %TYPE ptr = %CONVERTTOCPP[%TYPE](%PYARG_1);
-        %0 = new %TYPE(ptr.x(), ptr.y());
-        </inject-code>
-    </add-function>
     <modify-function signature="rx()" remove="all"/>
     <modify-function signature="ry()" remove="all"/>
   </value-type>
