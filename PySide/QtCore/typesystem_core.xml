@@ -2836,6 +2836,10 @@
 
   <value-type name="QEasingCurve">
     <modify-function signature="customType() const" remove="all"/>
+    <!-- FIXME: setCustomType() actually takes a pointer to function type
+    (EasingFunction), but for some reason apiextractor thinks it is a float/double:
+    http://bugs.openbossa.org/show_bug.cgi?id=201 -->
+    <modify-function signature="setCustomType(float)" remove="all"/>
     <modify-function signature="setCustomType(double)" remove="all"/>
   </value-type>
 
