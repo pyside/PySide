@@ -12,6 +12,7 @@
     <rejection class="QSslCertificate"/>
     <enum-type name="QAbstractSocket::NetworkLayerProtocol"/>
     <enum-type name="QAbstractSocket::SocketError"/>
+    <enum-type name="QAbstractSocket::SocketOption"/>
     <enum-type name="QAbstractSocket::SocketState"/>
     <enum-type name="QAbstractSocket::SocketType"/>
     <enum-type name="QFtp::Command"/>
@@ -131,7 +132,7 @@
             </modify-argument>
             <inject-code class="target" position="beginning" file="glue/qudpsocket_read_datagram_glue.cpp"/>
         </modify-function>
-        <modify-function signature="writeDatagram(const char*,qint64,QHostAddress,quint16)" remove="all"/>
+        <modify-function signature="writeDatagram(const char*,qint64,const QHostAddress&amp;,quint16)" remove="all"/>
         <modify-function signature="writeDatagram(const QByteArray&amp;, const QHostAddress&amp;, quint16)" allow-thread="yes"/>
     </object-type>
 
