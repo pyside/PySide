@@ -30,9 +30,12 @@ int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
         return -1;
     }
 
-    SbkBaseWrapper_setCptr(self, new QApplication(QApplicationArgCount, QApplicationArgValues));
+    void* cptr = new QApplication(QApplicationArgCount, QApplicationArgValues);
+    Shiboken::setCppPointer(reinterpret_cast<SbkBaseWrapper*>(self),
+                            Shiboken::SbkType<QApplication>(),
+                            cptr);
     SbkBaseWrapper_setValidCppObject(self, 1);
-    Shiboken::BindingManager::instance().registerWrapper(reinterpret_cast<SbkBaseWrapper*>(self));
+    Shiboken::BindingManager::instance().registerWrapper(reinterpret_cast<SbkBaseWrapper*>(self), cptr);
 
     // Verify if qApp is in main module
     const char QAPP_MACRO[] = "qApp";

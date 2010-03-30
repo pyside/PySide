@@ -2786,7 +2786,7 @@
         // The normal here would be to use the 'reference-count' tag but this
         // method is strongly tied to 'setTargetState' since both affect the same
         // internal value in QAbstractTransition.
-        Shiboken::SbkBaseWrapper_keepReference(reinterpret_cast&lt;SbkBaseWrapper*&gt;(%PYSELF), "setTargetState(QAbstractState*)1", %PYARG_1);
+        Shiboken::keepReference(reinterpret_cast&lt;SbkBaseWrapper*&gt;(%PYSELF), "setTargetState(QAbstractState*)1", %PYARG_1);
       </inject-code>
     </modify-function>
 

@@ -78,7 +78,7 @@ struct QtDictConverter
     static inline QtDict toCpp(PyObject* pyobj)
     {
         if (PyObject_TypeCheck(pyobj, Shiboken::SbkType<QtDict>()))
-            return *reinterpret_cast<QtDict*>(SbkBaseWrapper_cptr(pyobj));
+            return *reinterpret_cast<QtDict*>(Shiboken::getCppPointer(pyobj, Shiboken::SbkType<QtDict>()));
 
         QtDict result;
 
@@ -121,7 +121,7 @@ struct QSequenceConverter
     static T toCpp(PyObject* pyobj)
     {
         if (PyObject_TypeCheck(pyobj, Shiboken::SbkType<T>()))
-            return *reinterpret_cast<T*>(SbkBaseWrapper_cptr(pyobj));
+            return *reinterpret_cast<T*>(Shiboken::getCppPointer(pyobj, Shiboken::SbkType<T>()));
 
         T result;
         for (int i = 0; i < PySequence_Size(pyobj); i++) {

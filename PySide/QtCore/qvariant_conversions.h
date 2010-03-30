@@ -82,7 +82,7 @@ inline QVariant Converter<QVariant>::toCpp(PyObject* pyobj)
             }
     } else {
         // Is a known Qt type
-        return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyobj)->cptr);
+        return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyobj)->cptr[0]);
     }
 }
 

@@ -31,9 +31,12 @@ int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
         return -1;
     }
 
-    SbkBaseWrapper_setCptr(self, new QCoreApplication(QCoreApplicationArgCount, QCoreApplicationArgValues));
+    void* cptr = new QCoreApplication(QCoreApplicationArgCount, QCoreApplicationArgValues);
+    Shiboken::setCppPointer(reinterpret_cast<SbkBaseWrapper*>(self),
+                            Shiboken::SbkType<QCoreApplication>(),
+                            cptr);
     SbkBaseWrapper_setValidCppObject(self, 1);
-    Shiboken::BindingManager::instance().registerWrapper(reinterpret_cast<SbkBaseWrapper*>(self));
+    Shiboken::BindingManager::instance().registerWrapper(reinterpret_cast<SbkBaseWrapper*>(self), cptr);
 
     Py_INCREF(self);
     Py_AtExit(DeleteQCoreApplicationAtExit);
