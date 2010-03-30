@@ -1,8 +1,26 @@
 import unittest
 
-from PySide.QtGui import QMatrix4x4
+from PySide.QtCore import QPoint
+from PySide.QtGui import QMatrix, QMatrix4x4
+
+
+def qpointTimesQMatrix(point, matrix):
+    '''As seen in "QPoint QMatrix::map(const QPoint &p) const" C++ implementation.'''
+    return QPoint(matrix.m11() * point.x() + matrix.m21() * point.y() + matrix.dx(),
+                  matrix.m12() * point.x() + matrix.m22() * point.y() + matrix.dy())
 
 class QMatrixTest(unittest.TestCase):
+
+    def testMatrix(self):
+        matrix = QMatrix(11, 12, 21, 22, 100, 200)
+        point = QPoint(3, 3)
+        self.assertEqual(point * matrix, qpointTimesQMatrix(point, matrix))
+
+    def testMatrixWithWrongType(self):
+        matrix = QMatrix(11, 12, 21, 22, 100, 200)
+        point = QPoint(3, 3)
+        self.assertRaises(TypeError, matrix.__mul__, point)
+
     def testMatrix4x4(self):
         self.assertRaises(TypeError, QMatrix4x4, [0.0, 1.0, 2.0, 3.0])
         self.assertRaises(TypeError, QMatrix4x4, [0.0, 1.0, 2.0, 'I',
