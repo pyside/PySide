@@ -1717,11 +1717,10 @@
     </add-function>
     <add-function signature="toPyObject()" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            const char* type_name = %CPPSELF.typeName();
-            uint type_id = QMetaType::type(type_name);
-            if (!type_id || type_id > QVariant::UserType) {
+            uint typeId = %CPPSELF.userType();
+            if (typeId == qMetaTypeId&lt;PyObjectHolder>()) {
                 %PYARG_0 = %CPPSELF.value&lt;PyObjectHolder>();
-            } else if (type_id == QVariant::String) {
+            } else if (typeId == QVariant::String) {
                 %PYARG_0 = %CONVERTTOPYTHON[QString](%CPPSELF.toString());
             } else {
                 %PYARG_0 = Py_None;
@@ -1734,14 +1733,14 @@
         if (%CPPSELF.isNull()) {
             %PYARG_0 = Py_None;
             Py_INCREF(Py_None);
-        } else if (%CPPSELF.userType() == QMetaTypeId&lt;PyObjectHolder>::qt_metatype_id()) {
+        } else if (%CPPSELF.userType() == qMetaTypeId&lt;PyObjectHolder>()) {
             // emulate PyQt4 behaviour
             PyObject* obj = %CPPSELF.value&lt;PyObjectHolder>();
             if (PySequence_Check(obj))
                 %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE]("QVariantList");
         }
         if (!%PYARG_0)
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.typeName());
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
       </inject-code>
     </modify-function>
     <modify-function signature="toList()const">
