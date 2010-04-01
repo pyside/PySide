@@ -32,57 +32,63 @@ QT_END_NAMESPACE
 namespace Shiboken {
 
 // all types are convertible to QVariant
-inline bool Converter<QVariant>::isConvertible(PyObject* pyobj)
+inline bool Converter<QVariant>::isConvertible(PyObject* pyObj)
 {
     return true;
 }
 
-inline QVariant Converter<QVariant>::toCpp(PyObject* pyobj)
+inline QVariant Converter<QVariant>::toCpp(PyObject* pyObj)
 {
-    if (SbkQVariant_Check(pyobj))
-        return *Converter<QVariant*>::toCpp(pyobj);
-    // voodoo stuff to avoid linking qtcore bindings with qtgui bindings
-    QString className(pyobj->ob_type->tp_name);
-    className = className.mid(className.lastIndexOf(".") + 1);
-    uint typeCode = QMetaType::type(className.toAscii());
-    if (!typeCode || typeCode > QVariant::UserType) {
+    if (SbkQVariant_Check(pyObj))
+        return *Converter<QVariant*>::toCpp(pyObj);
 
-            // Check the implicit conversion stuff for most python-native types
-            if (SbkPySide_QtCore_QVariant_Type_CheckExact(pyobj)) {
-                QVariant::Type cpp_arg0 = Shiboken::Converter<QVariant::Type >::toCpp(pyobj);
-                // QVariant(QVariant::Type)
-                return QVariant(cpp_arg0);
-            } else if (SbkPySide_QtCore_Qt_GlobalColor_CheckExact(pyobj)) {
-                Qt::GlobalColor cpp_arg0 = Shiboken::Converter<Qt::GlobalColor >::toCpp(pyobj);
-                // QVariant(Qt::GlobalColor)
-                return QVariant(cpp_arg0);
-            } else if (PyBool_Check(pyobj)) {
-                bool cpp_arg0 = Shiboken::Converter<bool >::toCpp(pyobj);
-                // QVariant(bool)
-                return QVariant(cpp_arg0);
-            } else if (PyString_Check(pyobj)) {
-                const char * cpp_arg0 = Shiboken::Converter<const char * >::toCpp(pyobj);
-                // QVariant(const char*)
-                return QVariant(cpp_arg0);
-            } else if (PyFloat_Check(pyobj)) {
-                double cpp_arg0 = Shiboken::Converter<double >::toCpp(pyobj);
-                // QVariant(double)
-                return QVariant(cpp_arg0);
-            } else if (PyNumber_Check(pyobj)) {
-                int cpp_arg0 = Shiboken::Converter<int >::toCpp(pyobj);
-                // QVariant(int)
-                return QVariant(cpp_arg0);
-            } else if (PyLong_Check(pyobj)) {
-                qlonglong cpp_arg0 = Shiboken::Converter<qlonglong >::toCpp(pyobj);
-                // QVariant(qlonglong)
-                return QVariant(cpp_arg0);
-            } else {
-                Py_INCREF(pyobj);
-                return QVariant::fromValue<PyObjectHolder>(pyobj);
-            }
+    // Primitive types
+    if (PyBool_Check(pyObj)) {
+        // QVariant(bool)
+        return QVariant(Shiboken::Converter<bool>::toCpp(pyObj));
+    } else if (PyString_CheckExact(pyObj)) {
+        // QVariant(const char*)
+        return QVariant(Shiboken::Converter<const char *>::toCpp(pyObj));
+    } else if (PyFloat_CheckExact(pyObj)) {
+        // QVariant(double)
+        return QVariant(Shiboken::Converter<double>::toCpp(pyObj));
+    } else if (PyInt_CheckExact(pyObj)) {
+        // QVariant(int)
+        return QVariant(Shiboken::Converter<int>::toCpp(pyObj));
+    } else if (PyLong_CheckExact(pyObj)) {
+        // QVariant(qlonglong)
+        return QVariant(Shiboken::Converter<qlonglong>::toCpp(pyObj));
+    } else if (Shiboken::isShibokenEnum(pyObj)) {
+        // QVariant(enum)
+        return QVariant(Shiboken::Converter<int>::toCpp(pyObj));
+    } else if (!Shiboken::isShibokenType(pyObj) || Shiboken::isUserType(pyObj)) {
+        // QVariant(User class)
+        Py_INCREF(pyObj);
+        return QVariant::fromValue<PyObjectHolder>(pyObj);
     } else {
-        // Is a known Qt type
-        return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyobj)->cptr[0]);
+        // a class supported by QVariant?
+        const char* typeName = pyObj->ob_type->tp_name;
+        // check if the name starts with PySide.
+        if (!strncmp("PySide.", typeName, 7)) {
+            // get the type name
+            const char* lastDot = typeName;
+            for (int i = 8; typeName[i]; ++i) {
+                if (typeName[i] == '.')
+                    lastDot = &typeName[i];
+            }
+            lastDot++;
+            uint typeCode = QMetaType::type(lastDot);
+            if (!typeCode) {// Try with star at end, for QObject*, QWidget* and QAbstractKinectScroller*
+                QString typeName(lastDot);
+                typeName += '*';
+                typeCode = QMetaType::type(typeName.toAscii());
+            }
+            if (typeCode)
+                return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr[0]);
+        }
+        // Is a shiboken type not known by Qt
+        Py_INCREF(pyObj);
+        return QVariant::fromValue<PyObjectHolder>(pyObj);
     }
 }
 

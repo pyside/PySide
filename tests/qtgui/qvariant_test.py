@@ -48,6 +48,33 @@ class QVariantQPixmap(UsesQApplication):
 
         self.assertEqual(variant.typeName(), "QPixmap")
 
+    def testQObject(self):
+        obj = QObject()
+        v = QVariant(obj)
+        self.assertEqual(v.typeName(), 'QObject*')
+
+    def testQWidget(self):
+        obj = QWidget()
+        v = QVariant(obj)
+        self.assertEqual(v.typeName(), 'QWidget*')
+
+class MyColor(QColor):
+    pass
+
+class MyPrimitive(int):
+    pass
+
+class QVariantMess(unittest.TestCase):
+    def testMyColor(self):
+        c1 = MyColor()
+        v = QVariant(c1)
+        self.assertEqual(type(v.toPyObject()), MyColor)
+
+    def testMyPrimitive(self):
+        p = MyPrimitive(3)
+        v = QVariant(p)
+        self.assertNotEqual(v.type(), QVariant.Int)
+        self.assertTrue(v.toPyObject() is p)
 
 if __name__ == '__main__':
     unittest.main()
