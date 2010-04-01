@@ -1744,6 +1744,22 @@
             %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.typeName());
       </inject-code>
     </modify-function>
+    <modify-function signature="toList()const">
+        <inject-code class="target" position="beginning">
+            if (%CPPSELF.userType() == qMetaTypeId&lt;PyObjectHolder>()) {
+                PyObject* val = %CPPSELF.value&lt;PyObjectHolder>();
+                if (PySequence_Check(val)) {
+                    %PYARG_0 = val;
+                    Py_INCREF(val);
+                } else {
+                    %PYARG_0 = Py_None;
+                    Py_INCREF(Py_None);
+                }
+            } else {
+                %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
+            }
+        </inject-code>
+    </modify-function>
     <modify-function signature="toDouble(bool*)const">
       <modify-argument index="1">
         <remove-argument/>

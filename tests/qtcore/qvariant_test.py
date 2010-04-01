@@ -131,6 +131,11 @@ class QVariantConstructor(unittest.TestCase):
         self.assertEqual(variant.type(), QVariant.Size)
         self.assertEqual(variant.toSize(), mysize)
 
+    def testToList(self):
+        v = QVariant((1,2,3))
+        self.assertEqual(v.toList(), (1, 2, 3))
+        v = QVariant([0,1,2])
+        self.assertEqual(v.toList(), [0, 1, 2])
 
 if __name__ == '__main__':
     unittest.main()
