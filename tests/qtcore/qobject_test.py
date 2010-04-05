@@ -25,12 +25,6 @@ class ObjectNameCase(unittest.TestCase):
 
         self.assertEqual(name, obj.objectName())
 
-    def testNone(self):
-        #QObject.objectName(None)
-        obj = QObject()
-
-        self.assertRaises(TypeError, obj.setObjectName, None)
-
     def testDefault(self):
         #QObject.objectName() default
         obj = QObject()

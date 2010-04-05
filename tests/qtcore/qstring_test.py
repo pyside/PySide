@@ -105,6 +105,10 @@ class QStringConstructor(unittest.TestCase):
 
         self.assertEqual(obj1, obj2)
 
+    def testNullQString(self):
+        s = QString(None)
+        self.assertTrue(s.isNull())
+
     def testQStringFromPy(self):
         #QString(const char*)
         sample = 'a new string'

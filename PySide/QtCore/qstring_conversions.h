@@ -7,6 +7,7 @@ inline bool Converter<QString>::isConvertible(PyObject* pyObj)
             || PyUnicode_Check(pyObj)
             || SbkQByteArray_Check(pyObj)
             || SbkQLatin1String_Check(pyObj)
+            || pyObj == Py_None
 #if PY_VERSION_HEX < 0x03000000
             || (pyObj->ob_type->tp_as_buffer
                && PyType_HasFeature(pyObj->ob_type, Py_TPFLAGS_HAVE_GETCHARBUFFER)
@@ -35,6 +36,8 @@ inline QString Converter<QString>::toCpp(PyObject* pyObj)
 #endif
     } else if (PyString_Check(pyObj)) {
         return QString(Converter< char * >::toCpp(pyObj));
+    } else if (pyObj == Py_None) {
+        return QString();
     }
 #if PY_VERSION_HEX < 0x03000000
     // Support for buffer objects on QString constructor
