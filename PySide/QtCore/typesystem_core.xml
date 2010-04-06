@@ -976,13 +976,15 @@
     </modify-function>
   </object-type>
 
-  <value-type name="QString" hash-function="qHash">
+  <value-type name="QString" hash-function="QStringCustomHashFunction">
     <extra-includes>
       <include file-name="QTextCodec" location="global"/>
     </extra-includes>
     <conversion-rule file="qstring_conversions.h" />
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[2]" />
     <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[3]" />
+    <!-- Custom hash function -->
+    <inject-code class="native" position="beginning" file="glue/qstring_hashfunc.cpp" />
     <!-- buffer protocol -->
     <inject-code class="native" position="beginning" file="glue/qstring_bufferprotocol.cpp" />
     <inject-code class="target" position="end">

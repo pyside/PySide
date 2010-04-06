@@ -183,5 +183,10 @@ class QStringImplicitConvertion(unittest.TestCase):
         obj.setObjectName(QByteArray('foobar'))
         self.assertEqual(obj.objectName(), QString('foobar'))
 
+class QStringHash(unittest.TestCase):
+    def testHash(self):
+        self.assertEqual(hash("key"), hash(QString("key")))
+        self.assertEqual(hash(u"aéióu"), hash(QString(u"aéióu")))
+
 if __name__ == '__main__':
     unittest.main()
