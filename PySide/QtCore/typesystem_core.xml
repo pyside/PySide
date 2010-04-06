@@ -1471,8 +1471,10 @@
     </modify-function>
     <modify-function signature="thread() const" remove="all"/>
     <modify-function signature="connect(const QObject*, const char*, const char *, Qt::ConnectionType) const">
+        <inject-code class="target" position="beginning" file="">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnect(%1, %2, %CPPSELF, %4));
+        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnect(%1, %2, %CPPSELF, %3, %4));
+        </inject-code>
     </modify-function>
     <modify-function signature="connect(const QObject*, const char*, const QObject*, const char *, Qt::ConnectionType)">
         <inject-code class="target" position="beginning" file="">
