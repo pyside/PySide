@@ -249,7 +249,7 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
         else
             return emitNormalSignal(source, signalIndex, signal, args, argTypes);
     }
-    qWarning() << "Error emitting signal: " << signal;
+    qWarning() << "Signal" << signal << "not found, probably a typo or you are emitting a dynamic signal that has never been used in a connection until now.";
     return false;
 }
 
