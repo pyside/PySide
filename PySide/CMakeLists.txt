@@ -18,12 +18,16 @@ endmacro(execute_generator)
 
 # Only add subdirectory if the associated Qt module is found.
 macro(HAS_QT_MODULE var name)
-IF (${var})
-    add_subdirectory(${name})
-    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_BINARY_DIR}/${name}/${name}${CMAKE_SHARED_MODULE_SUFFIX}"
-                                                               "${CMAKE_BINARY_DIR}/PySide/${name}${CMAKE_SHARED_MODULE_SUFFIX}")
+if (DISABLE_${name})
+    message(STATUS "Generation of ${name} disabled.")
 else()
-    message(STATUS "${name} NOT found. ${name} support disabled.")
+    if (${var})
+        add_subdirectory(${name})
+        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_BINARY_DIR}/${name}/${name}${CMAKE_SHARED_MODULE_SUFFIX}"
+                                                                "${CMAKE_BINARY_DIR}/PySide/${name}${CMAKE_SHARED_MODULE_SUFFIX}")
+    else()
+        message(STATUS "${name} NOT found. ${name} support disabled.")
+    endif()
 endif()
 endmacro(HAS_QT_MODULE)
 
