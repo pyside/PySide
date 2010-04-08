@@ -994,6 +994,12 @@
         #endif
     </inject-code>
 
+    <!-- the number(qlonglong) is enough for python -->
+    <modify-function signature="number(uint,int)" remove="all" />
+    <modify-function signature="number(int,int)" remove="all" />
+    <modify-function signature="number(ulong,int)" remove="all" />
+    <modify-function signature="number(qlonglong,int)" remove="all" />
+    <modify-function signature="number(qulonglong,int)" remove="all" />
     <modify-function signature="insert(int,const QChar*,int)" remove="all" />
     <modify-function signature="QString(const QChar*, int)" remove="all" />
     <modify-function signature="fromStdString(std::string)" remove="all"/>
