@@ -22,7 +22,7 @@
   <object-type name="QAbstractVideoBuffer">
       <modify-function signature="map(QAbstractVideoBuffer::MapMode, int*, int*)">
           <modify-argument index="0">
-              <replace-type modified-type="PyObject *"/>
+              <replace-type modified-type="PyObject"/>
           </modify-argument>
           <modify-argument index="2">
               <remove-argument/>
