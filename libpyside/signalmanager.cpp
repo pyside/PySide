@@ -102,6 +102,8 @@ QString PySide::getCallbackSignature(const char* signal, PyObject* callback, boo
             numArgs = -1;
         else if (flags & METH_NOARGS)
             numArgs = 0;
+    } else if (PyCallable_Check(callback)) {
+        functionName = "__callback"+QString::number((size_t)callback);
     }
     Q_ASSERT(!functionName.isEmpty());
 

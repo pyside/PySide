@@ -4,6 +4,7 @@
 
 import sys
 import unittest
+import functools
 
 from PySide.QtCore import QObject, SIGNAL, SLOT, QProcess, QTimeLine
 
@@ -86,6 +87,20 @@ class CppSignalsToCppSlots(UsesQCoreApplication):
         else:
             self.assertEqual(new_dir, QTimeLine.Forward)
 
+called = False
+def someSlot(args=None):
+    global called
+    called = True
+
+class DynamicSignalsToFuncPartial(UsesQCoreApplication):
+
+    def testIt(self):
+        global called
+        called = False
+        o = QObject()
+        o.connect(o, SIGNAL("ASignal"), functools.partial(someSlot, "partial .."))
+        o.emit(SIGNAL("ASignal"))
+        self.assertTrue(called)
 
 if __name__ == '__main__':
     unittest.main()

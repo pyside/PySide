@@ -8,11 +8,10 @@ static bool getReceiver(PyObject *callback, QObject **receiver, PyObject **self)
         *self = PyCFunction_GET_SELF(callback);
         if (*self && SbkQObject_Check(*self))
             *receiver = Converter<QObject*>::toCpp(*self);
-    } else if (!PyFunction_Check(callback)) {
+    } else if (PyCallable_Check(callback)) {
+        // Ok, just a callable object
         *receiver = 0;
         *self = 0;
-        qWarning() << "Invalid callback object.";
-        return false;
     }
 
     bool usingGlobalReceiver = !*receiver;
