@@ -43,6 +43,7 @@
 #include <limits>
 #include <typeresolver.h>
 #include <basewrapper.h>
+#include <conversions.h>
 
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
 #error QSLOT_CODE and/or QSIGNAL_CODE changed! change the hardcoded stuff to the correct value!
@@ -50,6 +51,44 @@
 #define PYSIDE_SLOT '1'
 #define PYSIDE_SIGNAL '2'
 #include "globalreceiver.h"
+
+#define PYTHON_TYPE "PyObject"
+
+
+// Use this to wrap PyObject during the Signal/Slot handling
+struct PyObjectWrapper
+{
+    PyObject* m_me;
+    PyObjectWrapper(PyObject* me) : m_me(me) {}
+    PyObjectWrapper() : m_me(Py_None) {}
+    operator PyObject*() const { return m_me; }
+};
+
+Q_DECLARE_METATYPE(PyObjectWrapper)
+
+namespace Shiboken {
+
+template<>
+struct Converter<PyObjectWrapper>
+{
+    static PyObjectWrapper toCpp(PyObject* obj)
+    {
+        return PyObjectWrapper(obj);
+    }
+
+    static PyObject* toPython(void* obj)
+    {
+        return toPython(*reinterpret_cast<PyObjectWrapper*>(obj));
+    }
+
+    static PyObject* toPython(const PyObjectWrapper& obj)
+    {
+        return obj;
+    }
+};
+
+};
+
 
 using namespace PySide;
 
@@ -157,6 +196,11 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
 {
     // Register Qt primitive typedefs used on signals.
     using namespace Shiboken;
+
+    // Register PyObject type to use in queued signal and slot connections
+    qRegisterMetaType<PyObjectWrapper>(PYTHON_TYPE);
+
+    TypeResolver::createValueTypeResolver<PyObjectWrapper>(PYTHON_TYPE);
     TypeResolver::createValueTypeResolver<qint8>("qint8");
     TypeResolver::createValueTypeResolver<qint16>("qint16");
     TypeResolver::createValueTypeResolver<qint32>("qint32");
@@ -228,11 +272,15 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
 
     for (int i = 0; i < argsGiven; ++i)
         signalArgs[i+1] = Shiboken::TypeResolver::get(qPrintable(argTypes[i]))->toCpp(PySequence_GetItem(args, i));
+
     QMetaObject::activate(source, signalIndex, signalArgs);
+
     // FIXME: This will cause troubles with non-direct connections.
     for (int i = 0; i < argsGiven; ++i)
         Shiboken::TypeResolver::get(qPrintable(argTypes[i]))->deleteObject(signalArgs[i+1]);
+
     delete[] signalArgs;
+
     return true;
 }
 
@@ -272,8 +320,10 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
     } else {
         // call python slot
         Shiboken::GilState gil;
+
         QList<QByteArray> paramTypes = method.parameterTypes();
         PyObject* self = Shiboken::BindingManager::instance().retrieveWrapper(object);
+
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
 
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {

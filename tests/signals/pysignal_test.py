@@ -15,6 +15,22 @@ class Dummy(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
 
+    def callDummy(self):
+        self.emit(SIGNAL("dummy(PyObject)"), "PyObject")
+
+
+class PyObjectType(unittest.TestCase):
+    def mySlot(self, arg):
+        self.assertEqual(arg, "PyObject")
+        self.called = True
+
+    def testType(self):
+        self.called = False
+        o = Dummy()
+        o.connect(SIGNAL("dummy(PyObject)"), self.mySlot)
+        o.callDummy()
+        self.assert_(self.called)
+
 class PythonSigSlot(unittest.TestCase):
     def setUp(self):
         self.called = False
