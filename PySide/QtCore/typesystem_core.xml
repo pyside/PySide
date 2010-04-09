@@ -3052,4 +3052,8 @@
   <suppress-warning text="signal '*' in class '*' is overloaded."/>
   <suppress-warning text="enum 'enum_3' does not have a type entry or is not an enum"/>
   <suppress-warning text="Shadowing: QFile::fileName() const and QTemporaryFile::fileName() const"/>
+  <suppress-warning text="enum 'QtValidLicenseForDeclarativeModule' does not have a type entry or is not an enum"/>
+  <suppress-warning text="unhandled enum value: ~0u in Qt::GestureType"/>
+  <suppress-warning text="unmatched enum ~0u"/>
+  <suppress-warning text="signature 'setCustomType(float)' for function modification in 'QEasingCurve' not found. Possible candidates: setCustomType(double) in QEasingCurve"/>
 </typesystem>
