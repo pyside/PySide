@@ -32,7 +32,6 @@ class Dummy(QObject):
     '''Dummy class'''
     pass
 
-
 class PythonSignalToCppSlots(UsesQCoreApplication):
     '''Connect python signals to C++ slots'''
 
@@ -101,6 +100,12 @@ class DynamicSignalsToFuncPartial(UsesQCoreApplication):
         o.connect(o, SIGNAL("ASignal"), functools.partial(someSlot, "partial .."))
         o.emit(SIGNAL("ASignal"))
         self.assertTrue(called)
+
+class EmitUnknownType(UsesQCoreApplication):
+    def testIt(self):
+        a = QObject()
+        a.connect(SIGNAL('foobar(Dummy)'), lambda x: 42) # Just connect with an unknown type
+        self.assertRaises(TypeError, a.emit, SIGNAL('foobar(Dummy)'), 22)
 
 if __name__ == '__main__':
     unittest.main()

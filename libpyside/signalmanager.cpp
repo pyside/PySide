@@ -260,28 +260,38 @@ static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* a
 
 static bool emitNormalSignal(QObject* source, int signalIndex, const char* signal, PyObject* args, const QStringList& argTypes)
 {
-    int argsGiven = PySequence_Size(args);
+    Shiboken::AutoDecRef sequence(PySequence_Fast(args, 0));
+    int argsGiven = PySequence_Fast_GET_SIZE(sequence.object());
     if (argsGiven > argTypes.count()) {
-        QString msg = QString("%1 only accepts %2 arguments, %3 given!").arg(signal).arg(argTypes.count()).arg(argsGiven);
-        PyErr_SetString(PyExc_TypeError, msg.toLocal8Bit().constData());
+        PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", signal, argTypes.count(), argsGiven);
         return false;
     }
 
     void** signalArgs = new void*[argsGiven+1];
     signalArgs[0] = 0;
 
-    for (int i = 0; i < argsGiven; ++i)
-        signalArgs[i+1] = Shiboken::TypeResolver::get(qPrintable(argTypes[i]))->toCpp(PySequence_GetItem(args, i));
+    int i;
+    for (i = 0; i < argsGiven; ++i) {
+        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(qPrintable(argTypes[i]));
+        if (typeResolver) {
+            signalArgs[i+1] = typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i));
+        } else {
+            PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", qPrintable(argTypes[i]));
+            break;
+        }
+    }
 
-    QMetaObject::activate(source, signalIndex, signalArgs);
+    bool ok = i == argsGiven;
+    if (ok)
+        QMetaObject::activate(source, signalIndex, signalArgs);
 
     // FIXME: This will cause troubles with non-direct connections.
-    for (int i = 0; i < argsGiven; ++i)
-        Shiboken::TypeResolver::get(qPrintable(argTypes[i]))->deleteObject(signalArgs[i+1]);
+    for (int j = 0; j < i; ++j)
+        Shiboken::TypeResolver::get(qPrintable(argTypes[j]))->deleteObject(signalArgs[j+1]);
 
     delete[] signalArgs;
 
-    return true;
+    return ok;
 }
 
 bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* args)
