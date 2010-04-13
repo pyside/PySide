@@ -6,24 +6,13 @@
     <enum-type name="QHelpSearchQuery::FieldName"/>
 
     <value-type name="QHelpContentItem">
-      <modify-function signature="child(int) const">
-        <modify-argument index="return">
-          <parent index="this" action="add"/>
-        </modify-argument>
-      </modify-function>
       <modify-function signature="parent() const">
         <modify-argument index="return">
-          <define-ownership owner="target"/>
+          <define-ownership owner="default"/>
         </modify-argument>
       </modify-function>
     </value-type>
-    <object-type name="QHelpContentModel">
-      <modify-function signature="contentItemAt(const QModelIndex &amp;) const">
-        <modify-argument index="return">
-          <parent index="this" action="add"/>
-        </modify-argument>
-      </modify-function>
-    </object-type>
+    <object-type name="QHelpContentModel"/>
     <object-type name="QHelpContentWidget"/>
     <object-type name="QHelpEngine" />
     <object-type name="QHelpEngineCore"/>
