@@ -2197,7 +2197,8 @@
   <object-type name="QContextMenuEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ContextMenu"/>
   <object-type name="QDragEnterEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragEnter"/>
   <object-type name="QDragLeaveEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragLeave"/>
-  <object-type name="QDragMoveEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragMove">
+  <object-type name="QDragMoveEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragMove" />
+  <object-type name="QDropEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Drop">
     <modify-function signature="source() const">
       <modify-argument index="return">
         <define-ownership owner="target"/>
@@ -2207,7 +2208,6 @@
     <modify-function signature="format(int)const" remove="all"/>
     <modify-function signature="provides(const char*)const" remove="all"/>
   </object-type>
-  <object-type name="QDropEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Drop" />
   <object-type name="QFileOpenEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FileOpen" />
   <object-type name="QFocusEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FocusIn || %1-&gt;type() == QEvent::FocusOut" />
   <object-type name="QGraphicsSceneContextMenuEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneContextMenu" />
