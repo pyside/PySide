@@ -49,14 +49,14 @@ HAS_QT_MODULE(QT_QTXMLPATTERNS_FOUND QtXmlPatterns)
 
 # Try to find QtMultimedia
 # TODO: Remove this hack when cmake support QtMultimedia module
-if (NOT QT_MULTIMEDIA_FOUND AND ${QTVERSION} GREATER 4.5.0)
-    find_path(QT_MULTIMEDIA_INCLUDE_DIR QtMultimedia
+if (NOT QT_QTMULTIMEDIA_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)
+    find_path(QT_QTMULTIMEDIA_INCLUDE_DIR QtMultimedia
             PATHS ${QT_HEADERS_DIR}/QtMultimedia
                 ${QT_LIBRARY_DIR}/QtMultimedia.framework/Headers
             NO_DEFAULT_PATH)
-    find_library(QT_MULTIMEDIA_LIBRARY QtMultimedia PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH)
-    if (QT_MULTIMEDIA_INCLUDE_DIR AND QT_MULTIMEDIA_LIBRARY)
-        set(QT_MULTIMEDIA_FOUND ON)
+    find_library(QT_QTMULTIMEDIA_LIBRARY QtMultimedia PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH)
+    if (QT_QTMULTIMEDIA_INCLUDE_DIR AND QT_QTMULTIMEDIA_LIBRARY)
+        set(QT_QTMULTIMEDIA_FOUND ON)
     endif()
 endif ()
 
