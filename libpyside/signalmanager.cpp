@@ -59,7 +59,8 @@
 struct PyObjectWrapper
 {
     PyObject* m_me;
-    PyObjectWrapper(PyObject* me) : m_me(me) {}
+    PyObjectWrapper(const PyObjectWrapper &other) : m_me(other.m_me) {}
+    PyObjectWrapper(PyObject* me) : m_me(me) { Py_INCREF(m_me); }
     PyObjectWrapper() : m_me(Py_None) {}
     operator PyObject*() const { return m_me; }
 };
@@ -310,7 +311,7 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
         else
             return emitNormalSignal(source, signalIndex, signal, args, argTypes);
     }
-    qWarning() << "Signal" << signal << "not found, probably a typo or you are emitting a dynamic signal that has never been used in a connection until now.";
+    qDebug() << "Signal" << signal << "not found, probably a typo or you are emitting a dynamic signal that has never been used in a connection until now.";
     return false;
 }
 

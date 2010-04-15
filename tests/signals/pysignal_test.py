@@ -1,6 +1,6 @@
 
 import unittest
-from PySide.QtCore import QObject, SIGNAL, SLOT
+from PySide.QtCore import QObject, SIGNAL, SLOT, Qt
 
 try:
     from PySide.QtGui import QSpinBox, QApplication, QWidget
@@ -18,18 +18,64 @@ class Dummy(QObject):
     def callDummy(self):
         self.emit(SIGNAL("dummy(PyObject)"), "PyObject")
 
+    def callDummy2(self):
+        lst = []
+        lst.append("item1")
+        lst.append("item2")
+        lst.append("item3")
+        self.emit(SIGNAL("dummy2(PyObject, PyObject)"), "PyObject0", lst)
 
-class PyObjectType(unittest.TestCase):
+
+class PyObjectType(UsesQApplication):
     def mySlot(self, arg):
         self.assertEqual(arg, "PyObject")
         self.called = True
+        self.callCount += 1
 
-    def testType(self):
-        self.called = False
+    def mySlot2(self, arg0, arg1):
+        self.assertEqual(arg0, "PyObject0")
+        self.assertEqual(arg1[0], "item1")
+        self.assertEqual(arg1[1], "item2")
+        self.assertEqual(arg1[2], "item3")
+        self.callCount += 1
+        if self.running:
+            self.app.quit()
+
+    def setUp(self):
+        super(PyObjectType, self).setUp()
+        self.callCount = 0
+        self.running = False
+
+    def testWithOneArg(self):
         o = Dummy()
         o.connect(SIGNAL("dummy(PyObject)"), self.mySlot)
         o.callDummy()
-        self.assert_(self.called)
+        self.assertEqual(self.callCount, 1)
+
+    def testWithTwoArg(self):
+        o = Dummy()
+        o.connect(SIGNAL("dummy2(PyObject,PyObject)"), self.mySlot2)
+        o.callDummy2()
+        self.assertEqual(self.callCount, 1)
+
+    def testAsyncSignal(self):
+        self.called = False
+        self.running = True
+        o = Dummy()
+        o.connect(SIGNAL("dummy2(PyObject,PyObject)"), self.mySlot2, Qt.QueuedConnection)
+        o.callDummy2()
+        self.app.exec_()
+        self.assertEqual(self.callCount, 1)
+
+    def testTwice(self):
+        self.called = False
+        self.running = True
+        o = Dummy()
+        o.connect(SIGNAL("dummy2(PyObject,PyObject)"), self.mySlot2, Qt.QueuedConnection)
+        o.callDummy2()
+        o.callDummy2()
+        self.app.exec_()
+        self.assertEqual(self.callCount, 2)
 
 class PythonSigSlot(unittest.TestCase):
     def setUp(self):
