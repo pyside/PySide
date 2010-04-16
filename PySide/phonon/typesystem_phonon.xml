@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.phonon">
+    <load-typesystem name="typesystem_gui.xml" generate="no" />
+
+    <rejection class="Phonon::ObjectDescriptionData"/>
+    <rejection class="Phonon::ObjectDescriptionModelData"/>
+    <rejection class="Phonon::MediaNodeDestructionHandler"/>
+    <rejection class="Phonon::GlobalConfig"/>
+    <rejection class="Phonon::IODeviceStream"/>
+    <rejection class="Phonon::Factory"/>
+    <rejection class="Phonon::Experimental"/>
+    <rejection class="AudioOutputAdaptor"/>
+    <rejection class="*" field-name="k_ptr"/>
+
+    <namespace-type name="Phonon">
+        <extra-includes>
+          <include file-name="phononnamespace.h" location="global"/>
+        </extra-includes>
+    </namespace-type>
+    <namespace-type name="Phonon::BackendCapabilities" />
+
+    <!-- ### causes moc-related linker error -->
+    <!-- <object-type name="Phonon::BackendCapabilities::Notifier"/> -->
+
+    <enum-type name="Phonon::Category" />
+    <enum-type name="Phonon::DiscType"/>
+    <enum-type name="Phonon::ErrorType"/>
+    <enum-type name="Phonon::MetaData"/>
+    <enum-type name="Phonon::ObjectDescriptionType"/>
+    <enum-type name="Phonon::State"/>
+
+    <enum-type name="Phonon::AddonInterface::AngleCommand"/>
+    <enum-type name="Phonon::AddonInterface::ChapterCommand"/>
+    <enum-type name="Phonon::AddonInterface::Interface"/>
+    <enum-type name="Phonon::AddonInterface::NavigationCommand"/>
+    <enum-type name="Phonon::AddonInterface::TitleCommand"/>
+    <enum-type name="Phonon::AddonInterface::SubtitleCommand"/>
+    <enum-type name="Phonon::AddonInterface::AudioChannelCommand"/>
+    <enum-type name="Phonon::BackendInterface::Class"/>
+    <enum-type name="Phonon::EffectParameter::Hint" flags="Phonon::EffectParameter::Hints"/>
+    <enum-type name="Phonon::MediaController::Feature" flags="Phonon::MediaController::Features"/>
+    <enum-type name="Phonon::MediaSource::Type"/>
+    <enum-type name="Phonon::VideoWidget::AspectRatio"/>
+    <enum-type name="Phonon::VideoWidget::ScaleMode"/>
+    <enum-type name="Phonon::VolumeFaderEffect::FadeCurve"/>
+
+    <object-type name="Phonon::AbstractVideoOutput"/>
+    <object-type name="Phonon::AddonInterface"/>
+    <object-type name="Phonon::BackendInterface"/>
+    <object-type name="Phonon::EffectInterface"/>
+    <object-type name="Phonon::MediaNode"/>
+
+    <object-type name="Phonon::MediaObjectInterface"/>
+    <object-type name="Phonon::PlatformPlugin"/>
+    <object-type name="Phonon::StreamInterface"/>
+    <object-type name="Phonon::VideoWidgetInterface"/>
+    <object-type name="Phonon::VolumeFaderInterface"/>
+
+    <value-type name="Phonon::EffectParameter">
+        <modify-function signature="EffectParameter()" remove="all"/> <!-- internal -->
+        <modify-function signature="operator&lt;(const Phonon::EffectParameter &amp;)const" remove="all"/> <!-- internal -->
+        <modify-function signature="operator&gt;(const Phonon::EffectParameter &amp;)const" remove="all"/> <!-- internal -->
+        <modify-function signature="id()const" remove="all"/> <!-- internal -->
+        <modify-function signature="operator=(Phonon::EffectParameter)" remove="all"/> <!-- Covered by copy constructor -->
+        <modify-function signature="EffectParameter(Phonon::EffectParameter)" remove="all"/>
+        <modify-function signature="operator==(Phonon::EffectParameter)const" remove="all"/>
+    </value-type>
+    <value-type name="Phonon::MediaSource">
+        <modify-function signature="operator=(Phonon::MediaSource)" remove="all"/> <!-- Covered by copy constructor -->
+    </value-type>
+    <value-type name="Phonon::Path">
+        <modify-function signature="disconnect()" rename="disconnectPath"/>
+        <modify-function signature="operator=(Phonon::Path)" remove="all"/> <!-- Covered by copy constructor -->
+        <modify-function signature="insertEffect(Phonon::EffectDescription,Phonon::Effect*)">
+            <modify-argument index="1">
+                <parent index="this" action="add"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="insertEffect(Phonon::Effect*,Phonon::Effect*)">
+            <modify-argument index="1">
+                <parent index="this" action="add"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="removeEffect(Phonon::Effect*)">
+            <modify-argument index="1">
+                <parent index="this" action="remove"/>
+            </modify-argument>
+        </modify-function>
+    </value-type>
+    <value-type name="Phonon::ObjectDescription" generate="no"/>
+    <value-type name="Phonon::EffectDescription">
+        <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="fromIndex(int)" remove="all"/>
+    </value-type>
+    <value-type name="Phonon::AudioOutputDevice">
+        <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="fromIndex(int)" remove="all"/>
+    </value-type>
+
+    <value-type name="Phonon::AudioCaptureDevice">
+        <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="fromIndex(int)" remove="all"/>
+    </value-type>
+    <value-type name="Phonon::AudioChannelDescription">
+        <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="fromIndex(int)" remove="all"/>
+    </value-type>
+    <value-type name="Phonon::SubtitleDescription">
+        <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+        <modify-function signature="fromIndex(int)" remove="all"/>
+    </value-type>
+
+
+    <object-type name="Phonon::ObjectDescriptionModel" generate="no"/>
+    <object-type name="Phonon::EffectDescriptionModel" />
+    <object-type name="Phonon::AudioOutputDeviceModel" />
+
+    <object-type name="Phonon::AbstractAudioOutput"/>
+    <object-type name="Phonon::AbstractMediaStream"/>
+    <object-type name="Phonon::AudioOutput"/>
+    <object-type name="Phonon::Effect"/>
+    <object-type name="Phonon::EffectWidget"/>
+    <object-type name="Phonon::MediaController"/>
+    <object-type name="Phonon::MediaObject" />
+    <object-type name="Phonon::SeekSlider">
+        <modify-function signature="setMediaObject(Phonon::MediaObject*)">
+            <modify-argument index="1">
+                <parent index="this" action="add"/>
+            </modify-argument>
+        </modify-function>
+    </object-type>
+    <object-type name="Phonon::VideoPlayer"/>
+    <object-type name="Phonon::VideoWidget"/>
+    <object-type name="Phonon::VolumeFaderEffect"/>
+    <object-type name="Phonon::VolumeSlider">
+        <modify-function signature="setAudioOutput(Phonon::AudioOutput*)">
+            <modify-argument index="1">
+                <parent index="this" action="add"/>
+            </modify-argument>
+        </modify-function>
+    </object-type>
+
+</typesystem>
