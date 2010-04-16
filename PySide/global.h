@@ -23,6 +23,7 @@
 #include <QtScript/QtScript>
 #include <QtScriptTools/QtScriptTools>
 #include <QtMultimedia/QtMultimedia>
+#include <QtMaemo5/QtMaemo5>
 
 // QT_GUI_LIB must be defined to QSqlRelationalDelegate become visible
 #define QT_GUI_LIB

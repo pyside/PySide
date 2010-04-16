@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtGui">
+
+  <object-type name="QAbstractKineticScroller" />
+
+  <load-typesystem name="typesystem_gui_x11.xml" generate="yes"/>
+</typesystem>

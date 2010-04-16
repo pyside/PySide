@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtMaemo5">
+  <load-typesystem name="typesystem_gui.xml" generate="no"/>
+
+  <enum-type name="QMaemo5ValueButton::ValueLayout"/>
+
+  <object-type name="QMaemo5AbstractPickSelector"/>
+  <object-type name="QMaemo5DatePickSelector"/>
+  <object-type name="QMaemo5EditBar"/>
+  <object-type name="QMaemo5InformationBox"/>
+  <object-type name="QMaemo5ListPickSelector"/>
+  <object-type name="QMaemo5TimePickSelector"/>
+  <object-type name="QMaemo5ValueButton"/>
+</typesystem>
