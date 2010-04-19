@@ -221,6 +221,12 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
     TypeResolver::createValueTypeResolver<ushort>("ushort");
 }
 
+void SignalManager::clear()
+{
+    delete m_d;
+    m_d = new SignalManagerPrivate();
+}
+
 SignalManager::~SignalManager()
 {
     delete m_d;

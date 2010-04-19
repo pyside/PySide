@@ -247,10 +247,12 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         retval = PyObject_CallObject(callback, preparedArgs);
     }
 
-    if (!retval)
-        qWarning() << "Error calling slot" << m_metaObject.method(id).signature();
-    else
+    if (!retval) {
+        qDebug() << "Error calling slot" << m_metaObject.method(id).signature();
+        PyErr_Print();
+    } else {
         Py_DECREF(retval);
+    }
 
     return -1;
 }

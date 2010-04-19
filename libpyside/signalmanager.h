@@ -69,6 +69,9 @@ public:
 
     // Used to discovery if SignalManager was connected with object "destroyed()" signal.
     bool hasConnectionWith(const QObject *object);
+
+    // Disconnect all signals managed by Globalreceiver
+    void clear();
 private:
     struct SignalManagerPrivate;
     SignalManagerPrivate* m_d;
