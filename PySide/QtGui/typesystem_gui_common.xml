@@ -1180,7 +1180,27 @@
   <value-type name="QPrinterInfo">
     <modify-function signature="operator=(const QPrinterInfo &amp;)" remove="all"/>
   </value-type>
-  <object-type name="QLayoutItem"/>
+  <object-type name="QLayoutItem">
+
+    <modify-function signature="widget()">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="layout()">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="spacerItem()">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+
+  </object-type>
   <object-type name="QPaintDevice"/>
   <object-type name="QGraphicsItem">
     <inject-code class="target" position="end">
@@ -2262,171 +2282,204 @@
     <modify-function signature="getColor(const QColor&amp;, QWidget*, const QString&amp;, QFlags&lt;QColorDialog::ColorDialogOption>)" allow-thread="yes" />
   </object-type>
   <object-type name="QLayout">
-    <modify-function signature="addItem(QLayoutItem*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
+
+    <extra-includes>
+      <include file-name="glue/qlayout_help_functions.h" location="local"/>
+    </extra-includes>
+
+    <modify-function signature="itemAt(int)const">
+      <modify-argument index="return">
+        <define-ownership owner="default"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        addLayoutOwnership(%CPPSELF, %0);
+      </inject-code>
+    </modify-function>
+
+    <modify-function signature="parentWidget()const">
+      <modify-argument index="this">
+        <parent index="return" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="removeItem(QLayoutItem*)">
-      <modify-argument index="1">
-        <parent index="this" action="remove"/>
-      </modify-argument>
-    </modify-function>
+
     <modify-function signature="takeAt(int)">
       <modify-argument index="return">
         <parent index="this" action="remove"/>
       </modify-argument>
     </modify-function>
+
+    <modify-function signature="addItem(QLayoutItem*)">
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
+    </modify-function>
+
     <modify-function signature="addWidget(QWidget *)">
-      <modify-argument index="1">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addChildWidget(QWidget *)">
-      <modify-argument index="1">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addChildLayout(QLayout*)">
-      <modify-argument index="1">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="removeWidget(QWidget *)">
-      <modify-argument index="1">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="setMenuBar(QWidget*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
+
     <modify-function signature="getContentsMargins(int*,int*,int*,int*)const" remove="all" />
     <!--### Obsolete in 4.3-->
     <!-- <modify-function signature="setMargin(int)" remove="all"/> -->
     <!--### Obsolete in 4.3-->
   </object-type>
+
   <object-type name="QStackedLayout">
+    <extra-includes>
+      <include file-name="glue/qlayout_help_functions.h" location="local"/>
+    </extra-includes>
+
     <modify-function signature="addItem(QLayoutItem *)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
-    <modify-function signature="itemAt(int) const">
+
+   <modify-function signature="itemAt(int)const">
       <modify-argument index="return">
-        <parent index="this" action="add"/>
+        <define-ownership owner="default"/>
       </modify-argument>
+      <inject-code class="target" position="end">
+        addLayoutOwnership(%CPPSELF, %0);
+      </inject-code>
     </modify-function>
+
     <modify-function signature="addWidget(QWidget *)">
       <rename to="addStackedWidget"/>
-      <modify-argument index="1">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="insertWidget(int,QWidget*)">
-      <modify-argument index="2">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="takeAt(int)">
-      <modify-argument index="return">
-        <parent index="this" action="remove"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %2);
+      </inject-code>
     </modify-function>
   </object-type>
+
   <object-type name="QBoxLayout">
-    <modify-function signature="addWidget(QWidget *, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
+    <extra-includes>
+      <include file-name="glue/qlayout_help_functions.h" location="local"/>
+    </extra-includes>
+
+   <modify-function signature="itemAt(int)const">
+      <modify-argument index="return">
+        <define-ownership owner="default"/>
       </modify-argument>
+
+      <inject-code class="target" position="end">
+        addLayoutOwnership(%CPPSELF, %0);
+      </inject-code>
+    </modify-function>
+
+    <modify-function signature="addWidget(QWidget *, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addLayout(QLayout *, int)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addItem(QLayoutItem *)">
-      <modify-argument index="1">
-        <define-ownership owner="c++"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="insertWidget(int, QWidget *, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
-      <modify-argument index="2">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %2);
+      </inject-code>
     </modify-function>
     <modify-function signature="insertLayout(int, QLayout *, int)">
-      <modify-argument index="2">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %2);
+      </inject-code>
     </modify-function>
     <modify-function signature="insertItem(int, QLayoutItem *)">
-      <modify-argument index="2">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %2);
+      </inject-code>
     </modify-function>
     <modify-function signature="addSpacerItem(QSpacerItem*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="insertSpacerItem(int,QSpacerItem*)">
-      <modify-argument index="2">
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="takeAt(int)">
-      <modify-argument index="return">
-        <parent index="this" action="remove"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %2);
+      </inject-code>
     </modify-function>
   </object-type>
+
   <object-type name="QGridLayout">
+    <extra-includes>
+      <include file-name="glue/qlayout_help_functions.h" location="local"/>
+    </extra-includes>
+
     <modify-function signature="addWidget(QWidget *)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addWidget(QWidget *, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addWidget(QWidget *, int, int, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addLayout(QLayout *, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addLayout(QLayout *, int, int, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="takeAt(int)">
-      <modify-argument index="return">
-        <parent index="this" action="remove"/>
-      </modify-argument>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
     </modify-function>
     <modify-function signature="addItem(QLayoutItem *, int, int, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
+      <inject-code class="target" position="beginning">
+        addLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
+    </modify-function>
+
+   <modify-function signature="itemAt(int)const">
+      <modify-argument index="return">
+        <define-ownership owner="default"/>
       </modify-argument>
+
+      <inject-code class="target" position="end">
+        addLayoutOwnership(%CPPSELF, %0);
+      </inject-code>
     </modify-function>
 
     <modify-function signature="getItemPosition(int,int*,int*,int*,int*)" remove="all" />
   </object-type>
+
   <object-type name="QGraphicsView">
     <extra-includes>
       <include file-name="QPainterPath" location="global"/>
