@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtScript">
+    <load-typesystem name="typesystem_core.xml" generate="no" />
+
+    <enum-type name="QScriptContext::Error"/>
+    <enum-type name="QScriptContext::ExecutionState"/>
+    <enum-type name="QScriptContextInfo::FunctionType"/>
+    <enum-type name="QScriptEngine::ValueOwnership"/>
+    <enum-type name="QScriptEngine::QObjectWrapOption"/>
+    <enum-type name="QScriptEngineAgent::Extension"/>
+    <enum-type name="QScriptValue::ResolveFlag"/>
+    <enum-type name="QScriptValue::PropertyFlag"/>
+    <enum-type name="QScriptValue::SpecialValue"/>
+    <enum-type name="QScriptClass::QueryFlag"/>
+    <enum-type name="QScriptClass::Extension"/>
+
+    <object-type name="QScriptable"/>
+    <object-type name="QScriptClass"/>
+    <object-type name="QScriptClassPropertyIterator"/>
+    <object-type name="QScriptContext"/>
+    <value-type name="QScriptContextInfo"/>
+    <object-type name="QScriptEngineAgent"/>
+    <object-type name="QScriptEngine"/>
+    <object-type name="QScriptExtensionInterface"/>
+    <object-type name="QScriptExtensionPlugin"/>
+    <object-type name="QScriptProgram"/>
+    <value-type name="QScriptString"/>
+    <value-type name="QScriptValue"/>
+    <object-type name="QScriptValueIterator"/>
+</typesystem>
+

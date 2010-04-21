@@ -10,6 +10,7 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qabstracttransition_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qanimationgroup_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qeventtransition_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qfactoryinterface_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qfinalstate_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qhistorystate_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qmargins_wrapper.cpp

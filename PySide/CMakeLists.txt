@@ -33,8 +33,6 @@ endmacro(HAS_QT_MODULE)
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
                                                            "${CMAKE_BINARY_DIR}/PySide/__init__.py")
-
-
 # Try to find QtMultimedia
 # TODO: Remove this hack when cmake support QtMultimedia module
 if (NOT QT_QTMULTIMEDIA_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)
@@ -75,6 +73,7 @@ HAS_QT_MODULE(QT_QTUITOOLS_FOUND QtUiTools)
 HAS_QT_MODULE(QT_QTHELP_FOUND QtHelp)
 HAS_QT_MODULE(QT_QTXMLPATTERNS_FOUND QtXmlPatterns)
 HAS_QT_MODULE(QT_QTMAEMO5_FOUND QtMaemo5)
+HAS_QT_MODULE(QT_QTSCRIPT_FOUND QtScript)
 
 HAS_QT_MODULE(QT_QTMULTIMEDIA_FOUND QtMultimedia)
 

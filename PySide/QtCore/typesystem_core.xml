@@ -2818,6 +2818,8 @@
     </inject-code>
   </add-function>
 
+  <object-type name="QFactoryInterface"/>
+
   <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
   <suppress-warning text="signature 'findChildren(QRegExp)const' for function modification in 'QObject' not found"/>
   <suppress-warning text="signature 'findChildren(QString)const' for function modification in 'QObject' not found."/>
