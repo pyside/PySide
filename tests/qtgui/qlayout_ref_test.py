@@ -4,7 +4,7 @@
 import unittest
 from sys import getrefcount
 
-from PySide.QtGui import QHBoxLayout, QVBoxLayout, QGridLayout
+from PySide.QtGui import QHBoxLayout, QVBoxLayout, QGridLayout, QWidget
 from PySide.QtGui import QStackedLayout, QFormLayout
 from PySide.QtGui import QApplication, QPushButton, QLabel
 
@@ -42,26 +42,41 @@ class SaveReference(UsesQApplication):
         # Check if doesn't mess around with previous widget refcount
         self.assertEqual(getrefcount(self.widget1), 3)
 
+    def testMoveLayout(self):
+        l = QHBoxLayout()
+        self.assertEqual(getrefcount(self.widget1), 2)
+        l.addWidget(self.widget1)
+        self.assertEqual(getrefcount(self.widget1), 2)
+
+        w = QWidget()
+        w.setLayout(l)
+        self.assertEqual(getrefcount(self.widget1), 3)
+
+
     def testHBoxReference(self):
         #QHBoxLayout.addWidget reference count
-        self.checkLayoutReference(QHBoxLayout())
+        w = QWidget()
+        self.checkLayoutReference(QHBoxLayout(w))
 
     def testVBoxReference(self):
         #QVBoxLayout.addWidget reference count
-        self.checkLayoutReference(QVBoxLayout())
+        w = QWidget()
+        self.checkLayoutReference(QVBoxLayout(w))
 
     def testGridReference(self):
         #QGridLayout.addWidget reference count
-        self.checkLayoutReference(QGridLayout())
+        w = QWidget()
+        self.checkLayoutReference(QGridLayout(w))
 
     def testFormReference(self):
         #QFormLayout.addWidget reference count
-        self.checkLayoutReference(QFormLayout())
+        w = QWidget()
+        self.checkLayoutReference(QFormLayout(w))
 
     def testStackedReference(self):
         #QStackedLayout.addWidget reference count
-        self.checkLayoutReference(QStackedLayout())
-
+        w = QWidget()
+        self.checkLayoutReference(QStackedLayout(w))
 
 class MultipleAdd(UsesQApplication):
     '''Test case to check if refcount is incremented only once when multiple
@@ -73,12 +88,14 @@ class MultipleAdd(UsesQApplication):
         #Acquire resources
         super(MultipleAdd, self).setUp()
         self.widget = QPushButton('click me')
-        self.layout = QHBoxLayout()
+        self.win = QWidget()
+        self.layout = QHBoxLayout(self.win)
 
     def tearDown(self):
         #Release resources
         del self.widget
         del self.layout
+        del self.win
         super(MultipleAdd, self).tearDown()
 
     def testRefCount(self):
@@ -90,7 +107,6 @@ class MultipleAdd(UsesQApplication):
         self.assertEqual(getrefcount(self.widget), 3)
         self.layout.addWidget(self.widget)
         self.assertEqual(getrefcount(self.widget), 3)
-
 
 if __name__ == '__main__':
     unittest.main()
