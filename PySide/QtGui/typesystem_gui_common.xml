@@ -1,5 +1,21 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtGui">
+  <function signature="qAlpha(uint)" />
+  <function signature="qBlue(uint)" />
+  <function signature="qGray(int,int,int)" />
+  <function signature="qGray(uint)" />
+  <function signature="qGreen(uint)" />
+  <function signature="qIsGray(uint)" />
+  <function signature="qRed(uint)" />
+  <function signature="qRgb(int,int,int)" />
+  <function signature="qRgba(int,int,int,int)" />
+  <function signature="qFuzzyCompare(QMatrix,QMatrix)" />
+  <function signature="qFuzzyCompare(QTransform,QTransform)" />
+  <function signature="qFuzzyCompare(QQuaternion,QQuaternion)" />
+  <function signature="qFuzzyCompare(QMatrix4x4,QMatrix4x4)" />
+  <function signature="qFuzzyCompare(QVector2D,QVector2D)" />
+  <function signature="qFuzzyCompare(QVector3D,QVector3D)" />
+  <function signature="qFuzzyCompare(QVector4D,QVector4D)" />
   <rejection class="*" function-name="qobject_interface_iid&lt;QStyleFactoryInterface*&gt;"/>
   <rejection class="*" function-name="qobject_interface_iid&lt;QAccessibleFactoryInterface*&gt;"/>
   <rejection class="*" function-name="qobject_interface_iid&lt;QInputContextFactoryInterface*&gt;"/>

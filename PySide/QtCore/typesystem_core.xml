@@ -1,64 +1,31 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtCore">
     <load-typesystem name="typesystem_templates.xml" generate="no"/>
-    <!--
-        Stream manipulators does not fits into python language,
-        so we need to do a lot of inject code to handle them.
-    -->
-    <rejection class="" function-name="bin" />
-    <rejection class="" function-name="bom" />
-    <rejection class="" function-name="center" />
-    <rejection class="" function-name="dec" />
-    <rejection class="" function-name="endl" />
-    <rejection class="" function-name="fixed" />
-    <rejection class="" function-name="flush" />
-    <rejection class="" function-name="forcepoint" />
-    <rejection class="" function-name="forcesign" />
-    <rejection class="" function-name="hex" />
-    <rejection class="" function-name="left" />
-    <rejection class="" function-name="lowercasebase" />
-    <rejection class="" function-name="lowercasedigits" />
-    <rejection class="" function-name="noforcepoint" />
-    <rejection class="" function-name="noforcesign" />
-    <rejection class="" function-name="noshowbase" />
-    <rejection class="" function-name="oct" />
-    <rejection class="" function-name="reset" />
-    <rejection class="" function-name="right" />
-    <rejection class="" function-name="scientific" />
-    <rejection class="" function-name="showbase" />
-    <rejection class="" function-name="uppercasebase" />
-    <rejection class="" function-name="uppercasedigits" />
-    <rejection class="" function-name="ws" />
-    <!-- Qt4.6 functions -->
-    <rejection class="" function-name="qGetPtrHelper" />
-    <rejection class="" function-name="qMallocAligned" />
-    <rejection class="" function-name="qReallocAligned" />
-    <rejection class="" function-name="qRegisterAnimationInterpolator" />
-    <rejection class="" function-name="qVariantSetValue&lt;QVariant>" />
-    <rejection class="" function-name="q_check_ptr" />
-    <rejection class="" function-name="qobject_interface_iid" />
-    <rejection class="" function-name="qobject_interface_iid&lt;QFactoryInterface*>" />
-    <rejection class="" function-name="qobject_interface_iid&lt;QTextCodecFactoryInterface*>" />
-    <rejection class="" function-name="qstricmp" />
-    <rejection class="" function-name="qstrlen" />
-    <rejection class="" function-name="qstrncmp" />
-    <rejection class="" function-name="qstrnicmp" />
-    <rejection class="" function-name="qstrnlen" />
-    <rejection class="" function-name="qtTrId" />
-    <rejection class="" function-name="qvariant_cast&lt;QVariant>" />
-    <rejection class="" function-name="qFreeAligned" />
-    <rejection class="" function-name="qSharedBuild" />
-    <!-- End of rejections -->
-    <rejection class="" function-name="qAddPostRoutine" />
-    <rejection class="" function-name="qRemovePostRoutine" />
-    <!-- Removed because it have uchar* in their arguments-->
-    <rejection class="" function-name="qCompress" />
-    <!-- Removed because it's nto part of the public API, I guess -->
-    <rejection class="" function-name="qInf" />
-    <!-- Same as qCompress -->
-    <rejection class="" function-name="qUncompress" />
-    <!-- We do not export QStreamManipulator, so use QTextStream.setRealNumberPrecision instead of this -->
-    <rejection class="" function-name="qSetRealNumberPrecision" />
+
+    <function signature="qAcos(qreal)" />
+    <function signature="qAsin(qreal)" />
+    <function signature="qAtan(qreal)" />
+    <function signature="qAtan2(qreal,qreal)" />
+    <function signature="qChecksum(const char*,uint)" />
+    <function signature="qCritical(const char*)" />
+    <function signature="qDebug(const char*)" />
+    <function signature="qExp(qreal)" />
+    <function signature="qFabs(qreal)" />
+    <function signature="qFastCos(qreal)" />
+    <function signature="qFastSin(qreal)" />
+    <function signature="qFatal(const char*)" />
+    <function signature="qFuzzyCompare(double,double)" />
+    <function signature="qFuzzyIsNull(double)" />
+    <function signature="qIsFinite(double)" />
+    <function signature="qIsInf(double)" />
+    <function signature="qIsNaN(double)" />
+    <function signature="qIsNull(double)" />
+    <function signature="qRound(qreal)" />
+    <function signature="qTan(qreal)" />
+    <function signature="qVersion()" />
+    <function signature="qWarning(const char*)" />
+    <function signature="qrand()" />
+    <function signature="qsrand(uint)" />
 
     <!-- TODO: We do not support void* or const void* as arg -->
     <rejection class="QMetaObject" function-name="activate"/>
@@ -81,189 +48,6 @@
   <rejection class="*" function-name="trUtf8" />
   <rejection class="*" function-name="qt_metacast" />
   <rejection class="*" function-name="qt_metacall" />
-  <rejection class="" function-name="qSharedPointerDynamicCast"/>
-  <rejection class="" function-name="qSharedPointerConstCast"/>
-  <rejection class="" function-name="qSharedPointerCast"/>
-  <rejection class="" function-name="qWeakPointerCast"/>
-  <rejection class="" function-name="qAbs"/>
-  <rejection class="" function-name="qErrnoWarning"/>
-  <rejection class="" function-name="qstrcpy"/>
-  <rejection class="" function-name="qstrcmp"/>
-  <rejection class="" function-name="qstrdup"/>
-  <rejection class="" function-name="qstrncpy"/>
-  <rejection class="" function-name="qAbs"/>
-  <rejection class="" function-name="qAccessibleEditableTextCastHelper"/>
-  <rejection class="" function-name="qAccessibleTableCastHelper"/>
-  <rejection class="" function-name="qAccessibleTextCastHelper"/>
-  <rejection class="" function-name="qAccessibleValueCastHelper"/>
-  <rejection class="" function-name="qAppName"/>
-  <rejection class="" function-name="qAtomicAssign"/>
-  <rejection class="" function-name="q_atomic_decrement"/>
-  <rejection class="" function-name="qAtomicDetach"/>
-  <rejection class="" function-name="q_atomic_fetch_and_add_int"/>
-  <rejection class="" function-name="q_atomic_fetch_and_add_ptr"/>
-  <rejection class="" function-name="q_atomic_increment"/>
-  <rejection class="" function-name="q_atomic_set_int"/>
-  <rejection class="" function-name="q_atomic_set_ptr"/>
-  <rejection class="" function-name="q_atomic_test_and_set_int"/>
-  <rejection class="" function-name="q_atomic_test_and_set_ptr"/>
-  <rejection class="" function-name="qBinaryFind"/>
-  <rejection class="" function-name="qBound"/>
-  <rejection class="" function-name="qbswap"/>
-  <rejection class="" function-name="qbswap_helper"/>
-  <rejection class="" function-name="qbswap&lt;qint16&gt;"/>
-  <rejection class="" function-name="qbswap&lt;qint32&gt;"/>
-  <rejection class="" function-name="qbswap&lt;qint64&gt;"/>
-  <rejection class="" function-name="qbswap&lt;quint16&gt;"/>
-  <rejection class="" function-name="qbswap&lt;quint32&gt;"/>
-  <rejection class="" function-name="qbswap&lt;quint64&gt;"/>
-  <rejection class="" function-name="qCeil"/>
-  <rejection class="" function-name="qCopy"/>
-  <rejection class="" function-name="qCopyBackward"/>
-  <rejection class="" function-name="qCos"/>
-  <rejection class="" function-name="qCount"/>
-  <rejection class="" function-name="qDeleteAll"/>
-  <rejection class="" function-name="qDrawPlainRect"/>
-  <rejection class="" function-name="qDrawShadeLine"/>
-  <rejection class="" function-name="qDrawShadePanel"/>
-  <rejection class="" function-name="qDrawShadeRect"/>
-  <rejection class="" function-name="qDrawWinButton"/>
-  <rejection class="" function-name="qDrawWinPanel"/>
-  <rejection class="" function-name="qEqual"/>
-  <rejection class="" function-name="qFill"/>
-  <rejection class="" function-name="qFind"/>
-  <rejection class="" function-name="qFindChild"/>
-  <rejection class="" function-name="qFindChildren"/>
-  <rejection class="" function-name="qFindString"/>
-  <rejection class="" function-name="qFindStringBoyerMoore"/>
-  <rejection class="" function-name="qFloor"/>
-  <rejection class="" function-name="qForeachContainer"/>
-  <rejection class="" function-name="qForeachContainerNew"/>
-  <rejection class="" function-name="qForeachPointer"/>
-  <rejection class="" function-name="qFree"/>
-  <rejection class="" function-name="qFromBigEndian"/>
-  <rejection class="" function-name="qFromBigEndian&lt;qint16&gt;"/>
-  <rejection class="" function-name="qFromBigEndian&lt;qint32&gt;"/>
-  <rejection class="" function-name="qFromBigEndian&lt;qint64&gt;"/>
-  <rejection class="" function-name="qFromBigEndian&lt;quint16&gt;"/>
-  <rejection class="" function-name="qFromBigEndian&lt;quint32&gt;"/>
-  <rejection class="" function-name="qFromBigEndian&lt;quint64&gt;"/>
-  <rejection class="" function-name="qFromLittleEndian"/>
-  <rejection class="" function-name="qFromLittleEndian&lt;qint16&gt;"/>
-  <rejection class="" function-name="qFromLittleEndian&lt;qint32&gt;"/>
-  <rejection class="" function-name="qFromLittleEndian&lt;qint64&gt;"/>
-  <rejection class="" function-name="qFromLittleEndian&lt;quint16&gt;"/>
-  <rejection class="" function-name="qFromLittleEndian&lt;quint32&gt;"/>
-  <rejection class="" function-name="qFromLittleEndian&lt;quint64&gt;"/>
-  <rejection class="" function-name="qgetenv"/>
-  <rejection class="" function-name="qgraphicsitem_cast"/>
-  <rejection class="" function-name="qGreater"/>
-  <rejection class="" function-name="qHash"/>
-  <rejection class="" function-name="qInstallMsgHandler"/>
-  <rejection class="" function-name="qIntCast"/>
-  <rejection class="" function-name="qIsDetached"/>
-  <rejection class="" function-name="qIsDetached&lt;QBitArray&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QBitmap&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QBrush&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QByteArray&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QIcon&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QImage&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QKeySequence&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QPen&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QPicture&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QPixmap&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QString&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QUrl&gt;"/>
-  <rejection class="" function-name="qIsDetached&lt;QVariant&gt;"/>
-  <rejection class="" function-name="qLess"/>
-  <rejection class="" function-name="qLn"/>
-  <rejection class="" function-name="qLowerBound"/>
-  <rejection class="" function-name="qMakePair"/>
-  <rejection class="" function-name="qMalloc"/>
-  <rejection class="" function-name="qMapLessThanKey"/>
-  <rejection class="" function-name="qMax"/>
-  <rejection class="" function-name="qMemCopy"/>
-  <rejection class="" function-name="qMemSet"/>
-  <rejection class="" function-name="qMetaTypeConstructHelper"/>
-  <rejection class="" function-name="qMetaTypeDeleteHelper"/>
-  <rejection class="" function-name="qMetaTypeId"/>
-  <rejection class="" function-name="qMetaTypeLoadHelper"/>
-  <rejection class="" function-name="qMetaTypeSaveHelper"/>
-  <rejection class="" function-name="qMin"/>
-  <rejection class="" function-name="qobject_cast"/>
-  <rejection class="" function-name="qobject_cast&lt;const QWidget*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QAccessibleBridgeFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QAccessibleBridgeFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QAccessibleFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QAccessibleInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterfaceV2*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QIconEngineFactoryInterfaceV2*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QImageIOHandlerFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QInputContextFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QPictureFormatInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QPictureFormatInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QStyleFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QTextCodecFactoryInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QTextObjectInterface*&gt;"/>
-  <rejection class="" function-name="qobject_cast&lt;QWidget*&gt;"/>
-  <rejection class="" function-name="qPow"/>
-  <rejection class="" function-name="qputenv"/>
-  <rejection class="" function-name="qRealloc"/>
-  <rejection class="" function-name="qRegisterMetaType"/>
-  <rejection class="" function-name="qRegisterMetaTypeStreamOperators"/>
-  <rejection class="" function-name="qRegisterStaticPluginInstanceFunction"/>
-  <rejection class="" function-name="qRound64"/>
-  <rejection class="" function-name="qSetFieldWidth"/>
-  <rejection class="" function-name="qSetPadChar"/>
-  <rejection class="" function-name="qSin"/>
-  <rejection class="" function-name="qsnprintf"/>
-  <rejection class="" function-name="qSort"/>
-  <rejection class="" function-name="qSqrt"/>
-  <rejection class="" function-name="qStableSort"/>
-  <rejection class="" function-name="qStringComparisonHelper"/>
-  <rejection class="" function-name="qstyleoption_cast"/>
-  <rejection class="" function-name="qSwap"/>
-  <rejection class="" function-name="qSwap&lt;QBitArray&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QBitmap&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QBrush&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QByteArray&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QIcon&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QImage&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QKeySequence&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QPen&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QPicture&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QPixmap&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QString&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QUrl&gt;"/>
-  <rejection class="" function-name="qSwap&lt;QVariant&gt;"/>
-  <rejection class="" function-name="qt_assert"/>
-  <rejection class="" function-name="qt_assert_x"/>
-  <rejection class="" function-name="qt_check_pointer"/>
-  <rejection class="" function-name="qt_error_string"/>
-  <rejection class="" function-name="qThreadStorage_localData"/>
-  <rejection class="" function-name="qThreadStorage_localData_const"/>
-  <rejection class="" function-name="qThreadStorage_setLocalData"/>
-  <rejection class="" function-name="qt_message_output"/>
-  <rejection class="" function-name="qt_noop"/>
-  <rejection class="" function-name="qToBigEndian"/>
-  <rejection class="" function-name="qToLittleEndian"/>
-  <rejection class="" function-name="qToUnaligned"/>
-  <rejection class="" function-name="qToVoidFuture"/>
-  <rejection class="" function-name="qt_qFindChild_helper"/>
-  <rejection class="" function-name="qt_qFindChildren_helper"/>
-  <rejection class="" function-name="qt_set_sequence_auto_mnemonic"/>
-  <rejection class="" function-name="qUpperBound"/>
-  <rejection class="" function-name="qVariantCanConvert"/>
-  <rejection class="" function-name="qvariant_cast"/>
-  <rejection class="" function-name="qvariant_cast_helper"/>
-  <rejection class="" function-name="qVariantFromValue"/>
-  <rejection class="" function-name="qVariantSetValue"/>
-  <rejection class="" function-name="qVariantValue"/>
-  <rejection class="" function-name="qvsnprintf"/>
   <rejection class="QThreadPool"/>
   <!-- From Qt4.6 -->
   <rejection class="*" field-name="d_ptr"/>
