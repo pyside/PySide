@@ -2178,7 +2178,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QWidgetItem"/>
+  <object-type name="QWidgetItem" polymorphic-id-expression="%1-&gt;widget()" />
   <object-type name="QWindowsStyle">
     <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*, const QWidget*)const" remove="all"/>
     <!--### Obsolete in 4.3-->
