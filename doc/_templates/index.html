@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% set title = 'Overview' %}
+{% block body %}
+<div class="section">
+  <h1>PySide {{ version }}</h1>
+
+    <p><a href="http://www.qtsoftware.com/">Qt</a> is a cross-platform application framework from Qt Software (owned by Nokia).
+    It features a large number of libraries providing services like network abstraction and XML handling, along with a very rich
+    GUI package, allowing C++ developers to write their applications once and run them unmodified in different systems.
+    PySide aims to provide Python developers access to the Qt libraries in the most natural way.</p>
+
+    <p>PySide is built using the BoostPythonGenerator.</p>
+
+  <h2>Documentation</h2>
+  <table class="contentstable" align="center" style="margin-left: 30px"><tr>
+    <td width="50%">
+      <p class="biglink"><a class="biglink" href="{{ pathto("issuesdiff") }}">PyQt Incompatibilities</a><br/>
+         <span class="linkdescr">PySide issues and specificities</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("howto-build/index") }}">How to build</a><br/>
+         <span class="linkdescr">building compiling and installing PySide</span></p>
+    </td>
+    <td width="50%">
+      <p class="biglink"><a class="biglink" href="{{ pathto("contents") }}">Contents</a><br/>
+         <span class="linkdescr">for a complete overview</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("dbus") }}">DBus</a><br/>
+         <span class="linkdescr">DBus integration</span></p>
+
+    </td></tr>
+  </table>
+
+  <h2>Modules</h2>
+  <table class="contentstable" align="center" style="margin-left: 30px"><tr>
+    <td width="50%">
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtCore/index") }}">QtCore</a><br/>
+         <span class="linkdescr">core non-GUI functionality</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtGui/index") }}">QtGui</a><br/>
+         <span class="linkdescr">extends QtCore with GUI functionality.</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtHelp/index") }}">QtHelp</a><br/>
+         <span class="linkdescr">provides classes for integrating online documentation in applications</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtNetwork/index") }}">QtNetwork</a><br/>
+         <span class="linkdescr">offers classes that allow you to write TCP/IP clients and servers</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtOpenGL/index") }}">QtOpenGL</a><br/>
+         <span class="linkdescr">offers classes that make it easy to use OpenGL in Qt applications</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtScript/index") }}">QtScript</a><br/>
+         <span class="linkdescr">provides classes for making Qt applications scriptable</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtMultimedia/index") }}">QtMultimedia</a><br/>
+         <span class="linkdescr"></span>provides low-level multimedia functionality</p>
+    </td>
+    <td width="50%">
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtScriptTools/index") }}">QtScriptTools</a><br/>
+         <span class="linkdescr">provides additional components for applications that use Qt Script</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtSql/index") }}">QtSql</a><br/>
+         <span class="linkdescr">helps you provide seamless database integration to your Qt applications</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtSvg/index") }}">QtSvg</a><br/>
+         <span class="linkdescr">provides classes for displaying the contents of SVG files</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtUiTools/index") }}">QtUiTools</a><br/>
+         <span class="linkdescr">provides classes to handle forms created with Qt Designer</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtXml/index") }}">QtXml</a><br/>
+         <span class="linkdescr">provides a stream reader and writer for XML documents</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/QtWebKit/index") }}">QtWebkit</a><br/>
+         <span class="linkdescr">provides a Web browser engine</span></p>
+      <p class="biglink"><a class="biglink" href="{{ pathto("PySide/phonon/index") }}">Phonon</a><br/>
+         <span class="linkdescr">cross-platform multimedia framework that enables the use of audio and video
+          content in Qt applications</span></p>
+    </td></tr>
+  </table>
+</div>
+{% endblock %}

@@ -82,3 +82,4 @@ add_subdirectory(libpyside)
 # project directories
 add_subdirectory(${BINDING_NAME})
 add_subdirectory(tests)
+add_subdirectory(doc)
