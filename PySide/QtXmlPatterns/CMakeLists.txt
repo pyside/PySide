@@ -1,4 +1,4 @@
-project(QtXml)
+project(QtXmlPatterns)
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set(QtXmlPatterns_46_SRC )
