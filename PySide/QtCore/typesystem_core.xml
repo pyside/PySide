@@ -221,7 +221,10 @@
     <conversion-rule file="qmap_conversions.h"/>
     <include file-name="QMap" location="global"/>
   </container-type>
-  <container-type name="QMultiMap" type="multi-map"/>
+  <container-type name="QMultiMap" type="multi-map">
+    <conversion-rule file="qmultimap_conversions.h"/>
+    <include file-name="QMultiMap" location="global"/>
+  </container-type>
   <container-type name="QPair" type="pair">
     <conversion-rule file="qpair_conversions.h"/>
     <include file-name="QPair" location="global"/>
