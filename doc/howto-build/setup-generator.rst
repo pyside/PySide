@@ -9,8 +9,8 @@ Overview
 =========================================
 
 The **Generator Runner** (A.K.A. :program:`generatorrunner`) is the
-program that controls the binding generation process according to the
-rules given by the user through headers, type system files and generator
+program that controls the bindings generation process according to the
+rules given by the user through headers, typesystem files and generator
 front-ends (such as :ref:`shiboken-generator`). It depends on
 :ref:`api-extractor` library.
 
@@ -30,13 +30,13 @@ Build requirements
 Building and installing
 =======================
 
-To build and install just follow the generic cmake instructions in
+To build and install just follow the generic CMake instructions in
 section :ref:`cmake-primer`.
 
 Debian packaging
 ================
 
-In order to compile this package in a debian environment, make sure the
+In order to compile this package in a Debian environment, make sure the
 following packages are installed:
 
 * debhelper (>= 5)

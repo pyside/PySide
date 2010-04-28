@@ -24,13 +24,14 @@ Build requirements
 
 + CMake >= 2.6.0
 + Qt libraries and development headers >= 4.5.0
++ Python development headers >= 2.5
 + :ref:`api-extractor` + development headers
 + :ref:`generator-runner` + development headers
 
 Building and installing
 =======================
 
-To build and install just follow the generic cmake instructions in
+To build and install just follow the generic CMake instructions in
 section :ref:`cmake-primer`.
 
 Debian packaging

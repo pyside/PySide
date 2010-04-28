@@ -40,7 +40,7 @@ Build requirements
 ==================
 
    + CMake (>= 2.6.0)
-   + Qt 4.6 libraries + headers
+   + Qt4.6 libraries and development headers
    + Python dev libraries
    + Shiboken libraries
    + :ref:`generator-runner`
@@ -58,18 +58,23 @@ number of source files that will be compiled.
 Debian packaging
 ================
 
-.. note:: For the time being the Debian packaging uses Qt 4.5 as dependency, therefore the generated bindings will be for this version of Qt.
+.. note:: Qt 4.6 is available for Debian in the testing branch (squeeze), Ubuntu 10.04 (Lucid Lynx), and in Maemo 5 (Fremantle) in the upcoming PR 1.2 update. For building to Maemo 5, it is advised to get the packaging from the source uploaded to Maemo extras-devel, as it needs minor modifications in order to build.
 
-In order to compile this package in a debian environment, make sure the
+In order to compile this package in a Debian environment, make sure the
 following packages are installed:
 
 * debhelper (>= 5)
 * cdbs
 * cmake (>= 2.6.0)
 * python-all-dev
-* python-central (>= 0.6)
+* python-all-dbg
+* python-support (>= 0.3.9)
+* libqt4-dev
+* libqt4-opengl-dev
+* shiboken (>= 0.3)
 * generatorrunner (>= 0.4)
-* libqt4-dev (>= 4.5)
+* libshiboken-dev (>= 0.3.0)
+
 
 And then you can build the package using::
 

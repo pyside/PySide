@@ -6,9 +6,9 @@ CMake primer
 ************
 
 This chapter is a basic introduction to CMake, the build system used by PySide
-and the boost binding generator.
+and the bindings generator.
 
-The practical steps will focus on how to use cmake on a Unix-like (GNU/Linux)
+The practical steps will focus on how to use CMake on a Unix-like (GNU/Linux)
 environment.
 
 
@@ -20,13 +20,13 @@ Project file - CMakeLists.txt
 
 CMake parses the file CMakeLists.txt for information about the project,
 like project name, dependencies, what should be compiled, what should be
-shipped.
+shipped, and so on.
 
 
 CMake variables
 ---------------
 
-CMake can have its default behavior modified by providing some
+CMake can have its default behavior modified by providing some options in the command line:
 
 * ``CMAKE_INSTALL_PREFIX=<some path here>`` sets the install prefix to
   the specified path.
@@ -34,7 +34,7 @@ CMake can have its default behavior modified by providing some
   where CMake will try to find its modules.
 * ``CMAKE_TOOLCHAIN_FILE=<file path>`` sets the path to the file that
   describes the toolchain used to compile this project. It is very useful
-  when using CMake with icecc to speedup compilation.
+  when using CMake with `Icecream <http://en.opensuse.org/Icecream>`_ to speed up compilation.
 
 You can define a variable using the ``-D<VARIABLE>`` switch like the example
 below.
@@ -57,7 +57,7 @@ want it to be installed into ``/opt/sandbox/``, use the following lines::
   cmake -DCMAKE_INSTALL_PREFIX=/opt/sandbox ..
 
 CMake will process the project file and write the output files in the
-current directory
+current directory.
 
 Building
 ========
@@ -68,5 +68,5 @@ the project using :program:`make`.
 Installing
 ==========
 
-As in the building process, ``make install`` will install the files into
+As in the building process, :program:`make install` will install the files into
 the target directory.
