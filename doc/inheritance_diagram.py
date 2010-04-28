@@ -148,7 +148,7 @@ class InheritanceGraph(object):
         def recurse(cls):
             all_classes[cls] = None
             for c in cls.__bases__:
-                if c not in all_classes and c.__name__ != "instance":
+                if c not in all_classes and c.__name__ != "BaseWrapper":
                     recurse(c)
 
         for cls in classes:
@@ -246,7 +246,7 @@ class InheritanceGraph(object):
 
             # Write the edges
             for base in cls.__bases__:
-                if base.__name__ == "instance":
+                if base.__name__ == "BaseWrapper":
                     continue
                 if not self.show_builtins and base in __builtins__.values():
                     continue
@@ -304,7 +304,7 @@ class InheritanceDiagram(Directive):
         node['graph'] = graph
         # Store the original content for use as a hash
         node['parts'] = self.options.get('parts', 0)
-        node['content'] = ' '.join(class_names)
+        node['content'] = ', '.join(class_names)
         return [node]
 
 
@@ -332,7 +332,8 @@ def html_visit_inheritance_diagram(self, node):
             urls[child['reftitle']] = '#' + child.get('refid')
 
     dotcode = graph.generate_dot(name, parts, urls, env=self.builder.env)
-    render_dot_html(self, node, dotcode, [], 'inheritance', 'inheritance')
+    render_dot_html(self, node, dotcode, [], 'inheritance', 'inheritance',
+                    alt='Inheritance diagram of ' + node['content'])
     raise nodes.SkipNode
 
 
