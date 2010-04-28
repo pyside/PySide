@@ -10,7 +10,7 @@ making them available just using the ``import`` command.
 
 The build process is comprised of two stages: in a first moment the
 bindings source code are created from the Qt 4.6 headers by calling
-the :ref:`boost-python-generator` with apropriate parameters; the
+the :ref:`generator-runner` with apropriate parameters; the
 generated files are then compiled and linked together to form the
 bindings libraries.
 
@@ -41,8 +41,9 @@ Build requirements
 
    + CMake (>= 2.6.0)
    + Qt 4.6 libraries + headers
-   + Boost.Python + headers (>= 1.40.0)
-   + :ref:`boost-python-generator`
+   + Python dev libraries
+   + Shiboken libraries
+   + :ref:`generator-runner`
 
 
 Building and installing
@@ -67,8 +68,7 @@ following packages are installed:
 * cmake (>= 2.6.0)
 * python-all-dev
 * python-central (>= 0.6)
-* boostpythongenerator (>= 0.3)
-* libboost-python1.40-dev (>= 1.40.0)
+* generatorrunner (>= 0.4)
 * libqt4-dev (>= 4.5)
 
 And then you can build the package using::

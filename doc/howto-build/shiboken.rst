@@ -1,18 +1,17 @@
 
-.. _generator-runner:
+.. _shiboken-generator:
 
-****************
-Generator Runner
-****************
+******************
+Shiboken Generator
+******************
 
 Overview
 =========================================
 
-The **Generator Runner** (A.K.A. :program:`generatorrunner`) is the
-program that controls the binding generation process according to the
-rules given by the user through headers, type system files and generator
-front-ends (such as :ref:`shiboken-generator`). It depends on
-:ref:`api-extractor` library.
+The **Shiboken Generator** (A.K.A. :program:`shiboken`) is
+the plugin that creates the PySide bindings source files from Qt headers
+and auxiliary files  (typesystems, ``global.h`` and glue files). It depends on
+:ref:`generator-runner` and :ref:`api-extractor` library.
 
 
 Getting the sources
@@ -24,8 +23,9 @@ Build requirements
 ==================
 
 + CMake >= 2.6.0
-+ Qt4.5 libraries and development headers >= 4.5.0
++ Qt libraries and development headers >= 4.5.0
 + :ref:`api-extractor` + development headers
++ :ref:`generator-runner` + development headers
 
 Building and installing
 =======================
@@ -44,6 +44,7 @@ following packages are installed:
 * cmake (>= 2.6.0)
 * libqt4-dev (>= 4.5)
 * libapiextractor-dev (>= 0.3.2)
+* libgenrunner-dev (>= 0.3.2a1)
 
 And then you can build the package using::
 

@@ -7,7 +7,7 @@ Pre-requisites
 You will need:
 
 1. Qt4 source code (for API documentation).
-2. boostpythongenerator
+2. Generator runner with shiboken plugin
 3. PySide source code
 4. cmake
 5. sphinx

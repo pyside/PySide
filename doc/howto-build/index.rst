@@ -13,7 +13,7 @@ Contents:
    cmake-primer
    setup-apiextractor
    setup-generator
-   setup-boostpython
+   shiboken
    setup-bindings
 
 
