@@ -68,9 +68,9 @@ struct QtDictConverter
         typename QtDict::const_iterator it = cppobj.begin();
 
         for (; it != cppobj.end(); ++it) {
-            PyDict_SetItem(result,
-                           Shiboken::Converter<typename QtDict::key_type>::toPython(it.key()),
-                           Shiboken::Converter<typename QtDict::mapped_type>::toPython(it.value()));
+            Shiboken::AutoDecRef keyObj(Shiboken::Converter<typename QtDict::key_type>::toPython(it.key()));
+            Shiboken::AutoDecRef valueObj(Shiboken::Converter<typename QtDict::mapped_type>::toPython(it.value()));
+            PyDict_SetItem(result, keyObj, valueObj);
         }
 
         return result;
@@ -123,9 +123,10 @@ struct QSequenceConverter
         if (PyObject_TypeCheck(pyobj, Shiboken::SbkType<T>()))
             return *reinterpret_cast<T*>(Shiboken::getCppPointer(pyobj, Shiboken::SbkType<T>()));
 
+        Shiboken::AutoDecRef fastSequence(PySequence_Fast(pyobj, "Invalid sequence object"));
         T result;
         for (int i = 0; i < PySequence_Size(pyobj); i++) {
-            PyObject* pyItem = PySequence_GetItem(pyobj, i);
+            PyObject* pyItem = PySequence_Fast_GET_ITEM(fastSequence, i);
             result << Shiboken::Converter<typename T::value_type>::toCpp(pyItem);
         }
         return result;
