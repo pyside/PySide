@@ -3,18 +3,18 @@ DBUS integration
 
 To get PySide and DBus working toghether you can use the glib mainloop integration already done in pydbus.
 
-The example above show how to export Qt objects to python and emit an DBus signal when a Qtsignal is emited.  The code comments explains what you need to know about PySide and dbus, any doubts, see the python-dbus help.
+The example above show how to export Qt objects to python and emit an DBus signal when a Qt signal is emited.  The code comments explains what you need to know about PySide and dbus, any doubts, see the python-dbus help.
 
 DBUS Client
 -----------
 
-.. literalinclude:: ../examples/dbus/example-client.py
+.. literalinclude:: codesnippets/examples/dbus/example-client.py
 
 
 DBUS Server
 -----------
 
-.. literalinclude:: ../examples/dbus/example-server.py
+.. literalinclude:: codesnippets/examples/dbus/example-server.py
 
 
 Running the example
