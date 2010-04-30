@@ -25,8 +25,17 @@ class TestSimplePlaying(UsesQCoreApplication):
 
         self.called = False
 
+        # prevent locking with:
+        # request to play a stream, but no valid audio ...
+        self.output = phonon.Phonon.AudioOutput()
+        self.path = phonon.Phonon.createPath(self.media, self.output)
+
     def tearDown(self):
         super(TestSimplePlaying, self).tearDown()
+        del self.path
+        del self.output
+        del self.media
+        del self.source
 
     def testFinishedSignal(self):
         # Should pass if finished() is called
@@ -37,12 +46,9 @@ class TestSimplePlaying(UsesQCoreApplication):
         self.assertEqual(self.media.currentSource(), self.source)
 
     def testPathCreation(self):
-        output = phonon.Phonon.AudioOutput()
-        path = phonon.Phonon.createPath(self.media, output)
-
         # FIXME Both functions below are not exported by PyQt4
-        self.assertEqual(path.sink(), output)
-        self.assertEqual(path.source(), self.media)
+        self.assertEqual(self.path.sink(), self.output)
+        self.assertEqual(self.path.source(), self.media)
 
     def state_cb(self, newState, OldState):
         self.called = True
