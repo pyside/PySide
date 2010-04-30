@@ -371,6 +371,7 @@ QT_END_HEADER
 #endif
 
 // Phonon
+#include "phonon/pyside_phonon.h"
 #include<phonon/abstractaudiooutput.h>
 #include<phonon/abstractmediastream.h>
 #include<phonon/abstractvideooutput.h>

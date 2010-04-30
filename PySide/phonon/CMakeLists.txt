@@ -36,10 +36,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumefadereffect_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumefaderinterface_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumeslider_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_wrapper.cpp
-)
-
-set(phonon_GLUE_CODE
-${CMAKE_CURRENT_SOURCE_DIR}/glue/phonon_backendcapabilities_notifier_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_backendcapabilities_notifierwrapper_wrapper.cpp
 )
 
 execute_generator(phonon phonon_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${phonon_SOURCE_DIR}")

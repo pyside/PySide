@@ -10,17 +10,40 @@
     <rejection class="Phonon::Factory"/>
     <rejection class="Phonon::Experimental"/>
     <rejection class="AudioOutputAdaptor"/>
+    <rejection class="Phonon::BackendCapabilities::Notifier"/>
     <rejection class="*" field-name="k_ptr"/>
+    <rejection class="*" field-name="k_func"/>
 
     <namespace-type name="Phonon">
         <extra-includes>
           <include file-name="phononnamespace.h" location="global"/>
         </extra-includes>
     </namespace-type>
-    <namespace-type name="Phonon::BackendCapabilities" />
+    <namespace-type name="Phonon::BackendCapabilities" >
+       <inject-code class="native">
+        Phonon::BackendCapabilities::NotifierWrapper* Phonon::BackendCapabilities::NotifierWrapper::m_instance = 0;
+        Phonon::BackendCapabilities::Notifier* Phonon::BackendCapabilities::NotifierWrapper::m_notifier = 0;
+       </inject-code>
+
+       <add-function signature="notifier()" return-type="Phonon::BackendCapabilities::NotifierWrapper">
+          <inject-code class="target">
+            Phonon::BackendCapabilities::NotifierWrapper *_notifierWrapper =  Phonon::BackendCapabilities::NotifierWrapper::notifier();
+            %PYARG_0 = %CONVERTTOPYTHON[Phonon::BackendCapabilities::NotifierWrapper*](_notifierWrapper);
+          </inject-code>
+       </add-function>
+    </namespace-type>
 
     <!-- ### causes moc-related linker error -->
     <!-- <object-type name="Phonon::BackendCapabilities::Notifier"/> -->
+    <object-type name="Phonon::BackendCapabilities::NotifierWrapper" target-lang-name="Notifier">
+        <include file-name="backendcapabilities.h" location="global"/>
+        <include file-name="pyside_phonon.h" location="local"/>
+
+        <modify-function signature="notifier()" remove="all"/>
+        <modify-function signature="Phonon::BackendCapabilities::NotifierWrapper(Phonon::BackendCapabilities::Notifier*)">
+          <access modifier="private"/>
+        </modify-function>
+    </object-type>
 
     <enum-type name="Phonon::Category" />
     <enum-type name="Phonon::DiscType"/>
