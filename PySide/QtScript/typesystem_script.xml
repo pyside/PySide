@@ -6,7 +6,7 @@
     <enum-type name="QScriptContext::ExecutionState"/>
     <enum-type name="QScriptContextInfo::FunctionType"/>
     <enum-type name="QScriptEngine::ValueOwnership"/>
-    <enum-type name="QScriptEngine::QObjectWrapOption"/>
+    <enum-type name="QScriptEngine::QObjectWrapOption" flags="QScriptEngine::QObjectWrapOptions"/>
     <enum-type name="QScriptEngineAgent::Extension"/>
     <enum-type name="QScriptValue::ResolveFlag"/>
     <enum-type name="QScriptValue::PropertyFlag"/>
