@@ -1,5 +1,13 @@
 project(QtScript)
 
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+    set (QtCore_46_SRC )
+else()
+    set(QtScript_46_SRC
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptprogram_wrapper.cpp
+    )
+endif()
+
 set(QtScript_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptable_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptclass_wrapper.cpp
@@ -11,11 +19,10 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qtscript_module_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptengine_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptextensioninterface_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptextensionplugin_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptprogram_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptstring_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptvalue_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptvalueiterator_wrapper.cpp
-
+${QtScript_46_SRC}
 )
 
 execute_generator(script QtScript_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
