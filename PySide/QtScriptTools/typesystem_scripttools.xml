@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtScriptTools">
+    <load-typesystem name="typesystem_script.xml" generate="no" />
+    <load-typesystem name="typesystem_gui.xml" generate="no" />
+
+    <!-- enums -->
+    <enum-type name="QScriptEngineDebugger::DebuggerAction"/>
+    <enum-type name="QScriptEngineDebugger::DebuggerWidget"/>
+    <enum-type name="QScriptEngineDebugger::DebuggerState"/>
+
+    <!-- classes -->
+    <object-type name="QScriptEngineDebugger">
+        <extra-includes>
+            <include file-name="QScriptEngine" location="global"/>
+        </extra-includes>
+    </object-type>
+</typesystem>
