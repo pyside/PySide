@@ -28,6 +28,7 @@ set_target_properties(pyside PROPERTIES
 set(libpyside_HEADERS
     dynamicqmetaobject.h
     globalreceiver.h
+    pysideconversions.h
     pysidemacros.h
     signalmanager.h
 )
