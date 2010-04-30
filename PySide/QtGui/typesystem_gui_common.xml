@@ -92,7 +92,6 @@
   <rejection class="QAccessibleInterfaceEx"/>
   <rejection class="QAccessibleWidget"/>
   <rejection class="QAccessibleWidgetEx"/>
-  <rejection class="QAccessibleEvent"/>
   <rejection class="QAbstractItemDelegate" function-name="operator="/>
   <rejection class="QAbstractTextDocumentLayout::PaintContext" field-name="selections"/>
   <rejection class="QApplication" function-name="compressEvent"/>

@@ -175,12 +175,6 @@
         <modify-function signature="QHostAddress(quint8*)" remove="all" />
         <modify-function signature="operator=(QString)" remove="all"/>
         <modify-function signature="operator=(QHostAddress)" remove="all"/>
-        <modify-function signature="writeDatagram(const char*,qint64,const QHostAddress&amp;,quint16)" remove="all" />
-        <!--
-        <inject-code class="target" position="end">
-            python::implicitly_convertible&lt;QHostAddress::SpecialAddress,QHostAddress&gt;();
-        </inject-code>
-          -->
     </value-type>
 
     <value-type name="QHostInfo">

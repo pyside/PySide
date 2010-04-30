@@ -6,7 +6,7 @@
     <enum-type name="QAbstractXmlNodeModel::NodeCopySetting" />
     <enum-type name="QXmlNodeModelIndex::NodeKind" />
     <enum-type name="QXmlNodeModelIndex::DocumentOrder" />
-    <enum-type name="QXmlNodeModelIndex::Axis" />
+    <enum-type name="QXmlNodeModelIndex::Axis"/>
     <enum-type name="QXmlQuery::QueryLanguage" />
 
     <value-type name="QXmlSchema"/>
@@ -46,7 +46,6 @@
         <modify-function signature="namespaceBindings()const" remove="all" />
         <modify-function signature="namespaceForPrefix(short)const" remove="all" />
         <modify-function signature="stringValue()const" remove="all" />
-        <modify-function signature="type()const" remove="all" />
         <modify-function signature="is(const QXmlNodeModelIndex &amp;)const" remove="all" />
         <modify-function signature="reset()" remove="all" />
     </value-type>
@@ -54,4 +53,8 @@
     <value-type name="QXmlQuery" />
     <object-type name="QXmlResultItems" />
     <object-type name="QXmlSerializer" />
+
+
+    <suppress-warning text="unhandled enum value: ForwardAxis in QXmlNodeModelIndex::Axis"/>
+    <suppress-warning text="unhandled enum value: ReverseAxis in QXmlNodeModelIndex::Axis"/>
 </typesystem>

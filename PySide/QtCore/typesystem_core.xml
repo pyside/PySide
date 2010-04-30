@@ -475,7 +475,6 @@
   <rejection class="QSharedData"/>
   <rejection class="QSharedDataPointer"/>
   <rejection class="QStack"/>
-  <rejection class="QSysInfo"/>
   <rejection class="QThreadStorage"/>
   <rejection class="QThreadStorageData"/>
   <rejection class="QTypeInfo"/>
@@ -628,6 +627,8 @@
   <enum-type name="QSettings::Status"/>
   <enum-type name="QSocketNotifier::Type"/>
   <enum-type name="QSystemLocale::QueryType"/>
+  <enum-type name="QSysInfo::Endian"/>
+  <enum-type name="QSysInfo::Sizes"/>
   <enum-type name="QTextCodec::ConversionFlag" flags="QTextCodec::ConversionFlags"/>
   <enum-type name="QTextStream::FieldAlignment"/>
   <enum-type name="QTextStream::NumberFlag" flags="QTextStream::NumberFlags"/>
@@ -700,7 +701,6 @@
   <enum-type name="QCryptographicHash::Algorithm"/>
   <enum-type name="QReadWriteLock::RecursionMode"/>
   <enum-type name="QtConcurrent::ReduceOption" flags="QtConcurrent::ReduceOptions"/>
-  <enum-type name="QtConcurrent::ThreadFunctionResult"/>
   <enum-type name="QCoreApplication::Encoding" />
   <enum-type name="Qt::AlignmentFlag" flags="Qt::Alignment" />
   <enum-type name="Qt::CursorShape" />
@@ -2060,6 +2060,7 @@
   </object-type>
   <object-type name="QSocketNotifier"/>
   <object-type name="QSystemLocale"/>
+  <object-type name="QSysInfo"/>
   <object-type name="QTemporaryFile">
     <extra-includes>
       <include file-name="QAbstractFileEngine" location="global"/>
@@ -2844,6 +2845,8 @@
   <suppress-warning text="Shadowing: QFile::fileName() const and QTemporaryFile::fileName() const"/>
   <suppress-warning text="enum 'QtValidLicenseForDeclarativeModule' does not have a type entry or is not an enum"/>
   <suppress-warning text="unhandled enum value: ~0u in Qt::GestureType"/>
+  <suppress-warning text="unhandled enum value: (sizeof(void*)&lt;&lt;3) in QSysInfo::Sizes"/>
   <suppress-warning text="unmatched enum ~0u"/>
+  <suppress-warning text="unmatched enum (sizeof(void*)&lt;&lt;3)"/>
   <suppress-warning text="signature 'setCustomType(float)' for function modification in 'QEasingCurve' not found. Possible candidates: setCustomType(double) in QEasingCurve"/>
 </typesystem>

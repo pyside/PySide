@@ -10,6 +10,7 @@
   <enum-type name="QWebSettings::FontSize"/>
   <enum-type name="QWebSettings::WebGraphic"/>
   <enum-type name="QWebSettings::WebAttribute"/>
+  <enum-type name="QWebPage::ErrorDomain"/>
   <enum-type name="QWebPage::NavigationType"/>
   <enum-type name="QWebPage::WebAction"/>
   <enum-type name="QWebPage::WebWindowType"/>
@@ -40,8 +41,6 @@
           <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <!-- TODO QtScript isn't implemented yet -->
-    <modify-function signature="addToJavaScriptWindowObject(QString,QObject*,QScriptEngine::ValueOwnership)" remove="all" />
     <!-- TODO QMultiMap isn't implemented yet -->
     <modify-function signature="metaData()const" remove="all" />
   </object-type>

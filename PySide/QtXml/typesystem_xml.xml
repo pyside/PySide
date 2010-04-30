@@ -433,6 +433,8 @@
         </modify-function>
     </object-type>
 
+    <suppress-warning text="Shadowing: QDomNode::attributes() const and QDomElement::attributes() const"/>
+    <suppress-warning text="Shadowing: QDomNode::nodeType() const and QDomElement::nodeType() const"/>
 
 </typesystem>
 

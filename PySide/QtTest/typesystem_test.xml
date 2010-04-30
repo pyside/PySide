@@ -27,12 +27,12 @@
 
   <rejection class="QTouchEventSequence"/>
 
-  <!--<enum-type name="QTest::AttributeIndex"/>
+  <enum-type name="QTest::AttributeIndex"/>
   <enum-type name="QTest::KeyAction"/>
   <enum-type name="QTest::LogElementType"/>
   <enum-type name="QTest::MouseAction"/>
   <enum-type name="QTest::SkipMode"/>
-  <enum-type name="QTest::TestFailMode"/>-->
+  <enum-type name="QTest::TestFailMode"/>
 
   <rejection class="QSignalSpy"/>
   <rejection class="QTestEventList"/>
