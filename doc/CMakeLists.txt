@@ -56,6 +56,11 @@ create_doc(QtUitools "${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DI
 create_doc(QtXml "${QtCore_SOURCE_DIR}")
 create_doc(QtWebKit "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtNetwork_SOURCE_DIR}")
 create_doc(QtMultimedia "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+create_doc(QtScript "${QtCore_SOURCE_DIR}")
+create_doc(QtScriptTools "${QtCore_SOURCE_DIR}:${QtScript_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+create_doc(QtTest "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+create_doc(QtXmlPatterns "${QtCore_SOURCE_DIR}")
+create_doc(phonon "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
 
 #create devhelp file
 add_custom_target(apidevhelp
