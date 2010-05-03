@@ -109,6 +109,16 @@
                 <parent index="this" action="remove"/>
             </modify-argument>
         </modify-function>
+        <modify-function signature="sink() const">
+            <modify-argument index="return">
+                <define-ownership class="target" owner="default"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="source() const">
+            <modify-argument index="return">
+                <define-ownership class="target" owner="default"/>
+            </modify-argument>
+        </modify-function>
     </value-type>
     <value-type name="Phonon::ObjectDescription" generate="no"/>
     <value-type name="Phonon::EffectDescription">
