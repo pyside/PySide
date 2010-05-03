@@ -39,10 +39,13 @@ Debian packaging
 In order to compile this package in a Debian environment, make sure the
 following packages are installed:
 
-* debhelper (>= 5)
-* cdbs
+* debhelper (>= 7)
 * cmake (>= 2.6.0)
-* libqt4-dev (>= 4.5)
+* libqt4-dev (>= 4.4)
+* libxml2-dev
+* libxslt1-dev
+* pkg-config
+* python-sphinx
 
 And then you can build the package using::
 

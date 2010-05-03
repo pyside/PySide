@@ -30,6 +30,7 @@ The bindings available at the moment are listed below:
    + QtWebKit
    + QtXml
    + QtXmlPatterns
+   + Phonon
 
 Getting the sources
 ===================
@@ -58,22 +59,22 @@ number of source files that will be compiled.
 Debian packaging
 ================
 
-.. note:: Qt 4.6 is available for Debian in the testing branch (squeeze), Ubuntu 10.04 (Lucid Lynx), and in Maemo 5 (Fremantle) in the upcoming PR 1.2 update. For building to Maemo 5, it is advised to get the packaging from the source uploaded to Maemo extras-devel, as it needs minor modifications in order to build.
+.. note:: Qt 4.6 is available for Debian in the testing branch (squeeze), Ubuntu 10.04 (Lucid Lynx), and in Maemo 5 (Fremantle) in the upcoming PR 1.2 update. 
 
 In order to compile this package in a Debian environment, make sure the
 following packages are installed:
 
-* debhelper (>= 5)
-* cdbs
+* debhelper (>= 7)
 * cmake (>= 2.6.0)
 * python-all-dev
 * python-all-dbg
 * python-support (>= 0.3.9)
 * libqt4-dev
+* libphonon-dev
 * libqt4-opengl-dev
-* shiboken (>= 0.3)
+* shiboken (>= 0.2)
 * generatorrunner (>= 0.4)
-* libshiboken-dev (>= 0.3.0)
+* libshiboken-dev (>= 0.2.0)
 
 
 And then you can build the package using::

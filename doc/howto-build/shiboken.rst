@@ -41,11 +41,13 @@ In order to compile this package in a debian environment, make sure the
 following packages are installed:
 
 * debhelper (>= 5)
-* cdbs
 * cmake (>= 2.6.0)
 * libqt4-dev (>= 4.5)
-* libapiextractor-dev (>= 0.3.2)
-* libgenrunner-dev (>= 0.3.2a1)
+* libapiextractor-dev (>= 0.4.0)
+* libgenrunner-dev (>= 0.4.0)
+* generatorrunner (>= 0.4.0)
+* python-all-dev
+* python-all-dbg
 
 And then you can build the package using::
 

@@ -39,11 +39,11 @@ Debian packaging
 In order to compile this package in a Debian environment, make sure the
 following packages are installed:
 
-* debhelper (>= 5)
-* cdbs
+* debhelper (>= 7)
 * cmake (>= 2.6.0)
 * libqt4-dev (>= 4.5)
-* libapiextractor-dev (>= 0.3.2)
+* libapiextractor-dev (>= 0.3.3)
+* libxlst-dev
 
 And then you can build the package using::
 
