@@ -40,12 +40,12 @@ Debian packaging
 In order to compile this package in a debian environment, make sure the
 following packages are installed:
 
-* debhelper (>= 5)
+* debhelper (>= 7)
 * cmake (>= 2.6.0)
 * libqt4-dev (>= 4.5)
-* libapiextractor-dev (>= 0.4.0)
-* libgenrunner-dev (>= 0.4.0)
-* generatorrunner (>= 0.4.0)
+* libapiextractor-dev (>= 0.5.0)
+* libgenrunner-dev (>= 0.4.1)
+* generatorrunner (>= 0.4.1)
 * python-all-dev
 * python-all-dbg
 

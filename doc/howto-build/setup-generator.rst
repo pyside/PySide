@@ -42,7 +42,7 @@ following packages are installed:
 * debhelper (>= 7)
 * cmake (>= 2.6.0)
 * libqt4-dev (>= 4.5)
-* libapiextractor-dev (>= 0.3.3)
+* libapiextractor-dev (>= 0.5.0)
 * libxlst-dev
 
 And then you can build the package using::

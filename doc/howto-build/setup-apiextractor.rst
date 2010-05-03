@@ -41,7 +41,7 @@ following packages are installed:
 
 * debhelper (>= 7)
 * cmake (>= 2.6.0)
-* libqt4-dev (>= 4.4)
+* libqt4-dev (>= 4.5)
 * libxml2-dev
 * libxslt1-dev
 * pkg-config

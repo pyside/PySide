@@ -72,9 +72,9 @@ following packages are installed:
 * libqt4-dev
 * libphonon-dev
 * libqt4-opengl-dev
-* shiboken (>= 0.2)
-* generatorrunner (>= 0.4)
-* libshiboken-dev (>= 0.2.0)
+* shiboken (>= 0.3.0)
+* generatorrunner (>= 0.4.1)
+* libshiboken-dev (>= 0.3.0)
 
 
 And then you can build the package using::
