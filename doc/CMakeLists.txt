@@ -3,13 +3,14 @@ find_program(graphviz_exec dot)
 if (QT_SRC_DIR)
 
 if (NOT ${graphviz_exec} STREQUAL graphviz_exec-NOTFOUND)
-add_custom_target(apidoc
-                  #temporarily create a symlink for the generated .rst files inside ../doc
-                  #this allows Sphinx to see them, and output goes to the correct dir
-                  COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_BINARY_DIR}/PySide"  "${CMAKE_CURRENT_SOURCE_DIR}/PySide"
-                  COMMAND make html BUILDDIR=${CMAKE_BINARY_DIR}/apidoc WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                  COMMAND ${CMAKE_COMMAND} -E remove -f "${CMAKE_CURRENT_SOURCE_DIR}/PySide")
 
+add_custom_target(apidoc
+                  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/rst
+                  COMMAND sphinx-build -b html  ${CMAKE_CURRENT_BINARY_DIR}/rst htmldocs
+                 )
+
+# create conf.py based on conf.py.in
+configure_file("conf.py.in" "rst/conf.py" @ONLY)
 
 # copy pyside.qdocconf to qt source dir.
 configure_file("pyside.qdocconf" "${QT_SRC_DIR}/tools/qdoc3/test/pyside.qdocconf" @ONLY)
@@ -34,7 +35,7 @@ COMMAND ${GENERATOR} --generatorSet=qtdoc
         --library-source-dir=${QT_SRC_DIR}
         --documentation-only
         --documentation-data-dir=${DOC_DATA_DIR}
-        --documentation-out-dir=${CMAKE_BINARY_DIR}
+        --documentation-out-dir=${CMAKE_CURRENT_BINARY_DIR}/rst
         --documentation-code-snippets-dir=${CMAKE_CURRENT_SOURCE_DIR}/codesnippets
 WORKING_DIRECTORY ${${module}_SOURCE_DIR}
 
