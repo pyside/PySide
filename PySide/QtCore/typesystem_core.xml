@@ -87,7 +87,6 @@
   <enum-type name="Qt::GestureState"/>
   <enum-type name="Qt::CoordinateSystem"/>
   <enum-type name="Qt::TileRule"/>
-  <enum-type name="Qt::Initialization"/>
   <enum-type name="Qt::AnchorPoint"/>
   <enum-type name="Qt::NavigationMode"/>
   <enum-type name="Qt::InputMethodHint" flags="Qt::InputMethodHints"/>
@@ -2824,6 +2823,7 @@
 
   <object-type name="QFactoryInterface"/>
 
+  <suppress-warning text="enum 'Qt::Initialization' does not have a type entry or is not an enum" />
   <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
   <suppress-warning text="signature 'findChildren(QRegExp)const' for function modification in 'QObject' not found"/>
   <suppress-warning text="signature 'findChildren(QString)const' for function modification in 'QObject' not found."/>
