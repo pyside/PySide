@@ -8,6 +8,7 @@ from PySide.QtNetwork import *
 
 from helper import UsesQApplication
 
+"""
 class HttpSignalsCase(UsesQApplication):
     '''Test case for launching QHttp signals'''
 
@@ -42,6 +43,24 @@ class testHttp(UsesQApplication):
         http.setHost("qtsoftware.com")
         http.request(header)
         data = http.read(100)
+"""
+
+class testAuthenticationSignal(UsesQApplication):
+    def onAuthRequest(self, hostname, port, auth):
+        self.assert_(isinstance(auth, QAuthenticator))
+        print auth.realm()
+        self._resultOk = True
+        self.app.exit()
+
+    def testwaitSignal(self):
+        self._resultOk = False
+        http = QHttp()
+        http.setHost("projects.maemo.org", QHttp.ConnectionModeHttps, 0)
+        http.connect(SIGNAL("authenticationRequired(const QString&, quint16, QAuthenticator*)"), self.onAuthRequest)
+        path = QUrl.toPercentEncoding("/index.html", "!$&'()*+,;=:@/")
+        print http.get(path)
+        self.app.exec_()
+        self.assert_(self._resultOk)
 
 
 if __name__ == '__main__':
