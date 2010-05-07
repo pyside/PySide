@@ -13,7 +13,7 @@ addActionWithPyObject(QMenu *self, const QIcon& icon, const QString& text, PyObj
     self->addAction(act);
 
     PyObject *pyAct = Shiboken::Converter<QAction*>::toPython(act);
-    PyObject* result = PyObject_CallMethod(pyAct, "connect", "OsO", pyAct, SIGNAL(triggered(bool)), callback);
+    PyObject* result = PyObject_CallMethod(pyAct, "connect", "OsO", pyAct, SIGNAL(triggered()), callback);
     if (result == 0) {
         Py_DECREF(pyAct);
         return 0;
