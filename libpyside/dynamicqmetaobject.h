@@ -65,5 +65,10 @@ private:
     void updateMetaObject();
 };
 
+PYSIDE_API inline void deleteDynamicQMetaObject(void* data)
+{
+    delete reinterpret_cast<DynamicQMetaObject*>(data);
+}
+
 }
 #endif
