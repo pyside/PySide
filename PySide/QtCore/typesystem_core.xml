@@ -715,6 +715,12 @@
   <enum-type name="Qt::ToolBarArea" flags="Qt::ToolBarAreas" />
   <enum-type name="Qt::WidgetAttribute" />
 
+  <!--signal/slot-->
+  <inject-code class="native" position="beginning" file="glue/qslot.cpp" />
+  <inject-code class="target" position="end">
+    init_slot(module);
+  </inject-code>
+
   <object-type name="QAbstractTableModel">
     <extra-includes>
       <include file-name="QStringList" location="global"/>

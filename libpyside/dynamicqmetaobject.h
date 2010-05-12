@@ -36,9 +36,12 @@
 #define DYNAMICQMETAOBJECT_H
 
 #include "pysidemacros.h"
+#include <Python.h>
 #include <QMetaObject>
 #include <QLinkedList>
 #include <QByteArray>
+
+#define PYSIDE_SLOT_LIST_ATTR "_slots"
 
 class QObject;
 
@@ -56,6 +59,9 @@ public:
 
     void removeSignal(uint idex);
     void removeSlot(uint index);
+
+    //Retrieve Python metadata to create QMetaObject (class name, signals, slot)
+    static DynamicQMetaObject *createBasedOn(PyTypeObject *obj, const QMetaObject* base);
 
 private:
     QLinkedList<QByteArray> m_signals;

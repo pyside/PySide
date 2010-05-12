@@ -123,6 +123,30 @@ void DynamicQMetaObject::removeSlot(uint index)
     }
 }
 
+DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyTypeObject *type, const QMetaObject *base)
+{
+    PyObject *key, *value;
+    Py_ssize_t pos = 0;
+
+    QString className(type->tp_name);
+    className = className.mid(className.lastIndexOf(".")+1);
+    DynamicQMetaObject *mo = new PySide::DynamicQMetaObject(className.toAscii(), base);
+
+    while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
+        if (!PyFunction_Check(value))
+            continue;
+
+        if (PyObject_HasAttrString(value, PYSIDE_SLOT_LIST_ATTR)) {
+            PyObject *signature_list = PyObject_GetAttrString(value, PYSIDE_SLOT_LIST_ATTR);
+            for(Py_ssize_t i=0, i_max=PyList_Size(signature_list); i < i_max; i++) {
+                PyObject *signature = PyList_GET_ITEM(signature_list, i);
+                mo->addSlot(PyString_AsString(signature));
+            }
+        }
+    }
+    return mo;
+}
+
 void DynamicQMetaObject::removeSignal(uint index)
 {
     //Current Qt implementation does not support runtime remove signal
