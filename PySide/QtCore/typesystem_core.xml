@@ -714,6 +714,8 @@
   <enum-type name="QLocale::Country" />
   <enum-type name="Qt::ToolBarArea" flags="Qt::ToolBarAreas" />
   <enum-type name="Qt::WidgetAttribute" />
+  <enum-type name="QMetaMethod::Access"/>
+  <enum-type name="QMetaMethod::MethodType"/>
 
   <!--signal/slot-->
   <inject-code class="native" position="beginning" file="glue/qslot.cpp" />
@@ -2550,6 +2552,8 @@
     <include file-name="qobjectdefs.h" location="global" />
   </value-type>
 
+
+  <value-type name="QMetaMethod"/>
   <object-type name="QMetaObject">
     <include file-name="qobjectdefs.h" location="global" />
     <modify-function signature="connect(const QObject*, int, const QObject*, int, int, int*)" remove="all" />
@@ -2850,6 +2854,7 @@
   <suppress-warning text="enum 'enum_3' does not have a type entry or is not an enum"/>
   <suppress-warning text="Shadowing: QFile::fileName() const and QTemporaryFile::fileName() const"/>
   <suppress-warning text="enum 'QtValidLicenseForDeclarativeModule' does not have a type entry or is not an enum"/>
+  <suppress-warning text="enum 'QMetaMethod::Attributes' does not have a type entry or is not an enum"/>
   <suppress-warning text="unhandled enum value: ~0u in Qt::GestureType"/>
   <suppress-warning text="unhandled enum value: (sizeof(void*)&lt;&lt;3) in QSysInfo::Sizes"/>
   <suppress-warning text="unmatched enum ~0u"/>
