@@ -1,7 +1,10 @@
-#include <signalmanager.h>
+#include <shiboken.h>
 #include <dynamicqmetaobject.h>
 
+#include <QString>
+
 #define SLOT_DEC_NAME "Slot"
+
 typedef struct
 {
     PyObject_HEAD
@@ -67,10 +70,6 @@ static PyTypeObject PySideSlot_Type = {
     0,                         /*tp_del */
 };
 
-static PyMethodDef PySideQtSlot_methods[] = {
-    {NULL}  /* Sentinel */
-};
-
 PyAPI_FUNC(void) init_slot(PyObject* module)
 {
     if (PyType_Ready(&PySideSlot_Type) < 0)
@@ -86,7 +85,6 @@ PyAPI_FUNC(void) init_slot(PyObject* module)
 static const char* qslot_get_type_name(PyObject *type)
 {
     if (PyType_Check(type)) {
-        PyTypeObject *obj_type = (PyTypeObject*)(type);
         //tp_name return the full name
         Shiboken::AutoDecRef type_name(PyObject_GetAttrString(type, "__name__"));
         return PyString_AS_STRING((PyObject*)type_name);
@@ -106,7 +104,7 @@ static int qslot_init(PyObject *self, PyObject *args, PyObject *kw)
     if (emptyTuple == 0)
         emptyTuple = PyTuple_New(0);
 
-    if (!PyArg_ParseTupleAndKeywords(emptyTuple, kw, "|sN:QtCore."SLOT_DEC_NAME, (char**) kwlist, &arg_name, &arg_result))
+    if (!PyArg_ParseTupleAndKeywords(emptyTuple, kw, "|sO:QtCore."SLOT_DEC_NAME, (char**) kwlist, &arg_name, &arg_result))
         return 0;
 
     SlotData *data = reinterpret_cast<SlotData*>(self);
@@ -128,6 +126,8 @@ static int qslot_init(PyObject *self, PyObject *args, PyObject *kw)
 
     if (arg_result)
         data->result_type = strdup(qslot_get_type_name(arg_result));
+    else
+        data->result_type = strdup("void");
 
     return 1;
 }
@@ -147,7 +147,7 @@ static PyObject* qslot_call(PyObject *self, PyObject *args, PyObject *kw)
         }
 
         QString signature;
-        signature.sprintf("%s(%s)",data->slot_name, data->args);
+        signature.sprintf("%s %s(%s)", data->result_type, data->slot_name, data->args);
 
         PyObject *pySignature = PyString_FromString(QMetaObject::normalizedSignature(signature.toAscii()));
         PyObject *signature_list = 0;

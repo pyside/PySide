@@ -4,6 +4,9 @@ set(libpyside_SRC
 dynamicqmetaobject.cpp
 signalmanager.cpp
 globalreceiver.cpp
+qsignal.cpp
+qslot.cpp
+pyside.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
@@ -31,6 +34,7 @@ set(libpyside_HEADERS
     pysideconversions.h
     pysidemacros.h
     signalmanager.h
+    pyside.h
 )
 
 # create pkg-config file

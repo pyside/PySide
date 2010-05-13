@@ -48,24 +48,39 @@ class QObject;
 namespace PySide
 {
 
+class MethodData
+{
+    public:
+        MethodData(){}
+        MethodData(const char *signature, const char *type);
+        void clear();
+        QByteArray signature() const;
+        QByteArray type() const;
+        bool operator==(const MethodData &other) const;
+
+    private:
+        QByteArray m_signature;
+        QByteArray m_type;
+};
+
 class PYSIDE_API DynamicQMetaObject : public QMetaObject
 {
 public:
     DynamicQMetaObject(const char* className, const QMetaObject* metaObject);
     ~DynamicQMetaObject();
 
-    void addSignal(const char* signal);
-    void addSlot(const char* slot);
+    void addSignal(const char* signal, const char* type=0);
+    void addSlot(const char* slot, const char* type=0);
 
     void removeSignal(uint idex);
     void removeSlot(uint index);
 
     //Retrieve Python metadata to create QMetaObject (class name, signals, slot)
-    static DynamicQMetaObject *createBasedOn(PyTypeObject *obj, const QMetaObject* base);
+    static DynamicQMetaObject *createBasedOn(PyObject *obj, PyTypeObject *type, const QMetaObject* base);
 
 private:
-    QLinkedList<QByteArray> m_signals;
-    QLinkedList<QByteArray> m_slots;
+    QLinkedList<MethodData> m_signals;
+    QLinkedList<MethodData> m_slots;
     QByteArray m_className;
 
     void updateMetaObject();

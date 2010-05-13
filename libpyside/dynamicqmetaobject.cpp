@@ -35,11 +35,14 @@
 #include "dynamicqmetaobject.h"
 #include <QByteArray>
 #include <QString>
+#include <QStringList>
 #include <QList>
 #include <QObject>
 #include <cstring>
 #include <QDebug>
 #include <QMetaMethod>
+
+#include "qsignal.h"
 
 #define MAX_SIGNALS_COUNT 50
 
@@ -58,11 +61,32 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
     return idx;
 }
 
-static void clearItem(QLinkedList<QByteArray> &l, const QByteArray &value)
+MethodData::MethodData(const char *signature, const char *type)
+    : m_signature(signature), m_type(type)
 {
-    QLinkedList<QByteArray>::iterator i = qFind(l.begin(), l.end(), value);
-    if (i != l.end())
-        *i = QByteArray();
+}
+
+void MethodData::clear()
+{
+    m_signature.clear();
+    m_type.clear();
+}
+
+bool MethodData::operator==(const MethodData &other) const
+{
+    return m_signature == other.signature();
+}
+
+QByteArray MethodData::signature() const
+{
+    return m_signature;
+}
+
+QByteArray MethodData::type() const
+{
+    if (m_type == "void")
+        return QByteArray("");
+    return m_type;
 }
 
 DynamicQMetaObject::DynamicQMetaObject(const char *className, const QMetaObject* metaObject)
@@ -81,13 +105,13 @@ DynamicQMetaObject::~DynamicQMetaObject()
     delete[] d.data;
 }
 
-void DynamicQMetaObject::addSignal(const char* signal)
+void DynamicQMetaObject::addSignal(const char *signal, const char *type)
 {
     //search for a empty space
-    QByteArray blank;
-    QLinkedList<QByteArray>::iterator i = qFind(m_signals.begin(), m_signals.end(), blank);
+    MethodData blank;
+    QLinkedList<MethodData>::iterator i = qFind(m_signals.begin(), m_signals.end(), blank);
     if (i != m_signals.end()) {
-        *i = QByteArray(signal);
+        *i = MethodData(signal, type);
         updateMetaObject();
         return;
     }
@@ -97,19 +121,19 @@ void DynamicQMetaObject::addSignal(const char* signal)
         return;
     }
 
-    m_signals << QByteArray(signal);
+    m_signals << MethodData(signal, type);
     updateMetaObject();
 }
 
-void DynamicQMetaObject::addSlot(const char* slot)
+void DynamicQMetaObject::addSlot(const char *slot, const char *type)
 {
     //search for a empty space
-    QByteArray blank;
-    QLinkedList<QByteArray>::iterator i = qFind(m_slots.begin(), m_slots.end(), blank);
+    MethodData blank;
+    QLinkedList<MethodData>::iterator i = qFind(m_slots.begin(), m_slots.end(), blank);
     if (i != m_slots.end()) {
-        *i = QByteArray(slot);
+        *i = MethodData(slot, type);
     } else {
-        m_slots << QByteArray(slot);
+        m_slots << MethodData(slot, type);
     }
     updateMetaObject();
 }
@@ -117,13 +141,16 @@ void DynamicQMetaObject::addSlot(const char* slot)
 void DynamicQMetaObject::removeSlot(uint index)
 {
     QMetaMethod m = method(index);
-    if (m_slots.contains(m.signature())) {
-        clearItem(m_slots, m.signature());
-        updateMetaObject();
+    foreach(MethodData md, m_slots) {
+        if (md.signature() == m.signature()) {
+            md.clear();
+            updateMetaObject();
+            break;
+        }
     }
 }
 
-DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyTypeObject *type, const QMetaObject *base)
+DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject *pyObj, PyTypeObject *type, const QMetaObject *base)
 {
     PyObject *key, *value;
     Py_ssize_t pos = 0;
@@ -133,14 +160,30 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyTypeObject *type, const 
     DynamicQMetaObject *mo = new PySide::DynamicQMetaObject(className.toAscii(), base);
 
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
+
+        //Register signals
+        if (value->ob_type == &PySideSignal_Type) {
+            SignalData *data = reinterpret_cast<SignalData*>(value);
+
+            for(int i=0, i_max=data->signatures_size; i < i_max; i++) {
+                mo->addSignal(data->signatures[i]);
+                printf("QObject with signal:[%s][%s]\n",
+                       PyString_AS_STRING(PyObject_Str(key)), data->signatures[i]);
+            }
+        }
+
         if (!PyFunction_Check(value))
             continue;
 
+        //Register Slots
         if (PyObject_HasAttrString(value, PYSIDE_SLOT_LIST_ATTR)) {
             PyObject *signature_list = PyObject_GetAttrString(value, PYSIDE_SLOT_LIST_ATTR);
             for(Py_ssize_t i=0, i_max=PyList_Size(signature_list); i < i_max; i++) {
                 PyObject *signature = PyList_GET_ITEM(signature_list, i);
-                mo->addSlot(PyString_AsString(signature));
+                QString sig(PyString_AsString(signature));
+                //slot the slot type and signature
+                QStringList slotInfo = sig.split(" ", QString::SkipEmptyParts);
+                mo->addSlot(slotInfo[1].toAscii(), slotInfo[0].toAscii());
             }
         }
     }
@@ -151,9 +194,12 @@ void DynamicQMetaObject::removeSignal(uint index)
 {
     //Current Qt implementation does not support runtime remove signal
     QMetaMethod m = method(index);
-    if (m_signals.contains(m.signature())) {
-        clearItem(m_signals, m.signature());
-        updateMetaObject();
+    foreach(MethodData md, m_signals) {
+        if (md.signature() == m.signature()) {
+            md.clear();
+            updateMetaObject();
+            break;
+        }
     }
 }
 
@@ -198,26 +244,28 @@ void DynamicQMetaObject::updateMetaObject()
     int index = HEADER_LENGHT;
 
     //write signals
-    QLinkedList<QByteArray>::iterator iSignal = m_signals.begin();
+    QLinkedList<MethodData>::iterator iSignal = m_signals.begin();
     for(int i=0; i < MAX_SIGNALS_COUNT; i++) {
+        QByteArray sigType;
         if (iSignal != m_signals.end()) {
-            data[index++] = registerString(*iSignal, &strings); // func name
+            data[index++] = registerString((*iSignal).signature(), &strings); // func name
+            sigType = (*iSignal).type();
             iSignal++;
         } else {
             data[index++] = NULL_INDEX; // func name
         }
         data[index++] = NULL_INDEX; // arguments
-        data[index++] = NULL_INDEX; // normalized type
+        data[index++] = (sigType.size() > 0 ? registerString(sigType, &strings) : NULL_INDEX); // normalized type
         data[index++] = NULL_INDEX; // tags
         data[index++] = AccessPublic | MethodSignal; // flags
     }
 
 
     //write slots
-    foreach(QByteArray slot, m_slots) {
-        data[index++] = registerString(slot, &strings); // func name
+    foreach(MethodData slot, m_slots) {
+        data[index++] = registerString(slot.signature(), &strings); // func name
         data[index++] = NULL_INDEX; // arguments
-        data[index++] = NULL_INDEX; // normalized type
+        data[index++] = (slot.type().size() > 0 ? registerString(slot.type(), &strings) :  NULL_INDEX); // normalized type
         data[index++] = NULL_INDEX; // tags
         data[index++] = AccessPublic | MethodSlot; // flags
     }
@@ -225,8 +273,8 @@ void DynamicQMetaObject::updateMetaObject()
 
     // create the m_metadata string
     QByteArray str;
-    foreach(QByteArray signature, strings) {
-        str.append(signature);
+    foreach(QByteArray field, strings) {
+        str.append(field);
         str.append(char(0));
     }
 

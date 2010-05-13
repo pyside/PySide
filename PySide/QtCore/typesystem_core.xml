@@ -718,9 +718,11 @@
   <enum-type name="QMetaMethod::MethodType"/>
 
   <!--signal/slot-->
-  <inject-code class="native" position="beginning" file="glue/qslot.cpp" />
   <inject-code class="target" position="end">
-    init_slot(module);
+    PySide::init(module);
+  </inject-code>
+  <inject-code class="native" position="beginning">
+    #include &lt;pyside.h&gt;
   </inject-code>
 
   <object-type name="QAbstractTableModel">
