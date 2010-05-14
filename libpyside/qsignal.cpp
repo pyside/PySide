@@ -28,7 +28,7 @@ static PyObject* qsignal_instance_emit(PyObject *self, PyObject *args);
 static char* qsignal_build_signature(const char *name, const char *signature);
 static const char* qsignal_get_type_name(PyObject *type);
 static void qsignal_append_signature(SignalData *self, PyObject *args);
-static void qsignal_instance_initialize(PyObject *instance, SignalData *data, PyObject *source);
+static void qsignal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source);
 
 PyTypeObject PySideSignal_Type = {
     PyObject_HEAD_INIT(0)
@@ -166,7 +166,7 @@ void signal_update_source(PyObject *source)
         if (value->ob_type == &PySideSignal_Type) {
             PyObject *signal_instance = (PyObject*)PyObject_New(SignalData, &PySideSignalInstance_Type);
 
-            qsignal_instance_initialize(signal_instance, reinterpret_cast<SignalData*>(value), source);
+            qsignal_instance_initialize(signal_instance, key, reinterpret_cast<SignalData*>(value), source);
 
             PyObject_SetAttr(source, key, signal_instance);
             Py_DECREF(signal_instance);
@@ -198,6 +198,7 @@ char* qsignal_build_signature(const char *name, const char *signature)
 void qsignal_append_signature(SignalData *self, PyObject *args)
 {
     char *signature = 0;
+
     for(Py_ssize_t i=0, i_max=PySequence_Size(args); i < i_max; i++) {
         Shiboken::AutoDecRef arg(PySequence_ITEM(args, i));
         const char *type_name = qsignal_get_type_name(arg);
@@ -212,14 +213,13 @@ void qsignal_append_signature(SignalData *self, PyObject *args)
     }
 
     self->signatures_size++;
+
     if (self->signatures_size > 1) {
         self->signatures = (char**) realloc(self->signatures, sizeof(char**) * self->signatures_size);
     } else {
         self->signatures = (char**) malloc(sizeof(char**));
     }
-    self->signatures[self->signatures_size -1] = qsignal_build_signature(self->signal_name, signature);
-    printf("registred signature:[%d][%s]\n", self->signatures_size -1, self->signatures[self->signatures_size -1]);
-    free(signature);
+    self->signatures[self->signatures_size-1] = signature;
 }
 
 int qsignal_init(PyObject *self, PyObject *args, PyObject *kwds)
@@ -237,8 +237,9 @@ int qsignal_init(PyObject *self, PyObject *args, PyObject *kwds)
 
     bool tupled_args = false;
     SignalData *data = reinterpret_cast<SignalData*>(self);
-    if (arg_name)
+    if (arg_name) {
         data->signal_name = strdup(arg_name);
+    }
 
     for(Py_ssize_t i=0, i_max=PyTuple_Size(args); i < i_max; i++) {
         PyObject *arg = PyTuple_GET_ITEM(args, i);
@@ -260,9 +261,15 @@ void qsignal_free(void *self)
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
     SignalData *data = reinterpret_cast<SignalData*>(self);
 
-    //keep the data to instance
-    if (!data->initialized)
-        qsignal_instance_free(self);
+    for(int i=0, i_max=data->signatures_size; i < i_max; i++) {
+        if (data->signatures[i])
+            free(data->signatures[i]);
+    }
+
+    free(data->signatures);
+    free(data->signal_name);
+    data->initialized = false;
+    data->signatures_size = 0;
 
     pySelf->ob_type->tp_free (self);
 }
@@ -270,27 +277,27 @@ void qsignal_free(void *self)
 void qsignal_instance_free(void *self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
-    SignalData *data = reinterpret_cast<SignalData*>(self);
-    free(data->signatures[0]);
-    for(int i=1, i_max=data->signatures_size; i < i_max; i++) {
-        free(data->signatures[i]);
-    }
-    free(data->signatures);
-    free(data->signal_name);
-    data->initialized = false;
-
-    pySelf->ob_type->tp_free (self);
+    qsignal_free(self);
+    pySelf->ob_type->tp_free(self);
 }
 
-void qsignal_instance_initialize(PyObject *instance, SignalData *data, PyObject *source)
+void qsignal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source)
 {
     SignalData *self = reinterpret_cast<SignalData*>(instance);
-    self->signal_name = data->signal_name;
+    if (data->signal_name)
+        self->signal_name = strdup(data->signal_name);
+    else
+        self->signal_name = strdup(PyString_AsString(name));
+
     self->signatures_size = data->signatures_size;
-    self->signatures = data->signatures;
     self->initialized = true;
     self->source = source;
     data->initialized = true;
+
+    self->signatures = (char**) malloc(sizeof(char**) * self->signatures_size);
+    ///build signature
+    for(int i=0, i_max=self->signatures_size; i < i_max; i++)
+        self->signatures[i] = qsignal_build_signature(self->signal_name, data->signatures[i]);
 }
 
 PyObject* qsignal_instance_connect(PyObject *self, PyObject *args, PyObject *kwds)

@@ -161,6 +161,7 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject *pyObj, PyTypeObj
 
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
 
+#if 0
         //Register signals
         if (value->ob_type == &PySideSignal_Type) {
             SignalData *data = reinterpret_cast<SignalData*>(value);
@@ -171,6 +172,7 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject *pyObj, PyTypeObj
                        PyString_AS_STRING(PyObject_Str(key)), data->signatures[i]);
             }
         }
+#endif
 
         if (!PyFunction_Check(value))
             continue;
