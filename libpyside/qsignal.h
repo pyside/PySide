@@ -14,8 +14,16 @@ typedef struct {
     char *signal_name;
     char **signatures;
     int signatures_size;
-    PyObject *source;
 } SignalData;
+
+typedef struct {
+    PyObject_HEAD
+    char *signal_name;
+    char *signature;
+    PyObject *source;
+    PyObject *next;
+} SignalInstanceData;
+
 
 extern "C"
 {

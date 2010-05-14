@@ -10,6 +10,7 @@ class MyObject(QObject):
     sig1 = Signal()
     sig2 = Signal(int, name='rangeChanged')
     sig3 = Signal(int)
+    sig4 = Signal((int,), (QString,))
 
 
     @Slot(int)
@@ -20,6 +21,9 @@ class MyObject(QObject):
 
     def slot1(self):
         self._called = True
+
+    def slotString(self, s):
+        self._s = s
 
 
 class SignalObjectTest(unittest.TestCase):
@@ -39,6 +43,12 @@ class SignalObjectTest(unittest.TestCase):
         o = MyObject()
         o.sig2.connect(o.myRange)
         o.sig2.emit(10)
+
+    def testDictOperator(self):
+        o = MyObject()
+        o.sig4[QString].connect(o.slotString)
+        o.sig4[QString].emit("PySide")
+        self.assertEqual(o._s, "PySide")
 
 if __name__ == '__main__':
     unittest.main()
