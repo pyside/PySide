@@ -368,6 +368,7 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
         while(sourceWalk && !match) {
             targetWalk = reinterpret_cast<SignalInstanceData*>(slot);
             while(targetWalk && !match) {
+                printf("sig [%s] [%s]\n", sourceWalk->signature, targetWalk->signature);
                 if (QMetaObject::checkConnectArgs(sourceWalk->signature, targetWalk->signature)) {
                     PyList_Append(pyArgs, sourceWalk->source);
                     Shiboken::AutoDecRef sourceSignature(PyString_FromString(sourceWalk->signature));
@@ -401,6 +402,7 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
         return  PyObject_CallObject(pyMethod, tupleArgs);
     }
 
+    printf("signatures not match\n");
     return 0;
 }
 
