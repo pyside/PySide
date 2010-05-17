@@ -10,14 +10,6 @@ namespace PySide
 
 typedef struct {
     PyObject_HEAD
-    bool initialized;
-    char *signal_name;
-    char **signatures;
-    int signatures_size;
-} SignalData;
-
-typedef struct {
-    PyObject_HEAD
     char *signal_name;
     char *signature;
     PyObject *source;
@@ -27,8 +19,8 @@ typedef struct {
 
 extern "C"
 {
-    PyAPI_DATA(PyTypeObject) PySideSignal_Type;
-    PyAPI_DATA(PyTypeObject) PySideSignalInstance_Type;
+    PyAPI_DATA(PyTypeObject) Signal_Type;
+    PyAPI_DATA(PyTypeObject) SignalInstance_Type;
     PYSIDE_API PyAPI_FUNC(PyObject*) signal_new(const char *name, ...);
 }; //extern "C"
 

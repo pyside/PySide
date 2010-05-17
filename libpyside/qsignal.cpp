@@ -15,24 +15,32 @@ namespace PySide
 extern "C"
 {
 
-static int qsignal_init(PyObject*, PyObject*, PyObject*);
-static void qsignal_free(void*);
-static void qsignal_instance_free(void*);
+typedef struct {
+    PyObject_HEAD
+    bool initialized;
+    char *signal_name;
+    char **signatures;
+    int signatures_size;
+} SignalData;
+
+static int signal_init(PyObject*, PyObject*, PyObject*);
+static void signal_free(void*);
+static void signal_instance_free(void*);
 
 //methods
-static PyObject* qsignal_instance_connect(PyObject *self, PyObject *args, PyObject *kw);
-static PyObject* qsignal_instance_disconnect(PyObject *self, PyObject *args);
-static PyObject* qsignal_instance_emit(PyObject *self, PyObject *args);
-static PyObject* qsignal_instance_get_item(PyObject *self, PyObject *key);
+static PyObject* signal_instance_connect(PyObject *self, PyObject *args, PyObject *kw);
+static PyObject* signal_instance_disconnect(PyObject *self, PyObject *args);
+static PyObject* signal_instance_emit(PyObject *self, PyObject *args);
+static PyObject* signal_instance_get_item(PyObject *self, PyObject *key);
 
 //aux
-static char* qsignal_build_signature(const char *name, const char *signature);
-static const char* qsignal_get_type_name(PyObject *type);
-static void qsignal_append_signature(SignalData *self, char *signature);
-static void qsignal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source, int index);
-static char* qsignal_parse_signature(PyObject *args);
+static char* signal_build_signature(const char *name, const char *signature);
+static const char* signal_get_type_name(PyObject *type);
+static void signal_append_signature(SignalData *self, char *signature);
+static void signal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source, int index);
+static char* signal_parse_signature(PyObject *args);
 
-PyTypeObject PySideSignal_Type = {
+PyTypeObject Signal_Type = {
     PyObject_HEAD_INIT(0)
     0,                         /*ob_size*/
     SIGNAL_CLASS_NAME,         /*tp_name*/
@@ -69,10 +77,10 @@ PyTypeObject PySideSignal_Type = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)qsignal_init,    /*tp_init */
+    (initproc)signal_init,    /*tp_init */
     0,                         /*tp_alloc */
     PyType_GenericNew,         /*tp_new */
-    qsignal_free,              /*tp_free */
+    signal_free,              /*tp_free */
     0,                         /*tp_is_gc */
     0,                         /*tp_bases */
     0,                         /*tp_mro */
@@ -82,20 +90,20 @@ PyTypeObject PySideSignal_Type = {
     0,                         /*tp_del */
 };
 
-static PyMethodDef PySideQtSignalInstance_methods[] = {
-    {"connect", (PyCFunction)qsignal_instance_connect, METH_VARARGS|METH_KEYWORDS},
-    {"disconnect", (PyCFunction)qsignal_instance_disconnect, METH_VARARGS},
-    {"emit", (PyCFunction)qsignal_instance_emit, METH_VARARGS},
+static PyMethodDef SignalInstance_methods[] = {
+    {"connect", (PyCFunction)signal_instance_connect, METH_VARARGS|METH_KEYWORDS},
+    {"disconnect", (PyCFunction)signal_instance_disconnect, METH_VARARGS},
+    {"emit", (PyCFunction)signal_instance_emit, METH_VARARGS},
     {NULL}  /* Sentinel */
 };
 
-static PyMappingMethods PySideQSignalInstance_as_mapping = {
+static PyMappingMethods SignalInstance_as_mapping = {
     0,
-    qsignal_instance_get_item,
+    signal_instance_get_item,
     0
 };
 
-PyTypeObject PySideSignalInstance_Type = {
+PyTypeObject SignalInstance_Type = {
     PyObject_HEAD_INIT(0)
     0,                         /*ob_size*/
     SIGNAL_CLASS_NAME,         /*tp_name*/
@@ -109,7 +117,7 @@ PyTypeObject PySideSignalInstance_Type = {
     0,                         /*tp_repr*/
     0,                         /*tp_as_number*/
     0,                         /*tp_as_sequence*/
-    &PySideQSignalInstance_as_mapping,  /*tp_as_mapping*/
+    &SignalInstance_as_mapping,/*tp_as_mapping*/
     0,                         /*tp_hash */
     0,                         /*tp_call*/
     0,                         /*tp_str*/
@@ -124,7 +132,7 @@ PyTypeObject PySideSignalInstance_Type = {
     0,                         /*tp_weaklistoffset */
     0,                         /*tp_iter */
     0,                         /*tp_iternext */
-    PySideQtSignalInstance_methods, /*tp_methods */
+    SignalInstance_methods,    /*tp_methods */
     0,                         /*tp_members */
     0,                         /*tp_getset */
     0,                         /*tp_base */
@@ -135,7 +143,7 @@ PyTypeObject PySideSignalInstance_Type = {
     0,                         /*tp_init */
     0,                         /*tp_alloc */
     PyType_GenericNew,         /*tp_new */
-    qsignal_instance_free,     /*tp_free */
+    signal_instance_free,     /*tp_free */
     0,                         /*tp_is_gc */
     0,                         /*tp_bases */
     0,                         /*tp_mro */
@@ -148,27 +156,27 @@ PyTypeObject PySideSignalInstance_Type = {
 
 PyAPI_FUNC(void) init_signal(PyObject* module)
 {
-    if (PyType_Ready(&PySideSignal_Type) < 0)
+    if (PyType_Ready(&Signal_Type) < 0)
         return;
 
-    Py_INCREF(&PySideSignal_Type);
-    PyModule_AddObject(module, SIGNAL_CLASS_NAME, ((PyObject*)&PySideSignal_Type));
+    Py_INCREF(&Signal_Type);
+    PyModule_AddObject(module, SIGNAL_CLASS_NAME, ((PyObject*)&Signal_Type));
 
-    if (PyType_Ready(&PySideSignalInstance_Type) < 0)
+    if (PyType_Ready(&SignalInstance_Type) < 0)
         return;
 
-    Py_INCREF(&PySideSignalInstance_Type);
+    Py_INCREF(&SignalInstance_Type);
 }
 
 
 } // extern "C"
 
 
-PyObject* qsignal_instance_get_item(PyObject *self, PyObject *key)
+PyObject* signal_instance_get_item(PyObject *self, PyObject *key)
 {
     SignalInstanceData *data = reinterpret_cast<SignalInstanceData*>(self);
-    char *sig_key = qsignal_parse_signature(key);
-    char *sig = qsignal_build_signature(data->signal_name, sig_key);
+    char *sig_key = signal_parse_signature(key);
+    char *sig = signal_build_signature(data->signal_name, sig_key);
     free(sig_key);
 
     while(data) {
@@ -191,16 +199,16 @@ void signal_update_source(PyObject *source)
     PyTypeObject *obType = source->ob_type;
 
     while (PyDict_Next(obType->tp_dict, &pos, &key, &value)) {
-        if (value->ob_type == &PySideSignal_Type) {
-            PyObject *signal_instance = (PyObject*)PyObject_New(SignalInstanceData, &PySideSignalInstance_Type);
-            qsignal_instance_initialize(signal_instance, key, reinterpret_cast<SignalData*>(value), source, 0);
+        if (value->ob_type == &Signal_Type) {
+            PyObject *signal_instance = (PyObject*)PyObject_New(SignalInstanceData, &SignalInstance_Type);
+            signal_instance_initialize(signal_instance, key, reinterpret_cast<SignalData*>(value), source, 0);
             PyObject_SetAttr(source, key, signal_instance);
             Py_DECREF(signal_instance);
         }
     }
 }
 
-const char* qsignal_get_type_name(PyObject *type)
+const char* signal_get_type_name(PyObject *type)
 {
     if (PyType_Check(type)) {
         //tp_name return the full name
@@ -212,23 +220,23 @@ const char* qsignal_get_type_name(PyObject *type)
     return "";
 }
 
-char* qsignal_build_signature(const char *name, const char *signature)
+char* signal_build_signature(const char *name, const char *signature)
 {
     QString signal;
     signal.sprintf("2%s(%s)", name, signature);
     return strdup(QMetaObject::normalizedSignature(signal.toAscii()));
 }
 
-char* qsignal_parse_signature(PyObject *args)
+char* signal_parse_signature(PyObject *args)
 {
     char *signature = 0;
 
     if (args && !PySequence_Check(args) && (args != Py_None && args))
-        return strdup(qsignal_get_type_name(args));
+        return strdup(signal_get_type_name(args));
 
     for(Py_ssize_t i=0, i_max=PySequence_Size(args); i < i_max; i++) {
         Shiboken::AutoDecRef arg(PySequence_ITEM(args, i));
-        const char *type_name = qsignal_get_type_name(arg);
+        const char *type_name = signal_get_type_name(arg);
         if (strlen(type_name) > 0) {
             if (signature) {
                 signature = strcat(signature, ",");
@@ -242,7 +250,7 @@ char* qsignal_parse_signature(PyObject *args)
     return signature;
 }
 
-void qsignal_append_signature(SignalData *self, char *signature)
+void signal_append_signature(SignalData *self, char *signature)
 {
     self->signatures_size++;
 
@@ -254,7 +262,7 @@ void qsignal_append_signature(SignalData *self, char *signature)
     self->signatures[self->signatures_size-1] = signature;
 }
 
-int qsignal_init(PyObject *self, PyObject *args, PyObject *kwds)
+int signal_init(PyObject *self, PyObject *args, PyObject *kwds)
 {
     static PyObject *emptyTuple = 0;
     static const char *kwlist[] = {"name", 0};
@@ -277,18 +285,18 @@ int qsignal_init(PyObject *self, PyObject *args, PyObject *kwds)
         PyObject *arg = PyTuple_GET_ITEM(args, i);
         if (PySequence_Check(arg)) {
             tupled_args = true;
-            qsignal_append_signature(data, qsignal_parse_signature(arg));
+            signal_append_signature(data, signal_parse_signature(arg));
         }
     }
 
     if (!tupled_args)
-        qsignal_append_signature(data, qsignal_parse_signature(args));
+        signal_append_signature(data, signal_parse_signature(args));
 
 
     return 1;
 }
 
-void qsignal_free(void *self)
+void signal_free(void *self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
     SignalData *data = reinterpret_cast<SignalData*>(self);
@@ -306,7 +314,7 @@ void qsignal_free(void *self)
     pySelf->ob_type->tp_base->tp_free(self);
 }
 
-void qsignal_instance_free(void *self)
+void signal_instance_free(void *self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
     SignalInstanceData *data = reinterpret_cast<SignalInstanceData*>(self);
@@ -321,7 +329,7 @@ void qsignal_instance_free(void *self)
     pySelf->ob_type->tp_base->tp_free(self);
 }
 
-void qsignal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source, int index)
+void signal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source, int index)
 {
     if (data->initialized)
         return;
@@ -333,19 +341,19 @@ void qsignal_instance_initialize(PyObject *instance, PyObject *name, SignalData 
         self->signal_name = strdup(PyString_AsString(name));
 
     self->source = source;
-    self->signature = qsignal_build_signature(self->signal_name, data->signatures[index]);
+    self->signature = signal_build_signature(self->signal_name, data->signatures[index]);
     index++;
 
     if (index < data->signatures_size) {
-        self->next = (PyObject*)PyObject_New(SignalInstanceData, &PySideSignalInstance_Type);
-        qsignal_instance_initialize(self->next, name, data, source, index);
+        self->next = (PyObject*)PyObject_New(SignalInstanceData, &SignalInstance_Type);
+        signal_instance_initialize(self->next, name, data, source, index);
     }
 
     if (index == 0)
         data->initialized = true;
 }
 
-PyObject* qsignal_instance_connect(PyObject *self, PyObject *args, PyObject *kwds)
+PyObject* signal_instance_connect(PyObject *self, PyObject *args, PyObject *kwds)
 {
     PyObject *slot;
     PyObject *type;
@@ -359,7 +367,7 @@ PyObject* qsignal_instance_connect(PyObject *self, PyObject *args, PyObject *kwd
     Shiboken::AutoDecRef pyArgs(PyList_New(0));
 
     bool match = false;
-    if (slot->ob_type == &PySideSignalInstance_Type) {
+    if (slot->ob_type == &SignalInstance_Type) {
         //TODO: find best match
         SignalInstanceData *target = reinterpret_cast<SignalInstanceData*>(slot);
 
@@ -392,7 +400,7 @@ PyObject* qsignal_instance_connect(PyObject *self, PyObject *args, PyObject *kwd
     return 0;
 }
 
-PyObject* qsignal_instance_disconnect(PyObject *self, PyObject *args)
+PyObject* signal_instance_disconnect(PyObject *self, PyObject *args)
 {
     SignalInstanceData *source = reinterpret_cast<SignalInstanceData*>(self);
     Shiboken::AutoDecRef pyArgs(PyList_New(0));
@@ -404,7 +412,7 @@ PyObject* qsignal_instance_disconnect(PyObject *self, PyObject *args)
         slot = args;
 
     bool match = false;
-    if (slot->ob_type == &PySideSignalInstance_Type) {
+    if (slot->ob_type == &SignalInstance_Type) {
         SignalInstanceData *target = reinterpret_cast<SignalInstanceData*>(slot);
         if (QMetaObject::checkConnectArgs(source->signature, target->signature)) {
             PyList_Append(pyArgs, source->source);
@@ -435,7 +443,7 @@ PyObject* qsignal_instance_disconnect(PyObject *self, PyObject *args)
     return 0;
 }
 
-PyObject* qsignal_instance_emit(PyObject *self, PyObject *args)
+PyObject* signal_instance_emit(PyObject *self, PyObject *args)
 {
     SignalInstanceData *source = reinterpret_cast<SignalInstanceData*>(self);
 
@@ -456,13 +464,13 @@ PyObject* signal_new(const char *name, ...)
 {
     va_list listSignatures;
     char *sig;
-    SignalData *self = PyObject_New(SignalData, &PySideSignal_Type);
+    SignalData *self = PyObject_New(SignalData, &Signal_Type);
 
     va_start(listSignatures, name);
     sig = va_arg(listSignatures, char*);
 
     while(sig != NULL) {
-        qsignal_append_signature(self, strdup(sig));
+        signal_append_signature(self, strdup(sig));
         sig = va_arg(listSignatures, char*);
     }
 

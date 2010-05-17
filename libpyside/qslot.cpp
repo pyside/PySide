@@ -16,11 +16,11 @@ typedef struct
 extern "C"
 {
 
-static int qslot_init(PyObject *self, PyObject *arg, PyObject *kw);
-static PyObject* qslot_call(PyObject *self, PyObject *arg, PyObject *kw);
+static int slot_init(PyObject *self, PyObject *arg, PyObject *kw);
+static PyObject* slot_call(PyObject *self, PyObject *arg, PyObject *kw);
 
 // Class Definition -----------------------------------------------
-static PyTypeObject PySideSlot_Type = {
+static PyTypeObject Slot_Type = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "QtCore."SLOT_DEC_NAME,    /*tp_name*/
@@ -36,7 +36,7 @@ static PyTypeObject PySideSlot_Type = {
     0,                         /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
-    qslot_call,                /*tp_call*/
+    slot_call,                /*tp_call*/
     0,                         /*tp_str*/
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
@@ -57,7 +57,7 @@ static PyTypeObject PySideSlot_Type = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)qslot_init,      /*tp_init */
+    (initproc)slot_init,      /*tp_init */
     0,                         /*tp_alloc */
     PyType_GenericNew,         /*tp_new */
     0,                         /*tp_free */
@@ -72,17 +72,17 @@ static PyTypeObject PySideSlot_Type = {
 
 PyAPI_FUNC(void) init_slot(PyObject* module)
 {
-    if (PyType_Ready(&PySideSlot_Type) < 0)
+    if (PyType_Ready(&Slot_Type) < 0)
         return;
 
-    Py_INCREF(&PySideSlot_Type);
-    PyModule_AddObject(module, SLOT_DEC_NAME, ((PyObject*)&PySideSlot_Type));
+    Py_INCREF(&Slot_Type);
+    PyModule_AddObject(module, SLOT_DEC_NAME, ((PyObject*)&Slot_Type));
 }
 
 
 } // extern "C"
 
-static const char* qslot_get_type_name(PyObject *type)
+static const char* slot_get_type_name(PyObject *type)
 {
     if (PyType_Check(type)) {
         //tp_name return the full name
@@ -94,7 +94,7 @@ static const char* qslot_get_type_name(PyObject *type)
     return "";
 }
 
-static int qslot_init(PyObject *self, PyObject *args, PyObject *kw)
+static int slot_init(PyObject *self, PyObject *args, PyObject *kw)
 {
     static PyObject *emptyTuple = 0;
     static const char *kwlist[] = {"name", "result", 0};
@@ -110,7 +110,7 @@ static int qslot_init(PyObject *self, PyObject *args, PyObject *kw)
     SlotData *data = reinterpret_cast<SlotData*>(self);
     for(Py_ssize_t i=0, i_max=PyTuple_Size(args); i < i_max; i++) {
         PyObject *arg_type = PyTuple_GET_ITEM(args, i);
-        const char *type_name = qslot_get_type_name(arg_type);
+        const char *type_name = slot_get_type_name(arg_type);
         if (strlen(type_name) > 0) {
             if (data->args) {
                 data->args = strcat(data->args, ",");
@@ -125,14 +125,14 @@ static int qslot_init(PyObject *self, PyObject *args, PyObject *kw)
         data->slot_name = strdup(arg_name);
 
     if (arg_result)
-        data->result_type = strdup(qslot_get_type_name(arg_result));
+        data->result_type = strdup(slot_get_type_name(arg_result));
     else
         data->result_type = strdup("void");
 
     return 1;
 }
 
-static PyObject* qslot_call(PyObject *self, PyObject *args, PyObject *kw)
+static PyObject* slot_call(PyObject *self, PyObject *args, PyObject *kw)
 {
     PyObject *callback;
     callback = PyTuple_GetItem(args, 0);
