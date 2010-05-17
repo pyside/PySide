@@ -12,6 +12,7 @@ class MyObject(QTimer):
     sig2 = Signal(int, name='rangeChanged')
     sig3 = Signal(int)
     sig4 = Signal((int,), (QString,))
+    sig5 = Signal((QString,), (int,))
 
 
     @Slot(int)
@@ -66,6 +67,15 @@ class SignalObjectTest(UsesQCoreApplication):
         o.start(100)
         self.app.exec_()
         self.assert_(self._cb_called)
+
+    def testSignalWithSignal(self):
+        o = MyObject()
+        o.sig2.connect(o.myRange)
+        print "sig->sig", o.sig5.connect(o.sig2)
+        o.sig5[int].emit(10)
+        self.assertEqual(o._range, 10)
+
+
 
 
 if __name__ == '__main__':

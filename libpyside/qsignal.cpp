@@ -361,18 +361,26 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
 
     bool match = false;
     if (slot->ob_type == &SignalInstance_Type) {
-        //TODO: find best match
-        SignalInstanceData *target = reinterpret_cast<SignalInstanceData*>(slot);
+        SignalInstanceData *sourceWalk = source;
+        SignalInstanceData *targetWalk;
 
-        if (QMetaObject::checkConnectArgs(source->signature, target->signature)) {
-            PyList_Append(pyArgs, source->source);
-            Shiboken::AutoDecRef source_signature(PyString_FromString(source->signature));
-            PyList_Append(pyArgs, source_signature);
+        //find best match
+        while(sourceWalk && !match) {
+            targetWalk = reinterpret_cast<SignalInstanceData*>(slot);
+            while(targetWalk && !match) {
+                if (QMetaObject::checkConnectArgs(sourceWalk->signature, targetWalk->signature)) {
+                    PyList_Append(pyArgs, sourceWalk->source);
+                    Shiboken::AutoDecRef sourceSignature(PyString_FromString(sourceWalk->signature));
+                    PyList_Append(pyArgs, sourceSignature);
 
-            PyList_Append(pyArgs, target->source);
-            Shiboken::AutoDecRef target_signature(PyString_FromString(target->signature));
-            PyList_Append(pyArgs, target_signature);
-            match = true;
+                    PyList_Append(pyArgs, targetWalk->source);
+                    Shiboken::AutoDecRef targetSignature(PyString_FromString(targetWalk->signature));
+                    PyList_Append(pyArgs, targetSignature);
+                    match = true;
+                }
+                targetWalk = reinterpret_cast<SignalInstanceData*>(targetWalk->next);
+            }
+            sourceWalk = reinterpret_cast<SignalInstanceData*>(sourceWalk->next);
         }
     } else {
         //try the first signature
