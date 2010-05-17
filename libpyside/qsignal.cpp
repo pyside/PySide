@@ -348,9 +348,9 @@ void signal_instance_initialize(PyObject* instance, PyObject* name, SignalData* 
 
 PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds)
 {
-    PyObject *slot;
-    PyObject *type;
-    static const char *kwlist[] = {"type", 0};
+    PyObject *slot = 0;
+    PyObject *type = 0;
+    static const char *kwlist[] = {"slot", "type", 0};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
                                      "O|O:"SIGNAL_CLASS_NAME, (char**) kwlist, &slot, &type))
@@ -383,6 +383,9 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
         PyList_Append(pyArgs, slot);
         match = true;
     }
+
+    if (type)
+        PyList_Append(pyArgs, type);
 
     if (match) {
         Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));

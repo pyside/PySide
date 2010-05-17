@@ -60,5 +60,13 @@ class SignalObjectTest(UsesQCoreApplication):
         self.app.exec_()
         self.assert_(self._cb_called)
 
+    def testConnectionType(self):
+        o = MyObject()
+        o.timeout.connect(self.cb, type=Qt.DirectConnection)
+        o.start(100)
+        self.app.exec_()
+        self.assert_(self._cb_called)
+
+
 if __name__ == '__main__':
     unittest.main()
