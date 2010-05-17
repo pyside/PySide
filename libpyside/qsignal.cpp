@@ -190,7 +190,7 @@ PyObject* signal_instance_get_item(PyObject* self, PyObject* key)
     return 0;
 }
 
-void signal_update_source(PyObject* source)
+void signalUpdateSource(PyObject* source)
 {
     PyObject* attrs = PyObject_Dir(source);
     for(int i = 0, i_max = PyList_Size(attrs); i < i_max; i++) {
@@ -330,6 +330,7 @@ void signal_instance_free(void* self)
 void signal_instance_initialize(PyObject* instance, PyObject* name, SignalData* data, PyObject* source, int index)
 {
     SignalInstanceData *self = reinterpret_cast<SignalInstanceData*>(instance);
+    self->next = 0;
     if (data->signalName)
         self->signalName = strdup(data->signalName);
     else
@@ -452,7 +453,7 @@ PyObject* signal_instance_emit(PyObject* self, PyObject* args)
     return PyObject_CallObject(pyMethod, tupleArgs);
 }
 
-PyObject* signal_new(const char* name, ...)
+PyObject* signalNew(const char* name, ...)
 {
     va_list listSignatures;
     char* sig;

@@ -52,11 +52,12 @@ class MethodData
 {
 public:
     MethodData(){}
-    MethodData(const char *signature, const char *type);
+    MethodData(const char* signature, const char* type);
     void clear();
     QByteArray signature() const;
     QByteArray type() const;
-    bool operator==(const MethodData &other) const;
+    bool operator==(const MethodData& other) const;
+    bool operator==(const char* other) const;
 
 private:
     QByteArray m_signature;

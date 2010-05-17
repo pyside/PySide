@@ -61,7 +61,7 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
     return idx;
 }
 
-MethodData::MethodData(const char *signature, const char *type)
+MethodData::MethodData(const char* signature, const char* type)
     : m_signature(signature), m_type(type)
 {
 }
@@ -72,9 +72,14 @@ void MethodData::clear()
     m_type.clear();
 }
 
-bool MethodData::operator==(const MethodData &other) const
+bool MethodData::operator==(const MethodData& other) const
 {
     return m_signature == other.signature();
+}
+
+bool MethodData::operator==(const char* other) const
+{
+    return m_signature == other;
 }
 
 QByteArray MethodData::signature() const
@@ -107,9 +112,13 @@ DynamicQMetaObject::~DynamicQMetaObject()
 
 void DynamicQMetaObject::addSignal(const char* signal, const char* type)
 {
+    QLinkedList<MethodData>::iterator i = qFind(m_signals.begin(), m_signals.end(), signal);
+    if (i != m_signals.end())
+        return;
+
     //search for a empty space
     MethodData blank;
-    QLinkedList<MethodData>::iterator i = qFind(m_signals.begin(), m_signals.end(), blank);
+    i = qFind(m_signals.begin(), m_signals.end(), blank);
     if (i != m_signals.end()) {
         *i = MethodData(signal, type);
         updateMetaObject();
@@ -127,9 +136,13 @@ void DynamicQMetaObject::addSignal(const char* signal, const char* type)
 
 void DynamicQMetaObject::addSlot(const char* slot, const char* type)
 {
+    QLinkedList<MethodData>::iterator i = qFind(m_slots.begin(), m_slots.end(), slot);
+    if (i != m_slots.end())
+        return;
+
     //search for a empty space
     MethodData blank;
-    QLinkedList<MethodData>::iterator i = qFind(m_slots.begin(), m_slots.end(), blank);
+    i = qFind(m_slots.begin(), m_slots.end(), blank);
     if (i != m_slots.end()) {
         *i = MethodData(slot, type);
     } else {
@@ -162,18 +175,15 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
 
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
 
-#if 0
         //Register signals
-        if (value->ob_type == &PySideSignal_Type) {
-            SignalData *data = reinterpret_cast<SignalData*>(value);
-
-            for(int i=0, i_max=data->signatures_size; i < i_max; i++) {
-                mo->addSignal(data->signatures[i]);
-                printf("QObject with signal:[%s][%s]\n",
-                       PyString_AS_STRING(PyObject_Str(key)), data->signatures[i]);
+        if (value->ob_type == &Signal_Type) {
+            PyObject *attr = PyObject_GetAttr(pyObj, key);
+            SignalInstanceData *data = reinterpret_cast<SignalInstanceData*>(attr);
+            while(data) {
+                mo->addSignal(data->signature);
+                data = reinterpret_cast<SignalInstanceData*>(data->next);
             }
         }
-#endif
 
         if (!PyFunction_Check(value))
             continue;

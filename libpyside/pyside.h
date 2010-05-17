@@ -41,7 +41,7 @@
 namespace PySide
 {
 
-PYSIDE_API  void init(PyObject *module);
+PYSIDE_API void init(PyObject *module);
 
 } //namespace PySide
 
