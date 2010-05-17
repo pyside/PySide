@@ -50,17 +50,17 @@ namespace PySide
 
 class MethodData
 {
-    public:
-        MethodData(){}
-        MethodData(const char *signature, const char *type);
-        void clear();
-        QByteArray signature() const;
-        QByteArray type() const;
-        bool operator==(const MethodData &other) const;
+public:
+    MethodData(){}
+    MethodData(const char *signature, const char *type);
+    void clear();
+    QByteArray signature() const;
+    QByteArray type() const;
+    bool operator==(const MethodData &other) const;
 
-    private:
-        QByteArray m_signature;
-        QByteArray m_type;
+private:
+    QByteArray m_signature;
+    QByteArray m_type;
 };
 
 class PYSIDE_API DynamicQMetaObject : public QMetaObject
@@ -76,7 +76,7 @@ public:
     void removeSlot(uint index);
 
     //Retrieve Python metadata to create QMetaObject (class name, signals, slot)
-    static DynamicQMetaObject *createBasedOn(PyObject *obj, PyTypeObject *type, const QMetaObject* base);
+    static DynamicQMetaObject* createBasedOn(PyObject* obj, PyTypeObject* type, const QMetaObject* base);
 
 private:
     QLinkedList<MethodData> m_signals;

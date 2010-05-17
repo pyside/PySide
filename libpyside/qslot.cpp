@@ -8,16 +8,20 @@
 typedef struct
 {
     PyObject_HEAD
-    char* slot_name;
+    char* slotName;
     char* args;
-    char* result_type;
+    char* resultType;
 } SlotData;
 
 extern "C"
 {
 
-static int slot_init(PyObject *self, PyObject *arg, PyObject *kw);
-static PyObject* slot_call(PyObject *self, PyObject *arg, PyObject *kw);
+static int slot_init(PyObject*, PyObject*, PyObject*);
+static PyObject* slot_call(PyObject*, PyObject*, PyObject*);
+
+//aux
+static char* slot_get_type_name(PyObject*);
+
 
 // Class Definition -----------------------------------------------
 static PyTypeObject Slot_Type = {
@@ -70,7 +74,7 @@ static PyTypeObject Slot_Type = {
     0,                         /*tp_del */
 };
 
-PyAPI_FUNC(void) init_slot(PyObject* module)
+PyAPI_FUNC(void) init_slot(PyObject *module)
 {
     if (PyType_Ready(&Slot_Type) < 0)
         return;
@@ -82,91 +86,97 @@ PyAPI_FUNC(void) init_slot(PyObject* module)
 
 } // extern "C"
 
-static const char* slot_get_type_name(PyObject *type)
+char* slot_get_type_name(PyObject *type)
 {
     if (PyType_Check(type)) {
         //tp_name return the full name
-        Shiboken::AutoDecRef type_name(PyObject_GetAttrString(type, "__name__"));
-        return PyString_AS_STRING((PyObject*)type_name);
+        Shiboken::AutoDecRef typeName(PyObject_GetAttrString(type, "__name__"));
+        return strdup(PyString_AS_STRING(typeName.object()));
     } else if (PyString_Check(type)) {
-        return PyString_AS_STRING(type);
+        return strdup(PyString_AS_STRING(type));
     }
-    return "";
+    return 0;
 }
 
-static int slot_init(PyObject *self, PyObject *args, PyObject *kw)
+int slot_init(PyObject *self, PyObject *args, PyObject *kw)
 {
     static PyObject *emptyTuple = 0;
     static const char *kwlist[] = {"name", "result", 0};
-    char* arg_name = 0;
-    PyObject* arg_result = 0;
+    char* argName = 0;
+    PyObject* argResult = 0;
 
     if (emptyTuple == 0)
         emptyTuple = PyTuple_New(0);
 
-    if (!PyArg_ParseTupleAndKeywords(emptyTuple, kw, "|sO:QtCore."SLOT_DEC_NAME, (char**) kwlist, &arg_name, &arg_result))
+    if (!PyArg_ParseTupleAndKeywords(emptyTuple, kw, "|sO:QtCore."SLOT_DEC_NAME, (char**) kwlist, &argName, &argResult))
         return 0;
 
     SlotData *data = reinterpret_cast<SlotData*>(self);
-    for(Py_ssize_t i=0, i_max=PyTuple_Size(args); i < i_max; i++) {
-        PyObject *arg_type = PyTuple_GET_ITEM(args, i);
-        const char *type_name = slot_get_type_name(arg_type);
-        if (strlen(type_name) > 0) {
+    for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
+        PyObject *argType = PyTuple_GET_ITEM(args, i);
+        char *typeName = slot_get_type_name(argType);
+        if (typeName) {
             if (data->args) {
+                data->args = reinterpret_cast<char*>(realloc(data->args, (strlen(data->args) + 1 + strlen(typeName)) * sizeof(char*)));
                 data->args = strcat(data->args, ",");
-                data->args = strcat(data->args, type_name);
+                data->args = strcat(data->args, typeName);
+                free(typeName);
             } else {
-                data->args = strdup(type_name);
+                data->args = typeName;
             }
         }
     }
 
-    if (arg_name)
-        data->slot_name = strdup(arg_name);
+    if (argName)
+        data->slotName = strdup(argName);
 
-    if (arg_result)
-        data->result_type = strdup(slot_get_type_name(arg_result));
+    if (argResult)
+        data->resultType = slot_get_type_name(argResult);
     else
-        data->result_type = strdup("void");
+        data->resultType = strdup("void");
 
     return 1;
 }
 
-static PyObject* slot_call(PyObject *self, PyObject *args, PyObject *kw)
+PyObject* slot_call(PyObject* self, PyObject* args, PyObject* kw)
 {
-    PyObject *callback;
+    static PyObject* pySlotName = 0;
+    PyObject* callback;
     callback = PyTuple_GetItem(args, 0);
     Py_INCREF(callback);
 
     if (PyFunction_Check(callback)) {
         SlotData *data = reinterpret_cast<SlotData*>(self);
 
-        if (!data->slot_name) {
-            PyObject *func_name = ((PyFunctionObject*)callback)->func_name;
-            data->slot_name = strdup(PyString_AS_STRING(func_name));
+        if (!data->slotName) {
+            PyObject *funcName = reinterpret_cast<PyFunctionObject*>(callback)->func_name;
+            data->slotName = strdup(PyString_AS_STRING(funcName));
         }
 
         QString signature;
-        signature.sprintf("%s %s(%s)", data->result_type, data->slot_name, data->args);
+        signature.sprintf("%s %s(%s)", data->resultType, data->slotName, data->args);
+
+        if (!pySlotName)
+            pySlotName = PyString_FromString(PYSIDE_SLOT_LIST_ATTR);
 
         PyObject *pySignature = PyString_FromString(QMetaObject::normalizedSignature(signature.toAscii()));
-        PyObject *signature_list = 0;
-        if (PyObject_HasAttrString(callback, PYSIDE_SLOT_LIST_ATTR)) {
-            signature_list = PyObject_GetAttrString(callback, PYSIDE_SLOT_LIST_ATTR);
+        PyObject *signatureList = 0;
+        if (PyObject_HasAttr(callback, pySlotName)) {
+            signatureList = PyObject_GetAttr(callback, pySlotName);
         } else {
-            signature_list = PyList_New(0);
-            PyObject_SetAttrString(callback, PYSIDE_SLOT_LIST_ATTR, signature_list);
-            Py_DECREF(signature_list);
+            signatureList = PyList_New(0);
+            PyObject_SetAttr(callback, pySlotName, signatureList);
+            Py_DECREF(signatureList);
         }
 
-        PyList_Append(signature_list, pySignature);
+        PyList_Append(signatureList, pySignature);
         Py_DECREF(pySignature);
 
         //clear data
-        free(data->slot_name);
-        data->slot_name = 0;
-        free(data->result_type);
-        data->result_type = 0;
+        free(data->slotName);
+        data->slotName = 0;
+        free(data->resultType);
+        data->resultType = 0;
         free(data->args);
         data->args = 0;
         return callback;

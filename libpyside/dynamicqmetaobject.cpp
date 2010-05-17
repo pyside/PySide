@@ -89,7 +89,7 @@ QByteArray MethodData::type() const
     return m_type;
 }
 
-DynamicQMetaObject::DynamicQMetaObject(const char *className, const QMetaObject* metaObject)
+DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject)
 {
     d.superdata = metaObject;
     d.stringdata = 0;
@@ -105,7 +105,7 @@ DynamicQMetaObject::~DynamicQMetaObject()
     delete[] d.data;
 }
 
-void DynamicQMetaObject::addSignal(const char *signal, const char *type)
+void DynamicQMetaObject::addSignal(const char* signal, const char* type)
 {
     //search for a empty space
     MethodData blank;
@@ -125,7 +125,7 @@ void DynamicQMetaObject::addSignal(const char *signal, const char *type)
     updateMetaObject();
 }
 
-void DynamicQMetaObject::addSlot(const char *slot, const char *type)
+void DynamicQMetaObject::addSlot(const char* slot, const char* type)
 {
     //search for a empty space
     MethodData blank;
@@ -150,13 +150,14 @@ void DynamicQMetaObject::removeSlot(uint index)
     }
 }
 
-DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject *pyObj, PyTypeObject *type, const QMetaObject *base)
+DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObject* type, const QMetaObject* base)
 {
-    PyObject *key, *value;
+    PyObject* key;
+    PyObject* value;
     Py_ssize_t pos = 0;
 
     QString className(type->tp_name);
-    className = className.mid(className.lastIndexOf(".")+1);
+    className = className.mid(className.lastIndexOf('.')+1);
     DynamicQMetaObject *mo = new PySide::DynamicQMetaObject(className.toAscii(), base);
 
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
@@ -180,7 +181,7 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject *pyObj, PyTypeObj
         //Register Slots
         if (PyObject_HasAttrString(value, PYSIDE_SLOT_LIST_ATTR)) {
             PyObject *signature_list = PyObject_GetAttrString(value, PYSIDE_SLOT_LIST_ATTR);
-            for(Py_ssize_t i=0, i_max=PyList_Size(signature_list); i < i_max; i++) {
+            for(Py_ssize_t i = 0, i_max = PyList_Size(signature_list); i < i_max; i++) {
                 PyObject *signature = PyList_GET_ITEM(signature_list, i);
                 QString sig(PyString_AsString(signature));
                 //slot the slot type and signature

@@ -1,5 +1,3 @@
-#define protected public
-
 #include <shiboken.h>
 #include <Python.h>
 #include <QDebug>
@@ -18,9 +16,9 @@ extern "C"
 typedef struct {
     PyObject_HEAD
     bool initialized;
-    char *signal_name;
-    char **signatures;
-    int signatures_size;
+    char* signalName;
+    char** signatures;
+    int signaturesSize;
 } SignalData;
 
 static int signal_init(PyObject*, PyObject*, PyObject*);
@@ -28,17 +26,17 @@ static void signal_free(void*);
 static void signal_instance_free(void*);
 
 //methods
-static PyObject* signal_instance_connect(PyObject *self, PyObject *args, PyObject *kw);
-static PyObject* signal_instance_disconnect(PyObject *self, PyObject *args);
-static PyObject* signal_instance_emit(PyObject *self, PyObject *args);
-static PyObject* signal_instance_get_item(PyObject *self, PyObject *key);
+static PyObject* signal_instance_connect(PyObject*, PyObject*, PyObject*);
+static PyObject* signal_instance_disconnect(PyObject*, PyObject*);
+static PyObject* signal_instance_emit(PyObject*, PyObject*);
+static PyObject* signal_instance_get_item(PyObject*, PyObject*);
 
 //aux
-static char* signal_build_signature(const char *name, const char *signature);
-static const char* signal_get_type_name(PyObject *type);
-static void signal_append_signature(SignalData *self, char *signature);
-static void signal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source, int index);
-static char* signal_parse_signature(PyObject *args);
+static char* signal_build_signature(const char*, const char*);
+static char* signal_get_type_name(PyObject*);
+static void signal_append_signature(SignalData*, char*);
+static void signal_instance_initialize(PyObject*, PyObject*, SignalData*, PyObject *, int);
+static char* signal_parse_signature(PyObject*);
 
 PyTypeObject Signal_Type = {
     PyObject_HEAD_INIT(0)
@@ -172,12 +170,12 @@ PyAPI_FUNC(void) init_signal(PyObject* module)
 } // extern "C"
 
 
-PyObject* signal_instance_get_item(PyObject *self, PyObject *key)
+PyObject* signal_instance_get_item(PyObject* self, PyObject* key)
 {
-    SignalInstanceData *data = reinterpret_cast<SignalInstanceData*>(self);
-    char *sig_key = signal_parse_signature(key);
-    char *sig = signal_build_signature(data->signal_name, sig_key);
-    free(sig_key);
+    SignalInstanceData* data = reinterpret_cast<SignalInstanceData*>(self);
+    char* sigKey = signal_parse_signature(key);
+    char* sig = signal_build_signature(data->signalName, sigKey);
+    free(sigKey);
 
     while(data) {
         if (strcmp(data->signature, sig) == 0) {
@@ -192,32 +190,32 @@ PyObject* signal_instance_get_item(PyObject *self, PyObject *key)
     return 0;
 }
 
-void signal_update_source(PyObject *source)
+void signal_update_source(PyObject* source)
 {
-    PyObject *key, *value;
+    PyObject* key;
+    PyObject* value;
     Py_ssize_t pos = 0;
-    PyTypeObject *obType = source->ob_type;
+    PyTypeObject* obType = source->ob_type;
 
     while (PyDict_Next(obType->tp_dict, &pos, &key, &value)) {
         if (value->ob_type == &Signal_Type) {
-            PyObject *signal_instance = (PyObject*)PyObject_New(SignalInstanceData, &SignalInstance_Type);
-            signal_instance_initialize(signal_instance, key, reinterpret_cast<SignalData*>(value), source, 0);
-            PyObject_SetAttr(source, key, signal_instance);
-            Py_DECREF(signal_instance);
+            Shiboken::AutoDecRef signalInstance(reinterpret_cast<PyObject*>(PyObject_New(SignalInstanceData, &SignalInstance_Type)));
+            signal_instance_initialize(signalInstance, key, reinterpret_cast<SignalData*>(value), source, 0);
+            PyObject_SetAttr(source, key, signalInstance);
         }
     }
 }
 
-const char* signal_get_type_name(PyObject *type)
+char* signal_get_type_name(PyObject* type)
 {
     if (PyType_Check(type)) {
         //tp_name return the full name
-        Shiboken::AutoDecRef type_name(PyObject_GetAttrString(type, "__name__"));
-        return PyString_AS_STRING((PyObject*)type_name);
+        Shiboken::AutoDecRef typeName(PyObject_GetAttrString(type, "__name__"));
+        return strdup(PyString_AS_STRING(typeName.object()));
     } else if (PyString_Check(type)) {
-        return PyString_AS_STRING(type);
+        return strdup(PyString_AS_STRING(type));
     }
-    return "";
+    return 0;
 }
 
 char* signal_build_signature(const char *name, const char *signature)
@@ -232,17 +230,19 @@ char* signal_parse_signature(PyObject *args)
     char *signature = 0;
 
     if (args && !PySequence_Check(args) && (args != Py_None && args))
-        return strdup(signal_get_type_name(args));
+        return signal_get_type_name(args);
 
-    for(Py_ssize_t i=0, i_max=PySequence_Size(args); i < i_max; i++) {
+    for(Py_ssize_t i = 0, i_max = PySequence_Size(args); i < i_max; i++) {
         Shiboken::AutoDecRef arg(PySequence_ITEM(args, i));
-        const char *type_name = signal_get_type_name(arg);
-        if (strlen(type_name) > 0) {
+        char* typeName = signal_get_type_name(arg);
+        if (typeName) {
             if (signature) {
+                signature = reinterpret_cast<char*>(realloc(signature, (strlen(signature) + 1 + strlen(typeName)) * sizeof(char*)));
                 signature = strcat(signature, ",");
-                signature = strcat(signature, type_name);
+                signature = strcat(signature, typeName);
+                free(typeName);
             } else {
-                signature = strdup(type_name);
+                signature = typeName;
             }
         }
     }
@@ -250,48 +250,47 @@ char* signal_parse_signature(PyObject *args)
     return signature;
 }
 
-void signal_append_signature(SignalData *self, char *signature)
+void signal_append_signature(SignalData* self, char* signature)
 {
-    self->signatures_size++;
+    self->signaturesSize++;
 
-    if (self->signatures_size > 1) {
-        self->signatures = (char**) realloc(self->signatures, sizeof(char**) * self->signatures_size);
+    if (self->signaturesSize > 1) {
+        self->signatures = (char**) realloc(self->signatures, sizeof(char**) * self->signaturesSize);
     } else {
         self->signatures = (char**) malloc(sizeof(char**));
     }
-    self->signatures[self->signatures_size-1] = signature;
+    self->signatures[self->signaturesSize-1] = signature;
 }
 
-int signal_init(PyObject *self, PyObject *args, PyObject *kwds)
+int signal_init(PyObject* self, PyObject* args, PyObject* kwds)
 {
     static PyObject *emptyTuple = 0;
     static const char *kwlist[] = {"name", 0};
-    char* arg_name = 0;
+    char* argName = 0;
 
     if (emptyTuple == 0)
         emptyTuple = PyTuple_New(0);
 
     if (!PyArg_ParseTupleAndKeywords(emptyTuple, kwds,
-                                     "|s:QtCore."SIGNAL_CLASS_NAME, (char**) kwlist, &arg_name))
+                                     "|s:QtCore."SIGNAL_CLASS_NAME, (char**) kwlist, &argName))
         return 0;
 
-    bool tupled_args = false;
+    bool tupledArgs = false;
     SignalData *data = reinterpret_cast<SignalData*>(self);
-    if (arg_name) {
-        data->signal_name = strdup(arg_name);
+    if (argName) {
+        data->signalName = strdup(argName);
     }
 
-    for(Py_ssize_t i=0, i_max=PyTuple_Size(args); i < i_max; i++) {
+    for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
         PyObject *arg = PyTuple_GET_ITEM(args, i);
         if (PySequence_Check(arg)) {
-            tupled_args = true;
+            tupledArgs = true;
             signal_append_signature(data, signal_parse_signature(arg));
         }
     }
 
-    if (!tupled_args)
+    if (!tupledArgs)
         signal_append_signature(data, signal_parse_signature(args));
-
 
     return 1;
 }
@@ -301,25 +300,25 @@ void signal_free(void *self)
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
     SignalData *data = reinterpret_cast<SignalData*>(self);
 
-    for(int i=0, i_max=data->signatures_size; i < i_max; i++) {
+    for(int i = 0, i_max = data->signaturesSize; i < i_max; i++) {
         if (data->signatures[i])
             free(data->signatures[i]);
     }
 
     free(data->signatures);
-    free(data->signal_name);
+    free(data->signalName);
     data->initialized = false;
-    data->signatures_size = 0;
+    data->signaturesSize = 0;
 
     pySelf->ob_type->tp_base->tp_free(self);
 }
 
-void signal_instance_free(void *self)
+void signal_instance_free(void* self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
     SignalInstanceData *data = reinterpret_cast<SignalInstanceData*>(self);
 
-    free(data->signal_name);
+    free(data->signalName);
     free(data->signature);
 
     while(data) {
@@ -329,23 +328,23 @@ void signal_instance_free(void *self)
     pySelf->ob_type->tp_base->tp_free(self);
 }
 
-void signal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source, int index)
+void signal_instance_initialize(PyObject* instance, PyObject* name, SignalData* data, PyObject* source, int index)
 {
     if (data->initialized)
         return;
 
     SignalInstanceData *self = reinterpret_cast<SignalInstanceData*>(instance);
-    if (data->signal_name)
-        self->signal_name = strdup(data->signal_name);
+    if (data->signalName)
+        self->signalName = strdup(data->signalName);
     else
-        self->signal_name = strdup(PyString_AsString(name));
+        self->signalName = strdup(PyString_AsString(name));
 
     self->source = source;
-    self->signature = signal_build_signature(self->signal_name, data->signatures[index]);
+    self->signature = signal_build_signature(self->signalName, data->signatures[index]);
     index++;
 
-    if (index < data->signatures_size) {
-        self->next = (PyObject*)PyObject_New(SignalInstanceData, &SignalInstance_Type);
+    if (index < data->signaturesSize) {
+        self->next = reinterpret_cast<PyObject*>(PyObject_New(SignalInstanceData, &SignalInstance_Type));
         signal_instance_initialize(self->next, name, data, source, index);
     }
 
@@ -353,7 +352,7 @@ void signal_instance_initialize(PyObject *instance, PyObject *name, SignalData *
         data->initialized = true;
 }
 
-PyObject* signal_instance_connect(PyObject *self, PyObject *args, PyObject *kwds)
+PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds)
 {
     PyObject *slot;
     PyObject *type;
@@ -400,7 +399,7 @@ PyObject* signal_instance_connect(PyObject *self, PyObject *args, PyObject *kwds
     return 0;
 }
 
-PyObject* signal_instance_disconnect(PyObject *self, PyObject *args)
+PyObject* signal_instance_disconnect(PyObject* self, PyObject* args)
 {
     SignalInstanceData *source = reinterpret_cast<SignalInstanceData*>(self);
     Shiboken::AutoDecRef pyArgs(PyList_New(0));
@@ -443,7 +442,7 @@ PyObject* signal_instance_disconnect(PyObject *self, PyObject *args)
     return 0;
 }
 
-PyObject* signal_instance_emit(PyObject *self, PyObject *args)
+PyObject* signal_instance_emit(PyObject* self, PyObject* args)
 {
     SignalInstanceData *source = reinterpret_cast<SignalInstanceData*>(self);
 
@@ -460,11 +459,11 @@ PyObject* signal_instance_emit(PyObject *self, PyObject *args)
     return PyObject_CallObject(pyMethod, tupleArgs);
 }
 
-PyObject* signal_new(const char *name, ...)
+PyObject* signal_new(const char* name, ...)
 {
     va_list listSignatures;
-    char *sig;
-    SignalData *self = PyObject_New(SignalData, &Signal_Type);
+    char* sig;
+    SignalData* self = PyObject_New(SignalData, &Signal_Type);
 
     va_start(listSignatures, name);
     sig = va_arg(listSignatures, char*);

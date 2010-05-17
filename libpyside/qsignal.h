@@ -1,5 +1,5 @@
-﻿#ifndef QSIGNAL_H
-#define QSIGNAL_H
+﻿#ifndef PYSIDE_SIGNAL_H
+#define PYSIDE_SIGNAL_H
 
 #include <pysidemacros.h>
 #include <Python.h>
@@ -10,10 +10,10 @@ namespace PySide
 
 typedef struct {
     PyObject_HEAD
-    char *signal_name;
-    char *signature;
-    PyObject *source;
-    PyObject *next;
+    char* signalName;
+    char* signature;
+    PyObject* source;
+    PyObject* next;
 } SignalInstanceData;
 
 
@@ -21,10 +21,11 @@ extern "C"
 {
     PyAPI_DATA(PyTypeObject) Signal_Type;
     PyAPI_DATA(PyTypeObject) SignalInstance_Type;
-    PYSIDE_API PyAPI_FUNC(PyObject*) signal_new(const char *name, ...);
+    PYSIDE_API PyAPI_FUNC(PyObject*) signal_new(const char* name, ...);
 }; //extern "C"
 
-PYSIDE_API void signal_update_source(PyObject *source);
+PYSIDE_API void signal_update_source(PyObject* source);
 
 } //namespace PySide
+
 #endif
