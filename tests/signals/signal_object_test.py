@@ -27,6 +27,9 @@ class MyObject(QObject):
 
 
 class SignalObjectTest(unittest.TestCase):
+    def cb(self):
+        self._cb_called = True
+
     def testsingleConnect(self):
         o = MyObject()
         o.sig1.connect(o.slot1)
@@ -49,6 +52,11 @@ class SignalObjectTest(unittest.TestCase):
         o.sig4[QString].connect(o.slotString)
         o.sig4[QString].emit("PySide")
         self.assertEqual(o._s, "PySide")
+
+    def testGeneretedSignal(self):
+        o = MyObject()
+        o.destroyed.connect(self.cb)
+        self.assertEqual(self._cb_called)
 
 if __name__ == '__main__':
     unittest.main()

@@ -464,6 +464,10 @@ PyObject* signal_new(const char* name, ...)
     va_list listSignatures;
     char* sig;
     SignalData* self = PyObject_New(SignalData, &Signal_Type);
+    self->signalName = strdup(name);
+    self->signaturesSize = 0;
+    self->signatures = 0;
+    self->initialized = 0;
 
     va_start(listSignatures, name);
     sig = va_arg(listSignatures, char*);
