@@ -228,7 +228,7 @@ char* signal_parse_signature(PyObject *args)
 {
     char *signature = 0;
 
-    if (args && !PySequence_Check(args) && (args != Py_None && args))
+    if (args && (PyString_Check(args) || (!PySequence_Check(args) && (args != Py_None))))
         return signal_get_type_name(args);
 
     for(Py_ssize_t i = 0, i_max = PySequence_Size(args); i < i_max; i++) {
@@ -282,7 +282,7 @@ int signal_init(PyObject* self, PyObject* args, PyObject* kwds)
 
     for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
         PyObject *arg = PyTuple_GET_ITEM(args, i);
-        if (PySequence_Check(arg)) {
+        if (PySequence_Check(arg) && !PyString_Check(arg)) {
             tupledArgs = true;
             signal_append_signature(data, signal_parse_signature(arg));
         }
