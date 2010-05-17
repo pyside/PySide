@@ -28,7 +28,7 @@ static PyObject* qsignal_instance_get_item(PyObject *self, PyObject *key);
 //aux
 static char* qsignal_build_signature(const char *name, const char *signature);
 static const char* qsignal_get_type_name(PyObject *type);
-static void qsignal_append_signature(SignalData *self, PyObject *args);
+static void qsignal_append_signature(SignalData *self, char *signature);
 static void qsignal_instance_initialize(PyObject *instance, PyObject *name, SignalData *data, PyObject *source, int index);
 static char* qsignal_parse_signature(PyObject *args);
 
@@ -192,7 +192,7 @@ void signal_update_source(PyObject *source)
 
     while (PyDict_Next(obType->tp_dict, &pos, &key, &value)) {
         if (value->ob_type == &PySideSignal_Type) {
-            PyObject *signal_instance = (PyObject*)PyObject_New(SignalData, &PySideSignalInstance_Type);
+            PyObject *signal_instance = (PyObject*)PyObject_New(SignalInstanceData, &PySideSignalInstance_Type);
             qsignal_instance_initialize(signal_instance, key, reinterpret_cast<SignalData*>(value), source, 0);
             PyObject_SetAttr(source, key, signal_instance);
             Py_DECREF(signal_instance);
@@ -215,6 +215,7 @@ const char* qsignal_get_type_name(PyObject *type)
 char* qsignal_build_signature(const char *name, const char *signature)
 {
     QString signal;
+    signal.sprintf("2%s(%s)", name, signature);
     return strdup(QMetaObject::normalizedSignature(signal.toAscii()));
 }
 
@@ -241,10 +242,8 @@ char* qsignal_parse_signature(PyObject *args)
     return signature;
 }
 
-void qsignal_append_signature(SignalData *self, PyObject *args)
+void qsignal_append_signature(SignalData *self, char *signature)
 {
-    char *signature = qsignal_parse_signature(args);
-
     self->signatures_size++;
 
     if (self->signatures_size > 1) {
@@ -278,12 +277,12 @@ int qsignal_init(PyObject *self, PyObject *args, PyObject *kwds)
         PyObject *arg = PyTuple_GET_ITEM(args, i);
         if (PySequence_Check(arg)) {
             tupled_args = true;
-            qsignal_append_signature(data, arg);
+            qsignal_append_signature(data, qsignal_parse_signature(arg));
         }
     }
 
     if (!tupled_args)
-        qsignal_append_signature(data, args);
+        qsignal_append_signature(data, qsignal_parse_signature(args));
 
 
     return 1;
@@ -338,7 +337,7 @@ void qsignal_instance_initialize(PyObject *instance, PyObject *name, SignalData 
     index++;
 
     if (index < data->signatures_size) {
-        self->next = (PyObject*)PyObject_New(SignalData, &PySideSignalInstance_Type);
+        self->next = (PyObject*)PyObject_New(SignalInstanceData, &PySideSignalInstance_Type);
         qsignal_instance_initialize(self->next, name, data, source, index);
     }
 
@@ -452,5 +451,25 @@ PyObject* qsignal_instance_emit(PyObject *self, PyObject *args)
     Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
     return PyObject_CallObject(pyMethod, tupleArgs);
 }
+
+PyObject* signal_new(const char *name, ...)
+{
+    va_list listSignatures;
+    char *sig;
+    SignalData *self = PyObject_New(SignalData, &PySideSignal_Type);
+
+    va_start(listSignatures, name);
+    sig = va_arg(listSignatures, char*);
+
+    while(sig != NULL) {
+        qsignal_append_signature(self, strdup(sig));
+        sig = va_arg(listSignatures, char*);
+    }
+
+    va_end(listSignatures);
+
+    return reinterpret_cast<PyObject*>(self);
+}
+
 
 } //namespace PySide

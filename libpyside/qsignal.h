@@ -29,6 +29,7 @@ extern "C"
 {
     PyAPI_DATA(PyTypeObject) PySideSignal_Type;
     PyAPI_DATA(PyTypeObject) PySideSignalInstance_Type;
+    PYSIDE_API PyAPI_FUNC(PyObject*) signal_new(const char *name, ...);
 }; //extern "C"
 
 PYSIDE_API void signal_update_source(PyObject *source);
