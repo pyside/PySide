@@ -62,36 +62,49 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
 }
 
 MethodData::MethodData(const char* signature, const char* type)
-    : m_signature(signature), m_type(type)
 {
+    m_signature = QSharedPointer<QByteArray>(new QByteArray(signature));
+    m_type = QSharedPointer<QByteArray>(new QByteArray(type));
 }
 
 void MethodData::clear()
 {
-    m_signature.clear();
-    m_type.clear();
+    m_signature->clear();
+    m_type->clear();
 }
 
 bool MethodData::operator==(const MethodData& other) const
 {
-    return m_signature == other.signature();
+    return *m_signature == other.signature();
 }
 
 bool MethodData::operator==(const char* other) const
 {
-    return m_signature == other;
+    return *m_signature == other;
 }
 
 QByteArray MethodData::signature() const
 {
-    return m_signature;
+    if (!m_signature.isNull())
+        return *m_signature;
+    else
+        return QByteArray();
 }
 
 QByteArray MethodData::type() const
 {
-    if (m_type == "void")
-        return QByteArray("");
-    return m_type;
+    if (!m_type.isNull()) {
+        if (*m_type == "void")
+            return QByteArray();
+        return *m_type;
+    } else {
+        return QByteArray();
+    }
+}
+
+bool MethodData::isValid() const
+{
+    return m_signature->size();
 }
 
 DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject)
@@ -260,7 +273,7 @@ void DynamicQMetaObject::updateMetaObject()
     QLinkedList<MethodData>::iterator iSignal = m_signals.begin();
     for(int i=0; i < MAX_SIGNALS_COUNT; i++) {
         QByteArray sigType;
-        if (iSignal != m_signals.end()) {
+        if (iSignal != m_signals.end() && ((*iSignal).signature().size() > 0) ) {
             data[index++] = registerString((*iSignal).signature(), &strings); // func name
             sigType = (*iSignal).type();
             iSignal++;
@@ -276,9 +289,13 @@ void DynamicQMetaObject::updateMetaObject()
 
     //write slots
     foreach(MethodData slot, m_slots) {
-        data[index++] = registerString(slot.signature(), &strings); // func name
+        if (slot.isValid())
+            data[index++] = registerString(slot.signature(), &strings); // func name
+        else
+            data[index++] = NULL_INDEX;
+
         data[index++] = NULL_INDEX; // arguments
-        data[index++] = (slot.type().size() > 0 ? registerString(slot.type(), &strings) :  NULL_INDEX); // normalized type
+        data[index++] = (slot.isValid() ? registerString(slot.type(), &strings) :  NULL_INDEX); // normalized type
         data[index++] = NULL_INDEX; // tags
         data[index++] = AccessPublic | MethodSlot; // flags
     }

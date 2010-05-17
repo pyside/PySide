@@ -40,6 +40,7 @@
 #include <QMetaObject>
 #include <QLinkedList>
 #include <QByteArray>
+#include <QSharedPointer>
 
 #define PYSIDE_SLOT_LIST_ATTR "_slots"
 
@@ -54,14 +55,15 @@ public:
     MethodData(){}
     MethodData(const char* signature, const char* type);
     void clear();
+    bool isValid() const;
     QByteArray signature() const;
     QByteArray type() const;
     bool operator==(const MethodData& other) const;
     bool operator==(const char* other) const;
 
 private:
-    QByteArray m_signature;
-    QByteArray m_type;
+    QSharedPointer<QByteArray> m_signature;
+    QSharedPointer<QByteArray> m_type;
 };
 
 class PYSIDE_API DynamicQMetaObject : public QMetaObject
