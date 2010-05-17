@@ -5,8 +5,9 @@ import unittest
 import functools
 
 from PySide.QtCore import *
+from helper import UsesQCoreApplication
 
-class MyObject(QObject):
+class MyObject(QTimer):
     sig1 = Signal()
     sig2 = Signal(int, name='rangeChanged')
     sig3 = Signal(int)
@@ -15,9 +16,7 @@ class MyObject(QObject):
 
     @Slot(int)
     def myRange(self, r):
-        print "Range changed:", r
         self._range = r
-
 
     def slot1(self):
         self._called = True
@@ -26,9 +25,10 @@ class MyObject(QObject):
         self._s = s
 
 
-class SignalObjectTest(unittest.TestCase):
+class SignalObjectTest(UsesQCoreApplication):
     def cb(self):
         self._cb_called = True
+        self.app.exit()
 
     def testsingleConnect(self):
         o = MyObject()
@@ -55,8 +55,10 @@ class SignalObjectTest(unittest.TestCase):
 
     def testGeneretedSignal(self):
         o = MyObject()
-        o.destroyed.connect(self.cb)
-        self.assertEqual(self._cb_called)
+        o.timeout.connect(self.cb)
+        o.start(100)
+        self.app.exec_()
+        self.assert_(self._cb_called)
 
 if __name__ == '__main__':
     unittest.main()

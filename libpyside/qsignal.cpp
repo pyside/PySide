@@ -152,7 +152,7 @@ PyTypeObject SignalInstance_Type = {
 };
 
 
-PyAPI_FUNC(void) init_signal(PyObject* module)
+void init_signal(PyObject* module)
 {
     if (PyType_Ready(&Signal_Type) < 0)
         return;
@@ -192,17 +192,16 @@ PyObject* signal_instance_get_item(PyObject* self, PyObject* key)
 
 void signal_update_source(PyObject* source)
 {
-    PyObject* key;
-    PyObject* value;
-    Py_ssize_t pos = 0;
-    PyTypeObject* obType = source->ob_type;
-
-    while (PyDict_Next(obType->tp_dict, &pos, &key, &value)) {
-        if (value->ob_type == &Signal_Type) {
+    PyObject* attrs = PyObject_Dir(source);
+    for(int i = 0, i_max = PyList_Size(attrs); i < i_max; i++) {
+        PyObject *attrName = PyList_GET_ITEM(attrs, i);
+        PyObject *attr = PyObject_GetAttr(source, attrName);
+        if (attr->ob_type == &Signal_Type) {
             Shiboken::AutoDecRef signalInstance(reinterpret_cast<PyObject*>(PyObject_New(SignalInstanceData, &SignalInstance_Type)));
-            signal_instance_initialize(signalInstance, key, reinterpret_cast<SignalData*>(value), source, 0);
-            PyObject_SetAttr(source, key, signalInstance);
+            signal_instance_initialize(signalInstance, attrName, reinterpret_cast<SignalData*>(attr), source, 0);
+            PyObject_SetAttr(source, attrName, signalInstance);
         }
+        Py_DECREF(attr);
     }
 }
 
@@ -307,7 +306,7 @@ void signal_free(void *self)
 
     free(data->signatures);
     free(data->signalName);
-    data->initialized = false;
+    data->initialized = 0;
     data->signaturesSize = 0;
 
     pySelf->ob_type->tp_base->tp_free(self);
@@ -330,9 +329,6 @@ void signal_instance_free(void* self)
 
 void signal_instance_initialize(PyObject* instance, PyObject* name, SignalData* data, PyObject* source, int index)
 {
-    if (data->initialized)
-        return;
-
     SignalInstanceData *self = reinterpret_cast<SignalInstanceData*>(instance);
     if (data->signalName)
         self->signalName = strdup(data->signalName);
@@ -347,9 +343,6 @@ void signal_instance_initialize(PyObject* instance, PyObject* name, SignalData* 
         self->next = reinterpret_cast<PyObject*>(PyObject_New(SignalInstanceData, &SignalInstance_Type));
         signal_instance_initialize(self->next, name, data, source, index);
     }
-
-    if (index == 0)
-        data->initialized = true;
 }
 
 PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds)

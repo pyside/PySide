@@ -35,8 +35,8 @@
 
 #include "pyside.h"
 
-extern "C" PyAPI_FUNC(void) init_signal(PyObject* module);
-extern "C" PyAPI_FUNC(void) init_slot(PyObject* module);
+extern "C" void init_signal(PyObject* module);
+extern "C" void init_slot(PyObject* module);
 
 namespace PySide
 {

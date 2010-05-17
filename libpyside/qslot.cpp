@@ -74,7 +74,7 @@ static PyTypeObject Slot_Type = {
     0,                         /*tp_del */
 };
 
-PyAPI_FUNC(void) init_slot(PyObject *module)
+void init_slot(PyObject *module)
 {
     if (PyType_Ready(&Slot_Type) < 0)
         return;
