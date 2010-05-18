@@ -75,11 +75,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkinterface_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkproxy_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkreply_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkrequest_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslcipher_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslconfiguration_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslerror_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslkey_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslsocket_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qssl_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtcpserver_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtcpsocket_wrapper.cpp
@@ -89,6 +84,15 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
 ${SPECIFIC_OS_FILES}
 ${QtNetwork_46_SRC}
 )
+
+set(OPENSSL_SOURCES
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslcipher_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslkey_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslconfiguration_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslerror_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslsocket_wrapper.cpp
+)
+CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL ${OPENSSL_SOURCES} QtNetwork_SRC)
 
 execute_generator(network QtNetwork_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
 
