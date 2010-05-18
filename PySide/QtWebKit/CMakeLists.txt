@@ -68,6 +68,8 @@ target_link_libraries(QtWebKit
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTWEBKIT_LIBRARY}
+                      ${QT_QTNETWORK_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
                       )
 add_dependencies(QtWebKit QtGui)
 add_dependencies(QtWebKit QtNetwork)

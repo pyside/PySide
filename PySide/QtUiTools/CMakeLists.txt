@@ -27,7 +27,6 @@ target_link_libraries(QtUiTools
                       ${PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
-                      ${QT_QTXML_LIBRARY}
                       ${QT_QTUITOOLS_LIBRARY})
 
 add_dependencies(QtUiTools QtGui QtXml)

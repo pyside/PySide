@@ -36,11 +36,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 add_library(QtTest MODULE ${QtTest_SRC})
 set_property(TARGET QtTest PROPERTY PREFIX "")
 target_link_libraries(QtTest
-                      pyside
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
+                      ${QT_QTCORE_LIBRARY}
                       )
 add_dependencies(QtTest QtGui)
 

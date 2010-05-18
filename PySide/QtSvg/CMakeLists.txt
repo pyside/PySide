@@ -52,6 +52,7 @@ target_link_libraries(QtSvg
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTSVG_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
                       )
 add_dependencies(QtSvg QtGui)
 

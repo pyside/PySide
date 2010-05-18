@@ -35,6 +35,7 @@ target_link_libraries(QtMultimedia
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTMULTIMEDIA_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
                       )
 add_dependencies(QtMultimedia QtGui)
 
