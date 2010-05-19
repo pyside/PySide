@@ -92,7 +92,8 @@ set(OPENSSL_SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslerror_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslsocket_wrapper.cpp
 )
-CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL ${OPENSSL_SOURCES} QtNetwork_SRC)
+
+CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL OPENSSL_SOURCES QtNetwork_SRC)
 
 execute_generator(network QtNetwork_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
 

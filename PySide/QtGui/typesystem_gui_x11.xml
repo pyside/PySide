@@ -8,5 +8,7 @@
     <modify-function signature="appVisual(int)" remove="all"/>
   </value-type>
 
+  <enum-type name="QPixmap::ShareMode"/>
+
   <load-typesystem name="typesystem_gui_common.xml" generate="yes"/>
 </typesystem>

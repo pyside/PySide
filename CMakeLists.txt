@@ -4,8 +4,18 @@ project(pysidebindings)
 
 cmake_minimum_required(VERSION 2.6)
 
-set(CMAKE_CXX_FLAGS_RELEASE "-Wall -DNDEBUG -Os -Wl,-O1 -Wl,--hash-style=gnu -Wno-strict-aliasing -fvisibility=hidden")
+set(CMAKE_CXX_FLAGS_RELEASE "-Wall -DNDEBUG -Os -Wno-strict-aliasing -fvisibility=hidden")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-common -Wall -fno-strict-aliasing -fvisibility=hidden")
+
+if (CMAKE_HOST_UNIX)
+  if (CMAKE_HOST_APPLE)
+    if (NOT QT_INCLUDE_DIR)
+      set(QT_INCLUDE_DIR "/Library/Frameworks")
+    endif ()
+  else ()
+    set(CMAKE_CXX_FLAGS_RELEASE "$CMAKE_CXX_FLAGS_RELEASE -Wl,-O1 -Wl,--hash-style=gnu")
+  endif ()
+endif ()
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)

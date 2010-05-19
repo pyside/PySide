@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtGui">
-
   <rejection class="*" function-name="qt_mac_set_cursor"/>
   <rejection class="*" function-name="macMenu"/>
 
-  <!-- qApp macro register -->
-  <inject-code class="target" file="glue/qtgui_boost.cpp" position="end"/>
-  <inject-code class="native" file="glue/qtgui_glue.cpp" position="beginning"/>
+  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject"/>
 
-  <load-typesystem name="typesystem_gui.xml" generate="yes"/>
+  <load-typesystem name="typesystem_gui_common.xml" generate="yes"/>
+
+  <suppress-warning text="enum 'QPixmap::ShareMode' does not have a type entry or is not an enum" />
+  <suppress-warning text="enum 'QSysInfo::Endian' is specified in typesystem, but not declared" />
+  <suppress-warning text="type 'QGtkStyle' is specified in typesystem, but not defined. This could potentially lead to compilation errors." />
 </typesystem>

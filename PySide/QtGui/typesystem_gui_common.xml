@@ -439,7 +439,6 @@
     <modify-function signature="init(const QWidget*)" remove="all"/>
     <!--### Obsolete in 4.3-->
   </value-type>
-  <enum-type name="QPixmap::ShareMode"/>
   <value-type name="QStyleOptionGraphicsItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionGraphicsItem::Type &amp;&amp; %1-&gt;version == QStyleOptionGraphicsItem::Version" />
   <value-type name="QStyleOptionSizeGrip" polymorphic-id-expression="%1-&gt;type == QStyleOptionSizeGrip::Type &amp;&amp; %1-&gt;version == QStyleOptionSizeGrip::Version" />
   <value-type name="QStyleOptionButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionButton::Type &amp;&amp; %1-&gt;version == QStyleOptionButton::Version" />
