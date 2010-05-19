@@ -330,20 +330,28 @@ QT_END_NAMESPACE
 
 QT_END_HEADER
 
-//#define Q_QDOC
 #define qdoc
-//#undef Q_MOC_RUN
 
-//Export X11 related functions
-#define Q_WS_X11
+#if @ENABLE_X11@
+  #define Q_WS_X11
+#elif @ENABLE_MAC@
+  #define Q_WS_MAC
+#elif @ENABLE_WIN@
+  #define Q_WS_WIN
+#endif
 
 // There are symbols in Qt that exist in Debug but
 // not in release
 #define QT_NO_DEBUG
 
 #include <QtCore/QtCore>
+#if @ENABLE_MAC@
+  #undef qdoc
+#endif
 #include <QtGui/QtGui>
-#include <QtGui/QX11Info>
+#if @ENABLE_X11@
+  #include <QtGui/QX11Info>
+#endif
 #include <QtXml/QtXml>
 #include <QtUiTools/QtUiTools>
 #include <QtNetwork/QtNetwork>

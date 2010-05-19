@@ -33,8 +33,7 @@ macro(CHECK_QT_GUI_MACRO macro_display_name qt_macro module_sources global_sourc
     endif()
 endmacro(CHECK_QT_GUI_MACRO)
 
-if(Q_WS_X11)
-    set(AUTO_OS "X11")
+if(ENABLE_X11)
     set(MODULE_NAME "x11")
     set(SPECIFIC_OS_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11info_wrapper.cpp
@@ -49,16 +48,12 @@ if(Q_WS_X11)
         )
     endif(Q_WS_MAEMO_5)
 
-elseif(Q_WS_MAC)
-    set(AUTO_OS "MAC")
+elseif(ENABLE_MAC)
     set(MODULE_NAME "mac")
     set(SPECIFIC_OS_FILES
        )
-else()
-    message(FATAL_ERROR "OS not supported")
-endif(Q_WS_X11)
+endif(ENABLE_X11)
 
-message(STATUS "Detected OS: ${AUTO_OS}")
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set (QtGui_46_SRC )

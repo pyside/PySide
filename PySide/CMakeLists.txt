@@ -5,7 +5,7 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
 macro(execute_generator module sources typesystem_path)
 add_custom_command(OUTPUT ${${sources}}
 COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
-        ${pyside_SOURCE_DIR}/global.h
+        ${CMAKE_BINARY_DIR}/PySide/global.h
         --include-paths=${pyside_SOURCE_DIR}:${QT_INCLUDE_DIR}
         --typesystem-paths=${pyside_SOURCE_DIR}:${typesystem_path}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
@@ -15,6 +15,11 @@ WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 COMMENT "Running generator for ${module}..."
 )
 endmacro(execute_generator)
+
+# Configure include based on platform
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/global.h" @ONLY)
+
 
 # Only add subdirectory if the associated Qt module is found.
 macro(HAS_QT_MODULE var name)
