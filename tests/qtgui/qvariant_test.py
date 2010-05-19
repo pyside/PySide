@@ -76,5 +76,10 @@ class QVariantMess(unittest.TestCase):
         self.assertNotEqual(v.type(), QVariant.Int)
         self.assertTrue(v.toPyObject() is p)
 
+    def testMatrix2x2(self):
+        m = QMatrix2x2()
+        v = QVariant(m)
+        self.assertEqual('QMatrix2x2', v.typeName())
+
 if __name__ == '__main__':
     unittest.main()
