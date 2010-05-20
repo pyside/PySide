@@ -1,6 +1,6 @@
 New-style signal/slot
 *********************
-The new-style signal/slot was introduced by Riverbank on its PyQt v4.5. The main goal of this new-style is to provide a more pythonic syntax to the Python programmers.
+The new-style signal/slot was introduced by Riverbank on its PyQt v4.5. The main goal of this new-style is to provide a more pythonic syntax to the Python programmers. PySide uses `PSEP100 <http://www.pyside.org/docs/pseps/psep-0100.html>`_ as its implementation guideline.
 
 Old way: SIGNAL() and SLOT()
 ----------------------------
@@ -25,7 +25,7 @@ The example below uses the well known *clicked* signal from a *QPushButton*. The
 
 Next section shows how everything has changed to become more pythonic.
 
-New way: Signal() and Slot()
+New way: signal() and slot()
 ----------------------------
 The new-style uses a different syntax to create and to connect signals/slots. The previous example could be rewritten as:
 
@@ -38,7 +38,7 @@ The new-style uses a different syntax to create and to connect signals/slots. Th
 
     ...
 
-    clicked = QtCore.Signal()
+    clicked = QtCore.signal()
 
     button = QtGui.QPushButton("Call someFunc")
     button.clicked.connect(someFunc)
@@ -46,22 +46,22 @@ The new-style uses a different syntax to create and to connect signals/slots. Th
     ...
 
 
-Using QtCore.Signal()
+Using QtCore.signal()
 ---------------------
-Signals can be defined using the *QtCore.Signal()* class. Python types and C types can be passed as parameters to it. If you need to overload it just pass the types as tuples or lists.
+Signals can be defined using the *QtCore.signal()* class. Python types and C types can be passed as parameters to it. If you need to overload it just pass the types as tuples or lists.
 
 Besides that it can receive also a named argument *name* that defines the signal name. If nothing is passed as *name* then the new signal will have the same name as the variable that it is being assigned to.
 
-The section `Putting everything together`_ has a collection of examples that shows a bunch of situation using the *Signal()* class.
+The section `Putting everything together`_ has a collection of examples that shows a bunch of situation using the *signal()* class.
 
 **Note**: Signals should be defined only inside classes inheriting from QObject. This way the signal information is added to the class QMetaObject structure.
 
 
-Using QtCore.Slot()
+Using QtCore.slot()
 -------------------
-Slots are assigned and overloaded using the decorator *QtCore.Slot()*. Again, to define a signature just pass the types like the *QtCore.Signal()* class. Unlike the *Signal()* class, to overload a function you don't pass every variation as tuple or list. Instead of that you have to define a new decorator for every different signature. The examples section below will make it clearer.
+Slots are assigned and overloaded using the decorator *QtCore.slot()*. Again, to define a signature just pass the types like the *QtCore.signal()* class. Unlike the *signal()* class, to overload a function you don't pass every variation as tuple or list. Instead of that you have to define a new decorator for every different signature. The examples section below will make it clearer.
 
-Another difference is about its keywords. *Slot()* accepts a *name* and a *result*. The *result* keyword defines the type that will be returned and can be a C or Python type. The *name* behaves the same way as in *Signal()*. If nothing is passed as *name* then the new slot will have the same name as the function that is being decorated.
+Another difference is about its keywords. *slot()* accepts a *name* and a *result*. The *result* keyword defines the type that will be returned and can be a C or Python type. The *name* behaves the same way as in *signal()*. If nothing is passed as *name* then the new slot will have the same name as the function that is being decorated.
 
 Putting everything together
 ---------------------------
@@ -97,13 +97,13 @@ Nothing better than examples to show how to use the new-style. Here you can find
 
     # define a new slot that receives a QString and has
     # 'saySomeWords' as its name
-    @QtCore.Slot(QtCore.QString)
+    @QtCore.slot(QtCore.QString)
     def saySomeWords(words):
         print words
 
     class Communicate(QtCore.QObject):
         # create a new signal on the fly and name it 'speak'
-        speak = QtCore.Signal(QtCore.QString)
+        speak = QtCore.signal(QtCore.QString)
 
     someone = Communicate()
     # connect signal and slot
@@ -120,16 +120,16 @@ Nothing better than examples to show how to use the new-style. Here you can find
 
     # define a new slot that receives a C 'int' or a 'QString'
     # and has 'saySomething' as its name
-    @QtCore.Slot(int)
-    @QtCore.Slot(QtCore.QString)
+    @QtCore.slot(int)
+    @QtCore.slot(QtCore.QString)
     def saySomething(stuff):
         print stuff
 
     class Communicate(QtCore.QObject):
         # create two new signals on the fly: one will handle
         # int type, the other will handle QStrings
-        speakNumber = QtCore.Signal(int)
-        speakWord = QtCore.Signal(QtCore.QString)
+        speakNumber = QtCore.signal(int)
+        speakWord = QtCore.signal(QtCore.QString)
 
     someone = Communicate()
     # connect signal and slot properly
@@ -149,15 +149,15 @@ Nothing better than examples to show how to use the new-style. Here you can find
 
     # define a new slot that receives an C 'int' or a 'QString'
     # and has 'saySomething' as its name
-    @QtCore.Slot(int)
-    @QtCore.Slot(QtCore.QString)
+    @QtCore.slot(int)
+    @QtCore.slot(QtCore.QString)
     def saySomething(stuff):
         print stuff
 
     class Communicate(QtCore.QObject):
         # create two new signals on the fly: one will handle
         # int type, the other will handle QStrings
-        speak = QtCore.Signal((int,), (QtCore.QString,))
+        speak = QtCore.signal((int,), (QtCore.QString,))
 
     someone = Communicate()
     # connect signal and slot. As 'int' is the default
@@ -178,14 +178,14 @@ PyQt uses a different naming convention to its new signal/slot functions. In ord
 
 ::
 
-    from PySide.QtCore import Signal as pyqtSignal
-    from PySide.QtCore import Slot as pyqtSlot
+    from PySide.QtCore import signal as pyqtSignal
+    from PySide.QtCore import slot as pyqtSlot
 
 or
 
 ::
 
-    QtCore.pyqtSignal = QtCore.Signal
-    QtCore.pyqtSlot = QtCore.Slot
+    QtCore.pyqtSignal = QtCore.signal
+    QtCore.pyqtSlot = QtCore.slot
 
-This way any call to *pyqtSignal* or *pyqtSlot* will be translated to a *Signal* or *Slot* call.
+This way any call to *pyqtSignal* or *pyqtSlot* will be translated to a *signal* or *slot* call.
