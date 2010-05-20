@@ -46,7 +46,7 @@ target_link_libraries(QtXmlPatterns
                       ${QT_QTXMLPATTERNS_LIBRARY})
 add_dependencies(QtXmlPatterns QtCore)
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtXmlPatterns.so
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtXmlPatterns${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns/pyside_qtxmlpatterns_python.h
         DESTINATION include/PySide/QtXmlPatterns/)

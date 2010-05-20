@@ -62,7 +62,7 @@ target_link_libraries(phonon
 add_dependencies(phonon QtGui)
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.so
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/pyside_phonon_python.h
         DESTINATION include/PySide/phonon/)

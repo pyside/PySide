@@ -33,7 +33,7 @@ target_link_libraries(QtScriptTools
 add_dependencies(QtScriptTools QtCore QtScript QtGui)
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScriptTools.so
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScriptTools${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools/pyside_qtscripttools_python.h
         DESTINATION include/PySide/QtScriptTools/)

@@ -152,7 +152,7 @@ target_link_libraries(QtCore
                       )
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtCore.so
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtCore${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/pyside_qtcore_python.h
         DESTINATION include/PySide/QtCore/)

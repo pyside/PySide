@@ -49,7 +49,7 @@ target_link_libraries(QtMaemo5
 #add_dependencies(QtMaemo5)
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMaemo5.so
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMaemo5${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMaemo5/pyside_qtmaemo5_python.h

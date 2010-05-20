@@ -118,7 +118,7 @@ target_link_libraries(QtNetwork
 add_dependencies(QtNetwork QtCore)
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtNetwork.so
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtNetwork${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/pyside_qtnetwork_python.h
         DESTINATION include/PySide/QtNetwork/)

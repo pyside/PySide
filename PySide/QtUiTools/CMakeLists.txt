@@ -32,7 +32,7 @@ target_link_libraries(QtUiTools
 add_dependencies(QtUiTools QtGui QtXml)
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtUiTools.so
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtUiTools${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtUiTools/pyside_qtuitools_python.h
         DESTINATION include/PySide/QtUiTools/)

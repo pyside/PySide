@@ -48,7 +48,7 @@ target_link_libraries(QtScript
 add_dependencies(QtScript QtCore)
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScript.so DESTINATION ${SITE_PACKAGE}/PySide)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScript${CMAKE_DEBUG_POSTFIX}.so DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/pyside_qtscript_python.h
         DESTINATION include/PySide/QtScript/)
 
