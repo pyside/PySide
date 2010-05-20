@@ -12,11 +12,11 @@
         </modify-argument>
       </modify-function>
     </value-type>
-    <object-type name="QHelpContentModel"/>
+    <object-type name="QHelpContentModel" polymorphic-id-expression="qobject_cast&lt;QHelpContentModel*&gt;(%1)"/>
     <object-type name="QHelpContentWidget"/>
     <object-type name="QHelpEngine" />
     <object-type name="QHelpEngineCore"/>
-    <object-type name="QHelpIndexModel" />
+    <object-type name="QHelpIndexModel"/>
     <object-type name="QHelpIndexWidget"/>
     <object-type name="QHelpSearchEngine"/>
     <value-type name="QHelpSearchQuery"/>

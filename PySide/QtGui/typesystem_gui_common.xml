@@ -1482,7 +1482,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QDirModel">
+  <object-type name="QDirModel" polymorphic-id-expression="qobject_cast&lt;QDirModel*&gt;(%1)">
     <modify-function signature="parent()const" remove="all"/>
     <modify-function signature="setIconProvider(QFileIconProvider*)">
       <modify-argument index="1">
@@ -3271,7 +3271,7 @@
     <modify-function signature="name()const" remove="all"/>
     <!--### Obsolete in 4.3-->
   </object-type>
-  <object-type name="QProxyModel">
+  <object-type name="QProxyModel" polymorphic-id-expression="qobject_cast&lt;QProxyModel*&gt;(%1)">
     <modify-function signature="parent()const" remove="all"/>
     <extra-includes>
       <include file-name="QPixmap" location="global"/>
@@ -3501,7 +3501,7 @@
       <include file-name="QIcon" location="global"/>
     </extra-includes>
   </object-type>
-  <object-type name="QStandardItemModel">
+  <object-type name="QStandardItemModel" polymorphic-id-expression="qobject_cast&lt;QStandardItemModel*&gt;(%1)">
     <modify-function signature="parent()const" remove="all"/>
     <extra-includes>
       <include file-name="QStringList" location="global"/>
@@ -3838,7 +3838,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QAbstractProxyModel">
+  <object-type name="QAbstractProxyModel" polymorphic-id-expression="qobject_cast&lt;QAbstractProxyModel*&gt;(%1)">
     <extra-includes>
       <include file-name="QItemSelection" location="global"/>
       <include file-name="QStringList" location="global"/>
@@ -4191,7 +4191,7 @@
     </modify-function>
   </object-type>
   <object-type name="QCommandLinkButton"/>
-  <object-type name="QFileSystemModel">
+  <object-type name="QFileSystemModel" polymorphic-id-expression="qobject_cast&lt;QFileSystemModel*&gt;(%1)">
     <modify-function signature="setIconProvider(QFileIconProvider*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>

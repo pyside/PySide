@@ -725,7 +725,7 @@
     #include &lt;pyside.h&gt;
   </inject-code>
 
-  <object-type name="QAbstractTableModel">
+  <object-type name="QAbstractTableModel" polymorphic-id-expression="qobject_cast&lt;QAbstractTableModel*&gt;(%1)">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
       <include file-name="QSize" location="global"/>
@@ -1670,7 +1670,7 @@
         </inject-code>
     </add-function>
   </value-type>
-  <object-type name="QAbstractListModel">
+  <object-type name="QAbstractListModel" polymorphic-id-expression="qobject_cast&lt;QAbstractListModel*&gt;(%1)">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
       <include file-name="QSize" location="global"/>
