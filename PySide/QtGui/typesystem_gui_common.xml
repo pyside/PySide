@@ -39,7 +39,6 @@
   <rejection class="*" function-name="qDrawBorderPixmap"/>
   <rejection class="*" function-name="qDrawPixmaps"/>
   <rejection class="*" function-name="qGenericMatrixToMatrix4x4"/>
-  <rejection class="*" function-name="initStyleOption" />
   <rejection class="QTouchEvent" field-name="_touchPointStates"/>
 
   <rejection class="*" function-name="d_func"/>
