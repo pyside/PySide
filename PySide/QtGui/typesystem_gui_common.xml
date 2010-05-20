@@ -3195,8 +3195,6 @@
     <!--### Obsolete in 4.3-->
     <modify-function signature="windowActivationChange(bool)" remove="all"/>
     <!--### Obsolete in 4.3-->
-    <modify-function signature="fontInfo()const" remove="all"/>
-    <modify-function signature="fontMetrics()const" remove="all"/>
     <modify-function signature="raise()" rename="raise_" />
     <modify-function signature="setParent(QWidget*, QFlags&lt;Qt::WindowType>)">
       <modify-argument index="this">
