@@ -28,7 +28,7 @@ if (DISABLE_${name})
 else()
     if (${var})
         add_subdirectory(${name})
-        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_BINARY_DIR}/${name}/${name}${CMAKE_SHARED_MODULE_SUFFIX}"
+        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_BINARY_DIR}/${name}/${name}${CMAKE_DEBUG_POSTFIX}${CMAKE_SHARED_MODULE_SUFFIX}"
                                                                 "${CMAKE_BINARY_DIR}/PySide/${name}${CMAKE_SHARED_MODULE_SUFFIX}")
     else()
         message(STATUS "${name} NOT found. ${name} support disabled.")
