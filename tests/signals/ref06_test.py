@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from PySide.QtCore import QObject, QCoreApplication, QTimeLine, Signal, Slot
+from PySide.QtCore import QObject, QCoreApplication, QTimeLine, signal, slot
 from helper import UsesQCoreApplication
 
 class ExtQObject(QObject):
-    signalbetween = Signal('qreal')
+    signalbetween = signal('qreal')
 
     def __init__(self):
         QObject.__init__(self)
         self.counter = 0
 
-    @Slot('qreal')
+    @slot('qreal')
     def foo(self, value):
         self.counter += 1
 

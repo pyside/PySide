@@ -39,7 +39,7 @@
 #include "qsignal.h"
 #include "signalmanager.h"
 
-#define SIGNAL_CLASS_NAME "Signal"
+#define SIGNAL_CLASS_NAME "signal"
 
 namespace PySide
 {
@@ -402,7 +402,6 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
         while(sourceWalk && !match) {
             targetWalk = reinterpret_cast<SignalInstanceData*>(slot);
             while(targetWalk && !match) {
-                printf("sig [%s] [%s]\n", sourceWalk->signature, targetWalk->signature);
                 if (QMetaObject::checkConnectArgs(sourceWalk->signature, targetWalk->signature)) {
                     PyList_Append(pyArgs, sourceWalk->source);
                     Shiboken::AutoDecRef sourceSignature(PyString_FromString(sourceWalk->signature));
@@ -436,7 +435,6 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
         return  PyObject_CallObject(pyMethod, tupleArgs);
     }
 
-    printf("signatures not match\n");
     return 0;
 }
 
@@ -503,7 +501,7 @@ PyObject* signal_instance_emit(PyObject* self, PyObject* args)
 PyObject* signalNew(const char* name, ...)
 {
     va_list listSignatures;
-    char* sig;
+    char* sig = 0;
     SignalData* self = PyObject_New(SignalData, &Signal_Type);
     self->signalName = strdup(name);
     self->signaturesSize = 0;

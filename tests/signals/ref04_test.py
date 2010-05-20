@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from PySide.QtCore import QObject, Signal
+from PySide.QtCore import QObject, signal
 
 class ExtQObject(QObject):
 
-    mySignal = Signal()
+    mySignal = signal()
 
     def __init__(self):
         QObject.__init__(self)

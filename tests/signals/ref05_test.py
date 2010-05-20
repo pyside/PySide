@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from PySide.QtCore import QObject, QCoreApplication, QTimeLine, Slot
+from PySide.QtCore import QObject, QCoreApplication, QTimeLine, slot
 from helper import UsesQCoreApplication
 
 class ExtQObject(QObject):
@@ -11,7 +11,7 @@ class ExtQObject(QObject):
         QObject.__init__(self)
         self.counter = 0
 
-    @Slot('qreal')
+    @slot('qreal')
     def foo(self, value):
         self.counter += 1
 

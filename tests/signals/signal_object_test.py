@@ -8,14 +8,14 @@ from PySide.QtCore import *
 from helper import UsesQCoreApplication
 
 class MyObject(QTimer):
-    sig1 = Signal()
-    sig2 = Signal(int, name='rangeChanged')
-    sig3 = Signal(int)
-    sig4 = Signal((int,), (QString,))
-    sig5 = Signal((QString,), (int,))
+    sig1 = signal()
+    sig2 = signal(int, name='rangeChanged')
+    sig3 = signal(int)
+    sig4 = signal((int,), (QString,))
+    sig5 = signal((QString,), (int,))
 
 
-    @Slot(int)
+    @slot(int)
     def myRange(self, r):
         self._range = r
 
