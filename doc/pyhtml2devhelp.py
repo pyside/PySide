@@ -5,7 +5,7 @@
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public License
-  version 2.1 as publshed by the Free Software Foundation. Please
+  version 2.1 as published by the Free Software Foundation. Please
   review the following information to ensure the GNU Lesser General
   Public License version 2.1 requirements will be met:
   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
