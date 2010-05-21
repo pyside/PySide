@@ -1,11 +1,11 @@
 """
   This script is based on Python2.6 Ubuntu package script:
-  Copyright (C) 2009  Matthias Klose <doko@debian.org>
-  Copyright (C) 2010  Renato Araujo Oliveira Filho <renato.filho@openbossa.org>
+  Copyright (C) 2009 Matthias Klose <doko@debian.org>
+  Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public License
-  version 2.1 as published by the Free Software Foundation. Please
+  version 2.1 as publshed by the Free Software Foundation. Please
   review the following information to ensure the GNU Lesser General
   Public License version 2.1 requirements will be met:
   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
