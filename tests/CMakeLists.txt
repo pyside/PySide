@@ -8,7 +8,7 @@ foreach(test_file ${TEST_FILES})
     list(FIND test_blacklist ${CMAKE_MATCH_1}_${CMAKE_MATCH_2} expect_fail)
     add_test(${CMAKE_MATCH_1}_${CMAKE_MATCH_2} sh
              ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh
-             "${pysidebase_BINARY_DIR}"
+             "${pysidebase_BINARY_DIR}:${libpyside_BINARY_DIR}"
              "${CMAKE_BINARY_DIR}:${CMAKE_CURRENT_SOURCE_DIR}/util"
              ${PYTHON_EXECUTABLE}
              ${test_file})
