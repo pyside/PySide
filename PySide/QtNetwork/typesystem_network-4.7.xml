@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtNetwork">
+    <load-typesystem name="typesystem_core.xml" generate="no" />
+    <load-typesystem name="typesystem_network-4.6.xml" generate="yes" />
+
+    <enum-type name="QNetworkConfiguration::Purpose"/>
+    <enum-type name="QNetworkConfiguration::StateFlag" flags="QNetworkConfiguration::StateFlags"/>
+    <enum-type name="QNetworkConfiguration::Type"/>
+    <enum-type name="QNetworkConfigurationManager::Capability" flags="QNetworkConfigurationManager::Capabilities"/>
+    <enum-type name="QNetworkSession::SessionError"/>
+    <enum-type name="QNetworkSession::State"/>
+    <enum-type name="QNetworkAccessManager::NetworkAccessibility"/>
+    <enum-type name="QNetworkRequest::Priority"/>
+    <enum-type name="QNetworkRequest::LoadControl"/>
+
+
+    <value-type name="QNetworkConfiguration"/>
+    <object-type name="QNetworkConfigurationManager"/>
+    <object-type name="QNetworkSession"/>
+
+</typesystem>

@@ -73,8 +73,14 @@ elseif(Q_WS_WIN)
 else()
     message(FATAL_ERROR "OS not supported")
 endif()
-
 message(STATUS "Detected OS: ${AUTO_OS}")
+
+# Define supported Qt Version
+if(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
+    set(SUPPORTED_QT_VERSION 4.7)
+else()
+    set(SUPPORTED_QT_VERSION 4.6)
+endif()
 
 set(BINDING_VERSION ${BINDING_API_VERSION}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR})
 find_program(GENERATOR generatorrunner REQUIRED)

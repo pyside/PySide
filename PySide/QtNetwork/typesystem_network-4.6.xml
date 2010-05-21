@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtNetwork">
-    <load-typesystem name="typesystem_core.xml" generate="no" />
-
     <namespace-type name="QSsl">
         <extra-includes>
             <include file-name="qssl.h" location="global"/>

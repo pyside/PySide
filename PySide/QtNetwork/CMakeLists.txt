@@ -47,12 +47,15 @@ else()
     message(FATAL_ERROR "OS not supported")
 endif(Q_WS_X11)
 
-if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
-    set (QtNetwork_46_SRC )
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
+    set (QtNetwork_47_SRC
+        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkconfiguration_wrapper.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkconfigurationmanager_wrapper.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworksession_wrapper.cpp
+    )
 else()
-    set(QtNetwork_46_SRC
-       )
-endif (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+    set(QtNetwork_47_SRC )
+endif ()
 
 set(QtNetwork_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qabstractsocket_wrapper.cpp
@@ -82,7 +85,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtnetwork_module_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qudpsocket_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
 ${SPECIFIC_OS_FILES}
-${QtNetwork_46_SRC}
+${QtNetwork_47_SRC}
 )
 
 set(OPENSSL_SOURCES
@@ -94,6 +97,9 @@ set(OPENSSL_SOURCES
 )
 
 CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL OPENSSL_SOURCES QtNetwork_SRC)
+
+configure_file(typesystem_network.xml.in
+               "${CMAKE_CURRENT_BINARY_DIR}/typesystem_network.xml" @ONLY)
 
 execute_generator(network QtNetwork_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
 
