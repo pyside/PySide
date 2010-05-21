@@ -14,7 +14,7 @@ class TestLoadFinished(TimedQApplication):
 
     def setUp(self):
         #Acquire resources
-        TimedQApplication.setUp(self, timeout=250)
+        TimedQApplication.setUp(self, timeout=1000)
         self.view = QWebView()
         QObject.connect(self.view, SIGNAL('loadFinished(bool)'),
                         self.load_finished)
