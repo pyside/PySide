@@ -13,7 +13,7 @@ if (CMAKE_HOST_UNIX)
       set(QT_INCLUDE_DIR "/Library/Frameworks")
     endif ()
   else ()
-    set(CMAKE_CXX_FLAGS_RELEASE "$CMAKE_CXX_FLAGS_RELEASE -Wl,-O1 -Wl,--hash-style=gnu")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wl,-O1 -Wl,--hash-style=gnu")
   endif ()
 endif ()
 
