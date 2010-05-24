@@ -19,6 +19,7 @@
   <enum-type name="QVideoSurfaceFormat::Direction"/>
   <enum-type name="QVideoSurfaceFormat::YCbCrColorSpace"/>
 
+  <value-type name="QVideoSurfaceFormat"/>
   <object-type name="QAbstractVideoBuffer">
       <modify-function signature="map(QAbstractVideoBuffer::MapMode, int*, int*)">
           <modify-argument index="0">
@@ -35,28 +36,89 @@
           </inject-code>
       </modify-function>
   </object-type>
-
-  <object-type name="QVideoSurfaceFormat"/>
-  <object-type name="QAbstractVideoSurface">
-      <modify-function signature="nearestFormat(const QVideoSurfaceFormat&amp;)const" remove="all"/>
-      <modify-function signature="surfaceFormat()const" remove="all"/>
-  </object-type>
-  <object-type name="QAudioDeviceInfo">
-      <modify-function signature="defaultInputDevice()" remove="all"/>
-      <modify-function signature="defaultOutputDevice()" remove="all"/>
-      <modify-function signature="nearestFormat(const QAudioFormat&amp;)const" remove="all"/>
-      <modify-function signature="preferredFormat()const" remove="all"/>
-      <modify-function signature="availableDevices(QAudio::Mode)" remove="all"/>
-  </object-type>
-  <value-type name="QAudioFormat"/>
-  <!-- TODO TESTCASE start() check reference-count -->
-  <object-type name="QAudioInput">
-      <modify-function signature="format()const" remove="all"/>
-  </object-type>
-  <!-- TODO TESTCASE start() check reference-count -->
-  <object-type name="QAudioOutput">
-      <modify-function signature="format()const" remove="all"/>
-  </object-type>
-  <!-- TODO TESTCASE don't increment the reference count of the video buffer -->
+  <object-type name="QAbstractVideoSurface"/>
   <object-type name="QVideoFrame"/>
+
+  <value-type name="QAudioFormat"/>
+  <value-type name="QAudioDeviceInfo"/>
+  <object-type name="QAbstractAudioDeviceInfo"/>
+
+  <object-type name="QAbstractAudioOutput">
+    <modify-function signature="start(QIODevice *)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="c++"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <object-type name="QAbstractAudioInput">
+    <modify-function signature="start(QIODevice *)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="c++"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <object-type name="QAudioEnginePlugin">
+    <modify-function signature="createInput(const QByteArray&amp;, const QAudioFormat&amp;)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="createOutput(const QByteArray&amp;, const QAudioFormat&amp;)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="createDeviceInfo(const QByteArray&amp;, QAudio::Mode)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <object-type name="QAudioEngineFactoryInterface">
+    <modify-function signature="createInput(const QByteArray&amp;, const QAudioFormat&amp;)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="createOutput(const QByteArray&amp;, const QAudioFormat&amp;)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="createDeviceInfo(const QByteArray&amp;, QAudio::Mode)">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <object-type name="QAudioInput">
+    <modify-function signature="start()">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="start(QIODevice*)">
+      <modify-argument index="1">
+        <define-ownership class="target" owner="c++"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <object-type name="QAudioOutput">
+    <modify-function signature="start()">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="c++"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="start(QIODevice*)">
+      <modify-argument index="1">
+        <define-ownership class="target" owner="c++"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
 </typesystem>
