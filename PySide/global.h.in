@@ -359,6 +359,7 @@ QT_END_HEADER
 #include <QtScriptTools/QtScriptTools>
 #include <QtMultimedia/QtMultimedia>
 #include <QtMaemo5/QtMaemo5>
+#include <QtDeclarative/QtDeclarative>
 
 // QT_GUI_LIB must be defined to QSqlRelationalDelegate become visible
 #define QT_GUI_LIB

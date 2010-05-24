@@ -51,7 +51,7 @@ if (NOT QT_QTMULTIMEDIA_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)
     endif()
 endif ()
 
-# Try to find QtMaemo5 this need be before QtGui for enable some flags on that
+# Try to find QtMaemo5 - it has to be done before QtGui to enable some QtMaemo5 flags
 # TODO: Remove this hack when cmake support QtMaemo5 module
 if (NOT QT_QTMAEMO5_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)
     find_path(QT_QTMAEMO5_INCLUDE_DIR QtMaemo5
@@ -62,6 +62,19 @@ if (NOT QT_QTMAEMO5_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)
     if (QT_QTMAEMO5_INCLUDE_DIR AND QT_QTMAEMO5_LIBRARY)
         set(QT_QTMAEMO5_FOUND ON)
         set(Q_WS_MAEMO_5 ON)
+    endif()
+endif ()
+
+# Try to find QtDeclarative
+# TODO: Remove this hack when cmake support QtDeclarative module
+if (NOT QT_QTDECLARATIVE_FOUND AND ${QTVERSION} VERSION_GREATER 4.6.0)
+    find_path(QT_QTDECLARATIVE_INCLUDE_DIR QtDeclarative
+            PATHS ${QT_HEADERS_DIR}/QtDeclarative
+                ${QT_LIBRARY_DIR}/QtDeclarative.framework/Headers
+            NO_DEFAULT_PATH)
+    find_library(QT_QTDECLARATIVE_LIBRARY QtDeclarative PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH)
+    if (QT_QTDECLARATIVE_INCLUDE_DIR AND QT_QTDECLARATIVE_LIBRARY)
+        set(QT_QTDECLARATIVE_FOUND ON)
     endif()
 endif ()
 
@@ -82,3 +95,4 @@ HAS_QT_MODULE(QT_QTSCRIPT_FOUND QtScript)
 HAS_QT_MODULE(QT_QTSCRIPTTOOLS_FOUND QtScriptTools)
 HAS_QT_MODULE(QT_QTMULTIMEDIA_FOUND QtMultimedia)
 HAS_QT_MODULE(QT_PHONON_FOUND phonon)
+HAS_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)

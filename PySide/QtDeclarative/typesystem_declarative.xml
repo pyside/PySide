@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtDeclarative">
+    <load-typesystem name="typesystem_core.xml" generate="no"/>
+    <load-typesystem name="typesystem_network.xml" generate="no"/>
+    <load-typesystem name="typesystem_gui.xml" generate="no"/>
+
+    <object-type name="QDeclarativeComponent" />
+    <enum-type name="QDeclarativeComponent::Status" />
+    <object-type name="QDeclarativeContext" />
+    <object-type name="QDeclarativeEngine" />
+    <enum-type name="QDeclarativeEngine::ObjectOwnership" />
+    <value-type name="QDeclarativeError" />
+    <object-type name="QDeclarativeExpression" />
+    <object-type name="QDeclarativeExtensionPlugin" />
+    <object-type name="QDeclarativeImageProvider" />
+    <object-type name="QDeclarativeItem" />
+    <enum-type name="QDeclarativeItem::TransformOrigin" />
+
+    <value-type name="QDeclarativeListReference" />
+    <object-type name="QDeclarativeNetworkAccessManagerFactory" />
+    <object-type name="QDeclarativeParserStatus" />
+
+    <value-type name="QDeclarativeProperty" />
+    <enum-type name="QDeclarativeProperty::PropertyTypeCategory" />
+    <enum-type name="QDeclarativeProperty::Type" />
+
+    <object-type name="QDeclarativePropertyMap" />
+    <object-type name="QDeclarativePropertyValueSource" />
+    <value-type name="QDeclarativeScriptString" />
+    <object-type name="QDeclarativeView" />
+    <enum-type name="QDeclarativeView::ResizeMode" />
+    <enum-type name="QDeclarativeView::Status" />
+</typesystem>
