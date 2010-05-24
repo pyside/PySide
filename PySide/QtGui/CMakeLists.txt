@@ -277,7 +277,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qresizeevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qrubberband_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qscrollarea_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qscrollbar_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qsessionmanager_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qshortcutevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qshortcut_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qshowevent_wrapper.cpp
@@ -461,6 +460,12 @@ set(QT_SIZEGRIP_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qsizegrip_wrapper.cpp
 )
 CHECK_QT_GUI_MACRO("SizeGrip Support" QT_NO_SIZEGRIP QT_SIZEGRIP_SRCS QtGui_SRC)
+
+#Check QT_SESSIONMANAGER support
+set(QT_SESSIONMANAGER_SRCS
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qsessionmanager_wrapper.cpp
+)
+CHECK_QT_GUI_MACRO("SessionManager Support" QT_NO_SESSIONMANAGER QT_SESSIONMANAGER_SRCS QtGui_SRC)
 
 configure_file(typesystem_gui.xml.in
                "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
