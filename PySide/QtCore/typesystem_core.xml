@@ -95,6 +95,9 @@
   <enum-type name="QAbstractAnimation::DeletionPolicy"/>
   <enum-type name="QAbstractAnimation::Direction"/>
   <enum-type name="QAbstractAnimation::State"/>
+
+  <enum-type name="QElapsedTimer::ClockType" since="4.7"/>
+
   <!-- From Qt4.6 ^^^ -->
   <primitive-type name="qint8"/>
   <primitive-type name="qint16"/>
@@ -724,6 +727,8 @@
   <inject-code class="native" position="beginning">
     #include &lt;pyside.h&gt;
   </inject-code>
+
+  <value-type name="QElapsedTimer" since="4.7"/>
 
   <object-type name="QAbstractTableModel" polymorphic-id-expression="qobject_cast&lt;QAbstractTableModel*&gt;(%1)">
     <extra-includes>

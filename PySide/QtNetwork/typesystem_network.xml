@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtNetwork">
+  <load-typesystem name="typesystem_core.xml" generate="no"/>
+
     <namespace-type name="QSsl">
         <extra-includes>
             <include file-name="qssl.h" location="global"/>
@@ -245,20 +247,21 @@
         <modify-function signature="waitForEncrypted(int)" allow-thread="yes" />
     </object-type>
 
+
+    <!-- Qt 4.7 -->
+    <enum-type name="QNetworkConfiguration::Purpose" since="4.7"/>
+    <enum-type name="QNetworkConfiguration::StateFlag" flags="QNetworkConfiguration::StateFlags" since="4.7"/>
+    <enum-type name="QNetworkConfiguration::Type" since="4.7"/>
+    <enum-type name="QNetworkConfigurationManager::Capability" flags="QNetworkConfigurationManager::Capabilities" since="4.7"/>
+    <enum-type name="QNetworkSession::SessionError" since="4.7"/>
+    <enum-type name="QNetworkSession::State" since="4.7"/>
+    <enum-type name="QNetworkAccessManager::NetworkAccessibility" since="4.7"/>
+    <enum-type name="QNetworkRequest::Priority" since="4.7"/>
+    <enum-type name="QNetworkRequest::LoadControl" since="4.7"/>
+
+    <value-type name="QNetworkConfiguration" since="4.7"/>
+    <object-type name="QNetworkConfigurationManager" since="4.7"/>
+    <object-type name="QNetworkSession" since="4.7"/>
+
     <suppress-warning text="Shadowing: QAbstractSocket::*"/>
-
-    <!-- For people building without SSL support -->
-    <!--
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslSocket' for enum 'SslMode' is not declared"/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslError' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslCipher' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslKey' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslError' for enum 'SslError' is not declared"/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslCertificate' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslSocket' for enum 'PeerVerifyMode' is not declared"/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: namespace 'com.trolltech.qt.network.QSslCertificate' for enum 'SubjectInfo' is not declared"/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslConfiguration' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
-    <suppress-warning text="WARNING(MetaJavaBuilder) :: type 'QSslSocket' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
-    -->
-
 </typesystem>

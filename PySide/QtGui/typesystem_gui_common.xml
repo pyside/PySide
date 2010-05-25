@@ -241,6 +241,7 @@
   <enum-type name="QPageSetupDialog::PageSetupDialogOption" flags="QPageSetupDialog::PageSetupDialogOptions"/>
   <enum-type name="QPainter::CompositionMode"/>
   <enum-type name="QPainter::RenderHint" flags="QPainter::RenderHints"/>
+  <enum-type name="QPainter::PixmapFragmentHint" flags="QPainter::PixmapFragmentHints" since="4.7"/>
   <enum-type name="QPainterPath::ElementType"/>
   <enum-type name="QPrintEngine::PrintEnginePropertyKey" />
   <enum-type name="QPrinter::ColorMode"/>
@@ -368,6 +369,7 @@
   <enum-type name="QTextDocument::FindFlag" flags="QTextDocument::FindFlags"/>
   <enum-type name="QTextDocument::MetaInformation"/>
   <enum-type name="QTextDocument::ResourceType"/>
+  <enum-type name="QTextDocument::Stacks" since="4.7"/>
   <enum-type name="QTextEdit::AutoFormattingFlag" flags="QTextEdit::AutoFormatting"/>
   <enum-type name="QTextEdit::LineWrapMode"/>
   <enum-type name="QTextFormat::ObjectTypes"/>

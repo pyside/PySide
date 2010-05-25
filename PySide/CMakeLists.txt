@@ -11,6 +11,7 @@ COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
         --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt
         ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_${module}.xml
+        --api-version=${SUPPORTED_QT_VERSION}
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 COMMENT "Running generator for ${module}..."
 )

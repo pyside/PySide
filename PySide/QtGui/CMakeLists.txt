@@ -470,7 +470,7 @@ CHECK_QT_GUI_MACRO("SessionManager Support" QT_NO_SESSIONMANAGER QT_SESSIONMANAG
 configure_file(typesystem_gui.xml.in
                "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
 
-execute_generator(gui QtGui_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
+execute_generator(gui QtGui_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtCore_BINARY_DIR}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/

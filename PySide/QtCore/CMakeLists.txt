@@ -26,6 +26,15 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qvariantanimation_wrapper.cpp
     )
 endif()
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 7)
+    set (QtCore_47_SRC )
+else()
+    set(QtCore_47_SRC
+    ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qelapsedtimer_wrapper.cpp
+    )
+endif()
+
+
 
 set(QtCore_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qabstracteventdispatcher_wrapper.cpp
@@ -129,11 +138,11 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamnamespacedeclaration_wrapper
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamnotationdeclaration_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamreader_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamwriter_wrapper.cpp
-
 ${QtCore_46_SRC}
+${QtCore_47_SRC}
 )
 
-execute_generator(core QtCore_SRC "")
+execute_generator(core QtCore_SRC "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/

@@ -98,10 +98,7 @@ set(OPENSSL_SOURCES
 
 CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL OPENSSL_SOURCES QtNetwork_SRC)
 
-configure_file(typesystem_network.xml.in
-               "${CMAKE_CURRENT_BINARY_DIR}/typesystem_network.xml" @ONLY)
-
-execute_generator(network QtNetwork_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
+execute_generator(network QtNetwork_SRC "${CMAKE_CURRENT_SOURCE_DIR}:${QtCore_SOURCE_DIR}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/
