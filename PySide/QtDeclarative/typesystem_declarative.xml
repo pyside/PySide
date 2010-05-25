@@ -7,7 +7,13 @@
     <object-type name="QDeclarativeComponent" />
     <enum-type name="QDeclarativeComponent::Status" />
     <object-type name="QDeclarativeContext" />
-    <object-type name="QDeclarativeEngine" />
+    <object-type name="QDeclarativeEngine">
+        <modify-function signature="setNetworkAccessManagerFactory(QDeclarativeNetworkAccessManagerFactory*)">
+            <modify-argument index="1">
+                <parent index="this" action="add" />
+            </modify-argument>
+        </modify-function>
+    </object-type>
     <enum-type name="QDeclarativeEngine::ObjectOwnership" />
     <value-type name="QDeclarativeError" />
     <object-type name="QDeclarativeExpression" />
