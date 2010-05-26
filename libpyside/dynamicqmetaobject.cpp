@@ -153,6 +153,7 @@ void DynamicQMetaObject::addSlot(const char* slot, const char* type)
     if (i != m_slots.end())
         return;
 
+
     //search for a empty space
     MethodData blank;
     i = qFind(m_slots.begin(), m_slots.end(), blank);
@@ -193,7 +194,9 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
             PyObject *attr = PyObject_GetAttr(pyObj, key);
             SignalInstanceData *data = reinterpret_cast<SignalInstanceData*>(attr);
             while(data) {
-                mo->addSignal(data->signature);
+                int index = base->indexOfSignal(data->signature);
+                if (index == -1)
+                    mo->addSignal(data->signature);
                 data = reinterpret_cast<SignalInstanceData*>(data->next);
             }
         }
@@ -209,7 +212,9 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
                 QString sig(PyString_AsString(signature));
                 //slot the slot type and signature
                 QStringList slotInfo = sig.split(" ", QString::SkipEmptyParts);
-                mo->addSlot(slotInfo[1].toAscii(), slotInfo[0].toAscii());
+                int index = base->indexOfSlot(slotInfo[0].toAscii());
+                if (index == -1)
+                    mo->addSlot(slotInfo[1].toAscii(), slotInfo[0].toAscii());
             }
         }
     }

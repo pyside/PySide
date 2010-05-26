@@ -40,6 +40,7 @@
 #include "signalmanager.h"
 
 #define SIGNAL_CLASS_NAME "signal"
+#define QT_SIGNAL_SENTINEL "2"
 
 namespace PySide
 {
@@ -71,6 +72,7 @@ static char* signal_get_type_name(PyObject*);
 static void signal_append_signature(SignalData*, char*);
 static void signal_instance_initialize(PyObject*, PyObject*, SignalData*, PyObject *, int);
 static char* signal_parse_signature(PyObject*);
+static PyObject* signal_build_qt_compatible(const char*);
 
 PyTypeObject Signal_Type = {
     PyObject_HEAD_INIT(0)
@@ -254,7 +256,7 @@ char* signal_get_type_name(PyObject* type)
 char* signal_build_signature(const char *name, const char *signature)
 {
     QString signal;
-    signal.sprintf("2%s(%s)", name, signature);
+    signal.sprintf("%s(%s)", name, signature);
     return strdup(QMetaObject::normalizedSignature(signal.toAscii()));
 }
 
@@ -404,12 +406,13 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
             while(targetWalk && !match) {
                 if (QMetaObject::checkConnectArgs(sourceWalk->signature, targetWalk->signature)) {
                     PyList_Append(pyArgs, sourceWalk->source);
-                    Shiboken::AutoDecRef sourceSignature(PyString_FromString(sourceWalk->signature));
+                    Shiboken::AutoDecRef sourceSignature(signal_build_qt_compatible(sourceWalk->signature));
                     PyList_Append(pyArgs, sourceSignature);
 
                     PyList_Append(pyArgs, targetWalk->source);
-                    Shiboken::AutoDecRef targetSignature(PyString_FromString(targetWalk->signature));
+                    Shiboken::AutoDecRef targetSignature(signal_build_qt_compatible(targetWalk->signature));
                     PyList_Append(pyArgs, targetSignature);
+
                     match = true;
                 }
                 targetWalk = reinterpret_cast<SignalInstanceData*>(targetWalk->next);
@@ -419,7 +422,7 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
     } else {
         //try the first signature
         PyList_Append(pyArgs, source->source);
-        Shiboken::AutoDecRef signature(PyString_FromString(source->signature));
+        Shiboken::AutoDecRef signature(signal_build_qt_compatible(source->signature));
         PyList_Append(pyArgs, signature);
 
         PyList_Append(pyArgs, slot);
@@ -454,18 +457,18 @@ PyObject* signal_instance_disconnect(PyObject* self, PyObject* args)
         SignalInstanceData *target = reinterpret_cast<SignalInstanceData*>(slot);
         if (QMetaObject::checkConnectArgs(source->signature, target->signature)) {
             PyList_Append(pyArgs, source->source);
-            Shiboken::AutoDecRef source_signature(PyString_FromString(source->signature));
+            Shiboken::AutoDecRef source_signature(signal_build_qt_compatible(source->signature));
             PyList_Append(pyArgs, source_signature);
 
             PyList_Append(pyArgs, target->source);
-            Shiboken::AutoDecRef target_signature(PyString_FromString(target->signature));
+            Shiboken::AutoDecRef target_signature(signal_build_qt_compatible(target->signature));
             PyList_Append(pyArgs, target_signature);
             match = true;
         }
     } else {
         //try the first signature
         PyList_Append(pyArgs, source->source);
-        Shiboken::AutoDecRef signature(PyString_FromString(source->signature));
+        Shiboken::AutoDecRef signature(signal_build_qt_compatible(source->signature));
         PyList_Append(pyArgs, signature);
 
         PyList_Append(pyArgs, slot);
@@ -486,7 +489,7 @@ PyObject* signal_instance_emit(PyObject* self, PyObject* args)
     SignalInstanceData *source = reinterpret_cast<SignalInstanceData*>(self);
 
     Shiboken::AutoDecRef pyArgs(PyList_New(0));
-    Shiboken::AutoDecRef source_signature(PyString_FromString(source->signature));
+    Shiboken::AutoDecRef source_signature(signal_build_qt_compatible(source->signature));
 
     PyList_Append(pyArgs, source_signature);
     for(Py_ssize_t i=0, i_max=PyTuple_Size(args); i < i_max; i++)
@@ -519,6 +522,17 @@ PyObject* signalNew(const char* name, ...)
     va_end(listSignatures);
 
     return reinterpret_cast<PyObject*>(self);
+}
+
+
+PyObject* signal_build_qt_compatible(const char* signature)
+{
+    char* qtSignature;
+    qtSignature = reinterpret_cast<char*>(malloc(strlen(signature)+2));
+    sprintf(qtSignature, QT_SIGNAL_SENTINEL"%s", signature);
+    PyObject* ret = PyString_FromString(qtSignature);
+    free(qtSignature);
+    return ret;
 }
 
 
