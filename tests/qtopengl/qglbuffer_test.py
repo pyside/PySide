@@ -1,5 +1,5 @@
 #!/usr/bin/python
-'''Unit tests for QGLBuffer''
+'''Unit tests for QGLBuffer'''
 
 import unittest
 
