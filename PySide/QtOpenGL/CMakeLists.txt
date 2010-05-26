@@ -10,6 +10,15 @@ else()
   )
 endif()
 
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 7)
+  set(QtOpenGL_47_SRC )
+else()
+  set(QtOpenGL_47_SRC
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL/qglbuffer_wrapper.cpp
+  )
+endif()
+
+
 set(QtOpenGL_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL/qgl_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL/qglcolormap_wrapper.cpp
@@ -20,6 +29,7 @@ set(QtOpenGL_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL/qglwidget_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL/qtopengl_module_wrapper.cpp
     ${QtOpenGL_46_SRC}
+    ${QtOpenGL_47_SRC}
 )
 
 execute_generator(opengl QtOpenGL_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtOpenGL_SOURCE_DIR}")
