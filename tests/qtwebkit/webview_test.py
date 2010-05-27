@@ -33,11 +33,6 @@ class TestLoadFinished(TimedQApplication):
 
         self.assert_(self.called)
 
-    def testLoadFinishedFromUrl(self):
-        url = QUrl('http://www.python.org')
-        self.view.setUrl(url)
-        self.app.exec_()
-
     def load_finished(self, ok):
         #Callback to check if load was successful
         self.app.quit()
