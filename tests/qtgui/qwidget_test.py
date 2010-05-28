@@ -1,8 +1,20 @@
 
 import unittest
 
-from PySide.QtGui import QWidget
+from PySide.QtGui import QWidget, QMainWindow
 from helper import UsesQApplication
+
+class QWidgetInherit(QMainWindow):
+    def __init__(self):
+        QWidget.__init__(self)
+
+class QWidgetTest(UsesQApplication):
+
+    def testInheritance(self):
+        newobj = QWidgetInherit()
+        widget = QWidget()
+        newobj.setCentralWidget(widget)
+        self.assertEqual(widget, newobj.centralWidget())
 
 class QWidgetVisible(UsesQApplication):
 
