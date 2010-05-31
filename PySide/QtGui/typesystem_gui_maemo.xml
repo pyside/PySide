@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtGui">
 
+  <enum-type name="QAbstractKineticScroller::Mode"/>
+  <enum-type name="QAbstractKineticScroller::OvershootPolicy"/>
+  <enum-type name="QAbstractKineticScroller::State"/>
   <object-type name="QAbstractKineticScroller" />
 
   <load-typesystem name="typesystem_gui_x11.xml" generate="yes"/>

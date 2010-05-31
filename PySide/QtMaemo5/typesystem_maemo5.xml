@@ -10,5 +10,12 @@
   <object-type name="QMaemo5InformationBox"/>
   <object-type name="QMaemo5ListPickSelector"/>
   <object-type name="QMaemo5TimePickSelector"/>
-  <object-type name="QMaemo5ValueButton"/>
+  <object-type name="QMaemo5ValueButton">
+    <modify-function signature="setPickSelector(QMaemo5AbstractPickSelector*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+ 
 </typesystem>
