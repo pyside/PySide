@@ -39,7 +39,7 @@
 #include "qsignal.h"
 #include "signalmanager.h"
 
-#define SIGNAL_CLASS_NAME "signal"
+#define SIGNAL_CLASS_NAME "Signal"
 #define QT_SIGNAL_SENTINEL "2"
 
 namespace PySide

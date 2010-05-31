@@ -37,7 +37,7 @@
 
 #include <QString>
 
-#define SLOT_DEC_NAME "slot"
+#define SLOT_DEC_NAME "Slot"
 
 typedef struct
 {

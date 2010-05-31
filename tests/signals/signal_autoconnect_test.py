@@ -10,7 +10,7 @@ class MyObject(QWidget):
         QWidget.__init__(self, parent)
         self._method_called = False
 
-    @slot()
+    @Slot()
     def on_button_clicked(self):
         self._method_called = True
 

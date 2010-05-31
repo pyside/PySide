@@ -11,24 +11,24 @@ class MyObject(QObject):
         QObject.__init__(self, parent)
         self._slotCalledCount = 0
 
-    @slot()
+    @Slot()
     def mySlot(self):
         self._slotCalledCount = self._slotCalledCount + 1
 
-    @slot(int)
-    @slot('QString')
+    @Slot(int)
+    @Slot('QString')
     def mySlot2(self, arg0):
         self._slotCalledCount = self._slotCalledCount + 1
 
-    @slot(name='mySlot3')
+    @Slot(name='mySlot3')
     def foo(self):
         self._slotCalledCount = self._slotCalledCount + 1
 
-    @slot(QString, int)
+    @Slot(QString, int)
     def mySlot4(self, a, b):
         self._slotCalledCount = self._slotCalledCount + 1
 
-    @slot(result=int)
+    @Slot(result=int)
     def mySlot5(self):
         self._slotCalledCount = self._slotCalledCount + 1
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from PySide.QtCore import QObject, signal
+from PySide.QtCore import QObject, Signal
 
 class BoundAndUnboundSignalsTest(unittest.TestCase):
 
@@ -13,12 +13,12 @@ class BoundAndUnboundSignalsTest(unittest.TestCase):
         del self.methods
 
     def testUnboundSignal(self):
-        self.assertEqual(type(QObject.destroyed), signal)
+        self.assertEqual(type(QObject.destroyed), Signal)
         self.assertFalse(self.methods.issubset(dir(QObject.destroyed)))
 
     def testBoundSignal(self):
         obj = QObject()
-        self.assertNotEqual(type(obj.destroyed), signal)
+        self.assertNotEqual(type(obj.destroyed), Signal)
         self.assert_(self.methods.issubset(dir(obj.destroyed)))
 
 if __name__ == '__main__':
