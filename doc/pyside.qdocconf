@@ -1,8 +1,17 @@
 include(qt.qdocconf)
 
 quotinginformation      = true
+exampledirs             = $QTDIR/doc/src \
+                          $QTDIR/examples \
+                          $QTDIR/examples/tutorials \
+                          $QTDIR \
+                          $QTDIR/qmake/examples \
+                          $QTDIR/src/3rdparty/webkit/WebKit/qt/docs
+
 imagedirs               = $QTDIR/doc/src/images \
-                          $QTDIR/examples
+                          $QTDIR/examples \
+                          $QTDIR/doc/src/declarative/pics \
+                          $QTDIR/doc/src/template/image
 
 outputdir               = @CMAKE_CURRENT_BINARY_DIR@/qt4xmldoc
 outputformats           = WebXML
