@@ -18,8 +18,7 @@ class QColorGetTest(unittest.TestCase):
         self.assertEqual(self.color.getRgbF(), (20.0/255, 40.0/255, 60.0/255, 80.0/255))
 
     def testGetHsl(self):
-        hls = colorsys.rgb_to_hls(0.78, 0.15, 0.23)
-        self.assertEqual(self.color.getHsl(), (210, 127, 40, self.color.alpha()))
+        self.assertEqual(self.color.getHsl(), (210, 128, 40, self.color.alpha()))
 
     def testGetHslF(self):
         hls = colorsys.rgb_to_hls(20.0/255, 40.0/255, 60.0/255)
