@@ -4,7 +4,7 @@
 
 import unittest
 
-from PySide.QtCore import QByteArray, QString
+from PySide.QtCore import *
 
 class QByteArrayOperatorEqual(unittest.TestCase):
     '''TestCase for operator QByteArray == QByteArray'''
@@ -26,9 +26,9 @@ class QByteArrayOperatorEqual(unittest.TestCase):
         self.assertEqual(QByteArray(string), string)
 
     def testQString(self):
-        #QByteArray(string) == QString(string)
+        #QByteArray(string) == string
         string = 'another test string'
-        self.assertEqual(QByteArray(string), QString(string))
+        self.assertEqual(QByteArray(string), string)
 
 class QByteArrayOperatorAt(unittest.TestCase):
     '''TestCase for operator QByteArray[]'''

@@ -15,7 +15,7 @@ class TestInputDialog(TimedQApplication):
         self.assertEquals(QtGui.QInputDialog.getInteger(None, "title", "label"), (0, False))
 
     def testGetItem(self):
-        (item, bool) = QtGui.QInputDialog.getItem(None, "title", "label", QtCore.QStringList(["1", "2", "3"]))
+        (item, bool) = QtGui.QInputDialog.getItem(None, "title", "label", ["1", "2", "3"])
         self.assertEquals(str(item), "1")
 
     def testGetText(self):

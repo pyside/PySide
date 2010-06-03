@@ -24,7 +24,7 @@ class MyObject(QObject):
     def foo(self):
         self._slotCalledCount = self._slotCalledCount + 1
 
-    @Slot(QString, int)
+    @Slot(unicode, int)
     def mySlot4(self, a, b):
         self._slotCalledCount = self._slotCalledCount + 1
 
@@ -41,7 +41,7 @@ class StaticMetaObjectTest(unittest.TestCase):
         self.assert_(m.indexOfSlot('mySlot2(int)') > 0)
         self.assert_(m.indexOfSlot('mySlot2(QString)') > 0)
         self.assert_(m.indexOfSlot('mySlot3()') > 0)
-        self.assert_(m.indexOfSlot('mySlot4(QString,int)') > 0)
+        self.assert_(m.indexOfSlot('mySlot4(unicode,int)') > 0)
 
     def testEmission(self):
         o = MyObject()

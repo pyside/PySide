@@ -5,14 +5,14 @@ import sys
 import unittest
 
 from PySide import QtSql
-from PySide.QtCore import QVariant, QString
+from PySide.QtCore import *
 
 class SqlDatabaseCreationDestructionAndQueries(unittest.TestCase):
     '''Test cases for QtSql database creation, destruction and queries'''
 
     def setUp(self):
         #Acquire resources
-        self.assertFalse(QtSql.QSqlDatabase.drivers().isEmpty(), "installed Qt has no DB drivers")
+        self.assertFalse(not QtSql.QSqlDatabase.drivers(), "installed Qt has no DB drivers")
         self.assertTrue("QSQLITE" in QtSql.QSqlDatabase.drivers(), "\"QSQLITE\" driver not available in this Qt version")
         self.db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
         self.db.setDatabaseName(":memory:")

@@ -3,7 +3,7 @@
 
 import unittest
 
-from PySide.QtCore import QIODevice, QString, Qt, QVariant
+from PySide.QtCore import *
 
 class TestEnum(unittest.TestCase):
 
@@ -18,7 +18,7 @@ class TestEnum(unittest.TestCase):
         self.assertEqual(QIODevice.Unbuffered, 32)
 
     def testToIntInFunction(self):
-        self.assertEqual(QString.number(QIODevice.WriteOnly), "2")
+        self.assertEqual(str(int(QIODevice.WriteOnly)), "2")
 
 class TestQFlags(unittest.TestCase):
     def testToItn(self):

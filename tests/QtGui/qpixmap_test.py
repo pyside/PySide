@@ -16,7 +16,7 @@ class QPixmapTest(UsesQApplication):
         self.assert_(pixmap.size().height(), 20)
 
     def testQStringConstructor(self):
-        pixmap = QPixmap(QString("Testing!"))
+        pixmap = QPixmap("Testing!")
 
     def testQVariantConstructor2(self):
         v = QVariant(QPixmap())

@@ -39,8 +39,15 @@
   <rejection class="QFutureSynchronizer"/>
   <rejection class="QByteArray" function-name="contains"/>
   <rejection class="QRunnable"/>
+  <rejection class="QLatin1String" />
+  <rejection class="QLatin1Char" />
+  <rejection class="QStringMatcher" />
   <rejection class="QSharedPointer"/>
   <rejection class="QWeakPointer"/>
+  <rejection class="std::string"/>
+  <rejection class="std::wstring"/>
+  <rejection class="QStdWString"/>
+  <rejection class="QByteRef"/>
   <rejection class="QChildEvent" field-name="c"/>
   <rejection class="QTimerEvent" field-name="id"/>
   <rejection class="QEvent" field-name="t"/>
@@ -66,15 +73,6 @@
   <!-- From Qt4.6 ^^^ -->
   <enum-type name="QXmlStreamReader::Error"/>
   <enum-type name="QXmlStreamReader::TokenType"/>
-  <enum-type name="QString::NormalizationForm" />
-  <enum-type name="QString::SectionFlag" />
-  <enum-type name="QString::SplitBehavior"/>
-  <enum-type name="QChar::Decomposition" />
-  <enum-type name="QChar::Direction" />
-  <enum-type name="QChar::Joining" />
-  <enum-type name="QChar::SpecialCharacter" />
-  <enum-type name="QChar::UnicodeVersion" />
-  <enum-type name="QChar::CombiningClass" />
   <enum-type name="QLineF::IntersectType" />
   <enum-type name="QVariant::Type" />
   <!-- From Qt4.6 -->
@@ -111,8 +109,6 @@
   <primitive-type name="qreal"/>
   <primitive-type name="float"/>
   <primitive-type name="qint64"/>
-  <primitive-type name="__int64"/>
-  <primitive-type name="unsigned __int64"/>
   <primitive-type name="unsigned long long"/>
   <primitive-type name="long long"/>
   <primitive-type name="qlonglong" target-lang-api-name="PyLong" />
@@ -134,8 +130,7 @@
   <primitive-type name="long"/>
   <primitive-type name="unsigned long"/>
   <primitive-type name="WId"/>
-  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyLong"/>
-  <primitive-type name="QByteRef">
+  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyLong">
     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
       <include file-name="QTextDocument" location="global"/>
   </primitive-type>
@@ -145,9 +140,20 @@
     <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
 
-  <primitive-type name="std::string"/>
-  <primitive-type name="std::wstring"/>
-  <primitive-type name="QStdWString"/>
+  <primitive-type name="QString">
+    <include file-name="QString" location="global"/>
+    <conversion-rule file="qstring_conversions.h" />
+  </primitive-type>
+  <container-type name="QStringList" type="list">
+    <include file-name="QStringList" location="global"/>
+    <conversion-rule file="qstringlist_conversions.h" />
+  </container-type>
+  <primitive-type name="QStringRef">
+    <conversion-rule file="qstringref_conversions.h" />
+  </primitive-type>
+  <primitive-type name="QChar">
+    <conversion-rule file="qchar_conversions.h" />
+  </primitive-type>
 
   <container-type name="QSet" type="set">
     <conversion-rule file="qset_conversions.h"/>
@@ -242,7 +248,6 @@
   <rejection class="*" field-name="staticMetaObject"/>
   <!-- not support array in property -->
   <rejection class="QTextCodec::ConverterState" field-name="state_data"/>
-  <rejection class="QString" field-name="null"/>
   <rejection class="QVariant" field-name="handler"/>
   <rejection class="QUuid" field-name="data1"/>
   <rejection class="QUuid" field-name="data2"/>
@@ -542,20 +547,6 @@
   <rejection class="QVariant" function-name="setValue"/>
   <rejection class="QVariant" function-name="data"/>
   <rejection class="QVariant" function-name="constData"/>
-  <rejection class="QString" function-name="constData"/>
-  <rejection class="QString" function-name="constBegin"/>
-  <rejection class="QString" function-name="constEnd"/>
-  <rejection class="QString" function-name="begin"/>
-  <rejection class="QString" function-name="end"/>
-  <rejection class="QString" function-name="data"/>
-  <rejection class="QString" function-name="unicode"/>
-  <rejection class="QString" function-name="utf16"/>
-  <rejection class="QString" function-name="fromLatin1_helper"/>
-  <rejection class="QString" function-name="fromAscii_helper"/>
-  <rejection class="QString" function-name="toWCharArray"/>
-  <rejection class="QString" function-name="sprintf"/>
-  <rejection class="QString" function-name="vsprintf"/>
-  <rejection class="QString" function-name="fromStdWString"/>
   <rejection class="QStringRef" function-name="constData"/>
   <rejection class="QStringRef" function-name="data"/>
   <rejection class="QStringRef" function-name="unicode"/>
@@ -699,7 +690,6 @@
   <enum-type name="QDirIterator::IteratorFlag" flags="QDirIterator::IteratorFlags"/>
   <enum-type name="Qt::EventPriority"/>
   <enum-type name="Qt::MaskMode"/>
-  <enum-type name="QChar::Category" />
   <enum-type name="QCryptographicHash::Algorithm"/>
   <enum-type name="QReadWriteLock::RecursionMode"/>
   <enum-type name="QtConcurrent::ReduceOption" flags="QtConcurrent::ReduceOptions"/>
@@ -722,6 +712,8 @@
 
   <!--signal/slot-->
   <inject-code class="target" position="end">
+    Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("unicode");
+    Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("str");
     PySide::init(module);
   </inject-code>
   <inject-code class="native" position="beginning">
@@ -772,224 +764,6 @@
     </modify-function>
   </object-type>
 
-  <value-type name="QString" hash-function="QStringCustomHashFunction">
-    <extra-includes>
-      <include file-name="QTextCodec" location="global"/>
-    </extra-includes>
-    <conversion-rule file="qstring_conversions.h" />
-    <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[2]" />
-    <modify-documentation xpath="/description/section[@id='initializing-a-string']/para[3]" />
-    <!-- Custom hash function -->
-    <inject-code class="native" position="beginning" file="glue/qstring_hashfunc.cpp" />
-    <!-- buffer protocol -->
-    <inject-code class="native" position="beginning" file="glue/qstring_bufferprotocol.cpp" />
-    <inject-code class="target" position="end">
-        #if PY_VERSION_HEX &lt; 0x03000000
-            Shiboken::SbkType&lt;QString>()->tp_as_buffer = &amp;SbkQStringBufferProc;
-            Shiboken::SbkType&lt;QString>()->tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
-        #endif
-    </inject-code>
-
-    <!-- the number(qlonglong) is enough for python -->
-    <modify-function signature="number(uint,int)" remove="all" />
-    <modify-function signature="number(int,int)" remove="all" />
-    <modify-function signature="number(ulong,int)" remove="all" />
-    <modify-function signature="number(qlonglong,int)" remove="all" />
-    <modify-function signature="number(qulonglong,int)" remove="all" />
-    <modify-function signature="insert(int,const QChar*,int)" remove="all" />
-    <modify-function signature="QString(const QChar*, int)" remove="all" />
-    <modify-function signature="fromStdString(std::string)" remove="all"/>
-    <modify-function signature="toStdString()const" remove="all"/>
-    <modify-function signature="toStdWString()const" remove="all"/>
-    <modify-function signature="operator+=(char)" remove="all"/>
-    <modify-function signature="toUShort(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toDouble(bool*)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toFloat(bool*)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toInt(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toLong(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toLongLong(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toShort(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toUInt(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toULong(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toULongLong(bool*,int)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*,arg"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="setUtf16(const ushort*,int)" remove="all" />
-    <modify-function signature="fromUtf16(const ushort*,int)" remove="all" />
-    <modify-function signature="fromRawData(const QChar*,int)" remove="all" />
-    <modify-function signature="setUnicode(const QChar*,int)" remove="all" />
-    <modify-function signature="fromUcs4(const uint*,int)" remove="all" />
-    <modify-function signature="toUcs4()const" remove="all" />
-
-    <!-- Remove conflict signatures in python -->
-    <modify-function signature="arg(int, int, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(qlonglong, int, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(qulonglong, int, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(short, int, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(uint, int, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(ulong, int, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(ushort, int, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(char, int, const QChar&amp;) const" remove="all"/>
-    <modify-function signature="arg(QChar, int, const QChar&amp;) const" remove="all"/>
-
-    <add-function signature="__str__()" return-type="PyObject*">
-        <inject-code class="target" position="beginning">
-            QByteArray utf8 = %CPPSELF.toUtf8();
-            %PYARG_0 = PyUnicode_DecodeUTF8(utf8.data(), utf8.count(), 0);
-        </inject-code>
-    </add-function>
-    <add-function signature="__len__">
-        <inject-code class="target" position="beginning">
-            return %CPPSELF.count();
-        </inject-code>
-    </add-function>
-    <add-function signature="__getitem__">
-        <inject-code class="target" position="beginning">
-                if (_i &lt; 0 || _i >= %CPPSELF.size()) {
-                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                    return 0;
-                }
-                return %CONVERTTOPYTHON[%TYPE](%CPPSELF.at(_i));
-        </inject-code>
-    </add-function>
-    <add-function signature="__setitem__">
-        <inject-code class="target" position="beginning">
-                %CPPSELF.remove(_i, 1);
-                PyObject* args = Py_BuildValue("(nO)", _i, _value);
-                PyObject* result = SbkQStringFunc_insert(self, args);
-                Py_DECREF(args);
-                Py_XDECREF(result);
-                return !result ? -1 : 0;
-        </inject-code>
-    </add-function>
-    <add-function signature="__getslice__">
-        <inject-code class="target" position="beginning">
-            <insert-template name="get_slice"/>
-        </inject-code>
-    </add-function>
-  </value-type>
-  <value-type name="QLatin1String" />
-  <value-type name="QStringRef">
-    <modify-function signature="QStringRef(const QString*)" remove="all" />
-    <modify-function signature="QStringRef(const QString*,int,int)" remove="all" />
-    <modify-function signature="appendTo(QString*)const" remove="all" />
-    <modify-function signature="operator=(const QString*)" remove="all" />
-  </value-type>
-  <value-type name="QChar" hash-function="qHash">
-    <conversion-rule file="qchar_conversions.h" />
-    <modify-function signature="QChar(uchar)" remove="all"/>
-    <modify-function signature="QChar(short)" remove="all"/>
-    <modify-function signature="QChar(ushort)" remove="all"/>
-    <modify-function signature="QChar(uint)" remove="all"/>
-    <modify-function signature="QChar(char)" remove="all"/>
-    Implementation note: This constructor is a replacement for
-         QChar(char), as the char type check also catches numbers,
-         conflicting with QChar(int).
-    <add-function signature="QChar(PyString*)">
-        <inject-code class="target" position="beginning">
-            if (PyString_Size(%PYARG_1) == 1) {
-                char value = %CONVERTTOCPP[char](%PYARG_1);
-                %0 = new %TYPE(value);
-            } else {
-                PyErr_SetString(PyExc_TypeError, "expected string of size 1");
-            }
-        </inject-code>
-    </add-function>
-    <modify-function signature="combiningClass(uint)" remove="all"/>
-    <modify-function signature="combiningClass(ushort)" remove="all"/>
-    <modify-function signature="decomposition(uint)" remove="all"/>
-    <modify-function signature="digitValue(uint)" remove="all"/>
-    <modify-function signature="digitValue(ushort)" remove="all"/>
-    <modify-function signature="mirroredChar(uint)" remove="all"/>
-    <modify-function signature="mirroredChar(ushort)" remove="all"/>
-    <modify-function signature="toCaseFolded(uint)" remove="all"/>
-    <modify-function signature="toCaseFolded(ushort)" remove="all"/>
-    <modify-function signature="toUpper(uint)" remove="all"/>
-    <modify-function signature="toUpper(ushort)" remove="all"/>
-    <modify-function signature="toLower(uint)" remove="all"/>
-    <modify-function signature="toLower(ushort)" remove="all"/>
-    <modify-function signature="toTitleCase(uint)" remove="all"/>
-    <modify-function signature="toTitleCase(ushort)" remove="all"/>
-    <modify-function signature="unicode()" remove="all"/>
-    <modify-function signature="category(uint)" remove="all"/>
-    <modify-function signature="category(ushort)" remove="all"/>
-    <modify-function signature="decompositionTag(uint)" remove="all"/>
-    <modify-function signature="direction(uint)" remove="all"/>
-    <modify-function signature="direction(ushort)" remove="all"/>
-    <modify-function signature="joining(uint)" remove="all"/>
-    <modify-function signature="joining(ushort)" remove="all"/>
-    <modify-function signature="unicodeVersion(uint)" remove="all"/>
-    <modify-function signature="unicodeVersion(ushort)" remove="all"/>
-  </value-type>
-  <value-type name="QLatin1Char" />
   <value-type name="QBasicTimer"/>
   <value-type name="QByteArrayMatcher"/>
   <value-type name="QDate" hash-function="PySide::hash" >
@@ -1062,7 +836,6 @@
     <modify-function signature="rwidth()" remove="all" />
   </value-type>
 
-  <value-type name="QStringMatcher"/>
   <value-type name="QTime" hash-function="PySide::hash"/>
   <value-type name="QPersistentModelIndex">
     <modify-function signature="internalPointer()const" remove="all"/>
@@ -1493,7 +1266,6 @@
     <modify-function signature="QVariant(const QString&amp;)">
         <access modifier="private" />
     </modify-function>
-    <modify-function signature="QVariant(const QLatin1String&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QStringList&amp;)" remove="all"/>
     <modify-function signature="QVariant(const QChar&amp;)">
         <access modifier="private" />
@@ -1635,75 +1407,6 @@
       </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QStringList">
-    <conversion-rule file="qstringlist_conversions.h"/>
-    <modify-function signature="fromVector(QVector&lt;QString>)" remove="all" />
-    <add-function signature="__len__">
-        <inject-code class="target" position="beginning">
-            return %CPPSELF.count();
-        </inject-code>
-    </add-function>
-    <add-function signature="__getitem__">
-        <inject-code class="target" position="beginning">
-            if (_i &lt; 0 || _i >= %CPPSELF.size()) {
-                PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                return 0;
-            }
-            return %CONVERTTOPYTHON[QString](%CPPSELF.at(_i));
-        </inject-code>
-    </add-function>
-    <add-function signature="__setitem__">
-        <inject-code class="target" position="beginning">
-            PyObject* args = Py_BuildValue("(nO)", _i, _value);
-            PyObject* result = SbkQStringListFunc_replace(self, args);
-            Py_DECREF(args);
-            Py_XDECREF(result);
-            return !result ? -1 : 0;
-        </inject-code>
-    </add-function>
-    <add-function signature="__getslice__">
-        <inject-code class="target" position="beginning">
-            <insert-template name="get_slice"/>
-        </inject-code>
-    </add-function>
-    <add-function signature="__setslice__">
-        <inject-code class="target" position="beginning">
-            <!--
-            PyObject* result = 0;
-            Py_ssize_t start, end;
-            Py_ssize_t len = %CPPSELF->count();
-
-            if (_i1 &gt; len)
-               start = len;
-            else if (_i1 &lt; 0)
-               start = 0;
-            else
-               start = _i1;
-
-            if (_i2 &gt; len)
-               end = len;
-            else if (_i2 &lt; 0)
-               end = 0;
-            else
-               end = _i2;
-
-            if (start &lt; end) {
-                Py_ssize_t i;
-                for (Py_ssize_t i = _value->count(); i &gt; -1; i++) {
-                    PyObject* args = Py_BuildValue("(nO)", start, %CPPSELF->at(i));
-                    result = SbkQStringList_insert(self, args);
-                    Py_XDECREF(args);
-                    Py_XDECREF(result);
-                }
-                for (i = start; i &lt; end; i++)
-                    SbkQStringList_removeAt(self, Py_BuildValue("(n)", i));
-            }
-            return !result ? -1 : 0;
-            -->
-            return 0;
-        </inject-code>
-    </add-function>
-  </value-type>
   <object-type name="QAbstractListModel" polymorphic-id-expression="qobject_cast&lt;QAbstractListModel*&gt;(%1)">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
@@ -1759,9 +1462,7 @@
     <modify-function signature="operator const void *()const" remove="all"/>
     <modify-function signature="operator+=(const char*)" remove="all"/>
     <modify-function signature="operator=(const char*)" remove="all"/>
-    <modify-function signature="operator[](int)" remove="all"/>
     <modify-function signature="operator[](int)const" remove="all"/>
-    <modify-function signature="operator[](uint)" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
     <modify-function signature="push_back(char)" remove="all"/>
     <modify-function signature="push_back(const QByteArray&amp;)" remove="all"/>
@@ -2134,15 +1835,12 @@
     </modify-function>
   </object-type>
   <object-type name="QTextDecoder">
-    <modify-function signature="toUnicode(const char*,int)">
-      <remove/>
-    </modify-function>
-    <modify-function signature="toUnicode(QString*,const char*,int)" remove="all"/>
+    <modify-function signature="toUnicode(const char*,int)" remove="all" />
+    <!-- Removed because it expect QString to be mutable -->
+    <modify-function signature="toUnicode(QString*,const char*,int)" remove="all" />
   </object-type>
   <object-type name="QTextEncoder">
-    <modify-function signature="fromUnicode(const QChar*,int)">
-      <remove/>
-    </modify-function>
+    <modify-function signature="fromUnicode(const QChar*,int)" remove="all" />
   </object-type>
   <object-type name="QTimeLine"/>
   <object-type name="QTranslator">
@@ -2506,7 +2204,10 @@
     <modify-function signature="exec(QTextStream &amp;)" rename="exec_"/>
   </value-type>
   <object-type name="QTextStream" stream="yes">
+    <!-- Removed because it expect QString to be mutable -->
+    <modify-function signature="QTextStream(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" />
     <modify-function signature="QTextStream(const QByteArray&amp;, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+    <!-- Removed because it expect QString to be mutable -->
     <modify-function signature="setString(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
 
     <modify-function signature="operator&lt;&lt;(const void*)" remove="all"/>
@@ -2526,6 +2227,11 @@
     <modify-function signature="operator&gt;&gt;(signed short&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned int&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned short&amp;)" remove="all"/>
+    <!-- Removed because it expect QChar to be mutable -->
+    <modify-function signature="operator&gt;&gt;(QChar&amp;)" remove="all"/>
+    <!-- Removed because it expect QString to be mutable -->
+    <modify-function signature="operator&gt;&gt;(QString&amp;)" remove="all"/>
+
 
     <modify-function signature="flush()" allow-thread="yes"/>
     <modify-function signature="read(qint64)" allow-thread="yes"/>
@@ -2553,10 +2259,6 @@
     <modify-function signature="mid(int, int) const" remove="all"/>
     <modify-function signature="toList() const" remove="all"/>
     <modify-function signature="fromList(const QList&lt;QXmlStreamAttribute&gt; &amp;)" remove="all"/>
-    <modify-function signature="value(const QString &amp;, const QLatin1String &amp;)const" remove="all" />
-    <modify-function signature="value(const QLatin1String &amp;, const QLatin1String &amp;)const" remove="all" />
-    <modify-function signature="value(const QLatin1String &amp;)const" remove="all" />
-    <modify-function signature="hasAttribute(const QLatin1String &amp;)const" remove="all" />
   </value-type>
   <value-type name="QXmlStreamNamespaceDeclaration"/>
   <value-type name="QXmlStreamNotationDeclaration"/>
@@ -2566,6 +2268,7 @@
     <modify-function signature="addData(const char*)" remove="all"/>
   </object-type>
   <object-type name="QXmlStreamWriter">
+    <!-- Removed because it expect QString to be mutable -->
     <modify-function signature="QXmlStreamWriter(QString *)" remove="all" />
     <modify-function signature="codec()const" remove="all"/>
   </object-type>

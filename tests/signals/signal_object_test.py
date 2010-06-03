@@ -11,8 +11,8 @@ class MyObject(QTimer):
     sig1 = Signal()
     sig2 = Signal(int, name='rangeChanged')
     sig3 = Signal(int)
-    sig4 = Signal((int,), (QString,))
-    sig5 = Signal((QString,), (int,))
+    sig4 = Signal((int,), (unicode,))
+    sig5 = Signal((unicode,), (int,))
 
 
     @Slot(int)
@@ -50,8 +50,8 @@ class SignalObjectTest(UsesQCoreApplication):
 
     def testDictOperator(self):
         o = MyObject()
-        o.sig4[QString].connect(o.slotString)
-        o.sig4[QString].emit("PySide")
+        o.sig4[unicode].connect(o.slotString)
+        o.sig4[unicode].emit("PySide")
         self.assertEqual(o._s, "PySide")
 
     def testGeneretedSignal(self):

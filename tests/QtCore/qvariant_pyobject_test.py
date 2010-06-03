@@ -3,18 +3,16 @@
 
 import unittest
 
-from PySide.QtCore import QSize, QVariant, QString
+from PySide.QtCore import *
 
 
 class Dummy(object):
     '''Pure python sample class'''
     pass
 
-
 class MySize(QSize):
     '''Extended class'''
     pass
-
 
 class QVariantPurePython(unittest.TestCase):
     '''QVariant + pure python classes'''
@@ -25,7 +23,6 @@ class QVariantPurePython(unittest.TestCase):
         obj = QVariant(d)
         # inherited type name from other binding
         self.assertEqual('PyQt_PyObject', obj.typeName())
-
 
 class QVariantInheritedPython(unittest.TestCase):
     '''QVariant + classes inherited from C++'''
@@ -63,7 +60,7 @@ class QVariantToPyObject(unittest.TestCase):
         '''QVariant(python string).toPyObject() return an equal QString'''
         d = 'abc'
         obj = QVariant('abc')
-        self.assert_(isinstance(obj.toPyObject(), QString))
+        self.assert_(isinstance(obj.toPyObject(), unicode))
         self.assertEqual(d, obj.toPyObject())
 
 

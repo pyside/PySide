@@ -2,12 +2,12 @@
 import unittest
 import new
 
-from PySide.QtCore import QByteArray, QString
+from PySide.QtCore import *
 from helper.docmodifier import DocModifier
 
 class BaseQByteArrayOperatorIAdd(object):
     '''Base class for QByteArray += operator tests.
-    
+
     Implementing classes should inherit from unittest.TestCase and implement
     setUp, setting self.obj and self.orig_obj to the target QByteArray and original
     one, respectively'''
@@ -40,13 +40,6 @@ class BaseQByteArrayOperatorIAdd(object):
         self.obj += s
         self.assertEqual(self.obj, self.orig_obj + s)
         self.assertEqual(self.obj.size(), self.orig_obj.size() + 1)
-
-    def testQString(self):
-        '''QByteArray += QString'''
-        s = QString('dummy')
-        self.obj += s
-        self.assertEqual(self.obj, self.orig_obj + s)
-        self.assertEqual(self.obj.size(), self.orig_obj.size() + s.size())
 
 class NullQByteArrayOperatorIAdd(unittest.TestCase, BaseQByteArrayOperatorIAdd):
     '''Test case for operator QByteArray += on null QByteArrays'''

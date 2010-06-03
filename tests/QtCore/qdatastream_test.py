@@ -3,8 +3,7 @@
 
 import unittest
 
-from PySide.QtCore import QDataStream, QString, QIODevice, QByteArray
-from PySide.QtCore import QBitArray, QDate, QTime, QDateTime, QLine, QChar
+from PySide.QtCore import *
 
 def create_bitarray(string):
     array = QBitArray(len(string))

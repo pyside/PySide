@@ -3,8 +3,7 @@
 
 import unittest
 
-from PySide.QtCore import QTextStream, QIODevice, QString, QByteArray
-from PySide.QtCore import QTextCodec, QFile
+from PySide.QtCore import *
 
 class QTextStreamShiftTest(unittest.TestCase):
 
@@ -16,18 +15,11 @@ class QTextStreamShiftTest(unittest.TestCase):
     def testNumber(self):
         '''QTextStream << number'''
 
-        self.write << QString('4')
+        self.write << '4'
         self.write.flush()
         res = self.read.readLine()
-        self.assert_(isinstance(res, QString))
-        self.assertEqual(res, QString('4'))
-
-    def testString(self):
-        self.write << QString('Test_it!')
-        self.write.flush()
-        res = QString()
-        self.read >> res
-        self.assertEqual(res, QString('Test_it!'))
+        self.assert_(isinstance(res, unicode))
+        self.assertEqual(res, '4')
 
 class QTextStreamGetSet(unittest.TestCase):
 

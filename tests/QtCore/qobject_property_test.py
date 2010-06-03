@@ -3,7 +3,7 @@
 
 import unittest
 
-from PySide.QtCore import QObject, QVariant, QString
+from PySide.QtCore import *
 
 class PropertyCase(unittest.TestCase):
     '''Test case for QObject properties'''
@@ -41,14 +41,14 @@ class PropertyCase(unittest.TestCase):
         # QVariant.toInt has a bool* arg in C++, so returns a tuple
         self.assertEqual(obj.property('dummy').toInt(), (42, True))
 
-    def testQStringProperty(self):
+    def testStringProperty(self):
         obj = QObject()
-        self.assert_(not obj.setProperty('dummy', QString('data')))
+        self.assert_(not obj.setProperty('dummy', 'data'))
         prop = obj.property('dummy')
 
         self.assert_(isinstance(prop, QVariant))
         self.assert_(prop.isValid())
-        self.assertEqual(obj.property('dummy').toString(), QString('data'))
+        self.assertEqual(obj.property('dummy').toString(), 'data')
 
     def testImplicitQVariantProperty(self):
         obj = QObject()

@@ -5,7 +5,7 @@
 import unittest
 import sys
 
-from PySide.QtCore import QSize, QVariant, QByteArray, QStringList, QString
+from PySide.QtCore import *
 
 
 class QVariantToNumber(unittest.TestCase):
@@ -50,11 +50,6 @@ class QVariantToNumber(unittest.TestCase):
 class QVariantTypeName(unittest.TestCase):
     '''QVariant.typeName()'''
 
-    def testTypeNameQString(self):
-        '''QVariant(QString).typeName()'''
-        obj = QVariant(QString('aaaa'))
-        self.assertEqual('QString', obj.typeName())
-
     def testTypeNameString(self):
         '''QVariant(PyString).typeName()'''
         obj = QVariant('aaaa')
@@ -95,18 +90,6 @@ class QVariantTypeName(unittest.TestCase):
 
         obj = QVariant(['aaa', 'bbb', 'ccc', 'dddd'])
         self.assertEqual('QVariantList', obj.typeName())
-
-        obj = QVariant([QString('aaa'), QString('bbb'),
-                        QString('ccc'), QString('dddd')])
-        self.assertEqual('QVariantList', obj.typeName())
-
-    def testTypeNameQStringList(self):
-        '''QVariant(QStringList).typeName()'''
-        obj = QVariant(QStringList())
-        self.assertEqual('QStringList', obj.typeName())
-        obj = QVariant(QStringList(['aaa', 'bbb', 'ccc']))
-        self.assertEqual('QStringList', obj.typeName())
-
 
 class QVariantConstructor(unittest.TestCase):
     '''More qvariant constructions'''
