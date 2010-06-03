@@ -72,12 +72,12 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         slotIndex = metaObject->indexOfSlot(slot);
     }
     if (QMetaObject::connect(source, signalIndex, receiver, slotIndex, type)) {
-        // FIXME: Need to cast to QObjectWrapper* and call the public version of connectNotify
-        //        when avoiding the protected hack.
         #ifndef AVOID_PROTECTED_HACK
             source->connectNotify(signal);
         #else
-            reinterpret_cast<QObjectWrapper*>(source)->connectNotify_protected(signal);
+            // Need to cast to QObjectWrapper* and call the public version of
+            // connectNotify when avoiding the protected hack.
+            reinterpret_cast<QObjectWrapper*>(source)->connectNotify(signal);
         #endif
         if (usingGlobalReceiver)
             signalManager.globalReceiverConnectNotify(source, slotIndex);
