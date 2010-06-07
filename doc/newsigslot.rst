@@ -30,15 +30,11 @@ New way: Signal() and Slot()
 The new-style uses a different syntax to create and to connect signals/slots. The previous example could be rewritten as:
 
 ::
-    
+
     ...
 
     def someFunc():
         print "someFunc has been called!"
-
-    ...
-
-    clicked = QtCore.Signal()
 
     button = QtGui.QPushButton("Call someFunc")
     button.clicked.connect(someFunc)
