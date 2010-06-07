@@ -1,0 +1,1 @@
+PYSIDE_TEST(qsqldatabaseandqueries_test.py)

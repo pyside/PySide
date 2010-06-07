@@ -1,22 +1,44 @@
+set(PYSIDE_TIMEOUT 5)
 
-file(GLOB TEST_FILES */*_test.py)
+macro(TEST_QT_MODULE var name)
+  if(NOT DISABLE_${name} AND ${var})
+      add_subdirectory(${name})
+  endif()
+endmacro(TEST_QT_MODULE)
 
-set(test_blacklist )
+macro(PYSIDE_TEST)
+    set(TEST_NAME ${ARGV0})
+    if (${ARGC} EQUAL 1)
+        set(EXPECT_TO_FAIL 0)
+    elseif(${ARGC} EQUAL 2)
+        set(EXPECT_TO_FAIL ${ARGV1})
+    else()
+        message(WARNING "Ivalid call of macro PYSIDE_TEST")
+    endif()
+    set(TEST_CMD ${CMAKE_SOURCE_DIR}/tests/run_test.sh  ${CMAKE_BINARY_DIR} "${CMAKE_BINARY_DIR}:${CMAKE_SOURCE_DIR}/tests/util" ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}")
+    add_test(${TEST_NAME} ${TEST_CMD})
+    set_tests_properties(${TEST_NAME} PROPERTIES
+                         TIMEOUT ${PYSIDE_TIMEOUT}
+                         WILL_FAIL ${EXPECT_TO_FAIL})
+endmacro(PYSIDE_TEST)
 
-foreach(test_file ${TEST_FILES})
-    string(REGEX MATCH "/([^/]+)//?([^/]+)_test.py" test_name ${test_file} )
-    list(FIND test_blacklist ${CMAKE_MATCH_1}_${CMAKE_MATCH_2} expect_fail)
-    add_test(${CMAKE_MATCH_1}_${CMAKE_MATCH_2} sh
-             ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh
-             "${pysidebase_BINARY_DIR}:${libpyside_BINARY_DIR}"
-             "${CMAKE_BINARY_DIR}:${CMAKE_CURRENT_SOURCE_DIR}/util"
-             ${PYTHON_EXECUTABLE}
-             ${test_file})
-    set_tests_properties(${CMAKE_MATCH_1}_${CMAKE_MATCH_2} PROPERTIES TIMEOUT 5)
-    if (${expect_fail} GREATER -1)
-        set_tests_properties(${CMAKE_MATCH_1}_${CMAKE_MATCH_2} PROPERTIES WILL_FAIL TRUE)
-    endif(${expect_fail} GREATER -1)
-# Should set python path here
-# Looks like it's fixed in 2.8:
-# http://www.vtk.org/Bug/print_bug_page.php?bug_id=7885
-endforeach(test_file ${TEST_FILES})
+
+add_subdirectory(signals)
+TEST_QT_MODULE(QT_QTCORE_FOUND QtCore)
+TEST_QT_MODULE(QT_QTGUI_FOUND QtGui)
+TEST_QT_MODULE(QT_QTNETWORK_FOUND QtNetwork)
+TEST_QT_MODULE(QT_QTWEBKIT_FOUND QtWebKit)
+TEST_QT_MODULE(QT_QTSVG_FOUND QtSvg)
+TEST_QT_MODULE(QT_QTXML_FOUND QtXml)
+TEST_QT_MODULE(QT_QTTEST_FOUND QtTest)
+TEST_QT_MODULE(QT_QTOPENGL_FOUND QtOpenGL)
+TEST_QT_MODULE(QT_QTSQL_FOUND QtSql)
+TEST_QT_MODULE(QT_QTUITOOLS_FOUND QtUiTools)
+TEST_QT_MODULE(QT_QTHELP_FOUND QtHelp)
+TEST_QT_MODULE(QT_QTXMLPATTERNS_FOUND QtXmlPatterns)
+TEST_QT_MODULE(QT_QTMAEMO5_FOUND QtMaemo5)
+TEST_QT_MODULE(QT_QTSCRIPT_FOUND QtScript)
+TEST_QT_MODULE(QT_QTSCRIPTTOOLS_FOUND QtScriptTools)
+TEST_QT_MODULE(QT_QTMULTIMEDIA_FOUND QtMultimedia)
+TEST_QT_MODULE(QT_PHONON_FOUND phonon)
+TEST_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)
