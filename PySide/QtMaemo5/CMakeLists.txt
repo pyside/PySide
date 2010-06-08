@@ -46,7 +46,7 @@ target_link_libraries(QtMaemo5
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTMAEMO5_LIBRARY})
 
-#add_dependencies(QtMaemo5)
+add_dependencies(QtMaemo5 QtGui)
 
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMaemo5${CMAKE_DEBUG_POSTFIX}.so
