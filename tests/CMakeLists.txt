@@ -7,7 +7,8 @@ macro(TEST_QT_MODULE var name)
 endmacro(TEST_QT_MODULE)
 
 macro(PYSIDE_TEST)
-    set(TEST_NAME ${ARGV0})
+    string(REGEX MATCH "/([^/]+)//?([^/]+)\\.py" foo "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}" )
+    set(TEST_NAME "${CMAKE_MATCH_1}_${CMAKE_MATCH_2}")
     if (${ARGC} EQUAL 1)
         set(EXPECT_TO_FAIL 0)
     elseif(${ARGC} EQUAL 2)
@@ -15,7 +16,7 @@ macro(PYSIDE_TEST)
     else()
         message(WARNING "Ivalid call of macro PYSIDE_TEST")
     endif()
-    set(TEST_CMD ${CMAKE_SOURCE_DIR}/tests/run_test.sh  ${CMAKE_BINARY_DIR} "${CMAKE_BINARY_DIR}:${CMAKE_SOURCE_DIR}/tests/util" ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}")
+    set(TEST_CMD ${CMAKE_SOURCE_DIR}/tests/run_test.sh  ${CMAKE_BINARY_DIR} "${CMAKE_BINARY_DIR}:${CMAKE_SOURCE_DIR}/tests/util" ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}")
     add_test(${TEST_NAME} ${TEST_CMD})
     set_tests_properties(${TEST_NAME} PROPERTIES
                          TIMEOUT ${PYSIDE_TIMEOUT}
