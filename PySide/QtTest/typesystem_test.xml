@@ -6,6 +6,8 @@
   <rejection class="QTest" function-name="qCompare&lt;char*&gt;"/>
   <rejection class="QTest" function-name="qCompare&lt;double&gt;"/>
   <rejection class="QTest" function-name="qCompare&lt;float&gt;"/>
+  <rejection class="QTest" function-name="qCompare&lt;double,qreal&gt;"/>
+  <rejection class="QTest" function-name="qCompare&lt;qreal,double&gt;"/>
   <rejection class="QTest" function-name="qCompare"/>
   <rejection class="QTest" function-name="qVerify"/>
   <rejection class="QTest" function-name="qSleep"/>
