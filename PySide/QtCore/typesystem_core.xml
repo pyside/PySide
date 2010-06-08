@@ -2050,6 +2050,7 @@
     <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(char*&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(QDataStream&amp;,QVariant&amp;)" remove="all"/>
 
     <modify-function signature="operator&lt;&lt;(qint8)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(bool)" remove="all"/>
@@ -2062,8 +2063,57 @@
     <modify-function signature="operator&lt;&lt;(quint64)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(float)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(double)" remove="all"/>
-
+    <modify-function signature="operator&lt;&lt;(QDataStream&amp;,const QVariant&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
+    <add-function signature="writeQString(const QString&amp;)">
+        <inject-code class="target">
+            *(%CPPSELF) &lt;&lt; %1;
+        </inject-code>
+    </add-function>
+    <add-function signature="readQString()" return-type="QString">
+        <inject-code class="target">
+            %RETURN_TYPE val;
+            *(%CPPSELF) &gt;&gt; val;
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        </inject-code>
+    </add-function>
+    <add-function signature="writeQChar(const QChar&amp;)">
+        <inject-code class="target">
+            *(%CPPSELF) &lt;&lt; %1;
+        </inject-code>
+    </add-function>
+    <add-function signature="readQChar()" return-type="QChar">
+        <inject-code class="target">
+            %RETURN_TYPE val;
+            *(%CPPSELF) &gt;&gt; val;
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        </inject-code>
+    </add-function>
+    <add-function signature="writeQStringList(const QStringList&amp;)">
+        <inject-code class="target">
+            *(%CPPSELF) &lt;&lt; %1;
+        </inject-code>
+    </add-function>
+    <add-function signature="readQStringList()" return-type="QStringList">
+        <inject-code class="target">
+            %RETURN_TYPE val;
+            *(%CPPSELF) &gt;&gt; val;
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        </inject-code>
+    </add-function>
+    <add-function signature="writeQVariant(const QVariant&amp;)">
+        <inject-code class="target">
+            *(%CPPSELF) &lt;&lt; %1;
+        </inject-code>
+    </add-function>
+    <add-function signature="readQVariant()" return-type="QVariant">
+        <inject-code class="target">
+            %RETURN_TYPE val;
+            *(%CPPSELF) &gt;&gt; val;
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        </inject-code>
+    </add-function>
+
     <modify-function signature="readRawData(char*,int)" remove="all"/>
     <modify-function signature="readBytes(char*&amp;,uint&amp;)" remove="all"/>
     <modify-function signature="writeRawData(const char*,int)" remove="all"/>

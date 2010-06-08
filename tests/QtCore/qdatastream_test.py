@@ -76,22 +76,17 @@ class QDataStreamShift(unittest.TestCase):
 
     def testQCharValid(self):
         '''QDataStream <<>> QChar - valid'''
-        self.stream << QChar(42)
+        self.stream.writeQChar(42)
 
-        res = QChar()
-
-        self.read_stream >> res
-        self.assertEqual(res, QChar(42))
+        res = self.read_stream.readQChar()
+        self.assertEqual(res, unichr(42))
 
     def testQCharNull(self):
         '''QDataStream <<>> QChar - null'''
-        self.stream << QChar()
+        self.stream.writeQChar(None)
 
-        res = QChar()
-
-        self.read_stream >> res
-        self.assertEqual(res, QChar())
-        self.assert_(res.isNull())
+        res = self.read_stream.readQChar()
+        self.assertEqual(res, u'\x00')
 
     def testQByteArrayValid(self):
         '''QDataStream <<>> QByteArray - valid'''
@@ -126,35 +121,24 @@ class QDataStreamShift(unittest.TestCase):
 
     def testQStringValid(self):
         '''QDataStream <<>> QString - valid'''
-        self.stream << QString('Ka-boom')
+        self.stream.writeQString('Ka-boom')
 
-        res = QString()
-
-        self.read_stream >> res
-        self.assertEqual(res, QString('Ka-boom'))
+        res = self.read_stream.readQString()
+        self.assertEqual(res, u'Ka-boom')
 
     def testQStringEmpty(self):
         '''QDataStream <<>> QString - empty'''
-        self.stream << QString('')
+        self.stream.writeQString('')
 
-        res = QString()
-
-        self.read_stream >> res
-        self.assertEqual(res, QString(""))
-        self.assert_(res.isEmpty())
-        self.assert_(not res.isNull())
+        res = self.read_stream.readQString()
+        self.assertEqual(res, u'')
 
     def testQStringNull(self):
         '''QDataStream <<>> QString - null'''
-        self.stream << QString()
+        self.stream.writeQString(None)
 
-        res = QString()
-
-        self.read_stream >> res
-        self.assertEqual(res, QString())
-        self.assert_(res.isEmpty())
-        self.assert_(res.isNull())
-
+        res = self.read_stream.readQString()
+        self.assertEqual(res, u'')
 
     def testQBitArrayNull(self):
         '''QDataStream <<>> QBitArray - null'''
