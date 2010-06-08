@@ -12,6 +12,11 @@ Q_DECLARE_METATYPE(PyQt_PyObject)
 
 namespace Shiboken {
 
+inline bool Converter<QVariant>::checkType(PyObject* pyObj)
+{
+    return ValueTypeConverter<QVariant>::checkType(pyObj);
+}
+
 // all types are convertible to QVariant
 inline bool Converter<QVariant>::isConvertible(PyObject* pyObj)
 {

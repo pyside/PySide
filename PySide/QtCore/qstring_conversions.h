@@ -1,9 +1,13 @@
 namespace Shiboken {
 
 template<>
-class Converter<QString>
+struct Converter<QString>
 {
-public:
+    static bool checkType(PyObject* pyObj)
+    {
+        return PyString_Check(pyObj) || PyUnicode_Check(pyObj);
+    }
+
     static bool isConvertible(PyObject* pyObj)
     {
         return PyString_Check(pyObj)

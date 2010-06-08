@@ -7,8 +7,7 @@ struct Converter<QStringRef> : public Converter<QString>
 
     static PyObject* toPython(const QStringRef& cppObj)
     {
-        const QString* str = cppObj.string();
-        return Converter<QString>::toPython(*str);
+        return Converter<QString>::toPython(cppObj.toString());
     }
 
     static QStringRef toCpp(PyObject* pyObj)

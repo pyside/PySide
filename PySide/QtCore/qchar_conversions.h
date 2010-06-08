@@ -1,12 +1,17 @@
 namespace Shiboken {
 
 template<>
-class Converter<QChar>
+struct Converter<QChar>
 {
-public:
+    static bool checkType(PyObject* pyObj)
+    {
+        return PyString_Check(pyObj) && (PyString_Size(pyObj) == 1);
+    }
+
     static bool isConvertible(PyObject* pyObj)
     {
         return (PyString_Check(pyObj) && (PyString_Size(pyObj) == 1))
+               || pyObj == Py_None
                || PyInt_Check(pyObj);
     }
 

@@ -41,6 +41,11 @@
 template <typename QtDict>
 struct QtDictConverter
 {
+    static inline bool checkType(PyObject* pyObj)
+    {
+        return isConvertible(pyObj);
+    }
+
     static inline bool isConvertible(PyObject* pyObj)
     {
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<QtDict>()))
@@ -95,6 +100,11 @@ struct QtDictConverter
 template <typename MultiMap>
 struct QtMultiMapConverter
 {
+    static inline bool checkType(PyObject* pyObj)
+    {
+        return isConvertible(pyObj);
+    }
+
     static inline bool isConvertible(PyObject* pyObj)
     {
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<MultiMap>()))
@@ -145,6 +155,7 @@ struct QtMultiMapConverter
 
         return result;
     }
+
     static inline MultiMap toCpp(PyObject* pyObj)
     {
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<MultiMap>()))
@@ -165,6 +176,11 @@ struct QtMultiMapConverter
 template <typename T>
 struct QSequenceConverter
 {
+    static inline bool checkType(PyObject* pyObj)
+    {
+        return isConvertible(pyObj);
+    }
+
     static inline bool isConvertible(PyObject* pyObj)
     {
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<T>()))
