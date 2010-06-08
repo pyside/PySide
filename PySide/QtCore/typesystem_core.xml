@@ -992,7 +992,7 @@
   <value-type name="QLatin1Char" />
   <value-type name="QBasicTimer"/>
   <value-type name="QByteArrayMatcher"/>
-  <value-type name="QDate">
+  <value-type name="QDate" hash-function="PySide::hash" >
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
     <modify-function signature="getDate(int*,int*,int*)" >
         <modify-argument index="1">
@@ -1024,7 +1024,7 @@
         </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QDateTime"/>
+  <value-type name="QDateTime" hash-function="PySide::hash"/>
   <value-type name="QDir">
     <modify-function signature="QDir(QString,QString,QFlags&lt;QDir::SortFlag>,QFlags&lt;QDir::Filter>)" remove="all" />
   </value-type>
@@ -1063,7 +1063,7 @@
   </value-type>
 
   <value-type name="QStringMatcher"/>
-  <value-type name="QTime"/>
+  <value-type name="QTime" hash-function="PySide::hash"/>
   <value-type name="QPersistentModelIndex">
     <modify-function signature="internalPointer()const" remove="all"/>
     <modify-function signature="operator const QModelIndex&amp;()const" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
@@ -1681,7 +1681,7 @@
       <include file-name="QSize" location="global"/>
     </extra-includes>
   </object-type>
-  <value-type name="QUrl">
+  <value-type name="QUrl" hash-function="PySide::hash">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>

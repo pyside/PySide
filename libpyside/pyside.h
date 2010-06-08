@@ -45,6 +45,15 @@ namespace PySide
 PYSIDE_API void init(PyObject *module);
 
 /**
+ * Hash function used to enable hash on objects not supported on native Qt library which has toString function.
+ */
+template<class T>
+inline uint hash(const T& value)
+{
+    return qHash(value.toString());
+}
+
+/**
 *   If the type \p T was registered on Qt meta type system with Q_DECLARE_METATYPE macro, this class will initialize
 *   the meta type.
 *
