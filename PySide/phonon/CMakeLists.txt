@@ -1,5 +1,10 @@
 project(phonon)
 
+# workaround for a cmake bug under MacOSX, it finds phonon but not the include path
+if (NOT QT_PHONON_INCLUDE_DIR AND CMAKE_HOST_APPLE)
+    set(QT_PHONON_INCLUDE_DIR "${QT_LIBRARY_DIR}/phonon.framework/Headers")
+endif()
+
 set(phonon_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_abstractaudiooutput_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_abstractmediastream_wrapper.cpp
