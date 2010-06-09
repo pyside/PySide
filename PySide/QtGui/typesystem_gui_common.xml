@@ -516,6 +516,11 @@
   </value-type>
   <value-type name="QTextLine" >
     <modify-function signature="cursorToX(int*,QTextLine::Edge)const" remove="all" />
+    <modify-function signature="xToCursor(qreal,QTextLine::CursorPosition)const">
+      <modify-argument index="2">
+        <rename to="edge"/>
+      </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QTextTableFormat" />
   <value-type name="QTextImageFormat" />
@@ -780,6 +785,11 @@
       <include file-name="QStringList" location="global"/>
     </extra-includes>
     <modify-function signature="operator=(QFont)" remove="all"/>
+    <modify-function signature="setStyleHint(QFont::StyleHint, QFont::StyleStrategy)">
+      <modify-argument index="2">
+        <rename to="strategy"/>
+      </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QTextTableCell" >
     <extra-includes>
@@ -818,6 +828,11 @@
     <modify-function signature="fromData(const uchar *,int,const char *)" remove="all"/>
     <modify-function signature="bits()" remove="all"/>
     <modify-function signature="scanLine(int)" remove="all"/>
+    <modify-function signature="invertPixels(QImage::InvertMode)">
+      <modify-argument index="1">
+        <rename to="mode"/>
+      </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QCursor" >
     <extra-includes>
@@ -2457,26 +2472,47 @@
       </inject-code>
     </modify-function>
     <modify-function signature="addWidget(QWidget *, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
+      <modify-argument index="4">
+        <rename to="alignment"/>
+      </modify-argument>
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
     <modify-function signature="addWidget(QWidget *, int, int, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
+      <modify-argument index="6">
+        <rename to="alignment"/>
+      </modify-argument>
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
     <modify-function signature="addLayout(QLayout *, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
+      <modify-argument index="4">
+        <rename to="alignment"/>
+      </modify-argument>
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
     <modify-function signature="addLayout(QLayout *, int, int, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
+      <modify-argument index="6">
+        <rename to="alignment"/>
+      </modify-argument>
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
     <modify-function signature="addItem(QLayoutItem *, int, int, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
+      <modify-argument index="4">
+        <rename to="rowSpan"/>
+      </modify-argument>
+      <modify-argument index="5">
+        <rename to="columnSpan"/>
+      </modify-argument>
+      <modify-argument index="6">
+        <rename to="alignment"/>
+      </modify-argument>
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
@@ -3663,6 +3699,9 @@
       <modify-argument index="this">
         <parent index="2" action="add"/>
       </modify-argument>
+      <modify-argument index="2">
+        <rename to="parent"/>
+      </modify-argument>
     </modify-function>
     <modify-function signature="move(int,int)" rename="moveRubberBand"/>
     <modify-function signature="move(const QPoint &amp;)" rename="moveRubberBand"/>
@@ -4076,6 +4115,19 @@
     </modify-function>
     <modify-function signature="drawRects(const QVector&lt;QRectF&gt; &amp;)">
       <rename to="drawRectsF"/>
+    </modify-function>
+    <modify-function signature="drawRoundRect(int, int, int, int, int, int)">
+      <modify-argument index="5">
+        <rename to="xRound"/>
+      </modify-argument>
+      <modify-argument index="6">
+        <rename to="yRound"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="drawTiledPixmap(const QRect &amp;,const QPixmap &amp;, const QPoint &amp;)">
+      <modify-argument index="3">
+        <rename to="pos"/>
+      </modify-argument>
     </modify-function>
     <modify-function signature="QPainter(QPaintDevice *)">
       <modify-argument index="1">
@@ -4628,4 +4680,5 @@
   <suppress-warning text="Shadowing: *"/>
   <suppress-warning text="unhandled enum value: ~FlagMask in QMessageBox::StandardButton"/>
   <suppress-warning text="unmatched enum ~FlagMask"/>
+  <suppress-warning text="Argument 1 on function 'QTabWidget::setUpLayout' has default expressiont but does not have name."/>
 </typesystem>
