@@ -18,6 +18,19 @@
   <rejection class="QTest" function-name="qData"/>
   <rejection class="QTest" function-name="qWarn"/>
   <rejection class="QTest" function-name="toString"/>
+  <rejection class="QTest" function-name="toString&lt;bool>"/>
+  <rejection class="QTest" function-name="toString&lt;char>"/>
+  <rejection class="QTest" function-name="toString&lt;double>"/>
+  <rejection class="QTest" function-name="toString&lt;float>"/>
+  <rejection class="QTest" function-name="toString&lt;int>"/>
+  <rejection class="QTest" function-name="toString&lt;long>"/>
+  <rejection class="QTest" function-name="toString&lt;qint64>"/>
+  <rejection class="QTest" function-name="toString&lt;quint64>"/>
+  <rejection class="QTest" function-name="toString&lt;short>"/>
+  <rejection class="QTest" function-name="toString&lt;uint>"/>
+  <rejection class="QTest" function-name="toString&lt;ulong>"/>
+  <rejection class="QTest" function-name="toString&lt;ushort>"/>
+
   <rejection class="QTest" function-name="compare_helper"/>
 
   <namespace-type name="QTest">
