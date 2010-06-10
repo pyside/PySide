@@ -4,7 +4,7 @@ import unittest
 
 from sys import getrefcount
 from helper import UsesQApplication
-from PySide.QtCore import QAbstractTableModel, QVariant
+from PySide.QtCore import *
 from PySide.QtGui import QTableView
 
 class TestModel(QAbstractTableModel):
@@ -15,7 +15,7 @@ class TestModel(QAbstractTableModel):
     def columnCount(self, parent):
         return 0
     def data(self, index, role):
-        return QVariant()
+        return None
 
 class KeepReferenceTest(UsesQApplication):
 

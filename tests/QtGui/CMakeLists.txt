@@ -46,7 +46,6 @@ PYSIDE_TEST(qtabwidget_test.py)
 PYSIDE_TEST(qtextedit_test.py)
 PYSIDE_TEST(qtoolbar_test.py)
 PYSIDE_TEST(qtoolbox_test.py)
-PYSIDE_TEST(qvariant_test.py)
 PYSIDE_TEST(qwidget_setlayout_test.py)
 PYSIDE_TEST(qwidget_test.py TRUE) #Bug 237
 PYSIDE_TEST(reference_count_test.py)

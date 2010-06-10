@@ -7,9 +7,10 @@ from PySide.QtCore import *
 
 class QPixmapTest(UsesQApplication):
     def testQVariantConstructor(self):
+        obj = QObject()
         pixmap = QPixmap()
-        v = QVariant(pixmap)
-        pixmap_copy = QPixmap(v)
+        obj.setProperty('foo', pixmap)
+        self.assertEqual(type(obj.property('foo')), QPixmap)
 
     def testQSizeConstructor(self):
         pixmap = QPixmap(QSize(10,20))
@@ -17,12 +18,6 @@ class QPixmapTest(UsesQApplication):
 
     def testQStringConstructor(self):
         pixmap = QPixmap("Testing!")
-
-    def testQVariantConstructor2(self):
-        v = QVariant(QPixmap())
-        pixmap2 = QPixmap(v)
-        v = QVariant(QImage())
-        pixmap2 = QPixmap(v)
 
     def testQPixmapLoadFromDataWithQFile(self):
         f = QFile(os.path.join(os.path.dirname(__file__), 'sample.png'))

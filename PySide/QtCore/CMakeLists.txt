@@ -120,7 +120,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qtimerevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qtranslator_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qurl_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/quuid_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qvariant_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qwaitcondition_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qwritelocker_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamattribute_wrapper.cpp

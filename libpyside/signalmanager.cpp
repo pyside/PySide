@@ -54,35 +54,22 @@
 
 #define PYTHON_TYPE "PyObject"
 
-
-// Use this to wrap PyObject during the Signal/Slot handling
-struct PyObjectWrapper
-{
-    PyObject* m_me;
-    PyObjectWrapper(const PyObjectWrapper &other) : m_me(other.m_me) {}
-    PyObjectWrapper(PyObject* me) : m_me(me) { Py_INCREF(m_me); }
-    PyObjectWrapper() : m_me(Py_None) {}
-    operator PyObject*() const { return m_me; }
-};
-
-Q_DECLARE_METATYPE(PyObjectWrapper)
-
 namespace Shiboken {
 
 template<>
-struct Converter<PyObjectWrapper>
+struct Converter<PySide::PyObjectWrapper>
 {
-    static PyObjectWrapper toCpp(PyObject* obj)
+    static PySide::PyObjectWrapper toCpp(PyObject* obj)
     {
-        return PyObjectWrapper(obj);
+        return PySide::PyObjectWrapper(obj);
     }
 
     static PyObject* toPython(void* obj)
     {
-        return toPython(*reinterpret_cast<PyObjectWrapper*>(obj));
+        return toPython(*reinterpret_cast<PySide::PyObjectWrapper*>(obj));
     }
 
-    static PyObject* toPython(const PyObjectWrapper& obj)
+    static PyObject* toPython(const PySide::PyObjectWrapper& obj)
     {
         return obj;
     }
@@ -202,6 +189,8 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
     qRegisterMetaType<PyObjectWrapper>(PYTHON_TYPE);
 
     TypeResolver::createValueTypeResolver<PyObjectWrapper>(PYTHON_TYPE);
+    TypeResolver::createValueTypeResolver<PyObjectWrapper>("object");
+    TypeResolver::createValueTypeResolver<PyObjectWrapper>("PySide::PyObjectWrapper");
 }
 
 void SignalManager::clear()

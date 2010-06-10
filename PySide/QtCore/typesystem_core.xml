@@ -74,7 +74,6 @@
   <enum-type name="QXmlStreamReader::Error"/>
   <enum-type name="QXmlStreamReader::TokenType"/>
   <enum-type name="QLineF::IntersectType" />
-  <enum-type name="QVariant::Type" />
   <!-- From Qt4.6 -->
   <enum-type name="QXmlStreamReader::ReadElementTextBehaviour"/>
   <enum-type name="QDataStream::FloatingPointPrecision"/>
@@ -129,7 +128,10 @@
   <primitive-type name="signed long"/>
   <primitive-type name="long"/>
   <primitive-type name="unsigned long"/>
-  <primitive-type name="WId"/>
+  <primitive-type name="WId">
+    <!-- FIXME This is a workaround to include some headers needed by some includes (nothing to do with QBool) -->
+    <include file-name="signalmanager.h" location="global"/>
+  </primitive-type>
   <primitive-type name="Qt::HANDLE" target-lang-api-name="PyLong">
     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
       <include file-name="QTextDocument" location="global"/>
@@ -153,6 +155,10 @@
   </primitive-type>
   <primitive-type name="QChar">
     <conversion-rule file="qchar_conversions.h" />
+  </primitive-type>
+  <primitive-type name="QVariant">
+    <conversion-rule file="qvariant_conversions.h" />
+    <include file-name="typeresolver.h" location="global"/>
   </primitive-type>
 
   <container-type name="QSet" type="set">
@@ -248,7 +254,6 @@
   <rejection class="*" field-name="staticMetaObject"/>
   <!-- not support array in property -->
   <rejection class="QTextCodec::ConverterState" field-name="state_data"/>
-  <rejection class="QVariant" field-name="handler"/>
   <rejection class="QUuid" field-name="data1"/>
   <rejection class="QUuid" field-name="data2"/>
   <rejection class="QUuid" field-name="data3"/>
@@ -541,16 +546,6 @@
   <rejection class="reverse_iterator"/>
   <rejection class="stat"/>
   <rejection class="tm"/>
-  <rejection class="QVariant" function-name="canConvert"/>
-  <rejection class="QVariant" function-name="fromValue"/>
-  <rejection class="QVariant" function-name="value"/>
-  <rejection class="QVariant" function-name="setValue"/>
-  <rejection class="QVariant" function-name="data"/>
-  <rejection class="QVariant" function-name="constData"/>
-  <rejection class="QStringRef" function-name="constData"/>
-  <rejection class="QStringRef" function-name="data"/>
-  <rejection class="QStringRef" function-name="unicode"/>
-  <rejection class="QStringRef" function-name="string"/>
   <rejection class="QAbstractEventDispatcher" function-name="filterEvent"/>
   <rejection class="QAbstractEventDispatcher" function-name="setEventFilter"/>
   <rejection class="QAbstractFileEngine" function-name="beginEntryList"/>
@@ -1241,172 +1236,6 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <value-type name="QVariant">
-    <conversion-rule file="qvariant_conversions.h" />
-    <modify-function signature="create(int,const void*)" remove="all" />
-
-    <!-- QVariant constructor is a beast with its own rules -->
-    <modify-function signature="QVariant(float)" remove="all"/>
-    <modify-function signature="QVariant(int)" remove="all"/>
-    <modify-function signature="QVariant(double)" remove="all"/>
-    <modify-function signature="QVariant(bool)" remove="all"/>
-    <modify-function signature="QVariant(qlonglong)" remove="all"/>
-    <modify-function signature="QVariant(int, const void*)" remove="all"/>
-    <modify-function signature="QVariant(int,const void*,uint)" remove="all"/>
-    <!-- handled by inject code -->
-    <modify-function signature="QVariant(uint)" remove="all"/>
-    <modify-function signature="QVariant(qulonglong)" remove="all"/>
-    <modify-function signature="QVariant(const QByteArray&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(QDataStream&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QBitArray&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QString&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QStringList&amp;)" remove="all"/>
-    <modify-function signature="QVariant(const QChar&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QDate&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QTime&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QDateTime&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QSize&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QSizeF&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QPoint&amp;)">
-        <access modifier="private" />
-    </modify-function>>
-    <modify-function signature="QVariant(const QPointF&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QRect&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QRectF&amp;)" >
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QUrl&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QLocale&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(const QRegExp&amp;)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(QHash&lt;QString,QVariant>)" remove="all" />
-    <modify-function signature="QVariant(QMap&lt;QString,QVariant>)" remove="all" />
-    <modify-function signature="QVariant(QList&lt;QVariant>)" remove="all" />
-    <modify-function signature="QVariant(QVariant)" remove="all" />
-    <modify-function signature="QVariant(QLine)">
-        <access modifier="private" />
-    </modify-function>
-    <modify-function signature="QVariant(QLineF)">
-        <access modifier="private" />
-    </modify-function>
-
-    <add-function signature="QVariant(PyObject*)">
-        <inject-code class="target" position="beginning">
-        %0 = new %TYPE(%CONVERTTOCPP[QVariant](%PYARG_1));
-        </inject-code>
-    </add-function>
-    <add-function signature="toPyObject()" return-type="PyObject*">
-        <inject-code class="target" position="beginning">
-            uint typeId = %CPPSELF.userType();
-            if (typeId == qMetaTypeId&lt;PyQt_PyObject>()) {
-                %PYARG_0 = %CPPSELF.value&lt;PyQt_PyObject>();
-            } else if (typeId == QVariant::String) {
-                %PYARG_0 = %CONVERTTOPYTHON[QString](%CPPSELF.toString());
-            } else {
-                %PYARG_0 = Py_None;
-                Py_INCREF(Py_None);
-            }
-        </inject-code>
-    </add-function>
-    <modify-function signature="typeName()const">
-      <inject-code class="target" position="beginning">
-        if (%CPPSELF.isNull()) {
-            %PYARG_0 = Py_None;
-            Py_INCREF(Py_None);
-        } else if (%CPPSELF.userType() == qMetaTypeId&lt;PyQt_PyObject>()) {
-            // emulate PyQt4 behaviour
-            PyObject* obj = %CPPSELF.value&lt;PyQt_PyObject>();
-            if (PySequence_Check(obj))
-                %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE]("QVariantList");
-        }
-        if (!%PYARG_0)
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toList()const">
-        <inject-code class="target" position="beginning">
-            if (%CPPSELF.userType() == qMetaTypeId&lt;PyQt_PyObject>()) {
-                PyObject* val = %CPPSELF.value&lt;PyQt_PyObject>();
-                if (PySequence_Check(val)) {
-                    %PYARG_0 = val;
-                    Py_INCREF(val);
-                } else {
-                    %PYARG_0 = Py_None;
-                    Py_INCREF(Py_None);
-                }
-            } else {
-                %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
-            }
-        </inject-code>
-    </modify-function>
-    <modify-function signature="toDouble(bool*)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toInt(bool*)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toLongLong(bool*)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toUInt(bool*)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="toULongLong(bool*)const">
-      <modify-argument index="1">
-        <remove-argument/>
-      </modify-argument>
-      <inject-code class="target" position="beginning">
-        <insert-template name="fix_bool*"/>
-      </inject-code>
-    </modify-function>
-  </value-type>
   <object-type name="QAbstractListModel" polymorphic-id-expression="qobject_cast&lt;QAbstractListModel*&gt;(%1)">
     <extra-includes>
       <include file-name="QStringList" location="global"/>

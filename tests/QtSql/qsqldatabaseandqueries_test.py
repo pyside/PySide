@@ -39,16 +39,16 @@ class SqlDatabaseCreationDestructionAndQueries(unittest.TestCase):
         query.exec_("INSERT INTO person VALUES(101, 'George', 'Harrison')")
         query.prepare("INSERT INTO person (id, firstname, lastname) "
                       "VALUES (:id, :firstname, :lastname)")
-        query.bindValue(":id", QVariant(102))
-        query.bindValue(":firstname", QVariant("John"))
-        query.bindValue(":lastname", QVariant("Lennon"))
+        query.bindValue(":id", 102)
+        query.bindValue(":firstname", "John")
+        query.bindValue(":lastname", "Lennon")
         query.exec_()
 
         lastname = ''
         query.exec_("SELECT lastname FROM person where id=101")
         self.assertTrue(query.isActive())
         query.next()
-        lastname = query.value(0).toString()
+        lastname = query.value(0)
         self.assertEqual(lastname, 'Harrison')
 
 if __name__ == '__main__':

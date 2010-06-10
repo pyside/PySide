@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import unittest
-from PySide.QtCore import QObject, QState, QFinalState, SIGNAL, QCoreApplication, QTimer, QStateMachine, QSignalTransition, QVariant, QParallelAnimationGroup, QSequentialAnimationGroup, QAnimationGroup
+from PySide.QtCore import *
 
 class QAnimationGroupTest(unittest.TestCase):
 

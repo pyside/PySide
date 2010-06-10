@@ -46,6 +46,17 @@ class QObject;
 namespace PySide
 {
 
+/// Thin wrapper for PyObject which increases the reference count at the constructor but *NOT* at destructor.
+class PYSIDE_API PyObjectWrapper
+{
+public:
+    PyObjectWrapper(PyObject* me) : m_me(me) { Py_INCREF(m_me); }
+    PyObjectWrapper() : m_me(Py_None) { Py_INCREF(m_me); }
+    operator PyObject*() const { return m_me; }
+private:
+    PyObject* m_me;
+};
+
 PYSIDE_API bool isSignal(const char* signal);
 PYSIDE_API bool checkSignal(const char* signal);
 PYSIDE_API QString getCallbackSignature(const char* signal, PyObject* callback, bool encodeName);
@@ -84,4 +95,7 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE(PySide::PyObjectWrapper)
+
 #endif

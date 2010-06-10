@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import unittest
-from PySide.QtCore import QObject, QState, QFinalState, SIGNAL, QCoreApplication, QTimer, QStateMachine, QSignalTransition, QVariant
+from PySide.QtCore import *
 
 
 class QStateTest(unittest.TestCase):
@@ -8,11 +8,11 @@ class QStateTest(unittest.TestCase):
         app = QCoreApplication([])
 
         o = QObject()
-        o.setProperty("text", QVariant("INdT"))
+        o.setProperty("text", "INdT")
 
         machine = QStateMachine()
         s1 = QState()
-        s1.assignProperty(o, "text", QVariant("Rocks"));
+        s1.assignProperty(o, "text", "Rocks");
 
         s2 = QFinalState()
         t = s1.addTransition(o, SIGNAL("change()"), s2);
@@ -28,7 +28,7 @@ class QStateTest(unittest.TestCase):
         QTimer.singleShot(100, app.quit)
         app.exec_()
 
-        txt = o.property("text").toString()
+        txt = o.property("text")
         self.assert_(txt, "Rocks")
 
 if __name__ == '__main__':

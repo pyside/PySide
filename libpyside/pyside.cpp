@@ -34,6 +34,7 @@
 
 
 #include "pyside.h"
+#include "signalmanager.h"
 
 extern "C" void init_signal(PyObject* module);
 extern "C" void init_slot(PyObject* module);
@@ -45,6 +46,8 @@ void init(PyObject *module)
 {
     init_signal(module);
     init_slot(module);
+    // Init signal manager, so it will register some meta types used by QVariant.
+    SignalManager::instance();
 }
 
 } //namespace PySide

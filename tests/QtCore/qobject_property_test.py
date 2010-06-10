@@ -5,16 +5,24 @@ import unittest
 
 from PySide.QtCore import *
 
+class Dummy(object):
+    '''Pure python sample class'''
+    pass
+
+class MySize(QSize):
+    '''Extended class'''
+    pass
+
 class PropertyCase(unittest.TestCase):
     '''Test case for QObject properties'''
 
     def testObjectNameProperty(self):
         #QObject.setProperty() for existing C++ property
         obj = QObject()
-        self.assert_(obj.setProperty('objectName', QVariant('dummy')))
+        self.assert_(obj.setProperty('objectName', 'dummy'))
         self.assertEqual(obj.objectName(), 'dummy')
 
-        self.assert_(obj.setProperty('objectName', QVariant('foobar')))
+        self.assert_(obj.setProperty('objectName', 'foobar'))
         self.assertEqual(obj.objectName(), 'foobar')
 
     def testDynamicProperty(self):
@@ -22,50 +30,66 @@ class PropertyCase(unittest.TestCase):
         obj = QObject()
 
         # Should return false when creating a new dynamic property
-        self.assert_(not obj.setProperty('dummy', QVariant('mydata')))
+        self.assert_(not obj.setProperty('dummy', 'mydata'))
         prop = obj.property('dummy')
-        self.assert_(isinstance(prop, QVariant))
-        self.assert_(prop.isValid())
-        self.assertEqual(obj.property('dummy').toString(), 'mydata')
+        self.assert_(isinstance(prop, unicode))
+        self.assertEqual(obj.property('dummy'), 'mydata')
 
-        self.assert_(not obj.setProperty('dummy', QVariant('zigzag')))
+        self.assert_(not obj.setProperty('dummy', 'zigzag'))
         prop = obj.property('dummy')
-        self.assert_(isinstance(prop, QVariant))
-        self.assert_(prop.isValid())
-        self.assertEqual(obj.property('dummy').toString(), 'zigzag')
+        self.assert_(isinstance(prop, unicode))
+        self.assertEqual(obj.property('dummy'), 'zigzag')
 
-        self.assert_(not obj.setProperty('dummy', QVariant(42)))
+        self.assert_(not obj.setProperty('dummy', 42))
         prop = obj.property('dummy')
-        self.assert_(isinstance(prop, QVariant))
-        self.assert_(prop.isValid())
+        self.assert_(isinstance(prop, int))
         # QVariant.toInt has a bool* arg in C++, so returns a tuple
-        self.assertEqual(obj.property('dummy').toInt(), (42, True))
+        self.assertEqual(obj.property('dummy'), 42)
 
     def testStringProperty(self):
         obj = QObject()
         self.assert_(not obj.setProperty('dummy', 'data'))
         prop = obj.property('dummy')
 
-        self.assert_(isinstance(prop, QVariant))
-        self.assert_(prop.isValid())
-        self.assertEqual(obj.property('dummy').toString(), 'data')
+        self.assert_(isinstance(prop, unicode))
+        self.assertEqual(obj.property('dummy'), 'data')
 
     def testImplicitQVariantProperty(self):
         obj = QObject()
         self.assert_(not obj.setProperty('dummy', 'data'))
         prop = obj.property('dummy')
 
-        self.assert_(isinstance(prop, QVariant))
-        self.assert_(prop.isValid())
-        self.assertEqual(obj.property('dummy').toString(), 'data')
+        self.assert_(isinstance(prop, unicode))
+        self.assertEqual(obj.property('dummy'), 'data')
 
     def testInvalidProperty(self):
         #QObject.property() for invalid properties
         obj = QObject()
 
         prop = obj.property('dummy')
-        self.assert_(not prop.isValid())
+        self.assertEqual(prop, None)
 
+    def testTypeNamePythonClasses(self):
+        '''QVariant of pure python classes'''
+        d = Dummy()
+        obj = QObject()
+        obj.setProperty('foo', d)
+        # inherited type name from other binding
+        self.assertEqual(obj.property('foo'), d)
+
+    def testQVariantPyList(self):
+        '''QVariant(QVariantList).toPyObject() equals original list'''
+        obj = QObject()
+        obj.setProperty('foo', [1, 'two', 3])
+        self.assertEqual(obj.property('foo'), [1, 'two', 3])
+
+    def testSubClassConvertion(self):
+        '''QVariant(QSize subclass) type is UserType and returns same object'''
+        mysize = MySize(0, 0)
+        obj = QObject()
+        obj.setProperty('foo', mysize)
+
+        self.assertTrue(obj.property('foo') is mysize)
 
 if __name__ == '__main__':
     unittest.main()
