@@ -27,6 +27,7 @@ class TestThreadSignal(UsesQCoreApplication):
         t.start()
 
         self.app.exec_()
+        t.wait()
         self.assert_(self.__called__);
 
 if __name__ == '__main__':
