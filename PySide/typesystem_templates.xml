@@ -148,5 +148,19 @@
         _ret = %CPPSELF.%FUNCTION_NAME(%1, &amp;a, &amp;b);
         %PYARG_0 = Shiboken::makeTuple(_ret, a, b);
     </template>
+
+    <template name="return_QString">
+        %PYARG_0 = %CONVERTTOPYTHON[QString](%1);
+    </template>
+
+    <template name="return_tuple_QValidator_QString_int">
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);
+        %PYARG_0 = Shiboken::makeTuple(retval_, %1, %2);
+    </template>
+
+    <template name="return_for_QFileDialog">
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);
+        %PYARG_0 = Shiboken::makeTuple(retval_, %1, %2);
+    </template>
 </typesystem>
 

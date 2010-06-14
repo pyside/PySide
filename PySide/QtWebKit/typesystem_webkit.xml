@@ -46,7 +46,17 @@
   </object-type>
 
   <object-type name="QWebSettings"/>
-  <object-type name="QWebPage"/>
+  <object-type name="QWebPage">
+    <modify-function signature="javaScriptPrompt(QWebFrame*,const QString &amp;,const QString &amp;,QString*)">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4);
+        %PYARG_0 = Shiboken::makeTuple(retval_, %4);
+      </inject-code>
+    </modify-function>
+  </object-type>
   <object-type name="QWebHistory"/>
   <object-type name="QWebHistoryInterface"/>
   <object-type name="QWebPluginFactory"/>

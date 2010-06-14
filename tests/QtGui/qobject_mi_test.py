@@ -29,8 +29,10 @@ class DoubleQObjectInheritanceTest(UsesQApplication):
         self.assertFalse(obj.isVisible())
 
         #QIntValidator methods
-        self.assertEqual(obj.validate('aaaa', 0), QValidator.Invalid)
-        self.assertEqual(obj.validate('33', 0), QValidator.Acceptable)
+        state, string, number = obj.validate('aaaa', 0)
+        self.assertEqual(state, QValidator.Invalid)
+        state, string, number = obj.validate('33', 0)
+        self.assertEqual(state, QValidator.Acceptable)
 
 
 if __name__ == '__main__':

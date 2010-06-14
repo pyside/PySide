@@ -1507,7 +1507,16 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QDoubleValidator"/>
+  <object-type name="QDoubleValidator">
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
+    </modify-function>
+  </object-type>
   <object-type name="QFileIconProvider"/>
   <object-type name="QWizard">
     <!-- ### Requires correct class name in meta object -->
@@ -1633,7 +1642,16 @@
     <!--### Obsolete in 4.3-->
   </object-type>
   <object-type name="QInputContextFactory"/>
-  <object-type name="QIntValidator"/>
+  <object-type name="QIntValidator">
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
+    </modify-function>
+  </object-type>
   <object-type name="QItemDelegate">
     <modify-function signature="doLayout(QStyleOptionViewItem,QRect*,QRect*,QRect*,bool)const" remove="all" />
     <modify-function signature="drawCheck(QPainter*,QStyleOptionViewItem,QRect,Qt::CheckState)const">
@@ -1950,7 +1968,16 @@
   <object-type name="QPrintEngine"/>
   <object-type name="QProgressBar" />
   <object-type name="QPushButton" />
-  <object-type name="QRegExpValidator"/>
+  <object-type name="QRegExpValidator">
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
+    </modify-function>
+  </object-type>
   <object-type name="QScrollArea">
     <modify-function signature="setWidget(QWidget*)">
       <modify-argument index="1">
@@ -2214,7 +2241,24 @@
     </modify-function>
   </object-type>
   <object-type name="QVBoxLayout"/>
-  <object-type name="QValidator"/>
+  <object-type name="QValidator">
+    <modify-function signature="fixup(QString &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="QString"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_QString"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
+    </modify-function>
+  </object-type>
   <object-type name="QWhatsThis"/>
   <object-type name="QWidgetAction">
     <modify-function signature="setDefaultWidget(QWidget*)">
@@ -3308,6 +3352,22 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="fixup(QString &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="QString"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_QString"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QTextFrame" >
     <extra-includes>
@@ -3460,6 +3520,22 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="fixup(QString &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="QString"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_QString"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QSortFilterProxyModel">
     <modify-function signature="parent()const" remove="all"/>
@@ -3546,9 +3622,30 @@
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="getOpenFileNames(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes"/>
-    <modify-function signature="getOpenFileName(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes"/>
-    <modify-function signature="getSaveFileName(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes"/>
+    <modify-function signature="getOpenFileNames(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_for_QFileDialog"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="getOpenFileName(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_for_QFileDialog"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="getSaveFileName(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_for_QFileDialog"/>
+      </inject-code>
+    </modify-function>
     <modify-function signature="getExistingDirectory(QWidget*, const QString&amp;, const QString&amp;, QFlags&lt;QFileDialog::Option>)" allow-thread="yes" />
   </object-type>
   <object-type name="QErrorMessage"/>
@@ -3663,11 +3760,22 @@
     </extra-includes>
     <modify-function signature="setMimeData(QMimeData *, QClipboard::Mode)">
       <modify-argument index="1">
-        <!-- TODO: mybe this is not the best solution -->
+        <!-- TODO: maybe this is not the best solution -->
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="text(QString&amp;,QClipboard::Mode)const" remove="all" />
+    <modify-function signature="text(QString&amp;,QClipboard::Mode)const">
+      <modify-argument index="2">
+        <replace-default-expression with="QClipboard::Clipboard"/>
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);
+        %PYARG_0 = Shiboken::makeTuple(retval_, %1);
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QAbstractScrollArea">
     <modify-function signature="setViewport(QWidget *)">
@@ -3923,6 +4031,22 @@
     <modify-function signature="valueChanged(const QString &amp;)">
       <rename to="valueStringChanged"/>
     </modify-function>
+    <modify-function signature="fixup(QString &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="QString"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_QString"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QTextBrowser">
     <modify-function signature="highlighted(const QString &amp;)">
@@ -3932,6 +4056,22 @@
   <object-type name="QDoubleSpinBox">
     <modify-function signature="valueChanged(const QString &amp;)">
       <rename to="valueStringChanged"/>
+    </modify-function>
+    <modify-function signature="fixup(QString &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="QString"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_QString"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="validate(QString &amp;, int &amp;)const">
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        <insert-template name="return_tuple_QValidator_QString_int"/>
+      </inject-code>
     </modify-function>
   </object-type>
   <object-type name="QButtonGroup">
