@@ -122,7 +122,7 @@ if (NOT SITE_PACKAGE)
     message(FATAL_ERROR "Could not detect Python module installation directory.")
 endif()
 
-set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
+set(GENERATOR_EXTRA_FLAGS "--generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic")
 
 enable_testing()
 
