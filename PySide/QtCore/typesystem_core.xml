@@ -142,7 +142,7 @@
     <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
 
-  <primitive-type name="QString">
+  <primitive-type name="QString" default-constructor="QString()">
     <include file-name="QString" location="global"/>
     <conversion-rule file="qstring_conversions.h" />
   </primitive-type>
