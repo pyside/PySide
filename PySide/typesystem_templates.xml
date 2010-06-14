@@ -1,5 +1,14 @@
 <?xml version="1.0"?>
 <typesystem>
+    <template name="replace_child">
+        $CHILD_TYPE* oldChild = %CPPSELF.$FUNCTION_GET_OLD();
+        if (oldChild) {
+            Shiboken::AutoDecRef pyChild(%CONVERTTOPYTHON[$CHILD_TYPE*](oldChild));
+            Shiboken::setParent(NULL, pyChild);
+        }
+        Shiboken::setParent(%PYSELF, $PYARG);
+    </template>
+
     <!-- Templates to fix bool* parameters -->
     <template name="fix_bool*">
         bool ok_;

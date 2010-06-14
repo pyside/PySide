@@ -1260,11 +1260,11 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="parentWidget() const">
-        <modify-argument index="return">
-          <define-ownership owner="target"/>
-        </modify-argument>
         <modify-argument index="this">
           <parent index="return" action="add"/>
+        </modify-argument>
+        <modify-argument index="return">
+          <define-ownership class="target" owner="default"/>
         </modify-argument>
     </modify-function>
     <modify-function signature="setMatrix(QMatrix, bool)" remove="all"/>
@@ -1689,26 +1689,46 @@
   </object-type>
   <object-type name="QMainWindow">
     <modify-function signature="setCentralWidget(QWidget*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+       <inject-code class="target" position="beginning">
+         <insert-template name="replace_child">
+           <replace from="$FUNCTION_GET_OLD" to="centralWidget" />
+           <replace from="$CHILD_TYPE" to="QWidget" />
+           <replace from="$PYARG" to="%PYARG_1" />
+         </insert-template>
+       </inject-code>
     </modify-function>
+
     <modify-function signature="setMenuBar(QMenuBar*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
+       <inject-code class="target" position="beginning">
+         <insert-template name="replace_child">
+           <replace from="$FUNCTION_GET_OLD" to="menuBar" />
+           <replace from="$CHILD_TYPE" to="QMenuBar" />
+           <replace from="$PYARG" to="%PYARG_1" />
+         </insert-template>
+       </inject-code>
+   </modify-function>
+
     <modify-function signature="setMenuWidget(QWidget*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
+       <inject-code class="target" position="beginning">
+         <insert-template name="replace_child">
+           <replace from="$FUNCTION_GET_OLD" to="menuWidget" />
+           <replace from="$CHILD_TYPE" to="QWidget" />
+           <replace from="$PYARG" to="%PYARG_1" />
+         </insert-template>
+       </inject-code>
     </modify-function>
+
     <modify-function signature="setStatusBar(QStatusBar*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="addDockWidget(Qt::DockWidgetArea, QDockWidget*)">
+       <inject-code class="target" position="beginning">
+         <insert-template name="replace_child">
+           <replace from="$FUNCTION_GET_OLD" to="statusBar" />
+           <replace from="$CHILD_TYPE" to="QStatusBar" />
+           <replace from="$PYARG" to="%PYARG_1" />
+         </insert-template>
+       </inject-code>
+   </modify-function>
+
+   <modify-function signature="addDockWidget(Qt::DockWidgetArea, QDockWidget*)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
       </modify-argument>
