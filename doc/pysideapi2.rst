@@ -3,9 +3,10 @@ PySide API 2
 
 Since the beginning one of the PySide goals was to be API compatible with PyQt4,
 but with some (documented) exceptions. For example, PySide will not export to
-Python components marked as deprecated on C++ Qt.
+Python components marked as deprecated on C++ Qt. All the modifications follow
+the `PSEP101 <http://www.pyside.org/docs/pseps/psep-0101.html>`_ as its guideline.
 
-The latest release of PyQt4 came with improvements on the pythonic front, being
+The release 4.7 of PyQt4 came with improvements on the pythonic front, being
 the extinction of QString a good example. PySide followed this change, except in
 one point: while PyQt4 has conserved the old behavior as optional, PySide
 bindings fully adopted the new API - completely removing QString. No turning
@@ -43,21 +44,15 @@ The following methods had their return types modified this way:
 
 **Classes:** QAbstractSpinBox, QDateTimeEdit, QDoubleSpinBox, QSpinBox, QValidator
 
-Method / Return type
-
 - *fixup(string)*: string
 - *validate(string, int)*: [QValidator.State, string, int]
 
 
 **Classes:** QDoubleValidator, QIntValidator, QRegExpValidator
 
-Method / Return type
-
 - *validate(string, int)*: [QValidator.State, string, int]
 
 **Class:** QClipboard
-
-Method / Return type
 
 - *text(string, QClipboard.Mode mode=QClipboard.Clipboard)*: [string, string]
 
@@ -67,15 +62,11 @@ Method / Return type
 Instead of *getOpenFileNameAndFilter()*, *getOpenFileNamesAndFilter()* and *getSaveFileNameAndFilter()* like PyQt4 does,
 PySide has modified the original methods to return a tuple.
 
-Method / Return type
-
 - *getOpenFileName(QWidget parent=None, str caption=None, str dir=None, str filter=None, QFileDialog.Options options=0)*: [string, filter]
 - *getOpenFileNames(QWidget parent=None, str caption=None, str dir=None, str filter=None, QFileDialog.Options options=0)*: [list(string), filter]
 - *getSaveFileName(QWidget parent=None, str caption=None, str dir=None, str filter=None, QFileDialog.Options options=0)*: [string, filter]
 
 **Class:** QWebPage
-
-Method / Return type
 
 - *javaScriptPrompt(QWebFrame, string, string)*: [bool, string]
 
