@@ -1882,7 +1882,6 @@
     <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(char*&amp;)" remove="all"/>
-    <modify-function signature="operator&gt;&gt;(QDataStream&amp;,QVariant&amp;)" remove="all"/>
 
     <modify-function signature="operator&lt;&lt;(qint8)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(bool)" remove="all"/>
@@ -1895,7 +1894,6 @@
     <modify-function signature="operator&lt;&lt;(quint64)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(float)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(double)" remove="all"/>
-    <modify-function signature="operator&lt;&lt;(QDataStream&amp;,const QVariant&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
     <add-function signature="writeQString(const QString&amp;)">
         <inject-code class="target">
