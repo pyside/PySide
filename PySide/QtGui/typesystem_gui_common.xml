@@ -4700,5 +4700,5 @@
   <suppress-warning text="Shadowing: *"/>
   <suppress-warning text="unhandled enum value: ~FlagMask in QMessageBox::StandardButton"/>
   <suppress-warning text="unmatched enum ~FlagMask"/>
-  <suppress-warning text="Argument 1 on function 'QTabWidget::setUpLayout' has default expressiont but does not have name."/>
+  <suppress-warning text="Argument 1 on function 'QTabWidget::setUpLayout(bool)' has default expressiont but does not have name."/>
 </typesystem>
