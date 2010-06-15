@@ -93,3 +93,4 @@ QVariant
 
 As QVariant was removed, any function expecting it can receive any Python object (None is an invalid QVariant). The same rule is valid when returning something: the returned QVariant will be converted to the its original Python object type.
 
+When a method expects a *QVariant::Type* the programmer can use a string (the type name) or the type itself.
