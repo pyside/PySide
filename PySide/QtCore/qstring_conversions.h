@@ -1,6 +1,12 @@
 namespace Shiboken {
 
 template<>
+inline PyTypeObject* SbkType<QString>()
+{
+    return &PyUnicode_Type;
+}
+
+template<>
 struct Converter<QString>
 {
     static bool checkType(PyObject* pyObj)
