@@ -169,7 +169,11 @@
         </modify-function>
     </object-type>
     <object-type name="QNetworkCookieJar"/>
-    <object-type name="QNetworkReply"/>
+    <object-type name="QNetworkReply">
+        <modify-function signature="error()const">
+            <rename to="errorCode" />
+        </modify-function>
+    </object-type>
 
     <value-type name="QHostAddress" hash-function="qHash">
         <modify-function signature="QHostAddress(quint8*)" remove="all" />
