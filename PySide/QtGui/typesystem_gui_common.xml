@@ -1,5 +1,16 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtGui">
+  <template name="QFontCharFix">
+    int size = PyString_GET_SIZE(%PYARG_1);
+    if (size == 1) {
+        char *str = PyString_AS_STRING(%PYARG_1);
+        QChar ch(str[0]);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(ch));
+    } else {
+        PyErr_SetString(PyExc_TypeError, "String must have only one character");
+    }
+  </template>
+
   <function signature="qAlpha(uint)" />
   <function signature="qBlue(uint)" />
   <function signature="qGray(int,int,int)" />
@@ -1057,6 +1068,24 @@
   </value-type>
   <value-type name="QFontMetricsF" >
 
+    <modify-function signature="boundingRect(QChar)const" rename="boundingRectChar">
+      <modify-argument index="1">
+        <replace-type modified-type="PyString"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="QFontCharFix"/>
+     </inject-code>
+    </modify-function>
+
+    <modify-function signature="width(QChar)const" rename="widthChar">
+      <modify-argument index="1">
+        <replace-type modified-type="PyString"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="QFontCharFix"/>
+     </inject-code>
+    </modify-function>
+
     <modify-function signature="boundingRect(QRectF,int,QString,int,int*)const">
       <modify-argument index="5">
           <replace-type modified-type="PyObject"/>
@@ -1118,6 +1147,25 @@
   </value-type>
   <value-type name="QTextOption::Tab"/>
   <value-type name="QFontMetrics" >
+
+    <modify-function signature="boundingRect(QChar)const" rename="boundingRectChar">
+      <modify-argument index="1">
+        <replace-type modified-type="PyString"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="QFontCharFix"/>
+     </inject-code>
+    </modify-function>
+
+    <modify-function signature="width(QChar)const" rename="widthChar">
+      <modify-argument index="1">
+        <replace-type modified-type="PyString"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="QFontCharFix"/>
+     </inject-code>
+    </modify-function>
+
     <modify-function signature="boundingRect(int,int,int,int,int,QString,int,int*)const">
       <modify-argument index="8">
         <replace-type modified-type="PyObject"/>

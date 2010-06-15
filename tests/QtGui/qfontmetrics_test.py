@@ -185,5 +185,15 @@ class FSizeTest(QFontMetricsFTest):
                                          'PySide by INdT', 20, ['aaaa', 'ase'])
 
 
+class QCharTest(QFontMetricsFTest):
+
+    def testBoundingRect(self):
+        retCh = self.metrics.boundingRectChar('a')
+        self.assertEqual(type(retCh), QRectF)
+
+    def testWith(self):
+        retCh = self.metrics.widthChar('a')
+        self.assert_(retCh > 0)
+
 if __name__ == '__main__':
     unittest.main()
