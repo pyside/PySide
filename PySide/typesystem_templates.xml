@@ -159,8 +159,8 @@
     </template>
 
     <template name="return_for_QFileDialog">
-        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);
-        %PYARG_0 = Shiboken::makeTuple(retval_, %1, %2);
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, %5);
+        %PYARG_0 = Shiboken::makeTuple(retval_, %4);
     </template>
 </typesystem>
 
