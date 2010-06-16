@@ -161,7 +161,7 @@
     <include file-name="typeresolver.h" location="global"/>
   </primitive-type>
 
-  <primitive-type name="QVariant::Type">
+  <primitive-type name="QVariant::Type" default-constructor="QVariant::Invalid">
     <conversion-rule file="qvariant_type_conversions.h" />
   </primitive-type>
   <container-type name="QSet" type="set">
