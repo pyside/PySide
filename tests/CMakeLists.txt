@@ -16,7 +16,7 @@ macro(PYSIDE_TEST)
     else()
         message(WARNING "Ivalid call of macro PYSIDE_TEST")
     endif()
-    set(TEST_CMD ${CMAKE_SOURCE_DIR}/tests/run_test.sh  ${CMAKE_BINARY_DIR} "${CMAKE_BINARY_DIR}:${CMAKE_SOURCE_DIR}/tests/util" ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}")
+    set(TEST_CMD ${CMAKE_SOURCE_DIR}/tests/run_test.sh  ${libpyside_BINARY_DIR} "${CMAKE_BINARY_DIR}:${CMAKE_SOURCE_DIR}/tests/util" ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}")
     add_test(${TEST_NAME} ${TEST_CMD})
     set_tests_properties(${TEST_NAME} PROPERTIES
                          TIMEOUT ${PYSIDE_TIMEOUT}
