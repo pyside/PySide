@@ -1,3 +1,5 @@
+#Keep this in alphabetical sort
+
 PYSIDE_TEST(api2_test.py)
 PYSIDE_TEST(add_action_test.py)
 PYSIDE_TEST(customproxywidget_test.py)
@@ -14,6 +16,7 @@ PYSIDE_TEST(qapplication_singleton_test.py)
 PYSIDE_TEST(qapp_test.py)
 PYSIDE_TEST(qbrush_test.py)
 PYSIDE_TEST(qcolor_test.py)
+PYSIDE_TEST(qaction_test.py)
 PYSIDE_TEST(qdatastream_gui_operators_test.py)
 PYSIDE_TEST(qfontdialog_test.py)
 PYSIDE_TEST(qfontmetrics_test.py)
