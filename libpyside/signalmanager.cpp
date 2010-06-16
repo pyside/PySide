@@ -253,7 +253,12 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     for (i = 0; i < argsGiven; ++i) {
         Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(qPrintable(argTypes[i]));
         if (typeResolver) {
-            signalArgs[i+1] = typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i));
+            void *data = typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i));
+            if (Shiboken::TypeResolver::getType(qPrintable(argTypes[i])) == Shiboken::TypeResolver::ObjectType) {
+                signalArgs[i+1] = &data;
+            } else {
+                signalArgs[i+1] = data;
+            }
         } else {
             PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", qPrintable(argTypes[i]));
             break;
@@ -289,7 +294,6 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
         else
             return emitNormalSignal(source, signalIndex, signal, args, argTypes);
     }
-    qDebug() << "Signal" << signal << "not found, probably a typo or you are emitting a dynamic signal that has never been used in a connection until now.";
     return false;
 }
 
@@ -316,7 +320,10 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
 
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {
-            PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
+            void* data = args[i+1];
+            const char* dataType = paramTypes[i].constData();
+
+            PyObject* arg = Shiboken::TypeResolver::get(dataType)->toPython(data);
             PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
         }
 

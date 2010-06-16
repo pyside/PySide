@@ -13,7 +13,7 @@ class MyObject(QTimer):
     sig3 = Signal(int)
     sig4 = Signal((int,), (unicode,))
     sig5 = Signal((unicode,), (int,))
-
+    sig6 = Signal(QObject)
 
     @Slot(int)
     def myRange(self, r):
@@ -24,6 +24,9 @@ class MyObject(QTimer):
 
     def slotString(self, s):
         self._s = s
+
+    def slotObject(self, o):
+        self._o = o
 
 
 class SignalObjectTest(UsesQCoreApplication):
@@ -75,8 +78,12 @@ class SignalObjectTest(UsesQCoreApplication):
         o.sig5[int].emit(10)
         self.assertEqual(o._range, 10)
 
-
-
+    def testSignalWithObject(self):
+        o = MyObject()
+        o.sig6.connect(o.slotObject)
+        arg = QObject()
+        o.sig6.emit(arg)
+        self.assertEqual(arg, o._o)
 
 if __name__ == '__main__':
     unittest.main()

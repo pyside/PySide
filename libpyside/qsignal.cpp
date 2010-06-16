@@ -246,7 +246,12 @@ char* signal_get_type_name(PyObject* type)
     if (PyType_Check(type)) {
         //tp_name return the full name
         Shiboken::AutoDecRef typeName(PyObject_GetAttrString(type, "__name__"));
-        return strdup(PyString_AS_STRING(typeName.object()));
+        char *aux = strdup(PyString_AS_STRING(typeName.object()));
+        if (Shiboken::TypeResolver::getType(aux) == Shiboken::TypeResolver::ObjectType) {
+            aux = reinterpret_cast<char*>(realloc(aux, strlen(aux) + 1));
+            aux = strcat(aux, "*");
+        }
+        return aux;
     } else if (PyString_Check(type)) {
         return strdup(PyString_AS_STRING(type));
     }
@@ -281,7 +286,6 @@ char* signal_parse_signature(PyObject *args)
             }
         }
     }
-
     return signature;
 }
 
