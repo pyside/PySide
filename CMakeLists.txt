@@ -113,13 +113,17 @@ add_custom_target(dist
             echo "Source package created at ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2.\n"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; \\
-        print sysconfig.get_python_lib(1,0,prefix='${CMAKE_INSTALL_PREFIX}')"
-    OUTPUT_VARIABLE SITE_PACKAGE
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
 if (NOT SITE_PACKAGE)
-    message(FATAL_ERROR "Could not detect Python module installation directory.")
+    execute_process(
+        COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; \\
+            print sysconfig.get_python_lib(1,0,prefix='${CMAKE_INSTALL_PREFIX}')"
+        OUTPUT_VARIABLE SITE_PACKAGE
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if (NOT SITE_PACKAGE)
+        message(FATAL_ERROR "Could not detect Python module installation directory.")
+    elseif (APPLE)
+        message(STATUS "!!! The generated bindings will be installed on ${SITE_PACKAGE}, is it right!?")
+    endif()
 endif()
 
 set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
