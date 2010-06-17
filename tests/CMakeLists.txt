@@ -1,4 +1,4 @@
-set(PYSIDE_TIMEOUT 5)
+set(PYSIDE_TIMEOUT 10)
 
 macro(TEST_QT_MODULE var name)
   if(NOT DISABLE_${name} AND ${var})

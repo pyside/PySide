@@ -54,13 +54,17 @@ class TestSimplePlaying(UsesQCoreApplication):
         self.called = True
 
     def testStateChanged(self):
-        QtCore.QObject.connect(self.media,
+        # Check for ogg support before playing it
+        if (phonon.Phonon.BackendCapabilities.isMimeTypeAvailable('audio/ogg')):
+            QtCore.QObject.connect(self.media,
                 QtCore.SIGNAL('stateChanged(Phonon::State, Phonon::State)'),
                 self.state_cb)
 
-        self.media.play()
-        self.app.exec_()
-        self.assert_(self.called)
+            self.media.play()
+            self.app.exec_()
+            self.assert_(self.called)
+        else:
+            print 'Ogg format not supported! Playback test skipped!'
 
 if __name__ == '__main__':
     unittest.main()
