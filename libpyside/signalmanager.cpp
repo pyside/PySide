@@ -104,12 +104,13 @@ static QString codeCallbackName(PyObject* callback, const QString& funcName)
         return funcName+QString::number(quint64(callback), 16);
 }
 
-QString PySide::getCallbackSignature(const char* signal, PyObject* callback, bool encodeName)
+QString PySide::getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName)
 {
     QString functionName;
+    QString signature;
+    QStringList args;
     int numArgs = -1;
     bool useSelf = false;
-
     bool isMethod = PyMethod_Check(callback);
     bool isFunction = PyFunction_Check(callback);
 
@@ -123,25 +124,41 @@ QString PySide::getCallbackSignature(const char* signal, PyObject* callback, boo
         functionName = ((PyCFunctionObject*)callback)->m_ml->ml_name;
         useSelf = ((PyCFunctionObject*)callback)->m_self;
         int flags = ((PyCFunctionObject*)callback)->m_ml->ml_flags;
-        if (flags & METH_O)
-            numArgs = 1;
-        else if (flags & METH_VARARGS)
-            numArgs = -1;
-        else if (flags & METH_NOARGS)
-            numArgs = 0;
+
+        if (receiver) {
+            //Search for signature on metaobject
+            const QMetaObject *mo = receiver->metaObject();
+            for(int i=0; i < mo->methodCount(); i++) {
+            QMetaMethod me = mo->method(i);
+                if (QString(me.signature()).startsWith(functionName)) {
+                    numArgs = me.parameterTypes().size()+1;
+                    break;
+                }
+           }
+        }
+
+        if (numArgs == -1) {
+            if (flags & METH_O)
+                numArgs = 1;
+            else if (flags & METH_VARARGS)
+                numArgs = -1;
+            else if (flags & METH_NOARGS)
+                numArgs = 0;
+        }
     } else if (PyCallable_Check(callback)) {
         functionName = "__callback"+QString::number((size_t)callback);
     }
+
     Q_ASSERT(!functionName.isEmpty());
 
-    QString signature;
+    bool isShortCircuit = false;
+
     if (encodeName)
         signature = codeCallbackName(callback, functionName);
     else
         signature = functionName;
 
-    bool isShortCircuit;
-    QStringList args = getArgsFromSignature(signal, &isShortCircuit);
+    args = getArgsFromSignature(signal, &isShortCircuit);
 
     if (!isShortCircuit) {
         signature.append('(');
@@ -313,10 +330,8 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
     } else {
         // call python slot
         Shiboken::GilState gil;
-
         QList<QByteArray> paramTypes = method.parameterTypes();
         PyObject* self = Shiboken::BindingManager::instance().retrieveWrapper(object);
-
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
 
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {

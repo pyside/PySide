@@ -59,7 +59,7 @@ private:
 
 PYSIDE_API bool isSignal(const char* signal);
 PYSIDE_API bool checkSignal(const char* signal);
-PYSIDE_API QString getCallbackSignature(const char* signal, PyObject* callback, bool encodeName);
+PYSIDE_API QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName);
 QStringList getArgsFromSignature(const char* signature, bool* isShortCircuit = 0);
 
 class PYSIDE_API SignalManager

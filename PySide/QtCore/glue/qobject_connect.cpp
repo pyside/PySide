@@ -56,7 +56,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
-    const QByteArray callbackSig = PySide::getCallbackSignature(signal, callback, usingGlobalReceiver).toAscii();
+    const QByteArray callbackSig = PySide::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
     const char* slot = callbackSig.constData();
     int slotIndex = metaObject->indexOfSlot(slot);
     if (slotIndex == -1) {
@@ -103,7 +103,7 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
-    const QByteArray callbackSig = PySide::getCallbackSignature(signal, callback, usingGlobalReceiver).toAscii();
+    const QByteArray callbackSig = PySide::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
     QByteArray qtSlotName(callbackSig);
     qtSlotName = qtSlotName.prepend('1');
 
