@@ -14,16 +14,13 @@ class HttpSignalsCase(unittest.TestCase):
 
     def setUp(self):
         #Acquire resources
+        self.called = False
         self.app = QCoreApplication([])
+
         self.socket = QUdpSocket()
-        self.socket.bind(45454)
+
         self.server = QUdpSocket()
-        self.timer = QTimer.singleShot(1000, self.app.quit)
-        self.a = QTimer.singleShot(100, self.broadcast)
-        #self.a = QTimer()
-        #self.a.setInterval(100)
-        #QObject.connect(self.a, SIGNAL('timeout()'), self.broadcast)
-        #self.a.start()
+        self.server.bind(QHostAddress(QHostAddress.LocalHost), 45454)
 
     def tearDown(self):
         #Release resources
@@ -31,21 +28,21 @@ class HttpSignalsCase(unittest.TestCase):
         del self.server
         del self.app
 
-    def broadcast(self):
-        addr = QHostAddress(QHostAddress.Broadcast)
-        self.server.writeDatagram('datagram', addr, 45454)
+    def sendPackage(self):
+        addr = QHostAddress(QHostAddress.LocalHost)
+        self.socket.writeDatagram('datagram', addr, 45454)
 
     def callback(self):
-        while self.socket.hasPendingDatagrams():
-            datagram, host, port = self.socket.readDatagram(
-                        self.socket.pendingDatagramSize())
+        while self.server.hasPendingDatagrams():
+            datagram, host, port = self.server.readDatagram(self.server.pendingDatagramSize())
             self.called = True
             self.app.quit()
 
     def testDefaultArgs(self):
         #QUdpSocket.readDatagram pythonic return
         # @bug 124
-        QObject.connect(self.socket, SIGNAL('readyRead()'), self.callback)
+        QObject.connect(self.server, SIGNAL('readyRead()'), self.callback)
+        self.sendPackage()
         self.app.exec_()
 
         self.assert_(self.called)
