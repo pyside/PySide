@@ -718,6 +718,38 @@
     #include &lt;pyside.h&gt;
   </inject-code>
 
+  <inject-code class="native" position="beginning">
+    // Define a global variable to handle qInstallMsgHandler callback
+    static PyObject* qtmsghandler = 0;
+
+    void
+    msghandlercallback(QtMsgType type, const char* msg)
+    {
+        Shiboken::AutoDecRef arglist(Shiboken::makeTuple(type, msg));
+        Shiboken::AutoDecRef ret(PyObject_CallObject(qtmsghandler, arglist));
+    }
+  </inject-code>
+  <add-function signature="qInstallMsgHandler(PyObject)" return-type="PyObject">
+    <inject-code class="target" position="beginning">
+      if (%PYARG_1 == Py_None) {
+        qInstallMsgHandler(0);
+        %PYARG_0 = qtmsghandler ? qtmsghandler : Py_None;
+        qtmsghandler = 0;
+      } else if (!PyCallable_Check(%PYARG_1)) {
+        PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+      } else {
+        %PYARG_0 = qtmsghandler ? qtmsghandler : Py_None;
+        Py_INCREF(%PYARG_1);
+        qtmsghandler = %PYARG_1;
+        qInstallMsgHandler(msghandlercallback);
+      }
+
+      if (%PYARG_0 == Py_None)
+        Py_INCREF(%PYARG_0);
+
+    </inject-code>
+  </add-function>
+
   <value-type name="QElapsedTimer" since="4.7"/>
 
   <object-type name="QAbstractTableModel" polymorphic-id-expression="qobject_cast&lt;QAbstractTableModel*&gt;(%1)">
