@@ -44,5 +44,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtHelp${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtHelp/pyside_qthelp_python.h
         DESTINATION include/PySide/QtHelp/)
-
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_help.xml
+        DESTINATION share/PySide/typesystems)
 

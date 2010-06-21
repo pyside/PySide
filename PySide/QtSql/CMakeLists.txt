@@ -49,4 +49,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtSql${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/pyside_qtsql_python.h
         DESTINATION include/PySide/QtSql/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_sql.xml
+        DESTINATION share/PySide/typesystems)
+
 

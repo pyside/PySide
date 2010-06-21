@@ -61,3 +61,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtSvg${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSvg/pyside_qtsvg_python.h
         DESTINATION include/PySide/QtSvg/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_svg.xml
+        DESTINATION share/PySide/typesystems)
+

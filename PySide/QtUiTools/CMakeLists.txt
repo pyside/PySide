@@ -36,4 +36,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtUiTools${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtUiTools/pyside_qtuitools_python.h
         DESTINATION include/PySide/QtUiTools/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_uitools.xml
+        DESTINATION share/PySide/typesystems)
 

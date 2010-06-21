@@ -494,3 +494,10 @@ add_dependencies(QtGui QtCore)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtGui${CMAKE_DEBUG_POSTFIX}.so DESTINATION "${SITE_PACKAGE}/PySide")
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/pyside_qtgui_python.h
         DESTINATION include/PySide/QtGui/)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml
+              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_common.xml
+              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_mac.xml
+              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_maemo.xml
+              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_x11.xml
+        DESTINATION share/PySide/typesystems)
+

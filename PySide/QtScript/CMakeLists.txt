@@ -51,4 +51,7 @@ add_dependencies(QtScript QtCore)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScript${CMAKE_DEBUG_POSTFIX}.so DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/pyside_qtscript_python.h
         DESTINATION include/PySide/QtScript/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_script.xml
+        DESTINATION share/PySide/typesystems)
+
 

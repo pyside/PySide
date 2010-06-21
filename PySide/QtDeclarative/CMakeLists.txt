@@ -56,4 +56,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtDeclarative${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/pyside_qtdeclarative_python.h
         DESTINATION include/PySide/QtDeclarative/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_declarative.xml
+        DESTINATION share/PySide/typesystems)
+
 

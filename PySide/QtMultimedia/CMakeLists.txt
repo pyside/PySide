@@ -49,3 +49,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMultimedia${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/pyside_qtmultimedia_python.h
         DESTINATION include/PySide/QtMultimedia/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_multimedia.xml
+        DESTINATION share/PySide/typesystems)
+

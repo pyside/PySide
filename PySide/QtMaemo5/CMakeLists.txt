@@ -51,7 +51,8 @@ add_dependencies(QtMaemo5 QtGui)
 # install
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMaemo5${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
-
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMaemo5/pyside_qtmaemo5_python.h
         DESTINATION include/${BINDING_NAME}/QtMaemo5/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_maemo5.xml
+        DESTINATION share/PySide/typesystems)
 

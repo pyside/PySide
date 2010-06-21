@@ -125,3 +125,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtNetwork${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/pyside_qtnetwork_python.h
         DESTINATION include/PySide/QtNetwork/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_network.xml
+        DESTINATION share/PySide/typesystems)
+

@@ -97,3 +97,8 @@ HAS_QT_MODULE(QT_QTSCRIPTTOOLS_FOUND QtScriptTools)
 HAS_QT_MODULE(QT_QTMULTIMEDIA_FOUND QtMultimedia)
 HAS_QT_MODULE(QT_PHONON_FOUND phonon)
 HAS_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)
+
+# install
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_templates.xml
+        DESTINATION share/PySide/typesystems)
+

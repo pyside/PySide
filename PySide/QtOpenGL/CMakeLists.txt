@@ -59,4 +59,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtOpenGL${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL/pyside_qtopengl_python.h
         DESTINATION include/PySide/QtOpenGL/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_opengl.xml
+        DESTINATION share/PySide/typesystems)
 

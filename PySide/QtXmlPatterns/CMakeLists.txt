@@ -50,4 +50,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtXmlPatterns${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns/pyside_qtxmlpatterns_python.h
         DESTINATION include/PySide/QtXmlPatterns/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_xmlpatterns.xml
+        DESTINATION share/PySide/typesystems)
 

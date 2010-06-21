@@ -37,4 +37,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScriptTools${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools/pyside_qtscripttools_python.h
         DESTINATION include/PySide/QtScriptTools/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_scripttools.xml
+        DESTINATION share/PySide/typesystems)
 

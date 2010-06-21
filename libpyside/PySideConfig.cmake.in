@@ -1,5 +1,7 @@
 #  PYSIDE_INCLUDE_DIR   - Directories to include to use PySide
 #  PYSIDE_LIBRARIES     - Files to link against to use PySide
+#  PYSIDE_TYPESYSTEMS   - Type system files that should be used by other bindings extending PySide
 
 SET(PYSIDE_INCLUDE_DIR "@CMAKE_INSTALL_PREFIX@/include/PySide")
 SET(PYSIDE_LIBRARY "@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@pyside@CMAKE_SHARED_LIBRARY_SUFFIX@")
+SET(PYSIDE_TYPESYSTEMS "@CMAKE_INSTALL_PREFIX@/shared/PySide/typesystems")

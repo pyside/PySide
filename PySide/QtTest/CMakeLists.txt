@@ -49,3 +49,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtTest${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/pyside_qttest_python.h
         DESTINATION include/PySide/QtTest/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_test.xml
+        DESTINATION share/PySide/typesystems)
+

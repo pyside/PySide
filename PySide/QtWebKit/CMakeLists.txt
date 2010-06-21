@@ -79,3 +79,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtWebKit${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/PySide)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/pyside_qtwebkit_python.h
         DESTINATION include/PySide/QtWebKit/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_webkit.xml
+        DESTINATION share/PySide/typesystems)
+

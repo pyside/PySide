@@ -157,3 +157,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtCore${CMAKE_DEBUG_POSTFIX}.so
         DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/pyside_qtcore_python.h
         DESTINATION include/PySide/QtCore/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_core.xml
+        DESTINATION share/PySide/typesystems)
+
