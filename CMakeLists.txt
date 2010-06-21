@@ -126,6 +126,16 @@ if (NOT SITE_PACKAGE)
     endif()
 endif()
 
+# Detect if the python libs were compiled in debug mode
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; \\
+        print sysconfig.get_config_var('Py_DEBUG')"
+    OUTPUT_VARIABLE PY_DEBUG
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+if (PY_DEBUG)
+    add_definitions("-DPy_DEBUG")
+endif()
+
 set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
 
 enable_testing()
