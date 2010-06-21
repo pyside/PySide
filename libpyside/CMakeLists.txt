@@ -35,6 +35,7 @@ set(libpyside_HEADERS
     pysidemacros.h
     signalmanager.h
     pyside.h
+    qsignal.h
 )
 
 # create pkg-config file
