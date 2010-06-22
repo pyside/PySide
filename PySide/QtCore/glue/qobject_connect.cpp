@@ -25,6 +25,9 @@ static bool getReceiver(PyObject *callback, QObject **receiver, PyObject **self)
 
 static bool qobjectConnect(QObject* source, const char* signal, QObject* receiver, const char* slot, Qt::ConnectionType type)
 {
+    if (!signal || !slot)
+        return false;
+
     if (!PySide::checkSignal(signal))
         return false;
     signal++;
@@ -39,7 +42,7 @@ static bool qobjectConnect(QObject* source, const char* signal, QObject* receive
 
 static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType type)
 {
-    if (!PySide::checkSignal(signal))
+    if (!signal || !PySide::checkSignal(signal))
         return false;
     signal++;
 

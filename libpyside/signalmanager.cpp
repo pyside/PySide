@@ -82,11 +82,14 @@ using namespace PySide;
 
 bool PySide::isSignal(const char* signal)
 {
-    return signal[0] == PYSIDE_SIGNAL;
+    return (signal && signal[0] == PYSIDE_SIGNAL);
 }
 
 bool PySide::checkSignal(const char* signal)
 {
+    if (!signal)
+        return false;
+
     if (signal[0] != PYSIDE_SIGNAL) {
         PyErr_SetString(PyExc_TypeError, "Use the function PySide.QtCore.SIGNAL on signals");
         return false;
