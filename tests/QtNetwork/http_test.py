@@ -22,7 +22,8 @@ class HttpSignalsCase(UsesQApplication):
 
     def tearDown(self):
         self.httpd.shutdown()
-        del self.http
+        self.http = None
+        self.httpd = None
         super(HttpSignalsCase, self).tearDown()
 
     def callback(self, ident):
@@ -32,7 +33,7 @@ class HttpSignalsCase(UsesQApplication):
     def testDefaultArgs(self):
         #QHttp signal requestStarted signal
         # @bug 114
-        QObject.connect(self.http, SIGNAL('requestStarted(int)'), self.callback)
+        self.http.requestStarted.connect(self.callback)
         self.http.get(self.url.path())
 
         self.app.exec_()
