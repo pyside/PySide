@@ -3065,12 +3065,6 @@
     </modify-function>
   </object-type>
   <object-type name="QCompleter">
-    <modify-function signature="activated(const QModelIndex &amp;)">
-      <rename to="activatedIndex"/>
-    </modify-function>
-    <modify-function signature="highlighted(const QModelIndex &amp;)">
-      <rename to="highlightedIndex"/>
-    </modify-function>
     <modify-function signature="setModel(QAbstractItemModel *)">
       <modify-argument index="1">
         <reference-count action="add"/>
@@ -4235,14 +4229,6 @@
         <no-null-pointer/>
         <reference-count action="add"/>
       </modify-argument>
-    </modify-function>
-    <modify-function signature="activated(int)">&gt;
-        <rename to="activatedIndex"/></modify-function>
-    <modify-function signature="currentIndexChanged(const QString &amp;)">
-      <rename to="currentStringChanged"/>
-    </modify-function>
-    <modify-function signature="highlighted(int)">
-      <rename to="highlightedIndex"/>
     </modify-function>
     <modify-function signature="autoCompletion()const" remove="all"/>
     <!--### Obsolete in 4.3-->
