@@ -35,7 +35,7 @@ endif()
 
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterp REQUIRED)
-find_package(Shiboken REQUIRED)
+find_package(Shiboken 0.3.3 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
 set(BINDING_NAME PySide)
