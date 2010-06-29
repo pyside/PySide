@@ -11,10 +11,7 @@ class QWidgetInherit(QMainWindow):
 class QWidgetTest(UsesQApplication):
 
     def testInheritance(self):
-        newobj = QWidgetInherit()
-        widget = QWidget()
-        newobj.setCentralWidget(widget)
-        self.assertEqual(widget, newobj.centralWidget())
+        self.assertRaises(TypeError, QWidgetInherit)
 
 class QWidgetVisible(UsesQApplication):
 

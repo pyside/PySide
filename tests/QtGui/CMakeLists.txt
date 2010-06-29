@@ -52,7 +52,7 @@ PYSIDE_TEST(qtextedit_signal_test.py)
 PYSIDE_TEST(qtoolbar_test.py)
 PYSIDE_TEST(qtoolbox_test.py)
 PYSIDE_TEST(qwidget_setlayout_test.py)
-PYSIDE_TEST(qwidget_test.py TRUE) #Bug 237
+PYSIDE_TEST(qwidget_test.py)
 PYSIDE_TEST(reference_count_test.py)
 PYSIDE_TEST(standardpixmap_test.py)
 PYSIDE_TEST(timed_app_test.py)
