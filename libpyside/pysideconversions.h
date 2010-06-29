@@ -67,6 +67,7 @@ struct QtDictConverter
         return true;
     }
 
+    static inline PyObject* toPython(void* cppObj) { return toPython(*reinterpret_cast<QtDict*>(cppObj)); }
     static inline PyObject* toPython(const QtDict& cppobj)
     {
         PyObject* result = PyDict_New();
@@ -133,6 +134,7 @@ struct QtMultiMapConverter
         return true;
     }
 
+    static inline PyObject* toPython(void* cppObj) { return toPython(*reinterpret_cast<MultiMap*>(cppObj)); }
     static inline PyObject* toPython(const MultiMap& cppObj)
     {
         PyObject* result = PyDict_New();
@@ -194,6 +196,7 @@ struct QSequenceConverter
         }
         return true;
     }
+    static inline PyObject* toPython(void* cppObj) { return toPython(*reinterpret_cast<T*>(cppObj)); }
     static PyObject* toPython(const T& cppobj)
     {
         PyObject* result = PyList_New((int) cppobj.size());
