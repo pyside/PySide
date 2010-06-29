@@ -7,7 +7,7 @@ from helper import UsesQApplication
 
 class DynamicSignalTest(UsesQApplication):
 
-    def cp(self, obj):
+    def cb(self, obj):
         self._called = True
 
     def testQDialog(self):
