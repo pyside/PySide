@@ -21,5 +21,6 @@ class QListWidgetItemConstructor(UsesQApplication):
         item = self.widgetList.item(0)
         self.assertEqual(item.listWidget(), self.widgetList)
 
+
 if __name__ == '__main__':
     unittest.main()
