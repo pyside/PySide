@@ -45,21 +45,14 @@ struct Converter<QVariant>
             return QVariant::fromValue<PySide::PyObjectWrapper>(pyObj);
         } else {
             // a class supported by QVariant?
-            const char* typeName = pyObj->ob_type->tp_name;
-            // check if the name starts with PySide.
-            if (!strncmp("PySide.", typeName, 7)) {
-                // get the type name
-                const char* lastDot = typeName;
-                for (int i = 8; typeName[i]; ++i) {
-                    if (typeName[i] == '.')
-                        lastDot = &typeName[i];
-                }
-                lastDot++;
-                uint typeCode = QMetaType::type(lastDot);
+            if (Shiboken::isShibokenType(pyObj)) {
+                Shiboken::SbkBaseWrapperType *objType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(pyObj->ob_type);
+                const char* typeName = objType->original_name;
+                uint typeCode = QMetaType::type(typeName);
                 if (!typeCode) {// Try with star at end, for QObject*, QWidget* and QAbstractKinectScroller*
-                    QString typeName(lastDot);
-                    typeName += '*';
-                    typeCode = QMetaType::type(typeName.toAscii());
+                    QString stypeName(typeName);
+                    stypeName += '*';
+                    typeCode = QMetaType::type(stypeName.toAscii());
                 }
                 if (typeCode)
                     return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr[0]);
@@ -69,7 +62,11 @@ struct Converter<QVariant>
         }
     }
 
-    static PyObject* toPython(void* cppObj) { return toPython(*reinterpret_cast<QVariant*>(cppObj)); }
+    static PyObject* toPython(void* cppObj)
+    {
+        return toPython(*reinterpret_cast<QVariant*>(cppObj));
+    }
+
     static PyObject* toPython(const QVariant& cppObj)
     {
         if (cppObj.isValid()) {
