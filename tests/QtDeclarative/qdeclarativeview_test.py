@@ -2,8 +2,7 @@
 
 import unittest
 
-from PySide.QtCore import QUrl, QStringList, QVariant
-from PySide.QtGui import QPushButton
+from PySide.QtCore import QUrl
 from PySide.QtDeclarative import QDeclarativeView
 
 from helper import adjust_filename, TimedQApplication
@@ -14,7 +13,7 @@ class TestQDeclarativeView(TimedQApplication):
     def testQDeclarativeViewList(self):
         view = QDeclarativeView()
 
-        dataList = QStringList(["Item 1", "Item 2", "Item 3", "Item 4"])
+        dataList = ["Item 1", "Item 2", "Item 3", "Item 4"]
 
         ctxt = view.rootContext()
         ctxt.setContextProperty("myModel", dataList)
