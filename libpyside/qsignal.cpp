@@ -243,14 +243,20 @@ void signalUpdateSource(PyObject* source)
 char* signal_get_type_name(PyObject* type)
 {
     if (PyType_Check(type)) {
-        //tp_name return the full name
-        Shiboken::AutoDecRef typeName(PyObject_GetAttrString(type, "__name__"));
-        char *aux = strdup(PyString_AS_STRING(typeName.object()));
-        if (Shiboken::TypeResolver::getType(aux) == Shiboken::TypeResolver::ObjectType) {
-            aux = reinterpret_cast<char*>(realloc(aux, strlen(aux) + 1));
-            aux = strcat(aux, "*");
+        char *typeName = NULL;
+        if (type->ob_type == &Shiboken::SbkBaseWrapperType_Type) {
+            Shiboken::SbkBaseWrapperType *objType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(type);
+            typeName = strdup(objType->original_name);
+        } else {
+            //tp_name return the full name
+            Shiboken::AutoDecRef otypeName(PyObject_GetAttrString(type, "__name__"));
+            typeName = strdup(PyString_AS_STRING(otypeName.object()));
         }
-        return aux;
+        if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ObjectType) {
+            typeName = reinterpret_cast<char*>(realloc(typeName, strlen(typeName) + 1));
+            typeName = strcat(typeName, "*");
+        }
+        return typeName;
     } else if (PyString_Check(type)) {
         return strdup(PyString_AS_STRING(type));
     }
