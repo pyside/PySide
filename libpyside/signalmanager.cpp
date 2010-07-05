@@ -54,6 +54,39 @@
 
 #define PYTHON_TYPE "PyObject"
 
+namespace PySide {
+
+PyObjectWrapper::PyObjectWrapper()
+    :m_me(Py_None)
+{
+    Py_INCREF(m_me);
+}
+
+PyObjectWrapper::PyObjectWrapper(PyObject* me)
+    : m_me(me)
+{
+    Py_INCREF(m_me);
+}
+
+PyObjectWrapper::PyObjectWrapper(const PyObjectWrapper &other)
+    : m_me(other.m_me)
+{
+    Py_INCREF(m_me);
+}
+
+PyObjectWrapper::~PyObjectWrapper()
+{
+    Py_DECREF(m_me);
+}
+
+
+PyObjectWrapper::operator PyObject*() const
+{
+    return m_me;
+}
+
+};
+
 namespace Shiboken {
 
 template<>
@@ -71,6 +104,7 @@ struct Converter<PySide::PyObjectWrapper>
 
     static PyObject* toPython(const PySide::PyObjectWrapper& obj)
     {
+        Py_INCREF(obj);
         return obj;
     }
 };
@@ -335,14 +369,18 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
         Shiboken::GilState gil;
         QList<QByteArray> paramTypes = method.parameterTypes();
         PyObject* self = Shiboken::BindingManager::instance().retrieveWrapper(object);
-        Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
+        PyObject* preparedArgs = NULL;
+        Py_ssize_t args_size = paramTypes.count();
+
+        if (args_size)
+            preparedArgs = PyTuple_New(args_size);
 
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {
             void* data = args[i+1];
             const char* dataType = paramTypes[i].constData();
 
             PyObject* arg = Shiboken::TypeResolver::get(dataType)->toPython(data);
-            PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
+            PyTuple_SET_ITEM(preparedArgs, i, arg);
         }
 
         QString methodName = method.signature();
@@ -358,6 +396,7 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
         } else {
             qWarning() << "Dynamic slot" << methodName << "not found!";
         }
+        Py_XDECREF(preparedArgs);
     }
     return -1;
 }

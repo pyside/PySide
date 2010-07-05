@@ -50,9 +50,11 @@ namespace PySide
 class PYSIDE_API PyObjectWrapper
 {
 public:
-    PyObjectWrapper(PyObject* me) : m_me(me) { Py_INCREF(m_me); }
-    PyObjectWrapper() : m_me(Py_None) { Py_INCREF(m_me); }
-    operator PyObject*() const { return m_me; }
+    PyObjectWrapper();
+    PyObjectWrapper(PyObject* me);
+    PyObjectWrapper(const PyObjectWrapper &other);
+    ~PyObjectWrapper();
+    operator PyObject*() const;
 private:
     PyObject* m_me;
 };
