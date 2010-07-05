@@ -2926,8 +2926,6 @@
     <modify-function signature="dropMimeData(QTreeWidgetItem*,int,const QMimeData*,Qt::DropAction)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="isSortingEnabled()const" remove="all"/>
-    <modify-function signature="setSortingEnabled(bool)" remove="all"/>
     <modify-function signature="indexOfTopLevelItem(QTreeWidgetItem *)" remove="all"/>
     <modify-function signature="addTopLevelItem(QTreeWidgetItem *)">
       <modify-argument index="1">
@@ -3886,8 +3884,6 @@
     </extra-includes>
   </object-type>
   <object-type name="QTableWidget">
-    <modify-function signature="isSortingEnabled()const" remove="all"/>
-    <modify-function signature="setSortingEnabled(bool)" remove="all"/>
     <modify-function signature="setHorizontalHeaderItem(int, QTableWidgetItem *)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
