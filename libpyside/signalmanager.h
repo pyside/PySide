@@ -94,6 +94,8 @@ private:
     // disable copy
     SignalManager(const SignalManager&);
     SignalManager operator=(const SignalManager&);
+
+    static int call_method(QObject* object, int id, void** args);
 };
 
 }

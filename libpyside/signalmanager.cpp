@@ -33,6 +33,7 @@
 */
 
 #include "signalmanager.h"
+#include "qproperty.h"
 
 #include <QHash>
 #include <QStringList>
@@ -351,14 +352,87 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
     return false;
 }
 
-int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args)
+int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args)
 {
     const QMetaObject* metaObject = object->metaObject();
-    // only meta method invocation is supported right now.
+    PyObject* pp = 0;
+    PyObject* pp_name = 0;
+    QMetaProperty mp;
+    Shiboken::TypeResolver* typeResolver = 0;
+    PyObject* pySelf = Shiboken::BindingManager::instance().retrieveWrapper(object);
+
     if (call != QMetaObject::InvokeMetaMethod) {
-        qWarning("Only meta method invocation is supported right now by PySide.");
-        return id - metaObject->methodCount();
+        mp = metaObject->property(id);
+        if (!mp.isValid())
+            return id - metaObject->methodCount();
+
+        pp_name = PyString_FromString(mp.name());
+        pp = qproperty_get_object(pySelf, pp_name);
+        if (!pp) {
+            qWarning("Invalid property.");
+            Py_XDECREF(pp_name);
+            return id - metaObject->methodCount();
+        }
+        printf("access to property: %s-%s\n", mp.name(), mp.typeName());
+        typeResolver = Shiboken::TypeResolver::get(mp.typeName());
     }
+
+    switch(call) {
+#ifndef QT_NO_PROPERTIES
+        case QMetaObject::ReadProperty:
+        {
+            PyObject* value = qproperty_get(pp, pySelf);
+            if (value) {
+                void *data = typeResolver->toCpp(value);
+                if (Shiboken::TypeResolver::getType(mp.typeName()) == Shiboken::TypeResolver::ObjectType)
+                    args[0] = &data;
+                else
+                    args[0] = data;
+
+                Py_DECREF(value);
+            }
+            break;
+        }
+
+        case QMetaObject::WriteProperty:
+        {
+            Shiboken::AutoDecRef value(typeResolver->toPython(args[0]));
+            qproperty_set(pp, pySelf, value);
+            break;
+        }
+
+        case QMetaObject::ResetProperty:
+            qproperty_reset(pp, pp_name);
+            break;
+
+        case QMetaObject::QueryPropertyDesignable:
+        case QMetaObject::QueryPropertyScriptable:
+        case QMetaObject::QueryPropertyStored:
+        case QMetaObject::QueryPropertyEditable:
+        case QMetaObject::QueryPropertyUser:
+            break;
+#endif
+        case QMetaObject::InvokeMetaMethod:
+            id = call_method(object, id, args);
+            break;
+
+        default:
+            qWarning("Unsupported meta invocation type.");
+    }
+
+    if (call == QMetaObject::InvokeMetaMethod)
+        id = id - metaObject->methodCount();
+    else
+        id = id - metaObject->propertyCount();
+
+    Py_XDECREF(pp);
+    Py_XDECREF(pp_name);
+    return id;
+}
+
+int SignalManager::call_method(QObject* object, int id, void** args)
+{
+    const QMetaObject* metaObject = object->metaObject();
     QMetaMethod method = metaObject->method(id);
 
     if (method.methodType() == QMetaMethod::Signal) {
@@ -403,6 +477,7 @@ int PySide::SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, 
 
 bool SignalManager::registerMetaMethod(QObject* source, const char* signature, QMetaMethod::MethodType type)
 {
+    Q_ASSERT(source);
     const QMetaObject* metaObject = source->metaObject();
     int methodIndex = metaObject->indexOfMethod(signature);
     // Create the dynamic signal is needed

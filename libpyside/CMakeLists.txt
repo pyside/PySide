@@ -6,6 +6,7 @@ signalmanager.cpp
 globalreceiver.cpp
 qsignal.cpp
 qslot.cpp
+qproperty.cpp
 pyside.cpp
 )
 
@@ -36,6 +37,7 @@ set(libpyside_HEADERS
     signalmanager.h
     pyside.h
     qsignal.h
+    qproperty.h
 )
 
 # create pkg-config file

@@ -66,6 +66,23 @@ private:
     QSharedPointer<QByteArray> m_type;
 };
 
+class PropertyData
+{
+public:
+    PropertyData(){}
+    PropertyData(const char*name, PyObject *data);
+    QByteArray name() const;
+    QByteArray type() const;
+    uint flags() const;
+    bool isValid() const;
+    bool operator==(const PropertyData& other) const;
+    bool operator==(const char* name) const;
+
+private:
+    QByteArray m_name;
+    PyObject* m_data;
+};
+
 class PYSIDE_API DynamicQMetaObject : public QMetaObject
 {
 public:
@@ -74,9 +91,11 @@ public:
 
     void addSignal(const char* signal, const char* type=0);
     void addSlot(const char* slot, const char* type=0);
+    void addProperty(const char* property, PyObject* data);
 
     void removeSignal(uint idex);
     void removeSlot(uint index);
+    void removeProperty(uint index);
 
     //Retrieve Python metadata to create QMetaObject (class name, signals, slot)
     static DynamicQMetaObject* createBasedOn(PyObject* obj, PyTypeObject* type, const QMetaObject* base);
@@ -84,9 +103,11 @@ public:
 private:
     QLinkedList<MethodData> m_signals;
     QLinkedList<MethodData> m_slots;
+    QLinkedList<PropertyData> m_properties;
     QByteArray m_className;
 
     void updateMetaObject();
+    void writeMethodsData(QLinkedList<MethodData>& methods, unsigned int **data, QList<QByteArray> *strings, int *index, int max_count, int null_index, int flags);
 };
 
 PYSIDE_API inline void deleteDynamicQMetaObject(void* data)

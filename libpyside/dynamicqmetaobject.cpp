@@ -43,10 +43,35 @@
 #include <QMetaMethod>
 
 #include "qsignal.h"
+#include "qproperty.h"
 
 #define MAX_SIGNALS_COUNT 50
+#define MAX_SLOTS_COUNT 50
 
 using namespace PySide;
+
+enum PropertyFlags  {
+    Invalid = 0x00000000,
+    Readable = 0x00000001,
+    Writable = 0x00000002,
+    Resettable = 0x00000004,
+    EnumOrFlag = 0x00000008,
+    StdCppSet = 0x00000100,
+//     Override = 0x00000200,
+    Constant = 0x00000400,
+    Final = 0x00000800,
+    Designable = 0x00001000,
+    ResolveDesignable = 0x00002000,
+    Scriptable = 0x00004000,
+    ResolveScriptable = 0x00008000,
+    Stored = 0x00010000,
+    ResolveStored = 0x00020000,
+    Editable = 0x00040000,
+    ResolveEditable = 0x00080000,
+    User = 0x00100000,
+    ResolveUser = 0x00200000,
+    Notify = 0x00400000
+};
 
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
 {
@@ -59,6 +84,89 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
     }
     strings->append(s);
     return idx;
+}
+
+static int qvariant_nameToType(const char* name)
+{
+    if (!name)
+        return 0;
+
+    if (strcmp(name, "QVariant") == 0)
+        return 0xffffffff;
+    if (strcmp(name, "QCString") == 0)
+        return QMetaType::QByteArray;
+    if (strcmp(name, "Q_LLONG") == 0)
+        return QMetaType::LongLong;
+    if (strcmp(name, "Q_ULLONG") == 0)
+        return QMetaType::ULongLong;
+    if (strcmp(name, "QIconSet") == 0)
+        return QMetaType::QIcon;
+
+    uint tp = QMetaType::type(name);
+    return tp < QMetaType::User ? tp : 0;
+}
+
+/*
+  Returns true if the type is a QVariant types.
+*/
+static bool isVariantType(const char* type)
+{
+    return qvariant_nameToType(type) != 0;
+}
+
+/*!
+  Returns true if the type is qreal.
+*/
+static bool isQRealType(const char *type)
+{
+    return strcmp(type, "qreal") == 0;
+}
+
+uint PropertyData::flags() const
+{
+    const char* typeName = type().data();
+    uint flags = Invalid;
+    if (!isVariantType(typeName))
+         flags |= EnumOrFlag;
+    else if (!isQRealType(typeName))
+        flags |= qvariant_nameToType(typeName) << 24;
+
+    if (qproperty_is_readble(m_data))
+        flags |= Readable;
+
+    if (qproperty_is_writable(m_data))
+        flags |= Writable;
+
+    if (qproperty_has_reset(m_data))
+        flags |= Resettable;
+
+    if (!qproperty_is_designable(m_data))
+        flags |= ResolveDesignable;
+    else
+        flags |= Designable;
+
+    if (!qproperty_is_scriptable(m_data))
+        flags |= ResolveScriptable;
+    else
+        flags |= Scriptable;
+
+    if (!qproperty_is_stored(m_data))
+        flags |= ResolveStored;
+    else
+        flags |= Stored;
+
+    if (!qproperty_is_user(m_data))
+        flags |= ResolveUser;
+    else
+        flags |= User;
+
+    if (qproperty_is_constant(m_data))
+        flags |= Constant;
+
+    if (qproperty_is_final(m_data))
+        flags |= Final;
+
+    return flags;
 }
 
 MethodData::MethodData(const char* signature, const char* type)
@@ -107,6 +215,39 @@ bool MethodData::isValid() const
     return m_signature->size();
 }
 
+
+PropertyData::PropertyData(const char* name, PyObject* data)
+    : m_name(name), m_data(data)
+{
+}
+
+QByteArray PropertyData::type() const
+{
+    return QByteArray(qproperty_get_type(m_data));
+}
+
+
+bool PropertyData::isValid() const
+{
+    return !m_name.isEmpty();
+}
+
+QByteArray PropertyData::name() const
+{
+    return m_name;
+}
+
+bool PropertyData::operator==(const PropertyData& other) const
+{
+    return m_data == other.m_data;
+}
+
+bool PropertyData::operator==(const char* name) const
+{
+    return m_name == QString(name);
+}
+
+
 DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject)
 {
     d.superdata = metaObject;
@@ -153,6 +294,10 @@ void DynamicQMetaObject::addSlot(const char* slot, const char* type)
     if (i != m_slots.end())
         return;
 
+    if (m_slots.size() >= MAX_SLOTS_COUNT) {
+        qWarning() << "Fail to add dynamic slot to QObject. PySide support at most" << MAX_SLOTS_COUNT << "dynamic slots.";
+        return;
+    }
 
     //search for a empty space
     MethodData blank;
@@ -177,6 +322,24 @@ void DynamicQMetaObject::removeSlot(uint index)
     }
 }
 
+void DynamicQMetaObject::addProperty(const char* property, PyObject* data)
+{
+    QLinkedList<PropertyData>::iterator i = qFind(m_properties.begin(), m_properties.end(), property);
+    if (i != m_properties.end())
+        return;
+
+    //search for a empty space
+    PropertyData blank;
+    i = qFind(m_properties.begin(), m_properties.end(), blank);
+    if (i != m_properties.end()) {
+        *i = PropertyData(property, data);
+    } else {
+        m_properties << PropertyData(property, data);
+    }
+    updateMetaObject();
+}
+
+
 DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObject* type, const QMetaObject* base)
 {
     PyObject* key;
@@ -188,6 +351,11 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
     DynamicQMetaObject *mo = new PySide::DynamicQMetaObject(className.toAscii(), base);
 
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
+
+        //Register properties
+        if (value->ob_type == &QProperty_Type) {
+            mo->addProperty(PyString_AsString(key), value);
+        }
 
         //Register signals
         if (value->ob_type == &Signal_Type) {
@@ -234,6 +402,35 @@ void DynamicQMetaObject::removeSignal(uint index)
     }
 }
 
+void DynamicQMetaObject::writeMethodsData(QLinkedList<MethodData>& methods,
+                                          unsigned int **data,
+                                          QList<QByteArray> *strings,
+                                          int *prtIndex,
+                                          int max_count,
+                                          int null_index,
+                                          int flags)
+{
+    int index = *prtIndex;
+
+    QLinkedList<MethodData>::iterator iMethod = methods.begin();
+    for(int i=0; i < max_count; i++) {
+        QByteArray mType;
+        if (iMethod != methods.end() && ((*iMethod).signature().size() > 0) ) {
+            (*data)[index++] = registerString((*iMethod).signature(), strings); // func name
+            mType = (*iMethod).type();
+            iMethod++;
+        } else {
+            (*data)[index++] = null_index; // func name
+        }
+        (*data)[index++] = null_index; // arguments
+        (*data)[index++] = (mType.size() > 0 ? registerString(mType, strings) : null_index); // normalized type
+        (*data)[index++] = null_index; // tags
+        (*data)[index++] = flags;
+    }
+
+    *prtIndex = index;
+}
+
 void DynamicQMetaObject::updateMetaObject()
 {
     // these values are from moc source code, generator.cpp:66
@@ -251,22 +448,23 @@ void DynamicQMetaObject::updateMetaObject()
     };
 
     uint n_signals = MAX_SIGNALS_COUNT;
-    uint n_methods = n_signals + m_slots.count();
+    uint n_methods = n_signals + MAX_SLOTS_COUNT;
+    uint n_properties = m_properties.size();
     int header[] = {5,            // revision
                     0,            // class name index in m_metadata
                     0, 0,         // classinfo and classinfo index, not used by us
                     n_methods, 0, // method count and method list index
-                    0, 0,         // prop count and prop indexes
+                    n_properties, 0, // prop count and prop indexes
                     0, 0,         // enum count and enum index
                     0, 0,         // constructors
-                    MAX_SIGNALS_COUNT};
+                    n_signals};
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
     // header size + 5 indexes per method + an ending zero
     delete[] d.data;
     unsigned int* data;
-    data = new unsigned int[HEADER_LENGHT + n_methods*5 + 1];
+    data = new unsigned int[HEADER_LENGHT + n_methods*5 + n_properties*3 + 1];
     std::memcpy(data, header, sizeof(header));
 
     QList<QByteArray> strings;
@@ -275,35 +473,25 @@ void DynamicQMetaObject::updateMetaObject()
     int index = HEADER_LENGHT;
 
     //write signals
-    QLinkedList<MethodData>::iterator iSignal = m_signals.begin();
-    for(int i=0; i < MAX_SIGNALS_COUNT; i++) {
-        QByteArray sigType;
-        if (iSignal != m_signals.end() && ((*iSignal).signature().size() > 0) ) {
-            data[index++] = registerString((*iSignal).signature(), &strings); // func name
-            sigType = (*iSignal).type();
-            iSignal++;
-        } else {
-            data[index++] = NULL_INDEX; // func name
-        }
-        data[index++] = NULL_INDEX; // arguments
-        data[index++] = (sigType.size() > 0 ? registerString(sigType, &strings) : NULL_INDEX); // normalized type
-        data[index++] = NULL_INDEX; // tags
-        data[index++] = AccessPublic | MethodSignal; // flags
-    }
-
+    writeMethodsData(m_signals, &data, &strings, &index, MAX_SIGNALS_COUNT, NULL_INDEX, AccessPublic | MethodSignal);
 
     //write slots
-    foreach(MethodData slot, m_slots) {
-        if (slot.isValid())
-            data[index++] = registerString(slot.signature(), &strings); // func name
+    writeMethodsData(m_slots, &data, &strings, &index, MAX_SLOTS_COUNT, NULL_INDEX, AccessPublic | MethodSlot);
+
+    if (m_properties.size())
+        data[7] = index;
+
+    //write properties
+    foreach(PropertyData pp, m_properties) {
+        if (pp.isValid())
+            data[index++] = registerString(pp.name(), &strings); // name
         else
             data[index++] = NULL_INDEX;
 
-        data[index++] = NULL_INDEX; // arguments
-        data[index++] = (slot.isValid() ? registerString(slot.type(), &strings) :  NULL_INDEX); // normalized type
-        data[index++] = NULL_INDEX; // tags
-        data[index++] = AccessPublic | MethodSlot; // flags
+        data[index++] = (pp.isValid() ? registerString(pp.type(), &strings) :  NULL_INDEX); // normalized type
+        data[index++] = pp.flags(); //pp.flags(); //TODO: flags
     }
+
     data[index++] = 0; // the end
 
     // create the m_metadata string
