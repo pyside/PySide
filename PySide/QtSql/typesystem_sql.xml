@@ -21,7 +21,6 @@
         <include file-name="QStringList" location="global"/>
         <include file-name="QSize" location="global"/>
     </extra-includes>
-    <modify-function signature="operator=(QSqlDatabase)" remove="all"/>
     <modify-function signature="exec(QString)const" rename="exec_" allow-thread="yes" />
     <modify-function signature="open()" allow-thread="yes" />
     <modify-function signature="open(const QString&amp;, const QString&amp;)" allow-thread="yes" />
@@ -44,7 +43,6 @@
     </extra-includes>
     <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
     <modify-function signature="exec(const QString &amp;)" rename="exec_" allow-thread="yes" />
-    <modify-function signature="operator=(QSqlQuery)" remove="all"/>
     <modify-function signature="prepare(const QString&amp;)" allow-thread="yes" />
     <modify-function signature="clear()" allow-thread="yes" />
     <modify-function signature="last()" allow-thread="yes" />
@@ -59,24 +57,17 @@
         <include file-name="QSqlField" location="global"/>
     </extra-includes>
     <modify-function signature="append(QSqlField)" access="non-final"/>
-    <modify-function signature="operator=(QSqlRecord)" remove="all"/>
   </value-type>
 
-  <value-type name="QSqlError">
-    <modify-function signature="operator=(QSqlError)" remove="all"/>
-  </value-type>
+  <value-type name="QSqlError" />
 
-  <value-type name="QSqlIndex">
-    <modify-function signature="operator=(QSqlIndex)" remove="all"/>
-  </value-type>
+  <value-type name="QSqlIndex" />
 
   <value-type name="QSqlRelation"/>
 
   <object-type name="QSqlRelationalDelegate"/>
 
-  <value-type name="QSqlField">
-    <modify-function signature="operator=(QSqlField)" remove="all"/>
-  </value-type>
+  <value-type name="QSqlField" />
 
   <object-type name="QSqlDriver">
     <extra-includes>

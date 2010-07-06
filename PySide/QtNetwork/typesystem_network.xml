@@ -137,8 +137,6 @@
     </object-type>
 
     <object-type name="QHttpHeader">
-        <modify-function signature="operator=(QHttpHeader)" remove="all"/>
-
         <modify-function signature="QHttpHeader(QHttpHeader)" remove="all"/>
     </object-type>
     <object-type name="QLocalServer">
@@ -177,61 +175,36 @@
 
     <value-type name="QHostAddress" hash-function="qHash">
         <modify-function signature="QHostAddress(quint8*)" remove="all" />
-        <modify-function signature="operator=(QString)" remove="all"/>
-        <modify-function signature="operator=(QHostAddress)" remove="all"/>
     </value-type>
 
     <value-type name="QHostInfo">
-        <modify-function signature="operator=(QHostInfo)" remove="all"/>
         <modify-function signature="lookupHost(QString,QObject*,const char*)" access="private"/>
     </value-type>
 
-    <value-type name="QHttpRequestHeader">
-        <modify-function signature="operator=(QHttpRequestHeader)" remove="all"/>
-    </value-type>
+    <value-type name="QHttpRequestHeader" />
 
-    <value-type name="QHttpResponseHeader">
-        <modify-function signature="operator=(QHttpResponseHeader)" remove="all"/>
-    </value-type>
+    <value-type name="QHttpResponseHeader" />
 
-    <value-type name="QNetworkAddressEntry">
-        <modify-function signature="operator=(QNetworkAddressEntry)" remove="all"/>
-    </value-type>
+    <value-type name="QNetworkAddressEntry" />
 
-    <value-type name="QNetworkInterface">
-        <modify-function signature="operator=(QNetworkInterface)" remove="all"/>
-    </value-type>
+    <value-type name="QNetworkInterface" />
 
-    <value-type name="QNetworkProxy">
-        <modify-function signature="operator=(QNetworkProxy)" remove="all"/>
-    </value-type>
+    <value-type name="QNetworkProxy" />
 
-    <value-type name="QUrlInfo">
-        <modify-function signature="operator=(QUrlInfo)" remove="all"/>
-    </value-type>
+    <value-type name="QUrlInfo" />
 
     <value-type name="QIPv6Address">
-        <modify-function signature="operator[](int)const">
-            <remove/>
-        </modify-function>
-        <modify-function signature="operator[](int)">
-            <remove/>
-        </modify-function>
+        <modify-function signature="operator[](int)const" remove="all" />
+        <modify-function signature="operator[](int)" remove="all" />
     </value-type>
 
-    <value-type name="QAuthenticator">
-        <modify-function signature="operator=(QAuthenticator)" remove="all"/>
-    </value-type>
+    <value-type name="QAuthenticator" />
     <value-type name="QNetworkCookie">
-        <modify-function signature="operator=(QNetworkCookie)" remove="all"/>
-
         <extra-includes>
             <include file-name="QDateTime" location="global"/>
         </extra-includes>
     </value-type>
-    <value-type name="QNetworkRequest">
-        <modify-function signature="operator=(QNetworkRequest)" remove="all"/>
-    </value-type>
+    <value-type name="QNetworkRequest" />
 
     <enum-type name="QSslError::SslError"/>
     <enum-type name="QSslCertificate::SubjectInfo"/>

@@ -18,16 +18,12 @@
   </namespace-type>
 
   <value-type name="QGLColormap">
-    <modify-function signature="operator=(QGLColormap)" remove="all"/>
-
     <modify-function signature="setEntries(int,const unsigned int*,int)">
         <access modifier="private"/>
     </modify-function>
   </value-type>
 
-  <value-type name="QGLFormat">
-    <modify-function signature="operator=(QGLFormat)" remove="all"/>
-  </value-type>
+  <value-type name="QGLFormat" />
 
   <object-type name="QGLContext">
     <modify-function signature="chooseContext(const QGLContext*)">

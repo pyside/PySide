@@ -16,23 +16,19 @@
     <enum-type name="QXmlStreamReader::TokenType" />
 -->
 
-    <value-type name="QDomAttr">
-        <modify-function signature="operator=(QDomAttr)" remove="all"/>
+    <value-type name="QDomAttr" />
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
 
     <value-type name="QDomCDATASection">
-        <modify-function signature="operator=(QDomCDATASection)" remove="all"/>
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
 
     <value-type name="QDomCharacterData">
-        <modify-function signature="operator=(QDomCharacterData)" remove="all"/>
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
 
     <value-type name="QDomComment">
-        <modify-function signature="operator=(QDomComment)" remove="all"/>
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
 
@@ -46,7 +42,6 @@
 
     <value-type name="QDomDocument">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(QDomDocument)" remove="all"/>
 
         <!-- will be replaced in inject code -->
         <modify-function signature="setContent(const QByteArray&amp;, bool, QString*, int*, int*)">
@@ -189,55 +184,41 @@
 
     <value-type name="QDomDocumentFragment">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(QDomDocumentFragment)" remove="all"/>
     </value-type>
 
     <value-type name="QDomDocumentType">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(QDomDocumentType)" remove="all"/>
     </value-type>
 
     <value-type name="QDomEntity">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(QDomEntity)" remove="all"/>
     </value-type>
 
     <value-type name="QDomEntityReference">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(QDomEntityReference)" remove="all"/>
     </value-type>
 
-    <value-type name="QDomImplementation">
-        <modify-function signature="operator=(QDomImplementation)" remove="all"/>
-    </value-type>
+    <value-type name="QDomImplementation" />
 
-    <value-type name="QDomNamedNodeMap">
-        <modify-function signature="operator=(QDomNamedNodeMap)" remove="all"/>
-    </value-type>
+    <value-type name="QDomNamedNodeMap" />
 
     <value-type name="QDomNode">
-        <modify-function signature="operator=(QDomNode)" remove="all"/>
         <modify-function signature="save(QTextStream&amp;, int)const" allow-thread="yes"/>
         <modify-function signature="save(QTextStream&amp;, int, QDomNode::EncodingPolicy)const" allow-thread="yes"/>
     </value-type>
 
-    <value-type name="QDomNodeList">
-        <modify-function signature="operator=(const QDomNodeList &amp;)" remove="all"/>
-    </value-type>
+    <value-type name="QDomNodeList" />
 
     <value-type name="QDomNotation">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(QDomNotation)" remove="all"/>
     </value-type>
 
     <value-type name="QDomProcessingInstruction">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(QDomProcessingInstruction)" remove="all"/>
     </value-type>
 
     <value-type name="QDomText">
         <modify-function signature="nodeType()const" remove="all"/>
-        <modify-function signature="operator=(const QDomText &amp;)" remove="all"/>
     </value-type>
 
     <value-type name="QXmlParseException"/>
@@ -253,8 +234,6 @@
 
     <value-type name="QXmlAttributes"/>
 
-    <!-- FIXME: This needs to be changed to value-type if
-         QXmlNamespaceSupport is ever passed by value -->
     <object-type name="QXmlNamespaceSupport"/>
 
     <value-type name="QDomElement"/>

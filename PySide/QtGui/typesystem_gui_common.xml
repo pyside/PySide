@@ -102,7 +102,6 @@
   <rejection class="QAccessibleInterfaceEx"/>
   <rejection class="QAccessibleWidget"/>
   <rejection class="QAccessibleWidgetEx"/>
-  <rejection class="QAbstractItemDelegate" function-name="operator="/>
   <rejection class="QAbstractTextDocumentLayout::PaintContext" field-name="selections"/>
   <rejection class="QApplication" function-name="compressEvent"/>
   <rejection class="QBrush" function-name="cleanUp"/>
@@ -428,7 +427,6 @@
   <enum-type name="QTextFormat::FormatType"/>
   <enum-type name="QTextFormat::Property" />
   <value-type name="QTransform">
-    <modify-function signature="operator=(QTransform)" remove="all"/>
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
     <modify-function signature="inverted(bool*)const">
@@ -447,7 +445,6 @@
   <enum-type name="QTextOption::WrapMode"/>
   <enum-type name="QTextOption::Flag" flags="QTextOption::Flags"/>
   <value-type name="QStyleOption" polymorphic-id-expression="%1-&gt;type == QStyleOption::SO_Default">
-    <modify-function signature="operator=(QStyleOption)" remove="all"/>
     <modify-function signature="init(const QWidget*)" remove="all"/>
     <!--### Obsolete in 4.3-->
   </value-type>
@@ -457,61 +454,36 @@
   <value-type name="QStyleOptionComboBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionComboBox::Type &amp;&amp; %1-&gt;version == QStyleOptionComboBox::Version" />
   <value-type name="QStyleOptionComplex" polymorphic-id-expression="%1-&gt;type == QStyleOptionComplex::Type &amp;&amp; %1-&gt;version == QStyleOptionComplex::Version" />
   <value-type name="QStyleOptionDockWidget" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidget::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidget::Version" />
-  <value-type name="QStyleOptionDockWidgetV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidgetV2::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidgetV2::Version" >
-    <modify-function signature="operator=(QStyleOptionDockWidget)" remove="all"/>
-  </value-type>
+  <value-type name="QStyleOptionDockWidgetV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidgetV2::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidgetV2::Version" />
   <value-type name="QStyleOptionFocusRect" polymorphic-id-expression="%1-&gt;type == QStyleOptionFocusRect::Type &amp;&amp; %1-&gt;version == QStyleOptionFocusRect::Version" />
   <value-type name="QStyleOptionFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionFrame::Version" />
-  <value-type name="QStyleOptionFrameV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV2::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV2::Version" >
-    <modify-function signature="operator=(QStyleOptionFrame)" remove="all"/>
-  </value-type>
-  <value-type name="QStyleOptionFrameV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV3::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV3::Version">
-    <modify-function signature="operator=(QStyleOptionFrame)" remove="all"/>
-  </value-type>
+  <value-type name="QStyleOptionFrameV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV2::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV2::Version" />
+  <value-type name="QStyleOptionFrameV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV3::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV3::Version" />
   <value-type name="QStyleOptionGroupBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionGroupBox::Type &amp;&amp; %1-&gt;version == QStyleOptionGroupBox::Version" />
   <value-type name="QStyleOptionHeader" polymorphic-id-expression="%1-&gt;type == QStyleOptionHeader::Type &amp;&amp; %1-&gt;version == QStyleOptionHeader::Version" />
   <value-type name="QStyleOptionMenuItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionMenuItem::Type &amp;&amp; %1-&gt;version == QStyleOptionMenuItem::Version" />
   <value-type name="QStyleOptionProgressBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBar::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBar::Version" />
-  <value-type name="QStyleOptionProgressBarV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBarV2::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBarV2::Version" >
-    <modify-function signature="operator=(QStyleOptionProgressBar)" remove="all"/>
-  </value-type>
+  <value-type name="QStyleOptionProgressBarV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBarV2::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBarV2::Version" />
   <value-type name="QStyleOptionRubberBand" polymorphic-id-expression="%1-&gt;type == QStyleOptionRubberBand::Type &amp;&amp; %1-&gt;version == QStyleOptionRubberBand::Version" />
   <value-type name="QStyleOptionSlider" polymorphic-id-expression="%1-&gt;type == QStyleOptionSlider::Type &amp;&amp; %1-&gt;version == QStyleOptionSlider::Version" />
   <value-type name="QStyleOptionSpinBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionSpinBox::Type &amp;&amp; %1-&gt;version == QStyleOptionSpinBox::Version" />
   <value-type name="QStyleOptionTab" polymorphic-id-expression="%1-&gt;type == QStyleOptionTab::Type &amp;&amp; %1-&gt;version == QStyleOptionTab::Version" />
-  <value-type name="QStyleOptionTabV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV2::Version" >
-    <modify-function signature="operator=(const QStyleOptionTab &amp;)" remove="all"/>
-  </value-type>
-  <value-type name="QStyleOptionTabV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV3::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV3::Version">
-    <modify-function signature="operator=(QStyleOptionTab)" remove="all" />
-  </value-type>
+  <value-type name="QStyleOptionTabV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV2::Version" />
+  <value-type name="QStyleOptionTabV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV3::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV3::Version" />
   <value-type name="QStyleOptionTabBarBase" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBase::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBase::Version" />
-  <value-type name="QStyleOptionTabBarBaseV2" delete-in-main-thread="yes" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBaseV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBaseV2::Version">
-    <modify-function signature="operator=(QStyleOptionTabBarBase)" remove="all" />
-  </value-type>
+  <value-type name="QStyleOptionTabBarBaseV2" delete-in-main-thread="yes" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBaseV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBaseV2::Version" />
   <value-type name="QStyleOptionTabWidgetFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabWidgetFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionTabWidgetFrame::Version" />
   <value-type name="QStyleOptionTitleBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionTitleBar::Type &amp;&amp; %1-&gt;version == QStyleOptionTitleBar::Version" />
   <value-type name="QStyleOptionToolBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBar::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBar::Version" />
   <value-type name="QStyleOptionToolBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBox::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBox::Version" />
-  <value-type name="QStyleOptionToolBoxV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBoxV2::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBoxV2::Version" >
-    <modify-function signature="operator=(QStyleOptionToolBox)" remove="all"/>
-  </value-type>
+  <value-type name="QStyleOptionToolBoxV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBoxV2::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBoxV2::Version" />
   <value-type name="QStyleOptionToolButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolButton::Type &amp;&amp; %1-&gt;version == QStyleOptionToolButton::Version" />
   <value-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version" />
-  <value-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version" >
-    <modify-function signature="operator=(QStyleOptionViewItem)" remove="all"/>
-  </value-type>
-  <value-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version" >
-    <modify-function signature="operator=(QStyleOptionViewItem)" remove="all"/>
-  </value-type>
-  <value-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" >
-    <modify-function signature="operator=(QStyleOptionViewItem)" remove="all"/>
-  </value-type>
-  <value-type name="QTextFragment" >
-    <modify-function signature="operator=(QTextFragment)" remove="all"/>
-  </value-type>
+  <value-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version" />
+  <value-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version" />
+  <value-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" />
+  <value-type name="QTextFragment" />
   <value-type name="QBitmap" >
-    <modify-function signature="operator=(const QPixmap &amp;)" remove="all"/>
     <modify-function signature="QBitmap(QString,const char*)" remove="all" />
     <modify-function signature="fromData(QSize,const uchar*,QImage::Format)" remove="all" />
     <modify-function signature="fromData(QSize,const uchar*,QImage::Format)" remove="all"/>
@@ -519,12 +491,8 @@
   <value-type name="QTextInlineObject" />
   <value-type name="QSizePolicy"/>
   <value-type name="QTableWidgetSelectionRange"/>
-  <value-type name="QTextDocumentFragment" >
-    <modify-function signature="operator=(QTextDocumentFragment)" remove="all"/>
-  </value-type>
-  <value-type name="QTextOption" >
-    <modify-function signature="operator=(const QTextOption &amp;)" remove="all"/>
-  </value-type>
+  <value-type name="QTextDocumentFragment" />
+  <value-type name="QTextOption" />
   <value-type name="QTextLine" >
     <modify-function signature="cursorToX(int*,QTextLine::Edge)const" remove="all" />
     <modify-function signature="xToCursor(qreal,QTextLine::CursorPosition)const">
@@ -543,11 +511,8 @@
     <modify-function signature="intersect(QItemSelectionRange)const" remove="all"/>
     <!--### Obsolete in 4.3-->
   </value-type>
-  <value-type name="QPainterPath">
-    <modify-function signature="operator=(QPainterPath)" remove="all"/>
-  </value-type>
+  <value-type name="QPainterPath" />
   <value-type name="QPalette">
-    <modify-function signature="operator=(const QPalette&amp;)" remove="all"/>
     <modify-function signature="QPalette(QColor, QColor, QColor, QColor, QColor, QColor, QColor)" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="background()const" remove="all"/>
@@ -558,8 +523,6 @@
     <!--### Obsolete in 4.3-->
   </value-type>
   <value-type name="QKeySequence">
-    <modify-function signature="operator=(QKeySequence)" remove="all"/>
-    <!-- TODO: QVariant operator temporarily removed due to compilation problems. -->
     <modify-function signature="operator QVariant()const" remove="all"/>
     <modify-function signature="operator int()const" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
@@ -569,7 +532,6 @@
     <modify-function signature="load(const QString&amp;, const char*)" allow-thread="yes"/>
     <modify-function signature="save(QIODevice*, const char*)" allow-thread="yes"/>
     <modify-function signature="save(const QString&amp;, const char*)" allow-thread="yes"/>
-    <modify-function signature="operator=(QPicture)" remove="all"/>
     <modify-function signature="pictureFormat(QString)" remove="all" />
     <modify-function signature="inputFormatList()" remove="all"/>
     <!--### Obsolete in 4.3-->
@@ -582,7 +544,6 @@
     <modify-function signature="setData(const char*,uint)" remove="all"/>
   </value-type>
   <value-type name="QRegion" >
-    <modify-function signature="operator=(QRegion)" remove="all"/>
     <modify-function signature="operator&amp;=(QRegion)" remove="all"/>
     <modify-function signature="eor(QRegion)const" remove="all"/>
     <!--### Obsolete in 4.3-->
@@ -595,9 +556,7 @@
     <modify-function signature="operator&amp;=(QRect)" remove="all"/>
     <modify-function signature="operator+=(QRect)" remove="all"/>
   </value-type>
-  <value-type name="QTextBlock" >
-    <modify-function signature="operator=(QTextBlock)" remove="all"/>
-  </value-type>
+  <value-type name="QTextBlock" />
   <value-type name="QTextBlockFormat" />
   <value-type name="QTextTableCellFormat" />
   <value-type name="QTextCharFormat" >
@@ -608,7 +567,6 @@
     <!--### Obsolete in 4.3-->
   </value-type>
   <value-type name="QTextFormat" >
-    <modify-function signature="operator=(QTextFormat)" remove="all"/>
     <modify-function signature="isValid()const" access="non-final"/>
     <modify-function signature="setProperty(int,QVector&lt;QTextLength&gt;)" rename="setLengthVectorProperty"/>
   </value-type>
@@ -633,7 +591,6 @@
     <modify-function signature="operator&lt;&lt;(QVector&lt;QPointF&gt;)" remove="all"/>
   </value-type>
   <value-type name="QIcon" >
-    <modify-function signature="operator=(QIcon)" remove="all"/>
     <modify-function signature="serialNumber()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="QIcon(QIconEngineV2 *)">
@@ -651,12 +608,10 @@
     <include file-name="QTextFrame" location="global"/>
     <modify-function signature="operator++(int)" remove="all"/>
     <modify-function signature="operator--(int)" remove="all"/>
-    <modify-function signature="operator=(QTextFrame::iterator)" remove="all"/>
     <modify-function signature="operator++()" remove="all"/>
     <modify-function signature="operator--()" remove="all"/>
   </value-type>
   <value-type name="QTreeWidgetItemIterator" >
-    <modify-function signature="operator=(QTreeWidgetItemIterator)" remove="all"/>
     <modify-function signature="operator++(int)" remove="all"/>
     <modify-function signature="operator--(int)" remove="all"/>
     <modify-function signature="operator+=(int)" remove="all"/>
@@ -692,7 +647,6 @@
         </inject-code>
     </add-function>
 
-    <modify-function signature="operator=(QPixmap)" remove="all"/>
     <modify-function signature="operator!()const" remove="all"/>
     <modify-function signature="QPixmap(const char **)" remove="all"/>
     <modify-function signature="serialNumber()const" remove="all"/>
@@ -717,7 +671,6 @@
       <include file-name="QTextBlock" location="global"/>
       <include file-name="QTextDocumentFragment" location="global"/>
     </extra-includes>
-    <modify-function signature="operator=(QTextCursor)" remove="all"/>
     <modify-function signature="selectedTableCells(int*,int*,int*,int*)const" remove="all" />
     <modify-function signature="currentFrame()const">
       <modify-argument index="return">
@@ -763,7 +716,6 @@
     </extra-includes>
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
-    <modify-function signature="operator=(QMatrix)" remove="all"/>
     <modify-function signature="inverted(bool*)const">
       <modify-argument index="1">
         <remove-argument/>
@@ -777,9 +729,7 @@
     </modify-function>
   </value-type>
   <value-type name="QConicalGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::ConicalGradient" />
-  <value-type name="QFontInfo" >
-    <modify-function signature="operator=(QFontInfo)" remove="all"/>
-  </value-type>
+  <value-type name="QFontInfo" />
   <value-type name="QRadialGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::RadialGradient" />
   <value-type name="QPainterPath::Element">
     <modify-field name="x" write="false"/>
@@ -795,7 +745,6 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
-    <modify-function signature="operator=(QFont)" remove="all"/>
     <modify-function signature="setStyleHint(QFont::StyleHint, QFont::StyleStrategy)">
       <modify-argument index="2">
         <rename to="strategy"/>
@@ -806,7 +755,6 @@
     <extra-includes>
       <include file-name="QTextCursor" location="global"/>
     </extra-includes>
-    <modify-function signature="operator=(QTextTableCell)" remove="all"/>
   </value-type>
   <value-type name="QImage">
     <extra-includes>
@@ -822,7 +770,6 @@
     <modify-function signature="QImage(const uchar *, int, int, QImage::Format)" remove="all" />
     <modify-function signature="QImage(uchar*,int,int,QImage::Format)" remove="all" />
     <modify-function signature="loadFromData(const uchar*,int,const char*)" remove="all" />
-    <modify-function signature="operator=(QImage)" remove="all"/>
     <modify-function signature="setText(const char*,const char*,QString)" remove="all" />
     <modify-function signature="text(const char*,const char*)const" remove="all" />
     <modify-function signature="serialNumber()const" remove="all"/>
@@ -850,7 +797,6 @@
       <include file-name="QPixmap" location="global"/>
       <include file-name="Qt" location="global"/>
     </extra-includes>
-    <modify-function signature="operator=(QCursor)" remove="all"/>
   </value-type>
   <value-type name="QFontDatabase" >
     <extra-includes>
@@ -861,10 +807,8 @@
     <extra-includes>
       <include file-name="QBrush" location="global"/>
     </extra-includes>
-    <modify-function signature="operator=(QPen)" remove="all"/>
   </value-type>
   <value-type name="QBrush">
-    <modify-function signature="operator=(const QBrush &amp;)" remove="all"/>
     <extra-includes>
       <include file-name="QPixmap" location="global"/>
     </extra-includes>
@@ -874,8 +818,6 @@
       <include file-name="QVariant" location="global"/>
     </extra-includes>
     <modify-function signature="QColor(QColor::Spec)" remove="all"/>
-    <modify-function signature="operator=(QColor)" remove="all"/>
-    <modify-function signature="operator=(Qt::GlobalColor)" remove="all"/>
     <modify-function signature="QColor(const char*)" remove="all" />
     <add-function signature="QColor(QVariant)">
         <inject-code class="target" position="beginning">
@@ -1141,9 +1083,6 @@
         }
       </inject-code>
     </modify-function>
-
-    <modify-function signature="operator=(QFontMetricsF)" remove="all"/>
-    <modify-function signature="operator=(QFontMetricsF)" remove="all"/>
   </value-type>
   <value-type name="QTextOption::Tab"/>
   <value-type name="QFontMetrics" >
@@ -1250,14 +1189,10 @@
 
       </inject-code>
     </modify-function>
-
-    <modify-function signature="operator=(QFontMetrics)" remove="all"/>
   </value-type>
   <value-type name="QGradient" force-abstract="yes" polymorphic-id-expression="%1-&gt;type() == QGradient::NoGradient" />
   <value-type name="QLinearGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::LinearGradient" />
-  <value-type name="QPrinterInfo">
-    <modify-function signature="operator=(const QPrinterInfo &amp;)" remove="all"/>
-  </value-type>
+  <value-type name="QPrinterInfo" />
   <object-type name="QLayoutItem">
 
     <modify-function signature="widget()">
@@ -1567,8 +1502,6 @@
   </object-type>
   <object-type name="QFileIconProvider"/>
   <object-type name="QWizard">
-    <!-- ### Requires correct class name in meta object -->
-    <modify-function signature="setDefaultProperty(const char *, const char *, const char *)" remove="all"/>
     <modify-function signature="addPage(QWizardPage*)">
       <modify-argument index="1">
         <no-null-pointer/>
@@ -1581,10 +1514,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QWizardPage">
-    <!-- ### Reduced functionality due to meta object having missing information -->
-    <modify-function signature="registerField(const QString &amp;, QWidget *, const char *, const char *)" remove="all" />
-  </object-type>
+  <object-type name="QWizardPage" />
   <object-type name="QFocusFrame">
     <modify-function signature="setWidget(QWidget*)">
       <modify-argument index="1">
@@ -2059,7 +1989,6 @@
   <object-type name="QSpacerItem"/>
   <object-type name="QStandardItem">
     <modify-function signature="QStandardItem(const QStandardItem &amp;)" remove="all"/>
-    <modify-function signature="operator=(QStandardItem)" remove="all"/>
     <modify-function signature="operator&lt;(QStandardItem)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -2071,7 +2000,6 @@
     </modify-function>
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
-    <modify-function signature="operator=(QStandardItem)" remove="all"/>
     <modify-function signature="operator&lt;(QStandardItem)const" remove="all"/>
   </object-type>
   <object-type name="QStatusBar">
@@ -2987,7 +2915,6 @@
     <!--### Obsolete in 4.3-->
   </object-type>
   <object-type name="QTableWidgetItem" >
-    <modify-function signature="operator=(const QTableWidgetItem&amp;)" remove="all"/>
     <modify-function signature="backgroundColor()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(QColor)" remove="all"/>
@@ -3008,7 +2935,6 @@
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
     <modify-function signature="QTableWidgetItem(QTableWidgetItem)" remove="all"/>
-    <modify-function signature="operator=(QTableWidgetItem)" remove="all"/>
     <modify-function signature="operator&lt;(QTableWidgetItem)const" remove="all"/>
   </object-type>
   <object-type name="QListWidgetItem" >
@@ -3036,7 +2962,6 @@
     <modify-function signature="write(QDataStream&amp;)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="operator=(const QListWidgetItem&amp;)" remove="all"/>
     <modify-function signature="backgroundColor()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(QColor)" remove="all"/>
@@ -3048,7 +2973,6 @@
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
     <modify-function signature="QListWidgetItem(QListWidgetItem)" remove="all"/>
-    <modify-function signature="operator=(QListWidgetItem)" remove="all"/>
     <modify-function signature="operator&lt;(QListWidgetItem)const" remove="all"/>
   </object-type>
   <object-type name="QGraphicsTextItem">
@@ -3090,7 +3014,6 @@
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
     <modify-function signature="QTreeWidgetItem(const QTreeWidgetItem &amp;)" remove="all"/>
-    <modify-function signature="operator=(const QTreeWidgetItem&amp;)" remove="all"/>
     <modify-function signature="QTreeWidgetItem(QTreeWidget *,int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
@@ -3167,7 +3090,6 @@
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
     <modify-function signature="QTreeWidgetItem(QTreeWidgetItem)" remove="all"/>
-    <modify-function signature="operator=(QTreeWidgetItem)" remove="all"/>
     <modify-function signature="operator&lt;(QTreeWidgetItem)const" remove="all"/>
   </object-type>
   <object-type name="QListWidget">

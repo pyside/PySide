@@ -173,32 +173,6 @@
     <conversion-rule file="qlist_conversions.h"/>
     <include file-name="QList" location="global"/>
   </container-type>
-  <rejection class="QList" function-name="back"/>
-  <rejection class="QList" function-name="begin"/>
-  <rejection class="QList" function-name="constBegin"/>
-  <rejection class="QList" function-name="constData"/>
-  <rejection class="QList" function-name="constEnd"/>
-  <rejection class="QList" function-name="data"/>
-  <rejection class="QList" function-name="end"/>
-  <rejection class="QList" function-name="erase"/>
-  <rejection class="QList" function-name="erase"/>
-  <rejection class="QList" function-name="free"/>
-  <rejection class="QList" function-name="fromList"/>
-  <rejection class="QList" function-name="fromSet"/>
-  <rejection class="QList" function-name="fromSet"/>
-  <rejection class="QList" function-name="fromStdList" />
-  <rejection class="QList" function-name="front" />
-  <rejection class="QList" function-name="first" />
-  <rejection class="QList" function-name="insert"/>
-  <rejection class="QList" function-name="last"/>
-  <rejection class="QList" function-name="malloc"/>
-  <rejection class="QList" function-name="node_construct"/>
-  <rejection class="QList" function-name="node_copy"/>
-  <rejection class="QList" function-name="node_destruct"/>
-  <rejection class="QList" function-name="operator[]"/>
-  <rejection class="QList" function-name="operator="/>
-  <rejection class="QList" function-name="toSet"/>
-  <rejection class="QList" function-name="toStdList" />
 
   <container-type name="QVector" type="vector">
     <conversion-rule file="qvector_conversions.h"/>
@@ -221,12 +195,10 @@
   <rejection class="QVector" function-name="alloc"/>
   <rejection class="QVector" function-name="operator+="/>
   <rejection class="QVector" function-name="operator[]"/>
-  <rejection class="QVector" function-name="operator="/>
   <rejection class="QVector" function-name="toStdVector"/>
   <rejection class="QVector" function-name="fromStdVector"/>
 
   <container-type name="QQueue" type="queue"/>
-  <rejection class="QQueue" function-name="head"/>
 
   <container-type name="QHash" type="hash">
     <conversion-rule file="qhash_conversions.h"/>
@@ -446,40 +418,10 @@
   <rejection class="QForeachContainer"/>
   <rejection class="QForeachContainerBase"/>
   <rejection class="QGlobalStatic"/>
-  <rejection class="QHash"/>
-  <rejection class="QHashData"/>
-  <rejection class="QHashDummyNode"/>
-  <rejection class="QHashDummyNode"/>
-  <rejection class="QHashDummyNode"/>
-  <rejection class="QHashDummyNode"/>
-  <rejection class="QHashDummyNode"/>
-  <rejection class="QHashDummyValue"/>
-  <rejection class="QHashIterator"/>
-  <rejection class="QHashNode"/>
-  <rejection class="QHashNode"/>
-  <rejection class="QHashNode"/>
-  <rejection class="QHashNode"/>
-  <rejection class="QHashNode"/>
   <rejection class="QInternal"/>
   <rejection class="QLibrary"/>
-  <rejection class="QLinkedList"/>
-  <rejection class="QLinkedListData"/>
-  <rejection class="QLinkedListIterator"/>
-  <rejection class="QLinkedListNode"/>
-  <rejection class="QListData"/>
-  <rejection class="QListIterator"/>
-  <rejection class="QMap"/>
-  <rejection class="QMapData"/>
-  <rejection class="QMapIterator"/>
   <rejection class="QMetaType"/>
   <rejection class="QMetaTypeId"/>
-  <rejection class="QMultiHash"/>
-  <rejection class="QMultiMap"/>
-  <rejection class="QMutableHashIterator"/>
-  <rejection class="QMutableLinkedListIterator"/>
-  <rejection class="QMutableListIterator"/>
-  <rejection class="QMutableMapIterator"/>
-  <rejection class="QMutableVectorIterator"/>
   <rejection class="QNoImplicitBoolCast"/>
   <rejection class="QObjectCleanupHandler"/>
   <rejection class="QObjectData"/>
@@ -507,9 +449,6 @@
   <rejection class="QAbstractFileEngine::ExtensionReturn"/>
   <rejection class="QByteArray::Data"/>
   <rejection class="QIntForType"/>
-  <rejection class="QList::Node"/>
-  <rejection class="QList::const_iterator"/>
-  <rejection class="QList::iterator"/>
   <rejection class="QMetaTypeId2"/>
   <rejection class="QMutableSetIterator"/>
   <rejection class="QSubString"/>
@@ -1328,7 +1267,6 @@
     <modify-function signature="operator const char *()const" remove="all"/>
     <modify-function signature="operator const void *()const" remove="all"/>
     <modify-function signature="operator+=(const char*)" remove="all"/>
-    <modify-function signature="operator=(const char*)" remove="all"/>
     <modify-function signature="operator[](int)const" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
     <modify-function signature="push_back(char)" remove="all"/>
