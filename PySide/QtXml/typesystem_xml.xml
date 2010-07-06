@@ -16,7 +16,7 @@
     <enum-type name="QXmlStreamReader::TokenType" />
 -->
 
-    <value-type name="QDomAttr" />
+    <value-type name="QDomAttr">
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
 
