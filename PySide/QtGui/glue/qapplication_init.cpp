@@ -41,11 +41,11 @@ int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
 
     // Verify if qApp is in main module
     const char QAPP_MACRO[] = "qApp";
-    PyObject* localsDict = PyEval_GetLocals();
-    if (localsDict) {
-        PyObject* qAppObj = PyDict_GetItemString(localsDict, QAPP_MACRO);
+    PyObject* globalsDict = PyEval_GetGlobals();
+    if (globalsDict) {
+        PyObject* qAppObj = PyDict_GetItemString(globalsDict, QAPP_MACRO);
         if (qAppObj)
-            PyDict_SetItemString(localsDict, QAPP_MACRO, self);
+            PyDict_SetItemString(globalsDict, QAPP_MACRO, self);
     }
     PyObject_SetAttrString(moduleQtGui, QAPP_MACRO, self);
 
