@@ -1,17 +1,11 @@
 
 import sys
 import unittest
-import random
 from functools import partial
 
 from PySide.QtCore import QObject, SIGNAL, QProcess
 
 from helper import BasicPySlotCase, UsesQCoreApplication
-
-
-def random_gen(count=50, largest=49, lowest=0):
-    for i in range(count):
-        yield random.randint(lowest, largest)
 
 
 class MultipleSignalConnections(unittest.TestCase):
@@ -28,10 +22,9 @@ class MultipleSignalConnections(unittest.TestCase):
 
         if args is None:
             args = tuple()
-
         for rec in receivers:
             rec.setUp()
-            QObject.connect(sender, SIGNAL(signal), rec.cb)
+            self.assert_(QObject.connect(sender, SIGNAL(signal), rec.cb))
             rec.args = tuple(args)
 
         emitter(*args)
@@ -49,11 +42,9 @@ class PythonMultipleSlots(UsesQCoreApplication, MultipleSignalConnections):
         class Dummy(QObject):
             pass
 
-        for test in random_gen(20):
-            sender = Dummy()
-            receivers = [BasicPySlotCase() for x in range(10)]
-            self.run_many(sender, 'foobar', partial(sender.emit,
-                          SIGNAL('foobar')), receivers, (test, ))
+        sender = Dummy()
+        receivers = [BasicPySlotCase() for x in range(10)]
+        self.run_many(sender, 'foobar', partial(sender.emit,SIGNAL('foobar')), receivers, (0, ))
 
 
 class QProcessMultipleSlots(UsesQCoreApplication, MultipleSignalConnections):

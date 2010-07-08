@@ -12,11 +12,6 @@ except ImportError:
 
 from helper import BasicPySlotCase, UsesQApplication
 
-def random_gen(count=100, largest=99, lowest=0):
-    for i in range(count):
-        yield random.randint(lowest, largest)
-
-
 class MultipleSignalConnections(unittest.TestCase):
     '''Base class for multiple signal connection testing'''
 
@@ -55,12 +50,11 @@ if hasQtGui:
 
         def testSpinBoxValueChanged(self):
             """Multiple connections to QSpinBox.valueChanged(int)"""
-            for test in random_gen(10):
-                sender = QSpinBox()
-                #FIXME if number of receivers if higher than 50, segfaults
-                receivers = [BasicPySlotCase() for x in range(10)]
-                self.run_many(sender, 'valueChanged(int)', sender.setValue,
-                              receivers, (test,))
+            sender = QSpinBox()
+            #FIXME if number of receivers if higher than 50, segfaults
+            receivers = [BasicPySlotCase() for x in range(10)]
+            self.run_many(sender, 'valueChanged(int)', sender.setValue,
+                          receivers, (1,))
 
 if __name__ == '__main__':
     unittest.main()
