@@ -8,8 +8,8 @@
     <enum-type name="QScriptEngine::ValueOwnership"/>
     <enum-type name="QScriptEngine::QObjectWrapOption" flags="QScriptEngine::QObjectWrapOptions"/>
     <enum-type name="QScriptEngineAgent::Extension"/>
-    <enum-type name="QScriptValue::ResolveFlag"/>
-    <enum-type name="QScriptValue::PropertyFlag"/>
+    <enum-type name="QScriptValue::ResolveFlag" flags="QScriptValue::ResolveFlags"/>
+    <enum-type name="QScriptValue::PropertyFlag" flags="QScriptValue::PropertyFlags"/>
     <enum-type name="QScriptValue::SpecialValue"/>
     <enum-type name="QScriptClass::QueryFlag"/>
     <enum-type name="QScriptClass::Extension"/>
