@@ -36,6 +36,10 @@
 
       <!-- Syntax sugar -->
       <add-function signature="load(const char*, QWidget*)" return-type="QWidget*">
+        <modify-argument index="2">
+          <replace-default-expression with="0" />
+          <rename to="parentWidget" />
+        </modify-argument>
         <modify-argument index="return">
           <parent index="2" action="add"/>
         </modify-argument>
