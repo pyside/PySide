@@ -2191,22 +2191,24 @@
 
     <modify-function signature="targetState() const">
       <modify-argument index="return">
-        <define-ownership class="target" owner="default"/>
+        <reference-count action="add" variable-name="setTargetState(QAbstractState*)1" />
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="setTargetStates(QList&lt;QAbstractState*&gt;)">
-      <inject-code class="target" position="beginning">
-        // The normal here would be to use the 'reference-count' tag but this
-        // method is strongly tied to 'setTargetState' since both affect the same
-        // internal value in QAbstractTransition.
-        Shiboken::keepReference(reinterpret_cast&lt;SbkBaseWrapper*&gt;(%PYSELF), "setTargetState(QAbstractState*)1", %PYARG_1);
-      </inject-code>
+
+    <modify-function signature="targetStates() const">
+      <modify-argument index="return">
+        <reference-count action="add" variable-name="setTargetState(QAbstractState*)1" />
+      </modify-argument>
     </modify-function>
 
-    <!-- http://bugs.openbossa.org/show_bug.cgi?id=123
-    <modify-function signature="setTargetStates(QList&lt;QAbstractState*&gt;)" remove="all"/>
-    <modify-function signature="targetStates() const " remove="all"/>-->
+
+    <modify-function signature="setTargetStates(QList&lt;QAbstractState*&gt;)">
+      <modify-argument index="1">
+        <reference-count action="add" variable-name="setTargetState(QAbstractState*)1" />
+      </modify-argument>
+    </modify-function>
+
   </object-type>
 
   <object-type name="QAnimationGroup">
