@@ -89,8 +89,8 @@ class QAbstractTransitionTest(unittest.TestCase):
         del states
         del transition
 
-        self.assertEqual(getrefcount(state1), refcount1)
-        self.assertEqual(getrefcount(state2), refcount2)
+        self.assertEqual(getrefcount(state1), refcount1 - 1)
+        self.assertEqual(getrefcount(state2), refcount2 - 1)
 
     def testRefCountOfTargetStatesAfterSingleTargetState(self):
         transition = QEventTransition()
@@ -119,8 +119,8 @@ class QAbstractTransitionTest(unittest.TestCase):
         del states
         del transition
 
-        self.assertEqual(getrefcount(state1), refcount1)
-        self.assertEqual(getrefcount(state2), refcount2)
+        self.assertEqual(getrefcount(state1), refcount1 - 1)
+        self.assertEqual(getrefcount(state2), refcount2 - 1)
 
     def testRefCountOfTargetStatesBeforeSingleTargetState(self):
         transition = QEventTransition()
@@ -147,8 +147,8 @@ class QAbstractTransitionTest(unittest.TestCase):
 
         del states
 
-        self.assertEqual(getrefcount(state1), refcount1)
-        self.assertEqual(getrefcount(state2), refcount2)
+        self.assertEqual(getrefcount(state1), refcount1 - 1)
+        self.assertEqual(getrefcount(state2), refcount2 - 1)
 
 if __name__ == '__main__':
     unittest.main()
