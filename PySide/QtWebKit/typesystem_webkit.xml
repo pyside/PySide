@@ -51,9 +51,13 @@
       <modify-argument index="return">
         <replace-type modified-type="PyObject"/>
       </modify-argument>
+      <modify-argument index="4">
+        <remove-argument />
+      </modify-argument>
       <inject-code class="target" position="end">
-        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4);
-        %PYARG_0 = Shiboken::makeTuple(retval_, %4);
+        QString str;
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, &amp;str);
+        %PYARG_0 = Shiboken::makeTuple(retval_, str);
       </inject-code>
     </modify-function>
   </object-type>
