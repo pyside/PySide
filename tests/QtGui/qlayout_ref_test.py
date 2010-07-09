@@ -46,7 +46,7 @@ class SaveReference(UsesQApplication):
         l = QHBoxLayout()
         self.assertEqual(getrefcount(self.widget1), 2)
         l.addWidget(self.widget1)
-        self.assertEqual(getrefcount(self.widget1), 2)
+        self.assertEqual(getrefcount(self.widget1), 3)
 
         w = QWidget()
         w.setLayout(l)

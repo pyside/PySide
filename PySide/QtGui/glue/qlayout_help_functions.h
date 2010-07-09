@@ -3,24 +3,40 @@
 
 void addLayoutOwnership(QLayout *layout, QLayoutItem *item);
 
+inline QString retrieveObjectName(PyObject *obj)
+{
+    Shiboken::AutoDecRef objName(PyObject_Str(obj));
+    return QString(PyString_AsString(objName));
+}
+
 inline void addLayoutOwnership(QLayout *layout, QWidget *widget)
 {
     //transfer ownership to parent widget
     QWidget *parent = layout->parentWidget();
-    if (!parent)
-        return;
 
-    Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
-    Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(widget));
-    Shiboken::setParent(pyParent, pyChild);
+    if (!parent) {
+        //keep the reference while the layout is orphan
+        Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(layout));
+        Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(widget));
+        Shiboken::keepReference(reinterpret_cast<Shiboken::SbkBaseWrapper*>(pyParent.object()), qPrintable(retrieveObjectName(pyParent)), pyChild, true);
+    } else {
+        Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
+        Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(widget));
+        Shiboken::setParent(pyParent, pyChild);
+    }
 }
 
 inline void addLayoutOwnership(QLayout *layout, QLayout *other)
 {
     //transfer all children widgetes from other to layout parent widget
     QWidget *parent = layout->parentWidget();
-    if (!parent)
+    if (!parent) {
+        //keep the reference while the layout is orphan
+        Shiboken::AutoDecRef pyParent(Shiboken::Converter<QLayout*>::toPython(layout));
+        Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayout*>::toPython(other));
+        Shiboken::keepReference(reinterpret_cast<Shiboken::SbkBaseWrapper*>(pyParent.object()), qPrintable(retrieveObjectName(pyParent)), pyChild, true);
         return;
+    }
 
     for (int i=0, i_max=other->count(); i < i_max; i++) {
         addLayoutOwnership(layout, other->itemAt(i));
