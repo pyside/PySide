@@ -105,7 +105,7 @@ struct Converter<PySide::PyObjectWrapper>
 
     static PyObject* toPython(const PySide::PyObjectWrapper& obj)
     {
-        Py_INCREF(obj);
+        Py_INCREF((PyObject*)obj);
         return obj;
     }
 };
