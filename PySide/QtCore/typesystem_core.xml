@@ -178,6 +178,8 @@
     <conversion-rule file="qvector_conversions.h"/>
     <include file-name="QVector" location="global"/>
   </container-type>
+
+
   <rejection class="QVector" function-name="back"/>
   <rejection class="QVector" function-name="begin"/>
   <rejection class="QVector" function-name="constBegin"/>

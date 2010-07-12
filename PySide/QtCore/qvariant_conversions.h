@@ -40,6 +40,10 @@ struct Converter<QVariant>
         } else if (Shiboken::isShibokenEnum(pyObj)) {
             // QVariant(enum)
             return QVariant(Converter<int>::toCpp(pyObj));
+        } else if (PyDict_Check(pyObj)) {
+            return convertToVariantMap(pyObj);
+        } else if (PySequence_Check(pyObj)) {
+            return convertToVariantList(pyObj);
         } else if (!isShibokenType(pyObj) || isUserType(pyObj)) {
             // QVariant(User class)
             return QVariant::fromValue<PySide::PyObjectWrapper>(pyObj);
@@ -70,11 +74,70 @@ struct Converter<QVariant>
     static PyObject* toPython(const QVariant& cppObj)
     {
         if (cppObj.isValid()) {
+            if (qstrcmp(cppObj.typeName(), "QVariantList") == 0)
+                return Converter<QList<QVariant> >::toPython(cppObj.value<QVariantList>());
+
+            if (qstrcmp(cppObj.typeName(), "QStringList") == 0)
+                return Converter<QList<QString> >::toPython(cppObj.value<QStringList>());
+
+            if (qstrcmp(cppObj.typeName(), "QVariantMap") == 0)
+                return Converter<QMap<QString, QVariant> >::toPython(cppObj.value<QVariantMap>());
+
             Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(cppObj.typeName());
             if (tr)
                 return tr->toPython(const_cast<void*>(cppObj.data()));
         }
         Py_RETURN_NONE;
+    }
+
+    static QVariant convertToVariantMap(PyObject* map)
+    {
+        PyObject *key, *value;
+        Py_ssize_t pos = 0;
+        AutoDecRef keys(PyDict_Keys(map));
+        bool keysIsString = isStringList(keys);
+        if (keysIsString) {
+            QMap<QString, QVariant> ret;
+            while (PyDict_Next(map, &pos, &key, &value))
+                ret.insert(Converter<QString>::toCpp(key), toCpp(value));
+            return QVariant(ret);
+        } else {
+            return toCpp(map);
+        }
+    }
+
+    static bool isStringList(PyObject *list)
+    {
+        bool allString = true;
+        AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
+        Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
+        for(int i=0; i < size; i++) {
+            PyObject* item = PySequence_Fast_GET_ITEM(fast.object(), i);
+            if (!Converter<QString>::checkType(item)) {
+                allString = false;
+                break;
+            }
+        }
+        return allString;
+    }
+
+    static QVariant convertToVariantList(PyObject* list)
+    {
+        bool allString = isStringList(list);
+        if (allString) {
+            QStringList lst = Converter<QList<QString> >::toCpp(list);
+            return QVariant(lst);
+        } else {
+            QList<QVariant> lst;
+            AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
+            Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
+            for(int i=0; i < size; i++) {
+                PyObject* item = PySequence_Fast_GET_ITEM(fast.object(), i);
+                lst.append(toCpp(item));
+            }
+            return QVariant(lst);
+        }
+        Q_ASSERT(false);
     }
 };
 }

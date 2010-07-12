@@ -15,7 +15,7 @@ struct Converter<QVariant::Type>
 
     static QVariant::Type toCpp(PyObject* pyObj)
     {
-        const char* typeName;
+        const char* typeName = 0;
         if (pyObj == Py_None)
             return QVariant::Invalid;
 
@@ -31,6 +31,15 @@ struct Converter<QVariant::Type>
             typeName = PyString_AS_STRING(pyObj);
         else if (PyUnicode_Check(pyObj))
             typeName = PyString_AsString(pyObj);
+        else if (PyDict_Check(pyObj) && checkAllStringKeys(pyObj))
+            typeName = "QVariantMap";
+        else if (PySequence_Check(pyObj))
+            if (isStringList(pyObj))
+                typeName = "QStringList";
+            else
+                typeName = "QVariantList";
+        else
+            Q_ASSERT(false);
 
         return QVariant::nameToType(typeName);
     }
@@ -48,6 +57,27 @@ struct Converter<QVariant::Type>
         }
         Py_INCREF(pyObj);
         return pyObj;
+    }
+
+    static bool isStringList(PyObject* list)
+    {
+        bool allString = true;
+        AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
+        Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
+        for(int i=0; i < size; i++) {
+            PyObject* item = PySequence_Fast_GET_ITEM(fast.object(), i);
+            if (!Converter<QString>::checkType(item)) {
+                allString = false;
+                break;
+            }
+        }
+        return allString;
+    }
+
+    static bool checkAllStringKeys(PyObject* dict)
+    {
+        AutoDecRef keys(PyDict_Keys(dict));
+        return isStringList(keys);
     }
 };
 }
