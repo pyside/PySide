@@ -1,4 +1,6 @@
-set(PYSIDE_TIMEOUT 10)
+if(NOT CTEST_TESTING_TIMEOUT)
+    set(CTEST_TESTING_TIMEOUT 60)
+endif()
 
 macro(TEST_QT_MODULE var name)
   if(NOT DISABLE_${name} AND ${var})
@@ -19,7 +21,7 @@ macro(PYSIDE_TEST)
     set(TEST_CMD ${CMAKE_SOURCE_DIR}/tests/run_test.sh  ${libpyside_BINARY_DIR} "${CMAKE_BINARY_DIR}:${CMAKE_SOURCE_DIR}/tests/util" ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}")
     add_test(${TEST_NAME} ${TEST_CMD})
     set_tests_properties(${TEST_NAME} PROPERTIES
-                         TIMEOUT ${PYSIDE_TIMEOUT}
+                         TIMEOUT ${CTEST_TESTING_TIMEOUT}
                          WILL_FAIL ${EXPECT_TO_FAIL})
 endmacro(PYSIDE_TEST)
 
