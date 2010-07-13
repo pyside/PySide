@@ -14,9 +14,11 @@ class Obj(QObject):
         QObject.__init__(self)
         self.con_notified = False
         self.dis_notified = False
+        self.signal = ""
 
     def connectNotify(self, signal):
         self.con_notified = True
+        self.signal = signal
 
     def disconnectNotify(self, signal):
         self.dis_notified = True
@@ -39,6 +41,7 @@ class TestQObjectConnectNotify(UsesQCoreApplication):
         receiver = QObject()
         sender.connect(SIGNAL("destroyed()"), receiver, SLOT("deleteLater()"))
         self.assert_(sender.con_notified)
+        self.assertEqual(sender.signal, SIGNAL("destroyed()"))
         sender.disconnect(SIGNAL("destroyed()"), receiver, SLOT("deleteLater()"))
         self.assert_(sender.dis_notified)
 

@@ -28,6 +28,7 @@ class QXmlSimpleReaderTest(unittest.TestCase):
         reader = QXmlSimpleReader()
         prop, ok = reader.property('foo')
         self.assertEqual((prop, ok), (None, False))
+        reader.setProperty('foo', 'Something')
 
 if __name__ == '__main__':
     unittest.main()
