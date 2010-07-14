@@ -10,6 +10,8 @@ class testAudioDevices(unittest.TestCase):
 
     def testListDevices(self):
         for devInfo in QAudioDeviceInfo.availableDevices(QAudio.AudioOutput):
+            if devInfo.deviceName() == 'null':
+                continue
             fmt = QAudioFormat()
             for codec in devInfo.supportedCodecs():
                 fmt.setCodec(codec)

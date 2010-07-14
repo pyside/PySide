@@ -25,6 +25,18 @@ macro(PYSIDE_TEST)
                          WILL_FAIL ${EXPECT_TO_FAIL})
 endmacro(PYSIDE_TEST)
 
+# Try to find QtMultimedia
+# TODO: Remove this hack when cmake support QtMultimedia module
+if (NOT QT_QTMULTIMEDIA_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)
+    find_path(QT_QTMULTIMEDIA_INCLUDE_DIR QtMultimedia
+            PATHS ${QT_HEADERS_DIR}/QtMultimedia
+                ${QT_LIBRARY_DIR}/QtMultimedia.framework/Headers
+            NO_DEFAULT_PATH)
+    find_library(QT_QTMULTIMEDIA_LIBRARY QtMultimedia PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH)
+    if (QT_QTMULTIMEDIA_INCLUDE_DIR AND QT_QTMULTIMEDIA_LIBRARY)
+        set(QT_QTMULTIMEDIA_FOUND ON)
+    endif()
+endif ()
 
 add_subdirectory(signals)
 TEST_QT_MODULE(QT_QTCORE_FOUND QtCore)
