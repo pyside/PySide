@@ -154,7 +154,7 @@
     </template>
 
     <template name="return_tuple_QValidator_QString_int">
-        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);
+        %RETURN_TYPE retval_ = %RETURN_TYPE(%CPPSELF.%FUNCTION_NAME(%1, %2));
         %PYARG_0 = Shiboken::makeTuple(retval_, %1, %2);
     </template>
 

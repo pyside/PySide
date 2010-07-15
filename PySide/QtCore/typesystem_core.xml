@@ -1222,6 +1222,9 @@
     </extra-includes>
   </object-type>
   <value-type name="QUrl" hash-function="PySide::hash">
+    <modify-documentation xpath='description/para[3]'>
+        &lt;para>URLs can be represented in two forms: encoded or unencoded. The unencoded representation is suitable for showing to users, but the encoded representation is typically what you would send to a web server. For example, the unencoded URL &quot;http://bühler.example.com&quot; would be sent to the server as &quot;http://xn--bhler-kva.example.com/List%20of%20applicants.xml&quot;.&lt;/para>
+    </modify-documentation>
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>

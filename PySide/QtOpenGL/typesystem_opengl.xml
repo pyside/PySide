@@ -4,6 +4,7 @@
 
   <rejection class="QGLColormap::QGLColormapData"/>
   <rejection class="QGLWidget" function-name="setMouseTracking"/>
+  <rejection class="QGLContext" field-name="currentCtx"/>
 
   <enum-type name="QGL::FormatOption" flags="QGL::FormatOptions" force-integer="yes"/>
   <enum-type name="QGLContext::BindOption" flags="QGLContext::BindOptions"/>
