@@ -64,5 +64,20 @@ class QColorEqualGlobalColor(unittest.TestCase):
         self.assertEqual(QColor(255, 0, 0), Qt.red)
 
 
+class QColorCopy(unittest.TestCase):
+
+    def testDeepCopy(self):
+        '''QColor deepcopy'''
+
+        from copy import deepcopy
+
+        original = QColor(0, 0, 255)
+        copy = deepcopy([original])[0]
+
+        self.assert_(original is not copy)
+        self.assertEqual(original, copy)
+        del original
+        self.assertEqual(copy, QColor(0, 0, 255))
+
 if __name__ == '__main__':
     unittest.main()
