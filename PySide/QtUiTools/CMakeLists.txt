@@ -24,7 +24,7 @@ add_library(QtUiTools MODULE ${QtUiTools_SRC})
 set_target_properties(QtUiTools PROPERTIES PREFIX "")
 target_link_libraries(QtUiTools
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTUITOOLS_LIBRARY})

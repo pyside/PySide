@@ -52,7 +52,7 @@ add_library(QtXml MODULE ${QtXml_SRC})
 set_property(TARGET QtXml PROPERTY PREFIX "")
 target_link_libraries(QtXml
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTXML_LIBRARY}
                       )

@@ -41,7 +41,7 @@ set_target_properties(QtMaemo5 PROPERTIES
 
 target_link_libraries(QtMaemo5
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTMAEMO5_LIBRARY})

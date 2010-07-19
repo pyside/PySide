@@ -38,7 +38,7 @@ add_library(QtDeclarative MODULE ${QtDeclarative_SRC})
 set_target_properties(QtDeclarative PROPERTIES PREFIX "")
 target_link_libraries(QtDeclarative
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTNETWORK_LIBRARY}

@@ -37,7 +37,7 @@ add_library(QtMultimedia MODULE ${QtMultimedia_SRC})
 set_property(TARGET QtMultimedia PROPERTY PREFIX "")
 target_link_libraries(QtMultimedia
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTMULTIMEDIA_LIBRARY}
                       ${QT_QTGUI_LIBRARY}

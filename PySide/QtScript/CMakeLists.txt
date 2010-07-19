@@ -40,7 +40,7 @@ add_library(QtScript MODULE ${QtScript_SRC})
 set_property(TARGET QtScript PROPERTY PREFIX "")
 target_link_libraries(QtScript
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTSCRIPT_LIBRARY}

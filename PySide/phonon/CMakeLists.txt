@@ -60,7 +60,7 @@ add_library(phonon MODULE ${phonon_SRC})
 set_target_properties(phonon PROPERTIES PREFIX "")
 target_link_libraries(phonon
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_PHONON_LIBRARY})

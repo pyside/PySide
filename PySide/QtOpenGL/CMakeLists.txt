@@ -48,7 +48,7 @@ add_library(QtOpenGL MODULE ${QtOpenGL_SRC})
 set_target_properties(QtOpenGL PROPERTIES PREFIX "")
 target_link_libraries(QtOpenGL
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTOPENGL_LIBRARY})

@@ -24,7 +24,7 @@ add_library(QtScriptTools MODULE ${QtScriptTools_SRC})
 set_target_properties(QtScriptTools PROPERTIES PREFIX "")
 target_link_libraries(QtScriptTools
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_GUI_LIBRARY}
                       ${QT_QTSCRIPT_LIBRARY}

@@ -147,7 +147,7 @@ add_library(QtCore MODULE ${QtCore_SRC})
 set_property(TARGET QtCore PROPERTY PREFIX "")
 target_link_libraries(QtCore
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTCORE_LIBRARY}
                       )

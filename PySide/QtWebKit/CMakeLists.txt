@@ -65,7 +65,7 @@ add_library(QtWebKit MODULE ${QtWebKit_SRC})
 set_property(TARGET QtWebKit PROPERTY PREFIX "")
 target_link_libraries(QtWebKit
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTWEBKIT_LIBRARY}
                       ${QT_QTNETWORK_LIBRARY}

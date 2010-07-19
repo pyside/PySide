@@ -41,6 +41,11 @@ find_package(PythonInterpWithDebug REQUIRED)
 find_package(Shiboken 0.3.3 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
+#Fix missing variable on UNIX env
+if(NOT PYTHON_DEBUG_LIBRARIES AND UNIX)
+    set(PYTHON_DEBUG_LIBRARIES "${PYTHON_LIBRARIES}")
+endif()
+
 set(BINDING_NAME PySide)
 set(BINDING_API_MAJOR_VERSION "0")
 set(BINDING_API_MINOR_VERSION "3")
@@ -135,9 +140,20 @@ execute_process(
         print sysconfig.get_config_var('Py_DEBUG')"
     OUTPUT_VARIABLE PY_DEBUG
     OUTPUT_STRIP_TRAILING_WHITESPACE)
-if (PY_DEBUG)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(NOT PYTHON_DEBUG_LIBRARIES)
+        message(FATAL_ERROR "Python debug library not found. Try compile PySide with -DCMAKE_BUILD_TYPE=Release")
+    endif()
+    if(NOT PY_DEBUG)
+        message(WARNING "Compiling PySide with debug enabled, but the python executable was not compiled with debug support.")
+    endif()
     add_definitions("-DPy_DEBUG")
+    set(PYSIDE_PYTHON_LIBRARIES ${PYTHON_DEBUG_LIBRARIES})
+else()
+    set(PYSIDE_PYTHON_LIBRARIES ${PYTHON_LIBRARIES})
 endif()
+
 
 set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
 

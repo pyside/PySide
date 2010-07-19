@@ -37,7 +37,7 @@ add_library(QtSql MODULE ${QtSql_SRC})
 set_target_properties(QtSql PROPERTIES PREFIX "")
 target_link_libraries(QtSql
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTSQL_LIBRARY})

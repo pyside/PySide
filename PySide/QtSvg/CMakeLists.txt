@@ -49,7 +49,7 @@ add_library(QtSvg MODULE ${QtSvg_SRC})
 set_property(TARGET QtSvg PROPERTY PREFIX "")
 target_link_libraries(QtSvg
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTSVG_LIBRARY}
                       ${QT_QTGUI_LIBRARY}

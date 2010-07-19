@@ -41,7 +41,7 @@ add_library(QtXmlPatterns MODULE ${QtXmlPatterns_SRC})
 set_target_properties(QtXmlPatterns PROPERTIES PREFIX "")
 target_link_libraries(QtXmlPatterns
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTXMLPATTERNS_LIBRARY})
 add_dependencies(QtXmlPatterns QtCore)

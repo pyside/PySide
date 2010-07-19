@@ -114,7 +114,7 @@ add_library(QtNetwork MODULE ${QtNetwork_SRC})
 set_property(TARGET QtNetwork PROPERTY PREFIX "")
 target_link_libraries(QtNetwork
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTNETWORK_LIBRARY}
                       )

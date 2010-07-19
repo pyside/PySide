@@ -33,7 +33,7 @@ set_target_properties(QtHelp PROPERTIES PREFIX "")
 
 target_link_libraries(QtHelp
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTHELP_LIBRARY})

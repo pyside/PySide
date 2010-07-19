@@ -484,7 +484,7 @@ add_library(QtGui MODULE ${QtGui_SRC})
 set_property(TARGET QtGui PROPERTY PREFIX "")
 target_link_libraries(QtGui
                       pyside
-                      ${PYTHON_LIBRARIES}
+                      ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       )
