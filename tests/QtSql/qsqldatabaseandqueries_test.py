@@ -6,6 +6,12 @@ import unittest
 
 from PySide import QtSql
 from PySide.QtCore import *
+from PySide.QtGui import *
+
+class Foo(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
+        self.model = QtSql.QSqlTableModel()
 
 class SqlDatabaseCreationDestructionAndQueries(unittest.TestCase):
     '''Test cases for QtSql database creation, destruction and queries'''
@@ -50,6 +56,14 @@ class SqlDatabaseCreationDestructionAndQueries(unittest.TestCase):
         query.next()
         lastname = query.value(0)
         self.assertEqual(lastname, 'Harrison')
+
+    def testTableModelDeletion(self):
+        app = QApplication([])
+
+        bar = Foo()
+        model = bar.model
+        del bar
+        del app
 
 if __name__ == '__main__':
     unittest.main()
