@@ -4,6 +4,9 @@ project(pysidebindings)
 
 cmake_minimum_required(VERSION 2.6)
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/
+                      ${CMAKE_MODULE_PATH})
+
 if(CMAKE_HOST_UNIX)
     option(ENABLE_GCC_OPTIMIZATION "Enable specific GCC flags to optimization library size and performance. Only available on Release Mode" 0)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fvisibility=hidden -Wno-strict-aliasing")
@@ -34,7 +37,7 @@ if(AVOID_PROTECTED_HACK OR WIN32)
 endif()
 
 find_package(PythonLibs REQUIRED)
-find_package(PythonInterp REQUIRED)
+find_package(PythonInterpWithDebug REQUIRED)
 find_package(Shiboken 0.3.3 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
