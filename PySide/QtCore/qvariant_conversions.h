@@ -57,6 +57,7 @@ struct Converter<QVariant>
                     QString stypeName(typeName);
                     stypeName += '*';
                     typeCode = QMetaType::type(stypeName.toAscii());
+                    return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr);
                 }
                 if (typeCode)
                     return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr[0]);
