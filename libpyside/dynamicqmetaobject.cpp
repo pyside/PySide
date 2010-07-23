@@ -215,6 +215,10 @@ bool MethodData::isValid() const
     return m_signature->size();
 }
 
+PropertyData::PropertyData()
+    : m_data(0)
+{
+}
 
 PropertyData::PropertyData(const char* name, PyObject* data)
     : m_name(name), m_data(data)

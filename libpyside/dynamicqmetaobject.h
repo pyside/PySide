@@ -69,7 +69,7 @@ private:
 class PropertyData
 {
 public:
-    PropertyData(){}
+    PropertyData();
     PropertyData(const char*name, PyObject *data);
     QByteArray name() const;
     QByteArray type() const;
