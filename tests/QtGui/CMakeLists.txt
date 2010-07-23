@@ -62,4 +62,8 @@ PYSIDE_TEST(timed_app_test.py)
 PYSIDE_TEST(virtual_protected_inheritance_test.py)
 PYSIDE_TEST(virtual_pure_override_test.py)
 PYSIDE_TEST(wrong_return_test.py)
-PYSIDE_TEST(x11_symbols_test.py)
+
+
+if(X11)
+    PYSIDE_TEST(x11_symbols_test.py)
+endif()
