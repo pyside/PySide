@@ -7,7 +7,9 @@ static char** QCoreApplicationArgValues;
  */
 void DeleteQCoreApplicationAtExit() {
     if (QCoreApplication::instance()) {
-        delete QCoreApplication::instance();
+        PySide::SignalManager::instance().clear();
+        BindingManager::instance().invalidateWrapper(QCoreApplication::instance());
+        QCoreApplication::instance()->deleteLater();
         for (int i = 0; i < QCoreApplicationArgCount; ++i)
             delete[] QCoreApplicationArgValues[i];
     }
