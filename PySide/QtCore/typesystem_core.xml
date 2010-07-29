@@ -1697,6 +1697,8 @@
         QTimer* timer = Converter&lt;QTimer*>::toCpp(pyTimer);
         PyObject* result = PyObject_CallMethod(pyTimer, const_cast&lt;char*>("connect"), const_cast&lt;char*>("OsOs"), pyTimer, SIGNAL(timeout()), %PYARG_2, %3);
         Py_DECREF(result);
+        // invalidate to avoid use of python object
+        Shiboken::BindingManager::instance().invalidateWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL("timeout()"), timer, SLOT("deleteLater()"));
         timer->start(%1);
@@ -1713,6 +1715,7 @@
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
         PyObject* result = PyObject_CallMethod(pyTimer, const_cast&lt;char*>("connect"), const_cast&lt;char*>("OsO"), pyTimer, SIGNAL(timeout()), pyargs[1]);
         Py_DECREF(result);
+        Shiboken::BindingManager::instance().invalidateWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
         timer->start(cpp_arg0);
         </inject-code>
     </add-function>
