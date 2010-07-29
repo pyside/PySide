@@ -6,8 +6,6 @@ static char** QApplicationArgValues;
 
 void DeleteQApplicationAtExit() {
     if (QApplication::instance()) {
-        //disconnect and decref all widgets used on signals before destroy qApp
-        PySide::SignalManager::instance().clear();
         BindingManager::instance().invalidateWrapper(QApplication::instance());
         QApplication::instance()->deleteLater();
         for (int i = 0; i < QApplicationArgCount; ++i)

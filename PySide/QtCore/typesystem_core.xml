@@ -648,12 +648,14 @@
   <enum-type name="Qt::WidgetAttribute" />
   <enum-type name="QMetaMethod::Access"/>
   <enum-type name="QMetaMethod::MethodType"/>
+  
 
   <!--signal/slot-->
   <inject-code class="target" position="end">
     Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("unicode");
     Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("str");
     PySide::init(module);
+    Py_AtExit(QtCoreModuleExit);
   </inject-code>
   <inject-code class="native" position="beginning">
     #include &lt;pyside.h&gt;
@@ -668,6 +670,10 @@
     {
         Shiboken::AutoDecRef arglist(Shiboken::makeTuple(type, msg));
         Shiboken::AutoDecRef ret(PyObject_CallObject(qtmsghandler, arglist));
+    }
+    void QtCoreModuleExit()
+    {
+        PySide::SignalManager::instance().clear();
     }
   </inject-code>
   <add-function signature="qInstallMsgHandler(PyObject)" return-type="PyObject">
