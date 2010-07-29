@@ -37,6 +37,12 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)
+        # This is done to decrease the refcount of the vm object
+        # allowing the object wrapper to be deleted before the
+        # BindingManager. This is useful when compiling Shiboken
+        # for debug, since the BindingManager destructor has an
+        # assert that checks if the wrapper mapper is empty.
+        parent.childEvent = None
 
     def testChildEventMonkeyPatchWithInheritance(self):
         #Test if the new childEvent injected on a QObject's extension class instance is called from C++
@@ -50,6 +56,12 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)
+        # This is done to decrease the refcount of the vm object
+        # allowing the object wrapper to be deleted before the
+        # BindingManager. This is useful when compiling Shiboken
+        # for debug, since the BindingManager destructor has an
+        # assert that checks if the wrapper mapper is empty.
+        parent.childEvent = None
 
 if __name__ == '__main__':
     unittest.main()
