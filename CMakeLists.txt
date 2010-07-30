@@ -3,9 +3,18 @@ include(icecc.cmake) # this must be the first line!
 project(pysidebindings)
 
 cmake_minimum_required(VERSION 2.6)
-
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/
                       ${CMAKE_MODULE_PATH})
+find_package(PythonLibs REQUIRED)
+find_package(PythonInterpWithDebug REQUIRED)
+find_package(Shiboken 0.3.3 REQUIRED)
+find_package(Qt4 4.5.0 REQUIRED)
+
+set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed (default is /lib${LIB_SUFFIX})" FORCE)
+if(CMAKE_HOST_APPLE)
+    set(ALTERNATIVE_QT_INCLUDE_DIR "" CACHE PATH "The Alternative value to QT_INCLUDE_DIR. Necessary to fix bug on cmake 2.8 MACOS users")
+endif()
 
 if(CMAKE_HOST_UNIX)
     option(ENABLE_GCC_OPTIMIZATION "Enable specific GCC flags to optimization library size and performance. Only available on Release Mode" 0)
@@ -22,7 +31,11 @@ if(CMAKE_HOST_UNIX)
     if(CMAKE_HOST_APPLE)
         if (NOT QT_INCLUDE_DIR)
             set(QT_INCLUDE_DIR "/Library/Frameworks")
-         endif()
+        endif()
+        if(ALTERNATIVE_QT_INCLUDE_DIR)
+            set(QT_INCLUDE_DIR ${ALTERNATIVE_QT_INCLUDE_DIR})
+        endif()
+        string(REPLACE " " ":" QT_INCLUDE_DIR ${QT_INCLUDE_DIR})
     endif()
 endif()
 
@@ -36,11 +49,6 @@ if(AVOID_PROTECTED_HACK OR WIN32)
     message(STATUS "Avoiding protected hack!")
 endif()
 
-find_package(PythonLibs REQUIRED)
-find_package(PythonInterpWithDebug REQUIRED)
-find_package(Shiboken 0.3.3 REQUIRED)
-find_package(Qt4 4.5.0 REQUIRED)
-
 #Fix missing variable on UNIX env
 if(NOT PYTHON_DEBUG_LIBRARIES AND UNIX)
     set(PYTHON_DEBUG_LIBRARIES "${PYTHON_LIBRARIES}")
@@ -51,9 +59,6 @@ set(BINDING_API_MAJOR_VERSION "0")
 set(BINDING_API_MINOR_VERSION "3")
 set(BINDING_API_MICRO_VERSION "3")
 set(BINDING_API_VERSION "${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}.${BINDING_API_MICRO_VERSION}")
-
-set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
-set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed (default is /lib${LIB_SUFFIX})" FORCE)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
