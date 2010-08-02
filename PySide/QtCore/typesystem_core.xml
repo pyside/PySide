@@ -522,6 +522,12 @@
         %PYARG_0 = %CONVERTTOPYTHON[long](qAbs(%1));
     </inject-code>
   </add-function>
+
+  <inject-code class="target" position="end">
+    PyModule_AddIntConstant(module, "QT_VERSION", QT_VERSION);
+    PyModule_AddStringConstant(module, "QT_VERSION_STR", QT_VERSION_STR);
+  </inject-code>
+
   <enum-type name="QtMsgType"/>
   <enum-type name="QSystemSemaphore::AccessMode"/>
   <enum-type name="QSystemSemaphore::SystemSemaphoreError"/>
