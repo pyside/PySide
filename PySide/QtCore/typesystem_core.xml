@@ -517,9 +517,9 @@
       <include file-name="QTextDocument" location="global"/>
     </extra-includes>
   </namespace-type>
-  <add-function signature="qAbs(long)" return-type="long">
+  <add-function signature="qAbs(double)" return-type="double">
     <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[long](qAbs(%1));
+        %PYARG_0 = %CONVERTTOPYTHON[double](qAbs(%1));
     </inject-code>
   </add-function>
 
