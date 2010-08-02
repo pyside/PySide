@@ -212,6 +212,7 @@ PyObject* signal_instance_get_item(PyObject* self, PyObject* key)
     char* sigKey = signal_parse_signature(key);
     char* sig = signal_build_signature(data->signalName, sigKey);
     free(sigKey);
+    const char* sigName = data->signalName;
 
     while(data) {
         if (strcmp(data->signature, sig) == 0) {
@@ -222,7 +223,9 @@ PyObject* signal_instance_get_item(PyObject* self, PyObject* key)
         }
         data = reinterpret_cast<SignalInstanceData*>(data->next);
     }
+    PyErr_Format(PyExc_IndexError, "Signature %s not found for signal: %s", sig, sigName);
     free(sig);
+
     return 0;
 }
 
