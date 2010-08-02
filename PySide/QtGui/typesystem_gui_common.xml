@@ -4251,6 +4251,24 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <add-function signature="QAction(const QString&amp;, QObject*, PyObject*)">
+      <modify-argument index="2">
+        <replace-default-expression  with="0"/>
+        <rename to="parent"/>
+      </modify-argument>
+      <modify-argument index="3">
+        <replace-default-expression  with="0"/>
+        <rename to="triggered"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        %0 = new QActionWrapper(%1, %2);
+      </inject-code>
+
+      <inject-code class="target" position="end">
+          if (%PYARG_3 != Py_None)
+              Shiboken::AutoDecRef result(PyObject_CallMethod(%PYSELF, "connect", "OsO", %PYSELF, SIGNAL(triggered(bool)), %PYARG_3));
+      </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QPainter">
     <extra-includes>
@@ -4366,7 +4384,6 @@
     <modify-function signature="setMatrixEnabled(bool)" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="fontInfo()const" remove="all"/>
-    <modify-function signature="fontMetrics()const" remove="all"/>
   </object-type>
   <!-- qApp macro -->
   <inject-code class="native" position="beginning">
