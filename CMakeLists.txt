@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/
                       ${CMAKE_MODULE_PATH})
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterpWithDebug REQUIRED)
-find_package(Shiboken 0.3.3 REQUIRED)
+find_package(Shiboken 0.4.0 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
@@ -56,8 +56,8 @@ endif()
 
 set(BINDING_NAME PySide)
 set(BINDING_API_MAJOR_VERSION "0")
-set(BINDING_API_MINOR_VERSION "3")
-set(BINDING_API_MICRO_VERSION "3")
+set(BINDING_API_MINOR_VERSION "4")
+set(BINDING_API_MICRO_VERSION "0")
 set(BINDING_API_VERSION "${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}.${BINDING_API_MICRO_VERSION}")
 
 if (NOT CMAKE_BUILD_TYPE)
