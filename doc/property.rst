@@ -1,5 +1,5 @@
-Use of QPropery in PySide
-*************************
+Use of QProperty in PySide
+**************************
 
 PySide implements the function 'QProperty' which allows to declare properties compatible with QMetaProperties.
 
