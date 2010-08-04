@@ -4251,6 +4251,7 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="QAction(const QString&amp;, QObject*)" access="private" />
     <add-function signature="QAction(const QString&amp;, QObject*, const QKeySequence&amp;, PyObject*)">
 
       <!-- NOT use this for now Fix bug #??? 
@@ -4271,7 +4272,7 @@
       </modify-argument>
 
       <inject-code class="target" position="beginning">
-        %0 = new QActionWrapper(%1, %2);
+        %0 = new %TYPE(%1, %2);
         %0->setShortcut(%3);
       </inject-code>
 
