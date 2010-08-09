@@ -4277,7 +4277,7 @@
       </inject-code>
 
       <inject-code class="target" position="end">
-          if (%PYARG_4 != Py_None)
+          if (%PYARG_4 &amp;&amp; %PYARG_4 != Py_None)
               Shiboken::AutoDecRef result(PyObject_CallMethod(%PYSELF, "connect", "OsO", %PYSELF, SIGNAL(triggered(bool)), %PYARG_4));
       </inject-code>
     </add-function>
