@@ -24,6 +24,17 @@ class QPainterDrawText(UsesQApplication):
         self.assert_(self._called)
 
 
+class SetShortcutTest(UsesQApplication):
+
+    def testSetShortcut(self):
+        # Somehow an exception was leaking from the constructor
+        # and appearing in setShortcut.
+        o = QWidget()
+        action = QAction('aaaa', o)
+        shortcut = 'Ctrl+N'
+        action.setShortcut(shortcut)
+        s2 = action.shortcut()
+        self.assertEqual(s2, shortcut)
 
 if __name__ == '__main__':
     unittest.main()
