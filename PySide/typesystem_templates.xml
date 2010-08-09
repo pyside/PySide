@@ -181,11 +181,18 @@
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, %5);
         %PYARG_0 = Shiboken::makeTuple(retval_, %4);
     </template>
-
    <template name="set_qapp_parent_for_orphan">
         Shiboken::SbkBaseWrapper* _pySelf = reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYARG_0);
         if (!_pySelf->parentInfo)
             Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
+    </template>
+    <!-- templates for __reduce__ -->
+    <template name="reduce_start">
+        PyObject *type = PyObject_Type(%PYSELF);
+        PyObject *args = NULL;
+    </template>
+    <template name="reduce_finish">
+        %PYARG_0 = Py_BuildValue("(OO)", type, args);
     </template>
 </typesystem>
 
