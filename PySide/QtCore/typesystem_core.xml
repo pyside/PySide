@@ -727,6 +727,14 @@
     </extra-includes>
     <enum-type name="MonthNameType"/>
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            args = Py_BuildValue("(iii)", %CPPSELF.year(), %CPPSELF.month(),
+                                          %CPPSELF.day());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
     <modify-function signature="getDate(int*,int*,int*)" >
         <modify-argument index="1">
             <remove-argument/>
@@ -760,14 +768,35 @@
         </inject-code>
     </modify-function>
   </value-type>
-
   <value-type name="QDateTime" hash-function="PySide::hash">
     <conversion-rule class="target" file="qdatetime_conversions.h"/>
     <extra-includes>
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
+    <!-- Somewhat internal constructor used to pickle QDateTime -->
+    <add-function signature="QDateTime(int, int, int, int, int, int, int, int)">
+        <modify-argument index="8">
+          <replace-default-expression with="Qt::LocalTime"/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            QDate date(%1, %2, %3);
+            QTime time(%4, %5, %6, %7);
+            %0 = new %TYPE(date, time, Qt::TimeSpec(%8));
+        </inject-code>
+    </add-function>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            QDate date = %CPPSELF.date();
+            QTime time = %CPPSELF.time();
+            args = Py_BuildValue("(iiiiiiii)", date.year(), date.month(),
+                                               date.day(), time.hour(),
+                                               time.minute(), time.second(),
+                                               time.msec(), (int)%CPPSELF.timeSpec());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
   </value-type>
-
   <value-type name="QDir">
     <enum-type name="Filter" flags="QDir::Filters"/>
     <enum-type name="SortFlag" flags="QDir::SortFlags" />
@@ -803,6 +832,14 @@
     <modify-function signature="getRect(int*,int*,int*,int*)const">
       <remove/>
     </modify-function>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            args = Py_BuildValue("(iiii)", %CPPSELF.x(), %CPPSELF.y(),
+                                           %CPPSELF.width(), %CPPSELF.height());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QRectF">
     <modify-function signature="getCoords(qreal*,qreal*,qreal*,qreal*)const">
@@ -811,6 +848,16 @@
     <modify-function signature="getRect(qreal*,qreal*,qreal*,qreal*)const">
       <remove/>
     </modify-function>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            // FIXME These functions return qreal. Will convert to double (format
+            // string) mess things up in other architectures?
+            args = Py_BuildValue("(dddd)", %CPPSELF.x(), %CPPSELF.y(),
+                                           %CPPSELF.width(), %CPPSELF.height());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
   </value-type>
 
   <value-type name="QSize" hash-function="PySide::hash">
@@ -823,10 +870,26 @@
     </inject-code>
     <modify-function signature="rheight()" remove="all"/>
     <modify-function signature="rwidth()" remove="all"/>
+        <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            args = Py_BuildValue("(ii)", %CPPSELF.width(), %CPPSELF.height());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QSizeF">
     <modify-function signature="rheight()" remove="all" />
     <modify-function signature="rwidth()" remove="all" />
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            // FIXME These functions return qreal. Will convert to double (format
+            // string) mess things up in other architectures?
+            args = Py_BuildValue("(dd)", %CPPSELF.width(), %CPPSELF.height());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
   </value-type>
 
   <value-type name="QTime" hash-function="PySide::hash">
@@ -834,6 +897,14 @@
     <extra-includes>
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            args = Py_BuildValue("(iiii)", %CPPSELF.hour(), %CPPSELF.minute(),
+                                           %CPPSELF.second(), %CPPSELF.msec());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QPersistentModelIndex">
     <modify-function signature="internalPointer()const" remove="all"/>
@@ -1298,6 +1369,15 @@
             Shiboken::SbkType&lt;QByteArray>()->tp_flags |= Py_TPFLAGS_HAVE_GETCHARBUFFER;
         #endif
     </inject-code>
+
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            args = Py_BuildValue("(s)", %CPPSELF.constData());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
+
     <!-- removed functions -->
     <modify-function signature="begin()" remove="all"/>
     <modify-function signature="begin()const" remove="all"/>

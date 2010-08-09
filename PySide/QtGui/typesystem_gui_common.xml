@@ -678,6 +678,14 @@
             PyErr_SetString(PyExc_TypeError, "QVariant must be holding a QColor");
         </inject-code>
     </add-function>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_start"/>
+            args = Py_BuildValue("(iiii)", %CPPSELF.red(), %CPPSELF.green(),
+                                           %CPPSELF.blue(), %CPPSELF.alpha());
+            <insert-template name="reduce_finish"/>
+        </inject-code>
+    </add-function>
     <!-- get* methods. Inject code -->
     <modify-function signature="getCmyk(int*,int*,int*,int*,int*)">
         <modify-argument index="0">
