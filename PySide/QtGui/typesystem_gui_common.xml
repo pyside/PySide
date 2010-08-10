@@ -3439,15 +3439,18 @@
     <inject-code class="target" position="beginning">
         QWidget* tab = %CPPSELF.widget(%1);
         if (tab) {
-            Shiboken::setParent(0, %CONVERTTOPYTHON[QWidget*](tab));
+        	Shiboken::AutoDecref pyWidget(%CONVERTTOPYTHON[QWidget*](tab));
+            Shiboken::setParent(0, pyWidget);
             %CPPSELF.%FUNCTION_NAME(%1);
         }
     </inject-code>
     </modify-function>
     <modify-function signature="clear()">
         <inject-code class="target" position="beginning">
-            for (int i=0; i &lt; %CPPSELF.count(); i++)
-                Shiboken::setParent(0, %CONVERTTOPYTHON[QWidget*](%CPPSELF.widget(i)));
+            for (int i=0; i &lt; %CPPSELF.count(); i++) {
+            	Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](%CPPSELF.widget(i)));
+                Shiboken::setParent(0, pyWidget);
+            }
             %CPPSELF.%FUNCTION_NAME();
         </inject-code>
     </modify-function>
