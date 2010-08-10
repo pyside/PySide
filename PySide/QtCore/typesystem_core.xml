@@ -179,6 +179,10 @@
     <include file-name="QVector" location="global"/>
   </container-type>
 
+  <container-type name="QStack" type="vector">
+    <include file-name="QStack" location="global"/>
+    <conversion-rule file="qstack_conversion.h"/>
+  </container-type>
 
   <rejection class="QVector" function-name="back"/>
   <rejection class="QVector" function-name="begin"/>
@@ -220,7 +224,6 @@
     <conversion-rule file="qpair_conversions.h"/>
     <include file-name="QPair" location="global"/>
   </container-type>
-  <container-type name="QStack" type="stack"/>
 
   <rejection class="*" function-name="d_func"/>
   <rejection class="*" function-name="data_ptr"/>
