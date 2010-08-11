@@ -3439,7 +3439,7 @@
     <inject-code class="target" position="beginning">
         QWidget* tab = %CPPSELF.widget(%1);
         if (tab) {
-        	Shiboken::AutoDecref pyWidget(%CONVERTTOPYTHON[QWidget*](tab));
+            Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](tab));
             Shiboken::setParent(0, pyWidget);
             %CPPSELF.%FUNCTION_NAME(%1);
         }
@@ -4257,7 +4257,7 @@
     <modify-function signature="QAction(const QString&amp;, QObject*)" access="private" />
     <add-function signature="QAction(const QString&amp;, QObject*, const QKeySequence&amp;, PyObject*)">
 
-      <!-- NOT use this for now Fix bug #??? 
+      <!-- NOT use this for now Fix bug #???
       <modify-argument index="2">
         <replace-default-expression  with="0"/>
         <rename to="parent"/>
