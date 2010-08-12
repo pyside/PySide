@@ -572,7 +572,6 @@
   </value-type>
   <value-type name="QTextFormat" >
     <modify-function signature="isValid()const" access="non-final"/>
-    <modify-function signature="setProperty(int,QVector&lt;QTextLength&gt;)" rename="setLengthVectorProperty"/>
   </value-type>
   <value-type name="QTextListFormat" />
   <value-type name="QPolygon">
@@ -2088,8 +2087,7 @@
   <object-type name="QTextBlockUserData" />
   <object-type name="QTextItem" />
   <object-type name="QTextList" >
-    <modify-function signature="format()const" rename="textListFormat"/>
-    <modify-function signature="isEmpty()const" remove="all"/>
+    emodify-function signature="isEmpty()const" remove="all"/>
     <!--### Obsolete in 4.3-->
   </object-type>
   <object-type name="QTextObject"/>
@@ -2436,7 +2434,6 @@
     </modify-function>
 
     <modify-function signature="addWidget(QWidget *)">
-      <rename to="addStackedWidget"/>
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
@@ -3862,12 +3859,6 @@
         <rename to="parent"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="move(int,int)" rename="moveRubberBand"/>
-    <modify-function signature="move(const QPoint &amp;)" rename="moveRubberBand"/>
-    <modify-function signature="resize(int,int)" rename="resizeRubberBand"/>
-    <modify-function signature="resize(const QSize &amp;)" rename="resizeRubberBand"/>
-    <modify-function signature="setGeometry(int,int,int,int)" rename="setRubberBandGeometry"/>
-    <modify-function signature="setGeometry(const QRect &amp;)" rename="setRubberBandGeometry"/>
   </object-type>
   <object-type name="QTextLayout">
     <extra-includes>
@@ -4049,17 +4040,11 @@
   <object-type name="QDesktopWidget"/>
   <object-type name="QFrame"/>
   <object-type name="QTextTable">
-    <modify-function signature="format() const">
-      <rename to="tableFormat"/>
-    </modify-function>
     <extra-includes>
       <include file-name="QTextCursor" location="global"/>
     </extra-includes>
   </object-type>
   <object-type name="QSpinBox">
-    <modify-function signature="valueChanged(const QString &amp;)">
-      <rename to="valueStringChanged"/>
-    </modify-function>
     <modify-function signature="fixup(QString &amp;)const">
       <modify-argument index="return">
         <replace-type modified-type="QString"/>
@@ -4077,15 +4062,8 @@
       </inject-code>
     </modify-function>
   </object-type>
-  <object-type name="QTextBrowser">
-    <modify-function signature="highlighted(const QString &amp;)">
-      <rename to="highlightedString"/>
-    </modify-function>
-  </object-type>
+  <object-type name="QTextBrowser"/>
   <object-type name="QDoubleSpinBox">
-    <modify-function signature="valueChanged(const QString &amp;)">
-      <rename to="valueStringChanged"/>
-    </modify-function>
     <modify-function signature="fixup(QString &amp;)const">
       <modify-argument index="return">
         <replace-type modified-type="QString"/>
@@ -4315,18 +4293,6 @@
     <modify-function signature="drawPolyline(const QPointF *, int)" remove="all" />
     <modify-function signature="drawRects(const QRect *, int)" remove="all" />
     <modify-function signature="drawRects(const QRectF *, int)" remove="all" />
-    <modify-function signature="drawLines(const QVector&lt;QPoint&gt; &amp;)">
-      <rename to="drawLinesFromPoints"/>
-    </modify-function>
-    <modify-function signature="drawLines(const QVector&lt;QPointF&gt; &amp;)">
-      <rename to="drawLinesFromPointsF"/>
-    </modify-function>
-    <modify-function signature="drawLines(const QVector&lt;QLineF&gt; &amp;)">
-      <rename to="drawLinesF"/>
-    </modify-function>
-    <modify-function signature="drawRects(const QVector&lt;QRectF&gt; &amp;)">
-      <rename to="drawRectsF"/>
-    </modify-function>
     <modify-function signature="drawRoundRect(int, int, int, int, int, int)">
       <modify-argument index="5">
         <rename to="xRound"/>
