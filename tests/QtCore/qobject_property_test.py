@@ -13,6 +13,10 @@ class MySize(QSize):
     '''Extended class'''
     pass
 
+class ExtQObject(QObject):
+    registeredproperty = QProperty(int)
+
+
 class PropertyCase(unittest.TestCase):
     '''Test case for QObject properties'''
 
@@ -91,5 +95,27 @@ class PropertyCase(unittest.TestCase):
 
         self.assertTrue(obj.property('foo') is mysize)
 
+
+class PropertyWithConstructorCase(unittest.TestCase):
+    '''Test case for QObject properties set using named arguments in the constructor.'''
+
+    def testObjectNameProperty(self):
+        #QObject(property=value) for existing C++ property
+        obj = QObject(objectName='dummy')
+        self.assertEqual(obj.objectName(), 'dummy')
+
+    def testDynamicPropertyRaisesException(self):
+        self.assertRaises(AttributeError, QObject, dummy=42)
+
+    def testPythonDeclaredProperty(self):
+        obj = ExtQObject(registeredproperty=123)
+
+    def testConstructorPropertyInQObjectDerived(self):
+        #QTimer(property=value) for existing C++ property
+        obj = QTimer(objectName='dummy')
+        self.assertEqual(obj.objectName(), 'dummy')
+
+
 if __name__ == '__main__':
     unittest.main()
+
