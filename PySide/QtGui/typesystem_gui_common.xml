@@ -2917,6 +2917,11 @@
     </modify-function>
     <modify-function signature="elidedText(QFontMetrics, int, Qt::TextElideMode, QString)" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="createEditor(QWidget*,QStyleOptionViewItem,QModelIndex)const">
+      <modify-argument index="1">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
   </object-type>
   <object-type name="QTableWidgetItem" >
     <modify-function signature="backgroundColor()const" remove="all"/>
