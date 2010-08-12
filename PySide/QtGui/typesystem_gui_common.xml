@@ -555,6 +555,10 @@
     <!--### Obsolete in 4.3-->
     <modify-function signature="operator&amp;=(QRect)" remove="all"/>
     <modify-function signature="operator+=(QRect)" remove="all"/>
+    <modify-function signature="intersect(QRegion)" remove="all" />
+    <!--### Obsolete in 4.x-->
+    <modify-function signature="intersect(QRect)" remove="all" />
+    <!--### Obsolete in 4.x-->
   </value-type>
   <value-type name="QTextBlock" />
   <value-type name="QTextBlockFormat" />
