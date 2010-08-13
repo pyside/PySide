@@ -139,15 +139,15 @@ int qproperty_init(PyObject* self, PyObject* args, PyObject* kwds)
     data->scriptable = true;
     data->stored = true;
 
-    static const char *kwlist[] = {"fget", "fset", "freset", "fdel", "doc",
+    static const char *kwlist[] = {"type", "fget", "fset", "freset", "fdel", "doc",
                                    "designable", "scriptable", "stored", "user",
                                    "constant", "final", 0};
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
                                      "O|OOOOsbbbbbb:QtCore.QProperty", (char**) kwlist,
-                                     &type, &data->fget, &data->fset, &data->freset,
-                                     &data->fdel, &data->doc, &data->designable,
-                                     &data->scriptable, &data->stored, &data->user,
-                                     &data->constant, &data->final))
+                                     /*O*/&type,
+				     /*OOOO*/ &(data->fget), &(data->fset), &(data->freset), &(data->fdel),
+				     /*s*/&(data->doc),
+				     /*bbbbbb*/&(data->designable), &(data->scriptable), &(data->stored), &(data->user), &(data->constant), &(data->final)))
         return 0;
 
     if (!data->fset && data->fget)
