@@ -143,11 +143,11 @@ int qproperty_init(PyObject* self, PyObject* args, PyObject* kwds)
                                    "designable", "scriptable", "stored", "user",
                                    "constant", "final", 0};
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
-                                     "O|OOOOsbbbbbb:QtCore.QProperty", (char**) kwlist,
-                                     /*O*/&type,
-				     /*OOOO*/ &(data->fget), &(data->fset), &(data->freset), &(data->fdel),
-				     /*s*/&(data->doc),
-				     /*bbbbbb*/&(data->designable), &(data->scriptable), &(data->stored), &(data->user), &(data->constant), &(data->final)))
+                                     "OO|OOOsbbbbbb:QtCore.QProperty", (char**) kwlist,
+                                     /*OO*/     &type, &(data->fget),
+                                     /*OOOO*/   &(data->fset), &(data->freset), &(data->fdel),
+                                     /*s*/      &(data->doc),
+                                     /*bbbbbb*/ &(data->designable), &(data->scriptable), &(data->stored), &(data->user), &(data->constant), &(data->final)))
         return 0;
 
     if (!data->fset && data->fget)
@@ -187,6 +187,8 @@ int qproperty_set(PyObject* self, PyObject* source, PyObject* value)
         Py_INCREF(value);
         Shiboken::AutoDecRef result(PyObject_CallObject(data->fset, args));
         return (result.isNull() ? -1 : 0);
+    } else {
+        PyErr_SetString(PyExc_AttributeError, "Attibute read only");
     }
     return -1;
 }

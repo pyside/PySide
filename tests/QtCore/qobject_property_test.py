@@ -16,6 +16,16 @@ class MySize(QSize):
 class ExtQObject(QObject):
     registeredproperty = QProperty(int)
 
+class MyObject(QObject):
+    '''Test Property'''
+
+    def readPP(self):
+        return 42
+
+    def trySetPP(self):
+        self.pp = 0
+
+    pp = QProperty(int, readPP)
 
 class PropertyCase(unittest.TestCase):
     '''Test case for QObject properties'''
@@ -115,6 +125,11 @@ class PropertyWithConstructorCase(unittest.TestCase):
         obj = QTimer(objectName='dummy')
         self.assertEqual(obj.objectName(), 'dummy')
 
+    def testPythonProperty(self):
+        o = MyObject()
+        self.assertEqual(o.pp, 42)
+        o.pp = 0
+        self.assertRaises(AttributeError, o.trySetPP)
 
 if __name__ == '__main__':
     unittest.main()

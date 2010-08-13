@@ -373,7 +373,6 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             Py_XDECREF(pp_name);
             return id - metaObject->methodCount();
         }
-        printf("access to property: %s-%s\n", mp.name(), mp.typeName());
         typeResolver = Shiboken::TypeResolver::get(mp.typeName());
     }
 
