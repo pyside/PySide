@@ -1,3 +1,4 @@
+PYSIDE_TEST(bug_278_test.py)
 PYSIDE_TEST(blocking_signals_test.py)
 PYSIDE_TEST(child_event_test.py)
 PYSIDE_TEST(deletelater_test.py)
