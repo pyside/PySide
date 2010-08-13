@@ -10,6 +10,13 @@ find_package(PythonInterpWithDebug REQUIRED)
 find_package(Shiboken 0.4.0 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
+find_program(XVFB_RUN NAMES xvfb-run)
+set(XVFB_EXEC "")
+if (NOT ${XVFB_RUN} MATCHES "XVFB_RUN-NOTFOUND")
+    set(XVFB_EXEC ${XVFB_RUN})
+    message("Using xvfb-run to perform QtGui tests.")
+endif()
+
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
 set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed (default is /lib${LIB_SUFFIX})" FORCE)
 if(CMAKE_HOST_APPLE)
