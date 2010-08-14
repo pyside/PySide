@@ -1,38 +1,5 @@
 project(QtGui)
 
-# Check QtGui support
-macro(CHECK_QT_GUI_MACRO macro_display_name qt_macro module_sources global_sources)
-    if (DEFINED PYSIDE_${qt_macro})
-        if (PYSIDE_${qt_macro})
-            list(APPEND ${global_sources} ${${module_sources}})
-        endif()
-    else()
-        set(SRC_FILE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/test${qt_macro}.cxx)
-        file(WRITE ${SRC_FILE}
-        "#include <QtGui>\n"
-        "int main() { \n"
-        "#ifdef ${qt_macro}\n"
-        "#error not supported.\n"
-        "#endif\n"
-        "}\n")
-
-        try_compile(Q_WORKS ${CMAKE_BINARY_DIR}
-                    ${SRC_FILE}
-                    CMAKE_FLAGS
-                    -DINCLUDE_DIRECTORIES:STRING=${QT_QTGUI_INCLUDE_DIR}\;${QT_INCLUDE_DIR}
-                    -DLINK_LIBRARIES:PATH=${QT_QTGUI_LIBRARY_RELEASE}
-                    OUTPUT_VARIABLE OUTPUT)
-
-        set("PYSIDE_${qt_macro}" ${Q_WORKS} CACHE STRING "Has this Qt module been found by pyside?")
-        if(Q_WORKS)
-            message(STATUS "Testing support to ${macro_display_name} -- enabled")
-            list(APPEND ${global_sources} ${${module_sources}})
-        else()
-            message(STATUS "Testing support to ${macro_display_name} -- disabled")
-        endif()
-    endif()
-endmacro()
-
 if(ENABLE_X11)
     set(SPECIFIC_OS_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11info_wrapper.cpp
@@ -406,58 +373,10 @@ ${SPECIFIC_OS_FILES}
 ${QtGui_46_SRC}
 )
 
-#Check GtkStyle
-set(QT_GTKSTYLE_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qgtkstyle_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("GtkStyle" QT_NO_STYLE_GTK QT_GTKSTYLE_SRCS QtGui_SRC)
-
-#Check SystemTray
-set(QT_SYSTEMTRAY_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qsystemtrayicon_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("SystemTray" QT_NO_SYSTEMTRAYICON QT_SYSTEMTRAY_SRCS QtGui_SRC)
-
-#Check QT_PRINTDIALOG support
-set(QT_PRINTDIALOG_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qabstractpagesetupdialog_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qabstractprintdialog_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpagesetupdialog_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprintdialog_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("PrintDialog Support" QT_NO_PRINTDIALOG QT_PRINTDIALOG_SRCS QtGui_SRC)
-
-#Check QT_PRITPREVIEW support
-set(QT_PRINTPREVIEW_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprintpreviewwidget_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("PrintPreview Support" QT_NO_PRINTPREVIEWWIDGET QT_PRINTPREVIEW_SRCS QtGui_SRC)
-
-#Check QT_PRINTPREVIEWDIALOG support
-set(QT_PRINTPREVIEWDIALOG_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprintpreviewdialog_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("PrintPreviewDialog Support" QT_NO_PRINTPREVIEWDIALOG QT_PRINTPREVIEWDIALOG_SRCS QtGui_SRC)
-
-#Check QT_PRINTER
-set(QT_PRINTER_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprinter_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprinterinfo_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprintengine_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("Printer Support" QT_NO_PRINTER QT_PRINTER_SRCS QtGui_SRC)
-
-#Check QT_SIZEGRIP support
-set(QT_SIZEGRIP_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qsizegrip_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("SizeGrip Support" QT_NO_SIZEGRIP QT_SIZEGRIP_SRCS QtGui_SRC)
-
-#Check QT_SESSIONMANAGER support
-set(QT_SESSIONMANAGER_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qsessionmanager_wrapper.cpp
-)
-CHECK_QT_GUI_MACRO("SessionManager Support" QT_NO_SESSIONMANAGER QT_SESSIONMANAGER_SRCS QtGui_SRC)
+check_qt_class(QtGui QGtkStyle QtGui_SRC)
+check_qt_class(QtGui QSessionManager QtGui_SRC)
+check_qt_class(QtGui QSizeGrip QtGui_SRC)
+check_qt_class(QtGui QSystemTrayIcon QtGui_SRC)
 
 set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}

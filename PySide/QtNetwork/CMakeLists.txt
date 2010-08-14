@@ -1,38 +1,5 @@
 project(QtNetwork)
 
-# Check QtNetwork support
-macro(CHECK_QT_NETWORK_MACRO macro_display_name qt_macro module_sources global_sources)
-    if (DEFINED PYSIDE_${qt_macro})
-        if (PYSIDE_${qt_macro})
-            list(APPEND ${global_sources} ${${module_sources}})
-        endif()
-    else()
-        set(SRC_FILE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/test${qt_macro}.cxx)
-        file(WRITE ${SRC_FILE}
-        "#include <QtNetwork>\n"
-        "int main() { \n"
-        "#ifdef ${qt_macro}\n"
-        "#error not supported.\n"
-        "#endif\n"
-        "}\n")
-
-        try_compile(Q_WORKS ${CMAKE_BINARY_DIR}
-                    ${SRC_FILE}
-                    CMAKE_FLAGS
-                    -DINCLUDE_DIRECTORIES:STRING=${QT_QTNETWORK_INCLUDE_DIR}\;${QT_INCLUDE_DIR}
-                    -DLINK_LIBRARIES:PATH=${QT_QTNETWORK_LIBRARY_RELEASE}
-                    OUTPUT_VARIABLE OUTPUT)
-
-        set("PYSIDE_${qt_macro}" ${Q_WORKS} CACHE STRING "Has this Qt module been found by pyside?")
-        if(Q_WORKS)
-            message(STATUS "Testing support to ${macro_display_name} -- enabled")
-            list(APPEND ${global_sources} ${${module_sources}})
-        else()
-            message(STATUS "Testing support to ${macro_display_name} -- disabled")
-        endif()
-    endif()
-endmacro()
-
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
     set (QtNetwork_47_SRC
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkconfiguration_wrapper.cpp
@@ -74,15 +41,11 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
 ${QtNetwork_47_SRC}
 )
 
-set(OPENSSL_SOURCES
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslcipher_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslkey_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslconfiguration_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslerror_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qsslsocket_wrapper.cpp
-)
-
-CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL OPENSSL_SOURCES QtNetwork_SRC)
+check_qt_class(QtNetwork QSslCipher QtNetwork_SRC)
+check_qt_class(QtNetwork QSslConfiguration QtNetwork_SRC)
+check_qt_class(QtNetwork QSslError QtNetwork_SRC)
+check_qt_class(QtNetwork QSslKey QtNetwork_SRC)
+check_qt_class(QtNetwork QSslSocket QtNetwork_SRC)
 
 set(QtNetwork_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtNetwork_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}

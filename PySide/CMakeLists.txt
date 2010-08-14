@@ -51,6 +51,39 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
     install(FILES ${typesystem_files} DESTINATION share/PySide/typesystems)
 endmacro()
 
+macro(check_qt_class module class global_sources)
+    string(TOLOWER ${class} _class)
+    string(TOUPPER ${module} _module)
+    set(_cppfile ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module}/${_class}_wrapper.cpp)
+    if (DEFINED PYSIDE_${class})
+        if (PYSIDE_${class})
+            list(APPEND ${global_sources} ${_cppfile})
+        endif()
+    else()
+        set(SRC_FILE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/test${class}.cxx)
+        file(WRITE ${SRC_FILE}
+             "#include <${module}>\n"
+             "#include <typeinfo>\n"
+             "int main() { return (int) &typeid(${class}); }\n"
+        )
+        try_compile(Q_WORKS ${CMAKE_BINARY_DIR}
+                    ${SRC_FILE}
+                    CMAKE_FLAGS
+                        "-DLINK_LIBRARIES=${QT_${_module}_LIBRARY}"
+                        "-DLINK_DIRECTORIES=${QT_LIBRARY_DIR}"
+                        "-DINCLUDE_DIRECTORIES=${QT_INCLUDE_DIR};${QT_${_module}_INCLUDE_DIR}"
+                    OUTPUT_VARIABLE OUTPUT)
+        file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeCheckQtClassTest.log ${OUTPUT})
+
+        set("PYSIDE_${class}" ${Q_WORKS} CACHE STRING "Has this Qt class been found?")
+        if(Q_WORKS)
+            message(STATUS "Checking for ${class} in ${module} -- found")
+            list(APPEND ${global_sources} ${_cppfile})
+        else()
+            message(STATUS "Checking for ${class} in ${module} -- not found")
+        endif()
+    endif()
+endmacro()
 
 # Configure include based on platform
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"
