@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtWebKit">
+  <object-type name="QWebFrame">
+    <modify-function signature="print(QPrinter*)const" remove="all"/>
+  </object-type>
+  <object-type name="QWebView">
+    <modify-function signature="print(QPrinter*)const" remove="all"/>
+  </object-type>
+
+  <load-typesystem name="typesystem_webkit.xml" generate="yes"/>
+</typesystem>

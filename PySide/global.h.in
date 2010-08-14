@@ -338,6 +338,8 @@ QT_END_HEADER
   #define Q_WS_MAC
 #elif @ENABLE_WIN@
   #define Q_WS_WIN
+#elif @ENABLE_SIMULATOR@
+  #define Q_WS_SIMULATOR
 #endif
 
 // There are symbols in Qt that exist in Debug but

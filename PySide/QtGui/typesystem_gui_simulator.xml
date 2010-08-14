@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtGui">
+  <!-- These classes are not present in Qt Simulator build, even though
+       QT_NO_PRINTER is *not* set -->
+  <rejection class="QAbstractPageSetupDialog"/>
+  <rejection class="QAbstractPrintDialog"/>
+  <rejection class="QPageSetupDialog"/>
+  <rejection class="QPrintDialog"/>
+  <rejection class="QPrintPreviewDialog"/>
+  <rejection class="QPrintPreviewWidget"/>
+  <rejection class="QPrintEngine"/>
+  <rejection class="QPrinterInfo"/>
+  <rejection class="QPrinter"/>
+
+  <object-type name="QPlainTextEdit">
+    <modify-function signature="print(QPrinter*)const" remove="all"/>
+  </object-type>
+  <object-type name="QTextDocument">
+    <modify-function signature="print(QPrinter*)const" remove="all"/>
+  </object-type>
+  <object-type name="QTextEdit">
+    <modify-function signature="print(QPrinter*)const" remove="all"/>
+  </object-type>
+
+  <!-- Qt::HANDLE is typedef to "void *", which gives compilation errors on
+       conversion templates -->
+  <value-type name="QCursor">
+    <modify-function signature="QCursor(Qt::HANDLE)" remove="all"/>
+  </value-type>
+  <value-type name="QFont">
+    <modify-function signature="handle()const" remove="all"/>
+  </value-type>
+
+  <load-typesystem name="typesystem_gui.xml" generate="yes"/>
+</typesystem>
