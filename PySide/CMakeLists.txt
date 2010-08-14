@@ -4,7 +4,7 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
 
 macro(execute_generator module sources typesystem_path)
     message("Running generator for ${module}...")
-endmacro(execute_generator)
+endmacro()
 
 macro(create_pyside_module module_name typesystem_file module_include_dir module_libraries module_deps module_typesystem_path module_sources)
     add_custom_command(OUTPUT ${${module_sources}}
@@ -42,7 +42,7 @@ macro(create_pyside_module module_name typesystem_file module_include_dir module
             DESTINATION include/PySide/${module_name}/)
     install(FILES ${typesystem_file}
             DESTINATION share/PySide/typesystems)
-endmacro(create_pyside_module)
+endmacro()
 
 
 # Configure include based on platform
@@ -61,7 +61,7 @@ else()
         message(STATUS "${name} NOT found. ${name} support disabled.")
     endif()
 endif()
-endmacro(HAS_QT_MODULE)
+endmacro()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
                                                               "${CMAKE_BINARY_DIR}/PySide/__init__.py")

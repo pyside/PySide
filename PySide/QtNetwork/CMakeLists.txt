@@ -31,8 +31,7 @@ macro(CHECK_QT_NETWORK_MACRO macro_display_name qt_macro module_sources global_s
             message(STATUS "Testing support to ${macro_display_name} -- disabled")
         endif()
     endif()
-endmacro(CHECK_QT_NETWORK_MACRO)
-
+endmacro()
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
     set (QtNetwork_47_SRC
@@ -71,7 +70,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtcpsocket_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qtnetwork_module_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qudpsocket_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
-${SPECIFIC_OS_FILES}
+
 ${QtNetwork_47_SRC}
 )
 

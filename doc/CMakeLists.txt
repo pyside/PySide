@@ -43,7 +43,7 @@ COMMENT "Running generator to generate documentation of ${module}..."
 )
 add_dependencies("${module}-apidoc" qdoc3)
 add_dependencies(apidoc "${module}-apidoc")
-endmacro(create_doc module)
+endmacro()
 
 create_doc(QtCore "")
 create_doc(QtGui "${QtCore_SOURCE_DIR}")
@@ -79,11 +79,11 @@ add_custom_target(apidocinstall
 
 add_dependencies(apidocinstall apidevhelp)
 
-else (NOT ${graphviz_exec} STREQUAL graphviz_exec-NOTFOUND)
+else ()
     message(STATUS "Missing graphviz tool (dot), apidoc generation targets disabled.")
-endif (NOT ${graphviz_exec} STREQUAL graphviz_exec-NOTFOUND)
+endif ()
 
-else (QT_SRC_DIR)
+else ()
     message(STATUS "QT_SRC_DIR variable not set, apidoc generation targets disabled.")
-endif (QT_SRC_DIR)
+endif ()
 

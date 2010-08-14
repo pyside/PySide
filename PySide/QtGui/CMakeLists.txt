@@ -31,32 +31,20 @@ macro(CHECK_QT_GUI_MACRO macro_display_name qt_macro module_sources global_sourc
             message(STATUS "Testing support to ${macro_display_name} -- disabled")
         endif()
     endif()
-endmacro(CHECK_QT_GUI_MACRO)
+endmacro()
 
 if(ENABLE_X11)
-    set(MODULE_NAME "x11")
     set(SPECIFIC_OS_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11info_wrapper.cpp
        )
 
     if(Q_WS_MAEMO_5)
-        set(AUTO_OS "MAEMO 5")
-        set(MODULE_NAME "maemo")
         set(SPECIFIC_OS_FILES
             ${SPECIFIC_OS_FILES}
             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qabstractkineticscroller_wrapper.cpp
         )
-    endif(Q_WS_MAEMO_5)
-
-elseif(ENABLE_MAC)
-    set(MODULE_NAME "mac")
-    set(SPECIFIC_OS_FILES
-       )
-elseif(ENABLE_WIN)
-    set(MODULE_NAME "win")
-    set(SPECIFIC_OS_FILES
-       )
-endif(ENABLE_X11)
+    endif()
+endif()
 
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
@@ -98,7 +86,7 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qvector3d_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qvector4d_wrapper.cpp
     )
-endif (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+endif ()
 
 set(QtGui_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qabstractbutton_wrapper.cpp

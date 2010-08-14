@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtGui">
   <load-typesystem name="typesystem_core.xml" generate="no"/>
-  <load-typesystem name="typesystem_gui_@MODULE_NAME@.xml" generate="yes"/>
+  <load-typesystem name="typesystem_gui_@AUTO_OS@.xml" generate="yes"/>
 </typesystem>

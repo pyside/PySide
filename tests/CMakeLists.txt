@@ -25,7 +25,7 @@ else()
       if(NOT DISABLE_${name} AND ${var})
           add_subdirectory(${name})
       endif()
-    endmacro(TEST_QT_MODULE)
+    endmacro()
 
     macro(PYSIDE_TEST)
         string(REGEX MATCH "/([^/]+)//?([^/]+)\\.py" foo "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}" )
@@ -43,7 +43,7 @@ else()
                              TIMEOUT ${CTEST_TESTING_TIMEOUT}
                              WILL_FAIL ${EXPECT_TO_FAIL}
                              ENVIRONMENT "PYTHONPATH=${TEST_PYTHONPATH};${LIBRARY_PATH_VAR}=${TEST_LIBRARY_PATH}")
-    endmacro(PYSIDE_TEST)
+    endmacro()
 
     # Try to find QtMultimedia
     # TODO: Remove this hack when cmake support QtMultimedia module
