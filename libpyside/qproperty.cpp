@@ -231,12 +231,14 @@ const char* qproperty_get_type(PyObject* self)
 
 PyObject* qproperty_get_object(PyObject* source, PyObject* name)
 {
-    if (PyObject_HasAttr(source, name)) {
-        PyObject* attr = PyObject_GenericGetAttr(source, name);
-        if (isQPropertyType(attr))
-            return attr;
+    PyObject* attr = PyObject_GenericGetAttr(source, name);
+    if (attr && isQPropertyType(attr))
+        return attr;
+
+    if (!attr)
+        PyErr_Clear(); //Clear possible error caused by PyObject_GenericGetAttr
+    else
         Py_DECREF(attr);
-    }
     return 0;
 }
 

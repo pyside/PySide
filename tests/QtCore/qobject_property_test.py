@@ -13,8 +13,17 @@ class MySize(QSize):
     '''Extended class'''
     pass
 
-class ExtQObject(QObject):
-    registeredproperty = QProperty(int)
+class ExQObject(QObject):
+    def __init__(self, *args, **kargs):
+        QObject.__init__(self, *args, **kargs)
+
+    def setProperty(self, value):
+        self._value = value
+
+    def getProperty(self):
+        return self._value
+
+    registeredproperty = QProperty(int, getProperty, setProperty)
 
 class MyObject(QObject):
     '''Test Property'''
@@ -105,7 +114,6 @@ class PropertyCase(unittest.TestCase):
 
         self.assertTrue(obj.property('foo') is mysize)
 
-
 class PropertyWithConstructorCase(unittest.TestCase):
     '''Test case for QObject properties set using named arguments in the constructor.'''
 
@@ -118,17 +126,17 @@ class PropertyWithConstructorCase(unittest.TestCase):
         self.assertRaises(AttributeError, QObject, dummy=42)
 
     def testPythonDeclaredProperty(self):
-        obj = ExtQObject(registeredproperty=123)
+        obj = ExQObject(registeredproperty=123)
+        self.assertEqual(obj.registeredproperty, 123)
 
     def testConstructorPropertyInQObjectDerived(self):
         #QTimer(property=value) for existing C++ property
         obj = QTimer(objectName='dummy')
         self.assertEqual(obj.objectName(), 'dummy')
 
-    def testPythonProperty(self):
+    def testReadOnlyPythonProperty(self):
         o = MyObject()
         self.assertEqual(o.pp, 42)
-        o.pp = 0
         self.assertRaises(AttributeError, o.trySetPP)
 
 if __name__ == '__main__':
