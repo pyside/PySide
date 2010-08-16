@@ -5,7 +5,7 @@ from helper import UsesQApplication
 
 class QPainterDrawText(UsesQApplication):
 
-    def _cb(self, checked):
+    def _cb(self):
         self._called = True
 
     def testSignal(self):

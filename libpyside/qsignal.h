@@ -59,6 +59,7 @@ extern "C"
 
 PYSIDE_API PyAPI_FUNC(PyObject*) signalNew(const char* name, ...);
 PYSIDE_API void signalUpdateSource(PyObject* source);
+PYSIDE_API bool signal_connect(PyObject* source, const char* signal, PyObject* callback);
 
 } //namespace PySide
 

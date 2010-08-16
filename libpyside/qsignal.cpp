@@ -448,10 +448,26 @@ PyObject* signal_instance_connect(PyObject* self, PyObject* args, PyObject* kwds
     if (match) {
         Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
         Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->source, "connect"));
-        return  PyObject_CallObject(pyMethod, tupleArgs);
+        return PyObject_CallObject(pyMethod, tupleArgs);
     }
 
     return 0;
+}
+
+bool signal_connect(PyObject* source, const char* signal, PyObject* callback)
+{
+    Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source, "connect"));
+    if (pyMethod.isNull())
+        return false;
+
+    Shiboken::AutoDecRef pyArgs(PyList_New(0));
+    Shiboken::AutoDecRef pySignature(PyString_FromString(signal));
+    PyList_Append(pyArgs, source);
+    PyList_Append(pyArgs, pySignature);
+    PyList_Append(pyArgs, callback);
+    Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
+
+    return PyObject_CallObject(pyMethod, tupleArgs);
 }
 
 PyObject* signal_instance_disconnect(PyObject* self, PyObject* args)
