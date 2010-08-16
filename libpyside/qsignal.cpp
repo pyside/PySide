@@ -460,14 +460,9 @@ bool signal_connect(PyObject* source, const char* signal, PyObject* callback)
     if (pyMethod.isNull())
         return false;
 
-    Shiboken::AutoDecRef pyArgs(PyList_New(0));
     Shiboken::AutoDecRef pySignature(PyString_FromString(signal));
-    PyList_Append(pyArgs, source);
-    PyList_Append(pyArgs, pySignature);
-    PyList_Append(pyArgs, callback);
-    Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
-
-    return PyObject_CallObject(pyMethod, tupleArgs);
+    Shiboken::AutoDecRef pyArgs(PyTuple_Pack(3, source, pySignature.object(), callback));
+    return PyObject_CallObject(pyMethod, pyArgs);
 }
 
 PyObject* signal_instance_disconnect(PyObject* self, PyObject* args)

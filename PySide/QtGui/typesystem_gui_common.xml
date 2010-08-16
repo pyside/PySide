@@ -547,18 +547,13 @@
     <modify-function signature="operator&amp;=(QRegion)" remove="all"/>
     <modify-function signature="eor(QRegion)const" remove="all"/>
     <!--### Obsolete in 4.3-->
-    <modify-function signature="intersect(QRegion)const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="subtract(QRegion)const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="unite(QRegion)const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="operator&amp;=(QRect)" remove="all"/>
     <modify-function signature="operator+=(QRect)" remove="all"/>
-    <modify-function signature="intersect(QRegion)" remove="all" />
     <!--### Obsolete in 4.x-->
-    <modify-function signature="intersect(QRect)" remove="all" />
-    <!--### Obsolete in 4.x-->
+    <modify-function signature="intersect(QRect)const" remove="all" />
+    <modify-function signature="intersect(QRegion)const" remove="all" />
   </value-type>
   <value-type name="QTextBlock" />
   <value-type name="QTextBlockFormat" />
@@ -4241,36 +4236,6 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QAction(const QString&amp;, QObject*)" access="private" />
-    <add-function signature="QAction(const QString&amp;, QObject*, const QKeySequence&amp;, PyObject*)">
-
-      <!-- NOT use this for now Fix bug #???
-      <modify-argument index="2">
-        <replace-default-expression  with="0"/>
-        <rename to="parent"/>
-      </modify-argument>
-      -->
-
-      <modify-argument index="3">
-        <replace-default-expression  with="QKeySequence()"/>
-        <rename to="shortcut"/>
-      </modify-argument>
-
-      <modify-argument index="4">
-        <replace-default-expression  with="0"/>
-        <rename to="triggered"/>
-      </modify-argument>
-
-      <inject-code class="target" position="beginning">
-        %0 = new %TYPE(%1, %2);
-        %0->setShortcut(%3);
-      </inject-code>
-
-      <inject-code class="target" position="end">
-          if (%PYARG_4 &amp;&amp; %PYARG_4 != Py_None)
-              Shiboken::AutoDecRef result(PyObject_CallMethod(%PYSELF, "connect", "OsO", %PYSELF, SIGNAL(triggered(bool)), %PYARG_4));
-      </inject-code>
-    </add-function>
   </object-type>
   <object-type name="QPainter">
     <extra-includes>
@@ -4857,4 +4822,6 @@
   <suppress-warning text="unhandled enum value: ~FlagMask in QMessageBox::StandardButton"/>
   <suppress-warning text="unmatched enum ~FlagMask"/>
   <suppress-warning text="Argument 1 on function 'QTabWidget::setUpLayout(bool)' has default expressiont but does not have name."/>
+
+  <suppress-warning text="type 'QGtkStyle' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
 </typesystem>
