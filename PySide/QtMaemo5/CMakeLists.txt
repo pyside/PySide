@@ -11,7 +11,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5/qmaemo5valuebutton_wrapper.
 ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5/qtmaemo5_module_wrapper.cpp
 )
 
-set(QtMaemo5_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtMaemo5_SOURCE_DIR}")
+set(QtMaemo5_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtMaemo5_SOURCE_DIR}")
 
 # QT_QTMAEMO5_* variables are not defined by CMake
 if(NOT QT_QTMAEMO5_INCLUDE_DIR)
@@ -41,7 +41,6 @@ set(QtMaemo5_libraries  pyside
 set(QtMaemo5_deps QtGui)
 
 create_pyside_module(QtMaemo5
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_maemo5.xml
                      QtMaemo5_include_dirs
                      QtMaemo5_libraries
                      QtMaemo5_deps

@@ -459,10 +459,7 @@ set(QT_SESSIONMANAGER_SRCS
 )
 CHECK_QT_GUI_MACRO("SessionManager Support" QT_NO_SESSIONMANAGER QT_SESSIONMANAGER_SRCS QtGui_SRC)
 
-configure_file(typesystem_gui.xml.in
-               "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
-
-set(QtGui_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtCore_BINARY_DIR}")
+set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/
                         ${QT_INCLUDE_DIR}
@@ -476,15 +473,7 @@ set(QtGui_libraries   pyside
                       ${QT_QTGUI_LIBRARY})
 set(QtGui_deps "QtCore")
 
-# extra install
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_common.xml
-              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_mac.xml
-              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_maemo.xml
-              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_x11.xml
-        DESTINATION share/PySide/typesystems)
-
 create_pyside_module(QtGui
-                     ${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml
                      QtGui_include_dirs
                      QtGui_libraries
                      QtGui_deps

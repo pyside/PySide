@@ -25,7 +25,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptvalueiterator_wrapper.cpp
 ${QtScript_46_SRC}
 )
 
-set(QtScript_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
+set(QtScript_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtScript_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript
                             ${QT_INCLUDE_DIR}
@@ -41,7 +41,6 @@ set(QtScript_libraries      pyside
                             ${QT_QTSCRIPT_LIBRARY})
 set(QtScript_deps QtCore)
 create_pyside_module(QtScript
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_script.xml
                      QtScript_include_dirs
                      QtScript_libraries
                      QtScript_deps

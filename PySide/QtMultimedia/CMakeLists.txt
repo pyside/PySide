@@ -17,7 +17,7 @@ set(QtMultimedia_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qvideoframe_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qtmultimedia_module_wrapper.cpp
 )
-set(QtMultimedia_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtMultimedia_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}")
 
 set(QtMultimedia_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                                 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/
@@ -40,7 +40,6 @@ set(QtMultimedia_libraries  pyside
 set(QtMultimedia_deps QtGui)
 
 create_pyside_module(QtMultimedia
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_multimedia.xml
                      QtMultimedia_include_dirs
                      QtMultimedia_libraries
                      QtMultimedia_deps

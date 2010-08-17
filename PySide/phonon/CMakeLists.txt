@@ -43,7 +43,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumeslider_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_backendcapabilities_notifierwrapper_wrapper.cpp
 )
-set(phonon_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${phonon_SOURCE_DIR}")
+set(phonon_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${phonon_SOURCE_DIR}")
 set(phonon_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QT_QTCORE_INCLUDE_DIR}
                         ${QT_QTGUI_INCLUDE_DIR}
@@ -62,7 +62,6 @@ set(phonon_libraries  pyside
 set(phonon_deps QtGui)
 
 create_pyside_module(phonon
-                     "typesystem_phonon.xml"
                      phonon_include_dirs
                      phonon_libraries
                      phonon_deps

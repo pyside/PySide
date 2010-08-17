@@ -32,7 +32,7 @@ set(QtOpenGL_SRC
     ${QtOpenGL_47_SRC}
 )
 
-set(QtOpenGL_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtOpenGL_SOURCE_DIR}")
+set(QtOpenGL_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtOpenGL_SOURCE_DIR}")
 set(QtOpenGL_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${QT_QTCORE_INCLUDE_DIR}
                             ${QT_QTGUI_INCLUDE_DIR}
@@ -50,7 +50,6 @@ set(QtOpenGL_libraries      pyside
                             ${QT_QTOPENGL_LIBRARY})
 set(QtOpenGL_deps QtGui)
 create_pyside_module(QtOpenGL
-                    ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_opengl.xml
                     QtOpenGL_include_dirs
                     QtOpenGL_libraries
                     QtOpenGL_deps

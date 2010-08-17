@@ -84,7 +84,7 @@ set(OPENSSL_SOURCES
 
 CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL OPENSSL_SOURCES QtNetwork_SRC)
 
-set(QtNetwork_typesystem_path "${CMAKE_CURRENT_SOURCE_DIR}:${QtCore_SOURCE_DIR}")
+set(QtNetwork_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtNetwork_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/
                             ${QT_INCLUDE_DIR}
@@ -101,7 +101,6 @@ set(QtNetwork_libraries pyside
 set(QtNetwork_deps QtCore)
 
 create_pyside_module(QtNetwork
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_network.xml
                      QtNetwork_include_dirs
                      QtNetwork_libraries
                      QtNetwork_deps

@@ -5,7 +5,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qtest_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qttest_module_wrapper.cpp
 )
 
-set(QtTest_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtTest_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}")
 set(QtTest_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/
                         ${QT_INCLUDE_DIR}
@@ -25,7 +25,6 @@ set(QtTest_libraries    pyside
                         ${QT_QTCORE_LIBRARY})
 set(QtTest_deps  QtGui)
 create_pyside_module(QtTest
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_test.xml
                      QtTest_include_dirs
                      QtTest_libraries
                      QtTest_deps

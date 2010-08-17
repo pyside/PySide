@@ -6,7 +6,14 @@ macro(execute_generator module sources typesystem_path)
     message("Running generator for ${module}...")
 endmacro()
 
-macro(create_pyside_module module_name typesystem_file module_include_dir module_libraries module_deps module_typesystem_path module_sources)
+macro(create_pyside_module module_name module_include_dir module_libraries module_deps module_typesystem_path module_sources)
+    string(TOLOWER ${module_name} _module)
+    string(REGEX REPLACE ^qt "" _module ${_module})
+    set(typesystem_prefix ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_${_module})
+    if(EXISTS ${typesystem_prefix}_${AUTO_OS}.xml)
+        set(typesystem_prefix ${typesystem_prefix}_${AUTO_OS})
+    endif()
+
     add_custom_command(OUTPUT ${${module_sources}}
                         COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
                         ${CMAKE_BINARY_DIR}/PySide/global.h
@@ -14,7 +21,7 @@ macro(create_pyside_module module_name typesystem_file module_include_dir module
                         --typesystem-paths=${pyside_SOURCE_DIR}:${${module_typesystem_path}}
                         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
                         --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt
-                        ${typesystem_file}
+                        ${typesystem_prefix}.xml
                         --api-version=${SUPPORTED_QT_VERSION}
                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                         COMMENT "Running generator for ${module_name}...")
@@ -40,8 +47,8 @@ macro(create_pyside_module module_name typesystem_file module_include_dir module
     string(TOLOWER ${module_name} lower_module_name)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${lower_module_name}_python.h
             DESTINATION include/PySide/${module_name}/)
-    install(FILES ${typesystem_file}
-            DESTINATION share/PySide/typesystems)
+    file(GLOB typesystem_files ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_*.xml)
+    install(FILES ${typesystem_files} DESTINATION share/PySide/typesystems)
 endmacro()
 
 

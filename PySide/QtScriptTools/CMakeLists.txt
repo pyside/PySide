@@ -5,7 +5,7 @@ set(QtScriptTools_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools/qscriptenginedebugger_wrapper.cpp
 )
 
-set(QtScriptTools_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtScript_SOURCE_DIR}:${QtScriptTools_SOURCE_DIR}")
+set(QtScriptTools_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtScript_SOURCE_DIR}:${QtScriptTools_SOURCE_DIR}")
 
 set(QtScriptTools_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                                 ${QT_QTCORE_INCLUDE_DIR}
@@ -29,7 +29,6 @@ set(QtScriptTools_libraries     pyside
 set(QtScriptTools_deps QtCore QtScript QtGui)
 
 create_pyside_module(QtScriptTools
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_scripttools.xml
                      QtScriptTools_include_dirs
                      QtScriptTools_libraries
                      QtScriptTools_deps

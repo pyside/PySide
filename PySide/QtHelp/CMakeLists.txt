@@ -15,7 +15,7 @@ set(QtHelp_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtHelp/qthelp_module_wrapper.cpp
 )
 
-set(QtHelp_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtHelp_SOURCE_DIR}")
+set(QtHelp_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtHelp_SOURCE_DIR}")
 set(QtHelp_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QT_QTCORE_INCLUDE_DIR}
                         ${QT_QTGUI_INCLUDE_DIR}
@@ -34,7 +34,6 @@ set(QtHelp_libraries  pyside
 set(QtHelp_deps QtGui)
 
 create_pyside_module(QtHelp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_help.xml
                      QtHelp_include_dirs
                      QtHelp_libraries
                      QtHelp_deps

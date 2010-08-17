@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <typesystem package="PySide.QtGui">
+  <load-typesystem name="typesystem_core.xml" generate="no"/>
+
   <template name="QFontCharFix">
     int size = PyString_GET_SIZE(%PYARG_1);
     if (size == 1) {

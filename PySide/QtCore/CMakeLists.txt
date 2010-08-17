@@ -134,7 +134,7 @@ ${QtCore_46_SRC}
 ${QtCore_47_SRC}
 )
 
-set(QtCore_typesystem_path ${CMAKE_CURRENT_BINARY_DIR})
+set(QtCore_typesystem_path "")
 set(QtCore_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/
                         ${QT_INCLUDE_DIR}
@@ -147,7 +147,6 @@ set(QtCore_libraries  pyside
                       ${QT_QTCORE_LIBRARY})
 
 create_pyside_module(QtCore
-                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_core.xml
                      QtCore_include_dirs
                      QtCore_libraries
                      ""

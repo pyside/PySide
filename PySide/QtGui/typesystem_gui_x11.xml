@@ -10,5 +10,5 @@
 
   <enum-type name="QPixmap::ShareMode"/>
 
-  <load-typesystem name="typesystem_gui_common.xml" generate="yes"/>
+  <load-typesystem name="typesystem_gui.xml" generate="yes"/>
 </typesystem>
