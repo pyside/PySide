@@ -985,19 +985,6 @@
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3));
         </inject-code>
     </add-function>
-
-    <!-- These signals are private, because only QAbstractItemModel can emit then -->
-    <modify-function signature="rowsAboutToBeInserted(const QModelIndex&amp;,int,int)" remove="all" />
-    <modify-function signature="rowsInserted(const QModelIndex &amp;, int,int)" remove="all" />
-    <modify-function signature="rowsAboutToBeRemoved(const QModelIndex &amp;, int, int)" remove="all" />
-    <modify-function signature="rowsRemoved(const QModelIndex&amp;,int,int)" remove="all" />
-    <modify-function signature="columnsAboutToBeInserted(const QModelIndex&amp;,int,int)" remove="all" />
-    <modify-function signature="columnsInserted(const QModelIndex&amp;,int,int)" remove="all" />
-    <modify-function signature="columnsAboutToBeRemoved(const QModelIndex&amp;,int,int)" remove="all" />
-    <modify-function signature="columnsRemoved(const QModelIndex&amp;,int,int)" remove="all" />
-    <modify-function signature="modelAboutToBeReset()" remove="all" />
-    <modify-function signature="modelReset()" remove="all" />
-
   </object-type>
   <!-- QObject is created manually -->
   <object-type name="QObject">
