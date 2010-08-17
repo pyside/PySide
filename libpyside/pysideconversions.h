@@ -37,6 +37,7 @@
 
 #include <Python.h>
 #include <conversions.h>
+#include <QFlag>
 
 template <typename QtDict>
 struct QtDictConverter
@@ -219,6 +220,36 @@ struct QSequenceConverter
             result << Shiboken::Converter<typename T::value_type>::toCpp(pyItem);
         }
         return result;
+    }
+};
+
+template <typename T>
+struct QFlagsConverter
+{
+    static inline bool checkType(PyObject* pyObj)
+    {
+        return PyObject_TypeCheck(pyObj, Shiboken::SbkType<T>());
+    }
+
+    static inline bool isConvertible(PyObject* pyObj)
+    {
+        return PyObject_TypeCheck(pyObj, Shiboken::SbkType<T>())
+               || PyObject_TypeCheck(pyObj, Shiboken::SbkType<typename T::enum_type>());
+    }
+
+    static inline PyObject* toPython(void* cppobj)
+    {
+        return toPython(*reinterpret_cast<T*>(cppobj));
+    }
+
+    static inline PyObject* toPython(T cppenum)
+    {
+        return Shiboken::SbkEnumObject_New(Shiboken::SbkType<T>(), (long) cppenum);
+    }
+
+    static inline T toCpp(PyObject* pyobj)
+    {
+        return T(QFlag(reinterpret_cast<Shiboken::SbkEnumObject*>(pyobj)->ob_ival));
     }
 };
 
