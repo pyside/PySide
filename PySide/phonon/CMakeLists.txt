@@ -43,34 +43,28 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumeslider_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_backendcapabilities_notifierwrapper_wrapper.cpp
 )
-
-execute_generator(phonon phonon_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${phonon_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_PHONON_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon)
-add_library(phonon MODULE ${phonon_SRC})
-set_target_properties(phonon PROPERTIES PREFIX "")
-target_link_libraries(phonon
-                      pyside
+set(phonon_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${phonon_SOURCE_DIR}")
+set(phonon_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${QT_QTCORE_INCLUDE_DIR}
+                        ${QT_QTGUI_INCLUDE_DIR}
+                        ${QT_PHONON_INCLUDE_DIR}
+                        ${PYTHON_INCLUDE_PATH}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${QtGui_BINARY_DIR}/PySide/QtGui/
+                        ${QtCore_BINARY_DIR}/PySide/QtCore/
+                        ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon)
+set(phonon_libraries  pyside
                       ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_PHONON_LIBRARY})
-add_dependencies(phonon QtGui)
+set(phonon_deps QtGui)
 
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/pyside_phonon_python.h
-        DESTINATION include/PySide/phonon/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_phonon.xml
-        DESTINATION share/PySide/typesystems)
-
+create_pyside_module(phonon
+                     "typesystem_phonon.xml"
+                     phonon_include_dirs
+                     phonon_libraries
+                     phonon_depend
+                     phonon_typesystem_path
+                     phonon_SRC)

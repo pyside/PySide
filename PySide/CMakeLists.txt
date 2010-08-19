@@ -3,19 +3,39 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
         DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}")
 
 macro(execute_generator module sources typesystem_path)
-add_custom_command(OUTPUT ${${sources}}
-COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
-        ${CMAKE_BINARY_DIR}/PySide/global.h
-        --include-paths=${pyside_SOURCE_DIR}:${QT_INCLUDE_DIR}
-        --typesystem-paths=${pyside_SOURCE_DIR}:${typesystem_path}
-        --output-directory=${CMAKE_CURRENT_BINARY_DIR}
-        --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt
-        ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_${module}.xml
-        --api-version=${SUPPORTED_QT_VERSION}
-WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-COMMENT "Running generator for ${module}..."
-)
+    message("Running generator for ${module}...")
 endmacro(execute_generator)
+
+macro(create_pyside_module module_name typesystem_file module_include_dir module_libraries module_deps module_typesystem_path module_sources)
+    add_custom_command(OUTPUT ${${module_sources}}
+                        COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
+                        ${CMAKE_BINARY_DIR}/PySide/global.h
+                        --include-paths=${pyside_SOURCE_DIR}:${QT_INCLUDE_DIR}
+                        --typesystem-paths=${pyside_SOURCE_DIR}:${${module_typesystem_path}}
+                        --output-directory=${CMAKE_CURRENT_BINARY_DIR}
+                        --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt
+                        ${typesystem_file}
+                        --api-version=${SUPPORTED_QT_VERSION}
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        COMMENT "Running generator for ${module_name}...")
+
+    include_directories(${module_name} ${${module_include_dir}})
+    add_library(${module_name} MODULE ${${module_sources}})
+    set_target_properties(${module_name} PROPERTIES PREFIX "")
+    target_link_libraries(${module_name} ${${module_libraries}})
+    if(${module_deps})
+        add_dependencies(${module_name} ${${module_deps}})
+    endif()
+
+    # install
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}.so
+            DESTINATION ${SITE_PACKAGE}/PySide)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${module_name}_python.h
+            DESTINATION include/PySide/${module_name}/)
+    install(FILES ${typesystem_file}
+            DESTINATION share/PySide/typesystems)
+endmacro(create_pyside_module)
+
 
 # Configure include based on platform
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"

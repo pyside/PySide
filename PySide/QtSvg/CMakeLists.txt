@@ -30,37 +30,28 @@ ${SPECIFIC_OS_FILES}
 ${QtSvg_46_SRC}
 )
 
-execute_generator(svg QtSvg_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSvg/
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTSVG_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    )
-
-add_library(QtSvg MODULE ${QtSvg_SRC})
-set_property(TARGET QtSvg PROPERTY PREFIX "")
-target_link_libraries(QtSvg
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${SHIBOKEN_LIBRARY}
-                      ${QT_QTSVG_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      )
-add_dependencies(QtSvg QtGui)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtSvg${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSvg/pyside_qtsvg_python.h
-        DESTINATION include/PySide/QtSvg/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_svg.xml
-        DESTINATION share/PySide/typesystems)
-
+set(QtSvg_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtSvg_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSvg/
+                        ${QT_INCLUDE_DIR}
+                        ${QT_QTCORE_INCLUDE_DIR}
+                        ${QT_QTGUI_INCLUDE_DIR}
+                        ${QT_QTSVG_INCLUDE_DIR}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${PYTHON_INCLUDE_PATH}
+                        ${QtCore_BINARY_DIR}/PySide/QtCore/
+                        ${QtGui_BINARY_DIR}/PySide/QtGui/)
+set(QtSvg_libraries     pyside
+                        ${PYSIDE_PYTHON_LIBRARIES}
+                        ${SHIBOKEN_LIBRARY}
+                        ${QT_QTSVG_LIBRARY}
+                        ${QT_QTGUI_LIBRARY})
+set(QtSvg_deps QtGui)
+create_pyside_module(QtSvg
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_svg.xml
+                     QtSvg_include_dirs
+                     QtSvg_libraries
+                     QtSvg_deps
+                     QtSvg_typesystem_path
+                     QtSvg_SRC)

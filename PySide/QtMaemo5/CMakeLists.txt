@@ -11,8 +11,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5/qmaemo5valuebutton_wrapper.
 ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5/qtmaemo5_module_wrapper.cpp
 )
 
-execute_generator(maemo5 QtMaemo5_SRC
-                  "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtMaemo5_SOURCE_DIR}")
+set(QtMaemo5_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtMaemo5_SOURCE_DIR}")
 
 # QT_QTMAEMO5_* variables are not defined by CMake
 if(NOT QT_QTMAEMO5_INCLUDE_DIR)
@@ -24,35 +23,28 @@ if(NOT QT_QTMAEMO5_LIBRARY)
                PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH)
 endif(NOT QT_QTMAEMO5_LIBRARY)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTMAEMO5_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtCore_BINARY_DIR}/${BINDING_NAME}/QtCore/
-                    ${QtGui_BINARY_DIR}/${BINDING_NAME}/QtGui/
-                    ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5)
-add_library(QtMaemo5 MODULE ${QtMaemo5_SRC})
-
-set_target_properties(QtMaemo5 PROPERTIES
-                      PREFIX "")
-
-target_link_libraries(QtMaemo5
-                      pyside
+set(QtMaemo5_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${QT_QTCORE_INCLUDE_DIR}
+                        ${QT_QTGUI_INCLUDE_DIR}
+                        ${QT_QTMAEMO5_INCLUDE_DIR}
+                        ${PYTHON_INCLUDE_PATH}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${QtCore_BINARY_DIR}/${BINDING_NAME}/QtCore/
+                        ${QtGui_BINARY_DIR}/${BINDING_NAME}/QtGui/
+                        ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5)
+set(QtMaemo5_libraries  pyside
                       ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTMAEMO5_LIBRARY})
+set(QtMaemo5_deps QtGui)
 
-add_dependencies(QtMaemo5 QtGui)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMaemo5${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMaemo5/pyside_qtmaemo5_python.h
-        DESTINATION include/${BINDING_NAME}/QtMaemo5/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_maemo5.xml
-        DESTINATION share/PySide/typesystems)
+create_pyside_module(QtMaemo5
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_maemo5.xml
+                     QtMaemo5_include_dirs
+                     QtMaemo5_libraries
+                     QtMaemo5_deps
+                     QtMaemo5_typesystem_path
+                     QtMaemo5_SRC)
 

@@ -32,33 +32,27 @@ set(QtOpenGL_SRC
     ${QtOpenGL_47_SRC}
 )
 
-execute_generator(opengl QtOpenGL_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtOpenGL_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTOPENGL_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL)
-add_library(QtOpenGL MODULE ${QtOpenGL_SRC})
-set_target_properties(QtOpenGL PROPERTIES PREFIX "")
-target_link_libraries(QtOpenGL
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTOPENGL_LIBRARY})
-add_dependencies(QtOpenGL QtGui)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtOpenGL${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL/pyside_qtopengl_python.h
-        DESTINATION include/PySide/QtOpenGL/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_opengl.xml
-        DESTINATION share/PySide/typesystems)
-
+set(QtOpenGL_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtOpenGL_SOURCE_DIR}")
+set(QtOpenGL_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
+                            ${QT_QTCORE_INCLUDE_DIR}
+                            ${QT_QTGUI_INCLUDE_DIR}
+                            ${QT_QTOPENGL_INCLUDE_DIR}
+                            ${PYTHON_INCLUDE_PATH}
+                            ${SHIBOKEN_INCLUDE_DIR}
+                            ${libpyside_SOURCE_DIR}
+                            ${QtGui_BINARY_DIR}/PySide/QtGui/
+                            ${QtCore_BINARY_DIR}/PySide/QtCore/
+                            ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL)
+set(QtOpenGL_libraries      pyside
+                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${QT_QTCORE_LIBRARY}
+                            ${QT_QTGUI_LIBRARY}
+                            ${QT_QTOPENGL_LIBRARY})
+set(QtOpenGL_deps QtGui)
+create_pyside_module(QtOpenGL
+                    ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_opengl.xml
+                    QtOpenGL_include_dirs
+                    QtOpenGL_libraries
+                    QtOpenGL_deps
+                    QtOpenGL_typesystem_path
+                    QtOpenGL_SRC)

@@ -134,29 +134,22 @@ ${QtCore_46_SRC}
 ${QtCore_47_SRC}
 )
 
-execute_generator(core QtCore_SRC "${CMAKE_CURRENT_BINARY_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/
-                    ${QT_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    )
-add_library(QtCore MODULE ${QtCore_SRC})
-set_property(TARGET QtCore PROPERTY PREFIX "")
-target_link_libraries(QtCore
-                      pyside
+set(QtCore_typesystem_path ${CMAKE_CURRENT_BINARY_DIR})
+set(QtCore_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/
+                        ${QT_INCLUDE_DIR}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${PYTHON_INCLUDE_PATH})
+set(QtCore_libraries  pyside
                       ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
-                      ${QT_QTCORE_LIBRARY}
-                      )
+                      ${QT_QTCORE_LIBRARY})
 
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtCore${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/${BINDING_NAME})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/pyside_qtcore_python.h
-        DESTINATION include/PySide/QtCore/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_core.xml
-        DESTINATION share/PySide/typesystems)
-
+create_pyside_module(QtCore
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_core.xml
+                     QtCore_include_dirs
+                     QtCore_libraries
+                     ""
+                     QtCore_typesystem_path
+                     QtCore_SRC)

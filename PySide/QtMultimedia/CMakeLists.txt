@@ -17,38 +17,32 @@ set(QtMultimedia_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qvideoframe_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/qtmultimedia_module_wrapper.cpp
 )
+set(QtMultimedia_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
 
-execute_generator(multimedia QtMultimedia_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtMultimedia_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
+                                ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/
+                                ${QT_INCLUDE_DIR}
+                                ${QT_QTCORE_INCLUDE_DIR}
+                                ${QT_QTGUI_INCLUDE_DIR}
+                                ${QT_QTMULTIMEDIA_INCLUDE_DIR}
+                                ${SHIBOKEN_INCLUDE_DIR}
+                                ${libpyside_SOURCE_DIR}
+                                ${PYTHON_INCLUDE_PATH}
+                                ${QtCore_BINARY_DIR}/PySide/QtCore/
+                                ${QtGui_BINARY_DIR}/PySide/QtGui/)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTMULTIMEDIA_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    )
+set(QtMultimedia_libraries  pyside
+                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${SHIBOKEN_LIBRARY}
+                            ${QT_QTMULTIMEDIA_LIBRARY}
+                            ${QT_QTGUI_LIBRARY})
 
-add_library(QtMultimedia MODULE ${QtMultimedia_SRC})
-set_property(TARGET QtMultimedia PROPERTY PREFIX "")
-target_link_libraries(QtMultimedia
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${SHIBOKEN_LIBRARY}
-                      ${QT_QTMULTIMEDIA_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      )
-add_dependencies(QtMultimedia QtGui)
+set(QtMultimedia_deps QtGui)
 
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtMultimedia${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtMultimedia/pyside_qtmultimedia_python.h
-        DESTINATION include/PySide/QtMultimedia/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_multimedia.xml
-        DESTINATION share/PySide/typesystems)
-
+create_pyside_module(QtMultimedia
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_multimedia.xml
+                     QtMultimedia_include_dirs
+                     QtMultimedia_libraries
+                     QtMultimedia_deps
+                     QtMultimedia_typesystem_path
+                     QtMultimedia_SRC)

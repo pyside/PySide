@@ -36,10 +36,14 @@
 #define PYSIDEMACROS_H
 
 #if defined _WIN32 || defined __CYGWIN__
-    #if PYSIDE_BUILD
+    #if PYSIDE_EXPORTS
         #define PYSIDE_API __declspec(dllexport)
     #else
-        #define PYSIDE_API __declspec(dllimport)
+        #if defined __MINGW32__
+            #define PYSIDE_API
+        #else
+            #define PYSIDE_API __declspec(dllimport)
+        #endif
     #endif
 #else
     #if __GNUC__ >= 4

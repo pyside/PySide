@@ -98,33 +98,26 @@ set(OPENSSL_SOURCES
 
 CHECK_QT_NETWORK_MACRO("Network OPENSSL" QT_NO_OPENSSL OPENSSL_SOURCES QtNetwork_SRC)
 
-execute_generator(network QtNetwork_SRC "${CMAKE_CURRENT_SOURCE_DIR}:${QtCore_SOURCE_DIR}")
+set(QtNetwork_typesystem_path "${CMAKE_CURRENT_SOURCE_DIR}:${QtCore_SOURCE_DIR}")
+set(QtNetwork_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
+                            ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/
+                            ${QT_INCLUDE_DIR}
+                            ${QT_QTNETWORK_INCLUDE_DIR}
+                            ${SHIBOKEN_INCLUDE_DIR}
+                            ${libpyside_SOURCE_DIR}
+                            ${PYTHON_INCLUDE_PATH}
+                            ${QtCore_BINARY_DIR}/PySide/QtCore/)
+set(QtNetwork_libraries pyside
+                        ${PYSIDE_PYTHON_LIBRARIES}
+                        ${SHIBOKEN_LIBRARY}
+                        ${QT_QTNETWORK_LIBRARY})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTNETWORK_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    )
+set(QtNetwork_deps QtCore)
 
-add_library(QtNetwork MODULE ${QtNetwork_SRC})
-set_property(TARGET QtNetwork PROPERTY PREFIX "")
-target_link_libraries(QtNetwork
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${SHIBOKEN_LIBRARY}
-                      ${QT_QTNETWORK_LIBRARY}
-                      )
-add_dependencies(QtNetwork QtCore)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtNetwork${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/pyside_qtnetwork_python.h
-        DESTINATION include/PySide/QtNetwork/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_network.xml
-        DESTINATION share/PySide/typesystems)
-
+create_pyside_module(QtNetwork
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_network.xml
+                     QtNetwork_include_dirs
+                     QtNetwork_libraries
+                     QtNetwork_deps
+                     QtNetwork_typesystem_path
+                     QtNetwork_SRC)

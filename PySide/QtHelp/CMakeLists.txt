@@ -15,35 +15,28 @@ set(QtHelp_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtHelp/qthelp_module_wrapper.cpp
 )
 
-execute_generator(help QtHelp_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtHelp_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTHELP_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtHelp)
-add_library(QtHelp MODULE ${QtHelp_SRC})
-
-set_target_properties(QtHelp PROPERTIES PREFIX "")
-
-target_link_libraries(QtHelp
-                      pyside
+set(QtHelp_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtHelp_SOURCE_DIR}")
+set(QtHelp_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${QT_QTCORE_INCLUDE_DIR}
+                        ${QT_QTGUI_INCLUDE_DIR}
+                        ${QT_QTHELP_INCLUDE_DIR}
+                        ${PYTHON_INCLUDE_PATH}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${QtGui_BINARY_DIR}/PySide/QtGui/
+                        ${QtCore_BINARY_DIR}/PySide/QtCore/
+                        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtHelp)
+set(QtHelp_libraries  pyside
                       ${PYSIDE_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTHELP_LIBRARY})
-add_dependencies(QtHelp QtGui)
+set(QtHelp_deps QtGui)
 
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtHelp${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtHelp/pyside_qthelp_python.h
-        DESTINATION include/PySide/QtHelp/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_help.xml
-        DESTINATION share/PySide/typesystems)
-
+create_pyside_module(QtHelp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_help.xml
+                     QtHelp_include_dirs
+                     QtHelp_libraries
+                     QtHelp_deps
+                     QtHelp_typesystem_path
+                     QtHelp_SRC)

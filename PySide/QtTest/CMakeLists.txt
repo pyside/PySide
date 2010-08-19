@@ -18,38 +18,29 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qttest_module_wrapper.cpp
 ${SPECIFIC_OS_FILES}
 )
 
-execute_generator(test QtTest_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTTEST_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    )
-
-add_library(QtTest MODULE ${QtTest_SRC})
-set_property(TARGET QtTest PROPERTY PREFIX "")
-target_link_libraries(QtTest
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${SHIBOKEN_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTCORE_LIBRARY}
-                      )
-add_dependencies(QtTest QtGui)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtTest${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/pyside_qttest_python.h
-        DESTINATION include/PySide/QtTest/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_test.xml
-        DESTINATION share/PySide/typesystems)
-
+set(QtTest_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtTest_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/
+                        ${QT_INCLUDE_DIR}
+                        ${QT_QTCORE_INCLUDE_DIR}
+                        ${QT_QTGUI_INCLUDE_DIR}
+                        ${QT_QTTEST_INCLUDE_DIR}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${PYTHON_INCLUDE_PATH}
+                        ${QtCore_BINARY_DIR}/PySide/QtCore/
+                        ${QtGui_BINARY_DIR}/PySide/QtGui/)
+set(QtTest_libraries    pyside
+                        ${PYSIDE_PYTHON_LIBRARIES}
+                        ${SHIBOKEN_LIBRARY}
+                        ${QT_QTTEST_LIBRARY}
+                        ${QT_QTGUI_LIBRARY}
+                        ${QT_QTCORE_LIBRARY})
+set(QtTest_deps  QtGui)
+create_pyside_module(QtTest
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_test.xml
+                     QtTest_include_dirs
+                     QtTest_libraries
+                     QtTest_deps
+                     QtTest_typesystem_path
+                     QtTest_SRC)

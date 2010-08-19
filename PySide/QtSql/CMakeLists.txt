@@ -21,35 +21,27 @@ set(QtSql_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/qtsql_module_wrapper.cpp
 )
 
-execute_generator(sql QtSql_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtSql_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTSQL_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/)
-add_library(QtSql MODULE ${QtSql_SRC})
-set_target_properties(QtSql PROPERTIES PREFIX "")
-target_link_libraries(QtSql
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTSQL_LIBRARY})
-
-add_dependencies(QtSql QtGui)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtSql${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/pyside_qtsql_python.h
-        DESTINATION include/PySide/QtSql/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_sql.xml
-        DESTINATION share/PySide/typesystems)
-
-
+set(QtSql_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtSql_SOURCE_DIR}")
+set(QtSql_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${QT_QTCORE_INCLUDE_DIR}
+                        ${QT_QTGUI_INCLUDE_DIR}
+                        ${QT_QTSQL_INCLUDE_DIR}
+                        ${PYTHON_INCLUDE_PATH}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${QtCore_BINARY_DIR}/PySide/QtCore/
+                        ${QtGui_BINARY_DIR}/PySide/QtGui/
+                        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/)
+set(QtSql_libraries     pyside
+                        ${PYSIDE_PYTHON_LIBRARIES}
+                        ${QT_QTCORE_LIBRARY}
+                        ${QT_QTGUI_LIBRARY}
+                        ${QT_QTSQL_LIBRARY})
+set(QtSql_deps QtGui)
+create_pyside_module(QtSql
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_sql.xml
+                     QtSql_include_dirs
+                     QtSql_libraries
+                     QtSql_deps
+                     QtSql_typesystem_path
+                     QtSql_SRC)

@@ -23,7 +23,8 @@ target_link_libraries(pyside
 
 set_target_properties(pyside PROPERTIES
                       VERSION ${BINDING_API_VERSION}
-                      SOVERSION "${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}")
+                      SOVERSION "${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}"
+                      DEFINE_SYMBOL PYSIDE_EXPORTS)
 
 #
 # install stuff

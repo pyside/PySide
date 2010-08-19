@@ -26,30 +26,25 @@ set(QtXmlPatterns_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns/qxmlserializer_wrapper.cpp
     ${QtXmlPatterns_46_SRC}
 )
-
-execute_generator(xmlpatterns QtXmlPatterns_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTXMLPATTERNS_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns)
-add_library(QtXmlPatterns MODULE ${QtXmlPatterns_SRC})
-set_target_properties(QtXmlPatterns PROPERTIES PREFIX "")
-target_link_libraries(QtXmlPatterns
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTXMLPATTERNS_LIBRARY})
-add_dependencies(QtXmlPatterns QtCore)
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtXmlPatterns${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns/pyside_qtxmlpatterns_python.h
-        DESTINATION include/PySide/QtXmlPatterns/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_xmlpatterns.xml
-        DESTINATION share/PySide/typesystems)
+set(QtXmlPatterns_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
+set(QtXmlPatterns_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
+                                ${QT_QTCORE_INCLUDE_DIR}
+                                ${QT_QTXMLPATTERNS_INCLUDE_DIR}
+                                ${PYTHON_INCLUDE_PATH}
+                                ${SHIBOKEN_INCLUDE_DIR}
+                                ${libpyside_SOURCE_DIR}
+                                ${QtCore_BINARY_DIR}/PySide/QtCore/
+                                ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns)
+set(QtXmlPatterns_libraries     pyside
+                                ${PYSIDE_PYTHON_LIBRARIES}
+                                ${QT_QTCORE_LIBRARY}
+                                ${QT_QTXMLPATTERNS_LIBRARY})
+set(QtXmlPatterns_deps QtCore)
+create_pyside_module(QtXmlPatterns
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_xmlpatterns.xml
+                     QtXmlPatterns_include_dirs
+                     QtXmlPatterns_libraries
+                     QtXmlPatterns_deps
+                     QtXmlPatterns_typesystem_path
+                     QtXmlPatterns_SRC)
 

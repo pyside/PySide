@@ -35,34 +35,26 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml/qxmlreader_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml/qxmlsimplereader_wrapper.cpp
 )
 
-execute_generator(xml QtXml_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml
-                    ${CMAKE_SOURCE_DIR}
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTXML_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore
-                    )
-add_library(QtXml MODULE ${QtXml_SRC})
-set_property(TARGET QtXml PROPERTY PREFIX "")
-target_link_libraries(QtXml
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${SHIBOKEN_LIBRARY}
-                      ${QT_QTXML_LIBRARY}
-                      )
-add_dependencies(QtXml QtCore)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtXml${CMAKE_DEBUG_POSTFIX}.so DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml/pyside_qtxml_python.h
-        DESTINATION include/PySide/QtXml/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_xml.xml
-        DESTINATION share/PySide/typesystems)
-
-
+set(QtXml_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
+set(QtXml_include_dirs      ${CMAKE_CURRENT_SOURCE_DIR}
+                            ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml
+                            ${CMAKE_SOURCE_DIR}
+                            ${QT_INCLUDE_DIR}
+                            ${QT_QTCORE_INCLUDE_DIR}
+                            ${QT_QTXML_INCLUDE_DIR}
+                            ${SHIBOKEN_INCLUDE_DIR}
+                            ${libpyside_SOURCE_DIR}
+                            ${PYTHON_INCLUDE_PATH}
+                            ${QtCore_BINARY_DIR}/PySide/QtCore)
+set(QtXml_libraries         pyside
+                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${SHIBOKEN_LIBRARY}
+                            ${QT_QTXML_LIBRARY})
+set(QtXml_deps QtCore)
+create_pyside_module(QtXml
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_xml.xml
+                     QtXml_include_dirs
+                     QtXml_libraries
+                     QtXml_deps
+                     QtXml_typesystem_path
+                     QtXml_SRC)

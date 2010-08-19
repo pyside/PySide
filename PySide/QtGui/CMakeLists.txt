@@ -470,34 +470,32 @@ CHECK_QT_GUI_MACRO("SessionManager Support" QT_NO_SESSIONMANAGER QT_SESSIONMANAG
 configure_file(typesystem_gui.xml.in
                "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
 
-execute_generator(gui QtGui_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtCore_BINARY_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/
-                    ${QT_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    )
-add_library(QtGui MODULE ${QtGui_SRC})
-set_property(TARGET QtGui PROPERTY PREFIX "")
-target_link_libraries(QtGui
-                      pyside
+set(QtGui_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtCore_BINARY_DIR}")
+set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
+                        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/
+                        ${QT_INCLUDE_DIR}
+                        ${SHIBOKEN_INCLUDE_DIR}
+                        ${libpyside_SOURCE_DIR}
+                        ${PYTHON_INCLUDE_PATH}
+                        ${QtCore_BINARY_DIR}/PySide/QtCore/)
+set(QtGui_libraries   pyside
                       ${PYSIDE_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      )
-add_dependencies(QtGui QtCore)
+                      ${QT_QTGUI_LIBRARY})
+set(QtGui_deps "QtCore")
 
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtGui${CMAKE_DEBUG_POSTFIX}.so DESTINATION "${SITE_PACKAGE}/PySide")
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/pyside_qtgui_python.h
-        DESTINATION include/PySide/QtGui/)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml
-              ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_common.xml
+# extra install
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_common.xml
               ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_mac.xml
               ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_maemo.xml
               ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui_x11.xml
         DESTINATION share/PySide/typesystems)
+
+create_pyside_module(QtGui
+                     ${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml
+                     QtGui_include_dirs
+                     QtGui_libraries
+                     QtGui_deps
+                     QtGui_typesystem_path
+                     QtGui_SRC)
 

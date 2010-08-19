@@ -44,41 +44,32 @@ ${SPECIFIC_OS_FILES}
 ${QtWebKit_46_SRC}
 )
 
-execute_generator(webkit QtWebKit_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtNetwork_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebkit/
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTNETWORK_INCLUDE_DIR}
-                    ${QT_QTWEBKIT_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    ${QtNetwork_BINARY_DIR}/PySide/QtNetwork/
-                    )
-
-add_library(QtWebKit MODULE ${QtWebKit_SRC})
-set_property(TARGET QtWebKit PROPERTY PREFIX "")
-target_link_libraries(QtWebKit
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${SHIBOKEN_LIBRARY}
-                      ${QT_QTWEBKIT_LIBRARY}
-                      ${QT_QTNETWORK_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      )
-add_dependencies(QtWebKit QtGui)
-add_dependencies(QtWebKit QtNetwork)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtWebKit${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/pyside_qtwebkit_python.h
-        DESTINATION include/PySide/QtWebKit/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_webkit.xml
-        DESTINATION share/PySide/typesystems)
+set(QtWebKit_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtNetwork_SOURCE_DIR}")
+set(QtWebkit_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
+                            ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebkit/
+                            ${QT_INCLUDE_DIR}
+                            ${QT_QTCORE_INCLUDE_DIR}
+                            ${QT_QTGUI_INCLUDE_DIR}
+                            ${QT_QTNETWORK_INCLUDE_DIR}
+                            ${QT_QTWEBKIT_INCLUDE_DIR}
+                            ${SHIBOKEN_INCLUDE_DIR}
+                            ${libpyside_SOURCE_DIR}
+                            ${PYTHON_INCLUDE_PATH}
+                            ${QtCore_BINARY_DIR}/PySide/QtCore/
+                            ${QtGui_BINARY_DIR}/PySide/QtGui/
+                            ${QtNetwork_BINARY_DIR}/PySide/QtNetwork/ )
+set(QtWebKit_libraries      pyside
+                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${SHIBOKEN_LIBRARY}
+                            ${QT_QTWEBKIT_LIBRARY}
+                            ${QT_QTNETWORK_LIBRARY}
+                            ${QT_QTGUI_LIBRARY})
+set(QtWebKit_deps QtGui QtNetwork)
+create_pyside_module(QtWebKit
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_webkit.xml
+                     QtWebkit_include_dirs
+                     QtWebKit_libraries
+                     QtWebKit_deps
+                     QtWebKit_typesystem_path
+                     QtWebKit_SRC)
 

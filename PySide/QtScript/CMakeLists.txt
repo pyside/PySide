@@ -25,33 +25,25 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptvalueiterator_wrapper.cpp
 ${QtScript_46_SRC}
 )
 
-execute_generator(script QtScript_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTSCRIPT_INCLUDE_DIR}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore
-                    )
-add_library(QtScript MODULE ${QtScript_SRC})
-set_property(TARGET QtScript PROPERTY PREFIX "")
-target_link_libraries(QtScript
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${SHIBOKEN_LIBRARY}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTSCRIPT_LIBRARY}
-                      )
-add_dependencies(QtScript QtCore)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScript${CMAKE_DEBUG_POSTFIX}.so DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/pyside_qtscript_python.h
-        DESTINATION include/PySide/QtScript/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_script.xml
-        DESTINATION share/PySide/typesystems)
-
-
+set(QtScript_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}")
+set(QtScript_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
+                            ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript
+                            ${QT_INCLUDE_DIR}
+                            ${QT_QTSCRIPT_INCLUDE_DIR}
+                            ${SHIBOKEN_INCLUDE_DIR}
+                            ${libpyside_SOURCE_DIR}
+                            ${PYTHON_INCLUDE_PATH}
+                            ${QtCore_BINARY_DIR}/PySide/QtCore )
+set(QtScript_libraries      pyside
+                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${SHIBOKEN_LIBRARY}
+                            ${QT_QTCORE_LIBRARY}
+                            ${QT_QTSCRIPT_LIBRARY})
+set(QtScript_deps QtCore)
+create_pyside_module(QtScript
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_script.xml
+                     QtScript_include_dirs
+                     QtScript_libraries
+                     QtScript_deps
+                     QtScript_typesystem_path
+                     QtScript_SRC)

@@ -20,43 +20,40 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativeview_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qtdeclarative_module_wrapper.cpp
 )
 
-execute_generator(declarative QtDeclarative_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtDeclarative_SOURCE_DIR}:${QtNetwork_SOURCE_DIR}:${QtNetwork_BINARY_DIR}")
+set(QtDeclarative_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtGui_SOURCE_DIR}:${QtDeclarative_SOURCE_DIR}:${QtNetwork_SOURCE_DIR}:${QtNetwork_BINARY_DIR}")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTGUI_INCLUDE_DIR}
-                    ${QT_QTNETWORK_INCLUDE_DIR}
-                    ${QT_QTDECLARATIVE_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${QtNetwork_BINARY_DIR}/PySide/QtNetwork/
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative)
-add_library(QtDeclarative MODULE ${QtDeclarative_SRC})
-set_target_properties(QtDeclarative PROPERTIES PREFIX "")
-target_link_libraries(QtDeclarative
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTNETWORK_LIBRARY}
-                      ${QT_QTSCRIPT_LIBRARY}
-                      ${QT_QTSVG_LIBRARY}
-                      ${QT_QTSQL_LIBRARY}
-                      ${QT_QTXMLPATTERNS_LIBRARY}
-                      ${QT_QTOPENGL_LIBRARY}
-                      ${QT_QTDECLARATIVE_LIBRARY})
-add_dependencies(QtDeclarative QtGui)
-add_dependencies(QtDeclarative QtNetwork)
+set(QtDeclarative_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
+                            ${QT_QTCORE_INCLUDE_DIR}
+                            ${QT_QTGUI_INCLUDE_DIR}
+                            ${QT_QTNETWORK_INCLUDE_DIR}
+                            ${QT_QTDECLARATIVE_INCLUDE_DIR}
+                            ${PYTHON_INCLUDE_PATH}
+                            ${SHIBOKEN_INCLUDE_DIR}
+                            ${libpyside_SOURCE_DIR}
+                            ${QtGui_BINARY_DIR}/PySide/QtGui/
+                            ${QtCore_BINARY_DIR}/PySide/QtCore/
+                            ${QtNetwork_BINARY_DIR}/PySide/QtNetwork/
+                            ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative)
 
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtDeclarative${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/pyside_qtdeclarative_python.h
-        DESTINATION include/PySide/QtDeclarative/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_declarative.xml
-        DESTINATION share/PySide/typesystems)
+set(QtDeclarative_libraries   pyside
+                              ${PYSIDE_PYTHON_LIBRARIES}
+                              ${QT_QTCORE_LIBRARY}
+                              ${QT_QTGUI_LIBRARY}
+                              ${QT_QTNETWORK_LIBRARY}
+                              ${QT_QTSCRIPT_LIBRARY}
+                              ${QT_QTSVG_LIBRARY}
+                              ${QT_QTSQL_LIBRARY}
+                              ${QT_QTXMLPATTERNS_LIBRARY}
+                              ${QT_QTOPENGL_LIBRARY}
+                              ${QT_QTDECLARATIVE_LIBRARY})
 
+set(QtDeclarative_deps QtGui QtNetwork)
+
+create_pyside_module(QtDeclarative
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_declarative.xml
+                     QtDeclarative_include_dirs
+                     QtDeclarative_libraries
+                     QtDeclarative_deps
+                     QtDeclarative_typesystem_path
+                     QtDeclarative_SRC)
 
