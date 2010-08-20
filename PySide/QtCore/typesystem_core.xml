@@ -128,13 +128,10 @@
   <primitive-type name="signed long" default-constructor="0"/>
   <primitive-type name="long"/>
   <primitive-type name="unsigned long" default-constructor="0"/>
-  <primitive-type name="WId">
-    <!-- FIXME This is a workaround to include some headers needed by some includes (nothing to do with QBool) -->
-    <include file-name="signalmanager.h" location="global"/>
-  </primitive-type>
   <primitive-type name="Qt::HANDLE" target-lang-api-name="PyLong">
     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
-      <include file-name="QTextDocument" location="global"/>
+    <include file-name="signalmanager.h" location="global"/>
+    <include file-name="QTextDocument" location="global"/>
   </primitive-type>
   <primitive-type name="QBool" target-lang-api-name="PyBool">
     <conversion-rule file="qbool_conversions.h"/>
