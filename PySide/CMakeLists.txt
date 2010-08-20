@@ -21,7 +21,7 @@ macro(create_pyside_module module_name typesystem_file module_include_dir module
 
     include_directories(${module_name} ${${module_include_dir}})
     add_library(${module_name} MODULE ${${module_sources}})
-    set_target_properties(${module_name} PROPERTIES PREFIX "")
+    set_target_properties(${module_name} PROPERTIES PREFIX "" LIBRARY_OUTPUT_DIRECTORY ${pyside_BINARY_DIR})
     if(WIN32)
         set_target_properties(${module_name} PROPERTIES SUFFIX ".pyd")
     endif()
@@ -31,7 +31,7 @@ macro(create_pyside_module module_name typesystem_file module_include_dir module
     endif()
 
     # install
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}.so
+    install(FILES ${pyside_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}.so
             DESTINATION ${SITE_PACKAGE}/PySide)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${module_name}_python.h
             DESTINATION include/PySide/${module_name}/)
@@ -52,16 +52,14 @@ if (DISABLE_${name})
 else()
     if (${var})
         add_subdirectory(${name})
-        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_BINARY_DIR}/${name}/${name}${CMAKE_DEBUG_POSTFIX}${CMAKE_SHARED_MODULE_SUFFIX}"
-                                                                "${CMAKE_BINARY_DIR}/PySide/${name}${CMAKE_SHARED_MODULE_SUFFIX}")
     else()
         message(STATUS "${name} NOT found. ${name} support disabled.")
     endif()
 endif()
 endmacro(HAS_QT_MODULE)
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
-                                                           "${CMAKE_BINARY_DIR}/PySide/__init__.py")
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
+                                                              "${CMAKE_BINARY_DIR}/PySide/__init__.py")
 # Try to find QtMultimedia
 # TODO: Remove this hack when cmake support QtMultimedia module
 if (NOT QT_QTMULTIMEDIA_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)
