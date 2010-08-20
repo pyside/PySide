@@ -24,14 +24,18 @@ macro(create_pyside_module module_name typesystem_file module_include_dir module
     set_target_properties(${module_name} PROPERTIES PREFIX "" LIBRARY_OUTPUT_DIRECTORY ${pyside_BINARY_DIR})
     if(WIN32)
         set_target_properties(${module_name} PROPERTIES SUFFIX ".pyd")
+        set(${module_name}_suffix ".pyd")
+    else()
+        set(${module_name}_suffix ".so")
     endif()
     target_link_libraries(${module_name} ${${module_libraries}})
     if(${module_deps})
         add_dependencies(${module_name} ${${module_deps}})
     endif()
 
+
     # install
-    install(FILES ${pyside_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}.so
+    install(FILES ${pyside_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}${${module_name}_suffix}
             DESTINATION ${SITE_PACKAGE}/PySide)
     string(TOLOWER ${module_name} lower_module_name)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${lower_module_name}_python.h
