@@ -1,4 +1,4 @@
-    char data[%ARGUMENT_NAMES];
+    PySide::AutoArrayPointer<char> data(%ARGUMENT_NAMES);
     QHostAddress ha;
     quint16 port;
 

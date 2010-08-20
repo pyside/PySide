@@ -10,6 +10,7 @@
 
     <rejection class="QIPv6Address" field-name="c"/>
     <rejection class="QSslCertificate"/>
+    <enum-type name="QNetworkConfiguration::BearerType" />
     <enum-type name="QAbstractSocket::NetworkLayerProtocol"/>
     <enum-type name="QAbstractSocket::SocketError"/>
     <enum-type name="QAbstractSocket::SocketOption"/>
@@ -53,6 +54,10 @@
     </object-type>
 
     <object-type name="QFtp">
+        <extra-includes>
+            <include file-name="autoarraypointer.h" location="global"/>
+        </extra-includes>
+
         <modify-function signature="connectToHost(const QString&amp;, quint16)" allow-thread="yes" />
         <modify-function signature="login(const QString&amp;, const QString&amp;)" allow-thread="yes" />
         <modify-function signature="close()" allow-thread="yes" />
@@ -81,6 +86,10 @@
     </object-type>
 
     <object-type name="QHttp">
+        <extra-includes>
+            <include file-name="autoarraypointer.h" location="global"/>
+        </extra-includes>
+
         <modify-function signature="closeConnection()" remove="all"/>
         <modify-function signature="readAll()" allow-thread="yes"/>
         <modify-function signature="read(char*, qint64)" allow-thread="yes">
@@ -115,6 +124,10 @@
     </object-type>
     <object-type name="QTcpSocket"/>
     <object-type name="QUdpSocket">
+        <extra-includes>
+            <include file-name="autoarraypointer.h" location="global"/>
+        </extra-includes>
+
         <modify-function signature="readDatagram(char*, qint64, QHostAddress*, quint16*)" allow-thread="yes">
             <modify-argument index="1">
                 <remove-argument/>

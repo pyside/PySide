@@ -121,7 +121,7 @@
         %PYARG_0 = Shiboken::makeTuple(a, b, c, d, e);
     </template>
     <template name="read_wrapper">
-        char _data[%2];
+        PySide::AutoArrayPointer&lt;char&gt; _data(%2);
         qint64 _size = %CPPSELF.%FUNCTION_NAME(_data, %2);
         if (_size > 0)
             %PYARG_0 = %CONVERTTOPYTHON[QByteArray](QByteArray(_data, _size));
