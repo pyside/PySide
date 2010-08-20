@@ -2587,7 +2587,10 @@
 
     <!-- TODO: Support conversions on virtual function -->
     <modify-function signature="drawItems(QPainter*, int, QGraphicsItem**, const QStyleOptionGraphicsItem*)">
-
+        <extra-includes>
+            <include file-name="autoarraypointer.h" location="global"/>
+        </extra-includes>
+     
         <modify-argument index="2">
             <remove-argument/>
             <conversion-rule class="native">
@@ -2599,7 +2602,7 @@
             <replace-type modified-type="PySequence"/>
             <conversion-rule class="native">
                 int numItems = PySequence_Size(%PYARG_1);
-                QGraphicsItem *%out[numItems];
+                PySide::AutoArrayPointer&lt;QGraphicsItem*&gt; %out(numItems);
                 for (int i=0; i &lt; numItems; i++) {
                     %out[i] = %CONVERTTOCPP[QGraphicsItem*](PySequence_Fast_GET_ITEM(%PYARG_1, i));
                 }
@@ -2626,7 +2629,7 @@
 
             <conversion-rule class="native">
                 int numOptions = PySequence_Size(%PYARG_2);
-                QStyleOptionGraphicsItem %out[numOptions];
+                PySide::AutoArrayPointer&lt;QStyleOptionGraphicsItem&gt; %out(numOptions);
                 for (int i=0; i &lt; numOptions; i++) {
                     %out[i] = %CONVERTTOCPP[QStyleOptionGraphicsItem](PySequence_Fast_GET_ITEM(%PYARG_1, i));
                 }

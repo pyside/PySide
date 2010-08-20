@@ -127,10 +127,12 @@
   <primitive-type name="unsigned int" default-constructor="0"/>
   <primitive-type name="signed long" default-constructor="0"/>
   <primitive-type name="long"/>
-  <primitive-type name="unsigned long" default-constructor="0"/>
-  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyLong">
+  <primitive-type name="unsigned long" default-constructor="0">
     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
     <include file-name="signalmanager.h" location="global"/>
+  </primitive-type>
+  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyLong">
+    <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
     <include file-name="QTextDocument" location="global"/>
   </primitive-type>
   <primitive-type name="QBool" target-lang-api-name="PyBool">
