@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<typesystem package="PySide.QtGui">
+  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject"/>
+
+  <load-typesystem name="typesystem_gui_common.xml" generate="yes"/>
+</typesystem>

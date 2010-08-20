@@ -36,6 +36,7 @@
     <rejection class="QMetaObject" function-name="changeGuard"/>
     <rejection class="QMetaObject" function-name="removeGuard"/>
 
+  <rejection calls="WId" />
   <rejection class="QFutureSynchronizer"/>
   <rejection class="QByteArray" function-name="contains"/>
   <rejection class="QRunnable"/>

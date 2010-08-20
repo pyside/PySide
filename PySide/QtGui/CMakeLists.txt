@@ -52,6 +52,10 @@ elseif(ENABLE_MAC)
     set(MODULE_NAME "mac")
     set(SPECIFIC_OS_FILES
        )
+elseif(ENABLE_WIN)
+    set(MODULE_NAME "win")
+    set(SPECIFIC_OS_FILES
+       )
 endif(ENABLE_X11)
 
 
