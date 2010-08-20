@@ -53,11 +53,11 @@ typedef struct {
 
 extern "C"
 {
-    PyAPI_DATA(PyTypeObject) Signal_Type;
-    PyAPI_DATA(PyTypeObject) SignalInstance_Type;
+    extern PYSIDE_API PyTypeObject Signal_Type;
+    extern PYSIDE_API PyTypeObject SignalInstance_Type;
 }; //extern "C"
 
-PYSIDE_API PyAPI_FUNC(PyObject*) signalNew(const char* name, ...);
+PYSIDE_API PyObject* signalNew(const char* name, ...);
 PYSIDE_API void signalUpdateSource(PyObject* source);
 PYSIDE_API bool signal_connect(PyObject* source, const char* signal, PyObject* callback);
 
