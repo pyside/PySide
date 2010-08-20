@@ -5,38 +5,33 @@ set(QtScriptTools_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools/qscriptenginedebugger_wrapper.cpp
 )
 
-execute_generator(scripttools QtScriptTools_SRC "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtScript_SOURCE_DIR}:${QtScriptTools_SOURCE_DIR}")
+set(QtScriptTools_typesystem_path "${CMAKE_CURRENT_BINARY_DIR}:${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtScript_SOURCE_DIR}:${QtScriptTools_SOURCE_DIR}")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_GUI_INCLUDE_DIR}
-                    ${QT_QTSCRIPT_INCLUDE_DIR}
-                    ${QT_QTSCRIPTTOOLS_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH}
-                    ${SHIBOKEN_INCLUDE_DIR}
-                    ${libpyside_SOURCE_DIR}
-                    ${QtCore_BINARY_DIR}/PySide/QtCore/
-                    ${QtGui_BINARY_DIR}/PySide/QtGui/
-                    ${QtScript_BINARY_DIR}/PySide/QtScript/
-                    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools)
+set(QtScriptTools_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
+                                ${QT_QTCORE_INCLUDE_DIR}
+                                ${QT_GUI_INCLUDE_DIR}
+                                ${QT_QTSCRIPT_INCLUDE_DIR}
+                                ${QT_QTSCRIPTTOOLS_INCLUDE_DIR}
+                                ${PYTHON_INCLUDE_PATH}
+                                ${SHIBOKEN_INCLUDE_DIR}
+                                ${libpyside_SOURCE_DIR}
+                                ${QtCore_BINARY_DIR}/PySide/QtCore/
+                                ${QtGui_BINARY_DIR}/PySide/QtGui/
+                                ${QtScript_BINARY_DIR}/PySide/QtScript/
+                                ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools)
 
-add_library(QtScriptTools MODULE ${QtScriptTools_SRC})
-set_target_properties(QtScriptTools PROPERTIES PREFIX "")
-target_link_libraries(QtScriptTools
-                      pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_GUI_LIBRARY}
-                      ${QT_QTSCRIPT_LIBRARY}
-                      ${QT_QTSCRIPTTOOLS_LIBRARY})
+set(QtScriptTools_libraries     pyside
+                                ${PYSIDE_PYTHON_LIBRARIES}
+                                ${QT_QTCORE_LIBRARY}
+                                ${QT_GUI_LIBRARY}
+                                ${QT_QTSCRIPT_LIBRARY}
+                                ${QT_QTSCRIPTTOOLS_LIBRARY})
+set(QtScriptTools_deps QtCore QtScript QtGui)
 
-add_dependencies(QtScriptTools QtCore QtScript QtGui)
-
-# install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QtScriptTools${CMAKE_DEBUG_POSTFIX}.so
-        DESTINATION ${SITE_PACKAGE}/PySide)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools/pyside_qtscripttools_python.h
-        DESTINATION include/PySide/QtScriptTools/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_scripttools.xml
-        DESTINATION share/PySide/typesystems)
-
+create_pyside_module(QtScriptTools
+                     ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_scripttools.xml
+                     QtScriptTools_include_dirs
+                     QtScriptTools_libraries
+                     QtScriptTools_deps
+                     QtScriptTools_typesystem_path
+                     QtScriptTools_SRC)

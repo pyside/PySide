@@ -34,19 +34,6 @@ macro(CHECK_QT_NETWORK_MACRO macro_display_name qt_macro module_sources global_s
 endmacro(CHECK_QT_NETWORK_MACRO)
 
 
-if(Q_WS_X11)
-    set(MODULE_NAME network_x11)
-    set(SPECIFIC_OS_FILES
-       )
-
-elseif(Q_WS_MAC)
-    set(MODULE_NAME network_mac)
-    set(SPECIFIC_OS_FILES
-       )
-else()
-    message(FATAL_ERROR "OS not supported")
-endif(Q_WS_X11)
-
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
     set (QtNetwork_47_SRC
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkconfiguration_wrapper.cpp

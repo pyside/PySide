@@ -1,17 +1,5 @@
 project(QtTest)
 
-if(Q_WS_X11)
-    set(MODULE_NAME test_x11)
-    set(SPECIFIC_OS_FILES
-       )
-elseif(Q_WS_MAC)
-    set(MODULE_NAME test_mac)
-    set(SPECIFIC_OS_FILES
-       )
-else()
-    message(FATAL_ERROR "OS not supported")
-endif(Q_WS_X11)
-
 set(QtTest_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qtest_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qttest_module_wrapper.cpp

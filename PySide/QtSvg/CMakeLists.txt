@@ -1,17 +1,5 @@
 project(QtSvg)
 
-if(Q_WS_X11)
-    set(MODULE_NAME svg_x11)
-    set(SPECIFIC_OS_FILES
-       )
-elseif(Q_WS_MAC)
-    set(MODULE_NAME svg_mac)
-    set(SPECIFIC_OS_FILES
-       )
-else()
-    message(FATAL_ERROR "OS not supported")
-endif(Q_WS_X11)
-
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set (QtSvg_46_SRC )
 else ()
