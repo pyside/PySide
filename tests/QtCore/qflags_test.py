@@ -2,13 +2,18 @@
 '''Test cases for QFlags'''
 
 import unittest
-from PySide.QtCore import QIODevice, Qt, QFile
+from PySide.QtCore import QIODevice, Qt, QFile, QTemporaryFile
 
 class QFlagTest(unittest.TestCase):
     '''Test case for usage of flags'''
 
     def testCallFunction(self):
-        f = QFile("/tmp/t0");
+        f = QTemporaryFile()
+        self.assert_(f.open())
+        fileName = f.fileName()
+        f.close()
+
+        f = QFile(fileName)
         self.assertEqual(f.open(QIODevice.Truncate | QIODevice.Text | QIODevice.ReadWrite), True)
         om = f.openMode()
         self.assertEqual(om & QIODevice.Truncate, QIODevice.Truncate)
