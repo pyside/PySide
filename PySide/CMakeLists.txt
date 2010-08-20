@@ -33,7 +33,8 @@ macro(create_pyside_module module_name typesystem_file module_include_dir module
     # install
     install(FILES ${pyside_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}.so
             DESTINATION ${SITE_PACKAGE}/PySide)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${module_name}_python.h
+    string(TOLOWER ${module_name} lower_module_name)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${lower_module_name}_python.h
             DESTINATION include/PySide/${module_name}/)
     install(FILES ${typesystem_file}
             DESTINATION share/PySide/typesystems)
