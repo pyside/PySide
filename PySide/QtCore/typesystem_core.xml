@@ -22,6 +22,7 @@
     <function signature="qIsNull(double)" />
     <function signature="qRound(qreal)" />
     <function signature="qTan(qreal)" />
+    <function signature="qtTrId(const char *, int)" />
     <function signature="qVersion()" />
     <function signature="qWarning(const char*)" />
     <function signature="qrand()" />
