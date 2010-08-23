@@ -91,15 +91,15 @@ Nothing better than examples to show how to use the new-style. Here you can find
     import sys
     from PySide import QtCore
 
-    # define a new slot that receives a QString and has
+    # define a new slot that receives a string and has
     # 'saySomeWords' as its name
-    @QtCore.Slot(QtCore.QString)
+    @QtCore.Slot(str)
     def saySomeWords(words):
         print words
 
     class Communicate(QtCore.QObject):
         # create a new signal on the fly and name it 'speak'
-        speak = QtCore.Signal(QtCore.QString)
+        speak = QtCore.Signal(str)
 
     someone = Communicate()
     # connect signal and slot
@@ -114,18 +114,18 @@ Nothing better than examples to show how to use the new-style. Here you can find
     import sys
     from PySide import QtCore
 
-    # define a new slot that receives a C 'int' or a 'QString'
+    # define a new slot that receives a C 'int' or a 'str'
     # and has 'saySomething' as its name
     @QtCore.Slot(int)
-    @QtCore.Slot(QtCore.QString)
+    @QtCore.Slot(str)
     def saySomething(stuff):
         print stuff
 
     class Communicate(QtCore.QObject):
         # create two new signals on the fly: one will handle
-        # int type, the other will handle QStrings
+        # int type, the other will handle strings
         speakNumber = QtCore.Signal(int)
-        speakWord = QtCore.Signal(QtCore.QString)
+        speakWord = QtCore.Signal(str)
 
     someone = Communicate()
     # connect signal and slot properly
@@ -143,29 +143,29 @@ Nothing better than examples to show how to use the new-style. Here you can find
     import sys
     from PySide import QtCore
 
-    # define a new slot that receives an C 'int' or a 'QString'
+    # define a new slot that receives an C 'int' or a 'str'
     # and has 'saySomething' as its name
     @QtCore.Slot(int)
-    @QtCore.Slot(QtCore.QString)
+    @QtCore.Slot(str)
     def saySomething(stuff):
         print stuff
 
     class Communicate(QtCore.QObject):
         # create two new signals on the fly: one will handle
-        # int type, the other will handle QStrings
-        speak = QtCore.Signal((int,), (QtCore.QString,))
+        # int type, the other will handle strings
+        speak = QtCore.Signal((int,), (str,))
 
     someone = Communicate()
     # connect signal and slot. As 'int' is the default
-    # we have to inform the QString when connecting the
+    # we have to specify the str when connecting the
     # second signal
     someone.speak.connect(saySomething)
-    someone.speak[QtCore.QString].connect(saySomething)
+    someone.speak[str].connect(saySomething)
 
     # emit 'speak' signal with different arguments.
-    # we have to inform the QString as int is the default
+    # we have to specify the str as int is the default
     someone.speak.emit(10)
-    someone.speak[QtCore.QString].emit("Hello everybody!")
+    someone.speak[str].emit("Hello everybody!")
 
 
 PyQt compatibility
