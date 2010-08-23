@@ -65,6 +65,6 @@ create_pyside_module(phonon
                      "typesystem_phonon.xml"
                      phonon_include_dirs
                      phonon_libraries
-                     phonon_depend
+                     phonon_deps
                      phonon_typesystem_path
                      phonon_SRC)
