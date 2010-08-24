@@ -14,24 +14,33 @@ except ImportError:
 from helper import UsesQApplication
 
 if hasQtGui:
+    class Control:
+        def __init__(self):
+            self.arg = False
+
     class QtGuiSigLambda(UsesQApplication):
 
         def testButton(self):
             #Connecting a lambda to a QPushButton.clicked()
             obj = QPushButton('label')
-            QObject.connect(obj, SIGNAL('clicked()'),
-                            lambda: setattr(obj, 'called', True))
+            ctr = Control()
+            func = lambda: setattr(ctr, 'arg', True)
+            QObject.connect(obj, SIGNAL('clicked()'), func)
             obj.click()
-            self.assert_(obj.called)
+            self.assert_(ctr.arg)
+            QObject.disconnect(obj, SIGNAL('clicked()'), func)
+
 
         def testSpinButton(self):
             #Connecting a lambda to a QPushButton.clicked()
             obj = QSpinBox()
+            ctr = Control()
             arg = 444
-            QObject.connect(obj, SIGNAL('valueChanged(int)'),
-                            lambda x: setattr(obj, 'arg', 444))
+            func = lambda x: setattr(ctr, 'arg', 444)
+            QObject.connect(obj, SIGNAL('valueChanged(int)'), func)
             obj.setValue(444)
-            self.assertEqual(obj.arg, arg)
+            self.assertEqual(ctr.arg, arg)
+            QObject.disconnect(obj, SIGNAL('valueChanged(int)'), func)
 
 if __name__ == '__main__':
     unittest.main()
