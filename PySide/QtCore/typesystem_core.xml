@@ -1762,6 +1762,7 @@
     </modify-function>
   </object-type>
   <object-type name="QSignalMapper" />
+
   <object-type name="QCoreApplication">
     <extra-includes>
       <include file-name="QStringList" location="global"/>
@@ -1786,16 +1787,26 @@
     <modify-function signature="sendEvent(QObject*, QEvent*)" allow-thread="yes"/>
     <modify-function signature="sendPostedEvents(QObject*, int)" allow-thread="yes"/>
     <modify-function signature="sendPostedEvents()" allow-thread="yes"/>
+    <modify-function signature="instance()">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
 
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
     <modify-function signature="argv()" remove="all"/>
     <!-- Obsolete -->
     <modify-function signature="argc()" remove="all"/>
     <!-- Obsolete -->
-    <modify-function signature="notify(QObject*,QEvent*)" allow-thread="yes">
+    <modify-function signature="notify(QObject*,QEvent*)">
+      <inject-code class="shell" position="beginning">
+        Shiboken::ThreadStateSaver threadStateSaver;
+        if (!leavingPython)
+          threadStateSaver.save();
+      </inject-code>
       <modify-argument index="2" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="QCoreApplication(int &amp;, char  **)" remove="all"/>
+    <modify-function signature="QCoreApplication(int &amp;, char  **)" access="private"/>
     <inject-code class="native" file="glue/qcoreapplication_init.cpp" position="beginning" />
     <modify-function signature="postEvent(QObject*,QEvent*)">
       <modify-argument index="2">

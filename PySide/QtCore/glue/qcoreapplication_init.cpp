@@ -1,21 +1,30 @@
 // Global variables used to store argc and argv values
 static int QCoreApplicationArgCount;
 static char** QCoreApplicationArgValues;
+static bool leavingPython = false;
 
 /**
  * Called at QtCore module exit
  */
-void DeleteQCoreApplicationAtExit() {
-    if (QCoreApplication::instance()) {
-        BindingManager::instance().invalidateWrapper(QCoreApplication::instance());
-        QCoreApplication::instance()->deleteLater();
-        for (int i = 0; i < QCoreApplicationArgCount; ++i)
-            delete[] QCoreApplicationArgValues[i];
+void DeleteQCoreApplicationAtExit()
+{
+    leavingPython = true;
+    QCoreApplication *cpp = QCoreApplication::instance();
+    if (cpp) {
+        Shiboken::BindingManager &bmngr = Shiboken::BindingManager::instance();
+        PyObject* pySelf = bmngr.retrieveWrapper(cpp);
+        if (pySelf)
+            bmngr.invalidateWrapper(pySelf);
+        cpp->deleteLater();
     }
 }
 
 int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
+    if (Shiboken::isUserType(self) && !Shiboken::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication >()))
+        return -1;
+
+
     if (QCoreApplication::instance()) {
         PyErr_SetString(PyExc_RuntimeError, "A QCoreApplication instance already exists.");
         return -1;
@@ -32,14 +41,20 @@ int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
         return -1;
     }
 
-    void* cptr = new QCoreApplication(QCoreApplicationArgCount, QCoreApplicationArgValues);
+    QCoreApplicationWrapper* cptr = new QCoreApplicationWrapper(QCoreApplicationArgCount, QCoreApplicationArgValues);
     Shiboken::setCppPointer(reinterpret_cast<SbkBaseWrapper*>(self),
                             Shiboken::SbkType<QCoreApplication>(),
                             cptr);
-    SbkBaseWrapper_setValidCppObject(self, 1);
-    Shiboken::BindingManager::instance().registerWrapper(reinterpret_cast<SbkBaseWrapper*>(self), cptr);
 
-    Py_INCREF(self);
+    SbkBaseWrapper_setValidCppObject(self, 1);
+    SbkBaseWrapper *sbkSelf = reinterpret_cast<SbkBaseWrapper*>(self);
+    sbkSelf->containsCppWrapper = 1;
+    sbkSelf->hasOwnership = 0;
+    Shiboken::BindingManager::instance().registerWrapper(sbkSelf, cptr);
+    PySide::signalUpdateSource(self);
+    cptr->metaObject();
+
     Py_AtExit(DeleteQCoreApplicationAtExit);
+    Py_INCREF(self);
     return 1;
 }
