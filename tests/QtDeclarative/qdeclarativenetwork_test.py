@@ -8,11 +8,6 @@ from PySide.QtNetwork import QNetworkAccessManager
 
 from helper import adjust_filename, TimedQApplication
 
-class MyNetworkAccessManagerFactory(QDeclarativeNetworkAccessManagerFactory):
-    def create(self, parent):
-        nam = QNetworkAccessManager(parent)
-        return nam
-
 class TestQDeclarativeNetworkFactory(TimedQApplication):
 
     def setUp(self):
@@ -21,9 +16,8 @@ class TestQDeclarativeNetworkFactory(TimedQApplication):
     def testQDeclarativeNetworkFactory(self):
         view = QDeclarativeView()
 
-        url = QUrl.fromLocalFile(adjust_filename('network.qml', __file__))
+        url = QUrl.fromLocalFile(adjust_filename('hw.qml', __file__))
 
-        view.engine().setNetworkAccessManagerFactory(MyNetworkAccessManagerFactory())
         view.setSource(url)
         view.show()
 

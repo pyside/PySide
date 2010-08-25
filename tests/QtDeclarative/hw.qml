@@ -40,8 +40,16 @@
 
 import Qt 4.7
 
-Image {
-    width: 100
-    height: 100
-    source: "http://qt.nokia.com/logo.png"
+Rectangle {
+     id: page
+     width: 500; height: 200
+     color: "lightgray"
+
+     Text {
+         id: helloText
+         text: "Hello world!"
+         y: 30
+         anchors.horizontalCenter: page.horizontalCenter
+         font.pointSize: 24; font.bold: true
+     }
 }
