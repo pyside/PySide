@@ -1807,7 +1807,6 @@
         <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="arguments()" remove="all"/>
   </object-type>
   <object-type name="QSettings">
     <extra-includes>
