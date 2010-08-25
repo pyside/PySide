@@ -173,6 +173,15 @@
     </object-type>
     <object-type name="QLocalSocket"/>
     <object-type name="QNetworkAccessManager">
+        <modify-function signature="createRequest(QNetworkAccessManager::Operation, const QNetworkRequest&amp;, QIODevice *)">
+          <modify-argument index="3" invalidate-after-use="yes"/>
+        </modify-function>
+        <modify-function signature="get(const QNetworkRequest&amp;)" allow-thread="yes"/>
+        <modify-function signature="post(const QNetworkRequest &amp;, QIODevice *)" allow-thread="yes"/>
+        <modify-function signature="post(const QNetworkRequest &amp;, const QByteArray &amp;)" allow-thread="yes"/>
+        <modify-function signature="put(const QNetworkRequest &amp;, QIODevice *)" allow-thread="yes"/>
+        <modify-function signature="put(const QNetworkRequest &amp;, const QByteArray &amp;)" allow-thread="yes"/>
+        <modify-function signature="sendCustomRequest(const QNetworkRequest &amp;, const QByteArray &amp;, QIODevice *)" allow-thread="yes"/>
         <modify-function signature="setCookieJar(QNetworkCookieJar*)">
             <modify-argument index="1">
                 <define-ownership class="target" owner="c++"/>
