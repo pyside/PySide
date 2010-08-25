@@ -4,6 +4,8 @@
     <load-typesystem name="typesystem_network.xml" generate="no"/>
     <load-typesystem name="typesystem_gui.xml" generate="no"/>
 
+
+    <object-type name="QDeclarativeExtensionInterface"/>
     <object-type name="QDeclarativeComponent" />
     <enum-type name="QDeclarativeComponent::Status" />
     <object-type name="QDeclarativeContext" />
@@ -18,12 +20,19 @@
     <value-type name="QDeclarativeError" />
     <object-type name="QDeclarativeExpression" />
     <object-type name="QDeclarativeExtensionPlugin" />
+    <enum-type name="QDeclarativeImageProvider::ImageType" />
     <object-type name="QDeclarativeImageProvider" />
     <object-type name="QDeclarativeItem" />
     <enum-type name="QDeclarativeItem::TransformOrigin" />
 
     <value-type name="QDeclarativeListReference" />
-    <object-type name="QDeclarativeNetworkAccessManagerFactory" />
+    <object-type name="QDeclarativeNetworkAccessManagerFactory" >
+        <modify-function signature="create(QObject *)">
+          <modify-argument index="return">
+            <define-ownership class="target" owner="c++"/>
+          </modify-argument>
+        </modify-function>
+    </object-type>
     <object-type name="QDeclarativeParserStatus" />
 
     <value-type name="QDeclarativeProperty" />
