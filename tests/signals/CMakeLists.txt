@@ -1,5 +1,6 @@
 PYSIDE_TEST(args_dont_match_test.py)
 PYSIDE_TEST(bug_311.py)
+PYSIDE_TEST(bug_319.py)
 PYSIDE_TEST(decorators_test.py)
 PYSIDE_TEST(invalid_callback_test.py)
 PYSIDE_TEST(lambda_gui_test.py)

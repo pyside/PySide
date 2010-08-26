@@ -53,8 +53,8 @@ extern "C"
 static int slot_init(PyObject*, PyObject*, PyObject*);
 static PyObject* slot_call(PyObject*, PyObject*, PyObject*);
 
-//aux
-static char* slot_get_type_name(PyObject*);
+//external qsignal.cpp
+extern char* get_type_name(PyObject*);
 
 
 // Class Definition -----------------------------------------------
@@ -120,18 +120,6 @@ void init_slot(PyObject *module)
 
 } // extern "C"
 
-char* slot_get_type_name(PyObject *type)
-{
-    if (PyType_Check(type)) {
-        //tp_name return the full name
-        Shiboken::AutoDecRef typeName(PyObject_GetAttrString(type, "__name__"));
-        return strdup(PyString_AS_STRING(typeName.object()));
-    } else if (PyString_Check(type)) {
-        return strdup(PyString_AS_STRING(type));
-    }
-    return 0;
-}
-
 int slot_init(PyObject *self, PyObject *args, PyObject *kw)
 {
     static PyObject *emptyTuple = 0;
@@ -148,7 +136,7 @@ int slot_init(PyObject *self, PyObject *args, PyObject *kw)
     SlotData *data = reinterpret_cast<SlotData*>(self);
     for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
         PyObject *argType = PyTuple_GET_ITEM(args, i);
-        char *typeName = slot_get_type_name(argType);
+        char *typeName = get_type_name(argType);
         if (typeName) {
             if (data->args) {
                 data->args = reinterpret_cast<char*>(realloc(data->args, (strlen(data->args) + 1 + strlen(typeName)) * sizeof(char*)));
@@ -165,7 +153,7 @@ int slot_init(PyObject *self, PyObject *args, PyObject *kw)
         data->slotName = strdup(argName);
 
     if (argResult)
-        data->resultType = slot_get_type_name(argResult);
+        data->resultType = get_type_name(argResult);
     else
         data->resultType = strdup("void");
 

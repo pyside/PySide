@@ -48,6 +48,8 @@ namespace PySide
 extern "C"
 {
 
+char* get_type_name(PyObject*);
+
 typedef struct {
     PyObject_HEAD
     bool initialized;
@@ -68,7 +70,6 @@ static PyObject* signal_instance_get_item(PyObject*, PyObject*);
 
 //aux
 static char* signal_build_signature(const char*, const char*);
-static char* signal_get_type_name(PyObject*);
 static void signal_append_signature(SignalData*, char*);
 static void signal_instance_initialize(PyObject*, PyObject*, SignalData*, PyObject *, int);
 static char* signal_parse_signature(PyObject*);
@@ -244,7 +245,7 @@ void signalUpdateSource(PyObject* source)
     }
 }
 
-char* signal_get_type_name(PyObject* type)
+char* get_type_name(PyObject* type)
 {
     if (PyType_Check(type)) {
         char *typeName = NULL;
@@ -255,7 +256,7 @@ char* signal_get_type_name(PyObject* type)
         } else {
             // Translate python types to Qt names
             PyTypeObject *objType = reinterpret_cast<PyTypeObject*>(type);
-            if (objType == &PyString_Type)
+            if ((objType == &PyString_Type)  ||  (objType == &PyUnicode_Type))
                 typeName = strdup("QString");
             else if (objType == &PyInt_Type)
                 typeName = strdup("int");
@@ -284,11 +285,11 @@ char* signal_parse_signature(PyObject *args)
 {
     char *signature = 0;
     if (args && (PyString_Check(args) || (!PySequence_Check(args) && (args != Py_None))))
-        return signal_get_type_name(args);
+        return get_type_name(args);
 
     for(Py_ssize_t i = 0, i_max = PySequence_Size(args); i < i_max; i++) {
         Shiboken::AutoDecRef arg(PySequence_ITEM(args, i));
-        char* typeName = signal_get_type_name(arg);
+        char* typeName = get_type_name(arg);
         if (typeName) {
             if (signature) {
                 signature = reinterpret_cast<char*>(realloc(signature, (strlen(signature) + 1 + strlen(typeName)) * sizeof(char*)));
