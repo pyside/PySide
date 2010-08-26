@@ -378,6 +378,16 @@ check_qt_class(QtGui QSessionManager QtGui_SRC)
 check_qt_class(QtGui QSizeGrip QtGui_SRC)
 check_qt_class(QtGui QSystemTrayIcon QtGui_SRC)
 
+check_qt_class(QtGui QAbstractPageSetupDialog QtGui_SRC)
+check_qt_class(QtGui QAbstractPrintDialog QtGui_SRC)
+check_qt_class(QtGui QPageSetupDialog QtGui_SRC)
+check_qt_class(QtGui QPrintDialog QtGui_SRC)
+check_qt_class(QtGui QPrintPreviewWidget QtGui_SRC)
+check_qt_class(QtGui QPrintPreviewDialog QtGui_SRC)
+check_qt_class(QtGui QPrinter QtGui_SRC)
+check_qt_class(QtGui QPrinterInfo QtGui_SRC)
+check_qt_class(QtGui QPrintEngine QtGui_SRC)
+
 set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/
