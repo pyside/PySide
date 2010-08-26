@@ -4361,6 +4361,8 @@
       <include file-name="QStyle" location="global"/>
     </extra-includes>
     <modify-function signature="QApplication(int &amp;, char  **)" access="private" />
+    <modify-function signature="QApplication(int &amp;, char  **, bool)" remove="all" />
+    <modify-function signature="QApplication(int &amp;, char  **, QApplication::Type)" remove="all" />
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
     <inject-code class="native" file="glue/qapplication_init.cpp" position="beginning" />
 

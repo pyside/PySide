@@ -348,6 +348,8 @@ QT_END_HEADER
 
 #include <QtCore/QtCore>
 #if @ENABLE_MAC@ || @ENABLE_WIN@
+  // Workaround to parse the QApplication header
+  #define Q_INTERNAL_QAPP_SRC
   #undef qdoc
 #endif
 #include <QtGui/QtGui>
