@@ -250,15 +250,21 @@ char* signal_get_type_name(PyObject* type)
         char *typeName = NULL;
         if (type->ob_type == &Shiboken::SbkBaseWrapperType_Type) {
             Shiboken::SbkBaseWrapperType *objType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(type);
+            Q_ASSERT(objType->original_name);
             typeName = strdup(objType->original_name);
         } else {
-            //tp_name return the full name
-            Shiboken::AutoDecRef otypeName(PyObject_GetAttrString(type, "__name__"));
-            typeName = strdup(PyString_AS_STRING(otypeName.object()));
-        }
-        if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ObjectType) {
-            typeName = reinterpret_cast<char*>(realloc(typeName, strlen(typeName) + 1));
-            typeName = strcat(typeName, "*");
+            // Translate python types to Qt names
+            PyTypeObject *objType = reinterpret_cast<PyTypeObject*>(type);
+            if (objType == &PyString_Type)
+                typeName = strdup("QString");
+            else if (objType == &PyInt_Type)
+                typeName = strdup("int");
+            else if (objType == &PyLong_Type)
+                typeName = strdup("long");
+            else if (objType == &PyFloat_Type)
+                typeName = strdup("qreal");
+            else
+                typeName = strdup("object");
         }
         return typeName;
     } else if (PyString_Check(type)) {
@@ -277,7 +283,6 @@ char* signal_build_signature(const char *name, const char *signature)
 char* signal_parse_signature(PyObject *args)
 {
     char *signature = 0;
-
     if (args && (PyString_Check(args) || (!PySequence_Check(args) && (args != Py_None))))
         return signal_get_type_name(args);
 
