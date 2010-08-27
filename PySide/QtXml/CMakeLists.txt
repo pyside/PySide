@@ -56,4 +56,5 @@ create_pyside_module(QtXml
                      QtXml_libraries
                      QtXml_deps
                      QtXml_typesystem_path
-                     QtXml_SRC)
+                     QtXml_SRC
+                     "")

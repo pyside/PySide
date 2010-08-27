@@ -48,6 +48,7 @@
   <enum-type name="QTest::MouseAction"/>
   <enum-type name="QTest::SkipMode"/>
   <enum-type name="QTest::TestFailMode"/>
+  <enum-type name="QTest::QBenchmarkMetric" since="4.7"/>
 
   <rejection class="QSignalSpy"/>
   <rejection class="QTestEventList"/>

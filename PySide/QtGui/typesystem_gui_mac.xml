@@ -5,7 +5,7 @@
 
   <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject"/>
 
-  <load-typesystem name="typesystem_gui.xml" generate="yes"/>
+  <load-typesystem name="typesystem_gui_commom.xml" generate="yes"/>
 
   <suppress-warning text="enum 'QPixmap::ShareMode' does not have a type entry or is not an enum" />
   <suppress-warning text="enum 'QSysInfo::Endian' is specified in typesystem, but not declared" />

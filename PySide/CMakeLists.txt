@@ -6,12 +6,13 @@ macro(execute_generator module sources typesystem_path)
     message("Running generator for ${module}...")
 endmacro()
 
-macro(create_pyside_module module_name module_include_dir module_libraries module_deps module_typesystem_path module_sources)
+macro(create_pyside_module module_name module_include_dir module_libraries module_deps module_typesystem_path module_sources typesystem_name)
     string(TOLOWER ${module_name} _module)
     string(REGEX REPLACE ^qt "" _module ${_module})
-    set(typesystem_prefix ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_${_module})
-    if(EXISTS ${typesystem_prefix}_${AUTO_OS}.xml)
-        set(typesystem_prefix ${typesystem_prefix}_${AUTO_OS})
+    if (NOT EXISTS ${typesystem_name})
+        set(typesystem_path ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_${_module}.xml)
+    else()
+        set(typesystem_path ${typesystem_name})
     endif()
 
     add_custom_command(OUTPUT ${${module_sources}}
@@ -21,7 +22,7 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
                         --typesystem-paths=${pyside_SOURCE_DIR}:${${module_typesystem_path}}
                         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
                         --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt
-                        ${typesystem_prefix}.xml
+                        ${typesystem_path}
                         --api-version=${SUPPORTED_QT_VERSION}
                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                         COMMENT "Running generator for ${module_name}...")

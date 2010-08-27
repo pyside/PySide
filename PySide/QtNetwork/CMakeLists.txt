@@ -68,4 +68,5 @@ create_pyside_module(QtNetwork
                      QtNetwork_libraries
                      QtNetwork_deps
                      QtNetwork_typesystem_path
-                     QtNetwork_SRC)
+                     QtNetwork_SRC
+                     "")

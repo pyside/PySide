@@ -373,6 +373,10 @@ ${SPECIFIC_OS_FILES}
 ${QtGui_46_SRC}
 )
 
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui.xml.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
+
 check_qt_class(QtGui QGtkStyle QtGui_SRC)
 check_qt_class(QtGui QSessionManager QtGui_SRC)
 check_qt_class(QtGui QSizeGrip QtGui_SRC)
@@ -407,5 +411,6 @@ create_pyside_module(QtGui
                      QtGui_libraries
                      QtGui_deps
                      QtGui_typesystem_path
-                     QtGui_SRC)
+                     QtGui_SRC
+                     "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml")
 

@@ -151,4 +151,5 @@ create_pyside_module(QtCore
                      QtCore_libraries
                      ""
                      QtCore_typesystem_path
-                     QtCore_SRC)
+                     QtCore_SRC
+                     "")

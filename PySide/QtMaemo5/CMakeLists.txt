@@ -45,5 +45,6 @@ create_pyside_module(QtMaemo5
                      QtMaemo5_libraries
                      QtMaemo5_deps
                      QtMaemo5_typesystem_path
-                     QtMaemo5_SRC)
+                     QtMaemo5_SRC
+                     "")
 
