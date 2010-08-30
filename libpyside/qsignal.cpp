@@ -264,6 +264,8 @@ char* get_type_name(PyObject* type)
                 typeName = strdup("long");
             else if (objType == &PyFloat_Type)
                 typeName = strdup("qreal");
+            else if (objType == &PyBool_Type)
+                typeName = strdup("bool");
             else
                 typeName = strdup("object");
         }
