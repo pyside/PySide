@@ -28,6 +28,9 @@ struct Converter<QVariant>
         } else if (Converter<QString>::checkType(pyObj)) {
             // QVariant(const char*)
             return QVariant(Converter<QString>::toCpp(pyObj));
+        } else if (Converter<QByteArray>::checkType(pyObj)) {
+            // QVariant(QByteArray)
+            return QVariant(Converter<QByteArray>::toCpp(pyObj));
         } else if (PyFloat_CheckExact(pyObj)) {
             // QVariant(double)
             return QVariant(Converter<double>::toCpp(pyObj));

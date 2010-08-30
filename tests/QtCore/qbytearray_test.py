@@ -5,7 +5,7 @@ import unittest
 import ctypes
 import sys
 
-from PySide.QtCore import QByteArray
+from PySide.QtCore import *
 
 class QByteArrayTestToNumber(unittest.TestCase):
     def testToNumberInt(self):
@@ -91,8 +91,10 @@ class QByteArrayOperatorAtSetterLargeIndex(unittest.TestCase):
         obj[10] = 'normal'
         self.assertEqual(obj, QByteArray('mystring  normal'))
 
-
-
+class QByteArrayOnQVariant(unittest.TestCase):
+    def testQByteArrayOnQVariant(self):
+        a = QSettings().value("some_prop", QByteArray())
+        self.assertEqual(type(a), QByteArray)
 
 if __name__ == '__main__':
     unittest.main()
