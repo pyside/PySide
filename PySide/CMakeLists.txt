@@ -48,7 +48,7 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
     string(TOLOWER ${module_name} lower_module_name)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${lower_module_name}_python.h
             DESTINATION include/PySide/${module_name}/)
-    file(GLOB typesystem_files ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_*.xml)
+    file(GLOB typesystem_files ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_*.xml ${typesystem_path})
     install(FILES ${typesystem_files} DESTINATION share/PySide/typesystems)
 endmacro()
 
