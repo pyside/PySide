@@ -18,8 +18,8 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
     add_custom_command(OUTPUT ${${module_sources}}
                         COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
                         ${CMAKE_BINARY_DIR}/PySide/global.h
-                        --include-paths=${pyside_SOURCE_DIR}:${QT_INCLUDE_DIR}
-                        --typesystem-paths=${pyside_SOURCE_DIR}:${${module_typesystem_path}}
+                        --include-paths=${pyside_SOURCE_DIR}${PATH_SEP}${QT_INCLUDE_DIR}
+                        --typesystem-paths=${pyside_SOURCE_DIR}${PATH_SEP}${${module_typesystem_path}}
                         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
                         --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt
                         ${typesystem_path}
@@ -76,7 +76,7 @@ macro(check_qt_class module class global_sources)
                     OUTPUT_VARIABLE OUTPUT)
         file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeCheckQtClassTest.log ${OUTPUT})
 
-        set("PYSIDE_${class}" ${Q_WORKS} CACHE STRING "Has this Qt class been found?")
+        set("PYSIDE_${class}" ${Q_WORKS} CACHE STRING "Has ${class} class been found?")
         if(Q_WORKS)
             message(STATUS "Checking for ${class} in ${module} -- found")
             list(APPEND ${global_sources} ${_cppfile})

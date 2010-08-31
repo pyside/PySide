@@ -5,7 +5,7 @@ set(QtUiTools_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtUiTools/quiloader_wrapper.cpp
 )
 
-set(QtUiTools_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtXml_SOURCE_DIR}:${QtUiTools_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtUiTools_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtXml_SOURCE_DIR}${PATH_SEP}${QtUiTools_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 set(QtUiTools_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                             ${QT_QTCORE_INCLUDE_DIR}
                             ${QT_QTGUI_INCLUDE_DIR}

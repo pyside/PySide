@@ -31,7 +31,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/webcore_wrapper.cpp
 ${QtWebKit_46_SRC}
 )
 
-set(QtWebKit_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtNetwork_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtWebKit_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtNetwork_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 set(QtWebkit_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebkit/
                             ${QT_INCLUDE_DIR}

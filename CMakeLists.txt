@@ -97,6 +97,12 @@ else()
 endif()
 message(STATUS "Detected OS: ${AUTO_OS}")
 
+if (WIN32)
+    set(PATH_SEP "\;")
+else()
+    set(PATH_SEP ":")
+endif()
+
 # Define supported Qt Version
 if(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
     set(SUPPORTED_QT_VERSION 4.7)

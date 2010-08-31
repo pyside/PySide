@@ -21,7 +21,7 @@ set(QtSql_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/qtsql_module_wrapper.cpp
 )
 
-set(QtSql_typesystem_path "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtSql_SOURCE_DIR}:${QtGui_BINARY_DIR}")
+set(QtSql_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtSql_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 set(QtSql_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QT_QTCORE_INCLUDE_DIR}
                         ${QT_QTGUI_INCLUDE_DIR}

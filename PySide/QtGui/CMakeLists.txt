@@ -392,7 +392,7 @@ check_qt_class(QtGui QPrinter QtGui_SRC)
 check_qt_class(QtGui QPrinterInfo QtGui_SRC)
 check_qt_class(QtGui QPrintEngine QtGui_SRC)
 
-set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}")
+set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}")
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/
                         ${QT_INCLUDE_DIR}
