@@ -2,5 +2,4 @@
 <typesystem package="PySide.QtGui">
   <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject"/>
   <enum-type name="QPixmap::HBitmapFormat" />
-  <load-typesystem name="typesystem_gui_common.xml" generate="yes"/>
 </typesystem>

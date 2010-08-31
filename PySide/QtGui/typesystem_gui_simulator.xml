@@ -30,6 +30,4 @@
   <value-type name="QFont">
     <modify-function signature="handle()const" remove="all"/>
   </value-type>
-
-  <load-typesystem name="typesystem_gui_commom.xml" generate="yes"/>
 </typesystem>
