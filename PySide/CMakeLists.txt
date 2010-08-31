@@ -65,8 +65,7 @@ macro(check_qt_class module class global_sources)
         file(WRITE ${SRC_FILE}
              "#include <${module}>\n"
              "#include <typeinfo>\n"
-             "#include <inttypes.h>\n"
-             "int main() { return (intptr_t) &typeid(${class}); }\n"
+             "int main() { typeid(${class}); }\n"
         )
         try_compile(Q_WORKS ${CMAKE_BINARY_DIR}
                     ${SRC_FILE}
