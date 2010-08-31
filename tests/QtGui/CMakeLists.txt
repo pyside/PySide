@@ -3,6 +3,7 @@
 PYSIDE_TEST(api2_test.py)
 PYSIDE_TEST(bug_243.py)
 PYSIDE_TEST(bug_307.py)
+PYSIDE_TEST(bug_324.py)
 PYSIDE_TEST(add_action_test.py)
 PYSIDE_TEST(customproxywidget_test.py)
 PYSIDE_TEST(float_to_int_implicit_conversion_test.py)
