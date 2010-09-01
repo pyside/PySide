@@ -1686,6 +1686,7 @@
     <modify-function signature="singleShot(int,QObject*,const char*)">
       <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of c++ function call
+        (void) %2; // remove warning about unused variable
         Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
         PyObject* pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
         Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
