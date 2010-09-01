@@ -27,8 +27,8 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                         COMMENT "Running generator for ${module_name}...")
 
-    include_directories(${module_name} ${${module_include_dir}})
-    add_library(${module_name} MODULE ${${module_sources}})
+    include_directories(${module_name} ${${module_include_dir}} ${pyside_SOURCE_DIR})
+    add_library(${module_name} MODULE ${${module_sources}} ${${ARGN}})
     set_target_properties(${module_name} PROPERTIES PREFIX "" LIBRARY_OUTPUT_DIRECTORY ${pyside_BINARY_DIR})
     if(WIN32)
         set_target_properties(${module_name} PROPERTIES SUFFIX ".pyd")

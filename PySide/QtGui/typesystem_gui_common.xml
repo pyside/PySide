@@ -1388,6 +1388,7 @@
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
   </object-type>
+  <object-type name="QPyTextObject" />
   <object-type name="QActionGroup">
     <modify-function signature="addAction(QAction*)">
       <modify-argument index="1">
@@ -2527,7 +2528,7 @@
         <extra-includes>
             <include file-name="autoarraypointer.h" location="global"/>
         </extra-includes>
-     
+
         <modify-argument index="2">
             <remove-argument/>
             <conversion-rule class="native">

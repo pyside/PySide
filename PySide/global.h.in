@@ -353,6 +353,7 @@ QT_END_HEADER
   #undef qdoc
 #endif
 #include <QtGui/QtGui>
+#include "qpytextobject.h"
 #if @ENABLE_X11@
   #include <QtGui/QX11Info>
 #endif

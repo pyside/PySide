@@ -55,6 +55,8 @@ else()
     )
 endif ()
 
+qt4_wrap_cpp(QPYTEXTOBJECT_MOC "${pyside_SOURCE_DIR}/qpytextobject.h")
+
 set(QtGui_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qabstractbutton_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qabstractgraphicsshapeitem_wrapper.cpp
@@ -227,6 +229,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpolygon_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprogressbar_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qprogressdialog_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qproxymodel_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpytextobject_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpushbutton_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qradialgradient_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qradiobutton_wrapper.cpp
@@ -395,6 +398,7 @@ check_qt_class(QtGui QPrintEngine QtGui_SRC)
 set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}")
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/
+                        ${pyside_SOURCE_DIR}
                         ${QT_INCLUDE_DIR}
                         ${SHIBOKEN_INCLUDE_DIR}
                         ${libpyside_SOURCE_DIR}
@@ -412,5 +416,6 @@ create_pyside_module(QtGui
                      QtGui_deps
                      QtGui_typesystem_path
                      QtGui_SRC
-                     "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml")
+                     "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml"
+                     QPYTEXTOBJECT_MOC)
 
