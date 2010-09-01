@@ -18,7 +18,7 @@ struct Converter<QString>
     {
         return PyString_Check(pyObj)
                 || PyUnicode_Check(pyObj)
-                || SbkQByteArray_Check(pyObj)
+                || Converter<QByteArray>::checkType(pyObj)
                 || pyObj == Py_None
     #if PY_VERSION_HEX < 0x03000000
                 || (pyObj->ob_type->tp_as_buffer
@@ -42,7 +42,7 @@ struct Converter<QString>
             return QString(Converter< char * >::toCpp(pyObj));
         } else if (pyObj == Py_None) {
             return QString();
-        } else if (SbkQByteArray_Check(pyObj)) {
+        } else if (Converter<QByteArray>::checkType(pyObj)) {
             return QString(Converter< QByteArray >::toCpp(pyObj));
         }
 #if PY_VERSION_HEX < 0x03000000
