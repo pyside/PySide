@@ -1485,17 +1485,8 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QDoubleValidator">
-    <modify-function signature="validate(QString &amp;, int &amp;)const">
-      <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        <insert-template name="return_tuple_QValidator_QString_int"/>
-      </inject-code>
-    </modify-function>
-  </object-type>
-  <object-type name="QFileIconProvider"/>
+  <object-type name="QDoubleValidator" />
+  <object-type name="QFileIconProvider" />
   <object-type name="QWizard">
     <modify-function signature="addPage(QWizardPage*)">
       <modify-argument index="1">
@@ -2409,27 +2400,6 @@
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
     </extra-includes>
-
-    <modify-function signature="addItem(QLayoutItem *)">
-      <inject-code class="target" position="beginning">
-        addLayoutOwnership(%CPPSELF, %1);
-      </inject-code>
-    </modify-function>
-
-   <modify-function signature="itemAt(int)const">
-      <modify-argument index="return">
-        <define-ownership owner="default"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        addLayoutOwnership(%CPPSELF, %0);
-      </inject-code>
-    </modify-function>
-
-    <modify-function signature="addWidget(QWidget *)">
-      <inject-code class="target" position="beginning">
-        addLayoutOwnership(%CPPSELF, %1);
-      </inject-code>
-    </modify-function>
     <modify-function signature="insertWidget(int,QWidget*)">
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %2);
@@ -2440,33 +2410,20 @@
   <object-type name="QBoxLayout">
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
-    </extra-includes>
-
-   <modify-function signature="itemAt(int)const">
-      <modify-argument index="return">
-        <define-ownership owner="default"/>
-      </modify-argument>
-
-      <inject-code class="target" position="end">
-        addLayoutOwnership(%CPPSELF, %0);
-      </inject-code>
-    </modify-function>
+  </extra-includes>
 
     <modify-function signature="addWidget(QWidget *, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
+
     <modify-function signature="addLayout(QLayout *, int)">
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
-    <modify-function signature="addItem(QLayoutItem *)">
-      <inject-code class="target" position="beginning">
-        addLayoutOwnership(%CPPSELF, %1);
-      </inject-code>
-    </modify-function>
+
     <modify-function signature="insertWidget(int, QWidget *, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %2);
@@ -2498,12 +2455,6 @@
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
     </extra-includes>
-
-    <modify-function signature="addWidget(QWidget *)">
-      <inject-code class="target" position="beginning">
-        addLayoutOwnership(%CPPSELF, %1);
-      </inject-code>
-    </modify-function>
     <modify-function signature="addWidget(QWidget *, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
       <modify-argument index="4">
         <rename to="alignment"/>
@@ -2550,17 +2501,6 @@
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
-
-   <modify-function signature="itemAt(int)const">
-      <modify-argument index="return">
-        <define-ownership owner="default"/>
-      </modify-argument>
-
-      <inject-code class="target" position="end">
-        addLayoutOwnership(%CPPSELF, %0);
-      </inject-code>
-    </modify-function>
-
     <modify-function signature="getItemPosition(int,int*,int*,int*,int*)" remove="all" />
   </object-type>
 
@@ -3491,22 +3431,6 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="fixup(QString &amp;)const">
-      <modify-argument index="return">
-        <replace-type modified-type="QString"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        <insert-template name="return_QString"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="validate(QString &amp;, int &amp;)const">
-      <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        <insert-template name="return_tuple_QValidator_QString_int"/>
-      </inject-code>
-    </modify-function>
   </object-type>
   <object-type name="QSortFilterProxyModel">
     <modify-function signature="parent()const" remove="all"/>
@@ -4039,43 +3963,9 @@
       <include file-name="QTextCursor" location="global"/>
     </extra-includes>
   </object-type>
-  <object-type name="QSpinBox">
-    <modify-function signature="fixup(QString &amp;)const">
-      <modify-argument index="return">
-        <replace-type modified-type="QString"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        <insert-template name="return_QString"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="validate(QString &amp;, int &amp;)const">
-      <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        <insert-template name="return_tuple_QValidator_QString_int"/>
-      </inject-code>
-    </modify-function>
-  </object-type>
+  <object-type name="QSpinBox"/>
   <object-type name="QTextBrowser"/>
-  <object-type name="QDoubleSpinBox">
-    <modify-function signature="fixup(QString &amp;)const">
-      <modify-argument index="return">
-        <replace-type modified-type="QString"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        <insert-template name="return_QString"/>
-      </inject-code>
-    </modify-function>
-    <modify-function signature="validate(QString &amp;, int &amp;)const">
-      <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
-      </modify-argument>
-      <inject-code class="target" position="end">
-        <insert-template name="return_tuple_QValidator_QString_int"/>
-      </inject-code>
-    </modify-function>
-  </object-type>
+  <object-type name="QDoubleSpinBox"/>
   <object-type name="QButtonGroup">
    <modify-function signature="addButton(QAbstractButton *)">
       <modify-argument index="1">
@@ -4394,6 +4284,10 @@
     </modify-function>
   </object-type>
   <object-type name="QFormLayout">
+    <extra-includes>
+      <include file-name="glue/qlayout_help_functions.h" location="local"/>
+    </extra-includes>
+
     <!-- FIXME: What to do with this function!? -->
     <modify-function signature="getLayoutPosition(QLayout*,int*,QFormLayout::ItemRole*)const" remove="all" />
     <!-- FIXME: What to do with this function!? -->
@@ -4483,16 +4377,6 @@
     <modify-function signature="setItem(int,QFormLayout::ItemRole,QLayoutItem*)" remove="all"/>
     <!-- FIXME: Check what to do with this function! -->
     <modify-function signature="getItemPosition(int,int*,QFormLayout::ItemRole*)const" remove="all" />
-    <modify-function signature="addItem(QLayoutItem*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="takeAt(int)">
-      <modify-argument index="return">
-        <parent index="this" action="remove"/>
-      </modify-argument>
-    </modify-function>
   </object-type>
   <object-type name="QGraphicsGridLayout" >
     <modify-function signature="addItem(QGraphicsLayoutItem*,int,int,QFlags&lt;Qt::AlignmentFlag&gt;)">
@@ -4820,7 +4704,6 @@
   <suppress-warning text="signature 'addToolbar(QString)' for function modification in 'QMainWindow' not found."/>
   <suppress-warning text="namespace 'PySide.QtGui.QInputMethodEvent' for enum 'AttributeType' is not declared"/>
   <suppress-warning text="type 'QInputMethodEvent::Attribute' is specified in typesystem, but not defined."/>
-  <suppress-warning text="Shadowing: *"/>
   <suppress-warning text="unhandled enum value: ~FlagMask in QMessageBox::StandardButton"/>
   <suppress-warning text="unmatched enum ~FlagMask"/>
   <suppress-warning text="Argument 1 on function 'QTabWidget::setUpLayout(bool)' has default expressiont but does not have name."/>

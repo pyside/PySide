@@ -4,8 +4,11 @@ extern PyObject* moduleQtGui;
 static int QApplicationArgCount;
 static char** QApplicationArgValues;
 static const char QAPP_MACRO[] = "qApp";
+static bool leavingPython = false;
 
-void DeleteQApplicationAtExit() {
+void DeleteQApplicationAtExit()
+{
+    leavingPython = true;    
     PySide::SignalManager::instance().clear();
     QCoreApplication* cpp = QApplication::instance();
     if (cpp) {
