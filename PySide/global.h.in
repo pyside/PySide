@@ -371,15 +371,15 @@ QT_END_HEADER
 #include <QtSql/QtSql>
 #include <QtSvg/QtSvg>
 
-#ifndef QT_NO_XMLPATTERNS
+#ifdef @QT_QTXMLPATTERNS_FOUND@
 #  include <QtXmlPatterns/QtXmlPatterns>
 #endif
 
-#ifndef QT_NO_WEBKIT
+#ifdef @QT_QTWEBKIT_FOUND@
 #  include <QtWebKit/QtWebKit>
 #endif
 
-#ifndef QT_NO_TEST
+#ifdef @QT_QTTEST_FOUND@
 #  include <QtTest/QtTest>
 #endif
 
