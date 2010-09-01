@@ -2418,8 +2418,11 @@
   <add-function signature="QT_TR_NOOP_UTF8(const char*)" return-type="PyString*">
     <inject-code class="target" position="beginning">(void)%1;%PYARG_0 = %PYARG_1;</inject-code>
   </add-function>
-  <add-function signature="QT_TRANSLATE_NOOP(const char*)" return-type="PyString*">
-    <inject-code class="target" position="beginning">(void)%1;%PYARG_0 = %PYARG_1;</inject-code>
+  <add-function signature="QT_TRANSLATE_NOOP(const char*, const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">(void)%1;(void)%2;%PYARG_0 = %PYARG_2;</inject-code>
+  </add-function>
+  <add-function signature="QT_TRANSLATE_NOOP3(const char*, const char*, const char*)" return-type="PyString*">
+    <inject-code class="target" position="beginning">(void)%1;(void)%2;(void)%3;%PYARG_0 = %PYARG_2;</inject-code>
   </add-function>
   <add-function signature="QT_TRANSLATE_NOOP_UTF8(const char*)" return-type="PyString*">
     <inject-code class="target" position="beginning">(void)%1;%PYARG_0 = %PYARG_1;</inject-code>
