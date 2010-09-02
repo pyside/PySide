@@ -34,7 +34,7 @@ struct Converter<QVariant>
         } else if (PyFloat_CheckExact(pyObj)) {
             // QVariant(double)
             return QVariant(Converter<double>::toCpp(pyObj));
-        } else if (PyInt_CheckExact(pyObj)) {
+        } else if (PyInt_Check(pyObj)) {
             // QVariant(int)
             return QVariant(Converter<int>::toCpp(pyObj));
         } else if (PyLong_CheckExact(pyObj)) {

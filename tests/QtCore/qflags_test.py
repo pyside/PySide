@@ -2,7 +2,7 @@
 '''Test cases for QFlags'''
 
 import unittest
-from PySide.QtCore import QIODevice, Qt, QFile, QTemporaryFile
+from PySide.QtCore import *
 
 class QFlagTest(unittest.TestCase):
     '''Test case for usage of flags'''
@@ -28,15 +28,15 @@ class QFlagOperatorTest(unittest.TestCase):
 
     def testInvert(self):
         '''QFlags ~ (invert) operator'''
-        self.assert_(isinstance(~QIODevice.ReadOnly, QIODevice.OpenMode))
+        self.assertEqual(type(~QIODevice.ReadOnly), QIODevice.OpenMode)
 
     def testOr(self):
         '''QFlags | (or) operator'''
-        self.assert_(isinstance(QIODevice.ReadOnly | QIODevice.WriteOnly, QIODevice.OpenMode))
+        self.assertEqual(type(QIODevice.ReadOnly | QIODevice.WriteOnly), QIODevice.OpenMode)
 
     def testAnd(self):
         '''QFlags & (and) operator'''
-        self.assert_(isinstance(QIODevice.ReadOnly & QIODevice.WriteOnly, QIODevice.OpenMode))
+        self.assertEqual(type(QIODevice.ReadOnly & QIODevice.WriteOnly), QIODevice.OpenMode)
 
     def testIOr(self):
         '''QFlags |= (ior) operator'''
@@ -47,7 +47,7 @@ class QFlagOperatorTest(unittest.TestCase):
 
     def testInvertOr(self):
         '''QFlags ~ (invert) operator over the result of an | (or) operator'''
-        self.assert_(isinstance(~(Qt.ItemIsSelectable | Qt.ItemIsEditable), Qt.ItemFlags))
+        self.assertEqual(type(~(Qt.ItemIsSelectable | Qt.ItemIsEditable)), Qt.ItemFlags)
 
     def testEqual(self):
         '''QFlags == operator'''
@@ -56,6 +56,11 @@ class QFlagOperatorTest(unittest.TestCase):
         flag_type = (flags & Qt.WindowType_Mask)
         self.assertEqual(flag_type, Qt.Window)
 
+class QFlagsOnQVariant(unittest.TestCase):
+    def testQFlagsOnQVariant(self):
+        o = QObject()
+        o.setProperty("foo", QIODevice.ReadOnly | QIODevice.WriteOnly)
+        self.assertEqual(type(o.property("foo")), int)
 
 if __name__ == '__main__':
     unittest.main()

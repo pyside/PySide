@@ -237,19 +237,24 @@ struct QFlagsConverter
                || PyObject_TypeCheck(pyObj, Shiboken::SbkType<typename T::enum_type>());
     }
 
-    static inline PyObject* toPython(void* cppobj)
+    static inline PyObject* toPython(void* cppObj)
     {
-        return toPython(*reinterpret_cast<T*>(cppobj));
+        return toPython(*reinterpret_cast<T*>(cppObj));
     }
 
-    static inline PyObject* toPython(T cppenum)
+    static inline PyObject* toPython(const T& cppObj)
     {
-        return Shiboken::SbkEnumObject_New(Shiboken::SbkType<T>(), (long) cppenum);
+        PyObject* qflags = Shiboken::SbkType<T>()->tp_alloc(Shiboken::SbkType<T>(), 0);
+        reinterpret_cast<PyIntObject*>(qflags)->ob_ival = cppObj;
+        return qflags;
     }
 
-    static inline T toCpp(PyObject* pyobj)
+    static inline T toCpp(PyObject* pyObj)
     {
-        return T(QFlag(reinterpret_cast<Shiboken::SbkEnumObject*>(pyobj)->ob_ival));
+        if (Shiboken::isShibokenEnum(pyObj))
+            return T(QFlag(reinterpret_cast<Shiboken::SbkEnumObject*>(pyObj)->ob_ival));
+        else
+            return T(QFlag(reinterpret_cast<PyIntObject*>(pyObj)->ob_ival));
     }
 };
 
