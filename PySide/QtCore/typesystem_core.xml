@@ -985,6 +985,11 @@
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3));
         </inject-code>
     </add-function>
+    <modify-function signature="mimeData(QList&lt;QModelIndex&gt;) const">
+      <modify-argument index="return">
+        <define-ownership owner="c++"/>
+      </modify-argument>
+    </modify-function>
   </object-type>
   <!-- QObject is created manually -->
   <object-type name="QObject">
