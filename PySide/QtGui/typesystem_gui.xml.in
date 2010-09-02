@@ -2,5 +2,5 @@
 <typesystem package="PySide.QtGui">
     <load-typesystem name="typesystem_core.xml" generate="no"/>
     <load-typesystem name="typesystem_gui_@AUTO_OS@.xml" generate="yes"/>
-    <load-typesystem name="typesystem_gui_commom.xml" generate="yes"/>
+    <load-typesystem name="typesystem_gui_common.xml" generate="yes"/>
 </typesystem>
