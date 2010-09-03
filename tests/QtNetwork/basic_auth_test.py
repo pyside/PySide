@@ -3,10 +3,10 @@
 from PySide.QtCore import *
 from PySide.QtNetwork import *
 
-from helper import UsesQApplication
+from helper import UsesQCoreApplication
 from httpd import TestServer
 
-class testAuthenticationSignal(UsesQApplication):
+class testAuthenticationSignal(UsesQCoreApplication):
 
     def setUp(self):
         super(testAuthenticationSignal, self).setUp()
