@@ -43,8 +43,7 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
 
 
     # install
-    install(FILES ${pyside_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}${${module_name}_suffix}
-            DESTINATION ${SITE_PACKAGE}/PySide)
+    install(TARGETS ${module_name} LIBRARY DESTINATION ${SITE_PACKAGE}/PySide)
     string(TOLOWER ${module_name} lower_module_name)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${lower_module_name}_python.h
             DESTINATION include/PySide/${module_name}/)
