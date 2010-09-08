@@ -1,5 +1,5 @@
 project(pyside)
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py" "${CMAKE_CURRENT_SOURCE_DIR}/private.py"
         DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}")
 
 macro(execute_generator module sources typesystem_path)
@@ -106,6 +106,10 @@ endmacro()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
                                                               "${CMAKE_BINARY_DIR}/PySide/__init__.py")
+
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/private.py"
+                                                              "${CMAKE_BINARY_DIR}/PySide/private.py")
+#
 # Try to find QtMultimedia
 # TODO: Remove this hack when cmake support QtMultimedia module
 if (NOT QT_QTMULTIMEDIA_FOUND AND ${QTVERSION} VERSION_GREATER 4.5.9)

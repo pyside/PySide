@@ -520,6 +520,7 @@
       <include file-name="QTextDocument" location="global"/>
     </extra-includes>
   </namespace-type>
+
   <add-function signature="qAbs(double)" return-type="double">
     <inject-code class="target" position="beginning">
         %PYARG_0 = %CONVERTTOPYTHON[double](qAbs(%1));
@@ -530,6 +531,12 @@
     PyModule_AddIntConstant(module, "QT_VERSION", QT_VERSION);
     PyModule_AddStringConstant(module, "QT_VERSION_STR", QT_VERSION_STR);
   </inject-code>
+
+  <add-function signature="__moduleShutdown()">
+    <inject-code class="target" position="beginning">
+        PySide::SignalManager::instance().clear();
+    </inject-code>
+  </add-function>
 
   <enum-type name="QtMsgType"/>
   <enum-type name="QSystemSemaphore::AccessMode"/>
