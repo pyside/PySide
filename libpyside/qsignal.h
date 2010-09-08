@@ -42,13 +42,14 @@
 namespace PySide
 {
 
-typedef struct {
+struct SignalInstanceData
+{
     PyObject_HEAD
     char* signalName;
     char* signature;
     PyObject* source;
     PyObject* next;
-} SignalInstanceData;
+};
 
 
 extern "C"
