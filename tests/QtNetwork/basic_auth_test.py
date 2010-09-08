@@ -34,5 +34,15 @@ class testAuthenticationSignal(UsesQCoreApplication):
         self.app.exec_()
         self.assert_(self._resultOk)
 
+    def testwaitSignal2(self):
+        http = QHttp()
+        http.setHost("localhost", self.httpd.port())
+        # Using new signal slot syntax causes a segfault
+        http.authenticationRequired.connect(self.onAuthRequest)
+        path = QUrl.toPercentEncoding("/index.html", "!$&'()*+,;=:@/")
+        data = http.get(path)
+        self.app.exec_()
+        self.assert_(self._resultOk)
+
 if __name__ == '__main__':
     unittest.main()
