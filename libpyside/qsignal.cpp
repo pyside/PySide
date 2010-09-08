@@ -112,7 +112,7 @@ PyTypeObject Signal_Type = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)signal_init,    /*tp_init */
+    signal_init,               /*tp_init */
     0,                         /*tp_alloc */
     PyType_GenericNew,         /*tp_new */
     signal_free,              /*tp_free */
@@ -126,10 +126,10 @@ PyTypeObject Signal_Type = {
 };
 
 static PyMethodDef SignalInstance_methods[] = {
-    {"connect", (PyCFunction)signal_instance_connect, METH_VARARGS|METH_KEYWORDS},
-    {"disconnect", (PyCFunction)signal_instance_disconnect, METH_VARARGS},
-    {"emit", (PyCFunction)signal_instance_emit, METH_VARARGS},
-    {NULL}  /* Sentinel */
+    {"connect", (PyCFunction)signal_instance_connect, METH_VARARGS|METH_KEYWORDS, 0},
+    {"disconnect", signal_instance_disconnect, METH_VARARGS, 0},
+    {"emit", signal_instance_emit, METH_VARARGS, 0},
+    {0}  /* Sentinel */
 };
 
 static PyMappingMethods SignalInstance_as_mapping = {
@@ -234,11 +234,11 @@ void signalUpdateSource(PyObject* source)
 {
     Shiboken::AutoDecRef attrs(PyObject_Dir(source));
 
-    for(int i = 0, i_max = PyList_GET_SIZE(attrs.object()); i < i_max; i++) {
+    for(int i = 0, iMax = PyList_GET_SIZE(attrs.object()); i < iMax; ++i) {
         PyObject *attrName = PyList_GET_ITEM(attrs.object(), i);
-        Shiboken::AutoDecRef attr(PyObject_GetAttr((PyObject*)source->ob_type, attrName));
-        if (!attr.isNull() && (attr->ob_type == &Signal_Type)) {
-            Shiboken::AutoDecRef signalInstance(reinterpret_cast<PyObject*>(PyObject_New(SignalInstanceData, &SignalInstance_Type)));
+        Shiboken::AutoDecRef attr(PyObject_GetAttr(reinterpret_cast<PyObject*>(source->ob_type), attrName));
+        if (attr->ob_type == &Signal_Type) {
+            Shiboken::AutoDecRef signalInstance(_PyObject_New(&SignalInstance_Type));
             signal_instance_initialize(signalInstance, attrName, reinterpret_cast<SignalData*>(attr.object()), source, 0);
             PyObject_SetAttr(source, attrName, signalInstance);
         }
