@@ -1,5 +1,5 @@
 /*
-* This file is part of the Shiboken Python Bindings Generator project.
+* This file is part of the PySide project.
 *
 * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 *
