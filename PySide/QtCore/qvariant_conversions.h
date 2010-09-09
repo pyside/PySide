@@ -56,14 +56,13 @@ struct Converter<QVariant>
                 Shiboken::SbkBaseWrapperType *objType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(pyObj->ob_type);
                 const char* typeName = objType->original_name;
                 uint typeCode = QMetaType::type(typeName);
-                if (!typeCode) {// Try with star at end, for QObject*, QWidget* and QAbstractKinectScroller*
-                    QString stypeName(typeName);
-                    stypeName += '*';
-                    typeCode = QMetaType::type(stypeName.toAscii());
-                    return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr);
+                if (typeCode) {
+                    void** data = reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr;
+                    if (typeName[strlen(typeName)-1] == '*')
+                        return QVariant(typeCode, data);
+                    else
+                        return QVariant(typeCode, data[0]);
                 }
-                if (typeCode)
-                    return QVariant(typeCode, reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr[0]);
             }
             // Is a shiboken type not known by Qt
             return QVariant::fromValue<PySide::PyObjectWrapper>(pyObj);
