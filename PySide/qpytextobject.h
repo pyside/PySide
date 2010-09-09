@@ -36,3 +36,5 @@ public:
     QSizeF intrinsicSize(QTextDocument* doc, int posInDocument, const QTextFormat& format ) = 0;
 };
 #endif
+
+
