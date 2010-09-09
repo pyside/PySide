@@ -4,6 +4,7 @@
 '''Unit tests to test QTranslator and translation in general.'''
 
 import os
+import glob
 import unittest
 from PySide.QtCore import *
 
@@ -16,10 +17,12 @@ class TranslationTest(UsesQCoreApplication):
         super(TranslationTest, self).setUp()
         self.trdir = os.path.join(os.path.dirname(__file__), 'translations')
         # os.system is probably not the best way to do it
-        os.system('lrelease %s/*.ts > /dev/null' % self.trdir)
+	for file in glob.glob('%s/*.ts'  % self.trdir):
+	    self.assertFalse(os.system('lrelease -silent %s' % file))
 
     def tearDown(self):
-        os.system('rm %s/*.qm > /dev/null' % self.trdir)
+	for file in glob.glob('%s/*.qm'  % self.trdir):
+	    os.remove(file)
         super(TranslationTest, self).tearDown()
 
     def testLatin(self):
