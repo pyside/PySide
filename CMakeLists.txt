@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/
                       ${CMAKE_MODULE_PATH})
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterpWithDebug REQUIRED)
-find_package(Shiboken 0.4.0 REQUIRED)
+find_package(Shiboken 0.5 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
 find_program(XVFB_RUN NAMES xvfb-run)
