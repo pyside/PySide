@@ -1,10 +1,6 @@
 project(pyside)
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py" "${CMAKE_CURRENT_SOURCE_DIR}/private.py"
-        DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}")
-
-macro(execute_generator module sources typesystem_path)
-    message("Running generator for ${module}...")
-endmacro()
+        DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}${pyside_SUFFIX}")
 
 macro(create_pyside_module module_name module_include_dir module_libraries module_deps module_typesystem_path module_sources typesystem_name)
     string(TOLOWER ${module_name} _module)
@@ -16,7 +12,7 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
     endif()
 
     add_custom_command(OUTPUT ${${module_sources}}
-                        COMMAND ${GENERATOR} ${GENERATOR_EXTRA_FLAGS}
+                        COMMAND ${GENERATORRUNNER_BINARY} ${GENERATOR_EXTRA_FLAGS}
                         ${CMAKE_BINARY_DIR}/PySide/global.h
                         --include-paths=${pyside_SOURCE_DIR}${PATH_SEP}${QT_INCLUDE_DIR}
                         --typesystem-paths=${pyside_SOURCE_DIR}${PATH_SEP}${${module_typesystem_path}}
@@ -44,12 +40,12 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
 
     # install
     install(FILES ${pyside_BINARY_DIR}/${module_name}${CMAKE_DEBUG_POSTFIX}${${module_name}_suffix}
-            DESTINATION ${SITE_PACKAGE}/PySide)
+            DESTINATION ${SITE_PACKAGE}/PySide${pyside_SUFFIX})
     string(TOLOWER ${module_name} lower_module_name)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module_name}/pyside_${lower_module_name}_python.h
-            DESTINATION include/PySide/${module_name}/)
+            DESTINATION include/PySide${pyside_SUFFIX}/${module_name}/)
     file(GLOB typesystem_files ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_*.xml ${typesystem_path})
-    install(FILES ${typesystem_files} DESTINATION share/PySide/typesystems)
+    install(FILES ${typesystem_files} DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
 endmacro()
 
 macro(check_qt_class module class global_sources)
@@ -171,5 +167,5 @@ HAS_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)
 
 # install
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_templates.xml
-        DESTINATION share/PySide/typesystems)
+        DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
 

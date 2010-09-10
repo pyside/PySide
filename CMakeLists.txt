@@ -7,6 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/
                       ${CMAKE_MODULE_PATH})
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterpWithDebug REQUIRED)
+find_package(GeneratorRunner 0.6 REQUIRED)
 find_package(Shiboken 0.5 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
@@ -17,6 +18,7 @@ if (NOT ${XVFB_RUN} MATCHES "XVFB_RUN-NOTFOUND")
     message("Using xvfb-run to perform QtGui tests.")
 endif()
 
+option(ENABLE_VERSION_SUFFIX "Used to use current version in suffix to generated files. This is used to allow multiples versions installed simultaneous." FALSE)
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
 set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed (default is /lib${LIB_SUFFIX})" FORCE)
 if(CMAKE_HOST_APPLE)
@@ -66,6 +68,9 @@ set(BINDING_API_MINOR_VERSION "4")
 set(BINDING_API_MICRO_VERSION "1")
 set(BINDING_API_VERSION "${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}.${BINDING_API_MICRO_VERSION}" CACHE STRING "PySide version" FORCE)
 set(PYSIDE_QT_VERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" CACHE STRING "Qt version used to compile PySide" FORCE)
+if(ENABLE_VERSION_SUFFIX)
+      set(pyside_SUFFIX "-${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}")
+endif()
 
 include(${QT_USE_FILE})
 if (${QTVERSION} VERSION_LESS 4.5.0)
@@ -112,11 +117,6 @@ else()
 endif()
 
 set(BINDING_VERSION ${BINDING_API_VERSION}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR})
-find_program(GENERATOR generatorrunner REQUIRED)
-
-if (NOT GENERATOR)
-    message(FATAL_ERROR "You need to specify GENERATOR variable (-DGENERATOR=value)")
-endif()
 
 # uninstall target
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake"
