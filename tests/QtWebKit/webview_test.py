@@ -2,12 +2,17 @@
 '''Test cases for QWebView'''
 
 import unittest
+import sys
 
 from PySide.QtCore import QObject, SIGNAL, QUrl
-from PySide.QtWebKit import QWebView
+from PySide.QtWebKit import *
 
 from helper import adjust_filename, TimedQApplication
 
+
+class testWebPage(QWebPage):
+    def sayMyName(self):
+        return 'testWebPage'
 
 class TestLoadFinished(TimedQApplication):
     '''Test case for signal QWebView.loadFinished(bool)'''
@@ -32,6 +37,23 @@ class TestLoadFinished(TimedQApplication):
         self.app.exec_()
 
         self.assert_(self.called)
+
+    def testSetPageAndGetPage(self):
+        twp = testWebPage()
+        self.view.setPage(twp)
+        del twp
+        p = self.view.page()
+        self.assertEqual(p.sayMyName(), 'testWebPage')
+
+        # Setting the same webpage should not incref the python obj
+        refCount = sys.getrefcount(p)
+        self.view.setPage(p)
+        self.assertEquals(sys.getrefcount(p), refCount)
+
+        # Changing the webpage obj should decref the old one
+        twp2 = testWebPage()
+        self.view.setPage(twp2)
+        self.assertEquals(sys.getrefcount(p), refCount - 1)
 
     def load_finished(self, ok):
         #Callback to check if load was successful

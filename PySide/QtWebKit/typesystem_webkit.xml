@@ -49,7 +49,12 @@
   <object-type name="QWebView">
     <modify-function signature="setPage(QWebPage*)">
         <modify-argument index="1">
-            <define-ownership class="target" owner="c++"/>
+            <reference-count action="add"/>
+        </modify-argument>
+    </modify-function>
+    <modify-function signature="page() const">
+        <modify-argument index="return">
+            <define-ownership class="target" owner="default"/>
         </modify-argument>
     </modify-function>
     <modify-function signature="print(QPrinter*)const" rename="print_" />
