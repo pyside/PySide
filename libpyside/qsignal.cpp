@@ -226,7 +226,7 @@ void signalUpdateSource(PyObject* source)
         PyObject *attrName = PyList_GET_ITEM(attrs.object(), i);
         Shiboken::AutoDecRef attr(PyObject_GetAttr(reinterpret_cast<PyObject*>(source->ob_type), attrName));
         if (attr->ob_type == &Signal_Type) {
-            Shiboken::AutoDecRef signalInstance(_PyObject_New(&SignalInstance_Type));
+            Shiboken::AutoDecRef signalInstance((PyObject*)PyObject_New(SignalInstanceData, &SignalInstance_Type));
             signal_instance_initialize(signalInstance, attrName, reinterpret_cast<SignalData*>(attr.object()), source, 0);
             PyObject_SetAttr(source, attrName, signalInstance);
         }
@@ -365,9 +365,9 @@ void signal_instance_free(void* self)
     free(data->signalName);
     free(data->signature);
 
-    while(data) {
+    if (data->next) {
         Py_XDECREF(data->next);
-        data = reinterpret_cast<SignalInstanceData*>(data->next);
+        data->next = 0;
     }
     pySelf->ob_type->tp_base->tp_free(self);
 }
