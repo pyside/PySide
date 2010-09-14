@@ -1640,6 +1640,7 @@
   <object-type name="QMutex">
     <modify-function signature="lock()" allow-thread="yes"/>
     <modify-function signature="tryLock(int)" allow-thread="yes"/>
+    <modify-function signature="tryLock()" allow-thread="yes"/>
   </object-type>
   <object-type name="QSemaphore">
     <modify-function signature="acquire(int)" allow-thread="yes"/>
