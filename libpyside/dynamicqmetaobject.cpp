@@ -36,6 +36,11 @@
 #define MAX_SIGNALS_COUNT 50
 #define MAX_SLOTS_COUNT 50
 
+#define MAX_GLOBAL_SIGNALS_COUNT 500
+#define MAX_GLOBAL_SLOTS_COUNT 500
+
+#define GLOBAL_RECEIVER_CLASS_NAME "__GlobalReceiver__"
+
 using namespace PySide;
 
 enum PropertyFlags  {
@@ -108,6 +113,27 @@ static bool isVariantType(const char* type)
 static bool isQRealType(const char *type)
 {
     return strcmp(type, "qreal") == 0;
+}
+
+
+
+/*
+ * Avoid API break keep this on cpp
+ */
+static int maxSlotsCount(const QString& className)
+{
+    int maxSlots = MAX_SLOTS_COUNT;
+    if (className == GLOBAL_RECEIVER_CLASS_NAME)
+        maxSlots = MAX_GLOBAL_SIGNALS_COUNT;
+    return maxSlots;
+}
+
+static int maxSignalsCount(const QString& className)
+{
+    int maxSignals = MAX_SIGNALS_COUNT;
+    if (className == GLOBAL_RECEIVER_CLASS_NAME)
+        maxSignals = MAX_GLOBAL_SIGNALS_COUNT;
+    return maxSignals;
 }
 
 uint PropertyData::flags() const
@@ -271,8 +297,9 @@ void DynamicQMetaObject::addSignal(const char* signal, const char* type)
         return;
     }
 
-    if (m_signals.size() >= MAX_SIGNALS_COUNT) {
-        qWarning() << "Fail to add dynamic signal to QObject. PySide support at most" << MAX_SIGNALS_COUNT << "dynamic signals.";
+    int maxSignals = maxSignalsCount(m_className);
+    if (m_signals.size() >= maxSignals) {
+        qWarning() << "Fail to add dynamic signal to QObject. PySide support at most" << maxSignals << "dynamic signals.";
         return;
     }
 
@@ -286,8 +313,9 @@ void DynamicQMetaObject::addSlot(const char* slot, const char* type)
     if (i != m_slots.end())
         return;
 
-    if (m_slots.size() >= MAX_SLOTS_COUNT) {
-        qWarning() << "Fail to add dynamic slot to QObject. PySide support at most" << MAX_SLOTS_COUNT << "dynamic slots.";
+    int maxSlots = maxSlotsCount(m_className);
+    if (m_slots.size() >= maxSlots) {
+        qWarning() << "Fail to add dynamic slot to QObject. PySide support at most" << maxSlots << "dynamic slots.";
         return;
     }
 
@@ -439,8 +467,11 @@ void DynamicQMetaObject::updateMetaObject()
         MethodScriptable = 0x40
     };
 
-    uint n_signals = MAX_SIGNALS_COUNT;
-    uint n_methods = n_signals + MAX_SLOTS_COUNT;
+    int maxSignals = maxSignalsCount(m_className);
+    int maxSlots = maxSlotsCount(m_className);
+
+    uint n_signals = maxSignals;
+    uint n_methods = n_signals + maxSlots;
     uint n_properties = m_properties.size();
     int header[] = {5,            // revision
                     0,            // class name index in m_metadata
@@ -465,10 +496,10 @@ void DynamicQMetaObject::updateMetaObject()
     int index = HEADER_LENGHT;
 
     //write signals
-    writeMethodsData(m_signals, &data, &strings, &index, MAX_SIGNALS_COUNT, NULL_INDEX, AccessPublic | MethodSignal);
+    writeMethodsData(m_signals, &data, &strings, &index, maxSignals, NULL_INDEX, AccessPublic | MethodSignal);
 
     //write slots
-    writeMethodsData(m_slots, &data, &strings, &index, MAX_SLOTS_COUNT, NULL_INDEX, AccessPublic | MethodSlot);
+    writeMethodsData(m_slots, &data, &strings, &index, maxSlots, NULL_INDEX, AccessPublic | MethodSlot);
 
     if (m_properties.size())
         data[7] = index;

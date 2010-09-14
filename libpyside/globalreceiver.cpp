@@ -32,6 +32,7 @@
 #include "signalmanager.h"
 
 #define RECEIVER_DESTROYED_SLOT_NAME "__receiverDestroyed__(QObject*)"
+#define GLOBAL_RECEIVER_CLASS_NAME "__GlobalReceiver__"
 
 namespace PySide
 {
@@ -108,7 +109,7 @@ DynamicSlotData::~DynamicSlotData()
 
 
 GlobalReceiver::GlobalReceiver()
-    : m_metaObject("GlobalReceiver", &QObject::staticMetaObject)
+    : m_metaObject(GLOBAL_RECEIVER_CLASS_NAME, &QObject::staticMetaObject)
 {
     //slot used to be notifyed of object destrouction
     m_metaObject.addSlot(RECEIVER_DESTROYED_SLOT_NAME);
