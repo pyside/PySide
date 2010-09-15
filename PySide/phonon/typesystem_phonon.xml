@@ -61,7 +61,18 @@
         <modify-function signature="notifier()" remove="all"/>
         <modify-function signature="Phonon::BackendCapabilities::NotifierWrapper(Phonon::BackendCapabilities::Notifier*)">
           <access modifier="private"/>
-        </modify-function>
+      </modify-function>
+      <inject-code class="target" position="end">
+           PyObject* signal_item;
+
+           signal_item = PySide::signalNew("capabilitiesChanged", "void", NULL);
+           PyDict_SetItemString(SbkPhonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "capabilitiesChanged", signal_item);
+           Py_DECREF(signal_item);
+
+           signal_item = PySide::signalNew("availableAudioOutputDevicesChanged", "void", NULL);
+           PyDict_SetItemString( SbkPhonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "availableAudioOutputDevicesChanged", signal_item);
+           Py_DECREF(signal_item);
+      </inject-code>
     </object-type>
 
     <enum-type name="Phonon::Category" />
