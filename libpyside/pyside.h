@@ -26,6 +26,8 @@
 #include <Python.h>
 #include <pysidemacros.h>
 #include <QMetaType>
+#include <QHash>
+#include <QList>
 
 namespace PySide
 {
@@ -40,6 +42,17 @@ inline uint hash(const T& value)
 {
     return qHash(value.toString());
 }
+
+/**
+ * Fill QObject properties and do signal connections using the values found in \p kwds dictonary.
+ * \param qObj PyObject fot the QObject.
+ * \param metaObj QMetaObject of \p qObj.
+ * \param blackList keys to be ignored in kwds dictionary, this string list MUST be sorted.
+ * \param blackListSize numbe rof elements in blackList.
+ * \param kwds key->value dictonary.
+ * \return True if everything goes well, false with a Python error setted otherwise.
+ */
+PYSIDE_API bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds, const char** blackList, unsigned int blackListSize);
 
 /**
 *   If the type \p T was registered on Qt meta type system with Q_DECLARE_METATYPE macro, this class will initialize

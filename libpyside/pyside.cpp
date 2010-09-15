@@ -24,6 +24,10 @@
 #include "pyside.h"
 #include "signalmanager.h"
 #include "qproperty.h"
+#include <basewrapper.h>
+#include <conversions.h>
+#include <algorithm>
+#include "qsignal.h"
 
 extern "C" void init_signal(PyObject* module);
 extern "C" void init_slot(PyObject* module);
@@ -39,6 +43,43 @@ void init(PyObject *module)
     init_qproperty(module);
     // Init signal manager, so it will register some meta types used by QVariant.
     SignalManager::instance();
+}
+
+bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds, const char** blackList, unsigned int blackListSize)
+{
+
+    PyObject *key, *value;
+    Py_ssize_t pos = 0;
+
+    while (PyDict_Next(kwds, &pos, &key, &value)) {
+        if (!blackListSize || !std::binary_search(blackList, blackList + blackListSize, std::string(PyString_AS_STRING(key)))) {
+            QByteArray propName(PyString_AS_STRING(key));
+            if (metaObj->indexOfProperty(propName) != -1) {
+                propName[0] = std::toupper(propName[0]);
+                propName.prepend("set");
+
+                Shiboken::AutoDecRef propSetter(PyObject_GetAttrString(qObj, propName.constData()));
+                if (!propSetter.isNull()) {
+                    Shiboken::AutoDecRef args(PyTuple_Pack(1, value));
+                    Shiboken::AutoDecRef retval(PyObject_CallObject(propSetter, args));
+                } else {
+                    PyObject* attr = PyObject_GenericGetAttr(qObj, key);
+                    if (isQPropertyType(attr))
+                        PySide::qproperty_set(attr, qObj, value);
+                }
+            } else {
+                propName.append("()");
+                if (metaObj->indexOfSignal(propName) != -1) {
+                    propName.prepend('2');
+                    PySide::signal_connect(qObj, propName, value);
+                } else {
+                    PyErr_Format(PyExc_AttributeError, "'%s' is not a Qt property or a signal", propName.constData());
+                    return false;
+                };
+            }
+        }
+    }
+    return true;
 }
 
 } //namespace PySide
