@@ -188,11 +188,7 @@ PyObject* qproperty_get(PyObject* self, PyObject* source)
         Shiboken::AutoDecRef args(PyTuple_New(1));
         Py_INCREF(source);
         PyTuple_SET_ITEM(args, 0, source);
-        PyObject *ret =  PyObject_CallObject(data->fget, args);
-        if (!ret) {
-            PyErr_Print();
-        }
-        return ret;
+        return  PyObject_CallObject(data->fget, args);
     }
     return 0;
 }

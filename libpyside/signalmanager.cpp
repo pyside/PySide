@@ -377,6 +377,8 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
                     args[0] = data;
 
                 Py_DECREF(value);
+            } else if (PyErr_Occurred()) {
+                PyErr_Print(); // Clear any errors but print them to stderr
             }
             break;
         }

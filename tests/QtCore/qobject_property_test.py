@@ -129,6 +129,13 @@ class PropertyWithConstructorCase(unittest.TestCase):
         obj = ExQObject(registeredproperty=123)
         self.assertEqual(obj.registeredproperty, 123)
 
+    def testPythonDeclaredPropertyNoSetted(self):
+        try:
+            obj = ExQObject()
+            a = obj.registeredproperty
+        except AttributeError:
+            pass
+
     def testConstructorPropertyInQObjectDerived(self):
         #QTimer(property=value) for existing C++ property
         obj = QTimer(objectName='dummy')
