@@ -27,7 +27,7 @@ macro(create_doc module typesystem_path)
 string(REGEX REPLACE "^Qt" "" module_name ${module})
 string(TOLOWER ${module_name} module_name)
 add_custom_target("${module}-apidoc"
-COMMAND ${GENERATOR} --generatorSet=qtdoc
+COMMAND ${GENERATORRUNNER_BINARY} --generatorSet=qtdoc
         ${pyside_BINARY_DIR}/global.h
         --include-paths=${QT_INCLUDE_DIR}:${QT_QTCORE_INCLUDE_DIR}
         --typesystem-paths=${pyside_SOURCE_DIR}:${${module}_BINARY_DIR}:${typesystem_path}
@@ -61,7 +61,9 @@ create_doc(QtScriptTools "${QtCore_SOURCE_DIR}:${QtScript_SOURCE_DIR}:${QtGui_SO
 create_doc(QtTest "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
 create_doc(QtXmlPatterns "${QtCore_SOURCE_DIR}")
 create_doc(phonon "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}")
-create_doc(QtDeclarative "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtNetwork_SOURCE_DIR}")
+if (QT_QTDECLARATIVE_FOUND)
+    create_doc(QtDeclarative "${QtCore_SOURCE_DIR}:${QtGui_SOURCE_DIR}:${QtGui_BINARY_DIR}:${QtNetwork_SOURCE_DIR}")
+endif()
 
 #create devhelp file
 add_custom_target(apidevhelp
