@@ -66,7 +66,7 @@ static PyObject* signal_build_qt_compatible(const char*);
 PyTypeObject Signal_Type = {
     PyObject_HEAD_INIT(0)
     0,                         /*ob_size*/
-    SIGNAL_CLASS_NAME,         /*tp_name*/
+    "PySide.QtCore."SIGNAL_CLASS_NAME, /*tp_name*/
     sizeof(SignalData),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     0,                         /*tp_dealloc*/
@@ -129,7 +129,7 @@ static PyMappingMethods SignalInstance_as_mapping = {
 PyTypeObject SignalInstance_Type = {
     PyObject_HEAD_INIT(0)
     0,                         /*ob_size*/
-    SIGNAL_CLASS_NAME,         /*tp_name*/
+    "PySide.QtCore."SIGNAL_CLASS_NAME, /*tp_name*/
     sizeof(SignalInstanceData),/*tp_basicsize*/
     0,                         /*tp_itemsize*/
     0,                         /*tp_dealloc*/

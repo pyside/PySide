@@ -49,7 +49,7 @@ extern char* get_type_name(PyObject*);
 static PyTypeObject Slot_Type = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "QtCore."SLOT_DEC_NAME,    /*tp_name*/
+    "PySide.QtCore."SLOT_DEC_NAME, /*tp_name*/
     sizeof(SlotData),          /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     0,                         /*tp_dealloc*/
