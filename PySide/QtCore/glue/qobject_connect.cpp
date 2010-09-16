@@ -75,6 +75,8 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         slotIndex = metaObject->indexOfSlot(slot);
     }
     if (QMetaObject::connect(source, signalIndex, receiver, slotIndex, type)) {
+        if (usingGlobalReceiver)
+            signalManager.globalReceiverConnectNotify(source, slotIndex);
         #ifndef AVOID_PROTECTED_HACK
             source->connectNotify(signal - 1);
         #else
@@ -82,8 +84,6 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
             // connectNotify when avoiding the protected hack.
             reinterpret_cast<QObjectWrapper*>(source)->connectNotify(signal - 1);
         #endif
-        if (usingGlobalReceiver)
-            signalManager.globalReceiverConnectNotify(source, slotIndex);
 
         return true;
     }
@@ -114,6 +114,13 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
         if (usingGlobalReceiver) {
             int slotIndex = metaObject->indexOfSlot(callbackSig.constData());
             signalManager.globalReceiverDisconnectNotify(source, slotIndex);
+        #ifndef AVOID_PROTECTED_HACK
+            source->disconnectNotify(signal - 1);
+        #else
+            // Need to cast to QObjectWrapper* and call the public version of
+            // connectNotify when avoiding the protected hack.
+            reinterpret_cast<QObjectWrapper*>(source)->disconnectNotify(signal - 1);
+        #endif
         }
         return true;
     }

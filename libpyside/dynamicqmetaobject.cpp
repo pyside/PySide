@@ -322,11 +322,10 @@ void DynamicQMetaObject::addSlot(const char* slot, const char* type)
     //search for a empty space
     MethodData blank;
     i = qFind(m_slots.begin(), m_slots.end(), blank);
-    if (i != m_slots.end()) {
+    if (i != m_slots.end())
         *i = MethodData(slot, type);
-    } else {
+    else
         m_slots << MethodData(slot, type);
-    }
     updateMetaObject();
 }
 
@@ -438,7 +437,6 @@ void DynamicQMetaObject::writeMethodsData(QLinkedList<MethodData>& methods,
         if (iMethod != methods.end() && ((*iMethod).signature().size() > 0) ) {
             (*data)[index++] = registerString((*iMethod).signature(), strings); // func name
             mType = (*iMethod).type();
-            iMethod++;
         } else {
             (*data)[index++] = null_index; // func name
         }
@@ -446,6 +444,8 @@ void DynamicQMetaObject::writeMethodsData(QLinkedList<MethodData>& methods,
         (*data)[index++] = (mType.size() > 0 ? registerString(mType, strings) : null_index); // normalized type
         (*data)[index++] = null_index; // tags
         (*data)[index++] = flags;
+        if (iMethod != methods.end()) 
+            iMethod++;
     }
 
     *prtIndex = index;

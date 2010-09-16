@@ -1230,8 +1230,10 @@
      <inject-code class="target" position="beginning">
        // Avoid return +1 because SignalManager connect to "destroyed()" signal to control object timelife
        int ret = %CPPSELF.%FUNCTION_NAME(%1);
-       if (ret > 0 &amp;&amp; strcmp(%1, SIGNAL(destroyed())) == 0 &amp;&amp; PySide::SignalManager::instance().hasConnectionWith(%CPPSELF))
-           ret--;
+       if (ret > 0 &amp;&amp; ((strcmp(%1, SIGNAL(destroyed())) == 0) || (strcmp(%1, SIGNAL(destroyed(QObject*))) == 0))) {
+           if (PySide::SignalManager::instance().hasConnectionWith(%CPPSELF))
+             ret--;
+       }
        %PYARG_0 = %CONVERTTOPYTHON[int](ret);
      </inject-code>
    </modify-function>

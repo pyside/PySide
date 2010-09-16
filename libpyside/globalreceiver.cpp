@@ -107,7 +107,6 @@ DynamicSlotData::~DynamicSlotData()
     Py_DECREF(m_callback);
 }
 
-
 GlobalReceiver::GlobalReceiver()
     : m_metaObject(GLOBAL_RECEIVER_CLASS_NAME, &QObject::staticMetaObject)
 {
@@ -126,20 +125,23 @@ GlobalReceiver::~GlobalReceiver()
 void GlobalReceiver::connectNotify(QObject* source, int slotId)
 {
     if (m_slotReceivers.contains(slotId)) {
-        m_slotReceivers[slotId]->addRef(source);
+        DynamicSlotData* data = m_slotReceivers[slotId];
+        if (!data->hasRefTo(source))
+            QObject::connect(source, SIGNAL(destroyed(QObject*)), this, "1"RECEIVER_DESTROYED_SLOT_NAME);
+        data->addRef(source);
     }
 }
 
 void GlobalReceiver::disconnectNotify(QObject* source, int slotId)
 {
-    if (m_slotReceivers.contains(slotId)) {
-        QObject::disconnect(source, SIGNAL(destroyed(QObject*)), this, "1"RECEIVER_DESTROYED_SLOT_NAME);
-
+   if (m_slotReceivers.contains(slotId)) {
         DynamicSlotData *data = m_slotReceivers[slotId];
         data->decRef(source);
-        if (data->refCount() == 0) {
+        if (data->refCount() == 0)
             removeSlot(slotId);
-        }
+
+        if (!hasConnectionWith(source))
+            QObject::disconnect(source, SIGNAL(destroyed(QObject*)), this, "1"RECEIVER_DESTROYED_SLOT_NAME);
     }
 }
 
@@ -152,9 +154,8 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
 {
     m_metaObject.addSlot(slot);
     int slotId = m_metaObject.indexOfSlot(slot);
-    if (!m_slotReceivers.contains(slotId)) {
+    if (!m_slotReceivers.contains(slotId))
         m_slotReceivers[slotId] = new DynamicSlotData(slotId, callback);
-    }
 
     bool isShortCircuit = true;
     for (int i = 0; slot[i]; ++i) {
@@ -166,6 +167,7 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
 
     if (isShortCircuit)
         m_shortCircuitSlots << slotId;
+
 
     Q_ASSERT(slotId >= QObject::staticMetaObject.methodCount());
 }
@@ -236,12 +238,10 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         retval = PyObject_CallObject(callback, preparedArgs);
     }
 
-    if (!retval) {
-        qDebug() << "Error calling slot" << m_metaObject.method(id).signature();
+    if (!retval)
         PyErr_Print();
-    } else {
+    else
         Py_DECREF(retval);
-    }
 
     return -1;
 }
