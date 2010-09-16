@@ -4,7 +4,7 @@
 
 import unittest
 
-from PySide.QtCore import QObject, QTimer, QCoreApplication, SIGNAL
+from PySide.QtCore import QObject, QTimer, QCoreApplication, Signal
 from helper import UsesQCoreApplication
 
 class WatchDog(QObject):
@@ -40,7 +40,36 @@ class TestSingleShot(UsesQCoreApplication):
         self.app.quit()
 
     def testSingleShot(self):
-        timer = QTimer.singleShot(100, self.callback)
+        QTimer.singleShot(100, self.callback)
+        self.app.exec_()
+        self.assert_(self.called)
+
+class SigEmitter(QObject):
+
+    sig1 = Signal()
+
+
+class TestSingleShotSignal(UsesQCoreApplication):
+    '''Test case for QTimer.singleShot connecting to signals'''
+
+    def setUp(self):
+        UsesQCoreApplication.setUp(self)
+        self.watchdog = WatchDog(self)
+        self.called = False
+
+    def tearDown(self):
+        del self.watchdog
+        del self.called
+        UsesQCoreApplication.tearDown(self)
+
+    def callback(self):
+        self.called = True
+        self.app.quit()
+
+    def testSingleShotSignal(self):
+        emitter = SigEmitter()
+        emitter.sig1.connect(self.callback)
+        QTimer.singleShot(100, emitter.sig1)
         self.app.exec_()
         self.assert_(self.called)
 
