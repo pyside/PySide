@@ -2380,6 +2380,26 @@
       </modify-argument>
     </modify-function>
 
+    <!-- FIXME: the proper signature for this added function would be something like
+         addTransition(PySide.QtCore.Signal, QAbstractState*)
+         but that depends on bug #362. -->
+    <add-function signature="addTransition(PyObject*, QAbstractState*)" return-type="QSignalTransition*">
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        // Obviously the label used by the following goto is a very awkward solution,
+        // since it refers to a name very tied to the generator implementation.
+        // Check bug #362 for more information on this
+        // http://bugs.openbossa.org/show_bug.cgi?id=362
+        if (!PyObject_TypeCheck(%1, &amp;PySide::SignalInstance_Type))
+            goto Sbk%TYPEFunc_%FUNCTION_NAME_TypeError;
+        PySide::SignalInstanceData* signalInstance = reinterpret_cast&lt;PySide::SignalInstanceData*&gt;(%1);
+        QObject* sender = %CONVERTTOCPP[QObject*](signalInstance->source);
+        %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->%FUNCTION_NAME(sender, signalInstance->signature, %2));
+      </inject-code>
+    </add-function>
+
     <modify-function signature="removeTransition(QAbstractTransition*)">
       <modify-argument index="1">
         <parent index="this" action="remove"/>
