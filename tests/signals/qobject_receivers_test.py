@@ -30,9 +30,9 @@ class TestQObjectReceivers(unittest.TestCase):
         sender = QObject()
         receiver = QObject()
         sender.connect(sender, SIGNAL("destroyed()"), cute_slot)
-        self.assertEqual(sender.receivers(SIGNAL("destroyed(  )")), 0)
+        self.assertEqual(sender.receivers(SIGNAL("destroyed( )")), 1)
         sender.connect(sender, SIGNAL("destroyed()"), receiver, SLOT("deleteLater()"))
-        self.assertEqual(sender.receivers(SIGNAL("destroyed()")), 1)
+        self.assertEqual(sender.receivers(SIGNAL("destroyed()")), 2)
         del sender
         del receiver
 
