@@ -4,19 +4,29 @@ extern PyObject* moduleQtGui;
 static int QApplicationArgCount;
 static char** QApplicationArgValues;
 static const char QAPP_MACRO[] = "qApp";
-static bool leavingPython = false;
 
 void DeleteQApplicationAtExit()
 {
-    leavingPython = true;    
     PySide::SignalManager::instance().clear();
     QCoreApplication* cpp = QApplication::instance();
     if (cpp) {
         Shiboken::BindingManager &bmngr = Shiboken::BindingManager::instance();
-        PyObject* pySelf = bmngr.retrieveWrapper(cpp);
-        if (pySelf)
+        cpp->flush();
+
+        // Delete all widgets, this is slow but is necessary to avoid problems with python object
+        foreach(QWidget* w, QApplication::allWidgets()) {
+            PyObject* pySelf = bmngr.retrieveWrapper(w);
+
+            w->deleteLater();
+            //Make sure all events will send before invalidated the python object
+            QApplication::processEvents();
             bmngr.invalidateWrapper(pySelf);
+        }
+
+        PyObject* pySelf = bmngr.retrieveWrapper(cpp);
         cpp->deleteLater();
+        QApplication::processEvents();
+        bmngr.invalidateWrapper(pySelf);
     }
 }
 
@@ -62,7 +72,7 @@ int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
     }
 
     PyObject_SetAttrString(moduleQtGui, QAPP_MACRO, self);
-    Py_AtExit(DeleteQApplicationAtExit);
+    PySide::registerCleanupFunction(DeleteQApplicationAtExit);
     Py_INCREF(self);
     return 1;
 }

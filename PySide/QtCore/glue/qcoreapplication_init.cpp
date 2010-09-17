@@ -1,21 +1,20 @@
 // Global variables used to store argc and argv values
 static int QCoreApplicationArgCount;
 static char** QCoreApplicationArgValues;
-static bool leavingPython = false;
 
 /**
  * Called at QtCore module exit
  */
 void DeleteQCoreApplicationAtExit()
 {
-    leavingPython = true;
     QCoreApplication *cpp = QCoreApplication::instance();
     if (cpp) {
         Shiboken::BindingManager &bmngr = Shiboken::BindingManager::instance();
         PyObject* pySelf = bmngr.retrieveWrapper(cpp);
-        if (pySelf)
-            bmngr.invalidateWrapper(pySelf);
-        cpp->deleteLater();
+        cpp->flush();
+        QCoreApplication::processEvents();
+        bmngr.invalidateWrapper(pySelf);
+        delete cpp;
     }
 }
 
@@ -54,7 +53,7 @@ int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
     PySide::signalUpdateSource(self);
     cptr->metaObject();
 
-    Py_AtExit(DeleteQCoreApplicationAtExit);
+    PySide::registerCleanupFunction(DeleteQCoreApplicationAtExit);
     Py_INCREF(self);
     return 1;
 }

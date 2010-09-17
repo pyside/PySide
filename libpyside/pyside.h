@@ -75,6 +75,15 @@ template<typename T>
 struct initQtMetaType<T, false> {
 };
 
+
+typedef void (*CleanupFunction)(void);
+
+/**
+ * Register a function to be called before python die
+ */
+PYSIDE_API void registerCleanupFunction(CleanupFunction func);
+PYSIDE_API void runCleanupFunctions();
+
 } //namespace PySide
 
 

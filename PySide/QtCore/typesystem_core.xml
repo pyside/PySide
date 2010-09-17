@@ -552,8 +552,8 @@
   </inject-code>
 
   <add-function signature="__moduleShutdown()">
-    <inject-code class="target" position="beginning">
-        PySide::SignalManager::instance().clear();
+      <inject-code class="target" position="beginning">
+        PySide::runCleanupFunctions();
     </inject-code>
   </add-function>
 
@@ -1875,12 +1875,7 @@
     <!-- Obsolete -->
     <modify-function signature="argc()" remove="all"/>
     <!-- Obsolete -->
-    <modify-function signature="notify(QObject*,QEvent*)">
-      <inject-code class="shell" position="beginning">
-        Shiboken::ThreadStateSaver threadStateSaver;
-        if (!leavingPython)
-          threadStateSaver.save();
-      </inject-code>
+    <modify-function signature="notify(QObject*,QEvent*)" allow-thread="yes">
       <modify-argument index="2" invalidate-after-use="yes"/>
     </modify-function>
     <modify-function signature="QCoreApplication(int &amp;, char  **)" access="private"/>

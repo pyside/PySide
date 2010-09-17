@@ -22,6 +22,7 @@
 
 #include "signalmanager.h"
 #include "qproperty.h"
+#include "pyside.h"
 
 #include <QHash>
 #include <QStringList>
@@ -223,6 +224,11 @@ struct SignalManager::SignalManagerPrivate
     GlobalReceiver m_globalReceiver;
 };
 
+static void clearSignalManager()
+{
+    PySide::SignalManager::instance().clear();
+}
+
 SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
 {
     // Register Qt primitive typedefs used on signals.
@@ -234,6 +240,7 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
     TypeResolver::createValueTypeResolver<PyObjectWrapper>(PYTHON_TYPE);
     TypeResolver::createValueTypeResolver<PyObjectWrapper>("object");
     TypeResolver::createValueTypeResolver<PyObjectWrapper>("PySide::PyObjectWrapper");
+    PySide::registerCleanupFunction(clearSignalManager);
 }
 
 void SignalManager::clear()

@@ -24,17 +24,21 @@
 #include "pyside.h"
 #include "signalmanager.h"
 #include "qproperty.h"
+#include "qsignal.h"
 #include <basewrapper.h>
 #include <conversions.h>
 #include <algorithm>
-#include "qsignal.h"
+#include <QStack>
 
 extern "C" void init_signal(PyObject* module);
 extern "C" void init_slot(PyObject* module);
 extern "C" void init_qproperty(PyObject* module);
 
+static QStack<PySide::CleanupFunction> cleanupFunctionList;
+
 namespace PySide
 {
+
 
 void init(PyObject *module)
 {
@@ -81,6 +85,21 @@ bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds
     }
     return true;
 }
+
+void registerCleanupFunction(CleanupFunction func)
+{
+    cleanupFunctionList.push(func);
+}
+
+void runCleanupFunctions()
+{
+    while (!cleanupFunctionList.isEmpty()) {
+        CleanupFunction f = cleanupFunctionList.pop();
+        f();
+    }
+}
+
+
 
 } //namespace PySide
 
