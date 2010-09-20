@@ -512,7 +512,7 @@ void DynamicQMetaObject::updateMetaObject()
             data[index++] = NULL_INDEX;
 
         data[index++] = (pp.isValid() ? registerString(pp.type(), &strings) :  NULL_INDEX); // normalized type
-        data[index++] = pp.flags(); //pp.flags(); //TODO: flags
+        data[index++] = pp.flags();
     }
 
     data[index++] = 0; // the end
