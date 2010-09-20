@@ -27,7 +27,7 @@
 #include "qproperty.h"
 
 
-#define QPROPERTY_CLASS_NAME "QProperty"
+#define QPROPERTY_CLASS_NAME "Property"
 
 namespace PySide
 {

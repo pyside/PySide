@@ -39,7 +39,6 @@ static QStack<PySide::CleanupFunction> cleanupFunctionList;
 namespace PySide
 {
 
-
 void init(PyObject *module)
 {
     init_signal(module);
@@ -98,8 +97,6 @@ void runCleanupFunctions()
         f();
     }
 }
-
-
 
 } //namespace PySide
 
