@@ -1,6 +1,6 @@
 import unittest
 
-from PySide.QtCore import QObject, QProperty, QCoreApplication
+from PySide.QtCore import QObject, Property, QCoreApplication
 from PySide.QtScript import  QScriptEngine
 
 class MyObject(QObject):
@@ -20,7 +20,7 @@ class MyObject(QObject):
     def delX(self):
         self._p = 0
 
-    x = QProperty(int, getX, setX, resetX, delX)
+    x = Property(int, getX, setX, resetX, delX)
 
 
 class QPropertyTest(unittest.TestCase):

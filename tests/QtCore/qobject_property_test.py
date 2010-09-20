@@ -23,7 +23,7 @@ class ExQObject(QObject):
     def getProperty(self):
         return self._value
 
-    registeredproperty = QProperty(int, getProperty, setProperty)
+    registeredproperty = Property(int, getProperty, setProperty)
 
 class MyObject(QObject):
     '''Test Property'''
@@ -34,7 +34,7 @@ class MyObject(QObject):
     def trySetPP(self):
         self.pp = 0
 
-    pp = QProperty(int, readPP)
+    pp = Property(int, readPP)
 
 class PropertyCase(unittest.TestCase):
     '''Test case for QObject properties'''
