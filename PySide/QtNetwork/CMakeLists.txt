@@ -11,22 +11,25 @@ else()
 endif ()
 
 set(QtNetwork_SRC
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qabstractnetworkcache_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qabstractsocket_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qauthenticator_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qftp_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhostaddress_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhostinfo_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttp_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttpheader_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttprequestheader_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttpresponseheader_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qhttp_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qipv6address_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qlocalserver_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qlocalsocket_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkaccessmanager_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkaddressentry_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkcookiejar_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkcachemetadata_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkcookie_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkcookiejar_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkdiskcache_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkinterface_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkproxy_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkreply_wrapper.cpp

@@ -281,5 +281,9 @@
     <object-type name="QNetworkConfigurationManager" since="4.7"/>
     <object-type name="QNetworkSession" since="4.7"/>
 
+    <object-type name="QAbstractNetworkCache"/>
+    <object-type name="QNetworkDiskCache"/>
+    <value-type name="QNetworkCacheMetaData"/>
+
     <suppress-warning text="Shadowing: QAbstractSocket::*"/>
 </typesystem>
