@@ -2004,6 +2004,77 @@
     <modify-function signature="write(QDataStream&amp;)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
+
+    <modify-function signature="appendColumn(const QList&lt;QStandardItem *&gt; &amp;)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="appendRow(const QList&lt;QStandardItem *&gt; &amp;)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="appendRow(QStandardItem *)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="appendRows(const QList&lt;QStandardItem *&gt; &amp;)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="insertColumn(int, const QList&lt;QStandardItem *&gt; &amp;)">
+      <modify-argument index="2">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="insertRow(int, const QList&lt;QStandardItem *&gt; &amp;)">
+      <modify-argument index="2">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="insertRows(int, const QList&lt;QStandardItem *&gt; &amp;)">
+      <modify-argument index="2">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="setChild(int, int, QStandardItem *)">
+      <inject-code class="target" position="beginning">
+        // Clear parent from the old child
+        QStandardItem* _i = %CPPSELF->child(%1, %2);
+        if (_i) {
+            PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
+            Shiboken::setParent(0, _pyI);
+        }
+      </inject-code>
+      <modify-argument index="3">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="setChild(int, QStandardItem *)">
+      <inject-code class="target" position="beginning">
+        // Clear parent from the old child
+        QStandardItem* _i = %CPPSELF->child(%1);
+        if (_i) {
+            PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
+            Shiboken::setParent(0, _pyI);
+        }
+      </inject-code>
+      <modify-argument index="2">
+        <parent index="this" action="add"/>       
+      </modify-argument>
+    </modify-function>
+
+     <modify-function signature="takeChild(int, int)">
+      <modify-argument index="return">
+        <parent index="this" action="remove"/>       
+      </modify-argument>
+    </modify-function>
+
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
     <modify-function signature="operator&lt;(QStandardItem)const" remove="all"/>
@@ -3628,11 +3699,18 @@
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="appendRow(QStandardItem *)">
+
+    <modify-function signature="appendRow(const QList&lt;QStandardItem *&gt;&amp;)">
       <modify-argument index="1">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
+    <modify-function signature="appendRow(QStandardItem *)">
+      <modify-argument index="1">
+        <parent index="this" action="add" />
+      </modify-argument>
+  </modify-function>
+
     <modify-function signature="insertRow(int, QStandardItem *)">
       <modify-argument index="2">
         <parent index="this" action="add" />
@@ -3643,12 +3721,29 @@
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
+
     <modify-function signature="setItem(int, int, QStandardItem *)">
+      <inject-code class="target" position="beginning">
+        // Clear parent from the old child
+        QStandardItem* _i = %CPPSELF->item(%1, %2);
+        if (_i) {
+            PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
+            Shiboken::setParent(0, _pyI);
+        }
+      </inject-code>
       <modify-argument index="3">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
     <modify-function signature="setItem(int, QStandardItem *)">
+      <inject-code class="target" position="beginning">
+        // Clear parent from the old child
+        QStandardItem* _i = %CPPSELF->item(%1);
+        if (_i) {
+            PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
+            Shiboken::setParent(0, _pyI);
+        }
+      </inject-code>
       <modify-argument index="2">
         <parent index="this" action="add" />
       </modify-argument>
@@ -3658,7 +3753,16 @@
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
+
     <modify-function signature="setVerticalHeaderItem(int, QStandardItem *)">
+      <inject-code class="target" position="beginning">
+        // Clear parent from the old child
+        QStandardItem* _i = %CPPSELF->verticalHeaderItem(%1);
+        if (_i) {
+            PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
+            Shiboken::setParent(0, _pyI);
+        }
+      </inject-code>
       <modify-argument index="2">
         <parent index="this" action="add" />
       </modify-argument>
@@ -3690,12 +3794,6 @@
 
     <modify-function signature="insertRow(int, const QList&lt;QStandardItem *&gt;&amp;)">
       <modify-argument index="2">
-        <parent index="this" action="add" />
-      </modify-argument>
-    </modify-function>
-
-    <modify-function signature="appendRow(const QList&lt;QStandardItem *&gt;&amp;)">
-      <modify-argument index="1">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
