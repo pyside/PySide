@@ -7,6 +7,6 @@ typesystemdir=@CMAKE_INSTALL_PREFIX@/share/PySide@pyside_SUFFIX@/typesystems
 Name: PySide@pyside_SUFFIX@
 Description: Support library for Python bindings of Qt-based libraries.
 Version: @BINDING_API_VERSION@
-Libs: -L${libdir} -lpython -lpyside@pyside_SUFFIX@
+Libs: -L${libdir} -lpython -lpyside@pyside_SUFFIX@@LIBRARY_OUTPUT_SUFFIX@
 Cflags: -I${includedir}
 
