@@ -4290,9 +4290,49 @@
         </inject-code>
     </modify-function>
     <modify-function signature="style()">
-        <inject-code class="target" position="end">
-            Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
-        </inject-code>
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="desktop()">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="clipboard()">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="focusWidget()">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="overrideCursor()">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="topLevelAt(const QPoint&amp;)">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="topLevelAt(int, int)">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="widgetAt(const QPoint&amp;)">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
+    </modify-function>
+    <modify-function signature="widgetAt(int, int)">
+      <inject-code class="target" position="end">
+        <insert-template name="set_qapp_parent_for_orphan"/>
+      </inject-code>
     </modify-function>
   </object-type>
   <object-type name="QCommandLinkButton"/>
