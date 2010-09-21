@@ -22,8 +22,6 @@
 <typesystem package="PySide.QtHelp">
     <load-typesystem name="typesystem_gui.xml" generate="no" />
 
-    <enum-type name="QHelpSearchQuery::FieldName"/>
-
     <value-type name="QHelpContentItem">
       <modify-function signature="parent() const">
         <modify-argument index="return">
@@ -38,7 +36,9 @@
     <object-type name="QHelpIndexModel"/>
     <object-type name="QHelpIndexWidget"/>
     <object-type name="QHelpSearchEngine"/>
-    <value-type name="QHelpSearchQuery"/>
+    <value-type name="QHelpSearchQuery">
+        <enum-type name="FieldName"/>
+    </value-type>
     <object-type name="QHelpSearchQueryWidget"/>
     <object-type name="QHelpSearchResultWidget"/>
 </typesystem>

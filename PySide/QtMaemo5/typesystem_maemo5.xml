@@ -21,8 +21,6 @@
 <typesystem package="PySide.QtMaemo5">
   <load-typesystem name="typesystem_gui.xml" generate="no"/>
 
-  <enum-type name="QMaemo5ValueButton::ValueLayout"/>
-
   <object-type name="QMaemo5AbstractPickSelector">
     <modify-function signature="widget(QWidget*)">
       <modify-argument index="return">
@@ -76,6 +74,7 @@
 
   <object-type name="QMaemo5TimePickSelector"/>
   <object-type name="QMaemo5ValueButton">
+    <enum-type name="ValueLayout"/>
     <modify-function signature="setPickSelector(QMaemo5AbstractPickSelector*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>

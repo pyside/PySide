@@ -22,13 +22,10 @@
     <load-typesystem name="typesystem_script.xml" generate="no" />
     <load-typesystem name="typesystem_gui.xml" generate="no" />
 
-    <!-- enums -->
-    <enum-type name="QScriptEngineDebugger::DebuggerAction"/>
-    <enum-type name="QScriptEngineDebugger::DebuggerWidget"/>
-    <enum-type name="QScriptEngineDebugger::DebuggerState"/>
-
-    <!-- classes -->
     <object-type name="QScriptEngineDebugger">
+        <enum-type name="DebuggerAction"/>
+        <enum-type name="DebuggerState"/>
+        <enum-type name="DebuggerWidget"/>
         <extra-includes>
             <include file-name="QScriptEngine" location="global"/>
         </extra-includes>

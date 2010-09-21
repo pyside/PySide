@@ -147,307 +147,8 @@
   <rejection class="QPaintEngine" function-name="fix_neg_rect"/>
   <rejection class="QTabletEvent" field-name="mExtra"/>
   <rejection class="*" enum-name="enum_1"/>
-  <enum-type name="QAbstractItemDelegate::EndEditHint"/>
-  <enum-type name="QAbstractItemView::CursorAction"/>
-  <enum-type name="QAbstractItemView::DragDropMode"/>
-  <enum-type name="QAbstractItemView::DropIndicatorPosition"/>
-  <enum-type name="QAbstractItemView::EditTrigger" flags="QAbstractItemView::EditTriggers"/>
-  <enum-type name="QAbstractItemView::ScrollHint"/>
-  <enum-type name="QAbstractItemView::ScrollMode"/>
-  <enum-type name="QAbstractItemView::SelectionBehavior"/>
-  <enum-type name="QAbstractItemView::SelectionMode"/>
-  <enum-type name="QAbstractItemView::State"/>
-  <enum-type name="QAbstractPrintDialog::PrintDialogOption" flags="QAbstractPrintDialog::PrintDialogOptions"/>
-  <enum-type name="QAbstractPrintDialog::PrintRange"/>
-  <enum-type name="QAbstractSlider::SliderAction"/>
-  <enum-type name="QAbstractSlider::SliderChange"/>
-  <enum-type name="QAbstractSpinBox::ButtonSymbols"/>
-  <enum-type name="QAbstractSpinBox::CorrectionMode"/>
-  <enum-type name="QAbstractSpinBox::StepEnabledFlag" flags="QAbstractSpinBox::StepEnabled"/>
-  <enum-type name="QAction::ActionEvent"/>
-  <enum-type name="QAction::MenuRole"/>
-  <enum-type name="QApplication::ColorSpec"/>
-  <enum-type name="QApplication::Type"/>
-  <enum-type name="QCalendarWidget::HorizontalHeaderFormat"/>
-  <enum-type name="QCalendarWidget::SelectionMode"/>
-  <enum-type name="QCalendarWidget::VerticalHeaderFormat"/>
-  <enum-type name="QColor::Spec"/>
-  <enum-type name="QColorDialog::ColorDialogOption" flags="QColorDialog::ColorDialogOptions"/>
-  <enum-type name="QComboBox::InsertPolicy"/>
-  <enum-type name="QComboBox::SizeAdjustPolicy"/>
-  <enum-type name="QCompleter::CompletionMode"/>
-  <enum-type name="QCompleter::ModelSorting"/>
-  <enum-type name="QContextMenuEvent::Reason"/>
-  <enum-type name="QDesktopServices::StandardLocation"/>
-  <enum-type name="QDirModel::Roles"/>
-  <enum-type name="QFont::Capitalization"/>
-  <enum-type name="QFont::SpacingType"/>
-  <enum-type name="QFontDialog::FontDialogOption" flags="QFontDialog::FontDialogOptions"/>
-  <enum-type name="QFileSystemModel::Roles"/>
-  <enum-type name="QGraphicsItem::CacheMode"/>
-  <enum-type name="QGradient::InterpolationMode"/>
-  <enum-type name="QFormLayout::FieldGrowthPolicy"/>
-  <enum-type name="QFormLayout::ItemRole"/>
-  <enum-type name="QFormLayout::RowWrapPolicy"/>
-  <enum-type name="QIconEngineV2::IconEngineHook"/>
-  <enum-type name="QMdiArea::AreaOption" flags="QMdiArea::AreaOptions"/>
-  <enum-type name="QMdiArea::WindowOrder"/>
-  <enum-type name="QMdiArea::ViewMode"/>
-  <enum-type name="QMdiSubWindow::SubWindowOption" flags="QMdiSubWindow::SubWindowOptions"/>
-  <enum-type name="QPlainTextEdit::LineWrapMode"/>
-  <enum-type name="QPrintPreviewWidget::ViewMode"/>
-  <enum-type name="QPrintPreviewWidget::ZoomMode"/>
-  <enum-type name="QStyleOptionViewItemV4::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionViewItemV4::ViewItemPosition"/>
-  <enum-type name="QDataWidgetMapper::SubmitPolicy"/>
-  <enum-type name="QDateTimeEdit::Section" flags="QDateTimeEdit::Sections"/>
-  <enum-type name="QDialog::DialogCode"/>
-  <enum-type name="QDialogButtonBox::ButtonLayout"/>
-  <enum-type name="QDialogButtonBox::ButtonRole"/>
-  <enum-type name="QFileDialog::AcceptMode"/>
-  <enum-type name="QFileDialog::DialogLabel"/>
-  <enum-type name="QFileDialog::FileMode"/>
-  <enum-type name="QFileDialog::Option" flags="QFileDialog::Options"/>
-  <enum-type name="QFileDialog::ViewMode"/>
-  <enum-type name="QFileIconProvider::IconType"/>
-  <enum-type name="QFont::Stretch"/>
-  <enum-type name="QFont::Style"/>
-  <enum-type name="QFont::StyleStrategy"/>
-  <enum-type name="QFont::Weight"/>
-  <enum-type name="QFontComboBox::FontFilter" flags="QFontComboBox::FontFilters"/>
-  <enum-type name="QFrame::Shadow" extensible="yes"/>
-  <enum-type name="QFrame::Shape"/>
-  <enum-type name="QFrame::StyleMask"/>
-  <enum-type name="QGradient::CoordinateMode"/>
-  <enum-type name="QGradient::Spread" lower-bound="QGradient.PadSpread" upper-bound="QGradient.RepeatSpread"/>
-  <enum-type name="QGradient::Type"/>
-  <enum-type name="QGraphicsItem::Extension"/>
-  <enum-type name="QGraphicsItem::GraphicsItemChange"/>
-  <enum-type name="QGraphicsItem::GraphicsItemFlag" flags="QGraphicsItem::GraphicsItemFlags"/>
-  <enum-type name="QGraphicsPixmapItem::ShapeMode"/>
-  <enum-type name="QGraphicsScene::ItemIndexMethod"/>
-  <enum-type name="QGraphicsSceneContextMenuEvent::Reason"/>
-  <enum-type name="QGraphicsView::CacheModeFlag" flags="QGraphicsView::CacheMode"/>
-  <enum-type name="QGraphicsView::DragMode"/>
-  <enum-type name="QGraphicsView::OptimizationFlag" flags="QGraphicsView::OptimizationFlags"/>
-  <enum-type name="QGraphicsView::ViewportAnchor"/>
-  <enum-type name="QGraphicsView::ViewportUpdateMode"/>
-  <enum-type name="QIcon::Mode"/>
-  <enum-type name="QIcon::State"/>
-  <enum-type name="QImage::Format"/>
-  <enum-type name="QImage::InvertMode"/>
-  <enum-type name="QImageIOHandler::ImageOption"/>
-  <enum-type name="QImageReader::ImageReaderError"/>
-  <enum-type name="QImageWriter::ImageWriterError"/>
-  <enum-type name="QInputContext::StandardFormat"/>
-  <enum-type name="QInputDialog::InputMode"/>
-  <enum-type name="QInputDialog::InputDialogOption"/>
-  <!-- only declare this if ndef QT_NO_INPUTMETHOD -->
-  <enum-type name="QInputMethodEvent::AttributeType"/>
-  <!-- endif QT_NO_INPUTMETHOD -->
-  <enum-type name="QItemSelectionModel::SelectionFlag" flags="QItemSelectionModel::SelectionFlags"/>
-  <enum-type name="QKeySequence::SequenceFormat"/>
-  <enum-type name="QKeySequence::SequenceMatch"/>
-  <enum-type name="QKeySequence::StandardKey"/>
-  <enum-type name="QLCDNumber::Mode"/>
-  <enum-type name="QLCDNumber::SegmentStyle"/>
-  <enum-type name="QLayout::SizeConstraint"/>
-  <enum-type name="QLineEdit::EchoMode"/>
-  <enum-type name="QListView::Flow"/>
-  <enum-type name="QListView::LayoutMode"/>
-  <enum-type name="QListView::Movement"/>
-  <enum-type name="QListView::ResizeMode"/>
-  <enum-type name="QListView::ViewMode"/>
-  <enum-type name="QListWidgetItem::ItemType"/>
-  <enum-type name="QMainWindow::DockOption" flags="QMainWindow::DockOptions"/>
-  <enum-type name="QMessageBox::ButtonRole"/>
-  <enum-type name="QMessageBox::Icon"/>
-  <enum-type name="QMovie::CacheMode"/>
-  <enum-type name="QMovie::MovieState"/>
-  <enum-type name="QPaintDevice::PaintDeviceMetric"/>
-  <enum-type name="QPaintEngine::DirtyFlag" flags="QPaintEngine::DirtyFlags"/>
-  <enum-type name="QPaintEngine::PaintEngineFeature" flags="QPaintEngine::PaintEngineFeatures"/>
-  <enum-type name="QPaintEngine::PolygonDrawMode"/>
-  <enum-type name="QPaintEngine::Type"/>
-  <enum-type name="QPageSetupDialog::PageSetupDialogOption" flags="QPageSetupDialog::PageSetupDialogOptions"/>
-  <enum-type name="QPainter::CompositionMode"/>
-  <enum-type name="QPainter::RenderHint" flags="QPainter::RenderHints"/>
-  <enum-type name="QPainter::PixmapFragmentHint" flags="QPainter::PixmapFragmentHints" since="4.7"/>
-  <enum-type name="QPainterPath::ElementType"/>
-  <enum-type name="QPrintEngine::PrintEnginePropertyKey" />
-  <enum-type name="QPrinter::ColorMode"/>
-  <enum-type name="QPrinter::Orientation"/>
-  <enum-type name="QPrinter::OutputFormat"/>
-  <enum-type name="QPrinter::PageOrder"/>
-  <enum-type name="QPrinter::PaperSource"/>
-  <enum-type name="QPrinter::PrintRange"/>
-  <enum-type name="QPrinter::PrinterMode"/>
-  <enum-type name="QPrinter::PrinterState"/>
-  <enum-type name="QPrinter::Unit"/>
-  <enum-type name="QPrinter::DuplexMode"/>
-  <enum-type name="QProgressBar::Direction"/>
-  <enum-type name="QRegion::RegionType"/>
-  <enum-type name="QRubberBand::Shape"/>
-  <enum-type name="QSessionManager::RestartHint"/>
-  <enum-type name="QSizePolicy::Policy"/>
-  <enum-type name="QSizePolicy::PolicyFlag"/>
-  <enum-type name="QSizePolicy::ControlType" flags="QSizePolicy::ControlTypes"/>
-  <enum-type name="QStandardItem::ItemType"/>
-  <enum-type name="QStyle::SubControl" flags="QStyle::SubControls" extensible="yes" force-integer="yes"/>
-  <enum-type name="QStyle::ComplexControl" extensible="yes"/>
-  <enum-type name="QStyle::ContentsType" extensible="yes"/>
-  <enum-type name="QStyle::ControlElement" extensible="yes"/>
-  <enum-type name="QStyle::PixelMetric" extensible="yes" />
-  <enum-type name="QStyle::PrimitiveElement" extensible="yes" />
-  <enum-type name="QStyle::StandardPixmap" extensible="yes"/>
-  <enum-type name="QStyle::StateFlag" flags="QStyle::State"/>
-  <enum-type name="QStyle::SubElement" extensible="yes" />
-  <enum-type name="QStyleHintReturn::HintReturnType"/>
-  <enum-type name="QStyleHintReturn::StyleOptionType"/>
-  <enum-type name="QStyleHintReturn::StyleOptionVersion"/>
-  <enum-type name="QStyleHintReturnVariant::StyleOptionType"/>
-  <enum-type name="QStyleHintReturnVariant::StyleOptionVersion"/>
-  <enum-type name="QStyleHintReturnMask::StyleOptionType"/>
-  <enum-type name="QStyleHintReturnMask::StyleOptionVersion"/>
-  <enum-type name="QStyleOption::StyleOptionType"/>
-  <enum-type name="QStyleOption::OptionType" extensible="yes"/>
-  <enum-type name="QStyleOption::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionButton::ButtonFeature" flags="QStyleOptionButton::ButtonFeatures"/>
-  <enum-type name="QStyleOptionButton::StyleOptionType"/>
-  <enum-type name="QStyleOptionButton::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionComboBox::StyleOptionType"/>
-  <enum-type name="QStyleOptionComboBox::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionComplex::StyleOptionType"/>
-  <enum-type name="QStyleOptionComplex::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionDockWidget::StyleOptionType"/>
-  <enum-type name="QStyleOptionDockWidget::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionDockWidgetV2::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionFocusRect::StyleOptionType"/>
-  <enum-type name="QStyleOptionFocusRect::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionFrame::StyleOptionType"/>
-  <enum-type name="QStyleOptionFrame::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionFrameV2::FrameFeature" flags="QStyleOptionFrameV2::FrameFeatures"/>
-  <enum-type name="QStyleOptionFrameV2::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionFrameV3::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionGraphicsItem::StyleOptionType"/>
-  <enum-type name="QStyleOptionGraphicsItem::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionGroupBox::StyleOptionType"/>
-  <enum-type name="QStyleOptionGroupBox::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionHeader::SectionPosition"/>
-  <enum-type name="QStyleOptionHeader::SelectedPosition"/>
-  <enum-type name="QStyleOptionHeader::SortIndicator"/>
-  <enum-type name="QStyleOptionHeader::StyleOptionType"/>
-  <enum-type name="QStyleOptionHeader::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionMenuItem::CheckType"/>
-  <enum-type name="QStyleOptionMenuItem::MenuItemType"/>
-  <enum-type name="QStyleOptionMenuItem::StyleOptionType"/>
-  <enum-type name="QStyleOptionMenuItem::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionProgressBar::StyleOptionType"/>
-  <enum-type name="QStyleOptionProgressBar::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionProgressBarV2::StyleOptionType"/>
-  <enum-type name="QStyleOptionProgressBarV2::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionRubberBand::StyleOptionType"/>
-  <enum-type name="QStyleOptionRubberBand::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionSizeGrip::StyleOptionType"/>
-  <enum-type name="QStyleOptionSizeGrip::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionSlider::StyleOptionType"/>
-  <enum-type name="QStyleOptionSlider::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionSpinBox::StyleOptionType"/>
-  <enum-type name="QStyleOptionSpinBox::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionTab::CornerWidget" flags="QStyleOptionTab::CornerWidgets"/>
-  <enum-type name="QStyleOptionTab::SelectedPosition"/>
-  <enum-type name="QStyleOptionTab::StyleOptionType"/>
-  <enum-type name="QStyleOptionTab::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionTab::TabPosition"/>
-  <enum-type name="QStyleOptionTabBarBase::StyleOptionType"/>
-  <enum-type name="QStyleOptionTabBarBase::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionTabBarBaseV2::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionTabV2::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionTabV3::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionTabWidgetFrame::StyleOptionType"/>
-  <enum-type name="QStyleOptionTabWidgetFrame::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionTitleBar::StyleOptionType"/>
-  <enum-type name="QStyleOptionTitleBar::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionToolBar::StyleOptionType"/>
-  <enum-type name="QStyleOptionToolBar::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionToolBar::ToolBarFeature" flags="QStyleOptionToolBar::ToolBarFeatures"/>
-  <enum-type name="QStyleOptionToolBar::ToolBarPosition"/>
-  <enum-type name="QStyleOptionToolBox::StyleOptionType"/>
-  <enum-type name="QStyleOptionToolBox::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionToolButton::StyleOptionType"/>
-  <enum-type name="QStyleOptionToolButton::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionToolButton::ToolButtonFeature" flags="QStyleOptionToolButton::ToolButtonFeatures" />
-  <enum-type name="QStyleOptionViewItem::Position"/>
-  <enum-type name="QStyleOptionViewItem::StyleOptionType"/>
-  <enum-type name="QStyleOptionViewItem::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionViewItemV2::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionViewItemV2::ViewItemFeature" flags="QStyleOptionViewItemV2::ViewItemFeatures"/>
-  <enum-type name="QSystemTrayIcon::ActivationReason"/>
-  <enum-type name="QSystemTrayIcon::MessageIcon"/>
-  <enum-type name="QTabBar::Shape"/>
-  <enum-type name="QTabBar::SelectionBehavior"/>
-  <enum-type name="QTabBar::ButtonPosition"/>
-  <enum-type name="QTabWidget::TabPosition"/>
-  <enum-type name="QTabWidget::TabShape"/>
-  <enum-type name="QTableWidgetItem::ItemType"/>
-  <enum-type name="QTabletEvent::PointerType"/>
-  <enum-type name="QTabletEvent::TabletDevice"/>
-  <enum-type name="QTextCharFormat::UnderlineStyle"/>
-  <enum-type name="QTextCharFormat::VerticalAlignment"/>
-  <enum-type name="QTextCursor::MoveMode"/>
-  <enum-type name="QTextCursor::MoveOperation"/>
-  <enum-type name="QTextCursor::SelectionType"/>
-  <enum-type name="QTextDocument::FindFlag" flags="QTextDocument::FindFlags"/>
-  <enum-type name="QTextDocument::MetaInformation"/>
-  <enum-type name="QTextDocument::ResourceType"/>
-  <enum-type name="QTextDocument::Stacks" since="4.7"/>
-  <enum-type name="QTextEdit::AutoFormattingFlag" flags="QTextEdit::AutoFormatting"/>
-  <enum-type name="QTextEdit::LineWrapMode"/>
-  <enum-type name="QTextFormat::ObjectTypes"/>
-  <enum-type name="QTextFormat::PageBreakFlag" flags="QTextFormat::PageBreakFlags"/>
-  <enum-type name="QTextFrameFormat::Position"/>
-  <enum-type name="QTextFrameFormat::BorderStyle"/>
-  <enum-type name="QTextItem::RenderFlag" flags="QTextItem::RenderFlags"/>
-  <enum-type name="QTextLayout::CursorMode"/>
-  <enum-type name="QTextLength::Type"/>
-  <enum-type name="QTextLine::CursorPosition"/>
-  <enum-type name="QTextLine::Edge"/>
-  <enum-type name="QTextListFormat::Style"/>
-  <enum-type name="QToolButton::ToolButtonPopupMode"/>
-  <enum-type name="QTreeWidgetItem::ItemType"/>
-  <enum-type name="QTreeWidgetItemIterator::IteratorFlag" flags="QTreeWidgetItemIterator::IteratorFlags"/>
-  <enum-type name="QValidator::State"/>
-  <enum-type name="QWidget::RenderFlag" flags="QWidget::RenderFlags"/>
-  <enum-type name="QWorkspace::WindowOrder"/>
-  <enum-type name="QDoubleValidator::Notation"/>
-  <enum-type name="QGraphicsScene::SceneLayer" flags="QGraphicsScene::SceneLayers"/>
-  <enum-type name="QStyleOptionToolBoxV2::SelectedPosition"/>
-  <enum-type name="QStyleOptionToolBoxV2::StyleOptionVersion"/>
-  <enum-type name="QStyleOptionToolBoxV2::TabPosition"/>
-  <enum-type name="QStyleOptionViewItemV3::StyleOptionVersion"/>
-  <enum-type name="QTransform::TransformationType"/>
-  <enum-type name="QTreeWidgetItem::ChildIndicatorPolicy"/>
-  <enum-type name="QWizard::WizardOption" flags="QWizard::WizardOptions"/>
-  <enum-type name="QWizard::WizardPixmap"/>
-  <enum-type name="QWizard::WizardStyle"/>
-  <enum-type name="QStackedLayout::StackingMode"/>
-  <enum-type name="QWizard::WizardButton" />
-  <enum-type name="QBoxLayout::Direction" />
-  <enum-type name="QClipboard::Mode" />
-  <enum-type name="QDialogButtonBox::StandardButton" flags="QDialogButtonBox::StandardButtons" />
-  <enum-type name="QDockWidget::DockWidgetFeature" flags="QDockWidget::DockWidgetFeatures"/>
-  <enum-type name="QFont::StyleHint" />
-  <enum-type name="QFontDatabase::WritingSystem" />
-  <enum-type name="QHeaderView::ResizeMode" />
-  <enum-type name="QMessageBox::StandardButton" flags="QMessageBox::StandardButtons" />
-  <enum-type name="QPalette::ColorGroup" />
-  <enum-type name="QPalette::ColorRole" />
-  <enum-type name="QPrinter::PageSize" />
-  <enum-type name="QSlider::TickPosition" />
-  <enum-type name="QStyle::StyleHint" extensible="yes" />
-  <enum-type name="QTextFormat::FormatType"/>
-  <enum-type name="QTextFormat::Property" />
   <value-type name="QTransform">
+    <enum-type name="TransformationType"/>
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
     <modify-function signature="inverted(bool*)const">
@@ -462,47 +163,157 @@
       </inject-code>
     </modify-function>
   </value-type>
-  <enum-type name="QTextOption::TabType"/>
-  <enum-type name="QTextOption::WrapMode"/>
-  <enum-type name="QTextOption::Flag" flags="QTextOption::Flags"/>
   <value-type name="QStyleOption" polymorphic-id-expression="%1-&gt;type == QStyleOption::SO_Default">
+    <enum-type name="OptionType" extensible="yes"/>
+    <enum-type name="StyleOptionType"/>
+    <enum-type name="StyleOptionVersion"/>
     <modify-function signature="init(const QWidget*)" remove="all"/>
     <!--### Obsolete in 4.3-->
   </value-type>
-  <value-type name="QStyleOptionGraphicsItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionGraphicsItem::Type &amp;&amp; %1-&gt;version == QStyleOptionGraphicsItem::Version" />
-  <value-type name="QStyleOptionSizeGrip" polymorphic-id-expression="%1-&gt;type == QStyleOptionSizeGrip::Type &amp;&amp; %1-&gt;version == QStyleOptionSizeGrip::Version" />
-  <value-type name="QStyleOptionButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionButton::Type &amp;&amp; %1-&gt;version == QStyleOptionButton::Version" />
-  <value-type name="QStyleOptionComboBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionComboBox::Type &amp;&amp; %1-&gt;version == QStyleOptionComboBox::Version" />
-  <value-type name="QStyleOptionComplex" polymorphic-id-expression="%1-&gt;type == QStyleOptionComplex::Type &amp;&amp; %1-&gt;version == QStyleOptionComplex::Version" />
-  <value-type name="QStyleOptionDockWidget" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidget::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidget::Version" />
-  <value-type name="QStyleOptionDockWidgetV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidgetV2::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidgetV2::Version" />
-  <value-type name="QStyleOptionFocusRect" polymorphic-id-expression="%1-&gt;type == QStyleOptionFocusRect::Type &amp;&amp; %1-&gt;version == QStyleOptionFocusRect::Version" />
-  <value-type name="QStyleOptionFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionFrame::Version" />
-  <value-type name="QStyleOptionFrameV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV2::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV2::Version" />
-  <value-type name="QStyleOptionFrameV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV3::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV3::Version" />
-  <value-type name="QStyleOptionGroupBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionGroupBox::Type &amp;&amp; %1-&gt;version == QStyleOptionGroupBox::Version" />
-  <value-type name="QStyleOptionHeader" polymorphic-id-expression="%1-&gt;type == QStyleOptionHeader::Type &amp;&amp; %1-&gt;version == QStyleOptionHeader::Version" />
-  <value-type name="QStyleOptionMenuItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionMenuItem::Type &amp;&amp; %1-&gt;version == QStyleOptionMenuItem::Version" />
-  <value-type name="QStyleOptionProgressBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBar::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBar::Version" />
-  <value-type name="QStyleOptionProgressBarV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBarV2::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBarV2::Version" />
-  <value-type name="QStyleOptionRubberBand" polymorphic-id-expression="%1-&gt;type == QStyleOptionRubberBand::Type &amp;&amp; %1-&gt;version == QStyleOptionRubberBand::Version" />
-  <value-type name="QStyleOptionSlider" polymorphic-id-expression="%1-&gt;type == QStyleOptionSlider::Type &amp;&amp; %1-&gt;version == QStyleOptionSlider::Version" />
-  <value-type name="QStyleOptionSpinBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionSpinBox::Type &amp;&amp; %1-&gt;version == QStyleOptionSpinBox::Version" />
-  <value-type name="QStyleOptionTab" polymorphic-id-expression="%1-&gt;type == QStyleOptionTab::Type &amp;&amp; %1-&gt;version == QStyleOptionTab::Version" />
-  <value-type name="QStyleOptionTabV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV2::Version" />
-  <value-type name="QStyleOptionTabV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV3::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV3::Version" />
-  <value-type name="QStyleOptionTabBarBase" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBase::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBase::Version" />
-  <value-type name="QStyleOptionTabBarBaseV2" delete-in-main-thread="yes" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBaseV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBaseV2::Version" />
-  <value-type name="QStyleOptionTabWidgetFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabWidgetFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionTabWidgetFrame::Version" />
-  <value-type name="QStyleOptionTitleBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionTitleBar::Type &amp;&amp; %1-&gt;version == QStyleOptionTitleBar::Version" />
-  <value-type name="QStyleOptionToolBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBar::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBar::Version" />
-  <value-type name="QStyleOptionToolBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBox::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBox::Version" />
-  <value-type name="QStyleOptionToolBoxV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBoxV2::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBoxV2::Version" />
-  <value-type name="QStyleOptionToolButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolButton::Type &amp;&amp; %1-&gt;version == QStyleOptionToolButton::Version" />
-  <value-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version" />
-  <value-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version" />
-  <value-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version" />
-  <value-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" />
+  <value-type name="QStyleOptionGraphicsItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionGraphicsItem::Type &amp;&amp; %1-&gt;version == QStyleOptionGraphicsItem::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionSizeGrip" polymorphic-id-expression="%1-&gt;type == QStyleOptionSizeGrip::Type &amp;&amp; %1-&gt;version == QStyleOptionSizeGrip::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionButton::Type &amp;&amp; %1-&gt;version == QStyleOptionButton::Version">
+      <enum-type name="ButtonFeature" flags="QStyleOptionButton::ButtonFeatures"/>
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionComboBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionComboBox::Type &amp;&amp; %1-&gt;version == QStyleOptionComboBox::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionComplex" polymorphic-id-expression="%1-&gt;type == QStyleOptionComplex::Type &amp;&amp; %1-&gt;version == QStyleOptionComplex::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionDockWidget" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidget::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidget::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionDockWidgetV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidgetV2::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidgetV2::Version">
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionFocusRect" polymorphic-id-expression="%1-&gt;type == QStyleOptionFocusRect::Type &amp;&amp; %1-&gt;version == QStyleOptionFocusRect::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionFrame::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionFrameV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV2::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV2::Version">
+      <enum-type name="FrameFeature" flags="QStyleOptionFrameV2::FrameFeatures"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionFrameV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV3::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV3::Version">
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionGroupBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionGroupBox::Type &amp;&amp; %1-&gt;version == QStyleOptionGroupBox::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionHeader" polymorphic-id-expression="%1-&gt;type == QStyleOptionHeader::Type &amp;&amp; %1-&gt;version == QStyleOptionHeader::Version">
+      <enum-type name="SectionPosition"/>
+      <enum-type name="SelectedPosition"/>
+      <enum-type name="SortIndicator"/>
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionMenuItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionMenuItem::Type &amp;&amp; %1-&gt;version == QStyleOptionMenuItem::Version">
+      <enum-type name="CheckType"/>
+      <enum-type name="MenuItemType"/>
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionProgressBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBar::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBar::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionProgressBarV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBarV2::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBarV2::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionRubberBand" polymorphic-id-expression="%1-&gt;type == QStyleOptionRubberBand::Type &amp;&amp; %1-&gt;version == QStyleOptionRubberBand::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionSlider" polymorphic-id-expression="%1-&gt;type == QStyleOptionSlider::Type &amp;&amp; %1-&gt;version == QStyleOptionSlider::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionSpinBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionSpinBox::Type &amp;&amp; %1-&gt;version == QStyleOptionSpinBox::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionTab" polymorphic-id-expression="%1-&gt;type == QStyleOptionTab::Type &amp;&amp; %1-&gt;version == QStyleOptionTab::Version">
+      <enum-type name="CornerWidget" flags="QStyleOptionTab::CornerWidgets"/>
+      <enum-type name="SelectedPosition"/>
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+      <enum-type name="TabPosition"/>
+  </value-type>
+  <value-type name="QStyleOptionTabV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV2::Version">
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionTabV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV3::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV3::Version">
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionTabBarBase" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBase::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBase::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionTabBarBaseV2" delete-in-main-thread="yes" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBaseV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBaseV2::Version">
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionTabWidgetFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabWidgetFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionTabWidgetFrame::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionTitleBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionTitleBar::Type &amp;&amp; %1-&gt;version == QStyleOptionTitleBar::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionToolBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBar::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBar::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+      <enum-type name="ToolBarFeature" flags="QStyleOptionToolBar::ToolBarFeatures"/>
+      <enum-type name="ToolBarPosition"/>
+  </value-type>
+  <value-type name="QStyleOptionToolBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBox::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBox::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionToolBoxV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBoxV2::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBoxV2::Version">
+      <enum-type name="SelectedPosition"/>
+      <enum-type name="StyleOptionVersion"/>
+      <enum-type name="TabPosition"/>
+  </value-type>
+  <value-type name="QStyleOptionToolButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolButton::Type &amp;&amp; %1-&gt;version == QStyleOptionToolButton::Version">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+      <enum-type name="ToolButtonFeature" flags="QStyleOptionToolButton::ToolButtonFeatures" />
+  </value-type>
+  <value-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version">
+      <enum-type name="Position"/>
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version">
+      <enum-type name="StyleOptionVersion"/>
+      <enum-type name="ViewItemFeature" flags="QStyleOptionViewItemV2::ViewItemFeatures"/>
+  </value-type>
+  <value-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version">
+      <enum-type name="StyleOptionVersion"/>
+  </value-type>
+  <value-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" >
+      <enum-type name="StyleOptionVersion"/>
+      <enum-type name="ViewItemPosition"/>
+  </value-type>
   <value-type name="QTextFragment" />
   <value-type name="QBitmap" >
     <modify-function signature="QBitmap(QString,const char*)" remove="all" />
@@ -510,11 +321,22 @@
     <modify-function signature="fromData(QSize,const uchar*,QImage::Format)" remove="all"/>
   </value-type>
   <value-type name="QTextInlineObject" />
-  <value-type name="QSizePolicy"/>
+  <value-type name="QSizePolicy">
+      <enum-type name="ControlType" flags="QSizePolicy::ControlTypes"/>
+      <enum-type name="Policy"/>
+      <enum-type name="PolicyFlag"/>
+  </value-type>
   <value-type name="QTableWidgetSelectionRange"/>
   <value-type name="QTextDocumentFragment" />
-  <value-type name="QTextOption" />
+  <value-type name="QTextOption">
+      <enum-type name="Flag" flags="QTextOption::Flags"/>
+      <enum-type name="TabType"/>
+      <enum-type name="WrapMode"/>
+      <value-type name="Tab"/>
+  </value-type>
   <value-type name="QTextLine" >
+    <enum-type name="CursorPosition"/>
+    <enum-type name="Edge"/>
     <modify-function signature="cursorToX(int*,QTextLine::Edge)const" remove="all" />
     <modify-function signature="xToCursor(qreal,QTextLine::CursorPosition)const">
       <modify-argument index="2">
@@ -525,15 +347,30 @@
   <value-type name="QTextTableFormat" />
   <value-type name="QTextImageFormat" />
   <value-type name="QTextFrameFormat" >
+    <enum-type name="BorderStyle"/>
+    <enum-type name="Position"/>
     <modify-function signature="isValid()const" access="non-final"/>
   </value-type>
-  <value-type name="QTextLength" />
+  <value-type name="QTextLength">
+      <enum-type name="Type"/>
+  </value-type>
   <value-type name="QItemSelectionRange" hash-function="qHash">
     <modify-function signature="intersect(QItemSelectionRange)const" remove="all"/>
     <!--### Obsolete in 4.3-->
   </value-type>
-  <value-type name="QPainterPath" />
+  <value-type name="QPainterPath">
+    <enum-type name="ElementType"/>
+    <value-type name="Element">
+      <modify-field name="x" write="false"/>
+      <modify-field name="y" write="false"/>
+      <modify-field name="type" write="false"/>
+      <include file-name="QPainterPath" location="global"/>
+      <modify-function signature="operator QPointF()const" remove="all"/>
+    </value-type>
+  </value-type>
   <value-type name="QPalette">
+    <enum-type name="ColorGroup" />
+    <enum-type name="ColorRole" />
     <modify-function signature="QPalette(QColor, QColor, QColor, QColor, QColor, QColor, QColor)" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="background()const" remove="all"/>
@@ -544,6 +381,9 @@
     <!--### Obsolete in 4.3-->
   </value-type>
   <value-type name="QKeySequence">
+    <enum-type name="SequenceFormat"/>
+    <enum-type name="SequenceMatch"/>
+    <enum-type name="StandardKey"/>
     <modify-function signature="operator QVariant()const" remove="all"/>
     <modify-function signature="operator int()const" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
@@ -565,6 +405,7 @@
     <modify-function signature="setData(const char*,uint)" remove="all"/>
   </value-type>
   <value-type name="QRegion" >
+    <enum-type name="RegionType"/>
     <modify-function signature="operator&amp;=(QRegion)" remove="all"/>
     <modify-function signature="eor(QRegion)const" remove="all"/>
     <!--### Obsolete in 4.3-->
@@ -576,10 +417,20 @@
     <modify-function signature="intersect(QRect)const" remove="all" />
     <modify-function signature="intersect(QRegion)const" remove="all" />
   </value-type>
-  <value-type name="QTextBlock" />
+  <value-type name="QTextBlock">
+    <value-type name="iterator" >
+      <include file-name="QTextBlock" location="global"/>
+      <modify-function signature="operator++()" remove="all"/>
+      <modify-function signature="operator--()" remove="all"/>
+      <modify-function signature="operator++(int)" remove="all"/>
+      <modify-function signature="operator--(int)" remove="all"/>
+    </value-type>
+  </value-type>
   <value-type name="QTextBlockFormat" />
   <value-type name="QTextTableCellFormat" />
   <value-type name="QTextCharFormat" >
+    <enum-type name="UnderlineStyle"/>
+    <enum-type name="VerticalAlignment"/>
     <modify-function signature="isValid()const" access="non-final"/>
     <modify-function signature="anchorName()const" remove="all"/>
     <!--### Obsolete in 4.3-->
@@ -587,9 +438,15 @@
     <!--### Obsolete in 4.3-->
   </value-type>
   <value-type name="QTextFormat" >
+    <enum-type name="FormatType"/>
+    <enum-type name="ObjectTypes"/>
+    <enum-type name="PageBreakFlag" flags="QTextFormat::PageBreakFlags"/>
+    <enum-type name="Property" />
     <modify-function signature="isValid()const" access="non-final"/>
   </value-type>
-  <value-type name="QTextListFormat" />
+  <value-type name="QTextListFormat">
+      <enum-type name="Style"/>
+  </value-type>
   <value-type name="QPolygon">
     <extra-includes>
       <include file-name="QMatrix" location="global"/>
@@ -610,6 +467,8 @@
     <modify-function signature="operator&lt;&lt;(QVector&lt;QPointF&gt;)" remove="all"/>
   </value-type>
   <value-type name="QIcon" >
+    <enum-type name="Mode"/>
+    <enum-type name="State"/>
     <modify-function signature="serialNumber()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="QIcon(QIconEngineV2 *)">
@@ -623,14 +482,8 @@
       </modify-argument>
     </modify-function>
   </value-type>
-  <value-type name="QTextFrame::iterator" >
-    <include file-name="QTextFrame" location="global"/>
-    <modify-function signature="operator++(int)" remove="all"/>
-    <modify-function signature="operator--(int)" remove="all"/>
-    <modify-function signature="operator++()" remove="all"/>
-    <modify-function signature="operator--()" remove="all"/>
-  </value-type>
   <value-type name="QTreeWidgetItemIterator" >
+    <enum-type name="IteratorFlag" flags="QTreeWidgetItemIterator::IteratorFlags"/>
     <modify-function signature="operator++(int)" remove="all"/>
     <modify-function signature="operator--(int)" remove="all"/>
     <modify-function signature="operator+=(int)" remove="all"/>
@@ -639,17 +492,6 @@
     <modify-function signature="operator--()" remove="all"/>
     <modify-function signature="operator*()const" remove="all"/>
   </value-type>
-  <value-type name="QTextBlock::iterator" >
-    <include file-name="QTextBlock" location="global"/>
-    <modify-function signature="operator++()" remove="all"/>
-    <modify-function signature="operator--()" remove="all"/>
-    <modify-function signature="operator++(int)" remove="all"/>
-    <modify-function signature="operator--(int)" remove="all"/>
-  </value-type>
-  <value-type name="QAbstractTextDocumentLayout::PaintContext" >
-    <include file-name="QAbstractTextDocumentLayout" location="global"/>
-  </value-type>
-  <value-type name="QAbstractTextDocumentLayout::Selection" />
   <value-type name="QPixmap" >
     <conversion-rule file="qpixmap_conversion.h" />
     <extra-includes>
@@ -690,6 +532,9 @@
       <include file-name="QTextBlock" location="global"/>
       <include file-name="QTextDocumentFragment" location="global"/>
     </extra-includes>
+    <enum-type name="MoveMode"/>
+    <enum-type name="MoveOperation"/>
+    <enum-type name="SelectionType"/>
     <modify-function signature="selectedTableCells(int*,int*,int*,int*)const" remove="all" />
     <modify-function signature="currentFrame()const">
       <modify-argument index="return">
@@ -707,15 +552,6 @@
       </modify-argument>
     </modify-function>
   </value-type>
-  <value-type name="QTextLayout::FormatRange">
-    <include file-name="QTextLayout" location="global"/>
-  </value-type>
-
-  <!-- only declare this if ndef QT_NO_INPUTMETHOD -->
-  <value-type name="QInputMethodEvent::Attribute">
-    <include file-name="QInputMethodEvent" location="global"/>
-  </value-type>
-  <!-- endif ndef QT_NO_INPUTMETHOD -->
 
   <value-type name="QItemSelection" >
     <modify-function signature="operator+(const QList&lt;QItemSelectionRange&gt;&amp;)const" remove="all"/>
@@ -745,17 +581,14 @@
   <value-type name="QConicalGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::ConicalGradient" />
   <value-type name="QFontInfo" />
   <value-type name="QRadialGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::RadialGradient" />
-  <value-type name="QPainterPath::Element">
-    <modify-field name="x" write="false"/>
-    <modify-field name="y" write="false"/>
-    <modify-field name="type" write="false"/>
-    <include file-name="QPainterPath" location="global"/>
-    <modify-function signature="operator QPointF()const" remove="all"/>
-  </value-type>
-  <value-type name="QTextEdit::ExtraSelection" >
-    <include file-name="QTextEdit" location="global"/>
-  </value-type>
   <value-type name="QFont" >
+    <enum-type name="Capitalization"/>
+    <enum-type name="SpacingType"/>
+    <enum-type name="Stretch"/>
+    <enum-type name="Style"/>
+    <enum-type name="StyleHint" />
+    <enum-type name="StyleStrategy"/>
+    <enum-type name="Weight"/>
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
@@ -771,6 +604,8 @@
     </extra-includes>
   </value-type>
   <value-type name="QImage">
+    <enum-type name="Format"/>
+    <enum-type name="InvertMode"/>
     <extra-includes>
       <include file-name="QStringList" location="global"/>
       <include file-name="QMatrix" location="global"/>
@@ -816,6 +651,7 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
+    <enum-type name="WritingSystem" />
   </value-type>
   <value-type name="QPen">
     <extra-includes>
@@ -828,6 +664,7 @@
     </extra-includes>
   </value-type>
   <value-type name="QColor">
+    <enum-type name="Spec"/>
     <extra-includes>
       <include file-name="QVariant" location="global"/>
     </extra-includes>
@@ -1098,7 +935,6 @@
       </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QTextOption::Tab"/>
   <value-type name="QFontMetrics" >
 
     <modify-function signature="boundingRect(QChar)const" rename="boundingRectChar">
@@ -1204,7 +1040,12 @@
       </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QGradient" force-abstract="yes" polymorphic-id-expression="%1-&gt;type() == QGradient::NoGradient" />
+  <value-type name="QGradient" force-abstract="yes" polymorphic-id-expression="%1-&gt;type() == QGradient::NoGradient">
+      <enum-type name="CoordinateMode"/>
+      <enum-type name="InterpolationMode"/>
+      <enum-type name="Spread" lower-bound="QGradient.PadSpread" upper-bound="QGradient.RepeatSpread"/>
+      <enum-type name="Type"/>
+  </value-type>
   <value-type name="QLinearGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::LinearGradient" />
   <value-type name="QPrinterInfo" />
   <object-type name="QLayoutItem">
@@ -1228,8 +1069,15 @@
     </modify-function>
 
   </object-type>
-  <object-type name="QPaintDevice"/>
+  <object-type name="QPaintDevice">
+      <enum-type name="PaintDeviceMetric"/>
+  </object-type>
   <object-type name="QGraphicsItem">
+    <enum-type name="CacheMode"/>
+    <enum-type name="Extension"/>
+    <enum-type name="GraphicsItemChange"/>
+    <enum-type name="GraphicsItemFlag" flags="QGraphicsItem::GraphicsItemFlags"/>
+    <enum-type name="PanelModality"/>
     <inject-code class="target" position="end">
         PyObject* userTypeConstant =  PyInt_FromLong(QGraphicsItem::UserType);
         PyDict_SetItemString(SbkQGraphicsItem_Type.super.ht_type.tp_dict, "UserType", userTypeConstant);
@@ -1359,6 +1207,15 @@
   </object-type>
   <object-type name="QAbstractGraphicsShapeItem"/>
   <object-type name="QAbstractItemView">
+    <enum-type name="CursorAction"/>
+    <enum-type name="DragDropMode"/>
+    <enum-type name="DropIndicatorPosition"/>
+    <enum-type name="EditTrigger" flags="QAbstractItemView::EditTriggers"/>
+    <enum-type name="ScrollHint"/>
+    <enum-type name="ScrollMode"/>
+    <enum-type name="SelectionBehavior"/>
+    <enum-type name="SelectionMode"/>
+    <enum-type name="State"/>
     <modify-function signature="model() const">
       <modify-argument index="return">
         <!-- Defining ownership as "default" avoids the object to be automatically
@@ -1389,12 +1246,20 @@
     <modify-function signature="moveCursor(QAbstractItemView::CursorAction,QFlags&lt;Qt::KeyboardModifier&gt;)" remove="all"/>
   </object-type>
   <object-type name="QAbstractPrintDialog">
+      <enum-type name="PrintDialogOption" flags="QAbstractPrintDialog::PrintDialogOptions"/>
+      <enum-type name="PrintRange"/>
       <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
   </object-type>
   <object-type name="QAbstractSlider">
+    <enum-type name="SliderAction"/>
+    <enum-type name="SliderChange"/>
     <modify-function signature="sliderChange(QAbstractSlider::SliderChange)" remove="all"/>
   </object-type>
   <object-type name="QAbstractTextDocumentLayout">
+    <value-type name="PaintContext" >
+      <include file-name="QAbstractTextDocumentLayout" location="global"/>
+    </value-type>
+    <value-type name="Selection" />
     <modify-function signature="setPaintDevice(QPaintDevice*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -1445,6 +1310,7 @@
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
   </object-type>
   <object-type name="QDataWidgetMapper">
+    <enum-type name="SubmitPolicy"/>
     <modify-function signature="addMapping(QWidget*,int)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -1472,8 +1338,11 @@
     </modify-function>
   </object-type>
   <object-type name="QDateEdit"/>
-  <object-type name="QDesktopServices"/>
+  <object-type name="QDesktopServices">
+      <enum-type name="StandardLocation"/>
+  </object-type>
   <object-type name="QDialog">
+    <enum-type name="DialogCode"/>
     <modify-function signature="setExtension(QWidget*)" remove="all"/>
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
     <modify-function signature="extension()const" remove="all"/>
@@ -1486,6 +1355,9 @@
     <!--### Obsolete in 4.3-->
   </object-type>
   <object-type name="QDialogButtonBox">
+    <enum-type name="ButtonLayout"/>
+    <enum-type name="ButtonRole"/>
+    <enum-type name="StandardButton" flags="QDialogButtonBox::StandardButtons" />
     <modify-function signature="addButton(QAbstractButton*,QDialogButtonBox::ButtonRole)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -1498,6 +1370,7 @@
     </modify-function>
   </object-type>
   <object-type name="QDirModel" polymorphic-id-expression="qobject_cast&lt;QDirModel*&gt;(%1)">
+    <enum-type name="Roles"/>
     <modify-function signature="parent()const" remove="all"/>
     <modify-function signature="setIconProvider(QFileIconProvider*)">
       <modify-argument index="1">
@@ -1505,9 +1378,17 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QDoubleValidator" />
-  <object-type name="QFileIconProvider" />
+  <object-type name="QDoubleValidator">
+      <enum-type name="Notation"/>
+  </object-type>
+  <object-type name="QFileIconProvider">
+      <enum-type name="IconType"/>
+  </object-type>
   <object-type name="QWizard">
+    <enum-type name="WizardButton" />
+    <enum-type name="WizardOption" flags="QWizard::WizardOptions"/>
+    <enum-type name="WizardPixmap"/>
+    <enum-type name="WizardStyle"/>
     <modify-function signature="addPage(QWizardPage*)">
       <modify-argument index="1">
         <no-null-pointer/>
@@ -1528,8 +1409,11 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QFontComboBox"/>
+  <object-type name="QFontComboBox">
+      <enum-type name="FontFilter" flags="QFontComboBox::FontFilters"/>
+  </object-type>
   <object-type name="QFontDialog">
+    <enum-type name="FontDialogOption" flags="QFontDialog::FontDialogOptions"/>
     <modify-function signature="getFont(bool*,QWidget*)" allow-thread="yes">
         <modify-argument index="1">
             <remove-argument />
@@ -1584,12 +1468,15 @@
   <object-type name="QGraphicsItemGroup"/>
   <object-type name="QGraphicsLineItem" />
   <object-type name="QGraphicsPathItem" />
-  <object-type name="QGraphicsPixmapItem" />
+  <object-type name="QGraphicsPixmapItem">
+      <enum-type name="ShapeMode"/>
+  </object-type>
   <object-type name="QGraphicsPolygonItem"/>
   <object-type name="QGraphicsRectItem" />
   <object-type name="QGraphicsSimpleTextItem" />
   <object-type name="QHBoxLayout"/>
   <object-type name="QHeaderView">
+    <enum-type name="ResizeMode" />
     <modify-function signature="paintSection(QPainter*,QRect,int)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -1605,6 +1492,7 @@
     </modify-function>
   </object-type>
   <object-type name="QIconEngineV2">
+    <enum-type name="IconEngineHook"/>
     <modify-function signature="read(QDataStream&amp;)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -1614,6 +1502,7 @@
     <modify-function signature="virtual_hook(int,void*)" remove="all"/>
   </object-type>
   <object-type name="QImageWriter">
+    <enum-type name="ImageWriterError"/>
     <modify-function signature="setDevice(QIODevice*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -1670,8 +1559,16 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QItemSelectionModel"/>
-  <object-type name="QListView"/>
+  <object-type name="QItemSelectionModel">
+      <enum-type name="SelectionFlag" flags="QItemSelectionModel::SelectionFlags"/>
+  </object-type>
+  <object-type name="QListView">
+      <enum-type name="Flow"/>
+      <enum-type name="LayoutMode"/>
+      <enum-type name="Movement"/>
+      <enum-type name="ResizeMode"/>
+      <enum-type name="ViewMode"/>
+  </object-type>
   <object-type name="QColumnView">
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
@@ -1690,6 +1587,7 @@
     </modify-function>
   </object-type>
   <object-type name="QMainWindow">
+    <enum-type name="DockOption" flags="QMainWindow::DockOptions"/>
     <modify-function signature="setCentralWidget(QWidget*)">
        <inject-code class="target" position="beginning">
          <insert-template name="replace_child">
@@ -1775,6 +1673,9 @@
 
   </object-type>
   <object-type name="QMdiArea">
+    <enum-type name="AreaOption" flags="QMdiArea::AreaOptions"/>
+    <enum-type name="ViewMode"/>
+    <enum-type name="WindowOrder"/>
     <modify-function signature="addSubWindow(QWidget*, QFlags&lt;Qt::WindowType&gt;)" >
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -1785,6 +1686,7 @@
     </modify-function>
   </object-type>
   <object-type name="QMdiSubWindow">
+    <enum-type name="SubWindowOption" flags="QMdiSubWindow::SubWindowOptions"/>
     <modify-function signature="setWidget(QWidget*)" >
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -1949,8 +1851,12 @@
   <object-type name="QPrintDialog">
       <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
   </object-type>
-  <object-type name="QPrintEngine"/>
-  <object-type name="QProgressBar" />
+  <object-type name="QPrintEngine">
+      <enum-type name="PrintEnginePropertyKey" />
+  </object-type>
+  <object-type name="QProgressBar">
+      <enum-type name="Direction"/>
+  </object-type>
   <object-type name="QPushButton" />
   <object-type name="QRegExpValidator">
     <modify-function signature="validate(QString &amp;, int &amp;)const">
@@ -1972,6 +1878,7 @@
   <object-type name="QSessionManager">
     <extra-includes>
     </extra-includes>
+    <enum-type name="RestartHint"/>
     <modify-function signature="handle()const" remove="all"/>
   </object-type>
 
@@ -1994,6 +1901,7 @@
   <object-type name="QSound"/>
   <object-type name="QSpacerItem"/>
   <object-type name="QStandardItem">
+    <enum-type name="ItemType"/>
     <modify-function signature="QStandardItem(const QStandardItem &amp;)" remove="all"/>
     <modify-function signature="operator&lt;(QStandardItem)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
@@ -2109,9 +2017,19 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QStyleHintReturn"/>
-  <object-type name="QStyleHintReturnVariant"/>
-  <object-type name="QStyleHintReturnMask"/>
+  <object-type name="QStyleHintReturn">
+      <enum-type name="HintReturnType"/>
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </object-type>
+  <object-type name="QStyleHintReturnVariant">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </object-type>
+  <object-type name="QStyleHintReturnMask">
+      <enum-type name="StyleOptionType"/>
+      <enum-type name="StyleOptionVersion"/>
+  </object-type>
   <object-type name="QStylePainter" />
   <object-type name="QSyntaxHighlighter">
     <modify-function signature="setCurrentBlockUserData(QTextBlockUserData*)">
@@ -2126,6 +2044,8 @@
     </modify-function>
   </object-type>
   <object-type name="QSystemTrayIcon">
+    <enum-type name="ActivationReason"/>
+    <enum-type name="MessageIcon"/>
     <modify-function signature="setContextMenu(QMenu*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -2159,7 +2079,9 @@
   </object-type>
   <object-type name="QTextBlockGroup" />
   <object-type name="QTextBlockUserData" />
-  <object-type name="QTextItem" />
+  <object-type name="QTextItem">
+      <enum-type name="RenderFlag" flags="QTextItem::RenderFlags"/>
+  </object-type>
   <object-type name="QTextList" >
     <!--### Obsolete in 4.3-->
     <modify-function signature="isEmpty()const" remove="all"/>
@@ -2203,6 +2125,7 @@
     </modify-function>
   </object-type>
   <object-type name="QToolButton">
+    <enum-type name="ToolButtonPopupMode"/>
     <modify-function signature="setDefaultAction(QAction *)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -2294,6 +2217,7 @@
   </object-type>
   <object-type name="QVBoxLayout"/>
   <object-type name="QValidator">
+    <enum-type name="State"/>
     <modify-function signature="fixup(QString &amp;)const">
       <modify-argument index="return">
         <replace-type modified-type="QString"/>
@@ -2331,6 +2255,7 @@
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
   </object-type>
   <object-type name="QWorkspace">
+    <enum-type name="WindowOrder"/>
     <modify-function signature="addWindow(QWidget*, QFlags&lt;Qt::WindowType>)">
         <modify-argument index="1">
             <parent index="this" action="add" />
@@ -2340,7 +2265,9 @@
   <object-type name="QActionEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ActionAdded || %1-&gt;type() == QEvent::ActionRemoved || %1-&gt;type() == QEvent::ActionChanged" />
   <object-type name="QClipboardEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Clipboard"/>
   <object-type name="QCloseEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Close"/>
-  <object-type name="QContextMenuEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ContextMenu"/>
+  <object-type name="QContextMenuEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ContextMenu">
+      <enum-type name="Reason"/>
+  </object-type>
   <object-type name="QDragEnterEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragEnter"/>
   <object-type name="QDragLeaveEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragLeave"/>
   <object-type name="QDragMoveEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::DragMove" />
@@ -2356,7 +2283,9 @@
   </object-type>
   <object-type name="QFileOpenEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FileOpen" />
   <object-type name="QFocusEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FocusIn || %1-&gt;type() == QEvent::FocusOut" />
-  <object-type name="QGraphicsSceneContextMenuEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneContextMenu" />
+  <object-type name="QGraphicsSceneContextMenuEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneContextMenu">
+      <enum-type name="Reason"/>
+  </object-type>
   <object-type name="QGraphicsSceneDragDropEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneDragEnter || %1-&gt;type() == QEvent::GraphicsSceneDragLeave || %1-&gt;type() == QEvent::GraphicsSceneDragMove || %1-&gt;type() == QEvent::GraphicsSceneDrop" >
     <modify-function signature="setMimeData(const QMimeData *)" remove="all"/>
     <modify-function signature="setSource(QWidget *)" remove="all"/>
@@ -2374,7 +2303,16 @@
   <object-type name="QHideEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::Hide"/>
   <object-type name="QHoverEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::HoverEnter || %1-&gt;type() == QEvent::HoverLeave || %1-&gt;type() == QEvent::HoverMove"/>
   <object-type name="QIconDragEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::IconDrag"/>
-  <object-type name="QInputMethodEvent" copyable="no" polymorphic-id-expression="%1-&gt;type() == QEvent::InputMethod"/>
+
+  <object-type name="QInputMethodEvent" copyable="no" polymorphic-id-expression="%1-&gt;type() == QEvent::InputMethod">
+    <!-- only declare this if ndef QT_NO_INPUTMETHOD -->
+    <enum-type name="AttributeType"/>
+    <value-type name="Attribute">
+      <include file-name="QInputMethodEvent" location="global"/>
+    </value-type>
+    <!-- endif ndef QT_NO_INPUTMETHOD -->
+  </object-type>
+
   <object-type name="QMoveEvent" copyable = "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Move" />
   <object-type name="QResizeEvent" copyable = "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Resize"/>
   <object-type name="QShortcutEvent" copyable = "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Shortcut">
@@ -2385,7 +2323,10 @@
   </object-type>
   <object-type name="QShowEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Show"/>
   <object-type name="QStatusTipEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::StatusTip"/>
-  <object-type name="QTabletEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::TabletMove || %1-&gt;type() == QEvent::TabletPress || %1-&gt;type() == QEvent::TabletRelease"/>
+  <object-type name="QTabletEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::TabletMove || %1-&gt;type() == QEvent::TabletPress || %1-&gt;type() == QEvent::TabletRelease">
+      <enum-type name="PointerType"/>
+      <enum-type name="TabletDevice"/>
+  </object-type>
   <object-type name="QToolBarChangeEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::ToolBarChange"/>
   <object-type name="QWhatsThisClickedEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::WhatsThisClicked"/>
   <object-type name="QWheelEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Wheel"/>
@@ -2399,6 +2340,17 @@
   <object-type name="QAccessibleEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::AccessibilityDescription || %1-&gt;type() == QEvent::AccessibilityHelp"/>
   <object-type name="QAbstractButton"/>
   <object-type name="QStyle">
+    <enum-type name="ComplexControl" extensible="yes"/>
+    <enum-type name="ContentsType" extensible="yes"/>
+    <enum-type name="ControlElement" extensible="yes"/>
+    <enum-type name="PixelMetric" extensible="yes" />
+    <enum-type name="PrimitiveElement" extensible="yes" />
+    <enum-type name="RequestSoftwareInputPanel"/>
+    <enum-type name="StandardPixmap" extensible="yes"/>
+    <enum-type name="StateFlag" flags="QStyle::State"/>
+    <enum-type name="StyleHint" extensible="yes" />
+    <enum-type name="SubControl" flags="QStyle::SubControls" extensible="yes" force-integer="yes"/>
+    <enum-type name="SubElement" extensible="yes" />
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
     <modify-function signature="layoutSpacingImplementation(QSizePolicy::ControlType, QSizePolicy::ControlType, Qt::Orientation, const QStyleOption *, const QWidget *) const" virtual-slot="yes"/>
     <modify-function signature="drawComplexControl(QStyle::ComplexControl,const QStyleOptionComplex*,QPainter*,const QWidget*)const">
@@ -2422,6 +2374,7 @@
     <modify-function signature="itemTextRect(QFontMetrics,QRect,int,bool,QString)const" remove="all"/>
   </object-type>
   <object-type name="QColorDialog">
+    <enum-type name="ColorDialogOption" flags="QColorDialog::ColorDialogOptions"/>
     <!-- Obsolete method -->
     <modify-function signature="getRgba(uint,bool*,QWidget*)" remove="all" />
     <modify-function signature="getColor(const QColor&amp;, QWidget*)" allow-thread="yes" />
@@ -2432,6 +2385,8 @@
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
     </extra-includes>
+
+    <enum-type name="SizeConstraint"/>
 
     <modify-function signature="itemAt(int)const">
       <modify-argument index="return">
@@ -2491,6 +2446,7 @@
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
     </extra-includes>
+    <enum-type name="StackingMode"/>
     <modify-function signature="insertWidget(int,QWidget*)">
       <inject-code class="target" position="beginning">
         addLayoutOwnership(%CPPSELF, %2);
@@ -2501,7 +2457,9 @@
   <object-type name="QBoxLayout">
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
-  </extra-includes>
+    </extra-includes>
+
+    <enum-type name="Direction" />
 
     <modify-function signature="addWidget(QWidget *, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
       <inject-code class="target" position="beginning">
@@ -2600,6 +2558,11 @@
       <include file-name="QPainterPath" location="global"/>
       <include file-name="QVarLengthArray" location="global"/>
     </extra-includes>
+    <enum-type name="CacheModeFlag" flags="QGraphicsView::CacheMode"/>
+    <enum-type name="DragMode"/>
+    <enum-type name="OptimizationFlag" flags="QGraphicsView::OptimizationFlags"/>
+    <enum-type name="ViewportAnchor"/>
+    <enum-type name="ViewportUpdateMode"/>
     <modify-function signature="setupViewport(QWidget *)" access="non-final"/>
     <modify-function signature="setScene(QGraphicsScene*)">
       <modify-argument index="1">
@@ -2666,6 +2629,8 @@
     </modify-function>
   </object-type>
   <object-type name="QInputDialog">
+    <enum-type name="InputDialogOption"/>
+    <enum-type name="InputMode"/>
     <modify-function signature="getInteger(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
       <modify-argument index="8">
         <remove-default-expression/>
@@ -2716,6 +2681,8 @@
     <extra-includes>
       <include file-name="QVarLengthArray" location="global"/>
     </extra-includes>
+    <enum-type name="ItemIndexMethod"/>
+    <enum-type name="SceneLayer" flags="QGraphicsScene::SceneLayers"/>
     <modify-function signature="drawItems(QPainter*,int,QGraphicsItem**,const QStyleOptionGraphicsItem*,QWidget*)" remove="all" />
     <modify-function signature="contextMenuEvent(QGraphicsSceneContextMenuEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
@@ -2866,6 +2833,9 @@
     </modify-function>
   </object-type>
   <object-type name="QCalendarWidget">
+    <enum-type name="HorizontalHeaderFormat"/>
+    <enum-type name="SelectionMode"/>
+    <enum-type name="VerticalHeaderFormat"/>
     <extra-includes>
       <include file-name="QTextCharFormat" location="global"/>
     </extra-includes>
@@ -2932,6 +2902,7 @@
     <modify-function signature="mimeData(const QList&lt;QTreeWidgetItem*&gt;)const" remove="all"/>
   </object-type>
   <object-type name="QAbstractItemDelegate">
+    <enum-type name="EndEditHint"/>
     <modify-function signature="paint(QPainter*,QStyleOptionViewItem,QModelIndex)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -2947,6 +2918,7 @@
     </modify-function>
   </object-type>
   <object-type name="QTableWidgetItem" >
+    <enum-type name="ItemType"/>
     <modify-function signature="backgroundColor()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(QColor)" remove="all"/>
@@ -2970,6 +2942,7 @@
     <modify-function signature="operator&lt;(QTableWidgetItem)const" remove="all"/>
   </object-type>
   <object-type name="QListWidgetItem" >
+    <enum-type name="ItemType"/>
     <modify-function signature="QListWidgetItem(const QString &amp;, QListWidget *, int)">
       <modify-argument index="this">
         <parent index="2" action="add"/>
@@ -3024,6 +2997,8 @@
     </modify-function>
   </object-type>
   <object-type name="QCompleter">
+    <enum-type name="CompletionMode"/>
+    <enum-type name="ModelSorting"/>
     <modify-function signature="setModel(QAbstractItemModel *)">
       <modify-argument index="1">
         <reference-count action="add"/>
@@ -3041,6 +3016,8 @@
     </modify-function>
   </object-type>
   <object-type name="QTreeWidgetItem" hash-function="qHash">
+    <enum-type name="ChildIndicatorPolicy"/>
+    <enum-type name="ItemType"/>
     <modify-function signature="operator&lt;(QTreeWidgetItem)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -3167,6 +3144,8 @@
       <include file-name="QMessageBox" location="global"/>
       <include file-name="glue/qwidget_glue.h" location="local"/>
     </extra-includes>
+
+    <enum-type name="RenderFlag" flags="QWidget::RenderFlags"/>
 
     <modify-function signature="actionEvent(QActionEvent*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
@@ -3304,6 +3283,9 @@
     </modify-function>
   </object-type>
   <object-type name="QMessageBox">
+    <enum-type name="ButtonRole"/>
+    <enum-type name="Icon"/>
+    <enum-type name="StandardButton" flags="QMessageBox::StandardButtons" />
     <modify-function signature="setWindowTitle(const QString &amp;)" remove="all"/>
     <modify-function signature="setWindowModality(Qt::WindowModality)" remove="all"/>
     <modify-function signature="removeButton(QAbstractButton*)">
@@ -3346,6 +3328,9 @@
 
   </object-type>
   <object-type name="QAbstractSpinBox">
+    <enum-type name="ButtonSymbols"/>
+    <enum-type name="CorrectionMode"/>
+    <enum-type name="StepEnabledFlag" flags="QAbstractSpinBox::StepEnabled"/>
     <modify-function signature="setLineEdit(QLineEdit *)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -3372,11 +3357,19 @@
     <extra-includes>
       <include file-name="QTextCursor" location="global"/>
     </extra-includes>
+    <value-type name="iterator" >
+      <include file-name="QTextFrame" location="global"/>
+      <modify-function signature="operator++(int)" remove="all"/>
+      <modify-function signature="operator--(int)" remove="all"/>
+      <modify-function signature="operator++()" remove="all"/>
+      <modify-function signature="operator--()" remove="all"/>
+    </value-type>
   </object-type>
   <object-type name="QImageIOHandler">
     <extra-includes>
       <include file-name="QRect" location="global"/>
     </extra-includes>
+    <enum-type name="ImageOption"/>
     <modify-function signature="setFormat(const QByteArray &amp;)const" remove="all"/>
     <modify-function signature="setDevice(QIODevice*)">
       <modify-argument index="1">
@@ -3407,6 +3400,7 @@
       <include file-name="QStringList" location="global"/>
       <include file-name="QImage" location="global"/>
     </extra-includes>
+    <enum-type name="ImageReaderError"/>
     <!-- this method does nto makes sense in python -->
     <modify-function signature="read(QImage*)" remove="all" />
     <modify-function signature="setDevice(QIODevice*)">
@@ -3423,6 +3417,8 @@
       <include file-name="QRect" location="global"/>
       <include file-name="QSize" location="global"/>
     </extra-includes>
+    <enum-type name="CacheMode"/>
+    <enum-type name="MovieState"/>
     <modify-function signature="cacheMode()" remove="all"/>
     <modify-function signature="setDevice(QIODevice*)">
       <modify-argument index="1">
@@ -3432,9 +3428,12 @@
   </object-type>
   <object-type name="QAbstractPageSetupDialog"/>
   <object-type name="QPageSetupDialog">
+      <enum-type name="PageSetupDialogOption" flags="QPageSetupDialog::PageSetupDialogOptions"/>
       <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
   </object-type>
   <object-type name="QTabWidget">
+    <enum-type name="TabPosition"/>
+    <enum-type name="TabShape"/>
     <modify-function signature="addTab(QWidget*, const QString&amp;)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -3517,6 +3516,7 @@
     <modify-function signature="exec(QFlags&lt;Qt::DropAction&gt;, Qt::DropAction)" rename="exec_" allow-thread="yes"/>
   </object-type>
   <object-type name="QDateTimeEdit">
+    <enum-type name="Section" flags="QDateTimeEdit::Sections"/>
     <modify-function signature="setCalendarWidget(QCalendarWidget *)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -3541,11 +3541,13 @@
     <!--### Obsolete in 4.3-->
   </object-type>
   <object-type name="QSlider">
+      <enum-type name="TickPosition" />
   </object-type>
   <object-type name="QInputContext">
     <extra-includes>
       <include file-name="QTextFormat" location="global"/>
     </extra-includes>
+    <enum-type name="StandardFormat"/>
     <modify-function signature="setFocusWidget(QWidget*)" remove="all"/>
     <modify-function signature="filterEvent(const QEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
@@ -3593,6 +3595,11 @@
 
 
   <object-type name="QFileDialog">
+    <enum-type name="AcceptMode"/>
+    <enum-type name="DialogLabel"/>
+    <enum-type name="FileMode"/>
+    <enum-type name="Option" flags="QFileDialog::Options"/>
+    <enum-type name="ViewMode"/>
     <extra-includes>
       <include file-name="QUrl" location="global"/>
       <include file-name="QAbstractProxyModel" location="global"/>
@@ -3648,6 +3655,9 @@
     <extra-includes>
       <include file-name="QIcon" location="global"/>
     </extra-includes>
+    <enum-type name="Shape"/>
+    <enum-type name="SelectionBehavior"/>
+    <enum-type name="ButtonPosition"/>
   </object-type>
   <object-type name="QStandardItemModel" polymorphic-id-expression="qobject_cast&lt;QStandardItemModel*&gt;(%1)">
     <extra-includes>
@@ -3823,6 +3833,7 @@
       <include file-name="QImage" location="global"/>
       <include file-name="QPixmap" location="global"/>
     </extra-includes>
+    <enum-type name="Mode" />
     <modify-function signature="setMimeData(QMimeData *, QClipboard::Mode)">
       <modify-argument index="1">
         <!-- TODO: maybe this is not the best solution -->
@@ -3888,6 +3899,7 @@
     </extra-includes>
   </object-type>
   <object-type name="QRubberBand">
+    <enum-type name="Shape"/>
     <modify-function signature="QRubberBand(QRubberBand::Shape, QWidget*)">
       <modify-argument index="this">
         <parent index="2" action="add"/>
@@ -3901,6 +3913,10 @@
     <extra-includes>
       <include file-name="QTextOption" location="global"/>
     </extra-includes>
+    <enum-type name="CursorMode"/>
+    <value-type name="FormatRange">
+      <include file-name="QTextLayout" location="global"/>
+    </value-type>
   </object-type>
   <object-type name="QTableWidget">
     <modify-function signature="setHorizontalHeaderItem(int, QTableWidgetItem *)">
@@ -3968,6 +3984,10 @@
       <include file-name="QTextFormat" location="global"/>
       <include file-name="QTextCursor" location="global"/>
     </extra-includes>
+    <enum-type name="FindFlag" flags="QTextDocument::FindFlags"/>
+    <enum-type name="MetaInformation"/>
+    <enum-type name="ResourceType"/>
+    <enum-type name="Stacks" since="4.7"/>
     <modify-function signature="redo(QTextCursor*)" remove="all" />
     <modify-function signature="setDocumentLayout(QAbstractTextDocumentLayout*)">
       <modify-argument index="1">
@@ -4031,6 +4051,7 @@
   <object-type name="QSplitterHandle"/>
   <object-type name="QDial" />
   <object-type name="QLineEdit">
+    <enum-type name="EchoMode"/>
     <modify-function signature="setCompleter(QCompleter *)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -4043,7 +4064,10 @@
     </modify-function>
     <modify-function signature="del()" rename="del_" />
   </object-type>
-  <object-type name="QLCDNumber"/>
+  <object-type name="QLCDNumber">
+      <enum-type name="Mode"/>
+      <enum-type name="SegmentStyle"/>
+  </object-type>
   <object-type name="QSplashScreen">
     <modify-function signature="repaint()" remove="all"/>
     <modify-function signature="drawContents(QPainter*)">
@@ -4051,6 +4075,7 @@
     </modify-function>
   </object-type>
   <object-type name="QDockWidget">
+    <enum-type name="DockWidgetFeature" flags="QDockWidget::DockWidgetFeatures"/>
     <modify-function signature="setTitleBarWidget(QWidget*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -4075,7 +4100,11 @@
     </modify-function>
   </object-type>
   <object-type name="QDesktopWidget"/>
-  <object-type name="QFrame"/>
+  <object-type name="QFrame">
+      <enum-type name="Shadow" extensible="yes"/>
+      <enum-type name="Shape"/>
+      <enum-type name="StyleMask"/>
+  </object-type>
   <object-type name="QTextTable">
     <extra-includes>
       <include file-name="QTextCursor" location="global"/>
@@ -4150,6 +4179,10 @@
     </modify-function>
   </object-type>
   <object-type name="QPaintEngine">
+    <enum-type name="DirtyFlag" flags="QPaintEngine::DirtyFlags"/>
+    <enum-type name="PaintEngineFeature" flags="QPaintEngine::PaintEngineFeatures"/>
+    <enum-type name="PolygonDrawMode"/>
+    <enum-type name="Type"/>
     <modify-function signature="begin(QPaintDevice*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -4166,6 +4199,8 @@
     <modify-field name="state" read="false" write="false"/>
   </object-type>
   <object-type name="QComboBox">
+    <enum-type name="InsertPolicy"/>
+    <enum-type name="SizeAdjustPolicy"/>
     <modify-function signature="setCompleter(QCompleter*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -4208,6 +4243,11 @@
     <!--### Obsolete in 4.3-->
   </object-type>
   <object-type name="QTextEdit">
+    <enum-type name="AutoFormattingFlag" flags="QTextEdit::AutoFormatting"/>
+    <enum-type name="LineWrapMode"/>
+    <value-type name="ExtraSelection" >
+      <include file-name="QTextEdit" location="global"/>
+    </value-type>
     <extra-includes>
       <include file-name="QTextCursor" location="global"/>
     </extra-includes>
@@ -4224,6 +4264,17 @@
     <modify-function signature="print(QPrinter*) const" rename="print_"/>
   </object-type>
   <object-type name="QPrinter" >
+    <enum-type name="ColorMode"/>
+    <enum-type name="DuplexMode"/>
+    <enum-type name="Orientation"/>
+    <enum-type name="OutputFormat"/>
+    <enum-type name="PageOrder"/>
+    <enum-type name="PageSize" />
+    <enum-type name="PaperSource"/>
+    <enum-type name="PrintRange"/>
+    <enum-type name="PrinterMode"/>
+    <enum-type name="PrinterState"/>
+    <enum-type name="Unit"/>
     <!-- TODO: What to do with this function? -->
     <modify-function signature="getPageMargins(qreal*,qreal*,qreal*,qreal*,QPrinter::Unit)const" remove="all" />
     <modify-function signature="setEngines(QPrintEngine*,QPaintEngine*)">
@@ -4239,6 +4290,10 @@
     </extra-includes>
   </object-type>
   <object-type name="QAction">
+    <enum-type name="ActionEvent"/>
+    <enum-type name="MenuRole"/>
+    <enum-type name="Priority"/>
+    <enum-type name="SoftKeyRole"/>
     <modify-function signature="setMenu(QMenu*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -4251,6 +4306,9 @@
       <include file-name="QPainterPath" location="global"/>
       <include file-name="QPixmap" location="global"/>
     </extra-includes>
+    <enum-type name="CompositionMode"/>
+    <enum-type name="PixmapFragmentHint" flags="QPainter::PixmapFragmentHints" since="4.7"/>
+    <enum-type name="RenderHint" flags="QPainter::RenderHints"/>
     <modify-function signature="drawText(const QPointF &amp;, const QString &amp;, int, int)" remove="all"/>
     <modify-function signature="drawConvexPolygon(const QPoint *, int)" remove="all" />
     <modify-function signature="drawConvexPolygon(const QPointF *, int)" remove="all" />
@@ -4354,6 +4412,8 @@
   </inject-code>
   <inject-code class="target" file="glue/qtgui_qapp.cpp" position="end" />
   <object-type name="QApplication">
+    <enum-type name="ColorSpec"/>
+    <enum-type name="Type"/>
     <extra-includes>
       <include file-name="QBasicTimer" location="global"/>
       <include file-name="QFont" location="global"/>
@@ -4435,6 +4495,7 @@
   </object-type>
   <object-type name="QCommandLinkButton"/>
   <object-type name="QFileSystemModel" polymorphic-id-expression="qobject_cast&lt;QFileSystemModel*&gt;(%1)">
+    <enum-type name="Roles"/>
     <modify-function signature="setIconProvider(QFileIconProvider*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -4445,6 +4506,10 @@
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
     </extra-includes>
+
+    <enum-type name="FieldGrowthPolicy"/>
+    <enum-type name="ItemRole"/>
+    <enum-type name="RowWrapPolicy"/>
 
     <!-- FIXME: What to do with this function!? -->
     <modify-function signature="getLayoutPosition(QLayout*,int*,QFormLayout::ItemRole*)const" remove="all" />
@@ -4683,6 +4748,7 @@
   </object-type>
   <object-type name="QPlainTextDocumentLayout"/>
   <object-type name="QPlainTextEdit">
+    <enum-type name="LineWrapMode"/>
     <modify-function signature="setDocument(QTextDocument*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -4695,7 +4761,10 @@
     </modify-function>
   </object-type>
   <object-type name="QPrintPreviewDialog"/>
-  <object-type name="QPrintPreviewWidget"/>
+  <object-type name="QPrintPreviewWidget">
+      <enum-type name="ViewMode"/>
+      <enum-type name="ZoomMode"/>
+  </object-type>
   <object-type name="QStyledItemDelegate">
     <modify-function signature="setItemEditorFactory(QItemEditorFactory*)">
       <modify-argument index="1">
@@ -4713,18 +4782,6 @@
       </modify-argument>
     </modify-function>
   </object-type>
-
-  <!-- Qt 4.6 -->
-  <enum-type name="QGraphicsBlurEffect::BlurHint" flags="QGraphicsBlurEffect::BlurHints"/>
-  <enum-type name="QGesture::GestureCancelPolicy"/>
-  <enum-type name="QGraphicsEffect::PixmapPadMode"/>
-  <enum-type name="QGestureRecognizer::ResultFlag" flags="QGestureRecognizer::Result"/>
-  <enum-type name="QPinchGesture::ChangeFlag" flags="QPinchGesture::ChangeFlags"/>
-  <enum-type name="QGraphicsItem::PanelModality"/>
-  <enum-type name="QStyle::RequestSoftwareInputPanel"/>
-  <enum-type name="QAction::Priority"/>
-  <enum-type name="QAction::SoftKeyRole"/>
-
 
   <value-type name="QMatrix2x2"/>
   <value-type name="QMatrix2x3"/>
@@ -4796,16 +4853,24 @@
     <modify-function signature="data() const" remove="all"/>
   </value-type>
 
-  <object-type name="QGesture"/>
-  <object-type name="QGestureRecognizer"/>
+  <object-type name="QGesture">
+      <enum-type name="GestureCancelPolicy"/>
+  </object-type>
+  <object-type name="QGestureRecognizer">
+      <enum-type name="ResultFlag" flags="QGestureRecognizer::Result"/>
+  </object-type>
   <object-type name="QGraphicsAnchor"/>
   <object-type name="QGraphicsAnchorLayout"/>
-  <object-type name="QGraphicsBlurEffect"/>
+  <object-type name="QGraphicsBlurEffect">
+      <enum-type name="BlurHint" flags="QGraphicsBlurEffect::BlurHints"/>
+  </object-type>
   <object-type name="QGraphicsColorizeEffect"/>
   <object-type name="QGraphicsDropShadowEffect"/>
 
-  <enum-type name="QGraphicsEffect::ChangeFlag" flags="QGraphicsEffect::ChangeFlags"/>
-  <object-type name="QGraphicsEffect"/>
+  <object-type name="QGraphicsEffect">
+      <enum-type name="ChangeFlag" flags="QGraphicsEffect::ChangeFlags"/>
+      <enum-type name="PixmapPadMode"/>
+  </object-type>
 
   <!-- QtInternal
   <object-type name="QGraphicsEffectSource"/>
@@ -4819,7 +4884,9 @@
   <object-type name="QKeyEventTransition"/>
   <object-type name="QMouseEventTransition"/>
   <object-type name="QPanGesture"/>
-  <object-type name="QPinchGesture"/>
+  <object-type name="QPinchGesture">
+      <enum-type name="ChangeFlag" flags="QPinchGesture::ChangeFlags"/>
+  </object-type>
   <value-type name="QQuaternion"/>
 
   <!-- Symbian
@@ -4828,18 +4895,21 @@
   <object-type name="QS60MainDocument"/>
   <value-type name="QS60Style"/>
 
-  <enum-type name="QSymbianEvent::Type"/>
-  <object-type name="QSymbianEvent"/>
+  <object-type name="QSymbianEvent">
+      <enum-type name="Type"/>
+  </object-type>
   -->
 
-  <enum-type name="QSwipeGesture::SwipeDirection"/>
-  <object-type name="QSwipeGesture"/>
+  <object-type name="QSwipeGesture">
+      <enum-type name="SwipeDirection"/>
+  </object-type>
 
   <value-type name="QTileRules"/>
 
-  <enum-type name="QTouchEvent::DeviceType"/>
-  <value-type name="QTouchEvent"/>
-  <value-type name="QTouchEvent::TouchPoint"/>
+  <value-type name="QTouchEvent">
+      <enum-type name="DeviceType"/>
+      <value-type name="TouchPoint"/>
+  </value-type>
 
   <value-type name="QVector2D"/>
   <value-type name="QVector3D">

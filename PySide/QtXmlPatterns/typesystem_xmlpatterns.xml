@@ -21,18 +21,14 @@
 <typesystem package="PySide.QtXmlPatterns">
     <load-typesystem name="typesystem_core.xml" generate="no"/>
 
-    <enum-type name="QAbstractXmlNodeModel::SimpleAxis" />
-    <enum-type name="QAbstractXmlNodeModel::NodeCopySetting" />
-    <enum-type name="QXmlNodeModelIndex::NodeKind" />
-    <enum-type name="QXmlNodeModelIndex::DocumentOrder" />
-    <enum-type name="QXmlNodeModelIndex::Axis"/>
-    <enum-type name="QXmlQuery::QueryLanguage" />
-
     <value-type name="QXmlSchema"/>
     <object-type name="QXmlSchemaValidator"/>
     <object-type name="QAbstractMessageHandler" />
     <object-type name="QAbstractUriResolver" />
-    <object-type name="QAbstractXmlNodeModel" />
+    <object-type name="QAbstractXmlNodeModel">
+        <enum-type name="NodeCopySetting" />
+        <enum-type name="SimpleAxis" />
+    </object-type>
     <object-type name="QAbstractXmlReceiver" />
     <value-type name="QSourceLocation" />
     <object-type name="QXmlFormatter" />
@@ -52,6 +48,9 @@
     </value-type>
     <value-type name="QXmlNamePool" />
     <value-type name="QXmlNodeModelIndex">
+        <enum-type name="Axis"/>
+        <enum-type name="DocumentOrder" />
+        <enum-type name="NodeKind" />
         <modify-function signature="internalPointer()const" remove="all" />
         <!-- Qt internal methods -->
         <modify-function signature="name()const" remove="all" />
@@ -69,7 +68,9 @@
         <modify-function signature="reset()" remove="all" />
     </value-type>
 
-    <value-type name="QXmlQuery" />
+    <value-type name="QXmlQuery">
+        <enum-type name="QueryLanguage" />
+    </value-type>
     <object-type name="QXmlResultItems" />
     <object-type name="QXmlSerializer" />
 

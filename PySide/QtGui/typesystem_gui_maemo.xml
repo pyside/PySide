@@ -20,10 +20,11 @@
 -->
 <typesystem package="PySide.QtGui">
 
-  <enum-type name="QAbstractKineticScroller::Mode"/>
-  <enum-type name="QAbstractKineticScroller::OvershootPolicy"/>
-  <enum-type name="QAbstractKineticScroller::State"/>
-  <object-type name="QAbstractKineticScroller" />
+  <object-type name="QAbstractKineticScroller">
+      <enum-type name="Mode"/>
+      <enum-type name="OvershootPolicy"/>
+      <enum-type name="State"/>
+  </object-type>
 
   <load-typesystem name="typesystem_gui_x11.xml" generate="yes"/>
 </typesystem>

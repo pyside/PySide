@@ -26,6 +26,10 @@
   <rejection class="QSqlDriverFactoryInterface"/>
 
   <namespace-type name="QSql">
+    <enum-type name="Location"/>
+    <enum-type name="ParamTypeFlag" flags="QSql::ParamType"/>
+    <enum-type name="TableType"/>
+    <enum-type name="NumericalPrecisionPolicy"/>
     <extra-includes>
         <include file-name="QtSql/qsql.h" location="global"/>
     </extra-includes>
@@ -54,6 +58,7 @@
   </value-type>
 
   <value-type name="QSqlQuery">
+    <enum-type name="BatchExecutionMode"/>
     <extra-includes>
         <include file-name="QSqlError" location="global"/>
         <include file-name="QSqlRecord" location="global"/>
@@ -78,7 +83,9 @@
     <modify-function signature="append(QSqlField)" access="non-final"/>
   </value-type>
 
-  <value-type name="QSqlError" />
+  <value-type name="QSqlError">
+    <enum-type name="ErrorType"/>
+  </value-type>
 
   <value-type name="QSqlIndex" />
 
@@ -86,9 +93,14 @@
 
   <object-type name="QSqlRelationalDelegate"/>
 
-  <value-type name="QSqlField" />
+  <value-type name="QSqlField">
+      <enum-type name="RequiredStatus"/>
+  </value-type>
 
   <object-type name="QSqlDriver">
+    <enum-type name="DriverFeature"/>
+    <enum-type name="IdentifierType"/>
+    <enum-type name="StatementType"/>
     <extra-includes>
         <include file-name="QSqlQuery" location="global"/>
         <include file-name="QSqlError" location="global"/>
@@ -122,6 +134,8 @@
     </extra-includes>
   </object-type>
   <object-type name="QSqlResult">
+      <enum-type name="BindingSyntax"/>
+      <enum-type name="VirtualHookOperation"/>
       <extra-includes>
         <include file-name="QSqlError" location="global"/>
         <include file-name="QSqlQuery" location="global"/>
@@ -139,6 +153,7 @@
       <modify-function signature="prepare(QString)" allow-thread="yes" />
   </object-type>
   <object-type name="QSqlTableModel">
+    <enum-type name="EditStrategy"/>
     <extra-includes>
         <include file-name="QSqlIndex" location="global"/>
         <include file-name="QStringList" location="global"/>
@@ -150,19 +165,5 @@
         <include file-name="QSqlDriver" location="global"/>
     </extra-includes>
   </object-type>
-
-  <enum-type name="QSql::Location"/>
-  <enum-type name="QSql::ParamTypeFlag" flags="QSql::ParamType"/>
-  <enum-type name="QSql::TableType"/>
-  <enum-type name="QSql::NumericalPrecisionPolicy"/>
-  <enum-type name="QSqlDriver::DriverFeature"/>
-  <enum-type name="QSqlDriver::IdentifierType"/>
-  <enum-type name="QSqlDriver::StatementType"/>
-  <enum-type name="QSqlError::ErrorType"/>
-  <enum-type name="QSqlField::RequiredStatus"/>
-  <enum-type name="QSqlQuery::BatchExecutionMode"/>
-  <enum-type name="QSqlResult::BindingSyntax"/>
-  <enum-type name="QSqlResult::VirtualHookOperation"/>
-  <enum-type name="QSqlTableModel::EditStrategy"/>
 
 </typesystem>

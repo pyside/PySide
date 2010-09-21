@@ -21,30 +21,35 @@
 <typesystem package="PySide.QtScript">
     <load-typesystem name="typesystem_core.xml" generate="no" />
 
-    <enum-type name="QScriptContext::Error"/>
-    <enum-type name="QScriptContext::ExecutionState"/>
-    <enum-type name="QScriptContextInfo::FunctionType"/>
-    <enum-type name="QScriptEngine::ValueOwnership"/>
-    <enum-type name="QScriptEngine::QObjectWrapOption" flags="QScriptEngine::QObjectWrapOptions"/>
-    <enum-type name="QScriptEngineAgent::Extension"/>
-    <enum-type name="QScriptValue::ResolveFlag" flags="QScriptValue::ResolveFlags"/>
-    <enum-type name="QScriptValue::PropertyFlag" flags="QScriptValue::PropertyFlags"/>
-    <enum-type name="QScriptValue::SpecialValue"/>
-    <enum-type name="QScriptClass::QueryFlag"/>
-    <enum-type name="QScriptClass::Extension"/>
-
     <object-type name="QScriptable"/>
-    <object-type name="QScriptClass"/>
+    <object-type name="QScriptClass">
+        <enum-type name="Extension"/>
+        <enum-type name="QueryFlag"/>
+    </object-type>
     <object-type name="QScriptClassPropertyIterator"/>
-    <object-type name="QScriptContext"/>
-    <value-type name="QScriptContextInfo"/>
-    <object-type name="QScriptEngineAgent"/>
-    <object-type name="QScriptEngine"/>
+    <object-type name="QScriptContext">
+        <enum-type name="Error"/>
+        <enum-type name="ExecutionState"/>
+    </object-type>
+    <value-type name="QScriptContextInfo">
+        <enum-type name="FunctionType"/>
+    </value-type>
+    <object-type name="QScriptEngineAgent">
+        <enum-type name="Extension"/>
+    </object-type>
+    <object-type name="QScriptEngine">
+        <enum-type name="QObjectWrapOption" flags="QScriptEngine::QObjectWrapOptions"/>
+        <enum-type name="ValueOwnership"/>
+    </object-type>
     <object-type name="QScriptExtensionInterface"/>
     <object-type name="QScriptExtensionPlugin"/>
     <object-type name="QScriptProgram"/>
     <value-type name="QScriptString"/>
-    <value-type name="QScriptValue"/>
+    <value-type name="QScriptValue">
+        <enum-type name="PropertyFlag" flags="QScriptValue::PropertyFlags"/>
+        <enum-type name="ResolveFlag" flags="QScriptValue::ResolveFlags"/>
+        <enum-type name="SpecialValue"/>
+    </value-type>
     <object-type name="QScriptValueIterator"/>
 </typesystem>
 

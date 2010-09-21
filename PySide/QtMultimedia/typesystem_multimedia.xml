@@ -24,22 +24,19 @@
   <rejection class="" function-name="qobject_cast&lt;QAudioEngineFactoryInterface*&gt;"/>
   <rejection class="" function-name="qobject_interface_iid&lt;QAudioEngineFactoryInterface*&gt;"/>
 
-  <namespace-type name="QAudio"/>
-  <enum-type name="QAudio::Error"/>
-  <enum-type name="QAudio::Mode"/>
-  <enum-type name="QAudio::State"/>
-  <enum-type name="QAbstractVideoBuffer::HandleType"/>
-  <enum-type name="QAbstractVideoBuffer::MapMode"/>
-  <enum-type name="QAbstractVideoSurface::Error"/>
-  <enum-type name="QAudioFormat::Endian"/>
-  <enum-type name="QAudioFormat::SampleType"/>
-  <enum-type name="QVideoFrame::FieldType"/>
-  <enum-type name="QVideoFrame::PixelFormat"/>
-  <enum-type name="QVideoSurfaceFormat::Direction"/>
-  <enum-type name="QVideoSurfaceFormat::YCbCrColorSpace"/>
+  <namespace-type name="QAudio">
+      <enum-type name="Error"/>
+      <enum-type name="Mode"/>
+      <enum-type name="State"/>
+  </namespace-type>
 
-  <value-type name="QVideoSurfaceFormat"/>
+  <value-type name="QVideoSurfaceFormat">
+      <enum-type name="Direction"/>
+      <enum-type name="YCbCrColorSpace"/>
+  </value-type>
   <object-type name="QAbstractVideoBuffer">
+      <enum-type name="HandleType"/>
+      <enum-type name="MapMode"/>
       <modify-function signature="map(QAbstractVideoBuffer::MapMode, int*, int*)">
           <modify-argument index="0">
               <replace-type modified-type="PyObject"/>
@@ -55,10 +52,18 @@
           </inject-code>
       </modify-function>
   </object-type>
-  <object-type name="QAbstractVideoSurface"/>
-  <object-type name="QVideoFrame"/>
+  <object-type name="QAbstractVideoSurface">
+      <enum-type name="Error"/>
+  </object-type>
+  <object-type name="QVideoFrame">
+      <enum-type name="FieldType"/>
+      <enum-type name="PixelFormat"/>
+  </object-type>
 
-  <value-type name="QAudioFormat"/>
+  <value-type name="QAudioFormat">
+      <enum-type name="Endian"/>
+      <enum-type name="SampleType"/>
+  </value-type>
   <value-type name="QAudioDeviceInfo"/>
   <object-type name="QAbstractAudioDeviceInfo"/>
 

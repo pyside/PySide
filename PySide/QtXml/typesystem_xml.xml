@@ -27,14 +27,6 @@
     <rejection class="QXmlInputSource" field-name="EndOfData"/>
     <rejection class="QXmlInputSource" field-name="EndOfDocument"/>
 
-    <enum-type name="QDomNode::NodeType"/>
-    <enum-type name="QDomNode::EncodingPolicy"/>
-    <enum-type name="QDomImplementation::InvalidDataPolicy"/>
-<!--
-    <enum-type name="QXmlStreamReader::Error" />
-    <enum-type name="QXmlStreamReader::TokenType" />
--->
-
     <value-type name="QDomAttr">
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
@@ -217,11 +209,15 @@
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
 
-    <value-type name="QDomImplementation" />
+    <value-type name="QDomImplementation">
+        <enum-type name="InvalidDataPolicy"/>
+    </value-type>
 
     <value-type name="QDomNamedNodeMap" />
 
     <value-type name="QDomNode">
+        <enum-type name="EncodingPolicy"/>
+        <enum-type name="NodeType"/>
         <modify-function signature="save(QTextStream&amp;, int)const" allow-thread="yes"/>
         <modify-function signature="save(QTextStream&amp;, int, QDomNode::EncodingPolicy)const" allow-thread="yes"/>
     </value-type>
@@ -322,6 +318,8 @@
 
 <!-- These are defined already in QtCore
     <object-type name="QXmlStreamReader">
+        <enum-type name="Error" />
+        <enum-type name="TokenType" />
     </object-type>
 
     <object-type name="QXmlStreamWriter">

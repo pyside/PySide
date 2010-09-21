@@ -22,6 +22,11 @@
   <load-typesystem name="typesystem_core.xml" generate="no"/>
 
     <namespace-type name="QSsl">
+        <enum-type name="AlternateNameEntryType"/>
+        <enum-type name="EncodingFormat"/>
+        <enum-type name="KeyAlgorithm"/>
+        <enum-type name="KeyType"/>
+        <enum-type name="SslProtocol"/>
         <extra-includes>
             <include file-name="qssl.h" location="global"/>
         </extra-includes>
@@ -29,42 +34,13 @@
 
     <rejection class="QIPv6Address" field-name="c"/>
     <rejection class="QSslCertificate"/>
-    <enum-type name="QNetworkConfiguration::BearerType" />
-    <enum-type name="QAbstractSocket::NetworkLayerProtocol"/>
-    <enum-type name="QAbstractSocket::SocketError"/>
-    <enum-type name="QAbstractSocket::SocketOption"/>
-    <enum-type name="QAbstractSocket::SocketState"/>
-    <enum-type name="QAbstractSocket::SocketType"/>
-    <enum-type name="QFtp::Command"/>
-    <enum-type name="QFtp::Error"/>
-    <enum-type name="QFtp::State"/>
-    <enum-type name="QFtp::TransferMode"/>
-    <enum-type name="QFtp::TransferType"/>
-    <enum-type name="QHostAddress::SpecialAddress"/>
-    <enum-type name="QHttp::Error"/>
-    <enum-type name="QHttp::State"/>
-    <enum-type name="QHttp::ConnectionMode"/>
-    <enum-type name="QNetworkInterface::InterfaceFlag" flags="QNetworkInterface::InterfaceFlags"/>
-    <enum-type name="QNetworkProxy::Capability"/>
-    <enum-type name="QNetworkProxy::ProxyType"/>
-    <enum-type name="QUdpSocket::BindFlag" flags="QUdpSocket::BindMode"/>
-    <enum-type name="QUrlInfo::PermissionSpec"/>
-    <enum-type name="QHostInfo::HostInfoError"/>
-    <enum-type name="QSsl::KeyType"/>
-    <enum-type name="QSsl::EncodingFormat"/>
-    <enum-type name="QSsl::KeyAlgorithm"/>
-    <enum-type name="QSsl::AlternateNameEntryType"/>
-    <enum-type name="QSsl::SslProtocol"/>
-    <enum-type name="QLocalSocket::LocalSocketError"/>
-    <enum-type name="QLocalSocket::LocalSocketState"/>
-    <enum-type name="QNetworkAccessManager::Operation"/>
-    <enum-type name="QNetworkCookie::RawForm"/>
-    <enum-type name="QNetworkReply::NetworkError"/>
-    <enum-type name="QNetworkRequest::Attribute" extensible="yes"/>
-    <enum-type name="QNetworkRequest::CacheLoadControl"/>
-    <enum-type name="QNetworkRequest::KnownHeaders"/>
 
     <object-type name="QAbstractSocket">
+        <enum-type name="NetworkLayerProtocol"/>
+        <enum-type name="SocketError"/>
+        <enum-type name="SocketOption"/>
+        <enum-type name="SocketState"/>
+        <enum-type name="SocketType"/>
         <modify-function signature="connectToHost(const QString&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
         <modify-function signature="connectToHost(const QHostAddress&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
         <modify-function signature="disconnectFromHost()" allow-thread="yes" />
@@ -73,6 +49,11 @@
     </object-type>
 
     <object-type name="QFtp">
+        <enum-type name="Command"/>
+        <enum-type name="Error"/>
+        <enum-type name="State"/>
+        <enum-type name="TransferMode"/>
+        <enum-type name="TransferType"/>
         <extra-includes>
             <include file-name="autoarraypointer.h" location="global"/>
         </extra-includes>
@@ -105,6 +86,9 @@
     </object-type>
 
     <object-type name="QHttp">
+        <enum-type name="ConnectionMode"/>
+        <enum-type name="Error"/>
+        <enum-type name="State"/>
         <extra-includes>
             <include file-name="autoarraypointer.h" location="global"/>
         </extra-includes>
@@ -143,6 +127,7 @@
     </object-type>
     <object-type name="QTcpSocket"/>
     <object-type name="QUdpSocket">
+        <enum-type name="BindFlag" flags="QUdpSocket::BindMode"/>
         <extra-includes>
             <include file-name="autoarraypointer.h" location="global"/>
         </extra-includes>
@@ -190,8 +175,13 @@
 
         </modify-function>
     </object-type>
-    <object-type name="QLocalSocket"/>
+    <object-type name="QLocalSocket">
+        <enum-type name="LocalSocketError"/>
+        <enum-type name="LocalSocketState"/>
+    </object-type>
     <object-type name="QNetworkAccessManager">
+        <enum-type name="NetworkAccessibility" since="4.7"/>
+        <enum-type name="Operation"/>
         <modify-function signature="createRequest(QNetworkAccessManager::Operation, const QNetworkRequest&amp;, QIODevice *)">
           <modify-argument index="3" invalidate-after-use="yes"/>
         </modify-function>
@@ -209,16 +199,19 @@
     </object-type>
     <object-type name="QNetworkCookieJar"/>
     <object-type name="QNetworkReply">
+        <enum-type name="NetworkError"/>
         <modify-function signature="error()const">
             <rename to="errorCode" />
         </modify-function>
     </object-type>
 
     <value-type name="QHostAddress" hash-function="qHash">
+        <enum-type name="SpecialAddress"/>
         <modify-function signature="QHostAddress(quint8*)" remove="all" />
     </value-type>
 
     <value-type name="QHostInfo">
+        <enum-type name="HostInfoError"/>
         <modify-function signature="lookupHost(QString,QObject*,const char*)" access="private"/>
     </value-type>
 
@@ -228,11 +221,18 @@
 
     <value-type name="QNetworkAddressEntry" />
 
-    <value-type name="QNetworkInterface" />
+    <value-type name="QNetworkInterface">
+        <enum-type name="InterfaceFlag" flags="QNetworkInterface::InterfaceFlags"/>
+    </value-type>
 
-    <value-type name="QNetworkProxy" />
+    <value-type name="QNetworkProxy">
+        <enum-type name="Capability"/>
+        <enum-type name="ProxyType"/>
+    </value-type>
 
-    <value-type name="QUrlInfo" />
+    <value-type name="QUrlInfo">
+        <enum-type name="PermissionSpec"/>
+    </value-type>
 
     <value-type name="QIPv6Address">
         <modify-function signature="operator[](int)const" remove="all" />
@@ -241,45 +241,55 @@
 
     <value-type name="QAuthenticator" />
     <value-type name="QNetworkCookie">
+        <enum-type name="RawForm"/>
         <extra-includes>
             <include file-name="QDateTime" location="global"/>
         </extra-includes>
     </value-type>
-    <value-type name="QNetworkRequest" />
+    <value-type name="QNetworkRequest">
+        <enum-type name="Attribute" extensible="yes"/>
+        <enum-type name="LoadControl" since="4.7"/>
+        <enum-type name="Priority" since="4.7"/>
+        <enum-type name="CacheLoadControl"/>
+        <enum-type name="KnownHeaders"/>
+    </value-type>
 
-    <enum-type name="QSslError::SslError"/>
-    <enum-type name="QSslCertificate::SubjectInfo"/>
-    <enum-type name="QSslSocket::SslMode"/>
-    <enum-type name="QSslSocket::PeerVerifyMode"/>
 
     <value-type name="QSslCipher"/>
-    <value-type name="QSslError"/>
+    <value-type name="QSslError">
+        <enum-type name="SslError"/>
+    </value-type>
     <value-type name="QSslKey"/>
+
     <!-- TODO QSslCertificate requires QMultiMap which isn't implemented yet
     <value-type name="QSslCertificate"/>
     -->
+    <enum-type name="QSslCertificate::SubjectInfo"/>
+
     <value-type name="QSslConfiguration"/>
 
     <object-type name="QSslSocket">
+        <enum-type name="SslMode"/>
+        <enum-type name="PeerVerifyMode"/>
         <modify-function signature="connectToHostEncrypted(const QString&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
         <modify-function signature="waitForEncrypted(int)" allow-thread="yes" />
     </object-type>
 
 
     <!-- Qt 4.7 -->
-    <enum-type name="QNetworkConfiguration::Purpose" since="4.7"/>
-    <enum-type name="QNetworkConfiguration::StateFlag" flags="QNetworkConfiguration::StateFlags" since="4.7"/>
-    <enum-type name="QNetworkConfiguration::Type" since="4.7"/>
-    <enum-type name="QNetworkConfigurationManager::Capability" flags="QNetworkConfigurationManager::Capabilities" since="4.7"/>
-    <enum-type name="QNetworkSession::SessionError" since="4.7"/>
-    <enum-type name="QNetworkSession::State" since="4.7"/>
-    <enum-type name="QNetworkAccessManager::NetworkAccessibility" since="4.7"/>
-    <enum-type name="QNetworkRequest::Priority" since="4.7"/>
-    <enum-type name="QNetworkRequest::LoadControl" since="4.7"/>
-
-    <value-type name="QNetworkConfiguration" since="4.7"/>
-    <object-type name="QNetworkConfigurationManager" since="4.7"/>
-    <object-type name="QNetworkSession" since="4.7"/>
+    <value-type name="QNetworkConfiguration" since="4.7">
+        <enum-type name="BearerType" />
+        <enum-type name="Purpose" since="4.7"/>
+        <enum-type name="StateFlag" flags="QNetworkConfiguration::StateFlags" since="4.7"/>
+        <enum-type name="Type" since="4.7"/>
+    </value-type>
+    <object-type name="QNetworkConfigurationManager" since="4.7">
+        <enum-type name="Capability" flags="QNetworkConfigurationManager::Capabilities" since="4.7"/>
+    </object-type>
+    <object-type name="QNetworkSession" since="4.7">
+        <enum-type name="SessionError" since="4.7"/>
+        <enum-type name="State" since="4.7"/>
+    </object-type>
 
     <object-type name="QAbstractNetworkCache"/>
     <object-type name="QNetworkDiskCache"/>

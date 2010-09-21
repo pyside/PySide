@@ -53,6 +53,13 @@
   <rejection class="QTest" function-name="compare_helper"/>
 
   <namespace-type name="QTest">
+    <enum-type name="AttributeIndex"/>
+    <enum-type name="KeyAction"/>
+    <enum-type name="LogElementType"/>
+    <enum-type name="MouseAction"/>
+    <enum-type name="QBenchmarkMetric" since="4.7"/>
+    <enum-type name="SkipMode"/>
+    <enum-type name="TestFailMode"/>
     <extra-includes>
         <include file-name="QtTest" location="global"/>
     </extra-includes>
@@ -60,14 +67,6 @@
   </namespace-type>
 
   <rejection class="QTouchEventSequence"/>
-
-  <enum-type name="QTest::AttributeIndex"/>
-  <enum-type name="QTest::KeyAction"/>
-  <enum-type name="QTest::LogElementType"/>
-  <enum-type name="QTest::MouseAction"/>
-  <enum-type name="QTest::SkipMode"/>
-  <enum-type name="QTest::TestFailMode"/>
-  <enum-type name="QTest::QBenchmarkMetric" since="4.7"/>
 
   <rejection class="QSignalSpy"/>
   <rejection class="QTestEventList"/>

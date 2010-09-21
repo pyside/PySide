@@ -25,24 +25,27 @@
 
 
     <object-type name="QDeclarativeExtensionInterface"/>
-    <object-type name="QDeclarativeComponent" />
-    <enum-type name="QDeclarativeComponent::Status" />
+    <object-type name="QDeclarativeComponent">
+        <enum-type name="Status"/>
+    </object-type>
     <object-type name="QDeclarativeContext" />
     <object-type name="QDeclarativeEngine">
+        <enum-type name="ObjectOwnership" />
         <modify-function signature="setNetworkAccessManagerFactory(QDeclarativeNetworkAccessManagerFactory*)">
             <modify-argument index="1">
                 <parent index="this" action="add" />
             </modify-argument>
         </modify-function>
     </object-type>
-    <enum-type name="QDeclarativeEngine::ObjectOwnership" />
     <value-type name="QDeclarativeError" />
     <object-type name="QDeclarativeExpression" />
     <object-type name="QDeclarativeExtensionPlugin" />
-    <enum-type name="QDeclarativeImageProvider::ImageType" />
-    <object-type name="QDeclarativeImageProvider" />
-    <object-type name="QDeclarativeItem" />
-    <enum-type name="QDeclarativeItem::TransformOrigin" />
+    <object-type name="QDeclarativeImageProvider">
+        <enum-type name="ImageType" />
+    </object-type>
+    <object-type name="QDeclarativeItem">
+        <enum-type name="TransformOrigin" />
+    </object-type>
 
     <value-type name="QDeclarativeListReference" />
     <object-type name="QDeclarativeNetworkAccessManagerFactory" >
@@ -54,14 +57,16 @@
     </object-type>
     <object-type name="QDeclarativeParserStatus" />
 
-    <value-type name="QDeclarativeProperty" />
-    <enum-type name="QDeclarativeProperty::PropertyTypeCategory" />
-    <enum-type name="QDeclarativeProperty::Type" />
+    <value-type name="QDeclarativeProperty">
+        <enum-type name="PropertyTypeCategory" />
+        <enum-type name="Type" />
+    </value-type>
 
     <object-type name="QDeclarativePropertyMap" />
     <object-type name="QDeclarativePropertyValueSource" />
     <value-type name="QDeclarativeScriptString" />
-    <object-type name="QDeclarativeView" />
-    <enum-type name="QDeclarativeView::ResizeMode" />
-    <enum-type name="QDeclarativeView::Status" />
+    <object-type name="QDeclarativeView">
+        <enum-type name="ResizeMode" />
+        <enum-type name="Status" />
+    </object-type>
 </typesystem>

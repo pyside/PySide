@@ -25,13 +25,8 @@
   <rejection class="QGLWidget" function-name="setMouseTracking"/>
   <rejection class="QGLContext" field-name="currentCtx"/>
 
-  <enum-type name="QGL::FormatOption" flags="QGL::FormatOptions" force-integer="yes"/>
-  <enum-type name="QGLContext::BindOption" flags="QGLContext::BindOptions"/>
-  <enum-type name="QGLFormat::OpenGLVersionFlag" flags="QGLFormat::OpenGLVersionFlags"/>
-  <enum-type name="QGLFramebufferObject::Attachment"/>
-  <enum-type name="QGLShader::ShaderTypeBit" flags="QGLShader::ShaderType"/>
-
   <namespace-type name="QGL">
+    <enum-type name="FormatOption" flags="QGL::FormatOptions" force-integer="yes"/>
     <extra-includes>
         <include file-name="qgl.h" location="global"/>
     </extra-includes>
@@ -43,9 +38,13 @@
     </modify-function>
   </value-type>
 
-  <value-type name="QGLFormat" />
+  <value-type name="QGLFormat">
+    <enum-type name="OpenGLContextProfile" since="4.7"/>
+    <enum-type name="OpenGLVersionFlag" flags="QGLFormat::OpenGLVersionFlags"/>
+  </value-type>
 
   <object-type name="QGLContext">
+    <enum-type name="BindOption" flags="QGLContext::BindOptions"/>
     <modify-function signature="chooseContext(const QGLContext*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -64,7 +63,9 @@
     <modify-function signature="tryVisual(const QGLFormat&amp;, int)" remove="all"/>
     <modify-function signature="chooseVisual()" remove="all"/>
   </object-type>
-  <object-type name="QGLFramebufferObject"/>
+  <object-type name="QGLFramebufferObject">
+    <enum-type name="Attachment"/>
+  </object-type>
   <object-type name="QGLPixelBuffer">
     <extra-includes>
         <include file-name="QImage" location="global"/>
@@ -90,7 +91,9 @@
   </object-type>
 
   <value-type name="QGLFramebufferObjectFormat"/>
-  <object-type name="QGLShader"/>
+  <object-type name="QGLShader">
+    <enum-type name="ShaderTypeBit" flags="QGLShader::ShaderType"/>
+  </object-type>
   <object-type name="QGLShaderProgram">
     <!-- use QMatrixZxY overloads -->
     <modify-function signature="setUniformValue(int, Array)" remove="all" />
@@ -102,12 +105,10 @@
   </object-type>
 
   <!-- Qt 4.7 -->
-  <enum-type name="QGLFormat::OpenGLContextProfile" since="4.7"/>
-  <enum-type name="QGLBuffer::Access" since="4.7"/>
-  <enum-type name="QGLBuffer::Type" since="4.7"/>
-  <enum-type name="QGLBuffer::UsagePattern" since="4.7"/>
-
   <object-type name="QGLBuffer" since="4.7">
+    <enum-type name="Access" since="4.7"/>
+    <enum-type name="Type" since="4.7"/>
+    <enum-type name="UsagePattern" since="4.7"/>
     <modify-function signature="allocate(const void*, int)">
       <modify-argument index="1">
         <replace-type modified-type="const QByteArray&amp;"/>
