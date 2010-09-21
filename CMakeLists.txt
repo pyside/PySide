@@ -169,7 +169,9 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     set(PYSIDE_PYTHON_LIBRARIES ${PYTHON_LIBRARIES})
 endif()
-
+if(APPLE)
+    set(PYSIDE_PYTHON_LIBRARIES "-undefined dynamic_lookup")
+endif()
 
 set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
 
