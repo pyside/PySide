@@ -115,6 +115,12 @@
 
   <enum-type name="QElapsedTimer::ClockType" since="4.7"/>
 
+  <enum-type identified-by-value="QML_HAS_ATTACHED_PROPERTIES">
+    <extra-includes>
+      <include file-name="Qt/qdeclarative.h" location="global"/>
+    </extra-includes>
+  </enum-type>
+
   <!-- From Qt4.6 ^^^ -->
   <primitive-type name="qint8"/>
   <primitive-type name="qint16"/>
@@ -2546,6 +2552,7 @@
 
   <object-type name="QFactoryInterface"/>
 
+  <suppress-warning text="enum '_ISalnum' does not have a type entry or is not an enum" />
   <suppress-warning text="enum 'Qt::Initialization' does not have a type entry or is not an enum" />
   <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
   <suppress-warning text="signature 'findChildren(QRegExp)const' for function modification in 'QObject' not found"/>
