@@ -48,13 +48,9 @@
       </modify-function>
 
       <modify-function signature="load(QIODevice*, QWidget*)">
-        <modify-argument index="return">
-          <parent index="2" action="add"/>
-        </modify-argument>
-      </modify-function>
-
-      <!-- Syntax sugar -->
-      <add-function signature="load(const char*, QWidget*)" return-type="QWidget*">
+        <extra-includes>
+          <include file-name="glue/uitools_loadui.h" location="local"/> 
+        </extra-includes>
         <modify-argument index="2">
           <replace-default-expression with="0" />
           <rename to="parentWidget" />
@@ -63,11 +59,26 @@
           <parent index="2" action="add"/>
         </modify-argument>
         <inject-code>
-            QFile f(%1);
-            if (f.open(QIODevice::ReadOnly | QIODevice::Text))
-                %PYARG_0 = %CONVERTTOPYTHON[QWidget*](%CPPSELF.load(&amp;f, %2));
-            else
-                PyErr_SetString(PyExc_RuntimeError, "Unable to open ui file");
+            //Avoid calling the original function: %CPPSELF.load
+            %PYARG_0 = quiloader_load_ui_from_device(%CPPSELF, %1, %2);
+        </inject-code>
+     </modify-function>
+
+      <!-- Syntax sugar -->
+      <add-function signature="load(const char*, QWidget*)" return-type="QWidget*">
+        <extra-includes>
+          <include file-name="glue/uitools_loadui.h" location="local"/> 
+        </extra-includes>
+        <modify-argument index="2">
+          <replace-default-expression with="0" />
+          <rename to="parentWidget" />
+        </modify-argument>
+        <modify-argument index="return">
+          <parent index="2" action="add"/>
+        </modify-argument>
+        <inject-code>
+            //Avoid calling the original function: %CPPSELF.load
+            %PYARG_0 = quiloader_load_ui(%CPPSELF, %1, %2);
         </inject-code>
       </add-function>
     </object-type>
