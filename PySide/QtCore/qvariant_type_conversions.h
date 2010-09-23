@@ -25,8 +25,12 @@ struct Converter<QVariant::Type>
             typeName = "double"; // float is a UserType in QVariant.
         else if (pyObj == reinterpret_cast<PyObject*>(&PyLong_Type))
             typeName = "int"; // long is a UserType in QVariant.
-        else if (PyType_Check(pyObj))
-            typeName = reinterpret_cast<PyTypeObject*>(pyObj)->tp_name;
+        else if (PyType_Check(pyObj)) {
+            if (pyObj->ob_type == &Shiboken::SbkBaseWrapperType_Type)
+                typeName = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(pyObj)->original_name;
+            else
+                typeName = reinterpret_cast<PyTypeObject*>(pyObj)->tp_name;
+        }
         else if (PyString_Check(pyObj))
             typeName = PyString_AS_STRING(pyObj);
         else if (PyUnicode_Check(pyObj))
