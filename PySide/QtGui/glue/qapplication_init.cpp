@@ -15,18 +15,15 @@ void DeleteQApplicationAtExit()
 
         // Delete all widgets, this is slow but is necessary to avoid problems with python object
         foreach(QWidget* w, QApplication::allWidgets()) {
-            PyObject* pySelf = bmngr.retrieveWrapper(w);
-
             w->deleteLater();
             //Make sure all events will send before invalidated the python object
             QApplication::processEvents();
-            bmngr.invalidateWrapper(pySelf);
+            bmngr.destroyWrapper(w);
         }
 
-        PyObject* pySelf = bmngr.retrieveWrapper(cpp);
         cpp->deleteLater();
         QApplication::processEvents();
-        bmngr.invalidateWrapper(pySelf);
+        bmngr.destroyWrapper(cpp);
     }
 }
 

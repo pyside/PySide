@@ -10,10 +10,9 @@ void DeleteQCoreApplicationAtExit()
     QCoreApplication *cpp = QCoreApplication::instance();
     if (cpp) {
         Shiboken::BindingManager &bmngr = Shiboken::BindingManager::instance();
-        PyObject* pySelf = bmngr.retrieveWrapper(cpp);
         cpp->flush();
         QCoreApplication::processEvents();
-        bmngr.invalidateWrapper(pySelf);
+        bmngr.destroyWrapper(cpp);
         delete cpp;
     }
 }
