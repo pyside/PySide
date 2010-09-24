@@ -1216,6 +1216,16 @@
     <enum-type name="SelectionBehavior"/>
     <enum-type name="SelectionMode"/>
     <enum-type name="State"/>
+    <modify-function signature="setModel(QAbstractItemModel*)">
+      <modify-argument index="1">
+        <reference-count action="add"/>
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="setSelectionModel(QItemSelectionModel*)">
+      <modify-argument index="1">
+        <reference-count action="add"/>
+      </modify-argument>
+    </modify-function>
     <modify-function signature="model() const">
       <modify-argument index="return">
         <!-- Defining ownership as "default" avoids the object to be automatically
@@ -1480,11 +1490,6 @@
     <modify-function signature="paintSection(QPainter*,QRect,int)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="setModel(QAbstractItemModel*)">
-      <modify-argument index="1">
-        <reference-count action="add"/>
-      </modify-argument>
-    </modify-function>
   </object-type>
   <object-type name="QIconEngine">
     <modify-function signature="paint(QPainter*,QRect,QIcon::Mode,QIcon::State)">
@@ -1546,17 +1551,34 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QItemEditorCreatorBase"/>
+  <object-type name="QItemEditorCreatorBase"> 
+    <modify-function signature="createWidget(QWidget *) const">
+      <modify-argument index="1" invalidate-after-use="yes"/>
+    </modify-function>
+  </object-type>
   <object-type name="QItemEditorFactory">
-    <modify-function signature="registerEditor(QVariant::Type, QItemEditorCreatorBase *)">
+      <modify-function signature="registerEditor(QVariant::Type, QItemEditorCreatorBase *)">
       <modify-argument index="2">
-        <define-ownership owner="c++"/>
+        <reference-count action="add"/>
       </modify-argument>
+      <inject-code>
+        BindingManager::instance().transferOwnershipToCpp(%PYARG_2);
+      </inject-code>
     </modify-function>
     <modify-function signature="setDefaultFactory(QItemEditorFactory *)">
       <modify-argument index="1">
         <define-ownership owner="c++"/>
       </modify-argument>
+      <inject-code>
+        //this function is static we need keep ref to default value, to be able to call python virtual functions
+        static PyObject* _defaultValue = 0;
+        %CPPSELF.%FUNCTION_NAME(%1);
+        Py_INCREF(%PYARG_1);
+        if (_defaultValue)
+            Py_DECREF(_defaultValue);
+
+        _defaultValue = %PYARG_1;
+      </inject-code>
     </modify-function>
   </object-type>
   <object-type name="QItemSelectionModel">
@@ -1570,16 +1592,6 @@
       <enum-type name="ViewMode"/>
   </object-type>
   <object-type name="QColumnView">
-    <modify-function signature="setModel(QAbstractItemModel*)">
-      <modify-argument index="1">
-        <reference-count action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="setSelectionModel(QItemSelectionModel*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
     <modify-function signature="setPreviewWidget(QWidget*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -2063,17 +2075,6 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setModel(QAbstractItemModel*)">
-      <modify-argument index="1">
-        <reference-count action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="setSelectionModel(QItemSelectionModel*)">
-      <modify-argument index="1">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
     <modify-function signature="sortByColumn(int)" remove="all"/>
     <!--### Obsolete in 4.3-->
   </object-type>
@@ -2144,17 +2145,6 @@
     </modify-function>
     <modify-function signature="drawRow(QPainter*,QStyleOptionViewItem,QModelIndex)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
-    </modify-function>
-    <modify-function signature="setModel(QAbstractItemModel*)">
-      <modify-argument index="1">
-        <reference-count action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="setSelectionModel(QItemSelectionModel*)">
-      <modify-argument index="1">
-        <no-null-pointer/>
-        <parent index="this" action="add"/>
-      </modify-argument>
     </modify-function>
     <modify-function signature="sortByColumn(int)" remove="all"/>
     <!--### Obsolete in 4.3-->
@@ -3971,11 +3961,6 @@
     </modify-function>
     <modify-function signature="setItemSelected(const QTableWidgetItem*,bool)" remove="all"/>
     <modify-function signature="isItemSelected(const QTableWidgetItem*)const" remove="all"/>
-    <modify-function signature="setModel(QAbstractItemModel*)">
-      <modify-argument index="1">
-        <reference-count action="add"/>
-      </modify-argument>
-    </modify-function>
     <modify-function signature="mimeData(const QList&lt;QTableWidgetItem*&gt;)const" remove="all"/>
   </object-type>
   <object-type name="QTextDocument">

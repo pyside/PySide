@@ -1717,7 +1717,7 @@
                                 %3)
         );
         // invalidate to avoid use of python object
-        Shiboken::BindingManager::instance().invalidateWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
+        Shiboken::BindingManager::instance().destroyWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL("timeout()"), timer, SLOT("deleteLater()"));
         timer->start(%1);
@@ -1741,7 +1741,7 @@
                                 SIGNAL(timeout()),
                                 pyargs[1])
         );
-        Shiboken::BindingManager::instance().invalidateWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
+        Shiboken::BindingManager::instance().destroyWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
         timer->start(%1);
         </inject-code>
     </add-function>
@@ -1769,7 +1769,7 @@
                                 signalInstance->source,
                                 signalSignature.object())
         );
-        Shiboken::BindingManager::instance().invalidateWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
+        Shiboken::BindingManager::instance().destroyWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
         timer->start(%1);
         </inject-code>
     </add-function>
@@ -2288,13 +2288,13 @@
 
     <modify-function signature="addAnimation(QAbstractAnimation*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
 
     <modify-function signature="removeAnimation(QAbstractAnimation*)">
       <modify-argument index="1">
-        <parent index="this" action="remove"/>
+        <reference-count action="remove"/>
       </modify-argument>
     </modify-function>
 
