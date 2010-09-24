@@ -28,7 +28,7 @@ class KeepReferenceTest(UsesQApplication):
 
     def testModelWithParent(self):
         view = QTableView()
-        model = TestModel(self.app)
+        model = TestModel(None)
         view.setModel(model)
         samemodel = view.model()
         self.assertEqual(model, samemodel)
