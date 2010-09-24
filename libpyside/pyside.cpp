@@ -28,6 +28,7 @@
 #include <basewrapper.h>
 #include <conversions.h>
 #include <algorithm>
+#include <cctype>
 #include <QStack>
 
 extern "C" void init_signal(PyObject* module);
