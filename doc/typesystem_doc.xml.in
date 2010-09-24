@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<!--
+    This file is part of PySide project.
+    Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+    Contact: PySide team <contact@pyside.org>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<typesystem package="PySide">
+    <suppress-warning text="File containing conversion code for *" />
+    <suppress-warning text="File for inject code not exist: *" />
+
+    <load-typesystem name="typesystem_core.xml" generate="yes"/>
+    @if_QtDeclarative@
+    <load-typesystem name="typesystem_declarative.xml" generate="yes"/>
+    @end_QtDeclarative@
+
+    @if_QtGui@
+    <load-typesystem name="typesystem_gui.xml" generate="yes"/>
+    @end_QtGui@
+
+    @if_QtHelp@
+    <load-typesystem name="typesystem_help.xml" generate="yes" />
+    @end_QtHelp@
+
+    @if_Maemo5@
+    <load-typesystem name="typesystem_maemo5.xml" generate="yes" />
+    @end_Maemo5@
+
+    @if_Multimedia@
+    <load-typesystem name="typesystem_multimedia.xml" generate="yes" />
+    @end_Multimedia@
+
+    @if_QtNetwork@
+    <load-typesystem name="typesystem_network.xml" generate="yes" />
+    @end_QtNetwork@
+
+    @if_QtOpenGL@
+    <load-typesystem name="typesystem_opengl.xml" generate="yes" />
+    @end_QtOpenGL@
+
+    @if_QtScript@
+    <load-typesystem name="typesystem_script.xml" generate="yes" />
+    @end_QtScript@
+
+    @if_QtScriptTools@
+    <load-typesystem name="typesystem_scripttools.xml" generate="yes" />
+    @end_QtScriptTools@
+
+    @if_QtSql@
+    <load-typesystem name="typesystem_sql.xml" generate="yes" />
+    @end_QtSql@
+
+    @if_QtSvg@
+    <load-typesystem name="typesystem_svg.xml" generate="yes" />
+    @end_QtSvg@
+
+    @if_QtTest@
+    <load-typesystem name="typesystem_test.xml" generate="yes" />
+    @end_QtTest@
+
+    @if_QtUiTools@
+    <load-typesystem name="typesystem_uitools.xml" generate="yes" />
+    @end_QtUiTools@
+
+    @if_QtWebKit@
+    <load-typesystem name="typesystem_webkit.xml" generate="yes" />
+    @end_QtWebKit@
+
+    @if_QtXml@
+    <load-typesystem name="typesystem_xml.xml" generate="yes" />
+    @end_QtXml@
+
+    @if_QtXmlPatterns@
+    <load-typesystem name="typesystem_xmlpatterns.xml" generate="yes" />
+    @end_QtXmlPatterns@
+</typesystem>

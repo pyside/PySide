@@ -179,6 +179,12 @@ enable_testing()
 
 add_subdirectory(libpyside)
 # project directories
-add_subdirectory(${BINDING_NAME})
+add_subdirectory(PySide)
 add_subdirectory(tests)
-add_subdirectory(doc)
+
+find_program(DOT_EXEC dot)
+if (QT_SRC_DIR AND DOT_EXEC)
+    add_subdirectory(doc)
+else ()
+    message(STATUS "QT_SRC_DIR variable not set or graphviz not found, apidoc generation targets disabled.")
+endif()

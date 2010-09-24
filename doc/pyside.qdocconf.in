@@ -1,0 +1,352 @@
+######################## compat.qdocconf
+alias.i                         = e
+alias.include                   = input
+
+macro.0                         = "\\\\0"
+macro.b                         = "\\\\b"
+macro.n                         = "\\\\n"
+macro.r                         = "\\\\r"
+macro.i                         = "\\o"
+macro.i11                       = "\\o{1,1}"
+macro.i12                       = "\\o{1,2}"
+macro.i13                       = "\\o{1,3}"
+macro.i14                       = "\\o{1,4}"
+macro.i15                       = "\\o{1,5}"
+macro.i16                       = "\\o{1,6}"
+macro.i17                       = "\\o{1,7}"
+macro.i18                       = "\\o{1,8}"
+macro.i19                       = "\\o{1,9}"
+macro.i21                       = "\\o{2,1}"
+macro.i31                       = "\\o{3,1}"
+macro.i41                       = "\\o{4,1}"
+macro.i51                       = "\\o{5,1}"
+macro.i61                       = "\\o{6,1}"
+macro.i71                       = "\\o{7,1}"
+macro.i81                       = "\\o{8,1}"
+macro.i91                       = "\\o{9,1}"
+macro.img                       = "\\image"
+macro.endquote                  = "\\endquotation"
+macro.relatesto                 = "\\relates"
+
+spurious                        = "Missing comma in .*" \
+                                  "Missing pattern .*"
+
+######################## macros.qdocconf
+macro.aacute.HTML       = "&aacute;"
+macro.Aring.HTML        = "&Aring;"
+macro.aring.HTML        = "&aring;"
+macro.Auml.HTML         = "&Auml;"
+macro.author            = "\\bold{Author:}"
+macro.br.HTML           = "<br />"
+macro.BR.HTML           = "<br />"
+macro.copyright.HTML    = "&copy;"
+macro.eacute.HTML       = "&eacute;"
+macro.gui               = "\\bold"
+macro.hr.HTML           = "<hr />"
+macro.iacute.HTML       = "&iacute;"
+macro.key               = "\\bold"
+macro.menu              = "\\bold"
+macro.note              = "\\bold{Note:}"
+macro.oslash.HTML       = "&oslash;"
+macro.ouml.HTML         = "&ouml;"
+macro.QA                = "\\e{Qt Assistant}"
+macro.QD                = "\\e{Qt Designer}"
+macro.QL                = "\\e{Qt Linguist}"
+macro.param             = "\\e"
+macro.raisedaster.HTML  = "<sup>*</sup>"
+macro.rarrow.HTML       = "&rarr;"
+macro.reg.HTML          = "<sup>&reg;</sup>"
+macro.return            = "Returns"
+macro.starslash         = "\\c{*/}"
+macro.begincomment      = "\\c{/*}"
+macro.endcomment        = "\\c{*/}"
+macro.uuml.HTML         = "&uuml;"
+macro.mdash.HTML        = "&mdash;"
+
+macro.beginfloatleft.HTML   = "<div style=\"float: left; margin-right: 2em\">"
+macro.beginfloatright.HTML  = "<div style=\"float: right; margin-left: 2em\">"
+macro.endfloat.HTML         = "</div>"
+macro.clearfloat.HTML       = "<br style=\"clear: both\" />"
+
+######################## qt-cpp-ignore.qdocconf
+Cpp.ignoretokens        = QAXFACTORY_EXPORT \
+                          QDESIGNER_COMPONENTS_LIBRARY \
+                          QDESIGNER_EXTENSION_LIBRARY \
+                          QDESIGNER_SDK_LIBRARY \
+                          QDESIGNER_SHARED_LIBRARY \
+                          QDESIGNER_UILIB_LIBRARY \
+                          QM_EXPORT_CANVAS \
+                          QM_EXPORT_DNS \
+                          QM_EXPORT_DOM \
+                          QM_EXPORT_FTP \
+                          QM_EXPORT_HTTP \
+                          QM_EXPORT_ICONVIEW \
+                          QM_EXPORT_NETWORK \
+                          QM_EXPORT_OPENGL \
+                          QM_EXPORT_OPENVG \
+                          QM_EXPORT_SQL \
+                          QM_EXPORT_TABLE \
+                          QM_EXPORT_WORKSPACE \
+                          QM_EXPORT_XML \
+                          QT_ASCII_CAST_WARN \
+                          QT_ASCII_CAST_WARN_CONSTRUCTOR \
+                          QT_BEGIN_HEADER \
+                          QT_DESIGNER_STATIC \
+                          QT_END_HEADER \
+                          QT_FASTCALL \
+                          QT_WIDGET_PLUGIN_EXPORT \
+                          Q_COMPAT_EXPORT \
+                          Q_CORE_EXPORT \
+                          Q_CORE_EXPORT_INLINE \
+                          Q_EXPLICIT \
+                          Q_EXPORT \
+                          Q_EXPORT_CODECS_CN \
+                          Q_EXPORT_CODECS_JP \
+                          Q_EXPORT_CODECS_KR \
+                          Q_EXPORT_PLUGIN \
+                          Q_GFX_INLINE \
+                          Q_AUTOTEST_EXPORT \
+                          Q_GUI_EXPORT \
+                          Q_GUI_EXPORT_INLINE \
+                          Q_GUI_EXPORT_STYLE_CDE \
+                          Q_GUI_EXPORT_STYLE_COMPACT \
+                          Q_GUI_EXPORT_STYLE_MAC \
+                          Q_GUI_EXPORT_STYLE_MOTIF \
+                          Q_GUI_EXPORT_STYLE_MOTIFPLUS \
+                          Q_GUI_EXPORT_STYLE_PLATINUM \
+                          Q_GUI_EXPORT_STYLE_POCKETPC \
+                          Q_GUI_EXPORT_STYLE_SGI \
+                          Q_GUI_EXPORT_STYLE_WINDOWS \
+                          Q_GUI_EXPORT_STYLE_WINDOWSXP \
+                          QHELP_EXPORT \
+                          Q_INLINE_TEMPLATE \
+                          Q_INTERNAL_WIN_NO_THROW \
+                          Q_NETWORK_EXPORT \
+                          Q_OPENGL_EXPORT \
+                          Q_OPENVG_EXPORT \
+                          Q_OUTOFLINE_TEMPLATE \
+                          Q_SQL_EXPORT \
+                          Q_SVG_EXPORT \
+                          Q_SCRIPT_EXPORT \
+                          Q_SCRIPTTOOLS_EXPORT \
+                          Q_TESTLIB_EXPORT \
+                          Q_TYPENAME \
+                          Q_XML_EXPORT \
+                          Q_XMLSTREAM_EXPORT \
+                          Q_XMLPATTERNS_EXPORT \
+                          QDBUS_EXPORT \
+                          QT_BEGIN_NAMESPACE \
+                          QT_BEGIN_INCLUDE_NAMESPACE \
+                          QT_END_NAMESPACE \
+                          QT_END_INCLUDE_NAMESPACE \
+                          PHONON_EXPORT \
+                          Q_DECLARATIVE_EXPORT \
+                          Q_GADGET \
+                          QWEBKIT_EXPORT
+Cpp.ignoredirectives    = Q_DECLARE_HANDLE \
+                          Q_DECLARE_INTERFACE \
+                          Q_DECLARE_METATYPE \
+                          Q_DECLARE_OPERATORS_FOR_FLAGS \
+                          Q_DECLARE_PRIVATE \
+                          Q_DECLARE_PUBLIC \
+                          Q_DECLARE_SHARED \
+                          Q_DECLARE_TR_FUNCTIONS \
+                          Q_DECLARE_TYPEINFO \
+                          Q_DISABLE_COPY \
+                          QT_FORWARD_DECLARE_CLASS \
+                          Q_DUMMY_COMPARISON_OPERATOR \
+                          Q_ENUMS \
+                          Q_FLAGS \
+                          Q_INTERFACES \
+                          __attribute__ \
+                          K_DECLARE_PRIVATE \
+                          PHONON_OBJECT \
+                          PHONON_HEIR
+
+######################## qt-html-templates.qdocconf
+HTML.stylesheets        = classic.css
+HTML.postheader         = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n" \
+                          "<tr>\n" \
+                          "<td align=\"left\" valign=\"top\" width=\"32\">" \
+                          "<a href=\"http://qt.nokia.com/\"><img src=\"images/qt-logo.png\" align=\"left\" border=\"0\" /></a>" \
+                          "</td>\n" \
+                          "<td width=\"1\">&nbsp;&nbsp;</td>" \
+                          "<td class=\"postheader\" valign=\"center\">" \
+                          "<a href=\"index.html\">" \
+                          "<font color=\"#004faf\">Home</font></a>&nbsp;&middot;" \
+                          " <a href=\"classes.html\">" \
+                          "<font color=\"#004faf\">All&nbsp;Classes</font></a>&nbsp;&middot;" \
+                          " <a href=\"functions.html\">" \
+                          "<font color=\"#004faf\">All&nbsp;Functions</font></a>&nbsp;&middot;" \
+                          " <a href=\"overviews.html\">" \
+                          "<font color=\"#004faf\">Overviews</font></a>" \
+                          "</td>" \
+                          "</tr></table>"
+
+HTML.footer             = "<p /><address><hr /><div align=\"center\">\n" \
+                          "<table width=\"100%\" cellspacing=\"0\" border=\"0\"><tr class=\"address\">\n" \
+                          "<td width=\"40%\" align=\"left\">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies)</td>\n" \
+                          "<td width=\"20%\" align=\"center\"><a href=\"trademarks.html\">Trademarks</a></td>\n" \
+                          "<td width=\"40%\" align=\"right\"><div align=\"right\">Qt \\version</div></td>\n" \
+                          "</tr></table></div></address>"
+
+######################## qt-defines.qdocconf
+defines                 = Q_QDOC \
+                          QT_.*_SUPPORT \
+                          QT_.*_LIB \
+                          QT_COMPAT \
+                          QT_KEYPAD_NAVIGATION \
+                          QT3_SUPPORT \
+                          Q_WS_.* \
+                          Q_OS_.* \
+                          Q_BYTE_ORDER \
+                          QT_DEPRECATED \
+                          Q_NO_USING_KEYWORD \
+                          __cplusplus
+
+versionsym              = QT_VERSION_STR
+
+codeindent              = 1
+
+# Files not referenced in any qdoc file (last four needed by qtdemo)
+# See also qhp.Qt.extraFiles
+extraimages.HTML        = qt-logo \
+                          trolltech-logo \
+                          taskmenuextension-example.png \
+                          coloreditorfactoryimage.png \
+                          dynamiclayouts-example.png \
+                          stylesheet-coffee-plastique.png
+
+######################## qt.qdocconf
+
+project                 = Qt
+versionsym              =
+version                 = %VERSION%
+description             = Qt Reference Documentation
+url                     = http://qt.nokia.com/doc/@PYSIDE_QT_VERSION@
+
+edition.Desktop.modules = QtCore QtDBus QtGui QtNetwork QtOpenGL QtScript QtScriptTools QtSql QtSvg \
+                          QtWebKit QtXml QtXmlPatterns Qt3Support QtHelp \
+                          QtDesigner QtAssistant QAxContainer Phonon \
+                          QAxServer QtUiTools QtTest QtDBus
+edition.DesktopLight.modules = QtCore QtDBus QtGui Qt3SupportLight QtTest
+edition.DesktopLight.groups       = -graphicsview-api
+
+qhp.projects            = Qt
+
+qhp.Qt.file                = qt.qhp
+qhp.Qt.namespace           = com.trolltech.qt.460
+qhp.Qt.virtualFolder       = qdoc
+qhp.Qt.indexTitle          = Qt Reference Documentation
+qhp.Qt.indexRoot           =
+
+# Files not referenced in any qdoc file (last four are needed by qtdemo)
+# See also extraimages.HTML
+qhp.Qt.extraFiles          = classic.css \
+                             images/qt-logo.png \
+                             images/taskmenuextension-example.png \
+                             images/coloreditorfactoryimage.png \
+                             images/dynamiclayouts-example.png \
+                             images/stylesheet-coffee-plastique.png
+
+qhp.Qt.filterAttributes    = qt @PYSIDE_QT_VERSION@ qtrefdoc
+qhp.Qt.customFilters.Qt.name = Qt @PYSIDE_QT_VERSION@
+qhp.Qt.customFilters.Qt.filterAttributes = qt @PYSIDE_QT_VERSION@
+qhp.Qt.subprojects         = classes overviews examples
+qhp.Qt.subprojects.classes.title = Classes
+qhp.Qt.subprojects.classes.indexTitle = Qt's Classes
+qhp.Qt.subprojects.classes.selectors = class fake:headerfile
+qhp.Qt.subprojects.classes.sortPages = true
+qhp.Qt.subprojects.overviews.title = Overviews
+qhp.Qt.subprojects.overviews.indexTitle = All Overviews and HOWTOs
+qhp.Qt.subprojects.overviews.selectors = fake:page,group,module
+qhp.Qt.subprojects.examples.title = Tutorials and Examples
+qhp.Qt.subprojects.examples.indexTitle = Qt Examples
+qhp.Qt.subprojects.examples.selectors = fake:example
+
+language                = Cpp
+
+headerdirs              = @QT_SRC_DIR@/src \
+                          @QT_SRC_DIR@/extensions/activeqt \
+                          @QT_SRC_DIR@/tools/assistant/lib \
+                          @QT_SRC_DIR@/tools/assistant/compat/lib \
+                          @QT_SRC_DIR@/tools/designer/src/uitools \
+                          @QT_SRC_DIR@/tools/designer/src/lib/extension \
+                          @QT_SRC_DIR@/tools/designer/src/lib/sdk \
+                          @QT_SRC_DIR@/tools/designer/src/lib/uilib \
+                          @QT_SRC_DIR@/tools/qtestlib/src \
+                          @QT_SRC_DIR@/tools/qdbus/src
+sourcedirs              = @QT_SRC_DIR@/src \
+                          @QT_SRC_DIR@/doc/src \
+                          @QT_SRC_DIR@/extensions/activeqt \
+                          @QT_SRC_DIR@/tools/assistant/lib \
+                          @QT_SRC_DIR@/tools/assistant/compat/lib \
+                          @QT_SRC_DIR@/tools/designer/src/uitools \
+                          @QT_SRC_DIR@/tools/designer/src/lib/extension \
+                          @QT_SRC_DIR@/tools/designer/src/lib/sdk \
+                          @QT_SRC_DIR@/tools/designer/src/lib/uilib \
+                          @QT_SRC_DIR@/tools/qtestlib/src \
+                          @QT_SRC_DIR@/tools/qdbus
+
+excludedirs             = @QT_SRC_DIR@/src/3rdparty/clucene \
+                          @QT_SRC_DIR@/src/3rdparty/des \
+                          @QT_SRC_DIR@/src/3rdparty/freetype \
+                          @QT_SRC_DIR@/src/3rdparty/harfbuzz \
+                          @QT_SRC_DIR@/src/3rdparty/kdebase \
+                          @QT_SRC_DIR@/src/3rdparty/libjpeg \
+                          @QT_SRC_DIR@/src/3rdparty/libmng \
+                          @QT_SRC_DIR@/src/3rdparty/libpng \
+                          @QT_SRC_DIR@/src/3rdparty/libtiff \
+                          @QT_SRC_DIR@/src/3rdparty/md4 \
+                          @QT_SRC_DIR@/src/3rdparty/md5 \
+                          @QT_SRC_DIR@/src/3rdparty/patches \
+                          @QT_SRC_DIR@/src/3rdparty/sha1 \
+                          @QT_SRC_DIR@/src/3rdparty/sqlite \
+                          @QT_SRC_DIR@/src/3rdparty/webkit/JavaScriptCore \
+                          @QT_SRC_DIR@/src/3rdparty/webkit/WebCore \
+                          @QT_SRC_DIR@/src/3rdparty/wintab \
+                          @QT_SRC_DIR@/src/3rdparty/zlib \
+                          @QT_SRC_DIR@/doc/src/snippets \
+                          @QT_SRC_DIR@/src/3rdparty/phonon/gstreamer \
+                          @QT_SRC_DIR@/src/3rdparty/phonon/ds9 \
+                          @QT_SRC_DIR@/src/3rdparty/phonon/qt7 \
+                          @QT_SRC_DIR@/src/3rdparty/phonon/mmf \
+                          @QT_SRC_DIR@/src/3rdparty/phonon/waveout
+
+sources.fileextensions  = "*.cpp *.qdoc *.mm"
+examples.fileextensions = "*.cpp *.h *.js *.xq *.svg *.xml *.ui *.qhp *.qhcp"
+examples.imageextensions = "*.png"
+
+exampledirs             = @QT_SRC_DIR@/doc/src \
+                          @QT_SRC_DIR@/examples \
+                          @QT_SRC_DIR@/examples/tutorials \
+                          @QT_SRC_DIR@ \
+                          @QT_SRC_DIR@/qmake/examples \
+                          @QT_SRC_DIR@/src/3rdparty/webkit/WebKit/qt/docs
+imagedirs               = @QT_SRC_DIR@/doc/src/images \
+                          @QT_SRC_DIR@/examples
+outputdir               = @QT_SRC_DIR@/doc/html
+tagfile                 = @QT_SRC_DIR@/doc/html/qt.tags
+base                    = file:@QT_SRC_DIR@/doc/html
+
+HTML.generatemacrefs    = "true"
+
+######################## pyside.qdocconf
+quotinginformation      = true
+exampledirs             = @QT_SRC_DIR@/doc/src \
+                          @QT_SRC_DIR@/examples \
+                          @QT_SRC_DIR@/examples/tutorials \
+                          @QT_SRC_DIR@ \
+                          @QT_SRC_DIR@/qmake/examples \
+                          @QT_SRC_DIR@/src/3rdparty/webkit/WebKit/qt/docs
+
+imagedirs               = @QT_SRC_DIR@/doc/src/images \
+                          @QT_SRC_DIR@/examples \
+                          @QT_SRC_DIR@/doc/src/declarative/pics \
+                          @QT_SRC_DIR@/doc/src/template/image
+
+outputdir               = @DOC_DATA_DIR@
+outputformats           = WebXML
+
+generateindex           = false
+url                     = .
