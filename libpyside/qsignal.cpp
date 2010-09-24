@@ -225,7 +225,7 @@ void signalUpdateSource(PyObject* source)
     for(int i = 0, iMax = PyList_GET_SIZE(attrs.object()); i < iMax; ++i) {
         PyObject *attrName = PyList_GET_ITEM(attrs.object(), i);
         Shiboken::AutoDecRef attr(PyObject_GetAttr(reinterpret_cast<PyObject*>(source->ob_type), attrName));
-        if (attr->ob_type == &Signal_Type) {
+        if (!attr.isNull() &&  attr->ob_type == &Signal_Type) {
             Shiboken::AutoDecRef signalInstance((PyObject*)PyObject_New(SignalInstanceData, &SignalInstance_Type));
             signal_instance_initialize(signalInstance, attrName, reinterpret_cast<SignalData*>(attr.object()), source, 0);
             PyObject_SetAttr(source, attrName, signalInstance);
