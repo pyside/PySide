@@ -355,6 +355,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     QMetaProperty mp;
     Shiboken::TypeResolver* typeResolver = 0;
     PyObject* pySelf = Shiboken::BindingManager::instance().retrieveWrapper(object);
+    Q_ASSERT(pySelf);
 
     if (call != QMetaObject::InvokeMetaMethod) {
         mp = metaObject->property(id);
