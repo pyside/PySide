@@ -1226,6 +1226,11 @@
         <reference-count action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="setItemDelegate(QAbstractItemDelegate*)">
+      <modify-argument index="1">
+        <reference-count action="add"/>
+      </modify-argument>
+    </modify-function>
     <modify-function signature="model() const">
       <modify-argument index="return">
         <!-- Defining ownership as "default" avoids the object to be automatically
@@ -1338,7 +1343,7 @@
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setModel(QAbstractItemModel*)">
@@ -1551,7 +1556,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QItemEditorCreatorBase"> 
+  <object-type name="QItemEditorCreatorBase">
     <modify-function signature="createWidget(QWidget *) const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -1927,12 +1932,12 @@
 
     <modify-function signature="appendColumn(const QList&lt;QStandardItem *&gt; &amp;)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="appendRow(const QList&lt;QStandardItem *&gt; &amp;)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="appendRow(QStandardItem *)">
@@ -1942,23 +1947,23 @@
     </modify-function>
     <modify-function signature="appendRows(const QList&lt;QStandardItem *&gt; &amp;)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
 
     <modify-function signature="insertColumn(int, const QList&lt;QStandardItem *&gt; &amp;)">
       <modify-argument index="2">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="insertRow(int, const QList&lt;QStandardItem *&gt; &amp;)">
       <modify-argument index="2">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="insertRows(int, const QList&lt;QStandardItem *&gt; &amp;)">
       <modify-argument index="2">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
 
@@ -1972,7 +1977,7 @@
         }
       </inject-code>
       <modify-argument index="3">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setChild(int, QStandardItem *)">
@@ -1985,13 +1990,13 @@
         }
       </inject-code>
       <modify-argument index="2">
-        <parent index="this" action="add"/>       
+        <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
 
      <modify-function signature="takeChild(int, int)">
       <modify-argument index="return">
-        <parent index="this" action="remove"/>       
+        <parent index="this" action="remove"/>
       </modify-argument>
     </modify-function>
 
@@ -3601,7 +3606,7 @@
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
 
@@ -4198,7 +4203,7 @@
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate *)">
       <modify-argument index="1">
-        <define-ownership owner="c++"/>
+        <reference-count action="add"/>
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
