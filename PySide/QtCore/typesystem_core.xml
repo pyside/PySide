@@ -674,7 +674,15 @@
       <include file-name="QSize" location="global"/>
     </extra-includes>
   </object-type>
-  <value-type name="QLine"/>
+  <value-type name="QLine" hash-function="PySide::hash">
+    <inject-code class="native" position="beginning">
+      namespace PySide {
+          template&lt;&gt; inline uint hash(const QLine&amp; v) {
+              return qHash(qMakePair(qMakePair(v.x1(), v.y1()), qMakePair(v.x2(), v.y2())));
+          }
+      };
+    </inject-code>
+  </value-type>
   <value-type name="QLineF">
     <enum-type name="IntersectType" />
     <modify-function signature="intersect(QLineF, QPointF*)const">
@@ -756,7 +764,14 @@
     <modify-function signature="QDir(QString,QString,QFlags&lt;QDir::SortFlag>,QFlags&lt;QDir::Filter>)" remove="all" />
   </value-type>
 
-  <value-type name="QPoint">
+  <value-type name="QPoint" hash-function="PySide::hash">
+    <inject-code class="native" position="beginning">
+      namespace PySide {
+          template&lt;&gt; inline uint hash(const QPoint&amp; v) {
+              return qHash(qMakePair(v.x(), v.y()));
+          }
+      };
+    </inject-code>
     <modify-function signature="rx()" remove="all"/>
     <modify-function signature="ry()" remove="all"/>
   </value-type>
@@ -764,7 +779,14 @@
     <modify-function signature="rx()" remove="all"/>
     <modify-function signature="ry()" remove="all"/>
   </value-type>
-  <value-type name="QRect">
+  <value-type name="QRect" hash-function="PySide::hash">
+    <inject-code class="native" position="beginning">
+      namespace PySide {
+          template&lt;&gt; inline uint hash(const QRect&amp; v) {
+              return qHash(qMakePair(qMakePair(v.x(), v.y()), qMakePair(v.width(), v.height())));
+          }
+      };
+    </inject-code>
     <modify-function signature="getCoords(int*,int*,int*,int*)const">
       <remove/>
     </modify-function>
@@ -780,7 +802,15 @@
       <remove/>
     </modify-function>
   </value-type>
-  <value-type name="QSize">
+
+  <value-type name="QSize" hash-function="PySide::hash">
+    <inject-code class="native" position="beginning">
+      namespace PySide {
+          template&lt;&gt; inline uint hash(const QSize&amp; v) {
+              return qHash(qMakePair(v.width(), v.height()));
+          }
+      };
+    </inject-code>
     <modify-function signature="rheight()" remove="all"/>
     <modify-function signature="rwidth()" remove="all"/>
   </value-type>
