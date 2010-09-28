@@ -47,9 +47,6 @@ struct Converter<QVariant>
             return convertToVariantMap(pyObj);
         } else if (PySequence_Check(pyObj)) {
             return convertToVariantList(pyObj);
-        } else if (!isShibokenType(pyObj) || isUserType(pyObj)) {
-            // QVariant(User class)
-            return QVariant::fromValue<PySide::PyObjectWrapper>(pyObj);
         } else {
             // a class supported by QVariant?
             if (Shiboken::isShibokenType(pyObj)) {
@@ -60,7 +57,7 @@ struct Converter<QVariant>
                     void** data = reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr;
                     if (typeName[strlen(typeName)-1] == '*')
                         return QVariant(typeCode, data);
-                    else
+                    else if (!isUserType(pyObj)) // User types inherited from Value types *should* not be converted.
                         return QVariant(typeCode, data[0]);
                 }
             }
