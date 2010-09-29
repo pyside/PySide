@@ -685,6 +685,9 @@
         <modify-argument index="2">
             <remove-argument />
         </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(intersectType, intersectionPoint)" />
+        </modify-argument>
         <inject-code class="target" position="beginning">
             QPointF p;
             %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;p);
