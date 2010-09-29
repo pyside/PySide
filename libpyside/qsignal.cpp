@@ -255,7 +255,7 @@ char* get_type_name(PyObject* type)
             else if (objType == &PyBool_Type)
                 typeName = strdup("bool");
             else
-                typeName = strdup("object");
+                typeName = strdup("PyObject");
         }
         return typeName;
     } else if (PyString_Check(type)) {
