@@ -44,6 +44,7 @@ ignore = ["staticMetaObject",
 def recurse_into(el,obj):
     #s = el.split('.')[-1]
     #pdb.set_trace()
+    symbols = []
     for item in sorted(dir(obj)):
         if item[0]=='_':
             continue
@@ -52,44 +53,55 @@ def recurse_into(el,obj):
             mobj = eval(mel)
         except Exception:
             continue
+
         if item in ignore:
             continue
-        print mel
+        else:
+            symbols.append(mel)
+
         if isclass(mobj):
-            recurse_into(mel,mobj)
+            symbols += recurse_into(mel,mobj)
+
+    return symbols
 
 if __name__=='__main__':
-    top = sys.argv[1]
+    modules = [ 'QtCore',
+                'QtGui',
+                'QtHelp',
+               #'QtMultimedia',
+                'QtNetwork',
+                'QtOpenGL',
+                'QtScript',
+                'QtScriptTools',
+                'QtSql',
+                'QtSvg',
+                'QtTest',
+               #'QtUiTools',
+                'QtWebKit',
+                'QtXml',
+                'QtXmlPatterns' ]
 
-    if top=="PyQt4":
-        import sip
-        sip.setapi('QDate',2)
-        sip.setapi('QDateTime',2)
-        sip.setapi('QString',2)
-        sip.setapi('QTextStream',2)
-        sip.setapi('QTime',2)
-        sip.setapi('QUrl',2)
-        sip.setapi('QVariant',2)
+    libraries = ["PySide", "PyQt4"]
+    librarySymbols = {}
+    for l in libraries:
+        dictionary = []
+        if l =="PyQt4":
+            import sip
+            sip.setapi('QDate',2)
+            sip.setapi('QDateTime',2)
+            sip.setapi('QString',2)
+            sip.setapi('QTextStream',2)
+            sip.setapi('QTime',2)
+            sip.setapi('QUrl',2)
+            sip.setapi('QVariant',2)
 
-    if len(sys.argv)>2:
-        modules = sys.argv[2:]
-    else:
-        modules = [ 'QtCore',
-                    'QtGui',
-                    'QtHelp',
-                   #'QtMultimedia',
-                    'QtNetwork',
-                    'QtOpenGL',
-                    'QtScript',
-                    'QtScriptTools',
-                    'QtSql',
-                    'QtSvg',
-                    'QtTest',
-                   #'QtUiTools',
-                    'QtWebKit',
-                    'QtXml',
-                    'QtXmlPatterns' ]
+        for m in modules:
+            exec "from %s import %s" % (l,m) in globals(), locals()
+            dictionary += recurse_into(m, eval(m))
+        librarySymbols[l] = dictionary
 
-    for m in modules:
-        exec "from %s import %s" % (top,m) in globals(), locals()
-        recurse_into(m,eval(m))
+    print "PyQt4: ", len(librarySymbols["PyQt4"]), " PySide: ", len(librarySymbols["PySide"])
+
+    for symbol in librarySymbols["PyQt4"]:
+        if not (symbol in librarySymbols["PySide"]):
+            print "Symbol not found in PySide:", symbol
