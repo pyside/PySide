@@ -3,6 +3,8 @@ project(QtGui)
 if(ENABLE_X11)
     set(SPECIFIC_OS_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11info_wrapper.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11embedcontainer_wrapper.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11embedwidget_wrapper.cpp
        )
 
     if(Q_WS_MAEMO_5)
@@ -28,6 +30,7 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qmatrix4x3_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qmatrix4x4_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qgesture_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qgestureevent_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qgesturerecognizer_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qgraphicsanchor_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qgraphicsanchorlayout_wrapper.cpp
@@ -46,6 +49,8 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpinchgesture_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qquaternion_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qswipegesture_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtapandholdgesture_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtapgesture_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtilerules_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtouchevent_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qtouchevent_touchpoint_wrapper.cpp

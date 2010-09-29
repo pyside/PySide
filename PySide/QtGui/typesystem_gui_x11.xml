@@ -26,6 +26,12 @@
     <modify-function signature="visual()const" remove="all"/>
     <modify-function signature="appVisual(int)" remove="all"/>
   </value-type>
-
+  <object-type name="QX11EmbedContainer">
+    <enum-type name="Error"/>
+  </object-type>
+  <object-type name="QX11EmbedWidget">
+    <enum-type name="Error"/>
+  </object-type>
+ 
   <enum-type name="QPixmap::ShareMode"/>
 </typesystem>

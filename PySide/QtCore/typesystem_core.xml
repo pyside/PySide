@@ -58,7 +58,6 @@
 
   <rejection class="QFutureSynchronizer"/>
   <rejection class="QByteArray" function-name="contains"/>
-  <rejection class="QRunnable"/>
   <rejection class="QLatin1String" />
   <rejection class="QLatin1Char" />
   <rejection class="QStringMatcher" />
@@ -75,7 +74,6 @@
   <rejection class="*" function-name="trUtf8" />
   <rejection class="*" function-name="qt_metacast" />
   <rejection class="*" function-name="qt_metacall" />
-  <rejection class="QThreadPool"/>
   <!-- From Qt4.6 -->
   <rejection class="*" field-name="d_ptr"/>
   <rejection class="*" field-name="staticQtMetaObject"/>
@@ -430,14 +428,12 @@
   <rejection class="QForeachContainerBase"/>
   <rejection class="QGlobalStatic"/>
   <rejection class="QInternal"/>
-  <rejection class="QLibrary"/>
   <rejection class="QMetaType"/>
   <rejection class="QMetaTypeId"/>
   <rejection class="QNoImplicitBoolCast"/>
   <rejection class="QObjectCleanupHandler"/>
   <rejection class="QObjectData"/>
   <rejection class="QObjectUserData"/>
-  <rejection class="QPluginLoader"/>
   <rejection class="QPointer"/>
   <rejection class="QSetIterator"/>
   <rejection class="QSharedData"/>
@@ -2228,9 +2224,8 @@
       <include file-name="qtconcurrentthreadengine.h" location="global"/>
     </extra-includes>
   </namespace-type>
-  <!-- <object-type name="QThreadPool"/> -->
+  <object-type name="QThreadPool" />
   <value-type name="QXmlStreamAttribute"/>
-  <!-- FIXME Removed due to a shiboken bug-->
   <value-type name="QXmlStreamAttributes">
     <modify-function signature="push_back(QXmlStreamAttribute)" remove="all"/>
     <modify-function signature="pop_back()" remove="all"/>
@@ -2597,7 +2592,11 @@
   </add-function>
 
   <object-type name="QFactoryInterface"/>
+  <object-type name="QRunnable"/>
 
+  <object-type name="QPluginLoader"/>
+
+  <suppress-warning text="Unable to decide type of property: 'QLibrary::LoadHints' in class 'QPluginLoader'" />
   <suppress-warning text="enum '_ISalnum' does not have a type entry or is not an enum" />
   <suppress-warning text="enum 'Qt::Initialization' does not have a type entry or is not an enum" />
   <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>

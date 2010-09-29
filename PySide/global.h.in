@@ -337,6 +337,8 @@ QT_END_HEADER
 #include "qpytextobject.h"
 #if @ENABLE_X11@
   #include <QtGui/QX11Info>
+  #include <QtGui/QX11EmbedContainer>
+  #include <QtGui/QX11EmbedWidget>
 #endif
 #include <QtXml/QtXml>
 #include <QtUiTools/QtUiTools>
