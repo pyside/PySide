@@ -21,9 +21,9 @@ void DeleteQApplicationAtExit()
             bmngr.destroyWrapper(w);
         }
 
-        cpp->deleteLater();
-        QApplication::processEvents();
+        cpp->processEvents();
         bmngr.destroyWrapper(cpp);
+        delete cpp;
     }
 }
 
