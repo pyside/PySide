@@ -7,7 +7,7 @@
 #include <shiboken.h>
 
 static void
-_populate_parent(PyObject* pyParent, QWidget *parent)
+_populate_parent(PyObject* pyParent, QObject *parent)
 {
     if (parent->children().isEmpty())
         return;
@@ -21,7 +21,7 @@ _populate_parent(PyObject* pyParent, QWidget *parent)
 		        PyObject_SetAttrString(pyParent, qPrintable(name), pyChild);
 
             Shiboken::setParent(pyParent, pyChild);
-            _populate_parent(pyChild, qobject_cast<QWidget*>(child));
+            _populate_parent(pyChild, qobject_cast<QObject*>(child));
         }
     }
 }
