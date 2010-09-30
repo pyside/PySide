@@ -1,4 +1,5 @@
 PYSIDE_TEST(bug_360.py)
 PYSIDE_TEST(bug_376.py)
+PYSIDE_TEST(bug_392.py)
 PYSIDE_TEST(uiloader_test.py)
 PYSIDE_TEST(ui_test.py)
