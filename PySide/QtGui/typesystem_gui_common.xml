@@ -3248,6 +3248,31 @@
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
 
+    <modify-function signature="setStyle(QStyle*)">
+      <inject-code class="target" position="end">
+        Shiboken::keepReference(reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYSELF), "__style__",  %PYARG_1); 
+      </inject-code>
+    </modify-function>
+    <modify-function signature="style()const">
+      <inject-code class="target" position="end">
+        QStyle* myStyle = %CPPSELF->style();
+        if (myStyle &amp;&amp; qApp) { 
+        %PYARG_0 = %CONVERTTOPYTHON[QStyle*](myStyle);
+            QStyle *appStyle = qApp->style();
+            if (appStyle == myStyle) {
+                Shiboken::AutoDecRef pyApp(%CONVERTTOPYTHON[QApplication*](qApp));
+                Shiboken::setParent(pyApp, %PYARG_0);
+                SbkBaseWrapper_setOwnership(%PYARG_0, false);
+            } else {
+                Shiboken::keepReference(reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYSELF), "__style__",  %PYARG_0);
+            }
+        }
+      </inject-code>
+      <modify-argument index="return">
+        <define-ownership owner="default"/>
+      </modify-argument>
+    </modify-function>
+
     <modify-function signature="render(QPainter*,QPoint,QRegion,QFlags&lt;QWidget::RenderFlag&gt;)">
       <modify-argument index="2">
         <!-- Removed because the render(QPainter*) overload conflicts with the identical function in QGraphicsView -->
