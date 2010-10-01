@@ -54,20 +54,6 @@ class SegfaultCase(unittest.TestCase):
         self.assert_(self.called)
 
 
-    def testSameReference(self):
-        """Example of how sip(?) reuses memory positions"""
-        obj = Dummy()
-        s1 = str(obj)
-        del obj
-        obj = Dummy()
-        s2 = str(obj)
-        self.assertEqual(s1, s2)
-
-        obj2 = Dummy()
-        s3 = str(obj2)
-        self.assertNotEqual(s2, s3)
-
-
 if __name__ == '__main__':
     unittest.main()
 
