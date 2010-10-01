@@ -1,0 +1,16 @@
+<ui version="4.0">
+    <class>main_window</class>
+    <widget class="QMainWindow" name="main_window">
+      <widget class="QWidget" name="centralwidget"/>
+      <widget class="QMenuBar" name="menubar"/>
+      <widget class="QStatusBar" name="statusbar">
+        <action name="actionFoo">
+          <property name="text">
+            <string>foo</string>
+          </property>
+        </action>
+      </widget>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>
