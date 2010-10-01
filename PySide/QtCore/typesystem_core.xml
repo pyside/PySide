@@ -721,6 +721,10 @@
   <value-type name="QBasicTimer"/>
   <value-type name="QByteArrayMatcher"/>
   <value-type name="QDate" hash-function="PySide::hash" >
+    <conversion-rule class="target" file="qdate_conversions.h"/>
+    <extra-includes>
+      <include file-name="datetime.h" location="global"/>
+    </extra-includes>
     <enum-type name="MonthNameType"/>
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
     <modify-function signature="getDate(int*,int*,int*)" >
@@ -756,7 +760,14 @@
         </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QDateTime" hash-function="PySide::hash"/>
+
+  <value-type name="QDateTime" hash-function="PySide::hash">
+    <conversion-rule class="target" file="qdatetime_conversions.h"/>
+    <extra-includes>
+      <include file-name="datetime.h" location="global"/>
+    </extra-includes>
+  </value-type>
+
   <value-type name="QDir">
     <enum-type name="Filter" flags="QDir::Filters"/>
     <enum-type name="SortFlag" flags="QDir::SortFlags" />
@@ -818,7 +829,12 @@
     <modify-function signature="rwidth()" remove="all" />
   </value-type>
 
-  <value-type name="QTime" hash-function="PySide::hash"/>
+  <value-type name="QTime" hash-function="PySide::hash">
+    <conversion-rule class="target" file="qtime_conversions.h"/>
+    <extra-includes>
+      <include file-name="datetime.h" location="global"/>
+    </extra-includes>
+  </value-type>
   <value-type name="QPersistentModelIndex">
     <modify-function signature="internalPointer()const" remove="all"/>
     <modify-function signature="operator const QModelIndex&amp;()const" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
