@@ -88,4 +88,8 @@
     @if_QtXmlPatterns@
     <load-typesystem name="typesystem_xmlpatterns.xml" generate="yes" />
     @end_QtXmlPatterns@
+
+    @if_phonon@
+    <load-typesystem name="typesystem_phonon.xml" generate="yes" />
+    @end_phonon@
 </typesystem>

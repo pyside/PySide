@@ -20,9 +20,9 @@ configure_file(typesystem_doc.xml.in typesystem_doc.xml @ONLY)
 add_custom_target("docrsts"
     COMMAND ${GENERATORRUNNER_BINARY} --generatorSet=qtdoc
             ${pyside_BINARY_DIR}/global.h
-            --include-paths="${QT_INCLUDE_DIR}${PATH_SEP}${QT_QTCORE_INCLUDE_DIR}"
+            --include-paths="${QT_INCLUDE_DIR}${PATH_SEP}${pyside_SOURCE_DIR}"
             --api-version=${SUPPORTED_QT_VERSION}
-            --typesystem-paths="${pyside_SOURCE_DIR}${PATH_SEP}${QtCore_SOURCE_DIR}${PATH_SEP}${QtDeclarative_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}${PATH_SEP}${QtHelp_SOURCE_DIR}${PATH_SEP}${QtMaemo5_SOURCE_DIR}${PATH_SEP}${QtMultimedia_SOURCE_DIR}${PATH_SEP}${QtNetwork_SOURCE_DIR}${PATH_SEP}${QtOpenGL_SOURCE_DIR}${PATH_SEP}${QtScript_SOURCE_DIR}${PATH_SEP}${QtScriptTools_SOURCE_DIR}${PATH_SEP}${QtSql_SOURCE_DIR}${PATH_SEP}${QtSvg_SOURCE_DIR}${PATH_SEP}${QtTest_SOURCE_DIR}${PATH_SEP}${QtUiTools_SOURCE_DIR}${PATH_SEP}${QtWebKit_SOURCE_DIR}${PATH_SEP}${QtXml_SOURCE_DIR}${PATH_SEP}${QtXmlPatterns_SOURCE_DIR}"
+            --typesystem-paths="${pyside_SOURCE_DIR}${PATH_SEP}${QtCore_SOURCE_DIR}${PATH_SEP}${QtDeclarative_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}${PATH_SEP}${QtHelp_SOURCE_DIR}${PATH_SEP}${QtMaemo5_SOURCE_DIR}${PATH_SEP}${QtMultimedia_SOURCE_DIR}${PATH_SEP}${QtNetwork_SOURCE_DIR}${PATH_SEP}${QtOpenGL_SOURCE_DIR}${PATH_SEP}${QtScript_SOURCE_DIR}${PATH_SEP}${QtScriptTools_SOURCE_DIR}${PATH_SEP}${QtSql_SOURCE_DIR}${PATH_SEP}${QtSvg_SOURCE_DIR}${PATH_SEP}${QtTest_SOURCE_DIR}${PATH_SEP}${QtUiTools_SOURCE_DIR}${PATH_SEP}${QtWebKit_SOURCE_DIR}${PATH_SEP}${QtXml_SOURCE_DIR}${PATH_SEP}${QtXmlPatterns_SOURCE_DIR}${PATH_SEP}${phonon_SOURCE_DIR}"
             --library-source-dir=${QT_SRC_DIR}
             --documentation-only
             --documentation-data-dir=${DOC_DATA_DIR}
