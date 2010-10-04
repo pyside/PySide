@@ -17,11 +17,13 @@ qwidgetReparentLayout(QWidget *parent, QLayout *layout)
     {
         QLayoutItem *item = layout->itemAt(i);
         QWidget *w = item->widget();
-
         if (w)
         {
-            Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(w));
-            Shiboken::setParent(pyParent, pyChild);
+            QWidget* pw = w->parentWidget();
+            if (pw != parent) {
+                Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(w));
+                Shiboken::setParent(pyParent, pyChild);
+            }
         }
         else
         {
@@ -33,7 +35,6 @@ qwidgetReparentLayout(QWidget *parent, QLayout *layout)
 
     Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayout*>::toPython(layout));
     Shiboken::setParent(pyParent, pyChild);
-
     //remove previous references
     Shiboken::keepReference(reinterpret_cast<Shiboken::SbkBaseWrapper*>(pyChild.object()), qPrintable(retrieveObjectName(pyChild)), Py_None);
 }
@@ -41,9 +42,24 @@ qwidgetReparentLayout(QWidget *parent, QLayout *layout)
 static inline void
 qwidgetSetLayout(QWidget *self, QLayout *layout)
 {
-    if (self->layout())
+    if (!layout || self->layout())
         return;
 
-    qwidgetReparentLayout(self, layout);
-    self->setLayout(layout);
+    QObject* oldParent = layout->parent();
+    if (oldParent && oldParent != self) {
+        if (oldParent->isWidgetType()) {
+            // remove old parent policy
+            Shiboken::AutoDecRef pyLayout(Shiboken::Converter<QLayout*>::toPython(layout));
+            Shiboken::setParent(Py_None, pyLayout);
+        } else {
+            PyErr_Format(PyExc_RuntimeError, "QWidget::setLayout: Attempting to set QLayout \"%s\" on %s \"%s\", when the QLayout already has a parent",
+                          qPrintable(layout->objectName()), self->metaObject()->className(), qPrintable(self->objectName()));
+            return;
+        }
+    }
+
+    if (oldParent != self) {
+        qwidgetReparentLayout(self, layout);
+        self->setLayout(layout);
+    }
 }
