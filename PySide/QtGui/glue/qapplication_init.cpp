@@ -11,18 +11,18 @@ void DeleteQApplicationAtExit()
     QCoreApplication* cpp = QApplication::instance();
     if (cpp) {
         Shiboken::BindingManager &bmngr = Shiboken::BindingManager::instance();
-        cpp->flush();
 
         // Delete all widgets, this is slow but is necessary to avoid problems with python object
         foreach(QWidget* w, QApplication::allWidgets()) {
-            w->deleteLater();
-            //Make sure all events will send before invalidated the python object
-            QApplication::processEvents();
-            bmngr.destroyWrapper(w);
+            PyObject* wrapper = bmngr.retrieveWrapper(w);
+            if (wrapper) {
+                if (SbkBaseWrapper_hasOwnership(wrapper))
+                    delete w; // destroy C++ object and invalidate wrapper object
+                else
+                    bmngr.destroyWrapper(wrapper); // only invalidate wrapper object
+            }
         }
-
-        cpp->processEvents();
-        bmngr.destroyWrapper(cpp);
+        cpp->flush();
         delete cpp;
     }
 }
