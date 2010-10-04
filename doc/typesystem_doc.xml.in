@@ -23,9 +23,18 @@
     <suppress-warning text="File for inject code not exist: *" />
 
     <load-typesystem name="typesystem_core.xml" generate="yes"/>
-    @if_QtDeclarative@
-    <load-typesystem name="typesystem_declarative.xml" generate="yes"/>
-    @end_QtDeclarative@
+
+    @if_QtNetwork@
+    <load-typesystem name="typesystem_network.xml" generate="yes" />
+    @end_QtNetwork@
+
+    @if_QtXml@
+    <load-typesystem name="typesystem_xml.xml" generate="yes" />
+    @end_QtXml@
+
+    @if_QtScript@
+    <load-typesystem name="typesystem_script.xml" generate="yes" />
+    @end_QtScript@
 
     @if_QtGui@
     <load-typesystem name="typesystem_gui.xml" generate="yes"/>
@@ -43,17 +52,13 @@
     <load-typesystem name="typesystem_multimedia.xml" generate="yes" />
     @end_Multimedia@
 
-    @if_QtNetwork@
-    <load-typesystem name="typesystem_network.xml" generate="yes" />
-    @end_QtNetwork@
+    @if_QtDeclarative@
+    <load-typesystem name="typesystem_declarative.xml" generate="yes"/>
+    @end_QtDeclarative@
 
     @if_QtOpenGL@
     <load-typesystem name="typesystem_opengl.xml" generate="yes" />
     @end_QtOpenGL@
-
-    @if_QtScript@
-    <load-typesystem name="typesystem_script.xml" generate="yes" />
-    @end_QtScript@
 
     @if_QtScriptTools@
     <load-typesystem name="typesystem_scripttools.xml" generate="yes" />
@@ -79,9 +84,6 @@
     <load-typesystem name="typesystem_webkit.xml" generate="yes" />
     @end_QtWebKit@
 
-    @if_QtXml@
-    <load-typesystem name="typesystem_xml.xml" generate="yes" />
-    @end_QtXml@
 
     @if_QtXmlPatterns@
     <load-typesystem name="typesystem_xmlpatterns.xml" generate="yes" />
