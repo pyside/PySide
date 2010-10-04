@@ -158,8 +158,12 @@
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="fromIndex(int)" remove="all"/>
         </value-type>
-
-        <value-type name="AudioCaptureDevice">
+       <value-type name="AudioCaptureDevice">
+            <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+            <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <modify-function signature="fromIndex(int)" remove="all"/>
+        </value-type>
+        <value-type name="VideoCaptureDevice">
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="fromIndex(int)" remove="all"/>

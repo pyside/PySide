@@ -47,19 +47,41 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
     install(FILES ${typesystem_files} DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
 endmacro()
 
+#macro(check_qt_class_with_namespace module namespace class global_sources [namespace])
 macro(check_qt_class module class global_sources)
+    if (${ARGC} GREATER 3)
+        set (namespace ${ARGV3})
+        string(TOLOWER ${namespace} _namespace)
+    else ()
+        set (namespace "")
+    endif ()
+    if (${ARGC} GREATER 4)
+        set (include_file ${ARGV4})
+    else ()
+        set (include_file ${module})
+    endif ()
     string(TOLOWER ${class} _class)
     string(TOUPPER ${module} _module)
-    set(_cppfile ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module}/${_class}_wrapper.cpp)
+    if (${namespace})
+        set(_cppfile ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module}/${_namespace}_${_class}_wrapper.cpp)
+    else ()
+        set(_cppfile ${CMAKE_CURRENT_BINARY_DIR}/PySide/${module}/${_class}_wrapper.cpp)
+    endif ()
     if (DEFINED PYSIDE_${class})
         if (PYSIDE_${class})
             list(APPEND ${global_sources} ${_cppfile})
         endif()
     else()
+        if (NOT ${namespace} STREQUAL "" )
+            set (NAMESPACE_USE "using namespace ${namespace};")
+        else ()
+            set (NAMESPACE_USE "")
+        endif ()
         set(SRC_FILE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/test${class}.cxx)
         file(WRITE ${SRC_FILE}
-             "#include <${module}>\n"
+             "#include <${include_file}>\n"
              "#include <typeinfo>\n"
+	     "${NAMESPACE_USE}\n" 
              "int main() { typeid(${class}); }\n"
         )
         try_compile(Q_WORKS ${CMAKE_BINARY_DIR}
@@ -84,7 +106,6 @@ endmacro()
 # Configure include based on platform
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"
                "${CMAKE_CURRENT_BINARY_DIR}/global.h" @ONLY)
-
 
 # Only add subdirectory if the associated Qt module is found.
 macro(HAS_QT_MODULE var name)

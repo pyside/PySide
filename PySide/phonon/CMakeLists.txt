@@ -3,7 +3,7 @@ project(phonon)
 # workaround for a cmake bug under MacOSX, it finds phonon but not the include path
 if (NOT QT_PHONON_INCLUDE_DIR AND CMAKE_HOST_APPLE)
     set(QT_PHONON_INCLUDE_DIR "${QT_LIBRARY_DIR}/phonon.framework/Headers")
-endif()
+endif ()
 
 set(phonon_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_abstractaudiooutput_wrapper.cpp
@@ -43,6 +43,9 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumeslider_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_backendcapabilities_notifierwrapper_wrapper.cpp
 )
+
+check_qt_class("phonon" "VideoCaptureDevice" phonon_SRC "Phonon" "ObjectDescription")
+
 set(phonon_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${phonon_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 set(phonon_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QT_QTCORE_INCLUDE_DIR}
