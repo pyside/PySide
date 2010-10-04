@@ -1,6 +1,7 @@
 #Keep this in alphabetical sort
 
 PYSIDE_TEST(api2_test.py)
+PYSIDE_TEST(bug_172.py)
 PYSIDE_TEST(bug_243.py)
 PYSIDE_TEST(bug_300_test.py)
 PYSIDE_TEST(bug_307.py)
