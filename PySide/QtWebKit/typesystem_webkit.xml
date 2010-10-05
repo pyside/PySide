@@ -76,6 +76,9 @@
       <modify-argument index="4">
         <remove-argument />
       </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="(retval, result)"/>
+      </modify-argument>
       <inject-code class="target" position="end">
         QString str;
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, &amp;str);

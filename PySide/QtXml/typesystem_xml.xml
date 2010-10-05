@@ -68,6 +68,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -84,6 +87,9 @@
             <modify-argument index="5">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
@@ -102,6 +108,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -118,6 +127,9 @@
             <modify-argument index="4">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
@@ -136,6 +148,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -152,6 +167,9 @@
             <modify-argument index="5">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
@@ -170,6 +188,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -186,6 +207,9 @@
             <modify-argument index="4">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
@@ -278,7 +302,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PySequence"/>
+                <replace-type modified-type="(retval, ret)"/>
                 <conversion-rule class="native">
                     <insert-template name="QXmlEntityResolver_resolveEntity_return_conversion_native"/>
                 </conversion-rule>
@@ -301,7 +325,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PySequence"/>
+                <replace-type modified-type="(retval, ret)"/>
                 <conversion-rule class="native">
                     <insert-template name="QXmlEntityResolver_resolveEntity_return_conversion_native"/>
                 </conversion-rule>
@@ -336,7 +360,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PySequence" />
+                <replace-type modified-type="(retval, ok)" />
                 <conversion-rule class="native">
                     <insert-template name="fix_virtual_method_return_value_and_bool*"/>
                 </conversion-rule>
@@ -351,7 +375,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PySequence" />
+                <replace-type modified-type="(retval, ok)" />
                 <conversion-rule class="native">
                     <insert-template name="fix_virtual_method_return_value_and_bool*"/>
                 </conversion-rule>
@@ -403,7 +427,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PySequence" />
+                <replace-type modified-type="(retval, ok)" />
                 <conversion-rule class="native">
                     <insert-template name="fix_virtual_method_return_value_and_bool*"/>
                 </conversion-rule>
@@ -418,7 +442,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PySequence" />
+                <replace-type modified-type="(retval, ok)" />
                 <conversion-rule class="native">
                     <insert-template name="fix_virtual_method_return_value_and_bool*"/>
                 </conversion-rule>
