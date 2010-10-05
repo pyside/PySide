@@ -68,9 +68,9 @@ def setData(self, index, value, role):
 
     ok = False
     if index.column() == 1:
-        ok = self.setFirstName(id, value.toString())
+        ok = self.setFirstName(id, value)
     else:
-        ok = self.setLastName(id, value.toString())
+        ok = self.setLastName(id, value)
     self.refresh()
     return ok
 }

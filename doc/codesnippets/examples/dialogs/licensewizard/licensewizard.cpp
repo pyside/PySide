@@ -83,7 +83,7 @@ void LicenseWizard::showHelp()
 {
     static QString lastHelpMessage;
 
-    QString message;
+    message = ""
 
     switch (currentId()) {
     case Page_Intro:

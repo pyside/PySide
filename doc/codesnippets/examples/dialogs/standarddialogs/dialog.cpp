@@ -63,9 +63,9 @@
 //! [2]
 
 //! [3]
-    QString text = QInputDialog::getText(self, self.tr("QInputDialog().getText()"),
+    text = QInputDialog::getText(self, self.tr("QInputDialog().getText()"),
                                          self.tr("User name:"), QLineEdit.Normal,
                                          QDir().home().dirName(), ok)
-    if ok and not text.isEmpty():
+    if ok and text:
         textLabel.setText(text)
 //! [3]

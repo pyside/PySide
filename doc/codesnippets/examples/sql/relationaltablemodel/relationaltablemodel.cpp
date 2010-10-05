@@ -100,11 +100,11 @@ def main():
 
     createRelationalTables()
 
-    QSqlRelationalTableModel model
+    model = QSqlRelationalTableModel()
 
-    initializeModel(&model)
+    initializeModel(model)
 
-    view = createView(QObject.tr("Relational Table Model"), &model)
+    view = createView(QObject.tr("Relational Table Model"), model)
     view.show()
 
     return app.exec_()

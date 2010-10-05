@@ -113,7 +113,7 @@ def createConclusionPage(self):
 def main():
     app = QApplication(sys.argv)
 
-    translatorFileName = QLatin1String("qt_")
+    translatorFileName = "qt_"
     translatorFileName += QLocale.system().name()
     translator = QTranslator(app)
     if translator.load(translatorFileName, QLibraryInfo.location(QLibraryInfo.TranslationsPath)):

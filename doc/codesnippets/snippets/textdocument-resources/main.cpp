@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 //! [Adding a resource]
     document.addResource(QTextDocument.ImageResource,
-        QUrl("mydata://image.png"), QVariant(image))
+        QUrl("mydata://image.png"), image)
 //! [Adding a resource]
 
 //! [Inserting an image with a cursor]

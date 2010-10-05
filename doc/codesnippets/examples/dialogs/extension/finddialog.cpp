@@ -78,7 +78,7 @@ def __init__(self, parent):
 //! [3]
     connect(moreButton, SIGNAL("toggled(bool)"), extension, SLOT("setVisible(bool)"))
 
-    QVBoxLayout *extensionLayout =  QVBoxLayout
+    extensionLayout =  QVBoxLayout()
     extensionLayout.setMargin(0)
     extensionLayout.addWidget(wholeWordsCheckBox)
     extensionLayout.addWidget(backwardCheckBox)
@@ -87,17 +87,17 @@ def __init__(self, parent):
 //! [3]
 
 //! [4]
-    topLeftLayout = QHBoxLayout
+    topLeftLayout = QHBoxLayout()
     topLeftLayout.addWidget(label)
     topLeftLayout.addWidget(lineEdit)
 
-    leftLayout = QVBoxLayout
+    leftLayout = QVBoxLayout()
     leftLayout.addLayout(topLeftLayout)
     leftLayout.addWidget(caseCheckBox)
     leftLayout.addWidget(fromStartCheckBox)
     leftLayout.addSself.tretch(1)
 
-    mainLayout = QGridLayout
+    mainLayout = QGridLayout()
     mainLayout.setSizeConsself.traint(QLayout.SetFixedSize)
     mainLayout.addLayout(leftLayout, 0, 0)
     mainLayout.addWidget(buttonBox, 0, 1)

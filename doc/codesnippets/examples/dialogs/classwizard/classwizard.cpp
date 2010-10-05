@@ -60,14 +60,14 @@ def __init__(self, parent):
 //! [3]
 def accept(self):
 //! [3] //! [4]
-    className = self.field("className").toByteArray()
-    baseClass = self.field("baseClass").toByteArray()
-    macroName = self.field("macroName").toByteArray()
-    baseInclude = self.field("baseInclude").toByteArray()
+    className = self.field("className")
+    baseClass = self.field("baseClass")
+    macroName = self.field("macroName")
+    baseInclude = self.field("baseInclude")
 
-    outputDir = self.field("outputDir").toString()
-    header = self.field("header").toString()
-    implementation = self.field("implementation").toString()
+    outputDir = self.field("outputDir")
+    header = self.field("header")
+    implementation = self.field("implementation")
 //! [4]
 
 ...
@@ -223,17 +223,17 @@ class CodeStylePage(QWizardPage):
 
 //! [16]
     def initializePage(self):
-        className = self.field("className").toString()
+        className = self.field("className")
         self.macroNameLineEdit.setText(className.toUpper() + "_H")
 
-        baseClass = self.field("baseClass").toString()
+        baseClass = self.field("baseClass")
 
-        self.includeBaseCheckBox.setChecked(not baseClass.isEmpty())
-        self.includeBaseCheckBox.setEnabled(not baseClass.isEmpty())
-        self.baseIncludeLabel.setEnabled(not baseClass.isEmpty())
-        self.baseIncludeLineEdit.setEnabled(not baseClass.isEmpty())
+        self.includeBaseCheckBox.setChecked(len(baseClass))
+        self.includeBaseCheckBox.setEnabled(len(baseClass))
+        self.baseIncludeLabel.setEnabled(len(baseClass))
+        self.baseIncludeLineEdit.setEnabled(len(baseClass))
 
-        if baseClass.isEmpty():
+        if not baseClass:
             self.baseIncludeLineEdit.clear()
         elsif QRegExp("Q[A-Z].*").exactMatch(baseClass):
             baseIncludeLineEdit.setText("<" + baseClass + ">")
