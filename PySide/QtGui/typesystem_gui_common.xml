@@ -3250,13 +3250,13 @@
 
     <modify-function signature="setStyle(QStyle*)">
       <inject-code class="target" position="end">
-        Shiboken::keepReference(reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYSELF), "__style__",  %PYARG_1); 
+        Shiboken::keepReference(reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYSELF), "__style__",  %PYARG_1);
       </inject-code>
     </modify-function>
     <modify-function signature="style()const">
       <inject-code class="target" position="end">
         QStyle* myStyle = %CPPSELF->style();
-        if (myStyle &amp;&amp; qApp) { 
+        if (myStyle &amp;&amp; qApp) {
         %PYARG_0 = %CONVERTTOPYTHON[QStyle*](myStyle);
             QStyle *appStyle = qApp->style();
             if (appStyle == myStyle) {
@@ -4966,7 +4966,7 @@
       <include file-name="QMatrix4x4" location="global"/>
     </extra-includes>
   </value-type>
-  
+
   <suppress-warning text="template baseclass 'QGenericMatrix&lt;qreal&gt;' of '*' is not known"/>
   <suppress-warning text="signature 'QApplication(int&amp;,char**)' for function modification in 'QApplication' not found."/>
   <suppress-warning text="signature 'QApplication(int&amp;,char**,bool)' for function modification in 'QApplication' not found."/>
