@@ -1867,9 +1867,6 @@
         <modify-argument index="4">
             <remove-argument />
         </modify-argument>
-        <modify-argument index="return">
-            <replace-type modified-type="(retval, pid)"/>
-        </modify-argument>
         <inject-code class="target" position="beginning">
         qint64 pid;
         %RETURN_TYPE retval = %TYPE::%FUNCTION_NAME(%1, %2, %3, &amp;pid);
@@ -2534,7 +2531,7 @@
 
     <modify-function signature="defaultAnimations() const" remove="all"/>
 
-    <add-function signature="configuration()" return-type="list of QAbstractState" >
+    <add-function signature="configuration()" return-type="PySequence*" >
         <inject-code class="target" position="beginning">
             %PYARG_0 = PySet_New(0);
             foreach(QAbstractState* abs_state, %CPPSELF.configuration()) {
@@ -2545,7 +2542,7 @@
         </inject-code>
     </add-function>
 
-    <add-function signature="defaultAnimations()" return-type="list of QAbstractAnimation" >
+    <add-function signature="defaultAnimations()" return-type="PySequence*" >
         <inject-code class="target" position="beginning">
             %PYARG_0 = PyList_New(0);
             foreach(QAbstractAnimation* abs_anim, %CPPSELF.defaultAnimations()) {
