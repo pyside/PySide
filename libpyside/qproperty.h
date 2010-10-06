@@ -30,11 +30,6 @@
 namespace PySide
 {
 
-extern "C"
-{
-    extern PYSIDE_API PyTypeObject QProperty_Type;
-}; //extern "C"
-
 PYSIDE_API bool isQPropertyType(PyObject* pyObj);
 
 /**

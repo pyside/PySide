@@ -388,7 +388,7 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
 
         //Register properties
-        if (value->ob_type == &QProperty_Type) {
+        if (value->ob_type == &PySideQPropertyType) {
             mo->addProperty(PyString_AsString(key), value);
         }
 
