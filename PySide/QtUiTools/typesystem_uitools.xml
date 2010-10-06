@@ -23,6 +23,18 @@
     <load-typesystem name="typesystem_xml.xml" generate="no" />
 
     <object-type name="QUiLoader">
+      <extra-includes>
+        <include file-name="glue/plugins.h" location="local"/>
+      </extra-includes>
+      <inject-code>
+          Q_IMPORT_PLUGIN(uiplugin);
+      </inject-code>
+      <add-function signature="registerCustomWidget(PyObject*)" return-type="void">
+         <inject-code class="target" position="beginning">
+             registerCustomWidget(%PYARG_1);
+             %CPPSELF.addPluginPath(""); // force reload widgets
+         </inject-code>
+      </add-function>
       <modify-function signature="createAction(QObject *, const QString&amp;)">
         <modify-argument index="return">
           <parent index="1" action="add"/>
