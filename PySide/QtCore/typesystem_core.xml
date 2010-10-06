@@ -1165,6 +1165,9 @@
       <modify-argument index="return">
         <parent index="this" action="add"/>
       </modify-argument>
+      <modify-argument index="2">
+          <replace-default-expression with="QString()" />
+      </modify-argument>
     </add-function>
     <add-function signature="findChildren(PyTypeObject*, const QString&amp;)" return-type="PySequence*" >
         <inject-code class="target" position="beginning">
