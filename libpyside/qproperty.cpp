@@ -164,7 +164,7 @@ bool isQPropertyType(PyObject* pyObj)
     return false;
 }
 
-int qproperty_set(PyObject* self, PyObject* source, PyObject* value)
+int qpropertySet(PyObject* self, PyObject* source, PyObject* value)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     if (data->fset) {
@@ -181,7 +181,7 @@ int qproperty_set(PyObject* self, PyObject* source, PyObject* value)
     return -1;
 }
 
-PyObject* qproperty_get(PyObject* self, PyObject* source)
+PyObject* qpropertyGet(PyObject* self, PyObject* source)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     if (data->fget) {
@@ -193,7 +193,7 @@ PyObject* qproperty_get(PyObject* self, PyObject* source)
     return 0;
 }
 
-int qproperty_reset(PyObject* self, PyObject* source)
+int qpropertyReset(PyObject* self, PyObject* source)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     if (data->freset) {
@@ -207,13 +207,13 @@ int qproperty_reset(PyObject* self, PyObject* source)
 }
 
 
-const char* qproperty_get_type(PyObject* self)
+const char* qpropertyGetType(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return data->typeName;
 }
 
-PyObject* qproperty_get_object(PyObject* source, PyObject* name)
+PyObject* qpropertyGetObject(PyObject* source, PyObject* name)
 {
     PyObject* attr = PyObject_GenericGetAttr(source, name);
     if (attr && isQPropertyType(attr))
@@ -249,55 +249,55 @@ char* translate_type_name(PyObject* type)
     return 0;
 }
 
-bool qproperty_is_readble(PyObject* self)
+bool qpropertyIsReadable(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return (data->fget != 0);
 }
 
-bool qproperty_is_writable(PyObject* self)
+bool qpropertyIsWritable(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return (data->fset != 0);
 }
 
-bool qproperty_has_reset(PyObject* self)
+bool qpropertyHasReset(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return (data->freset != 0);
 }
 
-bool qproperty_is_designable(PyObject* self)
+bool qpropertyIsDesignable(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return data->designable;
 }
 
-bool qproperty_is_scriptable(PyObject* self)
+bool qpropertyIsScriptable(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return data->scriptable;
 }
 
-bool qproperty_is_stored(PyObject* self)
+bool qpropertyIsStored(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return data->stored;
 }
 
-bool qproperty_is_user(PyObject* self)
+bool qpropertyIsUser(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return data->user;
 }
 
-bool qproperty_is_constant(PyObject* self)
+bool qpropertyIsConstant(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return data->constant;
 }
 
-bool qproperty_is_final(PyObject* self)
+bool qpropertyIsFinal(PyObject* self)
 {
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
     return data->final;

@@ -46,7 +46,7 @@ PYSIDE_API bool isQPropertyType(PyObject* pyObj);
  * @param   value The value to set in property
  * @return  Return 0 if ok or -1 if this function fail
  **/
-PYSIDE_API int qproperty_set(PyObject* self, PyObject* source, PyObject* value);
+PYSIDE_API int qpropertySet(PyObject* self, PyObject* source, PyObject* value);
 
 /**
  * This function call get property function
@@ -56,7 +56,7 @@ PYSIDE_API int qproperty_set(PyObject* self, PyObject* source, PyObject* value);
  * @param   source The QObject witch has the property
  * @return  Return the result of property get function or 0 if this fail
  **/
-PYSIDE_API PyObject* qproperty_get(PyObject* self, PyObject* source);
+PYSIDE_API PyObject* qpropertyGet(PyObject* self, PyObject* source);
 
 /**
  * This function call reset property function
@@ -66,7 +66,7 @@ PYSIDE_API PyObject* qproperty_get(PyObject* self, PyObject* source);
  * @param   source The QObject witch has the property
  * @return  Return 0 if ok or -1 if this function fail
  **/
-PYSIDE_API int qproperty_reset(PyObject* self, PyObject* source);
+PYSIDE_API int qpropertyReset(PyObject* self, PyObject* source);
 
 
 /**
@@ -76,7 +76,7 @@ PYSIDE_API int qproperty_reset(PyObject* self, PyObject* source);
  * @param   self The property object
  * @return  Return the property type name
  **/
-PYSIDE_API const char* qproperty_get_type(PyObject* self);
+PYSIDE_API const char* qpropertyGetType(PyObject* self);
 
 /**
  * This function search in the source object for desired property
@@ -85,7 +85,7 @@ PYSIDE_API const char* qproperty_get_type(PyObject* self);
  * @param   name The property name
  * @return  Return a new reference to property object
  **/
-PYSIDE_API PyObject* qproperty_get_object(PyObject* source, PyObject* name);
+PYSIDE_API PyObject* qpropertyGetObject(PyObject* source, PyObject* name);
 
 
 /**
@@ -95,7 +95,7 @@ PYSIDE_API PyObject* qproperty_get_object(PyObject* source, PyObject* name);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_readble(PyObject* self);
+PYSIDE_API bool qpropertyIsReadable(PyObject* self);
 
 /**
  * This function check if property has write function
@@ -104,7 +104,7 @@ PYSIDE_API bool qproperty_is_readble(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_writable(PyObject* self);
+PYSIDE_API bool qpropertyIsWritable(PyObject* self);
 
 /**
  * This function check if property has reset function
@@ -113,7 +113,7 @@ PYSIDE_API bool qproperty_is_writable(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_has_reset(PyObject* self);
+PYSIDE_API bool qpropertyHasReset(PyObject* self);
 
 /**
  * This function check if property has the flag DESIGNABLE setted
@@ -122,7 +122,7 @@ PYSIDE_API bool qproperty_has_reset(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_designable(PyObject* self);
+PYSIDE_API bool qpropertyIsDesignable(PyObject* self);
 
 /**
  * This function check if property has the flag SCRIPTABLE setted
@@ -131,7 +131,7 @@ PYSIDE_API bool qproperty_is_designable(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_scriptable(PyObject* self);
+PYSIDE_API bool qpropertyIsScriptable(PyObject* self);
 
 /**
  * This function check if property has the flag STORED setted
@@ -140,7 +140,7 @@ PYSIDE_API bool qproperty_is_scriptable(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_stored(PyObject* self);
+PYSIDE_API bool qpropertyIsStored(PyObject* self);
 
 /**
  * This function check if property has the flag USER setted
@@ -149,7 +149,7 @@ PYSIDE_API bool qproperty_is_stored(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_user(PyObject* self);
+PYSIDE_API bool qpropertyIsUser(PyObject* self);
 
 /**
  * This function check if property has the flag CONSTANT setted
@@ -158,7 +158,7 @@ PYSIDE_API bool qproperty_is_user(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_constant(PyObject* self);
+PYSIDE_API bool qpropertyIsConstant(PyObject* self);
 
 /**
  * This function check if property has the flag FINAL setted
@@ -167,7 +167,7 @@ PYSIDE_API bool qproperty_is_constant(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-PYSIDE_API bool qproperty_is_final(PyObject* self);
+PYSIDE_API bool qpropertyIsFinal(PyObject* self);
 
 
 } //namespace PySide

@@ -159,39 +159,39 @@ uint PropertyData::flags() const
     else if (!isQRealType(typeName))
         flags |= qvariant_nameToType(typeName) << 24;
 
-    if (qproperty_is_readble(m_data))
+    if (qpropertyIsReadable(m_data))
         flags |= Readable;
 
-    if (qproperty_is_writable(m_data))
+    if (qpropertyIsWritable(m_data))
         flags |= Writable;
 
-    if (qproperty_has_reset(m_data))
+    if (qpropertyHasReset(m_data))
         flags |= Resettable;
 
-    if (!qproperty_is_designable(m_data))
+    if (!qpropertyIsDesignable(m_data))
         flags |= ResolveDesignable;
     else
         flags |= Designable;
 
-    if (!qproperty_is_scriptable(m_data))
+    if (!qpropertyIsScriptable(m_data))
         flags |= ResolveScriptable;
     else
         flags |= Scriptable;
 
-    if (!qproperty_is_stored(m_data))
+    if (!qpropertyIsStored(m_data))
         flags |= ResolveStored;
     else
         flags |= Stored;
 
-    if (!qproperty_is_user(m_data))
+    if (!qpropertyIsUser(m_data))
         flags |= ResolveUser;
     else
         flags |= User;
 
-    if (qproperty_is_constant(m_data))
+    if (qpropertyIsConstant(m_data))
         flags |= Constant;
 
-    if (qproperty_is_final(m_data))
+    if (qpropertyIsFinal(m_data))
         flags |= Final;
 
     return flags;
@@ -255,7 +255,7 @@ PropertyData::PropertyData(const char* name, PyObject* data)
 
 QByteArray PropertyData::type() const
 {
-    return QByteArray(qproperty_get_type(m_data));
+    return QByteArray(qpropertyGetType(m_data));
 }
 
 

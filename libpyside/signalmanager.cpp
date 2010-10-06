@@ -363,7 +363,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             return id - metaObject->methodCount();
 
         pp_name = PyString_FromString(mp.name());
-        pp = qproperty_get_object(pySelf, pp_name);
+        pp = qpropertyGetObject(pySelf, pp_name);
         if (!pp) {
             qWarning("Invalid property.");
             Py_XDECREF(pp_name);
@@ -376,7 +376,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
 #ifndef QT_NO_PROPERTIES
         case QMetaObject::ReadProperty:
         {
-            PyObject* value = qproperty_get(pp, pySelf);
+            PyObject* value = qpropertyGet(pp, pySelf);
             if (value) {
                 void *data = typeResolver->toCpp(value);
                 if (Shiboken::TypeResolver::getType(mp.typeName()) == Shiboken::TypeResolver::ObjectType)
@@ -394,12 +394,12 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
         case QMetaObject::WriteProperty:
         {
             Shiboken::AutoDecRef value(typeResolver->toPython(args[0]));
-            qproperty_set(pp, pySelf, value);
+            qpropertySet(pp, pySelf, value);
             break;
         }
 
         case QMetaObject::ResetProperty:
-            qproperty_reset(pp, pp_name);
+            qpropertyReset(pp, pp_name);
             break;
 
         case QMetaObject::QueryPropertyDesignable:
