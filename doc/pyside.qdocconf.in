@@ -52,6 +52,8 @@ macro.ouml.HTML         = "&ouml;"
 macro.QA                = "\\e{Qt Assistant}"
 macro.QD                = "\\e{Qt Designer}"
 macro.QL                = "\\e{Qt Linguist}"
+macro.QQV               = "\\e{Qt QML Viewer}"
+macro.qmlbasictype      = "\\e"
 macro.param             = "\\e"
 macro.raisedaster.HTML  = "<sup>*</sup>"
 macro.rarrow.HTML       = "&rarr;"
@@ -161,34 +163,10 @@ Cpp.ignoredirectives    = Q_DECLARE_HANDLE \
                           __attribute__ \
                           K_DECLARE_PRIVATE \
                           PHONON_OBJECT \
-                          PHONON_HEIR
-
-######################## qt-html-templates.qdocconf
-HTML.stylesheets        = classic.css
-HTML.postheader         = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n" \
-                          "<tr>\n" \
-                          "<td align=\"left\" valign=\"top\" width=\"32\">" \
-                          "<a href=\"http://qt.nokia.com/\"><img src=\"images/qt-logo.png\" align=\"left\" border=\"0\" /></a>" \
-                          "</td>\n" \
-                          "<td width=\"1\">&nbsp;&nbsp;</td>" \
-                          "<td class=\"postheader\" valign=\"center\">" \
-                          "<a href=\"index.html\">" \
-                          "<font color=\"#004faf\">Home</font></a>&nbsp;&middot;" \
-                          " <a href=\"classes.html\">" \
-                          "<font color=\"#004faf\">All&nbsp;Classes</font></a>&nbsp;&middot;" \
-                          " <a href=\"functions.html\">" \
-                          "<font color=\"#004faf\">All&nbsp;Functions</font></a>&nbsp;&middot;" \
-                          " <a href=\"overviews.html\">" \
-                          "<font color=\"#004faf\">Overviews</font></a>" \
-                          "</td>" \
-                          "</tr></table>"
-
-HTML.footer             = "<p /><address><hr /><div align=\"center\">\n" \
-                          "<table width=\"100%\" cellspacing=\"0\" border=\"0\"><tr class=\"address\">\n" \
-                          "<td width=\"40%\" align=\"left\">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies)</td>\n" \
-                          "<td width=\"20%\" align=\"center\"><a href=\"trademarks.html\">Trademarks</a></td>\n" \
-                          "<td width=\"40%\" align=\"right\"><div align=\"right\">Qt \\version</div></td>\n" \
-                          "</tr></table></div></address>"
+                          PHONON_HEIR \
+                          Q_PRIVATE_PROPERTY \
+                          Q_DECLARE_PRIVATE_D \
+                          Q_CLASSINFO
 
 ######################## qt-defines.qdocconf
 defines                 = Q_QDOC \
@@ -208,61 +186,13 @@ versionsym              = QT_VERSION_STR
 
 codeindent              = 1
 
-# Files not referenced in any qdoc file (last four needed by qtdemo)
-# See also qhp.Qt.extraFiles
-extraimages.HTML        = qt-logo \
-                          trolltech-logo \
-                          taskmenuextension-example.png \
-                          coloreditorfactoryimage.png \
-                          dynamiclayouts-example.png \
-                          stylesheet-coffee-plastique.png
-
 ######################## qt.qdocconf
 
 project                 = Qt
 versionsym              =
-version                 = %VERSION%
+version                 = @PYSIDE_QT_VERSION@
 description             = Qt Reference Documentation
-url                     = http://qt.nokia.com/doc/@PYSIDE_QT_VERSION@
-
-edition.Desktop.modules = QtCore QtDBus QtGui QtNetwork QtOpenGL QtScript QtScriptTools QtSql QtSvg \
-                          QtWebKit QtXml QtXmlPatterns Qt3Support QtHelp \
-                          QtDesigner QtAssistant QAxContainer Phonon \
-                          QAxServer QtUiTools QtTest QtDBus
-edition.DesktopLight.modules = QtCore QtDBus QtGui Qt3SupportLight QtTest
-edition.DesktopLight.groups       = -graphicsview-api
-
-qhp.projects            = Qt
-
-qhp.Qt.file                = qt.qhp
-qhp.Qt.namespace           = com.trolltech.qt.460
-qhp.Qt.virtualFolder       = qdoc
-qhp.Qt.indexTitle          = Qt Reference Documentation
-qhp.Qt.indexRoot           =
-
-# Files not referenced in any qdoc file (last four are needed by qtdemo)
-# See also extraimages.HTML
-qhp.Qt.extraFiles          = classic.css \
-                             images/qt-logo.png \
-                             images/taskmenuextension-example.png \
-                             images/coloreditorfactoryimage.png \
-                             images/dynamiclayouts-example.png \
-                             images/stylesheet-coffee-plastique.png
-
-qhp.Qt.filterAttributes    = qt @PYSIDE_QT_VERSION@ qtrefdoc
-qhp.Qt.customFilters.Qt.name = Qt @PYSIDE_QT_VERSION@
-qhp.Qt.customFilters.Qt.filterAttributes = qt @PYSIDE_QT_VERSION@
-qhp.Qt.subprojects         = classes overviews examples
-qhp.Qt.subprojects.classes.title = Classes
-qhp.Qt.subprojects.classes.indexTitle = Qt's Classes
-qhp.Qt.subprojects.classes.selectors = class fake:headerfile
-qhp.Qt.subprojects.classes.sortPages = true
-qhp.Qt.subprojects.overviews.title = Overviews
-qhp.Qt.subprojects.overviews.indexTitle = All Overviews and HOWTOs
-qhp.Qt.subprojects.overviews.selectors = fake:page,group,module
-qhp.Qt.subprojects.examples.title = Tutorials and Examples
-qhp.Qt.subprojects.examples.indexTitle = Qt Examples
-qhp.Qt.subprojects.examples.selectors = fake:example
+url                     = http://www.pyside.org/docs/pyside-@PYSIDE_QT_VERSION@
 
 language                = Cpp
 
@@ -306,26 +236,19 @@ excludedirs             = @QT_SRC_DIR@/src/3rdparty/clucene \
                           @QT_SRC_DIR@/src/3rdparty/webkit/WebCore \
                           @QT_SRC_DIR@/src/3rdparty/wintab \
                           @QT_SRC_DIR@/src/3rdparty/zlib \
-                          @QT_SRC_DIR@/doc/src/snippets \
                           @QT_SRC_DIR@/src/3rdparty/phonon/gstreamer \
                           @QT_SRC_DIR@/src/3rdparty/phonon/ds9 \
                           @QT_SRC_DIR@/src/3rdparty/phonon/qt7 \
                           @QT_SRC_DIR@/src/3rdparty/phonon/mmf \
-                          @QT_SRC_DIR@/src/3rdparty/phonon/waveout
+                          @QT_SRC_DIR@/src/3rdparty/phonon/waveout \
+                          @QT_SRC_DIR@/doc/src/snippets \
+                          @QT_SRC_DIR@/doc/src/ja_JP \
+                          @QT_SRC_DIR@/doc/src/zh_CN
 
 sources.fileextensions  = "*.cpp *.qdoc *.mm"
 examples.fileextensions = "*.cpp *.h *.js *.xq *.svg *.xml *.ui *.qhp *.qhcp"
 examples.imageextensions = "*.png"
 
-exampledirs             = @QT_SRC_DIR@/doc/src \
-                          @QT_SRC_DIR@/examples \
-                          @QT_SRC_DIR@/examples/tutorials \
-                          @QT_SRC_DIR@ \
-                          @QT_SRC_DIR@/qmake/examples \
-                          @QT_SRC_DIR@/src/3rdparty/webkit/WebKit/qt/docs
-imagedirs               = @QT_SRC_DIR@/doc/src/images \
-                          @QT_SRC_DIR@/examples
-outputdir               = @QT_SRC_DIR@/doc/html
 tagfile                 = @QT_SRC_DIR@/doc/html/qt.tags
 base                    = file:@QT_SRC_DIR@/doc/html
 
