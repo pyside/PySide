@@ -18,7 +18,7 @@ _populate_parent(PyObject* pyParent, QObject *parent)
             bool has_attr = PyObject_HasAttrString(pyParent, qPrintable(name));
             Shiboken::AutoDecRef pyChild(Shiboken::Converter<QObject*>::toPython(child));
             if (!has_attr)
-		        PyObject_SetAttrString(pyParent, qPrintable(name), pyChild);
+		        PyObject_SetAttrString(pyParent, qPrintable(name), PyWeakref_NewProxy(pyChild, 0));
 
             Shiboken::setParent(pyParent, pyChild);
             _populate_parent(pyChild, qobject_cast<QObject*>(child));
@@ -53,14 +53,17 @@ quiloader_load_ui(QUiLoader* self, const QString &ui_file, QWidget *parent)
         QWidget* w = self->load(&fd, parent);
         fd.close();
         if (w != 0) {
-            PyObject* pyParent = Shiboken::Converter<QWidget*>::toPython(w);
+            QObject *_parent = parent;
+            if (!_parent)
+                _parent = w;
 
+            Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(_parent));
             if (parent && parent->layout())
                 parent->layout()->deleteLater();
 
-            _populate_parent(pyParent, w);
+            _populate_parent(pyParent, _parent);
 
-            return pyParent;
+            return Shiboken::Converter<QWidget*>::toPython(w);
         }
     }
     PyErr_SetString(PyExc_RuntimeError, "Unable to open ui file");
