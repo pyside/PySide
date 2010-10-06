@@ -48,6 +48,8 @@
 
 namespace PySide {
 
+static int callMethod(QObject* object, int id, void** args);
+
 PyObjectWrapper::PyObjectWrapper()
     :m_me(Py_None)
 {
@@ -412,7 +414,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             break;
 #endif
         case QMetaObject::InvokeMetaMethod:
-            id = call_method(object, id, args);
+            id = callMethod(object, id, args);
             break;
 
         default:
@@ -429,7 +431,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     return id;
 }
 
-int SignalManager::call_method(QObject* object, int id, void** args)
+static int PySide::callMethod(QObject* object, int id, void** args)
 {
     const QMetaObject* metaObject = object->metaObject();
     QMetaMethod method = metaObject->method(id);
