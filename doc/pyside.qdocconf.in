@@ -205,7 +205,8 @@ headerdirs              = @QT_SRC_DIR@/src \
                           @QT_SRC_DIR@/tools/designer/src/lib/sdk \
                           @QT_SRC_DIR@/tools/designer/src/lib/uilib \
                           @QT_SRC_DIR@/tools/qtestlib/src \
-                          @QT_SRC_DIR@/tools/qdbus/src
+                          @QT_SRC_DIR@/tools/qdbus/src \
+                          @pyside_SOURCE_DIR@
 sourcedirs              = @QT_SRC_DIR@/src \
                           @QT_SRC_DIR@/doc/src \
                           @QT_SRC_DIR@/extensions/activeqt \
@@ -216,7 +217,8 @@ sourcedirs              = @QT_SRC_DIR@/src \
                           @QT_SRC_DIR@/tools/designer/src/lib/sdk \
                           @QT_SRC_DIR@/tools/designer/src/lib/uilib \
                           @QT_SRC_DIR@/tools/qtestlib/src \
-                          @QT_SRC_DIR@/tools/qdbus
+                          @QT_SRC_DIR@/tools/qdbus \
+                          @pyside_SOURCE_DIR@
 
 excludedirs             = @QT_SRC_DIR@/src/3rdparty/clucene \
                           @QT_SRC_DIR@/src/3rdparty/des \
