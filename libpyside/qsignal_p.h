@@ -1,7 +1,7 @@
 /*
  * This file is part of the PySide project.
  *
- * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: PySide team <contact@pyside.org>
  *
@@ -20,33 +20,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef PYSIDE_SIGNAL_H
-#define PYSIDE_SIGNAL_H
+#ifndef PYSIDE_QSIGNAL_P_H
+#define PYSIDE_QSIGNAL_P_H
 
-#include <pysidemacros.h>
 #include <Python.h>
-#include <QObject>
 
 extern "C"
 {
-    extern PYSIDE_API PyTypeObject PySideSignalInstanceType;
-
-    struct PySideSignalInstanceData
-    {
-        PyObject_HEAD
-        char* signalName;
-        char* signature;
-        PyObject* source;
-        PyObject* next;
-    };
+    extern PyTypeObject PySideSignalType;
 }; //extern "C"
 
 namespace PySide
 {
-
-PYSIDE_API PyObject* signalNew(const char* name, ...);
-PYSIDE_API void signalUpdateSource(PyObject* source);
-
+    bool signalConnect(PyObject* source, const char* signal, PyObject* callback);
+    char* getTypeName(PyObject*);
+    void initSignalSupport(PyObject* module);
 } //namespace PySide
 
 #endif

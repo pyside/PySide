@@ -33,6 +33,7 @@
 #include <QMetaMethod>
 
 #include "qsignal.h"
+#include "qsignal_p.h"
 #include "qproperty.h"
 #include "qproperty_p.h"
 
@@ -393,14 +394,14 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
         }
 
         //Register signals
-        if (value->ob_type == &Signal_Type) {
+        if (value->ob_type == &PySideSignalType) {
             PyObject *attr = PyObject_GetAttr(pyObj, key);
-            SignalInstanceData *data = reinterpret_cast<SignalInstanceData*>(attr);
+            PySideSignalInstanceData *data = reinterpret_cast<PySideSignalInstanceData*>(attr);
             while(data) {
                 int index = base->indexOfSignal(data->signature);
                 if (index == -1)
                     mo->addSignal(data->signature);
-                data = reinterpret_cast<SignalInstanceData*>(data->next);
+                data = reinterpret_cast<PySideSignalInstanceData*>(data->next);
             }
         }
 

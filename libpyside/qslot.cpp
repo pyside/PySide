@@ -21,9 +21,9 @@
  */
 
 #include <shiboken.h>
-#include "dynamicqmetaobject_p.h"
-
 #include <QString>
+#include "dynamicqmetaobject_p.h"
+#include "qsignal_p.h"
 
 #define SLOT_DEC_NAME "Slot"
 
@@ -40,10 +40,6 @@ extern "C"
 
 static int slot_init(PyObject*, PyObject*, PyObject*);
 static PyObject* slot_call(PyObject*, PyObject*, PyObject*);
-
-//external qsignal.cpp
-extern char* get_type_name(PyObject*);
-
 
 // Class Definition -----------------------------------------------
 static PyTypeObject Slot_Type = {
@@ -124,7 +120,7 @@ int slot_init(PyObject *self, PyObject *args, PyObject *kw)
     SlotData *data = reinterpret_cast<SlotData*>(self);
     for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
         PyObject *argType = PyTuple_GET_ITEM(args, i);
-        char *typeName = get_type_name(argType);
+        char *typeName = PySide::getTypeName(argType);
         if (typeName) {
             if (data->args) {
                 data->args = reinterpret_cast<char*>(realloc(data->args, (strlen(data->args) + 1 + strlen(typeName)) * sizeof(char*)));
@@ -141,7 +137,7 @@ int slot_init(PyObject *self, PyObject *args, PyObject *kw)
         data->slotName = strdup(argName);
 
     if (argResult)
-        data->resultType = get_type_name(argResult);
+        data->resultType = PySide::getTypeName(argResult);
     else
         data->resultType = strdup("void");
 

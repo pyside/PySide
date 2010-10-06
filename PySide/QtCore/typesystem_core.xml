@@ -1793,7 +1793,7 @@
     <!-- Second argument is a PySide.QtCore.Signal. See bug #362. -->
     <add-function signature="singleShot(int, PyObject*)" static="yes">
         <inject-code class="target" position="beginning">
-        if (!PyObject_TypeCheck(%2, &amp;PySide::SignalInstance_Type))
+        if (!PyObject_TypeCheck(%2, &amp;PySideSignalInstanceType))
             goto Sbk%TYPEFunc_%FUNCTION_NAME_TypeError;
 
         // %FUNCTION_NAME() - disable generation of c++ function call
@@ -1803,7 +1803,7 @@
         QTimer* timer = Converter&lt;QTimer*>::toCpp(pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
-        PySide::SignalInstanceData* signalInstance = reinterpret_cast&lt;PySide::SignalInstanceData*&gt;(%2);
+        PySideSignalInstanceData* signalInstance = reinterpret_cast&lt;PySideSignalInstanceData*&gt;(%2);
         Shiboken::AutoDecRef signalSignature(PyString_FromFormat("2%s", signalInstance->signature));
         Shiboken::AutoDecRef result(
             PyObject_CallMethod(pyTimer,
@@ -2498,9 +2498,9 @@
         // since it refers to a name very tied to the generator implementation.
         // Check bug #362 for more information on this
         // http://bugs.openbossa.org/show_bug.cgi?id=362
-        if (!PyObject_TypeCheck(%1, &amp;PySide::SignalInstance_Type))
+        if (!PyObject_TypeCheck(%1, &amp;PySideSignalInstanceType))
             goto Sbk%TYPEFunc_%FUNCTION_NAME_TypeError;
-        PySide::SignalInstanceData* signalInstance = reinterpret_cast&lt;PySide::SignalInstanceData*&gt;(%1);
+        PySideSignalInstanceData* signalInstance = reinterpret_cast&lt;PySideSignalInstanceData*&gt;(%1);
         QObject* sender = %CONVERTTOCPP[QObject*](signalInstance->source);
         %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->%FUNCTION_NAME(sender, signalInstance->signature, %2));
       </inject-code>

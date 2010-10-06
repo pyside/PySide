@@ -26,13 +26,13 @@
 #include "qproperty_p.h"
 #include "qproperty.h"
 #include "qsignal.h"
+#include "qsignal_p.h"
 #include <basewrapper.h>
 #include <conversions.h>
 #include <algorithm>
 #include <cctype>
 #include <QStack>
 
-extern "C" void init_signal(PyObject* module);
 extern "C" void init_slot(PyObject* module);
 
 static QStack<PySide::CleanupFunction> cleanupFunctionList;
@@ -42,7 +42,7 @@ namespace PySide
 
 void init(PyObject *module)
 {
-    init_signal(module);
+    initSignalSupport(module);
     init_slot(module);
     initQProperty(module);
     // Init signal manager, so it will register some meta types used by QVariant.
@@ -75,7 +75,7 @@ bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds
                 propName.append("()");
                 if (metaObj->indexOfSignal(propName) != -1) {
                     propName.prepend('2');
-                    PySide::signal_connect(qObj, propName, value);
+                    PySide::signalConnect(qObj, propName, value);
                 } else {
                     PyErr_Format(PyExc_AttributeError, "'%s' is not a Qt property or a signal", propName.constData());
                     return false;
