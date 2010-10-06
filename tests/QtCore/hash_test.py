@@ -10,16 +10,19 @@ class HashTest(unittest.TestCase):
         qdatetime = QDateTime.currentDateTime()
         qtime = QTime.currentTime()
         qurl = QUrl("http://www.pyside.org")
+        qpoint = QPoint(12, 42)
 
         myHash[qdate] = "QDate"
         myHash[qdatetime] = "QDateTime"
         myHash[qtime] = "QTime"
         myHash[qurl] = "QUrl"
+        myHash[qpoint] = "QPoint"
 
         self.assertEqual(myHash[qdate], "QDate")
         self.assertEqual(myHash[qdatetime], "QDateTime")
         self.assertEqual(myHash[qtime], "QTime")
         self.assertEqual(myHash[qurl], "QUrl")
+        self.assertEqual(myHash[qpoint], "QPoint")
 
     def testQPointHash(self):
         p1 = QPoint(12, 34)
