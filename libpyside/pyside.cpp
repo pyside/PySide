@@ -23,6 +23,7 @@
 
 #include "pyside.h"
 #include "signalmanager.h"
+#include "qproperty_p.h"
 #include "qproperty.h"
 #include "qsignal.h"
 #include <basewrapper.h>
@@ -33,7 +34,6 @@
 
 extern "C" void init_signal(PyObject* module);
 extern "C" void init_slot(PyObject* module);
-extern "C" void init_qproperty(PyObject* module);
 
 static QStack<PySide::CleanupFunction> cleanupFunctionList;
 
@@ -44,7 +44,7 @@ void init(PyObject *module)
 {
     init_signal(module);
     init_slot(module);
-    init_qproperty(module);
+    initQProperty(module);
     // Init signal manager, so it will register some meta types used by QVariant.
     SignalManager::instance();
 }

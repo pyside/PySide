@@ -59,26 +59,6 @@ PYSIDE_API int qpropertySet(PyObject* self, PyObject* source, PyObject* value);
 PYSIDE_API PyObject* qpropertyGet(PyObject* self, PyObject* source);
 
 /**
- * This function call reset property function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @param   source The QObject witch has the property
- * @return  Return 0 if ok or -1 if this function fail
- **/
-PYSIDE_API int qpropertyReset(PyObject* self, PyObject* source);
-
-
-/**
- * This function return the property type
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return the property type name
- **/
-PYSIDE_API const char* qpropertyGetType(PyObject* self);
-
-/**
  * This function search in the source object for desired property
  *
  * @param   source The QObject object
@@ -86,89 +66,6 @@ PYSIDE_API const char* qpropertyGetType(PyObject* self);
  * @return  Return a new reference to property object
  **/
 PYSIDE_API PyObject* qpropertyGetObject(PyObject* source, PyObject* name);
-
-
-/**
- * This function check if property has read function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsReadable(PyObject* self);
-
-/**
- * This function check if property has write function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsWritable(PyObject* self);
-
-/**
- * This function check if property has reset function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyHasReset(PyObject* self);
-
-/**
- * This function check if property has the flag DESIGNABLE setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsDesignable(PyObject* self);
-
-/**
- * This function check if property has the flag SCRIPTABLE setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsScriptable(PyObject* self);
-
-/**
- * This function check if property has the flag STORED setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsStored(PyObject* self);
-
-/**
- * This function check if property has the flag USER setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsUser(PyObject* self);
-
-/**
- * This function check if property has the flag CONSTANT setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsConstant(PyObject* self);
-
-/**
- * This function check if property has the flag FINAL setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qpropertyIsFinal(PyObject* self);
-
 
 } //namespace PySide
 

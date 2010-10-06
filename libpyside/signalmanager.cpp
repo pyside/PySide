@@ -21,8 +21,6 @@
 */
 
 #include "signalmanager.h"
-#include "qproperty.h"
-#include "pyside.h"
 
 #include <QHash>
 #include <QStringList>
@@ -34,6 +32,10 @@
 #include <typeresolver.h>
 #include <basewrapper.h>
 #include <conversions.h>
+
+#include "qproperty.h"
+#include "qproperty_p.h"
+#include "pyside.h"
 
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
 #error QSLOT_CODE and/or QSIGNAL_CODE changed! change the hardcoded stuff to the correct value!

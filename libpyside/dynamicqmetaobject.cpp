@@ -34,6 +34,7 @@
 
 #include "qsignal.h"
 #include "qproperty.h"
+#include "qproperty_p.h"
 
 #define MAX_SIGNALS_COUNT 50
 #define MAX_SLOTS_COUNT 50

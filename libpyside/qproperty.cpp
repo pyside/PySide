@@ -25,12 +25,16 @@
 #include <QDebug>
 
 #include "qproperty.h"
+#include "qproperty_p.h"
 #include "dynamicqmetaobject_p.h"
 
 #define QPROPERTY_CLASS_NAME "Property"
 
 namespace PySide
 {
+
+// aux function
+static char* translateTypeName(PyObject*);
 
 extern "C"
 {
@@ -52,11 +56,8 @@ typedef struct {
     bool final;
 } QPropertyData;
 
-static int qproperty_init(PyObject*, PyObject*, PyObject*);
-static void qproperty_free(void*);
-
-//aux
-static char* translate_type_name(PyObject*);
+static int qpropertyTpInit(PyObject*, PyObject*, PyObject*);
+static void qpropertyFree(void*);
 
 PyTypeObject QProperty_Type = {
     PyObject_HEAD_INIT(0)
@@ -95,10 +96,10 @@ PyTypeObject QProperty_Type = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)qproperty_init,  /*tp_init */
+    qpropertyTpInit,             /*tp_init */
     0,                         /*tp_alloc */
     PyType_GenericNew,         /*tp_new */
-    qproperty_free,            /*tp_free */
+    qpropertyFree,             /*tp_free */
     0,                         /*tp_is_gc */
     0,                         /*tp_bases */
     0,                         /*tp_mro */
@@ -108,7 +109,9 @@ PyTypeObject QProperty_Type = {
     0,                         /*tp_del */
 };
 
-void init_qproperty(PyObject* module)
+} // extern "C"
+
+void initQProperty(PyObject* module)
 {
     if (PyType_Ready(&QProperty_Type) < 0)
         return;
@@ -117,9 +120,7 @@ void init_qproperty(PyObject* module)
     PyModule_AddObject(module, QPROPERTY_CLASS_NAME, ((PyObject*)&QProperty_Type));
 }
 
-} // extern "C"
-
-int qproperty_init(PyObject* self, PyObject* args, PyObject* kwds)
+int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
 {
     PyObject* type = 0;
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
@@ -141,11 +142,11 @@ int qproperty_init(PyObject* self, PyObject* args, PyObject* kwds)
     if (!data->fset && data->fget)
         data->constant = true;
 
-    data->typeName = translate_type_name(type);
+    data->typeName = translateTypeName(type);
     return 1;
 }
 
-void qproperty_free(void *self)
+void qpropertyFree(void *self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
     QPropertyData *data = reinterpret_cast<QPropertyData*>(self);
@@ -226,7 +227,7 @@ PyObject* qpropertyGetObject(PyObject* source, PyObject* name)
     return 0;
 }
 
-char* translate_type_name(PyObject* type)
+char* translateTypeName(PyObject* type)
 {
     if (PyType_Check(type)) {
         char *typeName = NULL;
