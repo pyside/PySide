@@ -546,3 +546,8 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
     metaObj->d.data = data;
     metaObj->d.stringdata = stringData;
 }
+
+void PySide::deleteDynamicQMetaObject(void* data)
+{
+    delete reinterpret_cast<DynamicQMetaObject*>(data);
+}
