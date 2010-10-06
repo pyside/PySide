@@ -118,7 +118,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PyTuple*"/>
+                <replace-type modified-type="(retval, timeOut)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="fix_args,bool*"/>
@@ -145,7 +145,7 @@
                 <remove-argument/>
             </modify-argument>
             <modify-argument index="return">
-                <replace-type modified-type="PyTuple*"/>
+                <replace-type modified-type="(data, address, port)"/>
             </modify-argument>
             <inject-code class="target" position="beginning" file="glue/qudpsocket_read_datagram_glue.cpp"/>
         </modify-function>
@@ -170,7 +170,7 @@
                 <insert-template name="fix_args,bool*"/>
             </inject-code>
             <modify-argument index="return">
-                <replace-type modified-type="PyTuple*"/>
+                <replace-type modified-type="(retval, timeOut)"/>
             </modify-argument>
 
         </modify-function>

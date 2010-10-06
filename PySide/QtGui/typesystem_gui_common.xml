@@ -1156,6 +1156,9 @@
       <modify-argument index="1">
         <remove-argument/>
       </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="(retval, blockingPanel)"/>
+      </modify-argument>
       <inject-code class="target" position="beginning">
         QGraphicsItem *item_ = NULL;
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;item_);
@@ -3664,7 +3667,7 @@
 
     <modify-function signature="getOpenFileNames(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes">
       <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
+        <replace-type modified-type="(fileNames, selectedFilter)"/>
       </modify-argument>
       <inject-code class="target" position="end">
         <insert-template name="return_for_QFileDialog"/>
@@ -3675,7 +3678,7 @@
     </modify-function>
     <modify-function signature="getOpenFileName(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes">
       <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
+        <replace-type modified-type="(fileName, selectedFilter)"/>
       </modify-argument>
       <inject-code class="target" position="end">
         <insert-template name="return_for_QFileDialog"/>
@@ -3686,7 +3689,7 @@
     </modify-function>
     <modify-function signature="getSaveFileName(QWidget*, const QString&amp;, const QString&amp;, const QString&amp;, QString*, QFlags&lt;QFileDialog::Option&gt;)" allow-thread="yes">
       <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
+        <replace-type modified-type="(fileName, selectedFilter)"/>
       </modify-argument>
       <inject-code class="target" position="end">
         <insert-template name="return_for_QFileDialog"/>
@@ -3892,7 +3895,7 @@
         <replace-default-expression with="QClipboard::Clipboard"/>
       </modify-argument>
       <modify-argument index="return">
-        <replace-type modified-type="PyObject"/>
+        <replace-type modified-type="(retval, subtype)"/>
       </modify-argument>
       <inject-code class="target" position="end">
         %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);

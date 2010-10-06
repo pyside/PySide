@@ -68,6 +68,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -84,6 +87,9 @@
             <modify-argument index="5">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
@@ -102,6 +108,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -118,6 +127,9 @@
             <modify-argument index="4">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
@@ -136,6 +148,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -152,6 +167,9 @@
             <modify-argument index="5">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
@@ -170,6 +188,9 @@
                 <remove-argument/>
                 <remove-default-expression/>
             </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
+            </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
             </inject-code>
@@ -186,6 +207,9 @@
             <modify-argument index="4">
                 <remove-argument/>
                 <remove-default-expression/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(retval, errorMsg, errorLine, errorColumn)"/>
             </modify-argument>
             <inject-code class="target" position="beginning">
                 <insert-template name="qdomdocument_setcontent" />
