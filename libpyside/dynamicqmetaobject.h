@@ -26,50 +26,9 @@
 #include "pysidemacros.h"
 #include <Python.h>
 #include <QMetaObject>
-#include <QLinkedList>
-#include <QByteArray>
-#include <QSharedPointer>
-
-#define PYSIDE_SLOT_LIST_ATTR "_slots"
-
-class QObject;
 
 namespace PySide
 {
-
-class MethodData
-{
-public:
-    MethodData(){}
-    MethodData(const char* signature, const char* type);
-    void clear();
-    bool isValid() const;
-    QByteArray signature() const;
-    QByteArray type() const;
-    bool operator==(const MethodData& other) const;
-    bool operator==(const char* other) const;
-
-private:
-    QSharedPointer<QByteArray> m_signature;
-    QSharedPointer<QByteArray> m_type;
-};
-
-class PropertyData
-{
-public:
-    PropertyData();
-    PropertyData(const char*name, PyObject *data);
-    QByteArray name() const;
-    QByteArray type() const;
-    uint flags() const;
-    bool isValid() const;
-    bool operator==(const PropertyData& other) const;
-    bool operator==(const char* name) const;
-
-private:
-    QByteArray m_name;
-    PyObject* m_data;
-};
 
 class PYSIDE_API DynamicQMetaObject : public QMetaObject
 {
@@ -77,8 +36,8 @@ public:
     DynamicQMetaObject(const char* className, const QMetaObject* metaObject);
     ~DynamicQMetaObject();
 
-    void addSignal(const char* signal, const char* type=0);
-    void addSlot(const char* slot, const char* type=0);
+    void addSignal(const char* signal, const char* type = 0);
+    void addSlot(const char* slot, const char* type = 0);
     void addProperty(const char* property, PyObject* data);
 
     void removeSignal(uint idex);
@@ -89,13 +48,8 @@ public:
     static DynamicQMetaObject* createBasedOn(PyObject* obj, PyTypeObject* type, const QMetaObject* base);
 
 private:
-    QLinkedList<MethodData> m_signals;
-    QLinkedList<MethodData> m_slots;
-    QLinkedList<PropertyData> m_properties;
-    QByteArray m_className;
-
-    void updateMetaObject();
-    void writeMethodsData(QLinkedList<MethodData>& methods, unsigned int **data, QList<QByteArray> *strings, int *index, int max_count, int null_index, int flags);
+    class DynamicQMetaObjectPrivate;
+    DynamicQMetaObjectPrivate* m_d;
 };
 
 PYSIDE_API inline void deleteDynamicQMetaObject(void* data)

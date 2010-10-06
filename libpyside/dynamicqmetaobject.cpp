@@ -21,10 +21,12 @@
 */
 
 #include "dynamicqmetaobject.h"
+#include "dynamicqmetaobject_p.h"
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
 #include <QList>
+#include <QLinkedList>
 #include <QObject>
 #include <cstring>
 #include <QDebug>
@@ -64,6 +66,18 @@ enum PropertyFlags  {
     User = 0x00100000,
     ResolveUser = 0x00200000,
     Notify = 0x00400000
+};
+
+class DynamicQMetaObject::DynamicQMetaObjectPrivate
+{
+public:
+    QLinkedList<MethodData> m_signals;
+    QLinkedList<MethodData> m_slots;
+    QLinkedList<PropertyData> m_properties;
+    QByteArray m_className;
+
+    void updateMetaObject(QMetaObject* metaObj);
+    void writeMethodsData(QLinkedList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int maxCount, int nullIndex, int flags);
 };
 
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
@@ -266,76 +280,77 @@ bool PropertyData::operator==(const char* name) const
 }
 
 
-DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject)
+DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject) : m_d(new DynamicQMetaObjectPrivate)
 {
     d.superdata = metaObject;
     d.stringdata = 0;
     d.data = 0;
     d.extradata = 0;
-    m_className = QByteArray(className);
-    updateMetaObject();
+    m_d->m_className = QByteArray(className);
+    m_d->updateMetaObject(this);
 }
 
 DynamicQMetaObject::~DynamicQMetaObject()
 {
     delete[] d.stringdata;
     delete[] d.data;
+    delete m_d;
 }
 
 void DynamicQMetaObject::addSignal(const char* signal, const char* type)
 {
-    QLinkedList<MethodData>::iterator i = qFind(m_signals.begin(), m_signals.end(), signal);
-    if (i != m_signals.end())
+    QLinkedList<MethodData>::iterator i = qFind(m_d->m_signals.begin(), m_d->m_signals.end(), signal);
+    if (i != m_d->m_signals.end())
         return;
 
     //search for a empty space
     MethodData blank;
-    i = qFind(m_signals.begin(), m_signals.end(), blank);
-    if (i != m_signals.end()) {
+    i = qFind(m_d->m_signals.begin(), m_d->m_signals.end(), blank);
+    if (i != m_d->m_signals.end()) {
         *i = MethodData(signal, type);
-        updateMetaObject();
+        m_d->updateMetaObject(this);
         return;
     }
 
-    int maxSignals = maxSignalsCount(m_className);
-    if (m_signals.size() >= maxSignals) {
+    int maxSignals = maxSignalsCount(m_d->m_className);
+    if (m_d->m_signals.size() >= maxSignals) {
         qWarning() << "Fail to add dynamic signal to QObject. PySide support at most" << maxSignals << "dynamic signals.";
         return;
     }
 
-    m_signals << MethodData(signal, type);
-    updateMetaObject();
+    m_d->m_signals << MethodData(signal, type);
+    m_d->updateMetaObject(this);
 }
 
 void DynamicQMetaObject::addSlot(const char* slot, const char* type)
 {
-    QLinkedList<MethodData>::iterator i = qFind(m_slots.begin(), m_slots.end(), slot);
-    if (i != m_slots.end())
+    QLinkedList<MethodData>::iterator i = qFind(m_d->m_slots.begin(), m_d->m_slots.end(), slot);
+    if (i != m_d->m_slots.end())
         return;
 
-    int maxSlots = maxSlotsCount(m_className);
-    if (m_slots.size() >= maxSlots) {
+    int maxSlots = maxSlotsCount(m_d->m_className);
+    if (m_d->m_slots.size() >= maxSlots) {
         qWarning() << "Fail to add dynamic slot to QObject. PySide support at most" << maxSlots << "dynamic slots.";
         return;
     }
 
     //search for a empty space
     MethodData blank;
-    i = qFind(m_slots.begin(), m_slots.end(), blank);
-    if (i != m_slots.end())
+    i = qFind(m_d->m_slots.begin(), m_d->m_slots.end(), blank);
+    if (i != m_d->m_slots.end())
         *i = MethodData(slot, type);
     else
-        m_slots << MethodData(slot, type);
-    updateMetaObject();
+        m_d->m_slots << MethodData(slot, type);
+    m_d->updateMetaObject(this);
 }
 
 void DynamicQMetaObject::removeSlot(uint index)
 {
     QMetaMethod m = method(index);
-    foreach(MethodData md, m_slots) {
+    foreach(MethodData md, m_d->m_slots) {
         if (md.signature() == m.signature()) {
             md.clear();
-            updateMetaObject();
+            m_d->updateMetaObject(this);
             break;
         }
     }
@@ -343,19 +358,19 @@ void DynamicQMetaObject::removeSlot(uint index)
 
 void DynamicQMetaObject::addProperty(const char* property, PyObject* data)
 {
-    QLinkedList<PropertyData>::iterator i = qFind(m_properties.begin(), m_properties.end(), property);
-    if (i != m_properties.end())
+    QLinkedList<PropertyData>::iterator i = qFind(m_d->m_properties.begin(), m_d->m_properties.end(), property);
+    if (i != m_d->m_properties.end())
         return;
 
     //search for a empty space
     PropertyData blank;
-    i = qFind(m_properties.begin(), m_properties.end(), blank);
-    if (i != m_properties.end()) {
+    i = qFind(m_d->m_properties.begin(), m_d->m_properties.end(), blank);
+    if (i != m_d->m_properties.end()) {
         *i = PropertyData(property, data);
     } else {
-        m_properties << PropertyData(property, data);
+        m_d->m_properties << PropertyData(property, data);
     }
-    updateMetaObject();
+    m_d->updateMetaObject(this);
 }
 
 
@@ -412,46 +427,46 @@ void DynamicQMetaObject::removeSignal(uint index)
 {
     //Current Qt implementation does not support runtime remove signal
     QMetaMethod m = method(index);
-    foreach(MethodData md, m_signals) {
+    foreach(MethodData md, m_d->m_signals) {
         if (md.signature() == m.signature()) {
             md.clear();
-            updateMetaObject();
+            m_d->updateMetaObject(this);
             break;
         }
     }
 }
 
-void DynamicQMetaObject::writeMethodsData(QLinkedList<MethodData>& methods,
-                                          unsigned int **data,
-                                          QList<QByteArray> *strings,
-                                          int *prtIndex,
-                                          int max_count,
-                                          int null_index,
-                                          int flags)
+void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(QLinkedList<MethodData>& methods,
+                                                                     unsigned int** data,
+                                                                     QList<QByteArray>* strings,
+                                                                     int* prtIndex,
+                                                                     int maxCount,
+                                                                     int nullIndex,
+                                                                     int flags)
 {
     int index = *prtIndex;
 
     QLinkedList<MethodData>::iterator iMethod = methods.begin();
-    for(int i=0; i < max_count; i++) {
+    for(int i=0; i < maxCount; i++) {
         QByteArray mType;
         if (iMethod != methods.end() && ((*iMethod).signature().size() > 0) ) {
             (*data)[index++] = registerString((*iMethod).signature(), strings); // func name
             mType = (*iMethod).type();
         } else {
-            (*data)[index++] = null_index; // func name
+            (*data)[index++] = nullIndex; // func name
         }
-        (*data)[index++] = null_index; // arguments
-        (*data)[index++] = (mType.size() > 0 ? registerString(mType, strings) : null_index); // normalized type
-        (*data)[index++] = null_index; // tags
+        (*data)[index++] = nullIndex; // arguments
+        (*data)[index++] = (mType.size() > 0 ? registerString(mType, strings) : nullIndex); // normalized type
+        (*data)[index++] = nullIndex; // tags
         (*data)[index++] = flags;
-        if (iMethod != methods.end()) 
+        if (iMethod != methods.end())
             iMethod++;
     }
 
     *prtIndex = index;
 }
 
-void DynamicQMetaObject::updateMetaObject()
+void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject* metaObj)
 {
     // these values are from moc source code, generator.cpp:66
     enum MethodFlags {
@@ -485,7 +500,7 @@ void DynamicQMetaObject::updateMetaObject()
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
     // header size + 5 indexes per method + an ending zero
-    delete[] d.data;
+    delete[] metaObj->d.data;
     unsigned int* data;
     data = new unsigned int[HEADER_LENGHT + n_methods*5 + n_properties*3 + 1];
     std::memcpy(data, header, sizeof(header));
@@ -524,9 +539,9 @@ void DynamicQMetaObject::updateMetaObject()
         str.append(char(0));
     }
 
-    delete[] d.stringdata;
+    delete[] metaObj->d.stringdata;
     char* stringData = new char[str.count()];
     std::copy(str.begin(), str.end(), stringData);
-    d.data = data;
-    d.stringdata = stringData;
+    metaObj->d.data = data;
+    metaObj->d.stringdata = stringData;
 }

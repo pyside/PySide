@@ -25,7 +25,7 @@
 #include <QDebug>
 
 #include "qproperty.h"
-
+#include "dynamicqmetaobject_p.h"
 
 #define QPROPERTY_CLASS_NAME "Property"
 

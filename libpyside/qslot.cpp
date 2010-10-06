@@ -21,7 +21,7 @@
  */
 
 #include <shiboken.h>
-#include <dynamicqmetaobject.h>
+#include "dynamicqmetaobject_p.h"
 
 #include <QString>
 
