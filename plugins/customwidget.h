@@ -23,9 +23,9 @@
 #ifndef _PY_CUSTOM_WIDGET_H_
 #define _PY_CUSTOM_WIDGET_H_
 
+#include <shiboken.h>
 #include <QtDesigner/QtDesigner>
 #include <QDesignerCustomWidgetInterface>
-#include <shiboken.h>
 
 struct PyCustomWidgetPrivate;
 

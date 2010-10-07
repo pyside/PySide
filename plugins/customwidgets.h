@@ -23,12 +23,12 @@
 #ifndef _PY_CUSTOM_WIDGETS_H_
 #define _PY_CUSTOM_WIDGETS_H_
 
+#include <shiboken.h>
 #include <customwidget.h>
 
 #include <QtDesigner/QtDesigner>
 #include <QtPlugin>
 #include <QDesignerCustomWidgetInterface>
-#include <shiboken.h>
 
 struct PyCustomWidgetsPrivate;
 

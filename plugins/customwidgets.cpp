@@ -20,8 +20,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "customwidgets.h"
 #include "customwidget.h"
+#include "customwidgets.h"
 
 #include <shiboken.h>
 
