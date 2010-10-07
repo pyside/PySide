@@ -1,15 +1,17 @@
-include(icecc.cmake) # this must be the first line!
+include(cmake/Macros/icecc.cmake) # this must be the first line!
 
 project(pysidebindings)
 
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/
+                      ${CMAKE_SOURCE_DIR}/cmake/Macros/
                       ${CMAKE_MODULE_PATH})
 find_package(PythonLibs REQUIRED)
 find_package(PythonInterpWithDebug REQUIRED)
 find_package(GeneratorRunner 0.6 REQUIRED)
 find_package(Shiboken 0.5 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
+include(FindQt4Extra)
 
 set(XVFB_EXEC "")
 option(USE_XVFB "Uses xvfb-run with the unit tests to avoid QtGui tests popping windows on the screen." FALSE)
