@@ -56,11 +56,31 @@ class QFlagOperatorTest(unittest.TestCase):
         flag_type = (flags & Qt.WindowType_Mask)
         self.assertEqual(flag_type, Qt.Window)
 
+    def testOperatorBetweenFlags(self):
+        '''QFlags & QFlags'''
+        flags = Qt.NoItemFlags | Qt.ItemIsUserCheckable
+        newflags = Qt.NoItemFlags | Qt.ItemIsUserCheckable
+        self.assert_(flags & newflags)
+
+    def testOperatorDifferentOrder(self):
+        '''Different ordering of arguments'''
+        flags = Qt.NoItemFlags | Qt.ItemIsUserCheckable
+        self.assertEqual(flags | Qt.ItemIsEnabled, Qt.ItemIsEnabled | flags)
+
 class QFlagsOnQVariant(unittest.TestCase):
     def testQFlagsOnQVariant(self):
         o = QObject()
         o.setProperty("foo", QIODevice.ReadOnly | QIODevice.WriteOnly)
         self.assertEqual(type(o.property("foo")), int)
+
+class QFlagsWrongType(unittest.TestCase):
+    def testWrongType(self):
+        '''Wrong type passed to QFlags binary operators'''
+        self.assertRaises(TypeError, lambda :Qt.NoItemFlags | '43')
+        self.assertRaises(TypeError, lambda :Qt.NoItemFlags & '43')
+        self.assertRaises(TypeError, lambda :'jabba' & Qt.NoItemFlags)
+        self.assertRaises(TypeError, lambda :'hut' & Qt.NoItemFlags)
+        self.assertRaises(TypeError, lambda :Qt.NoItemFlags & QObject())
 
 if __name__ == '__main__':
     unittest.main()
