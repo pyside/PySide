@@ -183,7 +183,9 @@ set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic
 enable_testing()
 
 add_subdirectory(libpyside)
-add_subdirectory(plugins)
+if(QT_QTDESIGNER_FOUND)
+    add_subdirectory(plugins)
+endif()
 # project directories
 add_subdirectory(PySide)
 add_subdirectory(tests)
