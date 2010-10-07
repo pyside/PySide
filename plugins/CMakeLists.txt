@@ -13,7 +13,7 @@ set (ui_plugin_moc
 QT4_WRAP_CPP(MOC_FILES ${ui_plugin_moc})
 include_directories(${QT_QTDESIGNER_INCLUDE_DIR}
                     ${SHIBOKEN_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_DIR})
+                    ${PYTHON_INCLUDE_PATH})
 
 add_library(uiplugin STATIC ${ui_plugin_src} ${MOC_FILES})
 add_definitions(-fPIC)
