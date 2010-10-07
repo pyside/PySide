@@ -12,7 +12,7 @@ class BugTest(UsesQApplication):
 
         filePath = os.path.join(os.path.dirname(__file__), 'test.ui')
         result = loader.load(filePath, w)
-        self.assertEqual(type(result.child_object), QtGui.QFrame)
+        self.assert_(isinstance(result.child_object, QtGui.QFrame))
 
 if __name__ == '__main__':
     unittest.main()
