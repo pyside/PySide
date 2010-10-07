@@ -27,6 +27,11 @@
 #include <Python.h>
 #include <QObject>
 
+namespace Shiboken
+{
+    struct SbkBaseWrapperType;
+}
+
 extern "C"
 {
     extern PYSIDE_API PyTypeObject PySideSignalInstanceType;
@@ -37,6 +42,7 @@ extern "C"
         char* signalName;
         char* signature;
         PyObject* source;
+        PyObject* homonymousMethod;
         PyObject* next;
     };
 }; //extern "C"
@@ -46,6 +52,7 @@ namespace PySide
 
 PYSIDE_API PyObject* signalNew(const char* name, ...);
 PYSIDE_API void signalUpdateSource(PyObject* source);
+PYSIDE_API void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PyObject* signal);
 
 } //namespace PySide
 

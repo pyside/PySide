@@ -3,9 +3,9 @@
 import unittest
 from testbinding import TestObject
 
-'''Tests the behaviour of homonimous signals and slots.'''
+'''Tests the behaviour of homonymous signals and slots.'''
 
-class HomonimousSignalAndMethodTest(unittest.TestCase):
+class HomonymousSignalAndMethodTest(unittest.TestCase):
 
     def setUp(self):
         self.value = 123
@@ -39,13 +39,13 @@ class HomonimousSignalAndMethodTest(unittest.TestCase):
     def testCallingInstanceMethodWithoutArguments(self):
         self.assertRaises(TypeError, TestObject.idValue)
 
-    def testHomonimousSignalAndMethod(self):
+    def testHomonymousSignalAndMethod(self):
         self.assertEqual(self.obj.idValue(), self.value)
 
-    def testHomonimousSignalAndStaticMethod(self):
+    def testHomonymousSignalAndStaticMethod(self):
         self.assertEqual(TestObject.staticMethodDouble(3), 6)
 
-    def testHomonimousSignalAndStaticMethodFromInstance(self):
+    def testHomonymousSignalAndStaticMethodFromInstance(self):
         self.assertEqual(self.obj.staticMethodDouble(4), 8)
 
 if __name__ == '__main__':

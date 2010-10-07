@@ -67,5 +67,5 @@ target_link_libraries(testbinding
 add_dependencies(testbinding pyside QtCore libpyside pysidetest)
 
 
-PYSIDE_TEST(homonimoussignalandmethod_test.py)
+PYSIDE_TEST(homonymoussignalandmethod_test.py)
 

@@ -52,6 +52,7 @@ struct SignalData {
     char* signalName;
     char** signatures;
     int signaturesSize;
+    PyObject* homonymousMethod;
 };
 
 static int signalTpInit(PyObject*, PyObject*, PyObject*);
@@ -64,54 +65,57 @@ static PyObject* signalInstanceDisconnect(PyObject*, PyObject*);
 static PyObject* signalInstanceEmit(PyObject*, PyObject*);
 static PyObject* signalInstanceGetItem(PyObject*, PyObject*);
 
+static PyObject* signalInstanceCall(PyObject* self, PyObject* args, PyObject* kw);
+static PyObject* signalCall(PyObject*, PyObject*, PyObject*);
+
 PyTypeObject PySideSignalType = {
     PyObject_HEAD_INIT(0)
-    0,                         /*ob_size*/
-    "PySide.QtCore."SIGNAL_CLASS_NAME, /*tp_name*/
-    sizeof(SignalData),        /*tp_basicsize*/
-    0,                         /*tp_itemsize*/
-    0,                         /*tp_dealloc*/
-    0,                         /*tp_print*/
-    0,                         /*tp_getattr*/
-    0,                         /*tp_setattr*/
-    0,                         /*tp_compare*/
-    0,                         /*tp_repr*/
-    0,                         /*tp_as_number*/
-    0,                         /*tp_as_sequence*/
-    0,                         /*tp_as_mapping*/
-    0,                         /*tp_hash */
-    0,                         /*tp_call*/
-    0,                         /*tp_str*/
-    0,                         /*tp_getattro*/
-    0,                         /*tp_setattro*/
-    0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
-    SIGNAL_CLASS_NAME,         /*tp_doc */
-    0,                         /*tp_traverse */
-    0,                         /*tp_clear */
-    0,                         /*tp_richcompare */
-    0,                         /*tp_weaklistoffset */
-    0,                         /*tp_iter */
-    0,                         /*tp_iternext */
-    0,                         /*tp_methods */
-    0,                         /*tp_members */
-    0,                         /*tp_getset */
-    0,                         /*tp_base */
-    0,                         /*tp_dict */
-    0,                         /*tp_descr_get */
-    0,                         /*tp_descr_set */
-    0,                         /*tp_dictoffset */
-    signalTpInit,             /*tp_init */
-    0,                         /*tp_alloc */
-    PyType_GenericNew,         /*tp_new */
-    signalFree,                /*tp_free */
-    0,                         /*tp_is_gc */
-    0,                         /*tp_bases */
-    0,                         /*tp_mro */
-    0,                         /*tp_cache */
-    0,                         /*tp_subclasses */
-    0,                         /*tp_weaklist */
-    0,                         /*tp_del */
+    /*ob_size*/             0,
+    /*tp_name*/             "PySide.QtCore."SIGNAL_CLASS_NAME,
+    /*tp_basicsize*/        sizeof(SignalData),
+    /*tp_itemsize*/         0,
+    /*tp_dealloc*/          &Shiboken::deallocWrapper,
+    /*tp_print*/            0,
+    /*tp_getattr*/          0,
+    /*tp_setattr*/          0,
+    /*tp_compare*/          0,
+    /*tp_repr*/             0,
+    /*tp_as_number*/        0,
+    /*tp_as_sequence*/      0,
+    /*tp_as_mapping*/       0,
+    /*tp_hash*/             0,
+    /*tp_call*/             signalCall,
+    /*tp_str*/              0,
+    /*tp_getattro*/         0,
+    /*tp_setattro*/         0,
+    /*tp_as_buffer*/        0,
+    /*tp_flags*/            Py_TPFLAGS_DEFAULT,
+    /*tp_doc*/              SIGNAL_CLASS_NAME,
+    /*tp_traverse*/         0,
+    /*tp_clear*/            0,
+    /*tp_richcompare*/      0,
+    /*tp_weaklistoffset*/   0,
+    /*tp_iter*/             0,
+    /*tp_iternext*/         0,
+    /*tp_methods*/          0,
+    /*tp_members*/          0,
+    /*tp_getset*/           0,
+    /*tp_base*/             0,
+    /*tp_dict*/             0,
+    /*tp_descr_get*/        0,
+    /*tp_descr_set*/        0,
+    /*tp_dictoffset*/       0,
+    /*tp_init*/             signalTpInit,
+    /*tp_alloc*/            0,
+    /*tp_new*/              PyType_GenericNew,
+    /*tp_free*/             signalFree,
+    /*tp_is_gc*/            0,
+    /*tp_bases*/            0,
+    /*tp_mro*/              0,
+    /*tp_cache*/            0,
+    /*tp_subclasses*/       0,
+    /*tp_weaklist*/         0,
+    /*tp_del*/              0,
 };
 
 static PyMethodDef SignalInstance_methods[] = {
@@ -129,52 +133,52 @@ static PyMappingMethods SignalInstance_as_mapping = {
 
 PyTypeObject PySideSignalInstanceType = {
     PyObject_HEAD_INIT(0)
-    0,                         /*ob_size*/
-    "PySide.QtCore."SIGNAL_CLASS_NAME, /*tp_name*/
-    sizeof(PySideSignalInstanceData),/*tp_basicsize*/
-    0,                         /*tp_itemsize*/
-    0,                         /*tp_dealloc*/
-    0,                         /*tp_print*/
-    0,                         /*tp_getattr*/
-    0,                         /*tp_setattr*/
-    0,                         /*tp_compare*/
-    0,                         /*tp_repr*/
-    0,                         /*tp_as_number*/
-    0,                         /*tp_as_sequence*/
-    &SignalInstance_as_mapping,/*tp_as_mapping*/
-    0,                         /*tp_hash */
-    0,                         /*tp_call*/
-    0,                         /*tp_str*/
-    0,                         /*tp_getattro*/
-    0,                         /*tp_setattro*/
-    0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
-    SIGNAL_CLASS_NAME,         /*tp_doc */
-    0,                         /*tp_traverse */
-    0,                         /*tp_clear */
-    0,                         /*tp_richcompare */
-    0,                         /*tp_weaklistoffset */
-    0,                         /*tp_iter */
-    0,                         /*tp_iternext */
-    SignalInstance_methods,    /*tp_methods */
-    0,                         /*tp_members */
-    0,                         /*tp_getset */
-    0,                         /*tp_base */
-    0,                         /*tp_dict */
-    0,                         /*tp_descr_get */
-    0,                         /*tp_descr_set */
-    0,                         /*tp_dictoffset */
-    0,                         /*tp_init */
-    0,                         /*tp_alloc */
-    PyType_GenericNew,         /*tp_new */
-    signalInstanceFree,     /*tp_free */
-    0,                         /*tp_is_gc */
-    0,                         /*tp_bases */
-    0,                         /*tp_mro */
-    0,                         /*tp_cache */
-    0,                         /*tp_subclasses */
-    0,                         /*tp_weaklist */
-    0,                         /*tp_del */
+    /*ob_size*/             0,
+    /*tp_name*/             "PySide.QtCore."SIGNAL_CLASS_NAME,
+    /*tp_basicsize*/        sizeof(PySideSignalInstanceData),
+    /*tp_itemsize*/         0,
+    /*tp_dealloc*/          0,
+    /*tp_print*/            0,
+    /*tp_getattr*/          0,
+    /*tp_setattr*/          0,
+    /*tp_compare*/          0,
+    /*tp_repr*/             0,
+    /*tp_as_number*/        0,
+    /*tp_as_sequence*/      0,
+    /*tp_as_mapping*/       &SignalInstance_as_mapping,
+    /*tp_hash*/             0,
+    /*tp_call*/             signalInstanceCall,
+    /*tp_str*/              0,
+    /*tp_getattro*/         0,
+    /*tp_setattro*/         0,
+    /*tp_as_buffer*/        0,
+    /*tp_flags*/            Py_TPFLAGS_DEFAULT,
+    /*tp_doc*/              SIGNAL_CLASS_NAME,
+    /*tp_traverse*/         0,
+    /*tp_clear*/            0,
+    /*tp_richcompare*/      0,
+    /*tp_weaklistoffset*/   0,
+    /*tp_iter*/             0,
+    /*tp_iternext*/         0,
+    /*tp_methods*/          SignalInstance_methods,
+    /*tp_members*/          0,
+    /*tp_getset*/           0,
+    /*tp_base*/             0,
+    /*tp_dict*/             0,
+    /*tp_descr_get*/        0,
+    /*tp_descr_set*/        0,
+    /*tp_dictoffset*/       0,
+    /*tp_init*/             0,
+    /*tp_alloc*/            0,
+    /*tp_new*/              PyType_GenericNew,
+    /*tp_free*/             signalInstanceFree,
+    /*tp_is_gc*/            0,
+    /*tp_bases*/            0,
+    /*tp_mro*/              0,
+    /*tp_cache*/            0,
+    /*tp_subclasses*/       0,
+    /*tp_weaklist*/         0,
+    /*tp_del*/              0,
 };
 
 int signalTpInit(PyObject* self, PyObject* args, PyObject* kwds)
@@ -224,6 +228,8 @@ void signalFree(void *self)
     free(data->signalName);
     data->initialized = 0;
     data->signaturesSize = 0;
+    Py_XDECREF(data->homonymousMethod);
+    data->homonymousMethod = 0;
 
     pySelf->ob_type->tp_base->tp_free(self);
 }
@@ -236,8 +242,10 @@ void signalInstanceFree(void* self)
     free(data->signalName);
     free(data->signature);
 
+    Py_XDECREF(data->homonymousMethod);
+
     if (data->next) {
-        Py_XDECREF(data->next);
+        Py_DECREF(data->next);
         data->next = 0;
     }
     pySelf->ob_type->tp_base->tp_free(self);
@@ -385,6 +393,38 @@ PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
     return 0;
 }
 
+PyObject* signalCall(PyObject* self, PyObject* args, PyObject* kw)
+{
+    SignalData* signalData = reinterpret_cast<SignalData*>(self);
+
+    if (!signalData->homonymousMethod) {
+        PyErr_SetString(PyExc_TypeError, "native Qt signal is not callable");
+        return 0;
+    }
+
+    descrgetfunc getDescriptor = signalData->homonymousMethod->ob_type->tp_descr_get;
+    Shiboken::AutoDecRef homonymousMethod(getDescriptor(signalData->homonymousMethod, 0, 0));
+
+    if (PyCFunction_GET_FLAGS(homonymousMethod.object()) & METH_STATIC)
+        return PyCFunction_Call(homonymousMethod, args, kw);
+
+    ternaryfunc callFunc = signalData->homonymousMethod->ob_type->tp_call;
+    return callFunc(homonymousMethod, args, kw);
+}
+
+PyObject* signalInstanceCall(PyObject* self, PyObject* args, PyObject* kw)
+{
+    PySideSignalInstanceData* signalData = reinterpret_cast<PySideSignalInstanceData*>(self);
+    if (!signalData->homonymousMethod) {
+        PyErr_SetString(PyExc_TypeError, "native Qt signal is not callable");
+        return 0;
+    }
+
+    descrgetfunc getDescriptor = signalData->homonymousMethod->ob_type->tp_descr_get;
+    Shiboken::AutoDecRef homonymousMethod(getDescriptor(signalData->homonymousMethod, signalData->source, 0));
+    return PyCFunction_Call(homonymousMethod, args, kw);
+}
+
 } // extern "C"
 
 namespace PySide
@@ -503,6 +543,11 @@ void signalInstanceInitialize(PyObject* instance, PyObject* name, SignalData* da
 
     self->source = source;
     self->signature = signalBuildSignature(self->signalName, data->signatures[index]);
+    self->homonymousMethod = 0;
+    if (data->homonymousMethod) {
+        self->homonymousMethod = data->homonymousMethod;
+        Py_INCREF(self->homonymousMethod);
+    }
     index++;
 
     if (index < data->signaturesSize) {
@@ -531,6 +576,7 @@ PyObject* signalNew(const char* name, ...)
     self->signaturesSize = 0;
     self->signatures = 0;
     self->initialized = 0;
+    self->homonymousMethod = 0;
 
     va_start(listSignatures, name);
     sig = va_arg(listSignatures, char*);
@@ -556,5 +602,15 @@ PyObject* signalBuildQtCompatible(const char* signature)
     return ret;
 }
 
+void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PyObject* signal)
+{
+    PyObject* typeDict = wrapperType->super.ht_type.tp_dict;
+    PyObject* homonymousMethod;
+    if ((homonymousMethod = PyDict_GetItemString(typeDict, signalName))) {
+        Py_INCREF(homonymousMethod);
+        reinterpret_cast<SignalData*>(signal)->homonymousMethod = homonymousMethod;
+    }
+    PyDict_SetItemString(typeDict, signalName, signal);
+}
 
 } //namespace PySide
