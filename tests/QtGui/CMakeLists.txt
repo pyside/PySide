@@ -1,6 +1,7 @@
 #Keep this in alphabetical sort
 
 PYSIDE_TEST(api2_test.py)
+PYSIDE_TEST(add_action_test.py)
 PYSIDE_TEST(bug_172.py)
 PYSIDE_TEST(bug_243.py)
 PYSIDE_TEST(bug_300_test.py)
@@ -10,8 +11,8 @@ PYSIDE_TEST(bug_338.py)
 PYSIDE_TEST(bug_363.py)
 PYSIDE_TEST(bug_367.py)
 PYSIDE_TEST(bug_389.py)
-PYSIDE_TEST(add_action_test.py)
 PYSIDE_TEST(customproxywidget_test.py)
+PYSIDE_TEST(deepcopy_test.py)
 PYSIDE_TEST(float_to_int_implicit_conversion_test.py)
 PYSIDE_TEST(grandparent_method_test.py)
 PYSIDE_TEST(hashabletype_test.py)

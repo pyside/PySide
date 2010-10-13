@@ -149,6 +149,16 @@
   <rejection class="*" enum-name="enum_1"/>
   <value-type name="QTransform">
     <enum-type name="TransformationType"/>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="ddddddddd" />
+              <replace from="%REDUCE_ARGS" to="%CPPSELF.m11(), %CPPSELF.m12(), %CPPSELF.m13(), %CPPSELF.m21(), %CPPSELF.m22(), %CPPSELF.m23(), %CPPSELF.m31(), %CPPSELF.m32(), %CPPSELF.m33()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
+
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
     <modify-function signature="inverted(bool*)const">
@@ -384,6 +394,15 @@
     <enum-type name="SequenceFormat"/>
     <enum-type name="SequenceMatch"/>
     <enum-type name="StandardKey"/>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="iiii" />
+              <replace from="%REDUCE_ARGS" to="(*%CPPSELF)[0], (*%CPPSELF)[1], (*%CPPSELF)[2], (*%CPPSELF)[3]" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
     <modify-function signature="operator QVariant()const" remove="all"/>
     <modify-function signature="operator int()const" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
@@ -452,6 +471,22 @@
       <include file-name="QMatrix" location="global"/>
       <include file-name="QTransform" location="global"/>
     </extra-includes>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            PyObject *points = PyList_New(%CPPSELF.count());
+            for (int i = 0; i &lt; %CPPSELF.count(); ++i){
+                int x, y;
+                %CPPSELF.point(i, &amp;x, &amp;y);
+                PyList_SET_ITEM(points, i, %CONVERTTOPYTHON[QPoint](QPoint(x, y)));
+            }
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="(N)" />
+              <replace from="%REDUCE_ARGS" to="points" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
+
     <modify-function signature="QPolygon(int, const int *)" remove="all"/>
     <modify-function signature="operator+(QVector&lt;QPoint&gt;)const" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QPoint)" remove="all"/>
@@ -564,6 +599,14 @@
     <extra-includes>
       <include file-name="QPainterPath" location="global"/>
     </extra-includes>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="dddddd" />
+              <replace from="%REDUCE_ARGS" to="%CPPSELF.m11(), %CPPSELF.m12(), %CPPSELF.m21(), %CPPSELF.m22(), %CPPSELF.dx(), %CPPSELF.dy()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
     <modify-function signature="inverted(bool*)const">
@@ -668,6 +711,14 @@
     <extra-includes>
       <include file-name="QVariant" location="global"/>
     </extra-includes>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="iiii" />
+              <replace from="%REDUCE_ARGS" to="%CPPSELF.red(), %CPPSELF.green(), %CPPSELF.blue(), %CPPSELF.alpha()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
     <modify-function signature="QColor(QColor::Spec)" remove="all"/>
     <modify-function signature="QColor(const char*)" remove="all" />
     <add-function signature="QColor(QVariant)">
@@ -676,14 +727,6 @@
             %0 = new %TYPE(%1.value&lt;QColor>());
         else
             PyErr_SetString(PyExc_TypeError, "QVariant must be holding a QColor");
-        </inject-code>
-    </add-function>
-    <add-function signature="__reduce__" return-type="PyObject*">
-        <inject-code class="target" position="beginning">
-            <insert-template name="reduce_start"/>
-            args = Py_BuildValue("(iiii)", %CPPSELF.red(), %CPPSELF.green(),
-                                           %CPPSELF.blue(), %CPPSELF.alpha());
-            <insert-template name="reduce_finish"/>
         </inject-code>
     </add-function>
     <!-- get* methods. Inject code -->
@@ -4836,17 +4879,505 @@
     </modify-function>
   </object-type>
 
-  <value-type name="QMatrix2x2"/>
-  <value-type name="QMatrix2x3"/>
-  <value-type name="QMatrix2x4"/>
-  <value-type name="QMatrix3x2"/>
-  <value-type name="QMatrix3x3"/>
-  <value-type name="QMatrix3x4"/>
-  <value-type name="QMatrix4x2"/>
-  <value-type name="QMatrix4x3"/>
-  <value-type name="QMatrix4x4">
-    <modify-function signature="QMatrix4x4(const qreal*,int,int)" remove="all"/>
+  <value-type name="QMatrix2x2">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="4" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix2x2(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="4" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="4" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="4" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix2x2" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix2x2&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix2x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix2x2&amp;)" return-type="QMatrix2x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix2x2&amp;)" return-type="QMatrix2x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix2x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix2x2&amp;)" return-type="bool" />
+  </value-type>
 
+  <value-type name="QMatrix2x3">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="6" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix2x3(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="6" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="6" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="6" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix3x2" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix2x3&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix2x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix2x3&amp;)" return-type="QMatrix2x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix2x3&amp;)" return-type="QMatrix2x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix2x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix2x3&amp;)" return-type="bool" />
+  </value-type>
+
+  <value-type name="QMatrix2x4">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="8" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix2x4(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="8" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="8" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="8" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix4x2" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix2x4&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix2x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix2x4&amp;)" return-type="QMatrix2x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix2x4&amp;)" return-type="QMatrix2x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix2x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix2x4&amp;)" return-type="bool" />
+ </value-type>
+
+  <value-type name="QMatrix3x2">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="6" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix3x2(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="6" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="6" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="6" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix2x3" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix3x2&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix3x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix3x2&amp;)" return-type="QMatrix3x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix3x2&amp;)" return-type="QMatrix3x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix3x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix3x2&amp;)" return-type="bool" />
+  </value-type>
+
+  <value-type name="QMatrix3x3">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="9" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix3x3(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="9" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="9" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="9" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix3x3" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix3x3&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix3x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix3x3&amp;)" return-type="QMatrix3x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix3x3&amp;)" return-type="QMatrix3x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix3x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix3x3&amp;)" return-type="bool" />
+  </value-type>
+
+  <value-type name="QMatrix3x4">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="12" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix3x4(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="12" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="12" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="12" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix4x3" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix3x4&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix3x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix3x4&amp;)" return-type="QMatrix3x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix3x4&amp;)" return-type="QMatrix3x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix3x4" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix3x4&amp;)" return-type="bool" />
+  </value-type>
+
+  <value-type name="QMatrix4x2">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="8" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix4x2(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="8" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="8" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="8" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix2x4" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix4x2&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix4x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix4x2&amp;)" return-type="QMatrix4x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix4x2&amp;)" return-type="QMatrix4x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix4x2" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix4x2&amp;)" return-type="bool" />
+  </value-type>
+
+  <value-type name="QMatrix4x3">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="12" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QMatrix4x3(PySequence*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_constructor">
+          <replace from="%SIZE" to="12" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="data()" return-type="qreal">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="12" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="fill(PyObject*)">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_fill_function">
+          <replace from="%MATRIX_SIZE" to="12" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="transposed()" return-type="PyObject">
+      <inject-code class="target" position="beginning">
+        <insert-template name="matrix_transposed_function">
+          <replace from="%TRANSPOSED_TYPE" to="QMatrix3x4" />
+        </insert-template>
+      </inject-code>
+    </add-function>
+    <add-function signature="operator!=(const QMatrix4x3&amp;)" return-type="bool" />
+    <add-function signature="operator*=(qreal)" return-type="QMatrix4x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF *= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator+=(const QMatrix4x3&amp;)" return-type="QMatrix4x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF += %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator-=(const QMatrix4x3&amp;)" return-type="QMatrix4x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF -= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator/=(qreal)" return-type="QMatrix4x3" >
+      <inject-code class="target" position="beginning">
+        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF /= %1);
+      </inject-code>
+    </add-function>
+    <add-function signature="operator==(const QMatrix4x3&amp;)" return-type="bool" />
+  </value-type>
+
+
+  <value-type name="QMatrix4x4">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code_matrix">
+              <replace from="%MATRIX_TYPE" to="qreal" />
+              <replace from="%MATRIX_SIZE" to="16" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <modify-function signature="QMatrix4x4(const qreal*,int,int)" remove="all"/>
     <modify-function signature="QMatrix4x4(const qreal*)">
       <modify-argument index="1">
         <replace-type modified-type="PySequence" />
@@ -4866,21 +5397,13 @@
         }
       </inject-code>
     </modify-function>
-
-    <modify-function signature="constData() const" rename="data">
-      <modify-argument index="return">
-        <replace-type modified-type="PyTupleObject*"/>
-      </modify-argument>
+    <modify-function signature="data()">
       <inject-code class="target" position="beginning">
-        const qreal* values = %CPPSELF.constData();
-        %PYARG_0 = PyTuple_New(16);
-        for(int i=0; i &lt; 16; i++) {
-          PyObject *v = PyFloat_FromDouble(values[i]);
-          PyTuple_SET_ITEM(%PYARG_0, i, v);
-        }
+        <insert-template name="matrix_data_function">
+          <replace from="%MATRIX_SIZE" to="16" />
+        </insert-template>
       </inject-code>
     </modify-function>
-
     <modify-function signature="copyDataTo(qreal *) const">
       <modify-argument index="1">
         <remove-argument/>
@@ -4888,7 +5411,6 @@
       <modify-argument index="return">
         <replace-type modified-type="PyTupleObject*"/>
       </modify-argument>
-
       <inject-code class="target" position="beginning">
         qreal values[16];
         %CPPSELF.%FUNCTION_NAME(values);
@@ -4899,11 +5421,10 @@
         }
       </inject-code>
     </modify-function>
-
     <modify-function signature="operator()(int, int)" remove="all"/>
     <modify-function signature="operator()(int, int)const" remove="all"/>
-    <modify-function signature="data()" remove="all"/>
     <modify-function signature="data() const" remove="all"/>
+    <modify-function signature="constData() const" remove="all"/>
   </value-type>
 
   <object-type name="QGesture">
@@ -4942,7 +5463,17 @@
   <object-type name="QPinchGesture">
       <enum-type name="ChangeFlag" flags="QPinchGesture::ChangeFlags"/>
   </object-type>
-  <value-type name="QQuaternion"/>
+  <value-type name="QQuaternion">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="dddd" />
+              <replace from="%REDUCE_ARGS" to="%CPPSELF.scalar(), %CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+  </value-type>
+
 
   <!-- Symbian
   <value-type name="QS60MainApplication"/>
@@ -4966,16 +5497,41 @@
       <value-type name="TouchPoint"/>
   </value-type>
 
-  <value-type name="QVector2D"/>
+  <value-type name="QVector2D">
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="dd" />
+              <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+  </value-type>
   <value-type name="QVector3D">
     <extra-includes>
       <include file-name="QMatrix4x4" location="global"/>
     </extra-includes>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="ddd" />
+              <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QVector4D">
     <extra-includes>
       <include file-name="QMatrix4x4" location="global"/>
     </extra-includes>
+    <add-function signature="__reduce__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="reduce_code">
+              <replace from="%REDUCE_FORMAT" to="dddd" />
+              <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z(), %CPPSELF.w()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
   </value-type>
 
   <suppress-warning text="template baseclass 'QGenericMatrix&lt;qreal&gt;' of '*' is not known"/>
@@ -4990,6 +5546,6 @@
   <suppress-warning text="unhandled enum value: ~FlagMask in QMessageBox::StandardButton"/>
   <suppress-warning text="unmatched enum ~FlagMask"/>
   <suppress-warning text="Argument 1 on function 'QTabWidget::setUpLayout(bool)' has default expressiont but does not have name."/>
-
+  <suppress-warning text="enum 'QMatrix4x4::enum_1' is specified in typesystem, but not declared"/>
   <suppress-warning text="type 'QGtkStyle' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
 </typesystem>
