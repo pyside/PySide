@@ -2,7 +2,7 @@ import unittest
 import os
 from helper import UsesQApplication
 
-from PySide import QtCore, QtGui, QtDeclarative
+from PySide import QtGui, QtDeclarative
 from PySide.QtUiTools import QUiLoader
 
 class MyWidget(QtGui.QComboBox):
@@ -40,6 +40,16 @@ class BugTest(UsesQApplication):
         self.assert_(isinstance(result.custom, MyWidget))
         self.assert_(result.custom.isPython())
 
+    def testPythonCustomWidgetsTwice(self):
+        w = QtGui.QWidget()
+        loader = QUiLoader()
+        loader.registerCustomWidget(MyWidget)
+
+        filePath = os.path.join(os.path.dirname(__file__), 'pycustomwidget2.ui')
+        result = loader.load(filePath, w)
+        self.assert_(isinstance(result.custom, MyWidget))
+        self.assert_(isinstance(result.custom2, MyWidget))
+        self.assert_(result.custom.isPython())
 
 if __name__ == '__main__':
     unittest.main()

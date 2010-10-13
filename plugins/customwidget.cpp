@@ -91,7 +91,7 @@ QString PyCustomWidget::whatsThis() const
 }
 
 QWidget *PyCustomWidget::createWidget(QWidget *parent)
-{   
+{
     //Create a python instance and return cpp object
     PyObject* pyParent;
     bool unkowParent = false;
@@ -100,8 +100,11 @@ QWidget *PyCustomWidget::createWidget(QWidget *parent)
         if (!pyParent) {
             pyParent = Shiboken::Converter<QWidget*>::toPython(parent);
             unkowParent = true;
+        } else {
+            Py_INCREF(pyParent);
         }
     } else {
+        Py_INCREF(Py_None);
         pyParent = Py_None;
     }
 
@@ -110,14 +113,14 @@ QWidget *PyCustomWidget::createWidget(QWidget *parent)
 
     //Call python constructor
     PyObject* result = PyObject_CallObject(m_data->pyObject, pyArgs);
-    
+
     QWidget* widget = 0;
     if (result) {
         if (unkowParent) //if parent does not exists in python, transfer the ownership to cpp
-            Shiboken::BindingManager::instance().transferOwnershipToCpp(result); 
+            Shiboken::BindingManager::instance().transferOwnershipToCpp(result);
         else
             Shiboken::setParent(pyParent, result);
- 
+
         widget = reinterpret_cast<QWidget*>(Shiboken::getCppPointer(result, result->ob_type));
     }
 
