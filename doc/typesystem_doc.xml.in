@@ -48,9 +48,9 @@
     <load-typesystem name="typesystem_maemo5.xml" generate="yes" />
     @end_Maemo5@
 
-    @if_Multimedia@
+    @if_QtMultimedia@
     <load-typesystem name="typesystem_multimedia.xml" generate="yes" />
-    @end_Multimedia@
+    @end_QtMultimedia@
 
     @if_QtDeclarative@
     <load-typesystem name="typesystem_declarative.xml" generate="yes"/>
