@@ -187,12 +187,56 @@
             Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
     </template>
     <!-- templates for __reduce__ -->
-    <template name="reduce_start">
+    <template name="reduce_code">
         PyObject *type = PyObject_Type(%PYSELF);
         PyObject *args = NULL;
+        args = Py_BuildValue("%REDUCE_FORMAT", %REDUCE_ARGS);
+        %PYARG_0 = Py_BuildValue("(NN)", type, args);
     </template>
-    <template name="reduce_finish">
-        %PYARG_0 = Py_BuildValue("(OO)", type, args);
+    <template name="reduce_code_matrix">
+        QList&lt; %MATRIX_TYPE &gt; cppArgs;
+        %MATRIX_TYPE data[%MATRIX_SIZE];
+        %CPPSELF.copyDataTo(data);
+        int matrixSize = %MATRIX_SIZE;
+        for(int size=0; size &lt; matrixSize; size++)
+            cppArgs.append(data[size]);
+
+        PyObject *type = PyObject_Type(%PYSELF);
+        PyObject *args = Py_BuildValue("(N)", %CONVERTTOPYTHON[QList&lt;%MATRIX_TYPE&gt; ](cppArgs));
+        %PYARG_0 = Py_BuildValue("(NN)", type, args);
     </template>
+
+    <!-- Matrix Aux functions -->
+    <template name="matrix_constructor">
+        if (PySequence_Size(%PYARG_1) == %SIZE) {
+            Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_1, "Fail to parse sequnce on %TYPE constructor."));
+            qreal values[%SIZE];
+            for(int i=0; i &lt; %SIZE; i++) {
+                PyObject *pv = PySequence_Fast_GET_ITEM(fast.object(), i);
+                values[i] = %CONVERTTOCPP[qreal](pv);
+            }
+            %0 = new %TYPE(values);
+        }
+    </template>
+
+    <template name="matrix_data_function">
+        const qreal* data = %CPPSELF.constData();
+        PyObject *pyData = PyTuple_New(%MATRIX_SIZE);
+        if (data) {
+            for(int i=0; i &lt; %MATRIX_SIZE; i++)
+                PyTuple_SET_ITEM(pyData, i, %CONVERTTOPYTHON[qreal](data[i]));
+        }
+        return pyData;
+    </template>
+
+    <template name="matrix_fill_function">
+        qreal value = %CONVERTTOCPP[qreal](%PYARG_1);
+        %CPPSELF.fill(value);
+    </template>
+
+    <template name="matrix_transposed_function">
+        return %CONVERTTOPYTHON[%TRANSPOSED_TYPE](%CPPSELF.transposed());
+    </template>
+
 </typesystem>
 
