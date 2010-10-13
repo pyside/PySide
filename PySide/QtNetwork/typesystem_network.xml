@@ -200,9 +200,6 @@
     <object-type name="QNetworkCookieJar"/>
     <object-type name="QNetworkReply">
         <enum-type name="NetworkError"/>
-        <modify-function signature="error()const">
-            <rename to="errorCode" />
-        </modify-function>
     </object-type>
 
     <value-type name="QHostAddress" hash-function="qHash">
