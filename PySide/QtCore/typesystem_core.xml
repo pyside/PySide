@@ -1778,42 +1778,28 @@
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
 
-        Shiboken::AutoDecRef result(
-            PyObject_CallMethod(pyTimer,
-                                const_cast&lt;char*>("connect"),
-                                const_cast&lt;char*>("OsO"),
-                                pyTimer,
-                                SIGNAL(timeout()),
-                                pyargs[1])
-        );
-        Shiboken::BindingManager::instance().destroyWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
-        timer->start(%1);
-        </inject-code>
-    </add-function>
-    <!-- Second argument is a PySide.QtCore.Signal. See bug #362. -->
-    <add-function signature="singleShot(int, PyObject*)" static="yes">
-        <inject-code class="target" position="beginning">
-        if (!PyObject_TypeCheck(%2, &amp;PySideSignalInstanceType))
-            goto Sbk%TYPEFunc_%FUNCTION_NAME_TypeError;
-
-        // %FUNCTION_NAME() - disable generation of c++ function call
-        Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
-        PyObject* pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
-        Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
-        QTimer* timer = Converter&lt;QTimer*>::toCpp(pyTimer);
-        timer->setSingleShot(true);
-        timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
-        PySideSignalInstanceData* signalInstance = reinterpret_cast&lt;PySideSignalInstanceData*&gt;(%2);
-        Shiboken::AutoDecRef signalSignature(PyString_FromFormat("2%s", signalInstance->signature));
-        Shiboken::AutoDecRef result(
-            PyObject_CallMethod(pyTimer,
-                                const_cast&lt;char*>("connect"),
-                                const_cast&lt;char*>("OsOO"),
-                                pyTimer,
-                                SIGNAL(timeout()),
-                                signalInstance->source,
-                                signalSignature.object())
-        );
+        if (PyObject_TypeCheck(%2, &amp;PySideSignalInstanceType)) {
+            PySideSignalInstanceData* signalInstance = reinterpret_cast&lt;PySideSignalInstanceData*&gt;(%2);
+            Shiboken::AutoDecRef signalSignature(PyString_FromFormat("2%s", signalInstance->signature));
+            Shiboken::AutoDecRef result(
+                PyObject_CallMethod(pyTimer,
+                                    const_cast&lt;char*>("connect"),
+                                    const_cast&lt;char*>("OsOO"),
+                                    pyTimer,
+                                    SIGNAL(timeout()),
+                                    signalInstance->source,
+                                    signalSignature.object())
+            );
+        } else {
+            Shiboken::AutoDecRef result(
+                PyObject_CallMethod(pyTimer,
+                                    const_cast&lt;char*>("connect"),
+                                    const_cast&lt;char*>("OsO"),
+                                    pyTimer,
+                                    SIGNAL(timeout()),
+                                    pyargs[1])
+            );
+        }
         Shiboken::BindingManager::instance().destroyWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
         timer->start(%1);
         </inject-code>
