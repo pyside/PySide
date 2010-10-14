@@ -41,6 +41,15 @@ class QListWidgetTest(UsesQApplication):
         self.assert_(sys.getrefcount(i), 2)
         del i
 
+    def testIt(self):
+        lst = QtGui.QListWidget()
+        lst.show()
+        slot = lambda : lst.removeItemWidget(lst.currentItem())
+        lst.addItem(QtGui.QListWidgetItem("foo"))
+        QtCore.QTimer.singleShot(0, slot)
+        QtCore.QTimer.singleShot(0, lst.close)
+        self.app.exec_()
+        self.assertEqual(lst.count(), 1)
 
 if __name__ == '__main__':
     unittest.main()
