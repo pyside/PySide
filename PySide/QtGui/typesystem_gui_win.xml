@@ -19,6 +19,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 -->
 <typesystem package="PySide.QtGui">
-  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject"/>
+  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject" />
+  <primitive-type name="WId" target-lang-api-name="PyObject">
+    <conversion-rule file="glue/wid_conversions.h"/>
+  </primitive-type>
   <enum-type name="QPixmap::HBitmapFormat" />
 </typesystem>
