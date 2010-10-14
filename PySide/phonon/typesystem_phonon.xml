@@ -54,6 +54,27 @@
             <!-- ### causes moc-related linker error -->
             <!-- <object-type name="Notifier"/> -->
             <object-type name="NotifierWrapper" target-lang-name="Notifier">
+              <inject-documentation format="target" mode="append">
+.. class: Notifier
+
+   Notifications about backend capabilities
+
+.. method:: capabilitiesChanged()
+
+    This signal is emitted if the capabilities have changed. This can happen if the user has requested a backend change.
+
+.. method:: availableAudioOutputDevicesChanged()
+
+    This signal is emitted when audio capture devices were plugged or unplugged.
+
+    Check :meth:`PySide.phonon.BackendCapabilities.availableAudioOutputDevices` to get the current list of available devices.
+
+.. method:: availableAudioCaptureDevicesChanged()
+
+    This signal is emitted when audio capture devices were plugged or unplugged.
+
+    Check :meth:`PySide.phonon.BackendCapabilities.availableAudioCaptureDevices` to get the current list of available devices.
+              </inject-documentation>
                 <include file-name="backendcapabilities.h" location="global"/>
                 <include file-name="pyside_phonon.h" location="local"/>
 
