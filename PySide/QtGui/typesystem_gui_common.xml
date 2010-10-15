@@ -518,11 +518,20 @@
     </modify-function>
   </value-type>
   <value-type name="QTreeWidgetItemIterator" >
+    <modify-function signature="QTreeWidgetItemIterator(QTreeWidget *, QFlags&lt;QTreeWidgetItemIterator::IteratorFlag&gt;)">
+        <inject-code class="target" position="end">
+            Shiboken::setParent(%PYARG_1, (PyObject*)sbkSelf);
+        </inject-code>
+    </modify-function>
+    <add-function signature="value()" return-type="QTreeWidgetItem*">
+        <inject-code>
+            %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItem*](%CPPSELF.operator*());
+            SbkBaseWrapper_setOwnership(%PYARG_0, false);
+        </inject-code>
+    </add-function>
     <enum-type name="IteratorFlag" flags="QTreeWidgetItemIterator::IteratorFlags"/>
     <modify-function signature="operator++(int)" remove="all"/>
     <modify-function signature="operator--(int)" remove="all"/>
-    <modify-function signature="operator+=(int)" remove="all"/>
-    <modify-function signature="operator-=(int)" remove="all"/>
     <modify-function signature="operator++()" remove="all"/>
     <modify-function signature="operator--()" remove="all"/>
     <modify-function signature="operator*()const" remove="all"/>
