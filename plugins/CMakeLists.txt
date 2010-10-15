@@ -19,7 +19,7 @@ add_library(uiplugin STATIC ${ui_plugin_src} ${MOC_FILES})
 add_definitions(-fPIC)
 add_definitions(-DQT_STATICPLUGIN)
 target_link_libraries(uiplugin
-                      ${QT_QTDESIGNER_LIBRARY}
+                      ${QT_QTUITOOLS_LIBRARY}
                       ${SHIBOKEN_LIBRARY}
                       ${PYTHON_LIBRARY})
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

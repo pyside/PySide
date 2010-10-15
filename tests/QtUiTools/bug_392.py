@@ -2,7 +2,7 @@ import unittest
 import os
 from helper import UsesQApplication
 
-from PySide import QtGui, QtDeclarative
+from PySide import QtGui
 from PySide.QtUiTools import QUiLoader
 
 class MyWidget(QtGui.QComboBox):
@@ -20,15 +20,6 @@ class BugTest(UsesQApplication):
         filePath = os.path.join(os.path.dirname(__file__), 'action.ui')
         result = loader.load(filePath, w)
         self.assert_(isinstance(result.statusbar.actionFoo, QtGui.QAction))
-
-    def testCustomWidgets(self):
-        w = QtGui.QWidget()
-        loader = QUiLoader()
-
-        filePath = os.path.join(os.path.dirname(__file__), 'customwidget.ui')
-        result = loader.load(filePath, w)
-        self.assert_(isinstance(result.declarativeView, QtDeclarative.QDeclarativeView))
-        self.assert_(isinstance(result.worldTimeClock, QtGui.QWidget))
 
     def testPythonCustomWidgets(self):
         w = QtGui.QWidget()
