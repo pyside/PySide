@@ -1,7 +1,7 @@
 import unittest
 
-from PySide.QtGui import QPainter, QBrush, QLinearGradient
-from PySide.QtCore import QRect, QRectF, Qt
+from PySide.QtGui import QPainter, QLinearGradient
+from PySide.QtCore import QLine, QLineF, QPoint, QPointF, QRect, QRectF, Qt
 
 class QPainterDrawText(unittest.TestCase):
 
@@ -16,15 +16,15 @@ class QPainterDrawText(unittest.TestCase):
     def testDrawText(self):
         # bug #254
         rect = self.painter.drawText(100, 100, 100, 100,
-                                    Qt.AlignCenter | Qt.TextWordWrap,
-                                    self.text)
+                                     Qt.AlignCenter | Qt.TextWordWrap,
+                                     self.text)
         self.assert_(isinstance(rect, QRect))
 
     def testDrawTextWithRect(self):
         # bug #225
         rect = QRect(100, 100, 100, 100)
         newRect = self.painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap,
-                              self.text)
+                                        self.text)
 
         self.assert_(isinstance(newRect, QRect))
 
@@ -32,9 +32,17 @@ class QPainterDrawText(unittest.TestCase):
         '''QPainter.drawText(QRectF, ... ,QRectF*) inject code'''
         rect = QRectF(100, 52.3, 100, 100)
         newRect = self.painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap,
-                              self.text)
+                                        self.text)
 
         self.assert_(isinstance(newRect, QRectF))
+
+    def testDrawLinesOverloads(self):
+        '''Calls QPainter.drawLines overloads, if something is
+           wrong Exception and chaos ensues. Bug #395'''
+        self.painter.drawLines([QLine(QPoint(0,0), QPoint(1,1))])
+        self.painter.drawLines([QPoint(0,0), QPoint(1,1)])
+        self.painter.drawLines([QPointF(0,0), QPointF(1,1)])
+        self.painter.drawLines([QLineF(QPointF(0,0), QPointF(1,1))])
 
 class SetBrushWithOtherArgs(unittest.TestCase):
     '''Using qpainter.setBrush with args other than QBrush'''
