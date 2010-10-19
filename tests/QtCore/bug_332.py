@@ -14,3 +14,5 @@ class TestBug(unittest.TestCase):
         l.tryLock() # this cause a assertion
 
 
+if __name__ == '__main__':
+    unittest.main()
