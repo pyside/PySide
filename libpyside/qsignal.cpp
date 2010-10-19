@@ -236,18 +236,21 @@ void signalFree(void *self)
 
 void signalInstanceFree(void* self)
 {
-    PyObject *pySelf = reinterpret_cast<PyObject*>(self);
-    PySideSignalInstanceData *data = reinterpret_cast<PySideSignalInstanceData*>(self);
+    PyObject* pySelf = reinterpret_cast<PyObject*>(self);
+    PySideSignalInstanceData* data = reinterpret_cast<PySideSignalInstanceData*>(self);
 
-    free(data->signalName);
-    free(data->signature);
+    PySideSignalInstanceDataPrivate* dataPvt = data->d;
+    free(dataPvt->signalName);
+    free(dataPvt->signature);
 
-    Py_XDECREF(data->homonymousMethod);
+    Py_XDECREF(dataPvt->homonymousMethod);
 
-    if (data->next) {
-        Py_DECREF(data->next);
-        data->next = 0;
+    if (dataPvt->next) {
+        Py_DECREF(dataPvt->next);
+        dataPvt->next = 0;
     }
+    delete dataPvt;
+    data->d = 0;
     pySelf->ob_type->tp_base->tp_free(self);
 }
 
@@ -273,25 +276,25 @@ PyObject* signalInstanceConnect(PyObject* self, PyObject* args, PyObject* kwds)
         while(sourceWalk && !match) {
             targetWalk = reinterpret_cast<PySideSignalInstanceData*>(slot);
             while(targetWalk && !match) {
-                if (QMetaObject::checkConnectArgs(sourceWalk->signature, targetWalk->signature)) {
-                    PyList_Append(pyArgs, sourceWalk->source);
-                    Shiboken::AutoDecRef sourceSignature(PySide::signalBuildQtCompatible(sourceWalk->signature));
+                if (QMetaObject::checkConnectArgs(sourceWalk->d->signature, targetWalk->d->signature)) {
+                    PyList_Append(pyArgs, sourceWalk->d->source);
+                    Shiboken::AutoDecRef sourceSignature(PySide::signalBuildQtCompatible(sourceWalk->d->signature));
                     PyList_Append(pyArgs, sourceSignature);
 
-                    PyList_Append(pyArgs, targetWalk->source);
-                    Shiboken::AutoDecRef targetSignature(PySide::signalBuildQtCompatible(targetWalk->signature));
+                    PyList_Append(pyArgs, targetWalk->d->source);
+                    Shiboken::AutoDecRef targetSignature(PySide::signalBuildQtCompatible(targetWalk->d->signature));
                     PyList_Append(pyArgs, targetSignature);
 
                     match = true;
                 }
-                targetWalk = reinterpret_cast<PySideSignalInstanceData*>(targetWalk->next);
+                targetWalk = reinterpret_cast<PySideSignalInstanceData*>(targetWalk->d->next);
             }
-            sourceWalk = reinterpret_cast<PySideSignalInstanceData*>(sourceWalk->next);
+            sourceWalk = reinterpret_cast<PySideSignalInstanceData*>(sourceWalk->d->next);
         }
     } else {
         //try the first signature
-        PyList_Append(pyArgs, source->source);
-        Shiboken::AutoDecRef signature(PySide::signalBuildQtCompatible(source->signature));
+        PyList_Append(pyArgs, source->d->source);
+        Shiboken::AutoDecRef signature(PySide::signalBuildQtCompatible(source->d->signature));
         PyList_Append(pyArgs, signature);
 
         PyList_Append(pyArgs, slot);
@@ -303,7 +306,7 @@ PyObject* signalInstanceConnect(PyObject* self, PyObject* args, PyObject* kwds)
 
     if (match) {
         Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
-        Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->source, "connect"));
+        Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->d->source, "connect"));
         return PyObject_CallObject(pyMethod, tupleArgs);
     }
 
@@ -315,13 +318,13 @@ PyObject* signalInstanceEmit(PyObject* self, PyObject* args)
     PySideSignalInstanceData *source = reinterpret_cast<PySideSignalInstanceData*>(self);
 
     Shiboken::AutoDecRef pyArgs(PyList_New(0));
-    Shiboken::AutoDecRef sourceSignature(PySide::signalBuildQtCompatible(source->signature));
+    Shiboken::AutoDecRef sourceSignature(PySide::signalBuildQtCompatible(source->d->signature));
 
     PyList_Append(pyArgs, sourceSignature);
     for(Py_ssize_t i = 0, max = PyTuple_Size(args); i < max; i++)
         PyList_Append(pyArgs, PyTuple_GetItem(args, i));
 
-    Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->source, "emit"));
+    Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->d->source, "emit"));
 
     Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
     return PyObject_CallObject(pyMethod, tupleArgs);
@@ -331,18 +334,18 @@ PyObject* signalInstanceGetItem(PyObject* self, PyObject* key)
 {
     PySideSignalInstanceData* data = reinterpret_cast<PySideSignalInstanceData*>(self);
     char* sigKey = PySide::signalParseSignature(key);
-    char* sig = PySide::signalBuildSignature(data->signalName, sigKey);
+    char* sig = PySide::signalBuildSignature(data->d->signalName, sigKey);
     free(sigKey);
-    const char* sigName = data->signalName;
+    const char* sigName = data->d->signalName;
 
     while(data) {
-        if (strcmp(data->signature, sig) == 0) {
+        if (strcmp(data->d->signature, sig) == 0) {
             free(sig);
             PyObject *result = reinterpret_cast<PyObject*>(data);
             Py_INCREF(result);
             return result;
         }
-        data = reinterpret_cast<PySideSignalInstanceData*>(data->next);
+        data = reinterpret_cast<PySideSignalInstanceData*>(data->d->next);
     }
     PyErr_Format(PyExc_IndexError, "Signature %s not found for signal: %s", sig, sigName);
     free(sig);
@@ -364,20 +367,20 @@ PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
     bool match = false;
     if (slot->ob_type == &PySideSignalInstanceType) {
         PySideSignalInstanceData *target = reinterpret_cast<PySideSignalInstanceData*>(slot);
-        if (QMetaObject::checkConnectArgs(source->signature, target->signature)) {
-            PyList_Append(pyArgs, source->source);
-            Shiboken::AutoDecRef source_signature(PySide::signalBuildQtCompatible(source->signature));
+        if (QMetaObject::checkConnectArgs(source->d->signature, target->d->signature)) {
+            PyList_Append(pyArgs, source->d->source);
+            Shiboken::AutoDecRef source_signature(PySide::signalBuildQtCompatible(source->d->signature));
             PyList_Append(pyArgs, source_signature);
 
-            PyList_Append(pyArgs, target->source);
-            Shiboken::AutoDecRef target_signature(PySide::signalBuildQtCompatible(target->signature));
+            PyList_Append(pyArgs, target->d->source);
+            Shiboken::AutoDecRef target_signature(PySide::signalBuildQtCompatible(target->d->signature));
             PyList_Append(pyArgs, target_signature);
             match = true;
         }
     } else {
         //try the first signature
-        PyList_Append(pyArgs, source->source);
-        Shiboken::AutoDecRef signature(PySide::signalBuildQtCompatible(source->signature));
+        PyList_Append(pyArgs, source->d->source);
+        Shiboken::AutoDecRef signature(PySide::signalBuildQtCompatible(source->d->signature));
         PyList_Append(pyArgs, signature);
 
         PyList_Append(pyArgs, slot);
@@ -386,7 +389,7 @@ PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
 
     if (match) {
         Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
-        Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->source, "disconnect"));
+        Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->d->source, "disconnect"));
         return  PyObject_CallObject(pyMethod, tupleArgs);
     }
 
@@ -415,13 +418,13 @@ PyObject* signalCall(PyObject* self, PyObject* args, PyObject* kw)
 PyObject* signalInstanceCall(PyObject* self, PyObject* args, PyObject* kw)
 {
     PySideSignalInstanceData* signalData = reinterpret_cast<PySideSignalInstanceData*>(self);
-    if (!signalData->homonymousMethod) {
+    if (!signalData->d->homonymousMethod) {
         PyErr_SetString(PyExc_TypeError, "native Qt signal is not callable");
         return 0;
     }
 
-    descrgetfunc getDescriptor = signalData->homonymousMethod->ob_type->tp_descr_get;
-    Shiboken::AutoDecRef homonymousMethod(getDescriptor(signalData->homonymousMethod, signalData->source, 0));
+    descrgetfunc getDescriptor = signalData->d->homonymousMethod->ob_type->tp_descr_get;
+    Shiboken::AutoDecRef homonymousMethod(getDescriptor(signalData->d->homonymousMethod, signalData->d->source, 0));
     return PyCFunction_Call(homonymousMethod, args, kw);
 }
 
@@ -535,24 +538,26 @@ void signalAppendSignature(SignalData* self, char* signature)
 void signalInstanceInitialize(PyObject* instance, PyObject* name, SignalData* data, PyObject* source, int index)
 {
     PySideSignalInstanceData *self = reinterpret_cast<PySideSignalInstanceData*>(instance);
-    self->next = 0;
+    self->d = new PySideSignalInstanceDataPrivate;
+    PySideSignalInstanceDataPrivate* selfPvt = self->d;
+    selfPvt->next = 0;
     if (data->signalName)
-        self->signalName = strdup(data->signalName);
+        selfPvt->signalName = strdup(data->signalName);
     else
-        self->signalName = strdup(PyString_AsString(name));
+        selfPvt->signalName = strdup(PyString_AsString(name));
 
-    self->source = source;
-    self->signature = signalBuildSignature(self->signalName, data->signatures[index]);
-    self->homonymousMethod = 0;
+    selfPvt->source = source;
+    selfPvt->signature = signalBuildSignature(self->d->signalName, data->signatures[index]);
+    selfPvt->homonymousMethod = 0;
     if (data->homonymousMethod) {
-        self->homonymousMethod = data->homonymousMethod;
-        Py_INCREF(self->homonymousMethod);
+        selfPvt->homonymousMethod = data->homonymousMethod;
+        Py_INCREF(selfPvt->homonymousMethod);
     }
     index++;
 
     if (index < data->signaturesSize) {
-        self->next = reinterpret_cast<PyObject*>(PyObject_New(PySideSignalInstanceData, &PySideSignalInstanceType));
-        signalInstanceInitialize(self->next, name, data, source, index);
+        selfPvt->next = reinterpret_cast<PyObject*>(PyObject_New(PySideSignalInstanceData, &PySideSignalInstanceType));
+        signalInstanceInitialize(selfPvt->next, name, data, source, index);
     }
 }
 
@@ -611,6 +616,16 @@ void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* s
         reinterpret_cast<SignalData*>(signal)->homonymousMethod = homonymousMethod;
     }
     PyDict_SetItemString(typeDict, signalName, signal);
+}
+
+PyObject* getSignalSource(PySideSignalInstanceData* signal)
+{
+    return signal->d->source;
+}
+
+const char* getSignalSignature(PySideSignalInstanceData* signal)
+{
+    return signal->d->signature;
 }
 
 } //namespace PySide

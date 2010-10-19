@@ -36,14 +36,11 @@ extern "C"
 {
     extern PYSIDE_API PyTypeObject PySideSignalInstanceType;
 
-    struct PySideSignalInstanceData
+    struct PySideSignalInstanceDataPrivate;
+    struct PYSIDE_API PySideSignalInstanceData
     {
         PyObject_HEAD
-        char* signalName;
-        char* signature;
-        PyObject* source;
-        PyObject* homonymousMethod;
-        PyObject* next;
+        PySideSignalInstanceDataPrivate* d;
     };
 }; //extern "C"
 
@@ -53,7 +50,8 @@ namespace PySide
 PYSIDE_API PyObject* signalNew(const char* name, ...);
 PYSIDE_API void signalUpdateSource(PyObject* source);
 PYSIDE_API void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PyObject* signal);
-
+PYSIDE_API PyObject* getSignalSource(PySideSignalInstanceData* signal);
+PYSIDE_API const char* getSignalSignature(PySideSignalInstanceData* signal);
 } //namespace PySide
 
 #endif

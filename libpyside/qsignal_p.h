@@ -28,6 +28,14 @@
 extern "C"
 {
     extern PyTypeObject PySideSignalType;
+
+    struct PySideSignalInstanceDataPrivate {
+        char* signalName;
+        char* signature;
+        PyObject* source;
+        PyObject* homonymousMethod;
+        PyObject* next;
+    };
 }; //extern "C"
 
 namespace PySide

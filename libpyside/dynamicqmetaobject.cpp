@@ -398,10 +398,10 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
             PyObject *attr = PyObject_GetAttr(pyObj, key);
             PySideSignalInstanceData *data = reinterpret_cast<PySideSignalInstanceData*>(attr);
             while(data) {
-                int index = base->indexOfSignal(data->signature);
+                int index = base->indexOfSignal(data->d->signature);
                 if (index == -1)
-                    mo->addSignal(data->signature);
-                data = reinterpret_cast<PySideSignalInstanceData*>(data->next);
+                    mo->addSignal(data->d->signature);
+                data = reinterpret_cast<PySideSignalInstanceData*>(data->d->next);
             }
         }
 

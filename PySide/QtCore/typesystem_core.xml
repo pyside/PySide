@@ -1964,14 +1964,14 @@
 
         if (PyObject_TypeCheck(%2, &amp;PySideSignalInstanceType)) {
             PySideSignalInstanceData* signalInstance = reinterpret_cast&lt;PySideSignalInstanceData*&gt;(%2);
-            Shiboken::AutoDecRef signalSignature(PyString_FromFormat("2%s", signalInstance->signature));
+            Shiboken::AutoDecRef signalSignature(PyString_FromFormat("2%s", PySide::getSignalSignature(signalInstance)));
             Shiboken::AutoDecRef result(
                 PyObject_CallMethod(pyTimer,
                                     const_cast&lt;char*>("connect"),
                                     const_cast&lt;char*>("OsOO"),
                                     pyTimer,
                                     SIGNAL(timeout()),
-                                    signalInstance->source,
+                                    PySide::getSignalSource(signalInstance),
                                     signalSignature.object())
             );
         } else {
@@ -2632,12 +2632,13 @@
             <replace-default-expression with="0" />
         </modify-argument>
         <inject-code>
-            if (PyObject_TypeCheck(%1, &amp;PySide::SignalInstance_Type)) {
-                PySide::SignalInstanceData* data = (PySide::SignalInstanceData*) %PYARG_1;
-                Shiboken::AutoDecRef obType(PyObject_Type(data->source));
-                QObject* sender = %CONVERTTOCPP[QObject*](data->source);
+            if (PyObject_TypeCheck(%1, &amp;PySideSignalInstanceType)) {
+                PyObject* dataSource = PySide::getSignalSource((PySideSignalInstanceData*) %PYARG_1);
+                Shiboken::AutoDecRef obType(PyObject_Type(dataSource));
+                QObject* sender = %CONVERTTOCPP[QObject*](dataSource);
                 if (sender) {
-                    QByteArray signature(data->signature); // Append SIGNAL flag (2)
+                    const char* dataSignature = PySide::getSignalSignature((PySideSignalInstanceData*) %PYARG_1);
+                    QByteArray signature(dataSignature); // Append SIGNAL flag (2)
                     %0 = new QSignalTransitionWrapper(sender, "2" + signature, %2);
                 }
             }
@@ -2687,8 +2688,8 @@
         if (!PyObject_TypeCheck(%1, &amp;PySideSignalInstanceType))
             goto Sbk%TYPEFunc_%FUNCTION_NAME_TypeError;
         PySideSignalInstanceData* signalInstance = reinterpret_cast&lt;PySideSignalInstanceData*&gt;(%1);
-        QObject* sender = %CONVERTTOCPP[QObject*](signalInstance->source);
-        %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->%FUNCTION_NAME(sender, signalInstance->signature, %2));
+        QObject* sender = %CONVERTTOCPP[QObject*](PySide::getSignalSource(signalInstance));
+        %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->%FUNCTION_NAME(sender, PySide::getSignalSignature(signalInstance), %2));
       </inject-code>
     </add-function>
 
