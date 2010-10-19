@@ -1767,8 +1767,6 @@
     <modify-function signature="waitForBytesWritten(int)" allow-thread="yes"/>
     <modify-function signature="peek(char *,qint64)" remove="all"/>
     <modify-function signature="read(char *,qint64)" remove="all"/>
-<!--     Needed by QNetworkReply class on QtNetwork module -->
-<!--     <modify-function signature="readData(char *,qint64)" remove="all"/> -->
     <modify-function signature="readLine(char *,qint64)" remove="all"/>
     <modify-function signature="write(const char *,qint64)" remove="all"/>
     <modify-function signature="getChar(char *)">
@@ -1779,6 +1777,44 @@
         <inject-code class="target" position="beginning">
             <insert-template name="fix_char*" />
         </inject-code>
+    </modify-function>
+    <modify-function signature="readData(char *,qint64)">
+        <inject-code class="target">
+            QByteArray ba;
+            ba.resize(%2);
+            %CPPSELF.%FUNCTION_NAME(ba.data(), ba.size());
+            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](ba);
+        </inject-code>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="QByteArray"/>
+            <conversion-rule class="native">
+            const QByteArray ba(%CONVERTTOCPP[QByteArray](%PYARG_0));
+            memcpy(data, ba.data(), ba.size());
+            long long %out = ba.size();
+            </conversion-rule>
+        </modify-argument>
+    </modify-function>
+    <modify-function signature="readLineData(char *,qint64)">
+        <inject-code class="target">
+            QByteArray ba;
+            ba.resize(%2);
+            %CPPSELF.%FUNCTION_NAME(ba.data(), ba.size());
+            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](ba);
+        </inject-code>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="QByteArray"/>
+            <conversion-rule class="native">
+            const QByteArray ba(%CONVERTTOCPP[QByteArray](%PYARG_0));
+            memcpy(data, ba.data(), ba.size());
+            long long %out = ba.size();
+            </conversion-rule>
+        </modify-argument>
     </modify-function>
   </object-type>
   <object-type name="QCryptographicHash">
