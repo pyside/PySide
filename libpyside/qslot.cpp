@@ -21,9 +21,9 @@
  */
 
 #include <shiboken.h>
-#include <dynamicqmetaobject.h>
-
 #include <QString>
+#include "dynamicqmetaobject_p.h"
+#include "qsignal_p.h"
 
 #define SLOT_DEC_NAME "Slot"
 
@@ -38,15 +38,11 @@ typedef struct
 extern "C"
 {
 
-static int slot_init(PyObject*, PyObject*, PyObject*);
-static PyObject* slot_call(PyObject*, PyObject*, PyObject*);
-
-//external qsignal.cpp
-extern char* get_type_name(PyObject*);
-
+static int slotTpInit(PyObject*, PyObject*, PyObject*);
+static PyObject* slotCall(PyObject*, PyObject*, PyObject*);
 
 // Class Definition -----------------------------------------------
-static PyTypeObject Slot_Type = {
+static PyTypeObject PySideSlotType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "PySide.QtCore."SLOT_DEC_NAME, /*tp_name*/
@@ -62,7 +58,7 @@ static PyTypeObject Slot_Type = {
     0,                         /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
-    slot_call,                /*tp_call*/
+    slotCall,                  /*tp_call*/
     0,                         /*tp_str*/
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
@@ -83,7 +79,7 @@ static PyTypeObject Slot_Type = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)slot_init,      /*tp_init */
+    slotTpInit,                /*tp_init */
     0,                         /*tp_alloc */
     PyType_GenericNew,         /*tp_new */
     0,                         /*tp_free */
@@ -96,19 +92,7 @@ static PyTypeObject Slot_Type = {
     0,                         /*tp_del */
 };
 
-void init_slot(PyObject *module)
-{
-    if (PyType_Ready(&Slot_Type) < 0)
-        return;
-
-    Py_INCREF(&Slot_Type);
-    PyModule_AddObject(module, SLOT_DEC_NAME, ((PyObject*)&Slot_Type));
-}
-
-
-} // extern "C"
-
-int slot_init(PyObject *self, PyObject *args, PyObject *kw)
+int slotTpInit(PyObject *self, PyObject *args, PyObject *kw)
 {
     static PyObject *emptyTuple = 0;
     static const char *kwlist[] = {"name", "result", 0};
@@ -124,7 +108,7 @@ int slot_init(PyObject *self, PyObject *args, PyObject *kw)
     SlotData *data = reinterpret_cast<SlotData*>(self);
     for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
         PyObject *argType = PyTuple_GET_ITEM(args, i);
-        char *typeName = get_type_name(argType);
+        char *typeName = PySide::getTypeName(argType);
         if (typeName) {
             if (data->args) {
                 data->args = reinterpret_cast<char*>(realloc(data->args, (strlen(data->args) + 1 + strlen(typeName)) * sizeof(char*)));
@@ -141,14 +125,14 @@ int slot_init(PyObject *self, PyObject *args, PyObject *kw)
         data->slotName = strdup(argName);
 
     if (argResult)
-        data->resultType = get_type_name(argResult);
+        data->resultType = PySide::getTypeName(argResult);
     else
         data->resultType = strdup("void");
 
     return 1;
 }
 
-PyObject* slot_call(PyObject* self, PyObject* args, PyObject* kw)
+PyObject* slotCall(PyObject* self, PyObject* args, PyObject* kw)
 {
     static PyObject* pySlotName = 0;
     PyObject* callback;
@@ -194,3 +178,18 @@ PyObject* slot_call(PyObject* self, PyObject* args, PyObject* kw)
     return callback;
 }
 
+} // extern "C"
+
+namespace PySide
+{
+
+void initSlotSupport(PyObject* module)
+{
+    if (PyType_Ready(&PySideSlotType) < 0)
+        return;
+
+    Py_INCREF(&PySideSlotType);
+    PyModule_AddObject(module, SLOT_DEC_NAME, ((PyObject*)&PySideSlotType));
+}
+
+} // namespace PySide

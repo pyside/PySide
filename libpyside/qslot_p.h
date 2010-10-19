@@ -19,41 +19,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+#ifndef PYSIDE_SLOT_P_H
+#define PYSIDE_SLOT_P_H
 
-#ifndef PYSIDE_SIGNAL_H
-#define PYSIDE_SIGNAL_H
-
-#include <pysidemacros.h>
 #include <Python.h>
-#include <QObject>
-
-namespace Shiboken
-{
-    struct SbkBaseWrapperType;
-}
-
-extern "C"
-{
-    extern PYSIDE_API PyTypeObject PySideSignalInstanceType;
-
-    struct PySideSignalInstanceData
-    {
-        PyObject_HEAD
-        char* signalName;
-        char* signature;
-        PyObject* source;
-        PyObject* homonymousMethod;
-        PyObject* next;
-    };
-}; //extern "C"
 
 namespace PySide
 {
-
-PYSIDE_API PyObject* signalNew(const char* name, ...);
-PYSIDE_API void signalUpdateSource(PyObject* source);
-PYSIDE_API void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PyObject* signal);
-
-} //namespace PySide
+    void initSlotSupport(PyObject* module);
+}
 
 #endif

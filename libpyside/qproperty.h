@@ -30,11 +30,6 @@
 namespace PySide
 {
 
-extern "C"
-{
-    extern PYSIDE_API PyTypeObject QProperty_Type;
-}; //extern "C"
-
 PYSIDE_API bool isQPropertyType(PyObject* pyObj);
 
 /**
@@ -46,7 +41,7 @@ PYSIDE_API bool isQPropertyType(PyObject* pyObj);
  * @param   value The value to set in property
  * @return  Return 0 if ok or -1 if this function fail
  **/
-PYSIDE_API int qproperty_set(PyObject* self, PyObject* source, PyObject* value);
+PYSIDE_API int qpropertySet(PyObject* self, PyObject* source, PyObject* value);
 
 /**
  * This function call get property function
@@ -56,27 +51,7 @@ PYSIDE_API int qproperty_set(PyObject* self, PyObject* source, PyObject* value);
  * @param   source The QObject witch has the property
  * @return  Return the result of property get function or 0 if this fail
  **/
-PYSIDE_API PyObject* qproperty_get(PyObject* self, PyObject* source);
-
-/**
- * This function call reset property function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @param   source The QObject witch has the property
- * @return  Return 0 if ok or -1 if this function fail
- **/
-PYSIDE_API int qproperty_reset(PyObject* self, PyObject* source);
-
-
-/**
- * This function return the property type
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return the property type name
- **/
-PYSIDE_API const char* qproperty_get_type(PyObject* self);
+PYSIDE_API PyObject* qpropertyGet(PyObject* self, PyObject* source);
 
 /**
  * This function search in the source object for desired property
@@ -85,90 +60,7 @@ PYSIDE_API const char* qproperty_get_type(PyObject* self);
  * @param   name The property name
  * @return  Return a new reference to property object
  **/
-PYSIDE_API PyObject* qproperty_get_object(PyObject* source, PyObject* name);
-
-
-/**
- * This function check if property has read function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_readble(PyObject* self);
-
-/**
- * This function check if property has write function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_writable(PyObject* self);
-
-/**
- * This function check if property has reset function
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_has_reset(PyObject* self);
-
-/**
- * This function check if property has the flag DESIGNABLE setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_designable(PyObject* self);
-
-/**
- * This function check if property has the flag SCRIPTABLE setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_scriptable(PyObject* self);
-
-/**
- * This function check if property has the flag STORED setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_stored(PyObject* self);
-
-/**
- * This function check if property has the flag USER setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_user(PyObject* self);
-
-/**
- * This function check if property has the flag CONSTANT setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_constant(PyObject* self);
-
-/**
- * This function check if property has the flag FINAL setted
- * This function does not check the property object type
- *
- * @param   self The property object
- * @return  Return a boolean value
- **/
-PYSIDE_API bool qproperty_is_final(PyObject* self);
-
+PYSIDE_API PyObject* qpropertyGetObject(PyObject* source, PyObject* name);
 
 } //namespace PySide
 

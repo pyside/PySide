@@ -21,8 +21,6 @@
 */
 
 #include "signalmanager.h"
-#include "qproperty.h"
-#include "pyside.h"
 
 #include <QHash>
 #include <QStringList>
@@ -35,6 +33,10 @@
 #include <basewrapper.h>
 #include <conversions.h>
 
+#include "qproperty.h"
+#include "qproperty_p.h"
+#include "pyside.h"
+
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
 #error QSLOT_CODE and/or QSIGNAL_CODE changed! change the hardcoded stuff to the correct value!
 #endif
@@ -45,6 +47,8 @@
 #define PYTHON_TYPE "PyObject"
 
 namespace PySide {
+
+static int callMethod(QObject* object, int id, void** args);
 
 PyObjectWrapper::PyObjectWrapper()
     :m_me(Py_None)
@@ -363,7 +367,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             return id - metaObject->methodCount();
 
         pp_name = PyString_FromString(mp.name());
-        pp = qproperty_get_object(pySelf, pp_name);
+        pp = qpropertyGetObject(pySelf, pp_name);
         if (!pp) {
             qWarning("Invalid property.");
             Py_XDECREF(pp_name);
@@ -376,7 +380,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
 #ifndef QT_NO_PROPERTIES
         case QMetaObject::ReadProperty:
         {
-            PyObject* value = qproperty_get(pp, pySelf);
+            PyObject* value = qpropertyGet(pp, pySelf);
             if (value) {
                 void *data = typeResolver->toCpp(value);
                 if (Shiboken::TypeResolver::getType(mp.typeName()) == Shiboken::TypeResolver::ObjectType)
@@ -394,12 +398,12 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
         case QMetaObject::WriteProperty:
         {
             Shiboken::AutoDecRef value(typeResolver->toPython(args[0]));
-            qproperty_set(pp, pySelf, value);
+            qpropertySet(pp, pySelf, value);
             break;
         }
 
         case QMetaObject::ResetProperty:
-            qproperty_reset(pp, pp_name);
+            qpropertyReset(pp, pp_name);
             break;
 
         case QMetaObject::QueryPropertyDesignable:
@@ -410,7 +414,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             break;
 #endif
         case QMetaObject::InvokeMetaMethod:
-            id = call_method(object, id, args);
+            id = callMethod(object, id, args);
             break;
 
         default:
@@ -427,7 +431,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     return id;
 }
 
-int SignalManager::call_method(QObject* object, int id, void** args)
+static int PySide::callMethod(QObject* object, int id, void** args)
 {
     const QMetaObject* metaObject = object->metaObject();
     QMetaMethod method = metaObject->method(id);

@@ -22,18 +22,17 @@
 
 
 #include "pyside.h"
-#include "signalmanager.h"
-#include "qproperty.h"
-#include "qsignal.h"
 #include <basewrapper.h>
 #include <conversions.h>
 #include <algorithm>
 #include <cctype>
 #include <QStack>
-
-extern "C" void init_signal(PyObject* module);
-extern "C" void init_slot(PyObject* module);
-extern "C" void init_qproperty(PyObject* module);
+#include "signalmanager.h"
+#include "qproperty_p.h"
+#include "qproperty.h"
+#include "qsignal.h"
+#include "qsignal_p.h"
+#include "qslot_p.h"
 
 static QStack<PySide::CleanupFunction> cleanupFunctionList;
 
@@ -42,9 +41,9 @@ namespace PySide
 
 void init(PyObject *module)
 {
-    init_signal(module);
-    init_slot(module);
-    init_qproperty(module);
+    initSignalSupport(module);
+    initSlotSupport(module);
+    initQProperty(module);
     // Init signal manager, so it will register some meta types used by QVariant.
     SignalManager::instance();
 }
@@ -69,13 +68,13 @@ bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds
                 } else {
                     PyObject* attr = PyObject_GenericGetAttr(qObj, key);
                     if (isQPropertyType(attr))
-                        PySide::qproperty_set(attr, qObj, value);
+                        PySide::qpropertySet(attr, qObj, value);
                 }
             } else {
                 propName.append("()");
                 if (metaObj->indexOfSignal(propName) != -1) {
                     propName.prepend('2');
-                    PySide::signal_connect(qObj, propName, value);
+                    PySide::signalConnect(qObj, propName, value);
                 } else {
                     PyErr_Format(PyExc_AttributeError, "'%s' is not a Qt property or a signal", propName.constData());
                     return false;
