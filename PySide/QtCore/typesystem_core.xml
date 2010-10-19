@@ -1792,7 +1792,7 @@
             <replace-type modified-type="QByteArray"/>
             <conversion-rule class="native">
             const QByteArray ba(%CONVERTTOCPP[QByteArray](%PYARG_0));
-            memcpy(data, ba.data(), ba.size());
+            memcpy(%1, ba.data(), ba.size());
             long long %out = ba.size();
             </conversion-rule>
         </modify-argument>
