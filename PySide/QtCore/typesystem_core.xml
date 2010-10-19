@@ -2640,7 +2640,24 @@
 
   <object-type name="QSequentialAnimationGroup"/>
 
-  <object-type name="QSignalTransition"/>
+  <object-type name="QSignalTransition">
+    <add-function signature="QSignalTransition(PyObject*, QState*)" return-type="QSignalTransition*">
+        <modify-argument index="2">
+            <replace-default-expression with="0" />
+        </modify-argument>
+        <inject-code>
+            if (PyObject_TypeCheck(%1, &amp;PySide::SignalInstance_Type)) {
+                PySide::SignalInstanceData* data = (PySide::SignalInstanceData*) %PYARG_1;
+                Shiboken::AutoDecRef obType(PyObject_Type(data->source));
+                QObject* sender = %CONVERTTOCPP[QObject*](data->source);
+                if (sender) {
+                    QByteArray signature(data->signature); // Append SIGNAL flag (2)
+                    %0 = new QSignalTransitionWrapper(sender, "2" + signature, %2);
+                }
+            }
+        </inject-code>
+    </add-function>
+  </object-type>
 
   <object-type name="QState">
     <enum-type name="ChildMode"/>
@@ -2663,7 +2680,6 @@
         }
       </inject-code>
     </modify-function>
-
     <modify-function signature="addTransition(QAbstractState*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
