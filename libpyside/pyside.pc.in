@@ -3,10 +3,12 @@ exec_prefix=@CMAKE_INSTALL_PREFIX@
 libdir=@LIB_INSTALL_DIR@
 includedir=@CMAKE_INSTALL_PREFIX@/include/PySide@pyside_SUFFIX@
 typesystemdir=@CMAKE_INSTALL_PREFIX@/share/PySide@pyside_SUFFIX@/typesystems
+pythonpath=@SITE_PACKAGE@
 
 Name: PySide@pyside_SUFFIX@
 Description: Support library for Python bindings of Qt-based libraries.
 Version: @BINDING_API_VERSION@
-Libs: -L${libdir} -lpython -lpyside@pyside_SUFFIX@@LIBRARY_OUTPUT_SUFFIX@
+Libs: -L${libdir} -lpyside@pyside_SUFFIX@@LIBRARY_OUTPUT_SUFFIX@
 Cflags: -I${includedir}
+Requires: shiboken
 
