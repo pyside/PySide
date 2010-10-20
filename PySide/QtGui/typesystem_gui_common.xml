@@ -519,9 +519,9 @@
   </value-type>
   <value-type name="QTreeWidgetItemIterator" >
     <modify-function signature="QTreeWidgetItemIterator(QTreeWidget *, QFlags&lt;QTreeWidgetItemIterator::IteratorFlag&gt;)">
-        <inject-code class="target" position="end">
-            Shiboken::setParent(%PYARG_1, (PyObject*)sbkSelf);
-        </inject-code>
+        <modify-argument index="this">
+            <parent index="1" action="add" />
+        </modify-argument>
     </modify-function>
     <add-function signature="value()" return-type="QTreeWidgetItem*">
         <inject-code>
