@@ -25,11 +25,6 @@
 
 #include <Python.h>
 
-extern "C"
-{
-    extern PyTypeObject PySideQPropertyType;
-}; //extern "C"
-
 namespace PySide
 {
 

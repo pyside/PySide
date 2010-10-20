@@ -27,6 +27,18 @@
 #include <Python.h>
 #include <QObject>
 
+extern "C"
+{
+    extern PYSIDE_API PyTypeObject PySideQPropertyType;
+
+    struct PySideQPropertyDataPrivate;
+    struct PYSIDE_API PySideQPropertyData
+    {
+        PyObject_HEAD
+        PySideQPropertyDataPrivate* d;
+    };
+};
+
 namespace PySide
 {
 
