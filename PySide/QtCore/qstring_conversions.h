@@ -39,7 +39,7 @@ struct Converter<QString>
             return QString::fromUtf16(unicode, PyUnicode_GET_SIZE(pyObj));
     #endif
         } else if (PyString_Check(pyObj)) {
-            return QString(Converter< char * >::toCpp(pyObj));
+            return QString(Converter<const char * >::toCpp(pyObj));
         } else if (pyObj == Py_None) {
             return QString();
         } else if (Converter<QByteArray>::checkType(pyObj)) {
