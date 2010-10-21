@@ -36,6 +36,21 @@ class MyObject(QObject):
 
     pp = Property(int, readPP)
 
+class MyObjectWithNotifyProperty(QObject):
+    def __init__(self, parent=None):
+        QObject.__init__(self, parent)
+        self.p = 0
+
+    def readP(self):
+        return self.p
+
+    def writeP(self, v):
+        self.p = v
+        self.notifyP.emit()
+
+    notifyP = Signal()
+    myProperty = Property(int, readP, fset=writeP, notify=notifyP)
+
 class PropertyCase(unittest.TestCase):
     '''Test case for QObject properties'''
 
@@ -145,6 +160,25 @@ class PropertyWithConstructorCase(unittest.TestCase):
         o = MyObject()
         self.assertEqual(o.pp, 42)
         self.assertRaises(AttributeError, o.trySetPP)
+
+class PropertyWithNotify(unittest.TestCase):
+    def called(self):
+        self.called_ = True
+
+    def testMetaData(self):
+        obj = MyObjectWithNotifyProperty()
+        mo = obj.metaObject()
+        self.assertEqual(mo.propertyCount(), 2)
+        p = mo.property(1)
+        self.assertEqual(p.name(), "myProperty")
+        self.assert_(p.hasNotifySignal())
+
+    def testNotify(self):
+        self.called_ = False
+        obj = MyObjectWithNotifyProperty()
+        obj.notifyP.connect(self.called)
+        obj.myProperty = 10
+        self.assert_(self.called_)
 
 if __name__ == '__main__':
     unittest.main()

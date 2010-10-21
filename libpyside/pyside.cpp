@@ -68,7 +68,7 @@ bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds
                 } else {
                     PyObject* attr = PyObject_GenericGetAttr(qObj, key);
                     if (isQPropertyType(attr))
-                        PySide::qpropertySet(attr, qObj, value);
+                        PySide::qpropertySet(reinterpret_cast<PySideQProperty*>(attr), qObj, value);
                 }
             } else {
                 propName.append("()");

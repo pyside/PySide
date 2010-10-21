@@ -354,7 +354,7 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
 int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args)
 {
     const QMetaObject* metaObject = object->metaObject();
-    PyObject* pp = 0;
+    PySideQProperty* pp = 0;
     PyObject* pp_name = 0;
     QMetaProperty mp;
     Shiboken::TypeResolver* typeResolver = 0;

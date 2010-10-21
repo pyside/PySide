@@ -31,12 +31,14 @@ extern "C"
 {
     extern PYSIDE_API PyTypeObject PySideQPropertyType;
 
-    struct PySideQPropertyDataPrivate;
-    struct PYSIDE_API PySideQPropertyData
+    struct PySideQPropertyPrivate;
+    struct PYSIDE_API PySideQProperty
     {
         PyObject_HEAD
-        PySideQPropertyDataPrivate* d;
+        PySideQPropertyPrivate* d;
     };
+
+    struct PySideSignalInstanceData;
 };
 
 namespace PySide
@@ -53,7 +55,7 @@ PYSIDE_API bool isQPropertyType(PyObject* pyObj);
  * @param   value The value to set in property
  * @return  Return 0 if ok or -1 if this function fail
  **/
-PYSIDE_API int qpropertySet(PyObject* self, PyObject* source, PyObject* value);
+PYSIDE_API int qpropertySet(PySideQProperty* self, PyObject* source, PyObject* value);
 
 /**
  * This function call get property function
@@ -63,7 +65,16 @@ PYSIDE_API int qpropertySet(PyObject* self, PyObject* source, PyObject* value);
  * @param   source The QObject witch has the property
  * @return  Return the result of property get function or 0 if this fail
  **/
-PYSIDE_API PyObject* qpropertyGet(PyObject* self, PyObject* source);
+PYSIDE_API PyObject* qpropertyGet(PySideQProperty* self, PyObject* source);
+
+/**
+ * This function return the notify name used on this property
+ *
+ * @param   self The property object
+ * @return  Return a const char with the notify name used
+ **/
+PYSIDE_API const char* qpropertyGetNotify(PySideQProperty* self);
+
 
 /**
  * This function search in the source object for desired property
@@ -72,7 +83,7 @@ PYSIDE_API PyObject* qpropertyGet(PyObject* self, PyObject* source);
  * @param   name The property name
  * @return  Return a new reference to property object
  **/
-PYSIDE_API PyObject* qpropertyGetObject(PyObject* source, PyObject* name);
+PYSIDE_API PySideQProperty* qpropertyGetObject(PyObject* source, PyObject* name);
 
 } //namespace PySide
 

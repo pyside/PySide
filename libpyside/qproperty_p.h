@@ -25,6 +25,8 @@
 
 #include <Python.h>
 
+struct PySideQProperty;
+
 namespace PySide
 {
 
@@ -41,7 +43,7 @@ void initQProperty(PyObject* module);
  * @param   source The QObject witch has the property
  * @return  Return 0 if ok or -1 if this function fail
  **/
-int qpropertyReset(PyObject* self, PyObject* source);
+int qpropertyReset(PySideQProperty* self, PyObject* source);
 
 
 /**
@@ -51,7 +53,7 @@ int qpropertyReset(PyObject* self, PyObject* source);
  * @param   self The property object
  * @return  Return the property type name
  **/
-const char* qpropertyGetType(PyObject* self);
+const char* qpropertyGetType(PySideQProperty* self);
 
 /**
  * This function check if property has read function
@@ -60,7 +62,7 @@ const char* qpropertyGetType(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsReadable(PyObject* self);
+bool qpropertyIsReadable(PySideQProperty* self);
 
 /**
  * This function check if property has write function
@@ -69,7 +71,7 @@ bool qpropertyIsReadable(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsWritable(PyObject* self);
+bool qpropertyIsWritable(PySideQProperty* self);
 
 /**
  * This function check if property has reset function
@@ -78,7 +80,7 @@ bool qpropertyIsWritable(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyHasReset(PyObject* self);
+bool qpropertyHasReset(PySideQProperty* self);
 
 /**
  * This function check if property has the flag DESIGNABLE setted
@@ -87,7 +89,7 @@ bool qpropertyHasReset(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsDesignable(PyObject* self);
+bool qpropertyIsDesignable(PySideQProperty* self);
 
 /**
  * This function check if property has the flag SCRIPTABLE setted
@@ -96,7 +98,7 @@ bool qpropertyIsDesignable(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsScriptable(PyObject* self);
+bool qpropertyIsScriptable(PySideQProperty* self);
 
 /**
  * This function check if property has the flag STORED setted
@@ -105,7 +107,7 @@ bool qpropertyIsScriptable(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsStored(PyObject* self);
+bool qpropertyIsStored(PySideQProperty* self);
 
 /**
  * This function check if property has the flag USER setted
@@ -114,7 +116,7 @@ bool qpropertyIsStored(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsUser(PyObject* self);
+bool qpropertyIsUser(PySideQProperty* self);
 
 /**
  * This function check if property has the flag CONSTANT setted
@@ -123,7 +125,7 @@ bool qpropertyIsUser(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsConstant(PyObject* self);
+bool qpropertyIsConstant(PySideQProperty* self);
 
 /**
  * This function check if property has the flag FINAL setted
@@ -132,7 +134,7 @@ bool qpropertyIsConstant(PyObject* self);
  * @param   self The property object
  * @return  Return a boolean value
  **/
-bool qpropertyIsFinal(PyObject* self);
+bool qpropertyIsFinal(PySideQProperty* self);
 
 } // namespace PySide
 

@@ -27,6 +27,7 @@
 #include "qproperty.h"
 #include "qproperty_p.h"
 #include "dynamicqmetaobject_p.h"
+#include "qsignal.h"
 
 #define QPROPERTY_CLASS_NAME "Property"
 
@@ -57,13 +58,15 @@ char* translateTypeName(PyObject* type)
 extern "C"
 {
 
-struct PySideQPropertyDataPrivate {
+struct PySideQPropertyPrivate {
     char* typeName;
     PyObject* type;
     PyObject* fget;
     PyObject* fset;
     PyObject* freset;
     PyObject* fdel;
+    PyObject* notify;
+    char* notifySignature;
     char* doc;
     bool designable;
     bool scriptable;
@@ -80,7 +83,7 @@ PyTypeObject PySideQPropertyType = {
     PyObject_HEAD_INIT(0)
     0,                         /*ob_size*/
     QPROPERTY_CLASS_NAME,      /*tp_name*/
-    sizeof(PySideQPropertyData), /*tp_basicsize*/
+    sizeof(PySideQProperty),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     0,                         /*tp_dealloc*/
     0,                         /*tp_print*/
@@ -129,21 +132,30 @@ PyTypeObject PySideQPropertyType = {
 int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
 {
     PyObject* type = 0;
-    PySideQPropertyData* data = reinterpret_cast<PySideQPropertyData*>(self);
-    PySideQPropertyDataPrivate* pData = (PySideQPropertyDataPrivate*) malloc(sizeof(PySideQPropertyDataPrivate*));
+    PySideQProperty* data = reinterpret_cast<PySideQProperty*>(self);
+    PySideQPropertyPrivate* pData = (PySideQPropertyPrivate*) malloc(sizeof(PySideQPropertyPrivate));
     data->d = pData;
+    pData->fset = 0;
+    pData->fget = 0;
+    pData->freset = 0;
+    pData->fdel = 0;
     pData->designable = true;
     pData->scriptable = true;
     pData->stored = true;
+    pData->typeName = 0;
+    pData->doc = 0;
+    pData->notify = 0;
+    pData->notifySignature = 0;
 
-    static const char *kwlist[] = {"type", "fget", "fset", "freset", "fdel", "doc",
+    static const char *kwlist[] = {"type", "fget", "fset", "freset", "fdel", "doc", "notify",
                                    "designable", "scriptable", "stored", "user",
                                    "constant", "final", 0};
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
-                                     "OO|OOOsbbbbbb:QtCore.QProperty", (char**) kwlist,
+                                     "OO|OOOsObbbbbb:QtCore.QProperty", (char**) kwlist,
                                      /*OO*/     &type, &(pData->fget),
-                                     /*OOOO*/   &(pData->fset), &(pData->freset), &(pData->fdel),
+                                     /*OOO*/    &(pData->fset), &(pData->freset), &(pData->fdel),
                                      /*s*/      &(pData->doc),
+                                     /*O*/      &(pData->notify),
                                      /*bbbbbb*/ &(pData->designable), &(pData->scriptable), &(pData->stored), &(pData->user), &(pData->constant), &(pData->final)))
         return 0;
 
@@ -157,10 +169,11 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
 void qpropertyFree(void *self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
+    PySideQProperty *data = reinterpret_cast<PySideQProperty*>(self);
 
     free(data->d->typeName);
     free(data->d->doc);
+    free(data->d->notifySignature);
     free(data->d);
     pySelf->ob_type->tp_base->tp_free(self);
 }
@@ -189,16 +202,16 @@ bool isQPropertyType(PyObject* pyObj)
     return false;
 }
 
-int qpropertySet(PyObject* self, PyObject* source, PyObject* value)
+int qpropertySet(PySideQProperty* self, PyObject* source, PyObject* value)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    if (data->d->fset) {
+    PyObject* fset = self->d->fset;
+    if (fset) {
         Shiboken::AutoDecRef args(PyTuple_New(2));
         PyTuple_SET_ITEM(args, 0, source);
         PyTuple_SET_ITEM(args, 1, value);
         Py_INCREF(source);
         Py_INCREF(value);
-        Shiboken::AutoDecRef result(PyObject_CallObject(data->d->fset, args));
+        Shiboken::AutoDecRef result(PyObject_CallObject(fset, args));
         return (result.isNull() ? -1 : 0);
     } else {
         PyErr_SetString(PyExc_AttributeError, "Attibute read only");
@@ -206,43 +219,42 @@ int qpropertySet(PyObject* self, PyObject* source, PyObject* value)
     return -1;
 }
 
-PyObject* qpropertyGet(PyObject* self, PyObject* source)
+PyObject* qpropertyGet(PySideQProperty* self, PyObject* source)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    if (data->d->fget) {
+    PyObject* fget = self->d->fget;
+    if (fget) {
         Shiboken::AutoDecRef args(PyTuple_New(1));
         Py_INCREF(source);
         PyTuple_SET_ITEM(args, 0, source);
-        return  PyObject_CallObject(data->d->fget, args);
+        return  PyObject_CallObject(fget, args);
     }
     return 0;
 }
 
-int qpropertyReset(PyObject* self, PyObject* source)
+int qpropertyReset(PySideQProperty* self, PyObject* source)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    if (data->d->freset) {
+    PyObject* freset = self->d->freset;
+    if (freset) {
         Shiboken::AutoDecRef args(PyTuple_New(1));
         Py_INCREF(source);
         PyTuple_SET_ITEM(args, 0, source);
-        Shiboken::AutoDecRef result(PyObject_CallObject(data->d->freset, args));
+        Shiboken::AutoDecRef result(PyObject_CallObject(freset, args));
         return (result.isNull() ? -1 : 0);
     }
     return -1;
 }
 
 
-const char* qpropertyGetType(PyObject* self)
+const char* qpropertyGetType(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return data->d->typeName;
+    return self->d->typeName;
 }
 
-PyObject* qpropertyGetObject(PyObject* source, PyObject* name)
+PySideQProperty* qpropertyGetObject(PyObject* source, PyObject* name)
 {
     PyObject* attr = PyObject_GenericGetAttr(source, name);
     if (attr && isQPropertyType(attr))
-        return attr;
+        return reinterpret_cast<PySideQProperty*>(attr);
 
     if (!attr)
         PyErr_Clear(); //Clear possible error caused by PyObject_GenericGetAttr
@@ -251,58 +263,60 @@ PyObject* qpropertyGetObject(PyObject* source, PyObject* name)
     return 0;
 }
 
-bool qpropertyIsReadable(PyObject* self)
+bool qpropertyIsReadable(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return (data->d->fget != 0);
+    return (self->d->fget != 0);
 }
 
-bool qpropertyIsWritable(PyObject* self)
+bool qpropertyIsWritable(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return (data->d->fset != 0);
+    return (self->d->fset != 0);
 }
 
-bool qpropertyHasReset(PyObject* self)
+bool qpropertyHasReset(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return (data->d->freset != 0);
+    return (self->d->freset != 0);
 }
 
-bool qpropertyIsDesignable(PyObject* self)
+bool qpropertyIsDesignable(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return data->d->designable;
+    return self->d->designable;
 }
 
-bool qpropertyIsScriptable(PyObject* self)
+bool qpropertyIsScriptable(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return data->d->scriptable;
+    return self->d->scriptable;
 }
 
-bool qpropertyIsStored(PyObject* self)
+bool qpropertyIsStored(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return data->d->stored;
+    return self->d->stored;
 }
 
-bool qpropertyIsUser(PyObject* self)
+bool qpropertyIsUser(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return data->d->user;
+    return self->d->user;
 }
 
-bool qpropertyIsConstant(PyObject* self)
+bool qpropertyIsConstant(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return data->d->constant;
+    return self->d->constant;
 }
 
-bool qpropertyIsFinal(PyObject* self)
+bool qpropertyIsFinal(PySideQProperty* self)
 {
-    PySideQPropertyData *data = reinterpret_cast<PySideQPropertyData*>(self);
-    return data->d->final;
+    return self->d->final;
+}
+
+const char* qpropertyGetNotify(PySideQProperty* self)
+{
+    if (!self->d->notifySignature) {
+        PyObject* str = PyObject_Str(self->d->notify);
+        self->d->notifySignature = strdup(PyString_AsString(str));
+        Py_DECREF(str);
+    }
+
+    return self->d->notifySignature;
 }
 
 } //namespace PySide

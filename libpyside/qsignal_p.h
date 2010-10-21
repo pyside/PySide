@@ -43,6 +43,8 @@ namespace PySide
     bool signalConnect(PyObject* source, const char* signal, PyObject* callback);
     char* getTypeName(PyObject*);
     void initSignalSupport(PyObject* module);
+    const char** getSignalSignatures(PyObject* self, int *size);
+
 } //namespace PySide
 
 #endif

@@ -29,19 +29,21 @@
 
 #define PYSIDE_SLOT_LIST_ATTR "_slots"
 
+struct PySideQProperty;
 namespace PySide
 {
     class MethodData
     {
     public:
         MethodData(){}
-        MethodData(const char* signature, const char* type);
+        MethodData(const char* signature, const char* type = 0);
         void clear();
         bool isValid() const;
         QByteArray signature() const;
         QByteArray type() const;
         bool operator==(const MethodData& other) const;
         bool operator==(const char* other) const;
+        operator const char*() { return m_signature->data(); }
 
     private:
         QSharedPointer<QByteArray> m_signature;
@@ -52,17 +54,19 @@ namespace PySide
     {
     public:
         PropertyData();
-        PropertyData(const char* name, PyObject* data);
+        PropertyData(const char* name, uint notifyId=0, PySideQProperty* data = 0);
         QByteArray name() const;
         QByteArray type() const;
         uint flags() const;
         bool isValid() const;
+        uint notifyId() const;
         bool operator==(const PropertyData& other) const;
         bool operator==(const char* name) const;
 
     private:
         QByteArray m_name;
-        PyObject* m_data;
+        uint m_notifyId;
+        PySideQProperty* m_data;
     };
 }
 

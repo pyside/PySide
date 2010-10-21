@@ -54,12 +54,14 @@ struct SignalData {
     int signaturesSize;
     PyObject* homonymousMethod;
 };
-
+//Signal methods
 static int signalTpInit(PyObject*, PyObject*, PyObject*);
 static void signalFree(void*);
 static void signalInstanceFree(void*);
+static PyObject* signalGetItem(PyObject* self, PyObject* key);
+static PyObject* signalToString(PyObject* self);
 
-//methods
+//Signal Instance methods
 static PyObject* signalInstanceConnect(PyObject*, PyObject*, PyObject*);
 static PyObject* signalInstanceDisconnect(PyObject*, PyObject*);
 static PyObject* signalInstanceEmit(PyObject*, PyObject*);
@@ -67,6 +69,13 @@ static PyObject* signalInstanceGetItem(PyObject*, PyObject*);
 
 static PyObject* signalInstanceCall(PyObject* self, PyObject* args, PyObject* kw);
 static PyObject* signalCall(PyObject*, PyObject*, PyObject*);
+
+static PyMappingMethods Signal_as_mapping = {
+    0,
+    signalGetItem,
+    0
+};
+
 
 PyTypeObject PySideSignalType = {
     PyObject_HEAD_INIT(0)
@@ -82,10 +91,10 @@ PyTypeObject PySideSignalType = {
     /*tp_repr*/             0,
     /*tp_as_number*/        0,
     /*tp_as_sequence*/      0,
-    /*tp_as_mapping*/       0,
+    /*tp_as_mapping*/       &Signal_as_mapping,
     /*tp_hash*/             0,
     /*tp_call*/             signalCall,
-    /*tp_str*/              0,
+    /*tp_str*/              signalToString,
     /*tp_getattro*/         0,
     /*tp_setattro*/         0,
     /*tp_as_buffer*/        0,
@@ -232,6 +241,31 @@ void signalFree(void *self)
     data->homonymousMethod = 0;
 
     pySelf->ob_type->tp_base->tp_free(self);
+}
+
+PyObject* signalGetItem(PyObject* self, PyObject* key)
+{
+    SignalData* data = reinterpret_cast<SignalData*>(self);
+    char* sigKey;
+    if (key) {
+        sigKey = PySide::signalParseSignature(key);
+    } else {
+        if (data->signatures[0])
+            sigKey = strdup(data->signatures[0]);
+        else
+            sigKey = strdup("void");
+    }
+    char* sig = PySide::signalBuildSignature(data->signalName, sigKey);
+    free(sigKey);
+    PyObject* pySignature = PyString_FromString(sig);
+    free(sig);
+    return pySignature;
+}
+
+
+PyObject* signalToString(PyObject* self)
+{
+    return signalGetItem(self, 0);
 }
 
 void signalInstanceFree(void* self)
@@ -543,8 +577,10 @@ void signalInstanceInitialize(PyObject* instance, PyObject* name, SignalData* da
     selfPvt->next = 0;
     if (data->signalName)
         selfPvt->signalName = strdup(data->signalName);
-    else
+    else {
         selfPvt->signalName = strdup(PyString_AsString(name));
+        data->signalName = strdup(selfPvt->signalName);
+    }
 
     selfPvt->source = source;
     selfPvt->signature = signalBuildSignature(self->d->signalName, data->signatures[index]);
@@ -626,6 +662,14 @@ PyObject* getSignalSource(PySideSignalInstanceData* signal)
 const char* getSignalSignature(PySideSignalInstanceData* signal)
 {
     return signal->d->signature;
+}
+
+
+const char** getSignalSignatures(PyObject* signal, int *size)
+{
+    SignalData *self = reinterpret_cast<SignalData*>(signal);
+    *size = self->signaturesSize;
+    return (const char**) self->signatures;
 }
 
 } //namespace PySide
