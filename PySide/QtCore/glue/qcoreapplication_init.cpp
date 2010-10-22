@@ -2,21 +2,6 @@
 static int QCoreApplicationArgCount;
 static char** QCoreApplicationArgValues;
 
-/**
- * Called at QtCore module exit
- */
-void DeleteQCoreApplicationAtExit()
-{
-    QCoreApplication *cpp = QCoreApplication::instance();
-    if (cpp) {
-        Shiboken::BindingManager &bmngr = Shiboken::BindingManager::instance();
-        cpp->flush();
-        QCoreApplication::processEvents();
-        bmngr.destroyWrapper(cpp);
-        delete cpp;
-    }
-}
-
 int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
     if (Shiboken::isUserType(self) && !Shiboken::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication >()))
@@ -52,7 +37,7 @@ int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
     PySide::signalUpdateSource(self);
     cptr->metaObject();
 
-    PySide::registerCleanupFunction(DeleteQCoreApplicationAtExit);
+    PySide::registerCleanupFunction(&PySide::destroyQCoreApplication);
     Py_INCREF(self);
     return 1;
 }

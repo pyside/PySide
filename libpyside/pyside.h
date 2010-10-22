@@ -84,6 +84,11 @@ typedef void (*CleanupFunction)(void);
 PYSIDE_API void registerCleanupFunction(CleanupFunction func);
 PYSIDE_API void runCleanupFunctions();
 
+/**
+ * Destroy a QCoreApplication taking care of destroy all instances of QObject first.
+ */
+PYSIDE_API void destroyQCoreApplication();
+
 } //namespace PySide
 
 

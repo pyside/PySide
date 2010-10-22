@@ -5,28 +5,6 @@ static int QApplicationArgCount;
 static char** QApplicationArgValues;
 static const char QAPP_MACRO[] = "qApp";
 
-void DeleteQApplicationAtExit()
-{
-    PySide::SignalManager::instance().clear();
-    QCoreApplication* cpp = QApplication::instance();
-    if (cpp) {
-        Shiboken::BindingManager &bmngr = Shiboken::BindingManager::instance();
-
-        // Delete all widgets, this is slow but is necessary to avoid problems with python object
-        foreach(QWidget* w, QApplication::allWidgets()) {
-            PyObject* wrapper = bmngr.retrieveWrapper(w);
-            if (wrapper) {
-                if (SbkBaseWrapper_hasOwnership(wrapper))
-                    delete w; // destroy C++ object and invalidate wrapper object
-                else
-                    bmngr.destroyWrapper(wrapper); // only invalidate wrapper object
-            }
-        }
-        cpp->flush();
-        delete cpp;
-    }
-}
-
 int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
     if (Shiboken::isUserType(self) && !Shiboken::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication >()))
@@ -69,7 +47,7 @@ int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
     }
 
     PyObject_SetAttrString(moduleQtGui, QAPP_MACRO, self);
-    PySide::registerCleanupFunction(DeleteQApplicationAtExit);
+    PySide::registerCleanupFunction(&PySide::destroyQCoreApplication);
     Py_INCREF(self);
     return 1;
 }

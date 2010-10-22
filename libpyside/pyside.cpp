@@ -24,9 +24,11 @@
 #include "pyside.h"
 #include <basewrapper.h>
 #include <conversions.h>
+#include <typeresolver.h>
 #include <algorithm>
 #include <cctype>
 #include <QStack>
+#include <QCoreApplication>
 #include "signalmanager.h"
 #include "qproperty_p.h"
 #include "qproperty.h"
@@ -96,6 +98,30 @@ void runCleanupFunctions()
         CleanupFunction f = cleanupFunctionList.pop();
         f();
     }
+}
+
+void destroyQCoreApplication()
+{
+    SignalManager::instance().clear();
+    QCoreApplication* app = QCoreApplication::instance();
+    if (!app)
+        return;
+
+    Shiboken::BindingManager& bm = Shiboken::BindingManager::instance();
+    PyObject* pyQApp = bm.retrieveWrapper(app);
+    PyTypeObject* pyQObjectType = Shiboken::TypeResolver::get("QObject*")->pythonType();
+    assert(pyQObjectType);
+
+    foreach (PyObject* pyObj, bm.getAllPyObjects()) {
+        if (pyObj != pyQApp && PyObject_TypeCheck(pyObj, pyQObjectType)) {
+            if (SbkBaseWrapper_hasOwnership(pyObj)) {
+                bm.destroyWrapper(pyObj);
+                delete static_cast<QObject*>(Shiboken::getCppPointer(pyObj, Shiboken::SbkType<QObject*>()));
+            }
+        }
+    }
+    app->flush();
+    delete app;
 }
 
 } //namespace PySide
