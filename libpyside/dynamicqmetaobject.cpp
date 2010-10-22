@@ -404,12 +404,13 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
     className = className.mid(className.lastIndexOf('.')+1);
     DynamicQMetaObject *mo = new PySide::DynamicQMetaObject(className.toAscii(), base);
 
+    QList<PyObject*> properties;
+
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
 
-        //Register properties
-        if (value->ob_type == &PySideQPropertyType) {
-            mo->addProperty(PyString_AsString(key), value);
-        }
+        //Leave the properties to be register after signals because of notify object
+        if (value->ob_type == &PySideQPropertyType)
+            properties.append(key);
 
         //Register signals
         if (value->ob_type == &PySideSignalType) {
@@ -440,6 +441,13 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
             }
         }
     }
+
+    //Register properties
+    foreach(PyObject* key, properties) {
+        PyObject* value = PyDict_GetItem(type->tp_dict, key);
+        mo->addProperty(PyString_AsString(key), value);
+    }
+
     return mo;
 }
 
