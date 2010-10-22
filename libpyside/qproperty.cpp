@@ -28,32 +28,9 @@
 #include "qproperty_p.h"
 #include "dynamicqmetaobject_p.h"
 #include "qsignal.h"
+#include "qsignal_p.h"
 
 #define QPROPERTY_CLASS_NAME "Property"
-
-char* translateTypeName(PyObject* type)
-{
-    if (PyType_Check(type)) {
-        char* typeName = 0;
-        if (type->ob_type == &Shiboken::SbkBaseWrapperType_Type) {
-            Shiboken::SbkBaseWrapperType* objType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(type);
-            typeName = strdup(objType->original_name);
-        } else {
-            //tp_name return the full name
-            Shiboken::AutoDecRef otypeName(PyObject_GetAttrString(type, "__name__"));
-            typeName = strdup(PyString_AS_STRING(otypeName.object()));
-        }
-        if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ObjectType) {
-            typeName = reinterpret_cast<char*>(realloc(typeName, strlen(typeName) + 1));
-            typeName = strcat(typeName, "*");
-        }
-        return typeName;
-    } else if (PyString_Check(type)) {
-        return strdup(PyString_AS_STRING(type));
-    }
-    return 0;
-}
-
 
 extern "C"
 {
@@ -162,7 +139,7 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
     if (!pData->fset && pData->fget)
         pData->constant = true;
 
-    pData->typeName = translateTypeName(type);
+    pData->typeName = PySide::getTypeName(type);
     return 1;
 }
 
