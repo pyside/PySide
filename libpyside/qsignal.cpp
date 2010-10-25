@@ -83,7 +83,7 @@ PyTypeObject PySideSignalType = {
     /*tp_name*/             "PySide.QtCore."SIGNAL_CLASS_NAME,
     /*tp_basicsize*/        sizeof(SignalData),
     /*tp_itemsize*/         0,
-    /*tp_dealloc*/          &Shiboken::deallocWrapper,
+    /*tp_dealloc*/          0,
     /*tp_print*/            0,
     /*tp_getattr*/          0,
     /*tp_setattr*/          0,
