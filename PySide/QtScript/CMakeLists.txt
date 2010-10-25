@@ -35,7 +35,7 @@ set(QtScript_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${PYTHON_INCLUDE_PATH}
                             ${QtCore_BINARY_DIR}/PySide/QtCore )
 set(QtScript_libraries      pyside
-                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${SHIBOKEN_PYTHON_LIBRARIES}
                             ${SHIBOKEN_LIBRARY}
                             ${QT_QTCORE_LIBRARY}
                             ${QT_QTSCRIPT_LIBRARY})

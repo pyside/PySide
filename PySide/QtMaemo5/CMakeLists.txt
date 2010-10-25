@@ -34,7 +34,7 @@ set(QtMaemo5_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QtGui_BINARY_DIR}/${BINDING_NAME}/QtGui/
                         ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5)
 set(QtMaemo5_libraries  pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
+                      ${SHIBOKEN_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTMAEMO5_LIBRARY})

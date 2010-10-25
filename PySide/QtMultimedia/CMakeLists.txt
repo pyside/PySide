@@ -32,7 +32,7 @@ set(QtMultimedia_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                                 ${QtGui_BINARY_DIR}/PySide/QtGui/)
 
 set(QtMultimedia_libraries  pyside
-                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${SHIBOKEN_PYTHON_LIBRARIES}
                             ${SHIBOKEN_LIBRARY}
                             ${QT_QTMULTIMEDIA_LIBRARY}
                             ${QT_QTGUI_LIBRARY})

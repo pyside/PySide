@@ -36,7 +36,7 @@ set(QtXmlPatterns_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                                 ${QtCore_BINARY_DIR}/PySide/QtCore/
                                 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns)
 set(QtXmlPatterns_libraries     pyside
-                                ${PYSIDE_PYTHON_LIBRARIES}
+                                ${SHIBOKEN_PYTHON_LIBRARIES}
                                 ${QT_QTCORE_LIBRARY}
                                 ${QT_QTXMLPATTERNS_LIBRARY})
 set(QtXmlPatterns_deps QtCore)

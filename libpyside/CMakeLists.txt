@@ -17,7 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 add_library(pyside SHARED ${libpyside_SRC})
 target_link_libraries(pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
+                      ${SHIBOKEN_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTCORE_LIBRARY})
 

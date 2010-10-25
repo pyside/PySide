@@ -44,7 +44,7 @@ set(QtOpenGL_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${QtCore_BINARY_DIR}/PySide/QtCore/
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtOpenGL)
 set(QtOpenGL_libraries      pyside
-                            ${PYSIDE_PYTHON_LIBRARIES}
+                            ${SHIBOKEN_PYTHON_LIBRARIES}
                             ${QT_QTCORE_LIBRARY}
                             ${QT_QTGUI_LIBRARY}
                             ${QT_QTOPENGL_LIBRARY})

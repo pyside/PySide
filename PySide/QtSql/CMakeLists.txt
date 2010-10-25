@@ -33,7 +33,7 @@ set(QtSql_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QtGui_BINARY_DIR}/PySide/QtGui/
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtSql/)
 set(QtSql_libraries     pyside
-                        ${PYSIDE_PYTHON_LIBRARIES}
+                        ${SHIBOKEN_PYTHON_LIBRARIES}
                         ${QT_QTCORE_LIBRARY}
                         ${QT_QTGUI_LIBRARY}
                         ${QT_QTSQL_LIBRARY})

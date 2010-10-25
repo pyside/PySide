@@ -21,7 +21,7 @@ set(QtScriptTools_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                                 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScriptTools)
 
 set(QtScriptTools_libraries     pyside
-                                ${PYSIDE_PYTHON_LIBRARIES}
+                                ${SHIBOKEN_PYTHON_LIBRARIES}
                                 ${QT_QTCORE_LIBRARY}
                                 ${QT_GUI_LIBRARY}
                                 ${QT_QTSCRIPT_LIBRARY}

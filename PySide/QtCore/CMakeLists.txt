@@ -145,7 +145,7 @@ set(QtCore_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${libpyside_SOURCE_DIR}
                         ${PYTHON_INCLUDE_PATH})
 set(QtCore_libraries  pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
+                      ${SHIBOKEN_PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTCORE_LIBRARY})
 

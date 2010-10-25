@@ -37,7 +37,7 @@ set(QtDeclarative_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative)
 
 set(QtDeclarative_libraries   pyside
-                              ${PYSIDE_PYTHON_LIBRARIES}
+                              ${SHIBOKEN_PYTHON_LIBRARIES}
                               ${QT_QTCORE_LIBRARY}
                               ${QT_QTGUI_LIBRARY}
                               ${QT_QTNETWORK_LIBRARY}

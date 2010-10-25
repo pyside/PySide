@@ -21,7 +21,7 @@ set(QtSvg_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QtCore_BINARY_DIR}/PySide/QtCore/
                         ${QtGui_BINARY_DIR}/PySide/QtGui/)
 set(QtSvg_libraries     pyside
-                        ${PYSIDE_PYTHON_LIBRARIES}
+                        ${SHIBOKEN_PYTHON_LIBRARIES}
                         ${SHIBOKEN_LIBRARY}
                         ${QT_QTSVG_LIBRARY}
                         ${QT_QTGUI_LIBRARY})

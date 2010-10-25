@@ -60,7 +60,7 @@ set(QtNetwork_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                             ${PYTHON_INCLUDE_PATH}
                             ${QtCore_BINARY_DIR}/PySide/QtCore/)
 set(QtNetwork_libraries pyside
-                        ${PYSIDE_PYTHON_LIBRARIES}
+                        ${SHIBOKEN_PYTHON_LIBRARIES}
                         ${SHIBOKEN_LIBRARY}
                         ${QT_QTNETWORK_LIBRARY})
 

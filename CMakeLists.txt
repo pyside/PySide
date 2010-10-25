@@ -151,16 +151,6 @@ if (NOT SITE_PACKAGE)
     endif()
 endif()
 
-if(SHIBOKEN_BUILD_TYPE STREQUAL "Debug")
-    add_definitions("-DPy_DEBUG")
-    set(PYSIDE_PYTHON_LIBRARIES ${PYTHON_DEBUG_LIBRARIES})
-else()
-    set(PYSIDE_PYTHON_LIBRARIES ${PYTHON_LIBRARIES})
-endif()
-if(APPLE)
-    set(PYSIDE_PYTHON_LIBRARIES "-undefined dynamic_lookup")
-endif()
-
 set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
 
 enable_testing()

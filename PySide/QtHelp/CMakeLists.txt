@@ -27,7 +27,7 @@ set(QtHelp_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${QtCore_BINARY_DIR}/PySide/QtCore/
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtHelp)
 set(QtHelp_libraries  pyside
-                      ${PYSIDE_PYTHON_LIBRARIES}
+                      ${SHIBOKEN_PYTHON_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTHELP_LIBRARY})
