@@ -4,7 +4,6 @@ project(testbinding)
 cmake_minimum_required(VERSION 2.6)
 find_package(Qt4 4.5.0 REQUIRED)
 find_package(PythonLibs REQUIRED)
-find_package(PythonInterpWithDebug REQUIRED)
 find_package(GeneratorRunner 0.6 REQUIRED)
 find_package(Shiboken 0.5 REQUIRED)
 

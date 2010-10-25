@@ -37,7 +37,7 @@ else()
         else()
             message(WARNING "Invalid call of macro PYSIDE_TEST")
         endif()
-        set(TEST_CMD ${XVFB_EXEC} ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}")
+        set(TEST_CMD ${XVFB_EXEC} ${SHIBOKEN_PYTHON_INTERPRETER} "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}")
         add_test(${TEST_NAME} ${TEST_CMD})
         set_tests_properties(${TEST_NAME} PROPERTIES
                              TIMEOUT ${CTEST_TESTING_TIMEOUT}

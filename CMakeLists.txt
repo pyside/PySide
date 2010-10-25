@@ -3,11 +3,8 @@ include(cmake/Macros/icecc.cmake) # this must be the first line!
 project(pysidebindings)
 
 cmake_minimum_required(VERSION 2.6)
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules/
-                      ${CMAKE_SOURCE_DIR}/cmake/Macros/
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Macros/
                       ${CMAKE_MODULE_PATH})
-find_package(PythonLibs REQUIRED)
-find_package(PythonInterpWithDebug REQUIRED)
 find_package(GeneratorRunner 0.6 REQUIRED)
 find_package(Shiboken 0.5 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
@@ -143,7 +140,7 @@ add_custom_target(dist
 
 if (NOT SITE_PACKAGE)
     execute_process(
-        COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; \\
+        COMMAND ${SHIBOKEN_PYTHON_INTERPRETER} -c "from distutils import sysconfig; \\
             print sysconfig.get_python_lib(1,0,prefix='${CMAKE_INSTALL_PREFIX}')"
         OUTPUT_VARIABLE SITE_PACKAGE
         OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -154,22 +151,8 @@ if (NOT SITE_PACKAGE)
     endif()
 endif()
 
-# Detect if the python libs were compiled in debug mode
-execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; \\
-        print sysconfig.get_config_var('Py_DEBUG')"
-    OUTPUT_VARIABLE PY_DEBUG
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    if(NOT PYTHON_DEBUG_LIBRARIES)
-        message(FATAL_ERROR "Python debug library not found. Try compile PySide with -DCMAKE_BUILD_TYPE=Release")
-    endif()
-    if(NOT PY_DEBUG)
-        message(WARNING "Compiling PySide with debug enabled, but the python executable was not compiled with debug support.")
-    else()
-        add_definitions("-DPy_DEBUG")
-    endif()
+if(SHIBOKEN_BUILD_TYPE STREQUAL "Debug")
+    add_definitions("-DPy_DEBUG")
     set(PYSIDE_PYTHON_LIBRARIES ${PYTHON_DEBUG_LIBRARIES})
 else()
     set(PYSIDE_PYTHON_LIBRARIES ${PYTHON_LIBRARIES})
