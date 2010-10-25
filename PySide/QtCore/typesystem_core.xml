@@ -95,12 +95,6 @@
 
   <enum-type name="QtMsgType"/>
 
-  <enum-type identified-by-value="QML_HAS_ATTACHED_PROPERTIES" since="4.7">
-    <extra-includes>
-      <include file-name="Qt/qdeclarative.h" location="global"/>
-    </extra-includes>
-  </enum-type>
-
   <primitive-type name="qint8"/>
   <primitive-type name="qint16"/>
   <primitive-type name="qint32"/>
@@ -2837,4 +2831,9 @@
   <suppress-warning text="enum 'enum_4' does not have a type entry or is not an enum" />
   <suppress-warning text="enum 'enum_5' does not have a type entry or is not an enum" />
   <suppress-warning text="Shadowing: *" />
+  <!-- this enum is defined on Qt global header but only used in QtDeclarative module -->
+  <suppress-warning text="enum 'QML_HAS_ATTACHED_PROPERTIES' does not have a type entry or is not an enum" />
+
+  <!-- this enum is defined on Qt global header but only used in QtGui module -->
+  <suppress-warning text="enum 'PM_MessageBoxHeight' does not have a type entry or is not an enum" />
 </typesystem>
