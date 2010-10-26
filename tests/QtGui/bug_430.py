@@ -4,7 +4,7 @@ from PySide.QtGui import *
 
 class ListModel(QAbstractListModel):
     def rowCount(self, parent = QModelIndex()):
-        return len(self._items)
+        return 0
 
 app = QApplication([])
 model = ListModel()
