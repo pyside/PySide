@@ -16,7 +16,7 @@ if(USE_XVFB)
     find_program(XVFB_RUN NAMES xvfb-run)
     if (NOT ${XVFB_RUN} MATCHES "XVFB_RUN-NOTFOUND")
         set(XVFB_EXEC ${XVFB_RUN})
-        message("Using xvfb-run to perform QtGui tests.")
+        message(STATUS "Using xvfb-run to perform QtGui tests.")
     endif()
 endif()
 
@@ -56,12 +56,6 @@ endif()
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-endif()
-
-option(AVOID_PROTECTED_HACK "Avoid protected hack on generated bindings." FALSE)
-if(AVOID_PROTECTED_HACK OR WIN32)
-    add_definitions(-DAVOID_PROTECTED_HACK)
-    message(STATUS "Avoiding protected hack!")
 endif()
 
 set(BINDING_NAME PySide)
