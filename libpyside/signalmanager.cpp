@@ -301,18 +301,18 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     }
 
     void** signalArgs = new void*[argsGiven+1];
+    void** signalValues = new void*[argsGiven];
     signalArgs[0] = 0;
 
     int i;
     for (i = 0; i < argsGiven; ++i) {
         Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(qPrintable(argTypes[i]));
         if (typeResolver) {
-            void *data = typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i));
-            if (Shiboken::TypeResolver::getType(qPrintable(argTypes[i])) == Shiboken::TypeResolver::ObjectType) {
-                signalArgs[i+1] = &data;
-            } else {
-                signalArgs[i+1] = data;
-            }
+            typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i), &signalValues[i], true);
+            if (Shiboken::TypeResolver::getType(qPrintable(argTypes[i])) == Shiboken::TypeResolver::ObjectType)
+                signalArgs[i+1] = &signalValues[i];
+            else
+                signalArgs[i+1] = signalValues[i];
         } else {
             PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", qPrintable(argTypes[i]));
             break;
@@ -323,11 +323,12 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     if (ok)
         QMetaObject::activate(source, signalIndex, signalArgs);
 
-    // FIXME: This will cause troubles with non-direct connections.
+    //cleanup memory
     for (int j = 0; j < i; ++j)
         Shiboken::TypeResolver::get(qPrintable(argTypes[j]))->deleteObject(signalArgs[j+1]);
 
     delete[] signalArgs;
+    delete[] signalValues;
 
     return ok;
 }
@@ -374,6 +375,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             return id - metaObject->methodCount();
         }
         typeResolver = Shiboken::TypeResolver::get(mp.typeName());
+        Q_ASSERT(typeResolver);
     }
 
     switch(call) {
@@ -382,12 +384,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
         {
             PyObject* value = qpropertyGet(pp, pySelf);
             if (value) {
-                void *data = typeResolver->toCpp(value);
-                if (Shiboken::TypeResolver::getType(mp.typeName()) == Shiboken::TypeResolver::ObjectType)
-                    args[0] = &data;
-                else
-                    args[0] = data;
-
+                typeResolver->toCpp(value, &args[0]);
                 Py_DECREF(value);
             } else if (PyErr_Occurred()) {
                 PyErr_Print(); // Clear any errors but print them to stderr
