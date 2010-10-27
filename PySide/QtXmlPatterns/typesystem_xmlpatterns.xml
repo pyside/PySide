@@ -21,8 +21,18 @@
 <typesystem package="PySide.QtXmlPatterns">
     <load-typesystem name="typesystem_core.xml" generate="no"/>
 
-    <value-type name="QXmlSchema"/>
-    <object-type name="QXmlSchemaValidator"/>
+    <object-type name="QXmlSchema"/> <!-- Qt scoped pointer does not allow declare this as value type -->
+    <object-type name="QXmlSchemaValidator">
+      <modify-function signature="schema() const">
+        <modify-argument index="return">
+          <replace-type modified-type="QXmlSchema*"/>
+          <define-ownership owner="target"/>
+        </modify-argument>
+        <inject-code>
+          %PYARG_0 = %CONVERTTOPYTHON[QXmlSchema*](new QXmlSchema(%CPPSELF.schema()));
+        </inject-code>
+      </modify-function>
+    </object-type>
     <object-type name="QAbstractMessageHandler" />
     <object-type name="QAbstractUriResolver" />
     <object-type name="QAbstractXmlNodeModel">

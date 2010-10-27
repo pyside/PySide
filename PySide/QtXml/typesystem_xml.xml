@@ -260,7 +260,7 @@
         <modify-function signature="nodeType()const" remove="all"/>
     </value-type>
 
-    <value-type name="QXmlParseException"/>
+    <object-type name="QXmlParseException"/>
 
 <!-- These are defined in QtCore
     <value-type name="QXmlStreamAttribute"/>
