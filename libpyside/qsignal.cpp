@@ -608,6 +608,33 @@ bool signalConnect(PyObject* source, const char* signal, PyObject* callback)
     return PyObject_CallObject(pyMethod, pyArgs);
 }
 
+PyObject* signalNewFromMethod(PyObject* source, const QList<QMetaMethod>& methodList)
+{
+    PySideSignalInstanceData *root = 0;
+    PySideSignalInstanceData *previous = 0;
+    foreach(QMetaMethod m, methodList) {
+        PySideSignalInstanceData *item = PyObject_New(PySideSignalInstanceData, &PySideSignalInstanceType);
+        if (!root)
+            root = item;
+
+        if (previous)
+            previous->d->next = reinterpret_cast<PyObject*>(item);
+
+        item->d = new PySideSignalInstanceDataPrivate;
+        PySideSignalInstanceDataPrivate* selfPvt = item->d;
+        selfPvt->source = source;
+        const char* cppSignature = m.signature();
+        // separe SignalName
+        selfPvt->signalName = strdup(cppSignature);
+        char* endName = strchr(selfPvt->signalName, '(');
+        endName = '\0';
+        selfPvt->signature = strdup(cppSignature);
+        selfPvt->homonymousMethod = 0;
+        selfPvt->next = 0;
+    }
+    return reinterpret_cast<PyObject*>(root);
+}
+
 PyObject* signalNew(const char* name, ...)
 {
     va_list listSignatures;

@@ -48,6 +48,7 @@ namespace PySide
 {
 
 PYSIDE_API PyObject* signalNew(const char* name, ...);
+PYSIDE_API PyObject* signalNewFromMethod(PyObject* source, const QList<QMetaMethod>& method);
 PYSIDE_API void signalUpdateSource(PyObject* source);
 PYSIDE_API void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PyObject* signal);
 PYSIDE_API PyObject* getSignalSource(PySideSignalInstanceData* signal);
