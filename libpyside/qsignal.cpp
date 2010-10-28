@@ -523,6 +523,8 @@ char* getTypeName(PyObject* type)
         return typeName;
     } else if (PyString_Check(type)) {
         return strdup(PyString_AS_STRING(type));
+    } else if (type == Py_None) {
+        return strdup("void");
     }
     return 0;
 }
@@ -537,7 +539,7 @@ char* signalBuildSignature(const char *name, const char *signature)
 char* signalParseSignature(PyObject *args)
 {
     char *signature = 0;
-    if (args && (PyString_Check(args) || (!PySequence_Check(args) && (args != Py_None))))
+    if (args && (PyString_Check(args) || !PySequence_Check(args)))
         return getTypeName(args);
 
     for(Py_ssize_t i = 0, i_max = PySequence_Size(args); i < i_max; i++) {
@@ -623,12 +625,11 @@ PyObject* signalNewFromMethod(PyObject* source, const QList<QMetaMethod>& method
         item->d = new PySideSignalInstanceDataPrivate;
         PySideSignalInstanceDataPrivate* selfPvt = item->d;
         selfPvt->source = source;
-        const char* cppSignature = m.signature();
+        QByteArray cppName(m.signature());
+        cppName = cppName.mid(0, cppName.indexOf('('));
         // separe SignalName
-        selfPvt->signalName = strdup(cppSignature);
-        char* endName = strchr(selfPvt->signalName, '(');
-        endName = '\0';
-        selfPvt->signature = strdup(cppSignature);
+        selfPvt->signalName = strdup(cppName.data());
+        selfPvt->signature = strdup(m.signature());
         selfPvt->homonymousMethod = 0;
         selfPvt->next = 0;
     }

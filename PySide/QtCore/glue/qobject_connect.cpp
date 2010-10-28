@@ -32,7 +32,8 @@ static bool qobjectConnect(QObject* source, const char* signal, QObject* receive
         return false;
     signal++;
 
-    PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal);
+    if (!PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal))
+        return false;
 
     bool isSignal = PySide::isSignal(slot);
     slot++;
@@ -46,7 +47,9 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         return false;
     signal++;
 
-    PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal);
+    if (!PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal))
+        return false;
+
     int signalIndex = source->metaObject()->indexOfMethod(signal);
 
     PySide::SignalManager& signalManager = PySide::SignalManager::instance();
@@ -70,7 +73,8 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         if (usingGlobalReceiver) {
             signalManager.addGlobalSlot(slot, callback);
         } else {
-            PySide::SignalManager::registerMetaMethod(receiver, slot, QMetaMethod::Slot);
+            if (!PySide::SignalManager::registerMetaMethod(receiver, slot, QMetaMethod::Slot))
+                return false;
         }
         slotIndex = metaObject->indexOfSlot(slot);
     }

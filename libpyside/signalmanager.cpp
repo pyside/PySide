@@ -482,7 +482,7 @@ bool SignalManager::registerMetaMethod(QObject* source, const char* signature, Q
     if (methodIndex == -1) {
         Shiboken::SbkBaseWrapper* self = (Shiboken::SbkBaseWrapper*) Shiboken::BindingManager::instance().retrieveWrapper(source);
         if (!self->containsCppWrapper) {
-            qWarning() << "You can't add dynamic signals or slots on an object originated from C++.";
+            qWarning() << "Invalid Signal signature:" << signature;
             return false;
         } else {
             PySide::DynamicQMetaObject* dynMetaObj = reinterpret_cast<PySide::DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
