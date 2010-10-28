@@ -61,7 +61,7 @@
 
       <modify-function signature="load(QIODevice*, QWidget*)">
         <extra-includes>
-          <include file-name="glue/uitools_loadui.h" location="local"/> 
+          <include file-name="glue/uitools_loadui.h" location="local"/>
         </extra-includes>
         <modify-argument index="2">
           <replace-default-expression with="0" />
@@ -79,7 +79,7 @@
       <!-- Syntax sugar -->
       <add-function signature="load(const char*, QWidget*)" return-type="QWidget*">
         <extra-includes>
-          <include file-name="glue/uitools_loadui.h" location="local"/> 
+          <include file-name="glue/uitools_loadui.h" location="local"/>
         </extra-includes>
         <modify-argument index="2">
           <replace-default-expression with="0" />
