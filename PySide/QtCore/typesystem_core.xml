@@ -1425,7 +1425,7 @@
         <!-- Keep \x00 bytes passed in python strings -->
         <inject-code class="target" position="beginning">
             int size = PyString_Size(pyargs[0]);
-            %0 = new QByteArray(cpp_arg0, size);
+            %0 = new QByteArray(%1, size);
         </inject-code>
     </modify-function>
     <!-- buffer protocol -->
@@ -2130,7 +2130,7 @@
   </template>
 
   <template name="stream_write_method">
-      (*%CPPSELF) &lt;&lt; cpp_arg0;
+      (*%CPPSELF) &lt;&lt; %1;
   </template>
 
   <object-type name="QDataStream" stream="yes">
