@@ -28,7 +28,7 @@ set(QtDeclarative_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                             ${QT_QTGUI_INCLUDE_DIR}
                             ${QT_QTNETWORK_INCLUDE_DIR}
                             ${QT_QTDECLARATIVE_INCLUDE_DIR}
-                            ${PYTHON_INCLUDE_PATH}
+                            ${SHIBOKEN_PYTHON_INCLUDE_DIR}
                             ${SHIBOKEN_INCLUDE_DIR}
                             ${libpyside_SOURCE_DIR}
                             ${QtGui_BINARY_DIR}/PySide/QtGui/

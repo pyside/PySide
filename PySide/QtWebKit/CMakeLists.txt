@@ -41,7 +41,7 @@ set(QtWebkit_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${QT_QTWEBKIT_INCLUDE_DIR}
                             ${SHIBOKEN_INCLUDE_DIR}
                             ${libpyside_SOURCE_DIR}
-                            ${PYTHON_INCLUDE_PATH}
+                            ${SHIBOKEN_PYTHON_INCLUDE_DIR}
                             ${QtCore_BINARY_DIR}/PySide/QtCore/
                             ${QtGui_BINARY_DIR}/PySide/QtGui/
                             ${QtNetwork_BINARY_DIR}/PySide/QtNetwork/ )
