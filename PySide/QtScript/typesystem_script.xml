@@ -43,7 +43,7 @@
     </object-type>
     <object-type name="QScriptExtensionInterface"/>
     <object-type name="QScriptExtensionPlugin"/>
-    <object-type name="QScriptProgram"/>
+    <value-type name="QScriptProgram"/>
     <value-type name="QScriptString"/>
     <value-type name="QScriptValue">
         <enum-type name="PropertyFlag" flags="QScriptValue::PropertyFlags"/>

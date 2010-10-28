@@ -5488,10 +5488,10 @@
 
   <value-type name="QTileRules"/>
 
-  <value-type name="QTouchEvent">
+  <object-type name="QTouchEvent">
       <enum-type name="DeviceType"/>
       <value-type name="TouchPoint"/>
-  </value-type>
+  </object-type>
 
   <value-type name="QVector2D">
     <add-function signature="__reduce__" return-type="PyObject*">

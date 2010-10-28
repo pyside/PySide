@@ -119,8 +119,8 @@
       <inject-code class="target" position="beginning">
         int size = %2;
         if (size &lt; 0)
-            size = %1->size();
-        %CPPSELF.allocate((const void*) %1->data(), size);
+            size = %1.size();
+        %CPPSELF.allocate((const void*) %1.data(), size);
       </inject-code>
     </modify-function>
     <modify-function signature="map(QGLBuffer::Access)">
@@ -159,8 +159,8 @@
       <inject-code class="target" position="beginning">
         int size = %3;
         if (size &lt; 0)
-            size = %2->size();
-        %CPPSELF.write(%1, (const void*) %2->data(), size);
+            size = %2.size();
+        %CPPSELF.write(%1, (const void*) %2.data(), size);
       </inject-code>
     </modify-function>
   </object-type>
