@@ -25,6 +25,19 @@ class QUioaderTeste(UsesQApplication):
         self.assertNotEqual(child, None)
         self.assertEqual(w.findChild(QWidget, "grandson_object"), child.findChild(QWidget, "grandson_object"))
 
+    def testLoadFileUnicodeFilePath(self):
+        filePath = unicode(os.path.join(os.path.dirname(__file__), 'test.ui'))
+        loader = QUiLoader()
+        parent = QWidget()
+        w = loader.load(filePath, parent)
+        self.assertNotEqual(w, None)
+
+        self.assertEqual(len(parent.children()), 1)
+
+        child = w.findChild(QWidget, "child_object")
+        self.assertNotEqual(child, None)
+        self.assertEqual(w.findChild(QWidget, "grandson_object"), child.findChild(QWidget, "grandson_object"))
+
 if __name__ == '__main__':
     unittest.main()
 

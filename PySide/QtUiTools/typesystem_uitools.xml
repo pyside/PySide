@@ -77,7 +77,7 @@
      </modify-function>
 
       <!-- Syntax sugar -->
-      <add-function signature="load(const char*, QWidget*)" return-type="QWidget*">
+      <add-function signature="load(QString, QWidget*)" return-type="QWidget*">
         <extra-includes>
           <include file-name="glue/uitools_loadui.h" location="local"/>
         </extra-includes>
