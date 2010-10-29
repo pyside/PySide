@@ -20,15 +20,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <shiboken.h>
 #include <Python.h>
+#include "pysideproperty.h"
+#include "pysideproperty_p.h"
+#include "dynamicqmetaobject_p.h"
+#include "pysidesignal.h"
+#include "pysidesignal_p.h"
+
+#include <shiboken.h>
 #include <QDebug>
 
-#include "qproperty.h"
-#include "qproperty_p.h"
-#include "dynamicqmetaobject_p.h"
-#include "qsignal.h"
-#include "qsignal_p.h"
 
 #define QPROPERTY_CLASS_NAME "Property"
 

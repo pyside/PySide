@@ -28,14 +28,14 @@ static bool qobjectConnect(QObject* source, const char* signal, QObject* receive
     if (!signal || !slot)
         return false;
 
-    if (!PySide::checkSignal(signal))
+    if (!PySide::Signal::checkQtSignal(signal))
         return false;
     signal++;
 
     if (!PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal))
         return false;
 
-    bool isSignal = PySide::isSignal(slot);
+    bool isSignal = PySide::Signal::isQtSignal(slot);
     slot++;
     PySide::SignalManager::registerMetaMethod(receiver, slot, isSignal ? QMetaMethod::Signal : QMetaMethod::Slot);
     return QObject::connect(source, signal - 1, receiver, slot - 1, type);
@@ -43,7 +43,7 @@ static bool qobjectConnect(QObject* source, const char* signal, QObject* receive
 
 static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType type)
 {
-    if (!signal || !PySide::checkSignal(signal))
+    if (!signal || !PySide::Signal::checkQtSignal(signal))
         return false;
     signal++;
 
@@ -62,7 +62,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
-    const QByteArray callbackSig = PySide::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
+    const QByteArray callbackSig = PySide::Signal::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
     const char* slot = callbackSig.constData();
     int slotIndex = metaObject->indexOfSlot(slot);
     if (slotIndex == -1) {
@@ -97,7 +97,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
 
 static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObject* callback)
 {
-    if (!PySide::checkSignal(signal))
+    if (!PySide::Signal::checkQtSignal(signal))
         return false;
 
     PySide::SignalManager& signalManager = PySide::SignalManager::instance();
@@ -110,7 +110,7 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
-    const QByteArray callbackSig = PySide::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
+    const QByteArray callbackSig = PySide::Signal::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
     QByteArray qtSlotName(callbackSig);
     qtSlotName = qtSlotName.prepend('1');
 

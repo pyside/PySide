@@ -21,6 +21,10 @@
 */
 
 #include "signalmanager.h"
+#include "pysidesignal.h"
+#include "pysideproperty.h"
+#include "pysideproperty_p.h"
+#include "pyside.h"
 
 #include <QHash>
 #include <QStringList>
@@ -32,10 +36,6 @@
 #include <typeresolver.h>
 #include <basewrapper.h>
 #include <conversions.h>
-
-#include "qproperty.h"
-#include "qproperty_p.h"
-#include "pyside.h"
 
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
 #error QSLOT_CODE and/or QSIGNAL_CODE changed! change the hardcoded stuff to the correct value!
@@ -105,123 +105,7 @@ struct Converter<PySide::PyObjectWrapper>
 
 };
 
-
 using namespace PySide;
-
-bool PySide::isSignal(const char* signal)
-{
-    return (signal && signal[0] == PYSIDE_SIGNAL);
-}
-
-bool PySide::checkSignal(const char* signal)
-{
-    if (!signal)
-        return false;
-
-    if (signal[0] != PYSIDE_SIGNAL) {
-        PyErr_SetString(PyExc_TypeError, "Use the function PySide.QtCore.SIGNAL on signals");
-        return false;
-    }
-    return true;
-}
-
-static QString codeCallbackName(PyObject* callback, const QString& funcName)
-{
-    if (PyMethod_Check(callback)) {
-        PyObject *self = PyMethod_GET_SELF(callback);
-        PyObject *func = PyMethod_GET_FUNCTION(callback);
-        return funcName + QString::number(quint64(self), 16) + QString::number(quint64(func), 16);
-    } else
-        return funcName+QString::number(quint64(callback), 16);
-}
-
-QString PySide::getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName)
-{
-    QString functionName;
-    QString signature;
-    QStringList args;
-    int numArgs = -1;
-    bool useSelf = false;
-    bool isMethod = PyMethod_Check(callback);
-    bool isFunction = PyFunction_Check(callback);
-
-    if (isMethod || isFunction) {
-        PyObject* function = isMethod ? PyMethod_GET_FUNCTION(callback) : callback;
-        PyCodeObject* objCode = reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(function));
-        functionName = PyString_AS_STRING(objCode->co_name);
-        useSelf = isMethod;
-        numArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
-    } else if (PyCFunction_Check(callback)) {
-        functionName = ((PyCFunctionObject*)callback)->m_ml->ml_name;
-        useSelf = ((PyCFunctionObject*)callback)->m_self;
-        int flags = ((PyCFunctionObject*)callback)->m_ml->ml_flags;
-
-        if (receiver) {
-            //Search for signature on metaobject
-            const QMetaObject *mo = receiver->metaObject();
-            for(int i=0; i < mo->methodCount(); i++) {
-            QMetaMethod me = mo->method(i);
-                if (QString(me.signature()).startsWith(functionName)) {
-                    numArgs = me.parameterTypes().size()+1;
-                    break;
-                }
-           }
-        }
-
-        if (numArgs == -1) {
-            if (flags & METH_O)
-                numArgs = 1;
-            else if (flags & METH_VARARGS)
-                numArgs = -1;
-            else if (flags & METH_NOARGS)
-                numArgs = 0;
-        }
-    } else if (PyCallable_Check(callback)) {
-        functionName = "__callback"+QString::number((size_t)callback);
-    }
-
-    Q_ASSERT(!functionName.isEmpty());
-
-    bool isShortCircuit = false;
-
-    if (encodeName)
-        signature = codeCallbackName(callback, functionName);
-    else
-        signature = functionName;
-
-    args = getArgsFromSignature(signal, &isShortCircuit);
-
-    if (!isShortCircuit) {
-        signature.append('(');
-        if (numArgs == -1)
-            numArgs = std::numeric_limits<int>::max();
-        while (args.count() && args.count() > numArgs - useSelf) {
-            args.removeLast();
-        }
-        signature.append(args.join(","));
-        signature.append(')');
-    }
-    return signature;
-}
-
-QStringList PySide::getArgsFromSignature(const char* signature, bool* isShortCircuit)
-{
-    QString qsignature(signature);
-    QStringList result;
-    QRegExp splitRegex("\\s*,\\s*");
-
-    if (isShortCircuit)
-        *isShortCircuit = !qsignature.contains('(');
-    if (qsignature.contains("()") || qsignature.contains("(void)")) {
-        return result;
-    } else if (qsignature.contains('(')) {
-        static QRegExp regex(".+\\((.*)\\)");
-        //get args types
-        QString types = qsignature.replace(regex, "\\1");
-        result = types.split(splitRegex);
-    }
-    return result;
-}
 
 struct SignalManager::SignalManagerPrivate
 {
@@ -335,14 +219,14 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
 
 bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* args)
 {
-    if (!checkSignal(signal))
+    if (!Signal::checkQtSignal(signal))
         return false;
     signal++;
 
     int signalIndex = source->metaObject()->indexOfSignal(signal);
     if (signalIndex != -1) {
         bool isShortCircuit;
-        QStringList argTypes = getArgsFromSignature(signal, &isShortCircuit);
+        QStringList argTypes = Signal::getArgsFromSignature(signal, &isShortCircuit);
 
         if (isShortCircuit)
             return emitShortCircuitSignal(source, signalIndex, args);

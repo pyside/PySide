@@ -23,9 +23,12 @@
 #ifndef PYSIDE_SIGNAL_H
 #define PYSIDE_SIGNAL_H
 
+#include <QObject>
+#include <QString>
+#include <QStringList>
+
 #include <pysidemacros.h>
 #include <Python.h>
-#include <QObject>
 
 namespace Shiboken
 {
@@ -109,6 +112,38 @@ PYSIDE_API void                     updateSourceObject(PyObject* source);
  * @return  Return the signal signature
  **/
 PYSIDE_API void                     addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PySideSignal* signal);
+
+/**
+ * This function verify if the signature is a QtSignal base on SIGNAL flag
+ * @param   signature   The signal signature
+ * @return  Return true if this is a Qt Signal of false if not
+ **/
+PYSIDE_API bool                     isQtSignal(const char* signature);
+
+/**
+ * This function is similar as isQtSignal but this reaise a Python error if this faisl
+ * @param   signature   The signal signature
+ * @return  Return true if this is a Qt Signal of false if not
+ **/
+PYSIDE_API bool                     checkQtSignal(const char* signature);
+
+/**
+ * This function is used to retrieve the signature base on Signal and receiver callback
+ * @param   signature   The signal signature
+ * @param   receiver    The QObject which will receiver the signal
+ * @param   callback    Callback function which will connect with signal
+ * @param   encodeName  Used to specify if the returned signature will be encoded with Qt signal/slot style
+ * @return  Return the callback signature
+ **/
+PYSIDE_API QString                  getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName);
+
+/**
+ * Function to parese the signature and return a list of argument types
+ * @param   signature       The signal signature
+ * @param   isShortCircuit  If this is a shortCircuit(python<->python) signal
+ * @return  Return true if this is a Qt Signal of false if not
+ **/
+QStringList                         getArgsFromSignature(const char* signature, bool* isShortCircuit = 0);
 
 } //namespace Signal
 } //namespace PySide

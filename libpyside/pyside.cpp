@@ -20,8 +20,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 #include "pyside.h"
+#include "signalmanager.h"
+#include "pysideproperty_p.h"
+#include "pysideproperty.h"
+#include "pysidesignal.h"
+#include "pysidesignal_p.h"
+#include "pysideslot_p.h"
+
 #include <basewrapper.h>
 #include <conversions.h>
 #include <typeresolver.h>
@@ -29,12 +35,6 @@
 #include <cctype>
 #include <QStack>
 #include <QCoreApplication>
-#include "signalmanager.h"
-#include "qproperty_p.h"
-#include "qproperty.h"
-#include "qsignal.h"
-#include "qsignal_p.h"
-#include "qslot_p.h"
 
 static QStack<PySide::CleanupFunction> cleanupFunctionList;
 

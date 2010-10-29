@@ -45,12 +45,8 @@ public:
     operator PyObject*() const;
 private:
     PyObject* m_me;
+    void*     m_data; //future
 };
-
-PYSIDE_API bool isSignal(const char* signal);
-PYSIDE_API bool checkSignal(const char* signal);
-PYSIDE_API QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName);
-QStringList getArgsFromSignature(const char* signature, bool* isShortCircuit = 0);
 
 class PYSIDE_API SignalManager
 {
@@ -76,6 +72,7 @@ public:
 private:
     struct SignalManagerPrivate;
     SignalManagerPrivate* m_d;
+
     SignalManager();
     ~SignalManager();
 

@@ -19,17 +19,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-#include <shiboken.h>
 #include <Python.h>
-#include <QDebug>
-
-#include "qsignal.h"
-#include "qsignal_p.h"
+#include "pysidesignal.h"
+#include "pysidesignal_p.h"
 #include "signalmanager.h"
 
+#include <shiboken.h>
+#include <QDebug>
+
 #define SIGNAL_CLASS_NAME "Signal"
-#define QT_SIGNAL_SENTINEL "2"
+#define QT_SIGNAL_SENTINEL '2'
 
 
 namespace PySide { namespace Signal {
@@ -665,7 +664,7 @@ PyObject* buildQtCompatible(const char* signature)
 {
     char* qtSignature;
     qtSignature = reinterpret_cast<char*>(malloc(strlen(signature)+2));
-    sprintf(qtSignature, QT_SIGNAL_SENTINEL"%s", signature);
+    sprintf(qtSignature, "%c%s", QT_SIGNAL_SENTINEL, signature);
     PyObject* ret = PyString_FromString(qtSignature);
     free(qtSignature);
     return ret;
@@ -698,6 +697,118 @@ const char** getSignatures(PyObject* signal, int *size)
     PySideSignal *self = reinterpret_cast<PySideSignal*>(signal);
     *size = self->signaturesSize;
     return (const char**) self->signatures;
+}
+
+QStringList getArgsFromSignature(const char* signature, bool* isShortCircuit)
+{
+    QString qsignature(signature);
+    QStringList result;
+    QRegExp splitRegex("\\s*,\\s*");
+
+    if (isShortCircuit)
+        *isShortCircuit = !qsignature.contains('(');
+    if (qsignature.contains("()") || qsignature.contains("(void)")) {
+        return result;
+    } else if (qsignature.contains('(')) {
+        static QRegExp regex(".+\\((.*)\\)");
+        //get args types
+        QString types = qsignature.replace(regex, "\\1");
+        result = types.split(splitRegex);
+    }
+    return result;
+}
+
+QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName)
+{
+    QString functionName;
+    QString signature;
+    QStringList args;
+    int numArgs = -1;
+    bool useSelf = false;
+    bool isMethod = PyMethod_Check(callback);
+    bool isFunction = PyFunction_Check(callback);
+
+    if (isMethod || isFunction) {
+        PyObject* function = isMethod ? PyMethod_GET_FUNCTION(callback) : callback;
+        PyCodeObject* objCode = reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(function));
+        functionName = PyString_AS_STRING(objCode->co_name);
+        useSelf = isMethod;
+        numArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
+    } else if (PyCFunction_Check(callback)) {
+        functionName = ((PyCFunctionObject*)callback)->m_ml->ml_name;
+        useSelf = ((PyCFunctionObject*)callback)->m_self;
+        int flags = ((PyCFunctionObject*)callback)->m_ml->ml_flags;
+
+        if (receiver) {
+            //Search for signature on metaobject
+            const QMetaObject *mo = receiver->metaObject();
+            for(int i=0; i < mo->methodCount(); i++) {
+            QMetaMethod me = mo->method(i);
+                if (QString(me.signature()).startsWith(functionName)) {
+                    numArgs = me.parameterTypes().size()+1;
+                    break;
+                }
+           }
+        }
+
+        if (numArgs == -1) {
+            if (flags & METH_O)
+                numArgs = 1;
+            else if (flags & METH_VARARGS)
+                numArgs = -1;
+            else if (flags & METH_NOARGS)
+                numArgs = 0;
+        }
+    } else if (PyCallable_Check(callback)) {
+        functionName = "__callback"+QString::number((size_t)callback);
+    }
+
+    Q_ASSERT(!functionName.isEmpty());
+
+    bool isShortCircuit = false;
+
+    if (encodeName)
+        signature = codeCallbackName(callback, functionName);
+    else
+        signature = functionName;
+
+    args = getArgsFromSignature(signal, &isShortCircuit);
+
+    if (!isShortCircuit) {
+        signature.append('(');
+        if (numArgs == -1)
+            numArgs = std::numeric_limits<int>::max();
+        while (args.count() && args.count() > numArgs - useSelf) {
+            args.removeLast();
+        }
+        signature.append(args.join(","));
+        signature.append(')');
+    }
+    return signature;
+}
+
+bool isQtSignal(const char* signal)
+{
+    return (signal && signal[0] == QT_SIGNAL_SENTINEL);
+}
+
+bool checkQtSignal(const char* signal)
+{
+    if (!isQtSignal(signal)) {
+        PyErr_SetString(PyExc_TypeError, "Use the function PySide.QtCore.SIGNAL on signals");
+        return false;
+    }
+    return true;
+}
+
+QString  codeCallbackName(PyObject* callback, const QString& funcName)
+{
+    if (PyMethod_Check(callback)) {
+        PyObject *self = PyMethod_GET_SELF(callback);
+        PyObject *func = PyMethod_GET_FUNCTION(callback);
+        return funcName + QString::number(quint64(self), 16) + QString::number(quint64(func), 16);
+    } else
+        return funcName + QString::number(quint64(callback), 16);
 }
 
 } //namespace Signal

@@ -22,6 +22,11 @@
 
 #include "dynamicqmetaobject.h"
 #include "dynamicqmetaobject_p.h"
+#include "pysidesignal.h"
+#include "pysidesignal_p.h"
+#include "pysideproperty.h"
+#include "pysideproperty_p.h"
+
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
@@ -31,11 +36,6 @@
 #include <cstring>
 #include <QDebug>
 #include <QMetaMethod>
-
-#include "qsignal.h"
-#include "qsignal_p.h"
-#include "qproperty.h"
-#include "qproperty_p.h"
 
 #define MAX_SIGNALS_COUNT 50
 #define MAX_SLOTS_COUNT 50

@@ -4,9 +4,9 @@ set(libpyside_SRC
 dynamicqmetaobject.cpp
 signalmanager.cpp
 globalreceiver.cpp
-qsignal.cpp
-qslot.cpp
-qproperty.cpp
+pysidesignal.cpp
+pysideslot.cpp
+pysideproperty.cpp
 pyside.cpp
 )
 
@@ -37,8 +37,8 @@ set(libpyside_HEADERS
     pysidemacros.h
     signalmanager.h
     pyside.h
-    qsignal.h
-    qproperty.h
+    pysidesignal.h
+    pysideproperty.h
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

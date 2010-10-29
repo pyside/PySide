@@ -51,10 +51,12 @@ extern "C"
 }; //extern "C"
 
 namespace PySide { namespace Signal {
+
     void            init(PyObject* module);
     bool            connect(PyObject* source, const char* signal, PyObject* callback);
     char*           getTypeName(PyObject*);
     const char**    getSignatures(PyObject* self, int *size);
+    QString         codeCallbackName(PyObject* callback, const QString& funcName);
 
 }} //namespace PySide
 
