@@ -34,7 +34,7 @@ int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
     sbkSelf->containsCppWrapper = 1;
     sbkSelf->hasOwnership = 0;
     Shiboken::BindingManager::instance().registerWrapper(sbkSelf, cptr);
-    PySide::signalUpdateSource(self);
+    PySide::Signal::updateSourceObject(self);
     cptr->metaObject();
 
     PySide::registerCleanupFunction(&PySide::destroyQCoreApplication);

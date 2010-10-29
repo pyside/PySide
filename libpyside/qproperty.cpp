@@ -35,7 +35,7 @@
 extern "C"
 {
 
-struct PySideQPropertyPrivate {
+struct PySidePropertyPrivate {
     char* typeName;
     PyObject* type;
     PyObject* fget;
@@ -56,11 +56,11 @@ struct PySideQPropertyPrivate {
 static int qpropertyTpInit(PyObject*, PyObject*, PyObject*);
 static void qpropertyFree(void*);
 
-PyTypeObject PySideQPropertyType = {
+PyTypeObject PySidePropertyType = {
     PyObject_HEAD_INIT(0)
     0,                         /*ob_size*/
     QPROPERTY_CLASS_NAME,      /*tp_name*/
-    sizeof(PySideQProperty),   /*tp_basicsize*/
+    sizeof(PySideProperty),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     0,                         /*tp_dealloc*/
     0,                         /*tp_print*/
@@ -109,8 +109,8 @@ PyTypeObject PySideQPropertyType = {
 int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
 {
     PyObject* type = 0;
-    PySideQProperty* data = reinterpret_cast<PySideQProperty*>(self);
-    PySideQPropertyPrivate* pData = (PySideQPropertyPrivate*) malloc(sizeof(PySideQPropertyPrivate));
+    PySideProperty* data = reinterpret_cast<PySideProperty*>(self);
+    PySidePropertyPrivate* pData = (PySidePropertyPrivate*) malloc(sizeof(PySidePropertyPrivate));
     data->d = pData;
     pData->fset = 0;
     pData->fget = 0;
@@ -139,14 +139,14 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
     if (!pData->fset && pData->fget)
         pData->constant = true;
 
-    pData->typeName = PySide::getTypeName(type);
+    pData->typeName = PySide::Signal::getTypeName(type);
     return 1;
 }
 
 void qpropertyFree(void *self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
-    PySideQProperty *data = reinterpret_cast<PySideQProperty*>(self);
+    PySideProperty *data = reinterpret_cast<PySideProperty*>(self);
 
     free(data->d->typeName);
     free(data->d->doc);
@@ -159,27 +159,26 @@ void qpropertyFree(void *self)
 } // extern "C"
 
 
-namespace PySide
-{
+namespace PySide { namespace Property {
 
-void initQProperty(PyObject* module)
+void init(PyObject* module)
 {
-    if (PyType_Ready(&PySideQPropertyType) < 0)
+    if (PyType_Ready(&PySidePropertyType) < 0)
         return;
 
-    Py_INCREF(&PySideQPropertyType);
-    PyModule_AddObject(module, QPROPERTY_CLASS_NAME, ((PyObject*)&PySideQPropertyType));
+    Py_INCREF(&PySidePropertyType);
+    PyModule_AddObject(module, QPROPERTY_CLASS_NAME, ((PyObject*)&PySidePropertyType));
 }
 
-bool isQPropertyType(PyObject* pyObj)
+bool isPropertyType(PyObject* pyObj)
 {
     if (pyObj) {
-        return pyObj->ob_type == &PySideQPropertyType;
+        return pyObj->ob_type == &PySidePropertyType;
     }
     return false;
 }
 
-int qpropertySet(PySideQProperty* self, PyObject* source, PyObject* value)
+int setValue(PySideProperty* self, PyObject* source, PyObject* value)
 {
     PyObject* fset = self->d->fset;
     if (fset) {
@@ -196,7 +195,7 @@ int qpropertySet(PySideQProperty* self, PyObject* source, PyObject* value)
     return -1;
 }
 
-PyObject* qpropertyGet(PySideQProperty* self, PyObject* source)
+PyObject* getValue(PySideProperty* self, PyObject* source)
 {
     PyObject* fget = self->d->fget;
     if (fget) {
@@ -208,7 +207,7 @@ PyObject* qpropertyGet(PySideQProperty* self, PyObject* source)
     return 0;
 }
 
-int qpropertyReset(PySideQProperty* self, PyObject* source)
+int reset(PySideProperty* self, PyObject* source)
 {
     PyObject* freset = self->d->freset;
     if (freset) {
@@ -222,16 +221,16 @@ int qpropertyReset(PySideQProperty* self, PyObject* source)
 }
 
 
-const char* qpropertyGetType(PySideQProperty* self)
+const char* getTypeName(const PySideProperty* self)
 {
     return self->d->typeName;
 }
 
-PySideQProperty* qpropertyGetObject(PyObject* source, PyObject* name)
+PySideProperty* getObject(PyObject* source, PyObject* name)
 {
     PyObject* attr = PyObject_GenericGetAttr(source, name);
-    if (attr && isQPropertyType(attr))
-        return reinterpret_cast<PySideQProperty*>(attr);
+    if (attr && isPropertyType(attr))
+        return reinterpret_cast<PySideProperty*>(attr);
 
     if (!attr)
         PyErr_Clear(); //Clear possible error caused by PyObject_GenericGetAttr
@@ -240,52 +239,52 @@ PySideQProperty* qpropertyGetObject(PyObject* source, PyObject* name)
     return 0;
 }
 
-bool qpropertyIsReadable(PySideQProperty* self)
+bool isReadable(const PySideProperty* self)
 {
     return (self->d->fget != 0);
 }
 
-bool qpropertyIsWritable(PySideQProperty* self)
+bool isWritable(const PySideProperty* self)
 {
     return (self->d->fset != 0);
 }
 
-bool qpropertyHasReset(PySideQProperty* self)
+bool hasReset(const PySideProperty* self)
 {
     return (self->d->freset != 0);
 }
 
-bool qpropertyIsDesignable(PySideQProperty* self)
+bool isDesignable(const PySideProperty* self)
 {
     return self->d->designable;
 }
 
-bool qpropertyIsScriptable(PySideQProperty* self)
+bool isScriptable(const PySideProperty* self)
 {
     return self->d->scriptable;
 }
 
-bool qpropertyIsStored(PySideQProperty* self)
+bool isStored(const PySideProperty* self)
 {
     return self->d->stored;
 }
 
-bool qpropertyIsUser(PySideQProperty* self)
+bool isUser(const PySideProperty* self)
 {
     return self->d->user;
 }
 
-bool qpropertyIsConstant(PySideQProperty* self)
+bool isConstant(const PySideProperty* self)
 {
     return self->d->constant;
 }
 
-bool qpropertyIsFinal(PySideQProperty* self)
+bool isFinal(const PySideProperty* self)
 {
     return self->d->final;
 }
 
-const char* qpropertyGetNotify(PySideQProperty* self)
+const char* getNotifyName(PySideProperty* self)
 {
     if (!self->d->notifySignature) {
         PyObject* str = PyObject_Str(self->d->notify);
@@ -296,4 +295,5 @@ const char* qpropertyGetNotify(PySideQProperty* self)
     return self->d->notifySignature;
 }
 
+} //namespace Property
 } //namespace PySide

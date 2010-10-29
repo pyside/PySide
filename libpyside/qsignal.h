@@ -37,25 +37,80 @@ extern "C"
     extern PYSIDE_API PyTypeObject PySideSignalType;
     extern PYSIDE_API PyTypeObject PySideSignalInstanceType;
 
-    struct PySideSignalInstanceDataPrivate;
-    struct PYSIDE_API PySideSignalInstanceData
+    //Internal object
+    struct PYSIDE_API PySideSignal;
+
+    struct PySideSignalInstancePrivate;
+    struct PYSIDE_API PySideSignalInstance
     {
         PyObject_HEAD
-        PySideSignalInstanceDataPrivate* d;
+        PySideSignalInstancePrivate* d;
     };
 }; //extern "C"
 
-namespace PySide
-{
+namespace PySide { namespace Signal {
 
-PYSIDE_API PyObject* signalNew(const char* name, ...);
-PYSIDE_API PyObject* signalNewFromMethod(PyObject* source, const QList<QMetaMethod>& method);
-PYSIDE_API PySideSignalInstanceData* signalInitialize(PyObject* self, PyObject* name, PyObject *object);
+/**
+ * This function creates a Signal object which stay attached to QObject class
+ *
+ * @param   name of the Signal to be registered on meta object
+ * @param   signatures a list of signatures supported by this signal, ended with a NULL pointer
+ * @return  Return a new reference to PyObject* of type  PySideSignal
+ **/
+PYSIDE_API PySideSignal*            newObject(const char* name, ...);
 
-PYSIDE_API void signalUpdateSource(PyObject* source);
-PYSIDE_API void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PyObject* signal);
-PYSIDE_API PyObject* getSignalSource(PySideSignalInstanceData* signal);
-PYSIDE_API const char* getSignalSignature(PySideSignalInstanceData* signal);
+/**
+ * This function creates a Signal object which stay attached to QObject class based on a list of QMetaMethod
+ *
+ * @param   source of the Signal to be registered on meta object
+ * @param   methods a list of QMetaMethod wich contains the supported signature
+ * @return  Return a new reference to PyObject* of type  PySideSignal
+ **/
+PYSIDE_API PySideSignalInstance*    newObjectFromMethod(PyObject* source, const QList<QMetaMethod>& methods);
+
+/**
+ * This function initializes the Signal object creating a PySideSignalInstance
+ *
+ * @param   self a Signal object used as base to PySideSignalInstance
+ * @param   name the name to be used on PySideSignalInstance
+ * @param   object the PyObject where the signal will be attached
+ * @return  Return a new reference to PySideSignalInstance
+ **/
+PYSIDE_API PySideSignalInstance*    initialize(PySideSignal* signal, PyObject* name, PyObject *object);
+
+/**
+ * This function is used to retrieve the object in which the sigal is attached
+ *
+ * @param   self The Signal object
+ * @return  Return the internal reference to parent object of the signal
+ **/
+PYSIDE_API PyObject*                getObject(PySideSignalInstance* signal);
+
+/**
+ * This function is used to retrieve the signal signature
+ *
+ * @param   self The Signal object
+ * @return  Return the signal signature
+ **/
+PYSIDE_API const char*              getSignature(PySideSignalInstance* signal);
+
+/**
+ * This function is used to retrieve the signal signature
+ *
+ * @param   self The Signal object
+ * @return  Return the signal signature
+ **/
+PYSIDE_API void                     updateSourceObject(PyObject* source);
+
+/**
+ * This function is used to retrieve the signal signature
+ *
+ * @param   self The Signal object
+ * @return  Return the signal signature
+ **/
+PYSIDE_API void                     addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PySideSignal* signal);
+
+} //namespace Signal
 } //namespace PySide
 
 #endif

@@ -83,14 +83,14 @@
                   <access modifier="private"/>
               </modify-function>
               <inject-code class="target" position="end">
-                   PyObject* signal_item;
+                   PySideSignal* signal_item;
 
-                   signal_item = PySide::signalNew("capabilitiesChanged", "void", NULL);
-                   PyDict_SetItemString(SbkPhonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "capabilitiesChanged", signal_item);
+                   signal_item = PySide::Signal::newObject("capabilitiesChanged", "void", NULL);
+                   PyDict_SetItemString(SbkPhonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "capabilitiesChanged", (PyObject*)signal_item);
                    Py_DECREF(signal_item);
 
-                   signal_item = PySide::signalNew("availableAudioOutputDevicesChanged", "void", NULL);
-                   PyDict_SetItemString( SbkPhonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "availableAudioOutputDevicesChanged", signal_item);
+                   signal_item = PySide::Signal::newObject("availableAudioOutputDevicesChanged", "void", NULL);
+                   PyDict_SetItemString( SbkPhonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "availableAudioOutputDevicesChanged",  (PyObject*)signal_item);
                    Py_DECREF(signal_item);
               </inject-code>
             </object-type>

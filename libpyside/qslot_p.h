@@ -24,9 +24,8 @@
 
 #include <Python.h>
 
-namespace PySide
-{
-    void initSlotSupport(PyObject* module);
-}
+namespace PySide { namespace Slot {
+    void init(PyObject* module);
+}}
 
 #endif

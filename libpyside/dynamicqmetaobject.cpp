@@ -161,39 +161,39 @@ uint PropertyData::flags() const
     else if (!isQRealType(typeName))
         flags |= qvariant_nameToType(typeName) << 24;
 
-    if (qpropertyIsReadable(m_data))
+    if (PySide::Property::isReadable(m_data))
         flags |= Readable;
 
-    if (qpropertyIsWritable(m_data))
+    if (PySide::Property::isWritable(m_data))
         flags |= Writable;
 
-    if (qpropertyHasReset(m_data))
+    if (PySide::Property::hasReset(m_data))
         flags |= Resettable;
 
-    if (!qpropertyIsDesignable(m_data))
+    if (!PySide::Property::isDesignable(m_data))
         flags |= ResolveDesignable;
     else
         flags |= Designable;
 
-    if (!qpropertyIsScriptable(m_data))
+    if (!PySide::Property::isScriptable(m_data))
         flags |= ResolveScriptable;
     else
         flags |= Scriptable;
 
-    if (!qpropertyIsStored(m_data))
+    if (!PySide::Property::isStored(m_data))
         flags |= ResolveStored;
     else
         flags |= Stored;
 
-    if (!qpropertyIsUser(m_data))
+    if (!PySide::Property::isUser(m_data))
         flags |= ResolveUser;
     else
         flags |= User;
 
-    if (qpropertyIsConstant(m_data))
+    if (PySide::Property::isConstant(m_data))
         flags |= Constant;
 
-    if (qpropertyIsFinal(m_data))
+    if (PySide::Property::isFinal(m_data))
         flags |= Final;
 
     if (m_notifyId)
@@ -253,14 +253,14 @@ PropertyData::PropertyData()
 {
 }
 
-PropertyData::PropertyData(const char* name, uint notifyId, PySideQProperty* data)
+PropertyData::PropertyData(const char* name, uint notifyId, PySideProperty* data)
     : m_name(name), m_notifyId(notifyId), m_data(data)
 {
 }
 
 QByteArray PropertyData::type() const
 {
-    return QByteArray(qpropertyGetType(m_data));
+    return QByteArray(PySide::Property::getTypeName(m_data));
 }
 
 
@@ -374,8 +374,8 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
         return;
 
     // retrieve notifyId
-    PySideQProperty* property = reinterpret_cast<PySideQProperty*>(data);
-    const char* signalNotify = qpropertyGetNotify(property);
+    PySideProperty* property = reinterpret_cast<PySideProperty*>(data);
+    const char* signalNotify = PySide::Property::getNotifyName(property);
     uint notifyId = 0;
     if (signalNotify) {
         QByteArray signalSignature(signalNotify);
@@ -409,18 +409,18 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
     while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
 
         //Leave the properties to be register after signals because of notify object
-        if (value->ob_type == &PySideQPropertyType)
+        if (value->ob_type == &PySidePropertyType)
             properties.append(key);
 
         //Register signals
         if (value->ob_type == &PySideSignalType) {
             PyObject *attr = PyObject_GetAttr(pyObj, key);
-            PySideSignalInstanceData *data = reinterpret_cast<PySideSignalInstanceData*>(attr);
+            PySideSignalInstance *data = reinterpret_cast<PySideSignalInstance*>(attr);
             while(data) {
                 int index = base->indexOfSignal(data->d->signature);
                 if (index == -1)
                     mo->addSignal(data->d->signature);
-                data = reinterpret_cast<PySideSignalInstanceData*>(data->d->next);
+                data = reinterpret_cast<PySideSignalInstance*>(data->d->next);
             }
         }
 

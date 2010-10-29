@@ -29,7 +29,7 @@
 
 #define PYSIDE_SLOT_LIST_ATTR "_slots"
 
-struct PySideQProperty;
+struct PySideProperty;
 namespace PySide
 {
     class MethodData
@@ -54,7 +54,7 @@ namespace PySide
     {
     public:
         PropertyData();
-        PropertyData(const char* name, uint notifyId=0, PySideQProperty* data = 0);
+        PropertyData(const char* name, uint notifyId=0, PySideProperty* data = 0);
         QByteArray name() const;
         QByteArray type() const;
         uint flags() const;
@@ -66,7 +66,7 @@ namespace PySide
     private:
         QByteArray m_name;
         uint m_notifyId;
-        PySideQProperty* m_data;
+        PySideProperty* m_data;
     };
 }
 

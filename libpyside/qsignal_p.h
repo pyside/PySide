@@ -29,7 +29,7 @@ extern "C"
 {
     extern PyTypeObject PySideSignalType;
 
-    struct SignalData {
+    struct PySideSignal {
         PyObject_HEAD
         bool initialized;
         char* signalName;
@@ -38,25 +38,24 @@ extern "C"
         PyObject* homonymousMethod;
     };
 
-    struct PySideSignalInstanceData;
-    struct PySideSignalInstanceDataPrivate {
+    struct PySideSignalInstance;
+    struct PySideSignalInstancePrivate {
         char* signalName;
         char* signature;
         PyObject* source;
         PyObject* homonymousMethod;
-        PySideSignalInstanceData* next;
+        PySideSignalInstance* next;
     };
 
 
 }; //extern "C"
 
-namespace PySide
-{
-    bool signalConnect(PyObject* source, const char* signal, PyObject* callback);
-    char* getTypeName(PyObject*);
-    void initSignalSupport(PyObject* module);
-    const char** getSignalSignatures(PyObject* self, int *size);
+namespace PySide { namespace Signal {
+    void            init(PyObject* module);
+    bool            connect(PyObject* source, const char* signal, PyObject* callback);
+    char*           getTypeName(PyObject*);
+    const char**    getSignatures(PyObject* self, int *size);
 
-} //namespace PySide
+}} //namespace PySide
 
 #endif

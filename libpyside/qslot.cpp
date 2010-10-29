@@ -33,7 +33,7 @@ typedef struct
     char* slotName;
     char* args;
     char* resultType;
-} SlotData;
+} PySideSlot;
 
 extern "C"
 {
@@ -46,7 +46,7 @@ static PyTypeObject PySideSlotType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "PySide.QtCore."SLOT_DEC_NAME, /*tp_name*/
-    sizeof(SlotData),          /*tp_basicsize*/
+    sizeof(PySideSlot),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     0,                         /*tp_dealloc*/
     0,                         /*tp_print*/
@@ -105,10 +105,10 @@ int slotTpInit(PyObject *self, PyObject *args, PyObject *kw)
     if (!PyArg_ParseTupleAndKeywords(emptyTuple, kw, "|sO:QtCore."SLOT_DEC_NAME, (char**) kwlist, &argName, &argResult))
         return 0;
 
-    SlotData *data = reinterpret_cast<SlotData*>(self);
+    PySideSlot *data = reinterpret_cast<PySideSlot*>(self);
     for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
         PyObject *argType = PyTuple_GET_ITEM(args, i);
-        char *typeName = PySide::getTypeName(argType);
+        char *typeName = PySide::Signal::getTypeName(argType);
         if (typeName) {
             if (data->args) {
                 data->args = reinterpret_cast<char*>(realloc(data->args, (strlen(data->args) + 1 + strlen(typeName)) * sizeof(char*)));
@@ -125,7 +125,7 @@ int slotTpInit(PyObject *self, PyObject *args, PyObject *kw)
         data->slotName = strdup(argName);
 
     if (argResult)
-        data->resultType = PySide::getTypeName(argResult);
+        data->resultType = PySide::Signal::getTypeName(argResult);
     else
         data->resultType = strdup("void");
 
@@ -140,7 +140,7 @@ PyObject* slotCall(PyObject* self, PyObject* args, PyObject* kw)
     Py_INCREF(callback);
 
     if (PyFunction_Check(callback)) {
-        SlotData *data = reinterpret_cast<SlotData*>(self);
+        PySideSlot *data = reinterpret_cast<PySideSlot*>(self);
 
         if (!data->slotName) {
             PyObject *funcName = reinterpret_cast<PyFunctionObject*>(callback)->func_name;
@@ -180,10 +180,9 @@ PyObject* slotCall(PyObject* self, PyObject* args, PyObject* kw)
 
 } // extern "C"
 
-namespace PySide
-{
+namespace PySide { namespace Slot {
 
-void initSlotSupport(PyObject* module)
+void init(PyObject* module)
 {
     if (PyType_Ready(&PySideSlotType) < 0)
         return;
@@ -192,4 +191,5 @@ void initSlotSupport(PyObject* module)
     PyModule_AddObject(module, SLOT_DEC_NAME, ((PyObject*)&PySideSlotType));
 }
 
+} // namespace Slot
 } // namespace PySide

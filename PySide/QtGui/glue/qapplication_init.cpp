@@ -35,7 +35,7 @@ int SbkQApplication_Init(PyObject* self, PyObject* args, PyObject*)
     sbkSelf->containsCppWrapper = 1;
     sbkSelf->hasOwnership = 0;
     Shiboken::BindingManager::instance().registerWrapper(sbkSelf, cptr);
-    PySide::signalUpdateSource(self);
+    PySide::Signal::updateSourceObject(self);
     cptr->metaObject();
 
     // Verify if qApp is in main module

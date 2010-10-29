@@ -43,9 +43,9 @@ namespace PySide
 
 void init(PyObject *module)
 {
-    initSignalSupport(module);
-    initSlotSupport(module);
-    initQProperty(module);
+    Signal::init(module);
+    Slot::init(module);
+    Property::init(module);
     // Init signal manager, so it will register some meta types used by QVariant.
     SignalManager::instance();
 }
@@ -69,14 +69,14 @@ bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds
                     Shiboken::AutoDecRef retval(PyObject_CallObject(propSetter, args));
                 } else {
                     PyObject* attr = PyObject_GenericGetAttr(qObj, key);
-                    if (isQPropertyType(attr))
-                        PySide::qpropertySet(reinterpret_cast<PySideQProperty*>(attr), qObj, value);
+                    if (PySide::Property::isPropertyType(attr))
+                        PySide::Property::setValue(reinterpret_cast<PySideProperty*>(attr), qObj, value);
                 }
             } else {
                 propName.append("()");
                 if (metaObj->indexOfSignal(propName) != -1) {
                     propName.prepend('2');
-                    PySide::signalConnect(qObj, propName, value);
+                    PySide::Signal::connect(qObj, propName, value);
                 } else {
                     PyErr_Format(PyExc_AttributeError, "'%s' is not a Qt property or a signal", propName.constData());
                     return false;
