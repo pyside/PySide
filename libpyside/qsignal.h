@@ -34,6 +34,7 @@ namespace Shiboken
 
 extern "C"
 {
+    extern PYSIDE_API PyTypeObject PySideSignalType;
     extern PYSIDE_API PyTypeObject PySideSignalInstanceType;
 
     struct PySideSignalInstanceDataPrivate;
@@ -49,6 +50,8 @@ namespace PySide
 
 PYSIDE_API PyObject* signalNew(const char* name, ...);
 PYSIDE_API PyObject* signalNewFromMethod(PyObject* source, const QList<QMetaMethod>& method);
+PYSIDE_API PySideSignalInstanceData* signalInitialize(PyObject* self, PyObject* name, PyObject *object);
+
 PYSIDE_API void signalUpdateSource(PyObject* source);
 PYSIDE_API void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PyObject* signal);
 PYSIDE_API PyObject* getSignalSource(PySideSignalInstanceData* signal);
