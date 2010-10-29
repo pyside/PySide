@@ -38,6 +38,19 @@ class InheritsCase(unittest.TestCase):
         self.assert_(Dummy().inherits('QObject'))
         self.assert_(not Dummy().inherits('Parent'))
 
+    def testSetAttributeBeforeCallingInitOnQObjectDerived(self):
+        '''Test for bug #428.'''
+        class DerivedObject(QObject):
+            def __init__(self):
+                self.member = 'member'
+                QObject.__init__(self)
+        obj0 = DerivedObject()
+        # The second instantiation of DerivedObject will generate an exception
+        # that will not come to surface immediately.
+        obj1 = DerivedObject()
+        # The mere calling of the object method causes
+        # the exception to "reach the surface".
+        obj1.objectName()
 
 if __name__ == '__main__':
     unittest.main()
