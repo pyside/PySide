@@ -135,6 +135,7 @@ void SignalManager::clear()
 {
     delete m_d;
     m_d = new SignalManagerPrivate();
+    m_d.reset();
 }
 
 SignalManager::~SignalManager()
@@ -243,14 +244,16 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     PyObject* pp_name = 0;
     QMetaProperty mp;
     Shiboken::TypeResolver* typeResolver = 0;
-    PyObject* pySelf = Shiboken::BindingManager::instance().retrieveWrapper(object);
-    Q_ASSERT(pySelf);
+    PyObject* pySelf = 0;
 
     if (call != QMetaObject::InvokeMetaMethod) {
         mp = metaObject->property(id);
         if (!mp.isValid())
             return id - metaObject->methodCount();
 
+        Shiboken::GilState gil;
+        pySelf = Shiboken::BindingManager::instance().retrieveWrapper(object);
+        Q_ASSERT(pySelf);
         pp_name = PyString_FromString(mp.name());
         pp = Property::getObject(pySelf, pp_name);
         if (!pp) {
@@ -266,6 +269,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
 #ifndef QT_NO_PROPERTIES
         case QMetaObject::ReadProperty:
         {
+            Shiboken::GilState gil;
             PyObject* value = Property::getValue(pp, pySelf);
             if (value) {
                 typeResolver->toCpp(value, &args[0]);
@@ -278,14 +282,18 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
 
         case QMetaObject::WriteProperty:
         {
+            Shiboken::GilState gil;
             Shiboken::AutoDecRef value(typeResolver->toPython(args[0]));
             Property::setValue(pp, pySelf, value);
             break;
         }
 
         case QMetaObject::ResetProperty:
+        {
+            Shiboken::GilState gil;
             Property::reset(pp, pp_name);
             break;
+        }
 
         case QMetaObject::QueryPropertyDesignable:
         case QMetaObject::QueryPropertyScriptable:
@@ -307,8 +315,11 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     else
         id = id - metaObject->propertyCount();
 
-    Py_XDECREF(pp);
-    Py_XDECREF(pp_name);
+    if (pp || pp_name) {
+        Shiboken::GilState gil;
+        Py_XDECREF(pp);
+        Py_XDECREF(pp_name);
+    }
     return id;
 }
 
