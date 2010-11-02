@@ -435,7 +435,7 @@ DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObj
                 QString sig(PyString_AsString(signature));
                 //slot the slot type and signature
                 QStringList slotInfo = sig.split(" ", QString::SkipEmptyParts);
-                int index = base->indexOfSlot(slotInfo[0].toAscii());
+                int index = base->indexOfSlot(qPrintable(slotInfo[1]));
                 if (index == -1)
                     mo->addSlot(slotInfo[1].toAscii(), slotInfo[0].toAscii());
             }
