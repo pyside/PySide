@@ -358,6 +358,10 @@ static int PySide::callMethod(QObject* object, int id, void** args)
             if (retval.isNull()) {
                 qWarning() << "Error calling slot" << methodName;
                 PyErr_Print();
+            } else {
+                const char* returnType = method.typeName();
+                if (returnType && (strlen(returnType) > 0))
+                    Shiboken::TypeResolver::get(returnType)->toCpp(retval, &args[0]);
             }
         } else {
             qWarning() << "Dynamic slot" << methodName << "not found!";
