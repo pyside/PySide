@@ -38,6 +38,11 @@
         <modify-argument index="return">
             <define-ownership class="target" owner="default"/>
         </modify-argument>
+        <inject-code position="end">
+            Shiboken::SbkBaseWrapper* _pyReturn = reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYARG_0);
+            if (!_pyReturn->parentInfo)
+                Shiboken::setParent(%PYSELF, %PYARG_0);
+        </inject-code>
     </modify-function>
     <modify-function signature="print(QPrinter*)const" rename="print_" />
   </object-type>
