@@ -135,7 +135,6 @@ void SignalManager::clear()
 {
     delete m_d;
     m_d = new SignalManagerPrivate();
-    m_d.reset();
 }
 
 SignalManager::~SignalManager()
