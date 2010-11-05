@@ -20,15 +20,5 @@ class QStringConstructor(unittest.TestCase):
         obj.setObjectName(None)
         self.assertEqual(obj.objectName(), u'')
 
-class QStringImplicitConvertion(unittest.TestCase):
-    '''Implicit conversions for QString'''
-
-    def testQByteArray(self):
-        '''QString implicitly conversion: QByteArray'''
-        obj = QObject()
-        obj.setObjectName(QByteArray('foobar'))
-        self.assertEqual(obj.objectName(), u'foobar')
-
-
 if __name__ == '__main__':
     unittest.main()

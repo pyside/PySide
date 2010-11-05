@@ -18,14 +18,7 @@ struct Converter<QString>
     {
         return PyString_Check(pyObj)
                 || PyUnicode_Check(pyObj)
-                || Converter<QByteArray>::checkType(pyObj)
-                || pyObj == Py_None
-    #if PY_VERSION_HEX < 0x03000000
-                || (pyObj->ob_type->tp_as_buffer
-                && PyType_HasFeature(pyObj->ob_type, Py_TPFLAGS_HAVE_GETCHARBUFFER)
-                && pyObj->ob_type->tp_as_buffer->bf_getcharbuffer)
-    #endif
-                ;
+                || pyObj == Py_None;
     }
 
     static QString toCpp(PyObject* pyObj)
@@ -40,29 +33,7 @@ struct Converter<QString>
     #endif
         } else if (PyString_Check(pyObj)) {
             return QString(Converter<const char * >::toCpp(pyObj));
-        } else if (pyObj == Py_None) {
-            return QString();
-        } else if (Converter<QByteArray>::checkType(pyObj)) {
-            return QString(Converter< QByteArray >::toCpp(pyObj));
         }
-#if PY_VERSION_HEX < 0x03000000
-        // Support for buffer objects on QString constructor
-        else if (pyObj->ob_type->tp_as_buffer
-                && PyType_HasFeature(pyObj->ob_type, Py_TPFLAGS_HAVE_GETCHARBUFFER)
-                && pyObj->ob_type->tp_as_buffer->bf_getcharbuffer) {
-            QByteArray data;
-            PyBufferProcs* bufferProcs = pyObj->ob_type->tp_as_buffer;
-            int segments = bufferProcs->bf_getsegcount(pyObj, 0);
-            for (int i = 0; i < segments; ++i) {
-                char* segmentData;
-                int length = bufferProcs->bf_getcharbuffer(pyObj, i, &segmentData);
-                if (length == -1)
-                    break;
-                data.append(segmentData, length);
-            }
-            return QString(data);
-        }
-    #endif
         return QString();
     }
 
