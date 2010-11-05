@@ -27,6 +27,7 @@
 #include "pysidesignal.h"
 #include "pysidesignal_p.h"
 #include "pysideslot_p.h"
+#include "pysidemetafunction_p.h"
 
 #include <basewrapper.h>
 #include <conversions.h>
@@ -46,6 +47,7 @@ void init(PyObject *module)
     Signal::init(module);
     Slot::init(module);
     Property::init(module);
+    MetaFunction::init(module);
     // Init signal manager, so it will register some meta types used by QVariant.
     SignalManager::instance();
 }

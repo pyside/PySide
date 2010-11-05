@@ -1,13 +1,14 @@
 project(libpyside)
 
 set(libpyside_SRC
-dynamicqmetaobject.cpp
-signalmanager.cpp
-globalreceiver.cpp
-pysidesignal.cpp
-pysideslot.cpp
-pysideproperty.cpp
-pyside.cpp
+    dynamicqmetaobject.cpp
+    signalmanager.cpp
+    globalreceiver.cpp
+    pysidemetafunction.cpp
+    pysidesignal.cpp
+    pysideslot.cpp
+    pysideproperty.cpp
+    pyside.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
@@ -37,6 +38,7 @@ set(libpyside_HEADERS
     pysidemacros.h
     signalmanager.h
     pyside.h
+    pysidemetafunction.h
     pysidesignal.h
     pysideproperty.h
 )
