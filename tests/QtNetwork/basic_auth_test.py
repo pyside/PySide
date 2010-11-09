@@ -30,7 +30,7 @@ class testAuthenticationSignal(UsesQCoreApplication):
         http.setHost("localhost", self.httpd.port())
         http.connect(SIGNAL("authenticationRequired(const QString&, quint16, QAuthenticator*)"), self.onAuthRequest)
         path = QUrl.toPercentEncoding("/index.html", "!$&'()*+,;=:@/")
-        data = http.get(path)
+        data = http.get(str(path))
         self.app.exec_()
         self.assert_(self._resultOk)
 
@@ -40,7 +40,7 @@ class testAuthenticationSignal(UsesQCoreApplication):
         # Using new signal slot syntax causes a segfault
         http.authenticationRequired.connect(self.onAuthRequest)
         path = QUrl.toPercentEncoding("/index.html", "!$&'()*+,;=:@/")
-        data = http.get(path)
+        data = http.get(str(path))
         self.app.exec_()
         self.assert_(self._resultOk)
 
