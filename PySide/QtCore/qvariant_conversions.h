@@ -14,6 +14,37 @@ struct Converter<QVariant>
         return true;
     }
 
+    static QByteArray resolveMetaType(PyTypeObject* type, int &typeId)
+    {
+        if (PyObject_TypeCheck(type, &Shiboken::SbkBaseWrapperType_Type)) {
+            Shiboken::SbkBaseWrapperType *sbkType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(type);
+            const char* typeName = sbkType->original_name;
+
+            // Do not resolve types to value type
+            if (!QByteArray(typeName).endsWith("*"))
+                return QByteArray();
+
+            int obTypeId = QMetaType::type(typeName);
+            if (obTypeId) {
+                typeId = obTypeId;
+                return QByteArray(typeName);
+            }
+            // find in base types
+            if (type->tp_base) {
+                return resolveMetaType(type->tp_base, typeId);
+            } else if (type->tp_bases) {
+                int size = PyTuple_GET_SIZE(type->tp_bases);
+                for(int i=0; i < size; i++){
+                    QByteArray derivedName = resolveMetaType(reinterpret_cast<PyTypeObject*>(PyTuple_GET_ITEM(type->tp_bases, i)), typeId);
+                    if (!derivedName.isEmpty())
+                        return derivedName;
+                }
+            }
+        }
+        typeId = 0;
+        return QByteArray();
+    }
+
     static QVariant toCpp(PyObject* pyObj)
     {
         using namespace Shiboken;
@@ -51,14 +82,21 @@ struct Converter<QVariant>
             // a class supported by QVariant?
             if (Shiboken::isShibokenType(pyObj)) {
                 Shiboken::SbkBaseWrapperType *objType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(pyObj->ob_type);
-                const char* typeName = objType->original_name;
-                uint typeCode = QMetaType::type(typeName);
+                int typeCode = 0;
+                QByteArray typeName = resolveMetaType(reinterpret_cast<PyTypeObject*>(objType), typeCode);
                 if (typeCode) {
-                    void** data = reinterpret_cast<SbkBaseWrapper*>(pyObj)->cptr;
-                    if (typeName[strlen(typeName)-1] == '*')
-                        return QVariant(typeCode, data);
-                    else if (!isUserType(pyObj)) // User types inherited from Value types *should* not be converted.
-                        return QVariant(typeCode, data[0]);
+                    Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(typeName);
+                    void* data = 0;
+                    data = tr->toCpp(pyObj, &data, true);
+                    if (typeName.endsWith("*")) {
+                        QVariant var(typeCode, &data);
+                        tr->deleteObject(data);
+                        return var;
+                    } else {
+                        QVariant var(typeCode, data);
+                        tr->deleteObject(data);
+                        return var;
+                    }
                 }
             }
             // Is a shiboken type not known by Qt
@@ -88,6 +126,37 @@ struct Converter<QVariant>
                 return tr->toPython(const_cast<void*>(cppObj.data()));
         }
         Py_RETURN_NONE;
+    }
+
+    static QVariant convertToValueList(PyObject* list)
+    {
+        if (PySequence_Size(list) < 1)
+            return QVariant();
+
+        Shiboken::AutoDecRef element(PySequence_GetItem(list, 0));
+        int typeId = 0;
+        QByteArray typeName = resolveMetaType(element.cast<PyTypeObject*>(), typeId);
+        if (!typeName.isEmpty()) {
+            QByteArray listTypeName = QByteArray("QList<"+typeName+">");
+            typeId = QMetaType::type(listTypeName);
+            if (typeId > 0) {
+                Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(listTypeName);
+                if (!tr) {
+                    qWarning() << "TypeResolver for :" << listTypeName << "not registered.";
+                    return QVariant();
+                } else {
+                    void *data = 0;
+                    data = tr->toCpp(list, &data, true);
+                    QVariant var(typeId, data);
+                    tr->deleteObject(data);
+                    return var;
+                }
+            } else {
+                return QVariant();
+            }
+        }
+
+        return QVariant();
     }
 
     static QVariant convertToVariantMap(PyObject* map)
@@ -128,6 +197,9 @@ struct Converter<QVariant>
             QStringList lst = Converter<QList<QString> >::toCpp(list);
             return QVariant(lst);
         } else {
+            QVariant valueList = convertToValueList(list);
+            if (valueList.isValid())
+                return valueList;
             QList<QVariant> lst;
             AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
             Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());

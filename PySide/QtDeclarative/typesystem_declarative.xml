@@ -29,6 +29,10 @@
         </extra-includes>
     </enum-type>
 
+    <inject-code>
+        Shiboken::TypeResolver::createValueTypeResolver&lt; QList&lt;QObject*&gt; &gt;("QList&lt;QObject*&gt;");
+    </inject-code>
+
     <object-type name="QDeclarativeExtensionInterface"/>
     <object-type name="QDeclarativeComponent">
         <enum-type name="Status"/>
