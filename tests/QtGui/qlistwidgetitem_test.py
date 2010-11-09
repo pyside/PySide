@@ -21,6 +21,9 @@ class QListWidgetItemConstructor(UsesQApplication):
         item = self.widgetList.item(0)
         self.assertEqual(item.listWidget(), self.widgetList)
 
+    def testConstructorWithNone(self):
+        # Bug 452 - QListWidgetItem() not casting NoneType to null correctly.
+        item = QtGui.QListWidgetItem(None, 123)
 
 if __name__ == '__main__':
     unittest.main()
