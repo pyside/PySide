@@ -1061,7 +1061,7 @@
     <add-function signature="__setitem__">
         <inject-code class="target" position="beginning">
             PyObject* args = Py_BuildValue("(iiO)", _i, 1, _value);
-            PyObject* result = SbkQBitArrayFunc_setBit(self, args);
+            PyObject* result = Sbk_QBitArrayFunc_setBit(self, args);
             Py_DECREF(args);
             Py_XDECREF(result);
             return !result ? -1 : 0;
@@ -1700,7 +1700,7 @@
         <inject-code class="target" position="beginning">
                 %CPPSELF.remove(_i, 1);
                 PyObject* args = Py_BuildValue("(nO)", _i, _value);
-                PyObject* result = SbkQByteArrayFunc_insert(self, args);
+                PyObject* result = Sbk_QByteArrayFunc_insert(self, args);
                 Py_DECREF(args);
                 Py_XDECREF(result);
                 return !result ? -1 : 0;
@@ -1940,7 +1940,7 @@
                                 %3)
         );
         // invalidate to avoid use of python object
-        Shiboken::BindingManager::instance().destroyWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
+        Shiboken::BindingManager::instance().destroyWrapper((SbkObject*)pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL("timeout()"), timer, SLOT("deleteLater()"));
         timer->start(%1);
@@ -1978,7 +1978,7 @@
                                     pyargs[1])
             );
         }
-        Shiboken::BindingManager::instance().destroyWrapper((Shiboken::SbkBaseWrapper *)pyTimer);
+        Shiboken::BindingManager::instance().destroyWrapper((SbkObject*)pyTimer);
         timer->start(%1);
         </inject-code>
     </add-function>
@@ -2680,7 +2680,7 @@
         // Check bug #362 for more information on this
         // http://bugs.openbossa.org/show_bug.cgi?id=362
         if (!PyObject_TypeCheck(%1, &amp;PySideSignalInstanceType))
-            goto Sbk%TYPEFunc_%FUNCTION_NAME_TypeError;
+            goto Sbk_%TYPEFunc_%FUNCTION_NAME_TypeError;
         PySideSignalInstance* signalInstance = reinterpret_cast&lt;PySideSignalInstance*&gt;(%1);
         QObject* sender = %CONVERTTOCPP[QObject*](PySide::Signal::getObject(signalInstance));
         %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->%FUNCTION_NAME(sender, PySide::Signal::getSignature(signalInstance), %2));

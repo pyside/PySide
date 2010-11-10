@@ -2,7 +2,7 @@
 static int QCoreApplicationArgCount;
 static char** QCoreApplicationArgValues;
 
-int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
+int Sbk_QCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
     if (Shiboken::isUserType(self) && !Shiboken::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication >()))
         return -1;
@@ -19,20 +19,21 @@ int SbkQCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
         return -1;
     }
 
-    if (!PySequenceToArgcArgv(PyTuple_GET_ITEM(args, 0), &QCoreApplicationArgCount, &QCoreApplicationArgValues, "PySideApp")) {
+    if (!Shiboken::sequenceToArgcArgv(PyTuple_GET_ITEM(args, 0), &QCoreApplicationArgCount, &QCoreApplicationArgValues, "PySideApp")) {
         PyErr_BadArgument();
         return -1;
     }
 
+    SbkObject* sbkSelf = reinterpret_cast<SbkObject*>(self);
     QCoreApplicationWrapper* cptr = new QCoreApplicationWrapper(QCoreApplicationArgCount, QCoreApplicationArgValues);
-    Shiboken::setCppPointer(reinterpret_cast<SbkBaseWrapper*>(self),
-                            Shiboken::SbkType<QCoreApplication>(),
-                            cptr);
+    Shiboken::Wrapper::setCppPointer(sbkSelf,
+                                     Shiboken::SbkType<QCoreApplication>(),
+                                     cptr);
 
-    SbkBaseWrapper_setValidCppObject(self, 1);
-    SbkBaseWrapper *sbkSelf = reinterpret_cast<SbkBaseWrapper*>(self);
-    sbkSelf->containsCppWrapper = 1;
-    sbkSelf->hasOwnership = 0;
+    Shiboken::Wrapper::setValidCpp(sbkSelf, true);
+    Shiboken::Wrapper::setHasCppWrapper(sbkSelf, true);
+    Shiboken::Wrapper::releaseOwnership(sbkSelf);
+
     Shiboken::BindingManager::instance().registerWrapper(sbkSelf, cptr);
     PySide::Signal::updateSourceObject(self);
     cptr->metaObject();

@@ -110,15 +110,15 @@ void destroyQCoreApplication()
         return;
 
     Shiboken::BindingManager& bm = Shiboken::BindingManager::instance();
-    PyObject* pyQApp = bm.retrieveWrapper(app);
+    SbkObject* pyQApp = bm.retrieveWrapper(app);
     PyTypeObject* pyQObjectType = Shiboken::TypeResolver::get("QObject*")->pythonType();
     assert(pyQObjectType);
 
-    foreach (PyObject* pyObj, bm.getAllPyObjects()) {
+    foreach (SbkObject* pyObj, bm.getAllPyObjects()) {
         if (pyObj != pyQApp && PyObject_TypeCheck(pyObj, pyQObjectType)) {
-            if (SbkBaseWrapper_hasOwnership(pyObj)) {
+            if (Shiboken::Wrapper::hasOwnership(pyObj)) {
                 bm.destroyWrapper(pyObj);
-                delete static_cast<QObject*>(Shiboken::getCppPointer(pyObj, Shiboken::SbkType<QObject*>()));
+                delete static_cast<QObject*>(Shiboken::Wrapper::cppPointer(pyObj, Shiboken::SbkType<QObject*>()));
             }
         }
     }

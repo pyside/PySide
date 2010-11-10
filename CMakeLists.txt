@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Macros/
                       ${CMAKE_MODULE_PATH})
 find_package(GeneratorRunner 0.6.3 REQUIRED)
-find_package(Shiboken 0.5.2 REQUIRED)
+find_package(Shiboken 1.0.0 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 include(FindQt4Extra)
 

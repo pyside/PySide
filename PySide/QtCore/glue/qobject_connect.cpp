@@ -1,4 +1,4 @@
-static bool getReceiver(PyObject *callback, QObject **receiver, PyObject **self)
+static bool getReceiver(PyObject* callback, QObject** receiver, PyObject** self)
 {
     if (PyMethod_Check(callback)) {
         *self = PyMethod_GET_SELF(callback);
@@ -66,7 +66,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     const char* slot = callbackSig.constData();
     int slotIndex = metaObject->indexOfSlot(slot);
     if (slotIndex == -1) {
-        if (!usingGlobalReceiver && self && !((SbkBaseWrapper*)self)->containsCppWrapper) {
+        if (!usingGlobalReceiver && self && !Shiboken::Wrapper::hasCppWrapper((SbkObject*)self)) {
             qWarning() << "You can't add dynamic slots on an object originated from C++.";
             return false;
         }

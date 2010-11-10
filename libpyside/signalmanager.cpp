@@ -251,7 +251,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             return id - metaObject->methodCount();
 
         Shiboken::GilState gil;
-        pySelf = Shiboken::BindingManager::instance().retrieveWrapper(object);
+        pySelf = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(object);
         Q_ASSERT(pySelf);
         pp_name = PyString_FromString(mp.name());
         pp = Property::getObject(pySelf, pp_name);
@@ -334,7 +334,7 @@ static int PySide::callMethod(QObject* object, int id, void** args)
         // call python slot
         Shiboken::GilState gil;
         QList<QByteArray> paramTypes = method.parameterTypes();
-        PyObject* self = Shiboken::BindingManager::instance().retrieveWrapper(object);
+        PyObject* self = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(object);
         PyObject* preparedArgs = NULL;
         Py_ssize_t args_size = paramTypes.count();
 
@@ -378,8 +378,8 @@ bool SignalManager::registerMetaMethod(QObject* source, const char* signature, Q
     int methodIndex = metaObject->indexOfMethod(signature);
     // Create the dynamic signal is needed
     if (methodIndex == -1) {
-        Shiboken::SbkBaseWrapper* self = (Shiboken::SbkBaseWrapper*) Shiboken::BindingManager::instance().retrieveWrapper(source);
-        if (!self->containsCppWrapper) {
+        SbkObject* self = Shiboken::BindingManager::instance().retrieveWrapper(source);
+        if (!Shiboken::Wrapper::hasCppWrapper(self)) {
             qWarning() << "Invalid Signal signature:" << signature;
             return false;
         } else {

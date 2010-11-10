@@ -493,8 +493,8 @@ char* getTypeName(PyObject* type)
 {
     if (PyType_Check(type)) {
         char *typeName = NULL;
-        if (type->ob_type == &Shiboken::SbkBaseWrapperType_Type) {
-            Shiboken::SbkBaseWrapperType *objType = reinterpret_cast<Shiboken::SbkBaseWrapperType*>(type);
+        if (type->ob_type == &SbkObjectType_Type) {
+            SbkObjectType* objType = reinterpret_cast<SbkObjectType*>(type);
             Q_ASSERT(objType->original_name);
             typeName = strdup(objType->original_name);
         } else {
@@ -670,7 +670,7 @@ PyObject* buildQtCompatible(const char* signature)
     return ret;
 }
 
-void addSignalToWrapper(Shiboken::SbkBaseWrapperType* wrapperType, const char* signalName, PySideSignal* signal)
+void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal)
 {
     PyObject* typeDict = wrapperType->super.ht_type.tp_dict;
     PyObject* homonymousMethod;

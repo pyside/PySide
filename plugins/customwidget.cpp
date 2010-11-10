@@ -90,13 +90,13 @@ QString PyCustomWidget::whatsThis() const
     return QString();
 }
 
-QWidget *PyCustomWidget::createWidget(QWidget *parent)
+QWidget* PyCustomWidget::createWidget(QWidget* parent)
 {
     //Create a python instance and return cpp object
     PyObject* pyParent;
     bool unkowParent = false;
     if (parent) {
-        pyParent = Shiboken::BindingManager::instance().retrieveWrapper(parent);
+        pyParent = reinterpret_cast<PyObject*>(Shiboken::BindingManager::instance().retrieveWrapper(parent));
         if (!pyParent) {
             pyParent = Shiboken::Converter<QWidget*>::toPython(parent);
             unkowParent = true;
@@ -112,22 +112,22 @@ QWidget *PyCustomWidget::createWidget(QWidget *parent)
     PyTuple_SET_ITEM(pyArgs, 0, pyParent); //tuple will keep pyParent reference
 
     //Call python constructor
-    PyObject* result = PyObject_CallObject(m_data->pyObject, pyArgs);
+    SbkObject* result = reinterpret_cast<SbkObject*>(PyObject_CallObject(m_data->pyObject, pyArgs));
 
     QWidget* widget = 0;
     if (result) {
         if (unkowParent) //if parent does not exists in python, transfer the ownership to cpp
             Shiboken::BindingManager::instance().transferOwnershipToCpp(result);
         else
-            Shiboken::setParent(pyParent, result);
+            Shiboken::setParent(pyParent, reinterpret_cast<PyObject*>(result));
 
-        widget = reinterpret_cast<QWidget*>(Shiboken::getCppPointer(result, result->ob_type));
+        widget = reinterpret_cast<QWidget*>(Shiboken::Wrapper::cppPointer(result, result->ob_type));
     }
 
     return widget;
 }
 
-void PyCustomWidget::initialize(QDesignerFormEditorInterface *core)
+void PyCustomWidget::initialize(QDesignerFormEditorInterface* core)
 {
     m_data->initialized = true;
 }
