@@ -8,8 +8,7 @@ static QString retrieveObjectName(PyObject *obj)
 /**
  * Tranfer objects ownership from layout to widget
  **/
-static inline void
-qwidgetReparentLayout(QWidget *parent, QLayout *layout)
+static inline void qwidgetReparentLayout(QWidget *parent, QLayout *layout)
 {
     Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
 
@@ -36,11 +35,10 @@ qwidgetReparentLayout(QWidget *parent, QLayout *layout)
     Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayout*>::toPython(layout));
     Shiboken::setParent(pyParent, pyChild);
     //remove previous references
-    Shiboken::keepReference(reinterpret_cast<Shiboken::SbkBaseWrapper*>(pyChild.object()), qPrintable(retrieveObjectName(pyChild)), Py_None);
+    Shiboken::keepReference(reinterpret_cast<SbkObject*>(pyChild.object()), qPrintable(retrieveObjectName(pyChild)), Py_None);
 }
 
-static inline void
-qwidgetSetLayout(QWidget *self, QLayout *layout)
+static inline void qwidgetSetLayout(QWidget *self, QLayout *layout)
 {
     if (!layout || self->layout())
         return;

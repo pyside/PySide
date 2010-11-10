@@ -182,8 +182,8 @@
         %PYARG_0 = Shiboken::makeTuple(retval_, %4);
     </template>
    <template name="set_qapp_parent_for_orphan">
-        Shiboken::SbkBaseWrapper* _pySelf = reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYARG_0);
-        if (!_pySelf->parentInfo)
+        SbkObject* _pySelf = reinterpret_cast&lt;SbkObject*&gt;(%PYARG_0);
+        if (!Shiboken::Wrapper::hasParentInfo(_pySelf))
             Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
     </template>
     <!-- templates for __reduce__ -->

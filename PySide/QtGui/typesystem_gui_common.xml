@@ -526,7 +526,7 @@
     <add-function signature="value()" return-type="QTreeWidgetItem*">
         <inject-code>
             %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItem*](%CPPSELF.operator*());
-            SbkBaseWrapper_setOwnership(%PYARG_0, false);
+            Shiboken::Wrapper::releaseOwnership(%PYARG_0);
         </inject-code>
     </add-function>
     <enum-type name="IteratorFlag" flags="QTreeWidgetItemIterator::IteratorFlags"/>
@@ -1140,7 +1140,7 @@
     <enum-type name="PanelModality"/>
     <inject-code class="target" position="end">
         PyObject* userTypeConstant =  PyInt_FromLong(QGraphicsItem::UserType);
-        PyDict_SetItemString(SbkQGraphicsItem_Type.super.ht_type.tp_dict, "UserType", userTypeConstant);
+        PyDict_SetItemString(Sbk_QGraphicsItem_Type.super.ht_type.tp_dict, "UserType", userTypeConstant);
     </inject-code>
     <modify-function signature="setParentItem(QGraphicsItem *)">
       <modify-argument index="this">
@@ -3300,7 +3300,7 @@
 
     <modify-function signature="setStyle(QStyle*)">
       <inject-code class="target" position="end">
-        Shiboken::keepReference(reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYSELF), "__style__",  %PYARG_1);
+        Shiboken::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), "__style__",  %PYARG_1);
       </inject-code>
     </modify-function>
     <modify-function signature="style()const">
@@ -3312,9 +3312,9 @@
             if (appStyle == myStyle) {
                 Shiboken::AutoDecRef pyApp(%CONVERTTOPYTHON[QApplication*](qApp));
                 Shiboken::setParent(pyApp, %PYARG_0);
-                SbkBaseWrapper_setOwnership(%PYARG_0, false);
+                Shiboken::Wrapper::releaseOwnership(%PYARG_0);
             } else {
-                Shiboken::keepReference(reinterpret_cast&lt;Shiboken::SbkBaseWrapper*&gt;(%PYSELF), "__style__",  %PYARG_0);
+                Shiboken::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), "__style__",  %PYARG_0);
             }
         }
       </inject-code>

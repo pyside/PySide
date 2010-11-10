@@ -8,7 +8,7 @@ inline bool Converter<QPixmap>::isConvertible(PyObject* pyobj)
 {
     if (ValueTypeConverter<QPixmap>::isConvertible(pyobj))
         return true;
-    SbkBaseWrapperType* shiboType = reinterpret_cast<SbkBaseWrapperType*>(SbkType<QPixmap>());
+    SbkObjectType* shiboType = reinterpret_cast<SbkObjectType*>(SbkType<QPixmap>());
     bool isVariant = Converter<QVariant>::checkType(pyobj);
     if (isVariant) {
         QVariant var(Converter<QVariant>::toCpp(pyobj));
@@ -24,7 +24,7 @@ inline bool Converter<QPixmap>::isConvertible(PyObject* pyobj)
 
 inline QPixmap Converter<QPixmap>::toCpp(PyObject* pyobj)
 {
-    SbkBaseWrapperType* shiboType = reinterpret_cast<SbkBaseWrapperType*>(SbkType<QPixmap>());
+    SbkObjectType* shiboType = reinterpret_cast<SbkObjectType*>(SbkType<QPixmap>());
     bool isVariant = Converter<QVariant>::checkType(pyobj);
     if (isVariant) {
         QVariant var(Converter<QVariant>::toCpp(pyobj));
