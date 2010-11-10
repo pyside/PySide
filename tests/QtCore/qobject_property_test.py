@@ -129,6 +129,14 @@ class PropertyCase(unittest.TestCase):
 
         self.assertTrue(obj.property('foo') is mysize)
 
+    def testValueType(self):
+        rect = QRect(1, 2, 3, 4)
+        obj = QObject()
+        obj.setProperty('rect', rect)
+        '''Value types when converted to QVariant is copyed'''
+        self.assertFalse(obj.property('rect') is rect)
+        self.assertEqual(obj.property('rect'), rect)
+
 class PropertyWithConstructorCase(unittest.TestCase):
     '''Test case for QObject properties set using named arguments in the constructor.'''
 
