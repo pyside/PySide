@@ -42,6 +42,12 @@ class QByteArrayData(unittest.TestCase):
         url = QByteArray("http://web.openbossa.org/")
         self.assertEqual(url.data(), "http://web.openbossa.org/")
 
+    def testDataWithZeros(self):
+        s1 = "123\000321"
+        ba = QByteArray(s1)
+        s2 = ba.data()
+        self.assertEqual(s1, s2)
+
 class QByteArrayOperatorAtSetter(unittest.TestCase):
     '''Test case for operator QByteArray[] - __setitem__'''
 

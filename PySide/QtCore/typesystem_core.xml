@@ -1437,6 +1437,12 @@
         #endif
     </inject-code>
 
+   <modify-function signature="data()const">
+       <inject-code class="target" position="beginning">
+           %PYARG_0 = PyString_FromStringAndSize(%CPPSELF.%FUNCTION_NAME(), %CPPSELF.size());
+       </inject-code>
+   </modify-function>
+
     <!-- removed functions -->
     <modify-function signature="begin()" remove="all"/>
     <modify-function signature="begin()const" remove="all"/>
