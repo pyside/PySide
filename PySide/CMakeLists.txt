@@ -8,8 +8,8 @@ include(PySideModules)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"
                "${CMAKE_CURRENT_BINARY_DIR}/global.h" @ONLY)
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py"
-                                                              "${CMAKE_BINARY_DIR}/PySide/__init__.py")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" @ONLY)
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/private.py"
                                                               "${CMAKE_BINARY_DIR}/PySide/private.py")

@@ -63,4 +63,5 @@ add_dependencies(testbinding pyside QtCore libpyside pysidetest)
 
 
 PYSIDE_TEST(homonymoussignalandmethod_test.py)
+PYSIDE_TEST(version_test.py)
 

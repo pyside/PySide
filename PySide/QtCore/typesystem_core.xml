@@ -596,10 +596,7 @@
     </inject-code>
   </add-function>
 
-  <inject-code class="target" position="end">
-    PyModule_AddIntConstant(module, "QT_VERSION", QT_VERSION);
-    PyModule_AddStringConstant(module, "QT_VERSION_STR", QT_VERSION_STR);
-  </inject-code>
+  <inject-code class="target" position="end" file="glue/qt_version.cpp" />
 
   <add-function signature="__moduleShutdown()">
       <inject-code class="target" position="beginning">
