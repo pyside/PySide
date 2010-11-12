@@ -1,5 +1,5 @@
 project(pyside)
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/__init__.py" "${CMAKE_CURRENT_SOURCE_DIR}/private.py"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" "${CMAKE_CURRENT_BINARY_DIR}/private.py"
         DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}${pyside_SUFFIX}")
 
 include(PySideModules)
