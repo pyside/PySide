@@ -17,6 +17,7 @@ class Dummy(QThread):
 
     def run(self):
         #Start-quit sequence
+        self.qobj = QObject()
         mutex.lock()
         self.called = True
         mutex.unlock()
@@ -70,6 +71,7 @@ class QThreadSimpleCase(UsesQCoreApplication):
         QTimer.singleShot(1000, self.abort_application)
         self.app.exec_()
 
+        self.assertEqual(obj.qobj.thread(), obj) # test QObject.thread() method
         self.assert_(self.called)
 
 if __name__ == '__main__':
