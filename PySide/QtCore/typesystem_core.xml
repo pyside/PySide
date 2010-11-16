@@ -1944,7 +1944,7 @@
         // invalidate to avoid use of python object
         Shiboken::BindingManager::instance().destroyWrapper((SbkObject*)pyTimer);
         timer->setSingleShot(true);
-        timer->connect(timer, SIGNAL("timeout()"), timer, SLOT("deleteLater()"));
+        timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
         timer->start(%1);
       </inject-code>
     </modify-function>
