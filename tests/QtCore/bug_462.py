@@ -28,6 +28,7 @@ class MyBaseObject(QObject):
     def customEvent(self, event):
         self.events.append(event)
         if len(self.events) == 3:
+            self.t.wait()
             self.app.quit()
 
 
@@ -38,6 +39,7 @@ class CheckForEventsTypes(unittest.TestCase):
         o.app.exec_()
         for e in o.events:
             self.assert_(isinstance(e, MyEvent))
+        o.app = None
 
 if __name__ == '__main__':
     unittest.main()
