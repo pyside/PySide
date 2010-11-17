@@ -27,7 +27,22 @@ class MyLayout(QLayout):
     def add(self, item):
         self._list.append(item)
 
+class MissingItemAtLayout(QLayout):
+    def __init__(self, parent=None):
+        QLayout.__init__(self, parent)
+        self._list = []
 
+    def addItem(self, item):
+        self.add(item)
+
+    def addWidget(self, widget):
+        self.add(QWidgetItem(widget))
+
+    def count(self):
+        return len(self._list)
+
+    def add(self, item):
+        self._list.append(item)
 
 #Test if a layout implemented in python, the QWidget.setLayout works
 #fine because this implement som layout functions used in glue code of
@@ -70,6 +85,15 @@ class QLayoutTest(UsesQApplication):
         del w
 
         self.assertEqual(sys.getrefcount(b), 2)
+
+    def testMissingFunctions(self):
+        w = QWidget()
+        b = QPushButton("test")
+        l = MissingItemAtLayout()
+
+        l.addWidget(b)
+
+        self.assertRaises(RuntimeError, w.setLayout, l)
 
 if __name__ == '__main__':
     unittest.main()

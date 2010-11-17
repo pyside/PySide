@@ -12,21 +12,20 @@ static inline void qwidgetReparentLayout(QWidget *parent, QLayout *layout)
 {
     Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
 
-    for (int i=0; i < layout->count(); i++)
-    {
-        QLayoutItem *item = layout->itemAt(i);
-        QWidget *w = item->widget();
-        if (w)
-        {
+    for (int i=0; i < layout->count(); i++) {
+        QLayoutItem* item = layout->itemAt(i);
+        if (PyErr_Occurred())
+            return;
+
+        QWidget* w = item->widget();
+        if (w) {
             QWidget* pw = w->parentWidget();
             if (pw != parent) {
                 Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(w));
                 Shiboken::setParent(pyParent, pyChild);
             }
-        }
-        else
-        {
-            QLayout *l = item->layout();
+        } else {
+            QLayout* l = item->layout();
             if (l)
                 qwidgetReparentLayout(parent, l);
         }
@@ -58,6 +57,9 @@ static inline void qwidgetSetLayout(QWidget *self, QLayout *layout)
 
     if (oldParent != self) {
         qwidgetReparentLayout(self, layout);
+        if (PyErr_Occurred())
+            return;
+
         self->setLayout(layout);
     }
 }

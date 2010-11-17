@@ -3371,6 +3371,7 @@
     <modify-function signature="setLayout(QLayout *)">
       <inject-code class="target" position="beginning">
         qwidgetSetLayout(%CPPSELF, %1);
+        // %FUNCTION_NAME() - disable generation of function call.
       </inject-code>
     </modify-function>
     <modify-function signature="enabledChange(bool)" remove="all"/>

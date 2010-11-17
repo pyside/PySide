@@ -28,7 +28,7 @@ inline void addLayoutOwnership(QLayout* layout, QWidget* widget)
 
 inline void addLayoutOwnership(QLayout* layout, QLayout* other)
 {
-    //transfer all children widgetes from other to layout parent widget
+    //transfer all children widgets from other to layout parent widget
     QWidget* parent = layout->parentWidget();
     if (!parent) {
         //keep the reference while the layout is orphan
@@ -39,7 +39,11 @@ inline void addLayoutOwnership(QLayout* layout, QLayout* other)
     }
 
     for (int i=0, i_max=other->count(); i < i_max; i++) {
-        addLayoutOwnership(layout, other->itemAt(i));
+        QLayoutItem* item = layout->itemAt(i);
+        if (PyErr_Occurred())
+            return;
+
+        addLayoutOwnership(layout, item);
     }
 
     Shiboken::AutoDecRef pyParent(Shiboken::Converter<QLayout*>::toPython(layout));
