@@ -22,7 +22,7 @@ inline void addLayoutOwnership(QLayout* layout, QWidget* widget)
     } else {
         Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
         Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(widget));
-        Shiboken::setParent(pyParent, pyChild);
+        Shiboken::Wrapper::setParent(pyParent, pyChild);
     }
 }
 
@@ -48,7 +48,7 @@ inline void addLayoutOwnership(QLayout* layout, QLayout* other)
 
     Shiboken::AutoDecRef pyParent(Shiboken::Converter<QLayout*>::toPython(layout));
     Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayout*>::toPython(other));
-    Shiboken::setParent(pyParent, pyChild);
+    Shiboken::Wrapper::setParent(pyParent, pyChild);
 
 }
 
@@ -65,7 +65,7 @@ inline void addLayoutOwnership(QLayout* layout, QLayoutItem* item)
 
     Shiboken::AutoDecRef pyParent(Shiboken::Converter<QLayout*>::toPython(layout));
     Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayoutItem*>::toPython(item));
-    Shiboken::setParent(pyParent, pyChild);
+    Shiboken::Wrapper::setParent(pyParent, pyChild);
 }
 
 #endif

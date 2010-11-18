@@ -1621,7 +1621,7 @@
         <reference-count action="add"/>
       </modify-argument>
       <inject-code>
-        BindingManager::instance().transferOwnershipToCpp(%PYARG_2);
+        Shiboken::Wrapper::releaseOwnership(%PYARG_2);
       </inject-code>
     </modify-function>
     <modify-function signature="setDefaultFactory(QItemEditorFactory *)">
@@ -1955,7 +1955,7 @@
       <inject-code class="target" position="end">
         Shiboken::AutoDecRef result(PyObject_CallMethod(%PYSELF, "connect", "OsO", %PYSELF, SIGNAL(activated()), %PYARG_3));
         if (!result.isNull())
-            Shiboken::setParent(%PYARG_2, %PYSELF);
+            Shiboken::Wrapper::setParent(%PYARG_2, %PYSELF);
       </inject-code>
     </add-function>
   </object-type>
@@ -2018,7 +2018,7 @@
         QStandardItem* _i = %CPPSELF->child(%1, %2);
         if (_i) {
             PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
-            Shiboken::setParent(0, _pyI);
+            Shiboken::Wrapper::setParent(0, _pyI);
         }
       </inject-code>
       <modify-argument index="3">
@@ -2031,7 +2031,7 @@
         QStandardItem* _i = %CPPSELF->child(%1);
         if (_i) {
             PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
-            Shiboken::setParent(0, _pyI);
+            Shiboken::Wrapper::setParent(0, _pyI);
         }
       </inject-code>
       <modify-argument index="2">
@@ -2170,7 +2170,7 @@
         QWidget *_widget = %CPPSELF.widget(%1);
         if (_widget) {
             Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](_widget));
-            Shiboken::setParent(0, pyWidget);
+            Shiboken::Wrapper::setParent(0, pyWidget);
         }
       </inject-code>
     </modify-function>
@@ -3328,7 +3328,7 @@
             QStyle *appStyle = qApp->style();
             if (appStyle == myStyle) {
                 Shiboken::AutoDecRef pyApp(%CONVERTTOPYTHON[QApplication*](qApp));
-                Shiboken::setParent(pyApp, %PYARG_0);
+                Shiboken::Wrapper::setParent(pyApp, %PYARG_0);
                 Shiboken::Wrapper::releaseOwnership(%PYARG_0);
             } else {
                 Shiboken::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), "__style__",  %PYARG_0);
@@ -3586,7 +3586,7 @@
         QWidget* tab = %CPPSELF.widget(%1);
         if (tab) {
             Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](tab));
-            Shiboken::setParent(0, pyWidget);
+            Shiboken::Wrapper::setParent(0, pyWidget);
             %CPPSELF.%FUNCTION_NAME(%1);
         }
     </inject-code>
@@ -3595,7 +3595,7 @@
         <inject-code class="target" position="beginning">
             for (int i=0; i &lt; %CPPSELF.count(); i++) {
             	Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](%CPPSELF.widget(i)));
-                Shiboken::setParent(0, pyWidget);
+                Shiboken::Wrapper::setParent(0, pyWidget);
             }
             %CPPSELF.%FUNCTION_NAME();
         </inject-code>
@@ -3853,7 +3853,7 @@
         QStandardItem* _i = %CPPSELF->item(%1, %2);
         if (_i) {
             PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
-            Shiboken::setParent(0, _pyI);
+            Shiboken::Wrapper::setParent(0, _pyI);
         }
       </inject-code>
       <modify-argument index="3">
@@ -3866,7 +3866,7 @@
         QStandardItem* _i = %CPPSELF->item(%1);
         if (_i) {
             PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
-            Shiboken::setParent(0, _pyI);
+            Shiboken::Wrapper::setParent(0, _pyI);
         }
       </inject-code>
       <modify-argument index="2">
@@ -3885,7 +3885,7 @@
         QStandardItem* _i = %CPPSELF->verticalHeaderItem(%1);
         if (_i) {
             PyObject* _pyI = %CONVERTTOPYTHON[QStandardItem*](_i);
-            Shiboken::setParent(0, _pyI);
+            Shiboken::Wrapper::setParent(0, _pyI);
         }
       </inject-code>
       <modify-argument index="2">
@@ -3935,7 +3935,7 @@
             QList&lt;QStandardItem *&gt; ri = %CPPSELF.takeRow(0);
 
             PyObject *pyResult = %CONVERTTOPYTHON[QList&lt;QStandardItem * &gt;](ri);
-            Shiboken::setParent(Py_None, pyResult);
+            Shiboken::Wrapper::setParent(Py_None, pyResult);
             Py_XDECREF(pyResult);
           }
         </inject-code>
@@ -4554,7 +4554,7 @@
     <!-- ownership control transfer to qApp -->
     <modify-function signature="setStyle(QStyle*)">
         <inject-code class="target" position="end">
-            Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_1);
+            Shiboken::Wrapper::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_1);
         </inject-code>
     </modify-function>
     <modify-function signature="style()">

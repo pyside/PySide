@@ -23,9 +23,9 @@
         $CHILD_TYPE* oldChild = %CPPSELF.$FUNCTION_GET_OLD();
         if (oldChild) {
             Shiboken::AutoDecRef pyChild(%CONVERTTOPYTHON[$CHILD_TYPE*](oldChild));
-            Shiboken::setParent(NULL, pyChild);
+            Shiboken::Wrapper::setParent(NULL, pyChild);
         }
-        Shiboken::setParent(%PYSELF, $PYARG);
+        Shiboken::Wrapper::setParent(%PYSELF, $PYARG);
     </template>
 
     <!-- Templates to fix bool* parameters -->
@@ -184,7 +184,7 @@
    <template name="set_qapp_parent_for_orphan">
         SbkObject* _pySelf = reinterpret_cast&lt;SbkObject*&gt;(%PYARG_0);
         if (!Shiboken::Wrapper::hasParentInfo(_pySelf))
-            Shiboken::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
+            Shiboken::Wrapper::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
     </template>
     <!-- templates for __reduce__ -->
     <template name="reduce_code">
