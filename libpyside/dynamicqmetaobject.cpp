@@ -136,20 +136,14 @@ static bool isQRealType(const char *type)
 /*
  * Avoid API break keep this on cpp
  */
-static int maxSlotsCount(const QString& className)
+static int maxSlotsCount(const QByteArray& className)
 {
-    int maxSlots = MAX_SLOTS_COUNT;
-    if (className == GLOBAL_RECEIVER_CLASS_NAME)
-        maxSlots = MAX_GLOBAL_SIGNALS_COUNT;
-    return maxSlots;
+    return className == GLOBAL_RECEIVER_CLASS_NAME ? MAX_GLOBAL_SIGNALS_COUNT : MAX_SLOTS_COUNT;
 }
 
-static int maxSignalsCount(const QString& className)
+static int maxSignalsCount(const QByteArray& className)
 {
-    int maxSignals = MAX_SIGNALS_COUNT;
-    if (className == GLOBAL_RECEIVER_CLASS_NAME)
-        maxSignals = MAX_GLOBAL_SIGNALS_COUNT;
-    return maxSignals;
+    return className == GLOBAL_RECEIVER_CLASS_NAME ? MAX_GLOBAL_SIGNALS_COUNT : MAX_SIGNALS_COUNT;
 }
 
 uint PropertyData::flags() const
@@ -296,7 +290,7 @@ DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject*
     d.stringdata = 0;
     d.data = 0;
     d.extradata = 0;
-    m_d->m_className = QByteArray(className);
+    m_d->m_className = className;
     m_d->updateMetaObject(this);
 }
 
