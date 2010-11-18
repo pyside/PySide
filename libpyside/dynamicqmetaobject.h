@@ -52,7 +52,5 @@ private:
     DynamicQMetaObjectPrivate* m_d;
 };
 
-PYSIDE_API void deleteDynamicQMetaObject(void* data);
-
 }
 #endif
