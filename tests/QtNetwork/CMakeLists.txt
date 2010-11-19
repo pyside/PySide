@@ -1,4 +1,4 @@
-
+PYSIDE_TEST(bug_446.py)
 PYSIDE_TEST(basic_auth_test.py)
 PYSIDE_TEST(accessManager_test.py)
 PYSIDE_TEST(http_test.py)
