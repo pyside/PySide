@@ -51,13 +51,12 @@ def main():
 //! [0]
     numRead = 0
     numReadTotal = 0
-    buffer = ""
 
     while(True):
-        numRead  = socket.read(buffer, 50)
+        buffer  = socket.read(50)
         # do whatever with array
-        numReadTotal += numRead
-        if (numRead == 0 && !socket.waitForReadyRead()):
+        numReadTotal += buffer.size()
+        if (buffer.size() == 0 && !socket.waitForReadyRead()):
             break
 //! [0]
     return app.exec_()
