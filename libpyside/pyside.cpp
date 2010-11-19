@@ -116,9 +116,8 @@ void destroyQCoreApplication()
 
     foreach (SbkObject* pyObj, bm.getAllPyObjects()) {
         if (pyObj != pyQApp && PyObject_TypeCheck(pyObj, pyQObjectType)) {
-            if (Shiboken::Wrapper::hasOwnership(pyObj)) {
-                Shiboken::callCppDestructor<QObject*>(Shiboken::Wrapper::cppPointer(pyObj, Shiboken::SbkType<QObject*>()));
-            }
+            if (Shiboken::Wrapper::hasOwnership(pyObj))
+                Shiboken::callCppDestructor<QObject>(Shiboken::Wrapper::cppPointer(pyObj, Shiboken::SbkType<QObject*>()));
         }
     }
     delete app;
