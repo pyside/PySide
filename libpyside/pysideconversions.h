@@ -40,7 +40,7 @@ struct QtDictConverter
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<QtDict>()))
             return true;
 
-        if ((Shiboken::SbkType<QtDict>() && Shiboken::isShibokenType(pyObj)) || !PyDict_Check(pyObj))
+        if ((Shiboken::SbkType<QtDict>() && Shiboken::Wrapper::checkType(pyObj)) || !PyDict_Check(pyObj))
             return false;
 
         PyObject* key;
@@ -100,7 +100,7 @@ struct QtMultiMapConverter
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<MultiMap>()))
             return true;
 
-        if ((Shiboken::SbkType<MultiMap>() && Shiboken::isShibokenType(pyObj)) || !PyDict_Check(pyObj))
+        if ((Shiboken::SbkType<MultiMap>() && Shiboken::Wrapper::checkType(pyObj)) || !PyDict_Check(pyObj))
             return false;
 
         PyObject* key;
@@ -176,7 +176,7 @@ struct QSequenceConverter
     {
         if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<T>()))
             return true;
-        if ((Shiboken::SbkType<T>() && Shiboken::isShibokenType(pyObj)) || !PySequence_Check(pyObj))
+        if ((Shiboken::SbkType<T>() && Shiboken::Wrapper::checkType(pyObj)) || !PySequence_Check(pyObj))
             return false;
         for (int i = 0, max = PySequence_Length(pyObj); i < max; ++i) {
             Shiboken::AutoDecRef item(PySequence_GetItem(pyObj, i));

@@ -493,10 +493,9 @@ char* getTypeName(PyObject* type)
 {
     if (PyType_Check(type)) {
         char *typeName = NULL;
-        if (type->ob_type == &SbkObjectType_Type) {
-            SbkObjectType* objType = reinterpret_cast<SbkObjectType*>(type);
-            Q_ASSERT(objType->original_name);
-            typeName = strdup(objType->original_name);
+        if (type->ob_type == &SbkBaseType_Type) {
+            SbkBaseType* objType = reinterpret_cast<SbkBaseType*>(type);
+            typeName = strdup(Shiboken::BaseType::getOriginalName(objType));
         } else {
             // Translate python types to Qt names
             PyTypeObject *objType = reinterpret_cast<PyTypeObject*>(type);
@@ -670,7 +669,7 @@ PyObject* buildQtCompatible(const char* signature)
     return ret;
 }
 
-void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal)
+void addSignalToWrapper(SbkBaseType* wrapperType, const char* signalName, PySideSignal* signal)
 {
     PyObject* typeDict = wrapperType->super.ht_type.tp_dict;
     PyObject* homonymousMethod;

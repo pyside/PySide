@@ -29,8 +29,7 @@
 
 #include <pysidemacros.h>
 #include <Python.h>
-
-struct SbkObjectType;
+#include <basewrapper.h>
 
 extern "C"
 {
@@ -108,7 +107,7 @@ PYSIDE_API void updateSourceObject(PyObject* source);
  * @param   self The Signal object
  * @return  Return the signal signature
  **/
-PYSIDE_API void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal);
+PYSIDE_API void addSignalToWrapper(SbkBaseType* wrapperType, const char* signalName, PySideSignal* signal);
 
 /**
  * This function verify if the signature is a QtSignal base on SIGNAL flag

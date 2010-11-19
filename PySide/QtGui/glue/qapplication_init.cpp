@@ -7,7 +7,7 @@ static const char QAPP_MACRO[] = "qApp";
 
 int Sbk_QApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
-    if (Shiboken::isUserType(self) && !Shiboken::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication>()))
+    if (Shiboken::Wrapper::isUserType(self) && !Shiboken::BaseType::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication>()))
         return -1;
 
     if (QApplication::instance()) {

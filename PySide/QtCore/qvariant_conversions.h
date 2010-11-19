@@ -16,13 +16,13 @@ struct Converter<QVariant>
 
     static QByteArray resolveMetaType(PyTypeObject* type, int &typeId)
     {
-        if (PyObject_TypeCheck(type, &SbkObjectType_Type)) {
-            SbkObjectType* sbkType = reinterpret_cast<SbkObjectType*>(type);
-            QByteArray typeName(sbkType->original_name);
+        if (PyObject_TypeCheck(type, &SbkBaseType_Type)) {
+            SbkBaseType* sbkType = reinterpret_cast<SbkBaseType*>(type);
+            QByteArray typeName(Shiboken::BaseType::getOriginalName(sbkType));
             bool valueType = !typeName.endsWith("*");
 
             // Do not convert user type of value
-            if (valueType && sbkType->is_user_type)
+            if (valueType && Shiboken::BaseType::isUserType(type))
                 return QByteArray();
 
             int obTypeId = QMetaType::type(typeName);
@@ -86,8 +86,8 @@ struct Converter<QVariant>
             return convertToVariantList(pyObj);
         } else {
             // a class supported by QVariant?
-            if (Shiboken::isShibokenType(pyObj)) {
-                SbkObjectType* objType = reinterpret_cast<SbkObjectType*>(pyObj->ob_type);
+            if (Shiboken::Wrapper::checkType(pyObj)) {
+                SbkBaseType* objType = reinterpret_cast<SbkBaseType*>(pyObj->ob_type);
                 int typeCode = 0;
                 QByteArray typeName = resolveMetaType(reinterpret_cast<PyTypeObject*>(objType), typeCode);
                 if (typeCode) {

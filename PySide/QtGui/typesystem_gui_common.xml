@@ -3317,7 +3317,7 @@
 
     <modify-function signature="setStyle(QStyle*)">
       <inject-code class="target" position="end">
-        Shiboken::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), "__style__",  %PYARG_1);
+        Shiboken::Wrapper::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), "__style__",  %PYARG_1);
       </inject-code>
     </modify-function>
     <modify-function signature="style()const">
@@ -3331,7 +3331,7 @@
                 Shiboken::Wrapper::setParent(pyApp, %PYARG_0);
                 Shiboken::Wrapper::releaseOwnership(%PYARG_0);
             } else {
-                Shiboken::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), "__style__",  %PYARG_0);
+                Shiboken::Wrapper::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), "__style__",  %PYARG_0);
             }
         }
       </inject-code>

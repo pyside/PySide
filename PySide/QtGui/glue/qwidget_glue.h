@@ -34,7 +34,7 @@ static inline void qwidgetReparentLayout(QWidget *parent, QLayout *layout)
     Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayout*>::toPython(layout));
     Shiboken::Wrapper::setParent(pyParent, pyChild);
     //remove previous references
-    Shiboken::keepReference(reinterpret_cast<SbkObject*>(pyChild.object()), qPrintable(retrieveObjectName(pyChild)), Py_None);
+    Shiboken::Wrapper::keepReference(reinterpret_cast<SbkObject*>(pyChild.object()), qPrintable(retrieveObjectName(pyChild)), Py_None);
 }
 
 static inline void qwidgetSetLayout(QWidget *self, QLayout *layout)
