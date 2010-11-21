@@ -37,7 +37,14 @@
     <object-type name="QDeclarativeComponent">
         <enum-type name="Status"/>
     </object-type>
-    <object-type name="QDeclarativeContext" />
+    <object-type name="QDeclarativeContext">
+      <modify-function signature="setContextProperty(const QString &amp;, QObject*)">
+        <modify-argument index="2">
+          <reference-count action="add"/>
+        </modify-argument>
+      </modify-function>
+    </object-type>
+
     <object-type name="QDeclarativeEngine">
         <enum-type name="ObjectOwnership" />
         <modify-function signature="setNetworkAccessManagerFactory(QDeclarativeNetworkAccessManagerFactory*)">
