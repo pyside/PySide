@@ -117,6 +117,7 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
     pData->fget = 0;
     pData->freset = 0;
     pData->fdel = 0;
+    pData->final = 0;
     pData->designable = true;
     pData->scriptable = true;
     pData->stored = true;
@@ -124,6 +125,7 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
     pData->doc = 0;
     pData->notify = 0;
     pData->notifySignature = 0;
+    pData->constant = 0;
 
     static const char *kwlist[] = {"type", "fget", "fset", "freset", "fdel", "doc", "notify",
                                    "designable", "scriptable", "stored", "user",
@@ -134,12 +136,17 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
                                      /*OOO*/    &(pData->fset), &(pData->freset), &(pData->fdel),
                                      /*s*/      &(pData->doc),
                                      /*O*/      &(pData->notify),
-                                     /*bbbbbb*/ &(pData->designable), &(pData->scriptable), &(pData->stored), &(pData->user), &(pData->constant), &(pData->final)))
+                                     /*bbbbbb*/ &(pData->designable), &(pData->scriptable), &(pData->stored), &(pData->user), &(pData->constant), &(pData->final))) {
+        free(pData);
+        return 0;
+    }
+
+    if (pData->constant && (pData->fset || pData->notify)) {
+        free(pData);
+        PyErr_SetString(PyExc_AttributeError, "A constant property cannot have a WRITE method or a NOTIFY signal.");
         return 0;
 
-    if (!pData->fset && pData->fget)
-        pData->constant = true;
-
+    }
     pData->typeName = PySide::Signal::getTypeName(type);
     return 1;
 }

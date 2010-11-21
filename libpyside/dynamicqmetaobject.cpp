@@ -132,7 +132,6 @@ static bool isQRealType(const char *type)
 }
 
 
-
 /*
  * Avoid API break keep this on cpp
  */
@@ -164,34 +163,37 @@ uint PropertyData::flags() const
     if (PySide::Property::hasReset(m_data))
         flags |= Resettable;
 
-    if (!PySide::Property::isDesignable(m_data))
-        flags |= ResolveDesignable;
-    else
+    if (PySide::Property::isDesignable(m_data))
         flags |= Designable;
-
-    if (!PySide::Property::isScriptable(m_data))
-        flags |= ResolveScriptable;
     else
+        flags |= ResolveDesignable;
+
+    if (PySide::Property::isScriptable(m_data))
         flags |= Scriptable;
-
-    if (!PySide::Property::isStored(m_data))
-        flags |= ResolveStored;
     else
+        flags |= ResolveScriptable;
+
+    if (PySide::Property::isStored(m_data))
         flags |= Stored;
-
-    if (!PySide::Property::isUser(m_data))
-        flags |= ResolveUser;
     else
+        flags |= ResolveStored;
+
+    //EDITABLE
+    flags |= ResolveEditable;
+
+    if (PySide::Property::isUser(m_data))
         flags |= User;
+    else
+        flags |= ResolveUser;
+
+    if (m_notifyId != -1)
+        flags |= Notify;
 
     if (PySide::Property::isConstant(m_data))
         flags |= Constant;
 
     if (PySide::Property::isFinal(m_data))
         flags |= Final;
-
-    if (m_notifyId)
-        flags |= Notify;
 
     return flags;
 }
@@ -247,7 +249,7 @@ PropertyData::PropertyData()
 {
 }
 
-PropertyData::PropertyData(const char* name, uint notifyId, PySideProperty* data)
+PropertyData::PropertyData(const char* name, int notifyId, PySideProperty* data)
     : m_name(name), m_notifyId(notifyId), m_data(data)
 {
 }
@@ -268,7 +270,7 @@ QByteArray PropertyData::name() const
     return m_name;
 }
 
-uint PropertyData::notifyId() const
+int PropertyData::notifyId() const
 {
     return m_notifyId;
 }
@@ -370,10 +372,10 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
     // retrieve notifyId
     PySideProperty* property = reinterpret_cast<PySideProperty*>(data);
     const char* signalNotify = PySide::Property::getNotifyName(property);
-    uint notifyId = 0;
+    int notifyId = -1;
     if (signalNotify) {
         QByteArray signalSignature(signalNotify);
-        notifyId = m_d->m_signals.indexOf(signalNotify) + 1;
+        notifyId = m_d->m_signals.indexOf(signalNotify);
     }
 
     //search for a empty space
@@ -553,9 +555,8 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
     }
 
     //write properties notify
-    foreach(PropertyData pp, m_properties) {
-        data[index++] = pp.notifyId(); //signal notify index
-    }
+    foreach(PropertyData pp, m_properties)
+        data[index++] = pp.notifyId() >= 0 ? pp.notifyId() : 0; //signal notify index
 
     data[index++] = 0; // the end
 

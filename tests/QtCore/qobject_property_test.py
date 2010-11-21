@@ -188,6 +188,20 @@ class PropertyWithNotify(unittest.TestCase):
         obj.myProperty = 10
         self.assert_(self.called_)
 
+class MetaPropertyTest(unittest.TestCase):
+    def testConstant(self):
+        obj = MyObject()
+        mo = obj.metaObject()
+        self.assertEqual(mo.propertyCount(), 2)
+        p = mo.property(1)
+        self.assertTrue(p.isConstant())
+
+        obj = MyObjectWithNotifyProperty()
+        mo = obj.metaObject()
+        self.assertEqual(mo.propertyCount(), 2)
+        p = mo.property(1)
+        self.assertFalsee(p.isConstant())
+
 if __name__ == '__main__':
     unittest.main()
 
