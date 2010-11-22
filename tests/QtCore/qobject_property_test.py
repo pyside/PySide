@@ -34,7 +34,7 @@ class MyObject(QObject):
     def trySetPP(self):
         self.pp = 0
 
-    pp = Property(int, readPP)
+    pp = Property(int, readPP, constant=True)
 
 class MyObjectWithNotifyProperty(QObject):
     def __init__(self, parent=None):
@@ -200,7 +200,7 @@ class MetaPropertyTest(unittest.TestCase):
         mo = obj.metaObject()
         self.assertEqual(mo.propertyCount(), 2)
         p = mo.property(1)
-        self.assertFalsee(p.isConstant())
+        self.assertFalse(p.isConstant())
 
 if __name__ == '__main__':
     unittest.main()

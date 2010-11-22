@@ -19,8 +19,7 @@ class HttpSignalsCase(UsesQCoreApplication):
         self.server.close()
 
     def onReadReady(self):
-        buf = None
-        data = self.client.read(buf, 100)
+        data = self.client.read(100)
         self.assertEqual(data.size(), len(HttpSignalsCase.DATA))
         self.assertEqual(data, HttpSignalsCase.DATA)
         self.done()
