@@ -116,7 +116,8 @@ GlobalReceiver::GlobalReceiver()
 
 GlobalReceiver::~GlobalReceiver()
 {
-    foreach(DynamicSlotData* data, m_slotReceivers) {
+    while(!m_slotReceivers.empty()) {
+        DynamicSlotData* data = m_slotReceivers.take(m_slotReceivers.begin().key());
         data->clear();
         delete data;
     }
@@ -203,8 +204,10 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
     if (strcmp(slot.signature(), RECEIVER_DESTROYED_SLOT_NAME) == 0) {
         QObject *arg = *(QObject**)args[1];
 
-        QHash<int, DynamicSlotData*>::iterator i = m_slotReceivers.begin();
-        while(i != m_slotReceivers.end()) {
+        //avoid hash changes during the destruction
+        QHash<int, DynamicSlotData*> copy = m_slotReceivers;
+        QHash<int, DynamicSlotData*>::iterator i = copy.begin();
+        while(i != copy.end()) {
             if (i.value()->hasRefTo(arg)) {
                 disconnectNotify(arg, i.key());
                 break;
