@@ -39,7 +39,7 @@ inline void addLayoutOwnership(QLayout* layout, QLayout* other)
     }
 
     for (int i=0, i_max=other->count(); i < i_max; i++) {
-        QLayoutItem* item = layout->itemAt(i);
+        QLayoutItem* item = other->itemAt(i);
         if (PyErr_Occurred())
             return;
 
