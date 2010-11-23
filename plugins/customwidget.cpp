@@ -117,11 +117,11 @@ QWidget* PyCustomWidget::createWidget(QWidget* parent)
     QWidget* widget = 0;
     if (result) {
         if (unkowParent) //if parent does not exists in python, transfer the ownership to cpp
-            Shiboken::Wrapper::releaseOwnership(result);
+            Shiboken::Object::releaseOwnership(result);
         else
-            Shiboken::Wrapper::setParent(pyParent, reinterpret_cast<PyObject*>(result));
+            Shiboken::Object::setParent(pyParent, reinterpret_cast<PyObject*>(result));
 
-        widget = reinterpret_cast<QWidget*>(Shiboken::Wrapper::cppPointer(result, result->ob_type));
+        widget = reinterpret_cast<QWidget*>(Shiboken::Object::cppPointer(result, result->ob_type));
     }
 
     return widget;

@@ -8,15 +8,15 @@ inline bool Converter<QPixmap>::isConvertible(PyObject* pyobj)
 {
     if (ValueTypeConverter<QPixmap>::isConvertible(pyobj))
         return true;
-    SbkBaseType* shiboType = reinterpret_cast<SbkBaseType*>(SbkType<QPixmap>());
-    bool isVariant = Converter<QVariant>::checkType(pyobj);
+    SbkObjectType* shiboType = reinterpret_cast<SbkObjectType*>(SbkType<QPixmap>());
+    bool isVariant = Shiboken::Converter<QVariant>::checkType(pyobj);
     if (isVariant) {
-        QVariant var(Converter<QVariant>::toCpp(pyobj));
+        QVariant var(Shiboken::Converter<QVariant>::toCpp(pyobj));
         return var.type() == QVariant::Pixmap;
-    } else if (Converter<QSize>::checkType(pyobj) || Converter<QString>::checkType(pyobj)) {
+    } else if (Shiboken::Converter<QSize>::checkType(pyobj) || Shiboken::Converter<QString>::checkType(pyobj)) {
         return true;
     } else {
-        return Shiboken::BaseType::isExternalConvertible(shiboType, pyobj);
+        return Shiboken::ObjectType::isExternalConvertible(shiboType, pyobj);
     }
     return false;
 
@@ -24,7 +24,7 @@ inline bool Converter<QPixmap>::isConvertible(PyObject* pyobj)
 
 inline QPixmap Converter<QPixmap>::toCpp(PyObject* pyobj)
 {
-    SbkBaseType* shiboType = reinterpret_cast<SbkBaseType*>(SbkType<QPixmap>());
+    SbkObjectType* shiboType = reinterpret_cast<SbkObjectType*>(SbkType<QPixmap>());
     bool isVariant = Converter<QVariant>::checkType(pyobj);
     if (isVariant) {
         QVariant var(Converter<QVariant>::toCpp(pyobj));
@@ -33,8 +33,8 @@ inline QPixmap Converter<QPixmap>::toCpp(PyObject* pyobj)
         return QPixmap(Shiboken::Converter<QSize >::toCpp(pyobj));
     } else if (Converter<QString>::checkType(pyobj)) {
         return QPixmap(Shiboken::Converter<QString >::toCpp(pyobj));
-    } else if (Shiboken::BaseType::isExternalConvertible(shiboType, pyobj) && Shiboken::BaseType::hasExternalCppConversions(shiboType)) {
-        QPixmap* cptr = reinterpret_cast<QPixmap*>(Shiboken::BaseType::callExternalCppConversion(shiboType, pyobj));
+    } else if (Shiboken::ObjectType::isExternalConvertible(shiboType, pyobj) && Shiboken::ObjectType::hasExternalCppConversions(shiboType)) {
+        QPixmap* cptr = reinterpret_cast<QPixmap*>(Shiboken::ObjectType::callExternalCppConversion(shiboType, pyobj));
         std::auto_ptr<QPixmap> cptr_auto_ptr(cptr);
         return *cptr;
     }

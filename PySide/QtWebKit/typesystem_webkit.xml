@@ -40,8 +40,8 @@
         </modify-argument>
         <inject-code position="end">
             SbkObject* _pyReturn = reinterpret_cast&lt;SbkObject*&gt;(%PYARG_0);
-            if (!Shiboken::Wrapper::hasParentInfo(_pyReturn))
-                Shiboken::Wrapper::setParent(%PYSELF, %PYARG_0);
+            if (!Shiboken::Object::hasParentInfo(_pyReturn))
+                Shiboken::Object::setParent(%PYSELF, %PYARG_0);
         </inject-code>
     </modify-function>
     <modify-function signature="print(QPrinter*)const" rename="print_" />

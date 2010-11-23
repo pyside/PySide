@@ -20,7 +20,7 @@ _populate_parent(PyObject* pyParent, QObject *parent)
             if (!has_attr)
                 PyObject_SetAttrString(pyParent, qPrintable(name), pyChild);
 
-            Shiboken::Wrapper::setParent(pyParent, pyChild);
+            Shiboken::Object::setParent(pyParent, pyChild);
             _populate_parent(pyChild, qobject_cast<QObject*>(child));
         }
     }

@@ -15,10 +15,10 @@ static Py_ssize_t SbkQByteArray_segcountproc(PyObject* self, Py_ssize_t* lenp)
 
 static Py_ssize_t SbkQByteArray_readbufferproc(PyObject* self, Py_ssize_t segment, void** ptrptr)
 {
-    if (segment || !Shiboken::Wrapper::isValid(self))
+    if (segment || !Shiboken::Object::isValid(self))
         return -1;
 
-    QByteArray* cppSelf = Converter<QByteArray*>::toCpp(self);
+    QByteArray* cppSelf = Shiboken::Converter<QByteArray*>::toCpp(self);
     *ptrptr = reinterpret_cast<void*>(cppSelf->data());
     return cppSelf->size();
 }

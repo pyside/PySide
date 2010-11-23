@@ -4,7 +4,7 @@ static char** QCoreApplicationArgValues;
 
 int Sbk_QCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
-    if (Shiboken::Wrapper::isUserType(self) && !Shiboken::BaseType::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication >()))
+    if (Shiboken::Object::isUserType(self) && !Shiboken::ObjectType::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication >()))
         return -1;
 
 
@@ -26,13 +26,13 @@ int Sbk_QCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
 
     SbkObject* sbkSelf = reinterpret_cast<SbkObject*>(self);
     QCoreApplicationWrapper* cptr = new QCoreApplicationWrapper(QCoreApplicationArgCount, QCoreApplicationArgValues);
-    Shiboken::Wrapper::setCppPointer(sbkSelf,
+    Shiboken::Object::setCppPointer(sbkSelf,
                                      Shiboken::SbkType<QCoreApplication>(),
                                      cptr);
 
-    Shiboken::Wrapper::setValidCpp(sbkSelf, true);
-    Shiboken::Wrapper::setHasCppWrapper(sbkSelf, true);
-    Shiboken::Wrapper::releaseOwnership(sbkSelf);
+    Shiboken::Object::setValidCpp(sbkSelf, true);
+    Shiboken::Object::setHasCppWrapper(sbkSelf, true);
+    Shiboken::Object::releaseOwnership(sbkSelf);
 
     Shiboken::BindingManager::instance().registerWrapper(sbkSelf, cptr);
     PySide::Signal::updateSourceObject(self);

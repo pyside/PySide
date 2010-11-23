@@ -1931,7 +1931,7 @@
         PyObject* pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
         Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
 
-        QTimer* timer = Converter&lt;QTimer*>::toCpp(pyTimer);
+        QTimer* timer = %CONVERTTOCPP[QTimer*](pyTimer);
         Shiboken::AutoDecRef result(
             PyObject_CallMethod(pyTimer,
                                 const_cast&lt;char*>("connect"),
@@ -1941,7 +1941,7 @@
                                 %PYARG_2,
                                 %3)
         );
-        Shiboken::Wrapper::invalidate((SbkObject*)pyTimer);
+        Shiboken::Object::invalidate((SbkObject*)pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
         timer->start(%1);
@@ -1953,7 +1953,7 @@
         Shiboken::AutoDecRef emptyTuple(PyTuple_New(0));
         PyObject *pyTimer = Shiboken::SbkType&lt;QTimer>()->tp_new(Shiboken::SbkType&lt;QTimer>(), emptyTuple, 0);
         Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
-        QTimer* timer = Converter&lt;QTimer*>::toCpp(pyTimer);
+        QTimer* timer = %CONVERTTOCPP[QTimer*](pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
 
@@ -1979,7 +1979,7 @@
                                     pyargs[1])
             );
         }
-        Shiboken::Wrapper::invalidate((SbkObject*)pyTimer);
+        Shiboken::Object::invalidate((SbkObject*)pyTimer);
         timer->start(%1);
         </inject-code>
     </add-function>
@@ -2567,7 +2567,7 @@
         <inject-code class="target" position="beginning">
             for(int counter = 0; counter &lt; %CPPSELF.animationCount(); ++counter ) {
                     PyObject* obj = %CONVERTTOPYTHON[QAbstractAnimation*](%CPPSELF.animationAt(counter));
-                    Shiboken::Wrapper::setParent(NULL, obj);
+                    Shiboken::Object::setParent(NULL, obj);
                     Py_DECREF(obj);
             }
             %CPPSELF.clear();
@@ -2721,7 +2721,7 @@
             %PYARG_0 = PySet_New(0);
             foreach(QAbstractState* abs_state, %CPPSELF.configuration()) {
                     Shiboken::AutoDecRef obj(%CONVERTTOPYTHON[QAbstractState*](abs_state));
-                    Shiboken::Wrapper::setParent(self, obj);
+                    Shiboken::Object::setParent(self, obj);
                     PySet_Add(%PYARG_0, obj);
             }
         </inject-code>
@@ -2732,7 +2732,7 @@
             %PYARG_0 = PyList_New(0);
             foreach(QAbstractAnimation* abs_anim, %CPPSELF.defaultAnimations()) {
                     Shiboken::AutoDecRef obj(%CONVERTTOPYTHON[QAbstractAnimation*](abs_anim));
-                    Shiboken::Wrapper::setParent(self, obj);
+                    Shiboken::Object::setParent(self, obj);
                     PyList_Append(%PYARG_0, obj);
             }
         </inject-code>
