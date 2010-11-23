@@ -26,8 +26,8 @@ struct Converter<QVariant::Type>
         else if (pyObj == reinterpret_cast<PyObject*>(&PyLong_Type))
             typeName = "int"; // long is a UserType in QVariant.
         else if (PyType_Check(pyObj)) {
-            if (pyObj->ob_type == &SbkBaseType_Type)
-                typeName = Shiboken::BaseType::getOriginalName(reinterpret_cast<SbkBaseType*>(pyObj));
+            if (pyObj->ob_type == &SbkObjectType_Type)
+                typeName = Shiboken::ObjectType::getOriginalName(reinterpret_cast<SbkObjectType*>(pyObj));
             else
                 typeName = reinterpret_cast<PyTypeObject*>(pyObj)->tp_name;
         }

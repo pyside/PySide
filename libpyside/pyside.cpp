@@ -119,14 +119,14 @@ void destroyQCoreApplication()
     //filter only QObjects which we have ownership, this will avoid list changes during the destruction of some parent object
     foreach (SbkObject* pyObj, bm.getAllPyObjects()) {
         if (pyObj != pyQApp && PyObject_TypeCheck(pyObj, pyQObjectType)) {
-            if (Shiboken::Wrapper::hasOwnership(pyObj))
+            if (Shiboken::Object::hasOwnership(pyObj))
                 objects << pyObj;
         }
     }
 
     //Now we can destroy all object in the list
     foreach (SbkObject* pyObj, objects)
-        Shiboken::callCppDestructor<QObject>(Shiboken::Wrapper::cppPointer(pyObj, Shiboken::SbkType<QObject*>()));
+        Shiboken::callCppDestructor<QObject>(Shiboken::Object::cppPointer(pyObj, Shiboken::SbkType<QObject*>()));
 
     // in the end destroy app
     delete app;

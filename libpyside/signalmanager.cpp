@@ -379,7 +379,7 @@ bool SignalManager::registerMetaMethod(QObject* source, const char* signature, Q
     // Create the dynamic signal is needed
     if (methodIndex == -1) {
         SbkObject* self = Shiboken::BindingManager::instance().retrieveWrapper(source);
-        if (!Shiboken::Wrapper::hasCppWrapper(self)) {
+        if (!Shiboken::Object::hasCppWrapper(self)) {
             qWarning() << "Invalid Signal signature:" << signature;
             return false;
         } else {
