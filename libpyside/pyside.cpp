@@ -32,6 +32,7 @@
 #include <basewrapper.h>
 #include <conversions.h>
 #include <typeresolver.h>
+#include <bindingmanager.h>
 #include <algorithm>
 #include <cctype>
 #include <QStack>
@@ -102,6 +103,18 @@ void runCleanupFunctions()
     }
 }
 
+static void destructionVisitor(SbkObject* pyObj, void* data)
+{
+    void** realData = reinterpret_cast<void**>(data);
+    SbkObject* pyQApp = reinterpret_cast<SbkObject*>(realData[0]);
+    PyTypeObject* pyQObjectType = reinterpret_cast<PyTypeObject*>(realData[1]);
+
+    if (pyObj != pyQApp && PyObject_TypeCheck(pyObj, pyQObjectType)) {
+        if (Shiboken::Object::hasOwnership(pyObj))
+            Shiboken::callCppDestructor<QObject>(Shiboken::Object::cppPointer(pyObj, Shiboken::SbkType<QObject*>()));
+    }
+};
+
 void destroyQCoreApplication()
 {
     SignalManager::instance().clear();
@@ -114,19 +127,8 @@ void destroyQCoreApplication()
     PyTypeObject* pyQObjectType = Shiboken::TypeResolver::get("QObject*")->pythonType();
     assert(pyQObjectType);
 
-    QList<SbkObject*> objects;
-
-    //filter only QObjects which we have ownership, this will avoid list changes during the destruction of some parent object
-    foreach (SbkObject* pyObj, bm.getAllPyObjects()) {
-        if (pyObj != pyQApp && PyObject_TypeCheck(pyObj, pyQObjectType)) {
-            if (Shiboken::Object::hasOwnership(pyObj))
-                objects << pyObj;
-        }
-    }
-
-    //Now we can destroy all object in the list
-    foreach (SbkObject* pyObj, objects)
-        Shiboken::callCppDestructor<QObject>(Shiboken::Object::cppPointer(pyObj, Shiboken::SbkType<QObject*>()));
+    void* data[2] = {pyQApp, pyQObjectType};
+    bm.visitAllPyObjects(&destructionVisitor, &data);
 
     // in the end destroy app
     delete app;
