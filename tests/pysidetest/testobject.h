@@ -2,6 +2,9 @@
 #define TESTOBJECT_H
 
 #include <QObject>
+#ifdef pysidetest_EXPORTS
+#define PYSIDE_EXPORTS 1
+#endif
 #include "pysidemacros.h"
 
 class PYSIDE_API TestObject : public QObject
