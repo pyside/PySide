@@ -148,7 +148,7 @@ class InheritanceGraph(object):
         def recurse(cls):
             all_classes[cls] = None
             for c in cls.__bases__:
-                if c not in all_classes and c.__name__ != "BaseWrapper":
+                if c not in all_classes and not (c.__name__ == "Object" and c.__module__ == "Shiboken"):
                     recurse(c)
 
         for cls in classes:
@@ -246,7 +246,7 @@ class InheritanceGraph(object):
 
             # Write the edges
             for base in cls.__bases__:
-                if base.__name__ == "BaseWrapper":
+                if base.__name__ == "Object" and base.__module__ == "Shiboken":
                     continue
                 if not self.show_builtins and base in __builtins__.values():
                     continue
