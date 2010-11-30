@@ -87,11 +87,11 @@
 
                    signal_item = PySide::Signal::newObject("capabilitiesChanged", "void", NULL);
                    PyDict_SetItemString(Sbk_Phonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "capabilitiesChanged", (PyObject*)signal_item);
-                   Py_DECREF(signal_item);
+                   Py_DECREF((PyObject*)signal_item);
 
                    signal_item = PySide::Signal::newObject("availableAudioOutputDevicesChanged", "void", NULL);
                    PyDict_SetItemString( Sbk_Phonon_BackendCapabilities_NotifierWrapper_Type.super.ht_type.tp_dict, "availableAudioOutputDevicesChanged",  (PyObject*)signal_item);
-                   Py_DECREF(signal_item);
+                   Py_DECREF((PyObject*)signal_item);
               </inject-code>
             </object-type>
         </namespace-type>
