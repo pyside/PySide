@@ -25,6 +25,7 @@
 
 #include <shiboken.h>
 #include <QString>
+#include <QMetaObject>
 
 #define SLOT_DEC_NAME "Slot"
 

@@ -43,7 +43,7 @@
 #define MAX_GLOBAL_SIGNALS_COUNT 500
 #define MAX_GLOBAL_SLOTS_COUNT 500
 
-#define GLOBAL_RECEIVER_CLASS_NAME "__GlobalReceiver__"
+#define EMPTY_META_METHOD "0()"
 
 using namespace PySide;
 
@@ -79,7 +79,7 @@ public:
     QByteArray m_className;
 
     void updateMetaObject(QMetaObject* metaObj);
-    void writeMethodsData(QList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int maxCount, int nullIndex, int flags);
+    void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int maxCount, int nullIndex, int flags);
 };
 
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
@@ -135,12 +135,12 @@ static bool isQRealType(const char *type)
 /*
  * Avoid API break keep this on cpp
  */
-static int maxSlotsCount(const QByteArray& className)
+static inline int maxSlotsCount(const QByteArray& className)
 {
     return className == GLOBAL_RECEIVER_CLASS_NAME ? MAX_GLOBAL_SIGNALS_COUNT : MAX_SLOTS_COUNT;
 }
 
-static int maxSignalsCount(const QByteArray& className)
+static inline int maxSignalsCount(const QByteArray& className)
 {
     return className == GLOBAL_RECEIVER_CLASS_NAME ? MAX_GLOBAL_SIGNALS_COUNT : MAX_SIGNALS_COUNT;
 }
@@ -198,50 +198,48 @@ uint PropertyData::flags() const
     return flags;
 }
 
-MethodData::MethodData(const char* signature, const char* type)
+// const QByteArray with EMPTY_META_METHOD, used to save some memory
+const QByteArray MethodData::m_emptySig(EMPTY_META_METHOD);
+
+MethodData::MethodData() : m_signature(m_emptySig)
 {
-    m_signature = QSharedPointer<QByteArray>(new QByteArray(signature));
-    m_type = QSharedPointer<QByteArray>(new QByteArray(type));
+}
+
+MethodData::MethodData(const char* signature, const char* type) : m_signature(signature), m_type(type)
+{
 }
 
 void MethodData::clear()
 {
-    m_signature->clear();
-    m_type->clear();
+    m_signature = m_emptySig;
+    m_type.clear();
 }
 
 bool MethodData::operator==(const MethodData& other) const
 {
-    return *m_signature == other.signature();
+    return m_signature == other.signature();
 }
 
 bool MethodData::operator==(const char* other) const
 {
-    return *m_signature == other;
+    return m_signature == other;
 }
 
 QByteArray MethodData::signature() const
 {
-    if (!m_signature.isNull())
-        return *m_signature;
-    else
-        return QByteArray();
+    return m_signature;
 }
 
 QByteArray MethodData::type() const
 {
-    if (!m_type.isNull()) {
-        if (*m_type == "void")
-            return QByteArray();
-        return *m_type;
-    } else {
+    if (m_type == "void")
         return QByteArray();
-    }
+    return m_type;
 }
 
 bool MethodData::isValid() const
 {
-    return m_signature->size();
+    return m_signature.size();
 }
 
 PropertyData::PropertyData()
@@ -334,29 +332,27 @@ void DynamicQMetaObject::addSlot(const char* slot, const char* type)
     if (index != -1)
         return;
 
-    int maxSlots = maxSlotsCount(m_d->m_className);
-    if (m_d->m_slots.size() >= maxSlots) {
-        qWarning() << "Fail to add dynamic slot to QObject. PySide support at most" << maxSlots << "dynamic slots.";
-        return;
-    }
-
     //search for a empty space
     MethodData blank;
     index = m_d->m_slots.indexOf(blank);
     if (index != -1) {
         m_d->m_slots[index] = MethodData(slot, type);
-    } else {
+    } else if (m_d->m_slots.size() < maxSlotsCount(m_d->m_className)) {
         m_d->m_slots << MethodData(slot, type);
+    } else {
+        qWarning() << "Fail to add dynamic slot to QObject. PySide support at most" << maxSlotsCount(m_d->m_className) << "dynamic slots.";
+        return;
     }
     m_d->updateMetaObject(this);
 }
 
 void DynamicQMetaObject::removeSlot(uint index)
 {
-    QMetaMethod m = method(index);
-    foreach(MethodData md, m_d->m_slots) {
-        if (md.signature() == m.signature()) {
-            md.clear();
+    const char* methodSig = method(index).signature();
+    QList<MethodData>::iterator it = m_d->m_slots.begin();
+    for (; it != m_d->m_slots.end(); ++it) {
+        if (it->signature() == methodSig) {
+            it->clear();
             m_d->updateMetaObject(this);
             break;
         }
@@ -460,7 +456,7 @@ void DynamicQMetaObject::removeSignal(uint index)
     }
 }
 
-void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(QList<MethodData>& methods,
+void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList<MethodData>& methods,
                                                                      unsigned int** data,
                                                                      QList<QByteArray>* strings,
                                                                      int* prtIndex,
@@ -470,23 +466,28 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(QList<Metho
 {
     int index = *prtIndex;
 
-    QList<MethodData>::iterator iMethod = methods.begin();
-    for(int i=0; i < maxCount; i++) {
-        QByteArray mType;
-        if (iMethod != methods.end() && ((*iMethod).signature().size() > 0) ) {
-            (*data)[index++] = registerString((*iMethod).signature(), strings); // func name
-            mType = (*iMethod).type();
-        } else {
-            (*data)[index++] = nullIndex; // func name
-        }
+    int emptyIndex = registerString(EMPTY_META_METHOD, strings);
+
+    QList<MethodData>::const_iterator it = methods.begin();
+
+    for (; it != methods.end(); ++it) {
+        if (it->signature() != EMPTY_META_METHOD)
+            (*data)[index++] = registerString(it->signature(), strings); // func name
+        else
+            (*data)[index++] = emptyIndex; // func name
         (*data)[index++] = nullIndex; // arguments
-        (*data)[index++] = (mType.size() > 0 ? registerString(mType, strings) : nullIndex); // normalized type
+        (*data)[index++] = (it->type().size() > 0 ? registerString(it->type(), strings) : nullIndex); // normalized type
         (*data)[index++] = nullIndex; // tags
         (*data)[index++] = flags;
-        if (iMethod != methods.end())
-            iMethod++;
     }
 
+    for (int i = methods.count(); i < maxCount; ++i) {
+        (*data)[index++] = emptyIndex; // func name
+        (*data)[index++] = nullIndex; // arguments
+        (*data)[index++] = nullIndex; // normalized type
+        (*data)[index++] = nullIndex; // tags
+        (*data)[index++] = flags;
+    }
     *prtIndex = index;
 }
 
