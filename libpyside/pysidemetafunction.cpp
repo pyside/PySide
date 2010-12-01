@@ -98,29 +98,26 @@ void functionFree(void *self)
 
 PyObject* functionCall(PyObject* self, PyObject* args, PyObject* kw)
 {
-    QGenericArgument gArgs[10];
-    PySideMetaFunction* function = reinterpret_cast<PySideMetaFunction*>(self);
-    QList<QVariant*> vArgs;
-    QMetaMethod method = function->d->method;
-    QList<QByteArray> pTypes = method.parameterTypes();
-    int numArgs = pTypes.size();
-
-    Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get("QVariant");
+    static Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get("QVariant");
     Q_ASSERT(typeResolver);
-    for(int i=0; i < numArgs; i++) {
-        QVariant *vArg;
+
+    QGenericArgument gArgs[10];
+    QVariant vArgs[10];
+    PySideMetaFunction* function = reinterpret_cast<PySideMetaFunction*>(self);
+    QMetaMethod method = function->d->method;
+    int argsGiven = method.parameterTypes().size();
+
+    for (int i = 0; i < argsGiven; ++i) {
         Shiboken::AutoDecRef pyArg(PySequence_GetItem(args, i));
-        typeResolver->toCpp(pyArg, (void**)&vArg, true);
-        vArgs.append(vArg);
-        gArgs[i] = Q_ARG(QVariant, *vArg);
+        gArgs[i] = Q_ARG(QVariant, vArgs[i]);
+        void* v[1] = { &vArgs[i] };
+        typeResolver->toCpp(pyArg, v);
     }
 
     QVariant retVariant;
     QGenericReturnArgument returnValue = Q_RETURN_ARG(QVariant, retVariant);
     method.invoke(function->d->qobject, returnValue, gArgs[0], gArgs[1], gArgs[2], gArgs[3], gArgs[4], gArgs[5], gArgs[6], gArgs[7], gArgs[8], gArgs[9]);
 
-    while(!vArgs.isEmpty())
-        delete vArgs.takeFirst();
 
     if (retVariant.isValid())
         return typeResolver->toPython(&retVariant);
