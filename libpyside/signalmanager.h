@@ -43,6 +43,7 @@ public:
     PyObjectWrapper(const PyObjectWrapper &other);
     ~PyObjectWrapper();
     operator PyObject*() const;
+    PyObjectWrapper& operator=(const PyObjectWrapper &other);
 private:
     PyObject* m_me;
     void*     m_data; //future

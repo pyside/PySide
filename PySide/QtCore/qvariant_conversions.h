@@ -14,26 +14,26 @@ struct Converter<QVariant>
         return true;
     }
 
-    static QByteArray resolveMetaType(PyTypeObject* type, int &typeId)
+    static const char* resolveMetaType(PyTypeObject* type, int* typeId)
     {
         if (PyObject_TypeCheck(type, &SbkObjectType_Type)) {
             SbkObjectType* sbkType = reinterpret_cast<SbkObjectType*>(type);
-            QByteArray typeName(Shiboken::ObjectType::getOriginalName(sbkType));
-            bool valueType = !typeName.endsWith("*");
+            const char* typeName = Shiboken::ObjectType::getOriginalName(sbkType);
+            bool valueType = '*' != typeName[qstrlen(typeName) - 1];
 
             // Do not convert user type of value
             if (valueType && Shiboken::ObjectType::isUserType(type))
-                return QByteArray();
+                return 0;
 
             int obTypeId = QMetaType::type(typeName);
             if (obTypeId) {
-                typeId = obTypeId;
-                return QByteArray(typeName);
+                *typeId = obTypeId;
+                return typeName;
             }
 
             // Do not resolve types to value type
             if (valueType)
-                return QByteArray();
+                return 0;
 
             // find in base types
             if (type->tp_base) {
@@ -41,14 +41,14 @@ struct Converter<QVariant>
             } else if (type->tp_bases) {
                 int size = PyTuple_GET_SIZE(type->tp_bases);
                 for(int i=0; i < size; i++){
-                    QByteArray derivedName = resolveMetaType(reinterpret_cast<PyTypeObject*>(PyTuple_GET_ITEM(type->tp_bases, i)), typeId);
-                    if (!derivedName.isEmpty())
+                    const char* derivedName = resolveMetaType(reinterpret_cast<PyTypeObject*>(PyTuple_GET_ITEM(type->tp_bases, i)), typeId);
+                    if (derivedName)
                         return derivedName;
                 }
             }
         }
-        typeId = 0;
-        return QByteArray();
+        *typeId = 0;
+        return 0;
     }
 
     static QVariant toCpp(PyObject* pyObj)
@@ -87,22 +87,15 @@ struct Converter<QVariant>
         } else {
             // a class supported by QVariant?
             if (Shiboken::Object::checkType(pyObj)) {
-                SbkObjectType* objType = reinterpret_cast<SbkObjectType*>(pyObj->ob_type);
-                int typeCode = 0;
-                QByteArray typeName = resolveMetaType(reinterpret_cast<PyTypeObject*>(objType), typeCode);
-                if (typeCode) {
+                int typeCode;
+                const char* typeName = resolveMetaType(pyObj->ob_type, &typeCode);
+
+                if (typeCode && typeName) {
                     Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(typeName);
-                    void* data = 0;
-                    data = tr->toCpp(pyObj, &data, true);
-                    if (typeName.endsWith("*")) {
-                        QVariant var(typeCode, &data);
-                        tr->deleteObject(data);
-                        return var;
-                    } else {
-                        QVariant var(typeCode, data);
-                        tr->deleteObject(data);
-                        return var;
-                    }
+                    QVariant var(typeCode, (void*)0);
+                    void* args[] = { var.data() };
+                    tr->toCpp(pyObj, args);
+                    return var;
                 }
             }
             // Is a shiboken type not known by Qt
@@ -140,28 +133,25 @@ struct Converter<QVariant>
             return QVariant();
 
         Shiboken::AutoDecRef element(PySequence_GetItem(list, 0));
-        int typeId = 0;
-        QByteArray typeName = resolveMetaType(element.cast<PyTypeObject*>(), typeId);
-        if (!typeName.isEmpty()) {
-            QByteArray listTypeName = QByteArray("QList<"+typeName+">");
+        int typeId;
+        const char* typeName = resolveMetaType(element.cast<PyTypeObject*>(), &typeId);
+        if (typeName) {
+            QByteArray listTypeName("QList<");
+            listTypeName += typeName;
+            listTypeName += '>';
             typeId = QMetaType::type(listTypeName);
             if (typeId > 0) {
                 Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(listTypeName);
                 if (!tr) {
                     qWarning() << "TypeResolver for :" << listTypeName << "not registered.";
-                    return QVariant();
                 } else {
-                    void *data = 0;
-                    data = tr->toCpp(list, &data, true);
-                    QVariant var(typeId, data);
-                    tr->deleteObject(data);
+                    QVariant var(typeId, (void*)0);
+                    void* args[] = { var.data(), 0 };
+                    tr->toCpp(list, args);
                     return var;
                 }
-            } else {
-                return QVariant();
             }
         }
-
         return QVariant();
     }
 

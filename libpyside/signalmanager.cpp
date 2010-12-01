@@ -70,9 +70,17 @@ PyObjectWrapper::PyObjectWrapper(const PyObjectWrapper &other)
 
 PyObjectWrapper::~PyObjectWrapper()
 {
+    Shiboken::GilState gil;
     Py_DECREF(m_me);
 }
 
+PyObjectWrapper& PyObjectWrapper::operator=(const PySide::PyObjectWrapper& other)
+{
+    Py_INCREF(other.m_me);
+    Py_DECREF(m_me);
+    m_me = other.m_me;
+    return *this;
+}
 
 PyObjectWrapper::operator PyObject*() const
 {
@@ -179,24 +187,26 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
 {
     Shiboken::AutoDecRef sequence(PySequence_Fast(args, 0));
     int argsGiven = PySequence_Fast_GET_SIZE(sequence.object());
+
     if (argsGiven > argTypes.count()) {
         PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", signal, argTypes.count(), argsGiven);
         return false;
     }
 
-    void** signalArgs = new void*[argsGiven+1];
-    void** signalValues = new void*[argsGiven];
+    QVariant* signalValues = new QVariant[argsGiven];
+    void** signalArgs = new void*[argsGiven + 1];
     signalArgs[0] = 0;
 
     int i;
     for (i = 0; i < argsGiven; ++i) {
-        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(qPrintable(argTypes[i]));
+        const char* typeName = argTypes[i].toAscii().constData();
+        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
         if (typeResolver) {
-            typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i), &signalValues[i], true);
-            if (Shiboken::TypeResolver::getType(qPrintable(argTypes[i])) == Shiboken::TypeResolver::ObjectType)
-                signalArgs[i+1] = &signalValues[i];
-            else
-                signalArgs[i+1] = signalValues[i];
+            int typeId = QMetaType::type(typeName);
+            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType)
+                signalValues[i] = QVariant(typeId, (void*) 0);
+            signalArgs[i+1] = signalValues[i].data();
+            typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i), &signalArgs[i+1]);
         } else {
             PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", qPrintable(argTypes[i]));
             break;
@@ -206,10 +216,6 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     bool ok = i == argsGiven;
     if (ok)
         QMetaObject::activate(source, signalIndex, signalArgs);
-
-    //cleanup memory
-    for (int j = 0; j < i; ++j)
-        Shiboken::TypeResolver::get(qPrintable(argTypes[j]))->deleteObject(signalArgs[j+1]);
 
     delete[] signalArgs;
     delete[] signalValues;
