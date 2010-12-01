@@ -1,6 +1,7 @@
 project(QtDeclarative)
 
 set(QtDeclarative_SRC
+${CMAKE_CURRENT_SOURCE_DIR}/pysideqmlregistertype.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativecomponent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativecontext_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativeengine_wrapper.cpp
