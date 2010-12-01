@@ -21,6 +21,7 @@
 */
 
 #include "globalreceiver.h"
+#include "dynamicqmetaobject_p.h"
 
 #include <QMetaMethod>
 #include <QDebug>
@@ -32,7 +33,6 @@
 #include "signalmanager.h"
 
 #define RECEIVER_DESTROYED_SLOT_NAME "__receiverDestroyed__(QObject*)"
-#define GLOBAL_RECEIVER_CLASS_NAME "__GlobalReceiver__"
 
 namespace PySide
 {

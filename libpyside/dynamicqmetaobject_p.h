@@ -25,9 +25,9 @@
 
 #include <Python.h>
 #include <QByteArray>
-#include <QSharedPointer>
 
 #define PYSIDE_SLOT_LIST_ATTR "_slots"
+#define GLOBAL_RECEIVER_CLASS_NAME "__GlobalReceiver__"
 
 struct PySideProperty;
 namespace PySide
@@ -35,7 +35,11 @@ namespace PySide
     class MethodData
     {
     public:
-        MethodData(){}
+        MethodData();
+        /**
+         * \param signature method signature
+         * \param type method return type
+         */
         MethodData(const char* signature, const char* type = 0);
         void clear();
         bool isValid() const;
@@ -43,11 +47,11 @@ namespace PySide
         QByteArray type() const;
         bool operator==(const MethodData& other) const;
         bool operator==(const char* other) const;
-        operator const char*() { return m_signature->data(); }
 
     private:
-        QSharedPointer<QByteArray> m_signature;
-        QSharedPointer<QByteArray> m_type;
+        QByteArray m_signature;
+        QByteArray m_type;
+        static const QByteArray m_emptySig;
     };
 
     class PropertyData
