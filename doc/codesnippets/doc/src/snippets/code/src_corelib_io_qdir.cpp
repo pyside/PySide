@@ -28,14 +28,14 @@ absolutePath = directory.absoluteFilePath("contents.txt")
 
 //! [4]
 dir = QDir("example")
-if !dir.exists():
+if not dir.exists():
     print "Cannot find the example directory"
 //! [4]
 
 
 //! [5]
 dir = QDir.root()                 # "/"
-if !dir.cd("tmp"):                # "/tmp"
+if not dir.cd("tmp"):             # "/tmp"
     print "Cannot find the \"/tmp\" directory"
 else:
     file = QFile(dir.filePath("ex1.txt"))   # "/tmp/ex1.txt"
@@ -83,7 +83,7 @@ if dir.isRoot():
 
 
 //! [10]
-// The current directory is "/usr/local"
+# The current directory is "/usr/local"
 d1 = QDir("/usr/local/bin")
 d2 = QDir("bin")
 if d1 == d2:
@@ -112,7 +112,7 @@ Q_INIT_RESOURCE(myapp);
 
 
 //! [14]
-def initMyResource(): 
+def initMyResource():
     Q_INIT_RESOURCE(myapp)
 
 class MyNamespace

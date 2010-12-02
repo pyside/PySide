@@ -173,7 +173,7 @@ c = a | b
 
 //! [14]
 a = QBitArray(3)
-QBitArray b(2)
+b = QBitArray(2)
 c = QBitArray()
 a[0] = 1
 a[1] = 0

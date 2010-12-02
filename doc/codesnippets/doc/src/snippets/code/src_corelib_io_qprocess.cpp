@@ -6,10 +6,11 @@ builder = QProcess()
 builder.setProcessChannelMode(QProcess.MergedChannels)
 builder.start("make", QStringList() << "-j2")
 
+import sys
 if !builder.waitForFinished():
-    qDebug() << "Make failed:" << builder.errorString()
+    sys.stderr.write("Make failed:" + builder.errorString())
 else
-    qDebug() << "Make output:" << builder.readAll()
+    sys.stderr.write("Make output:" + builder.readAll())
 //! [0]
 
 

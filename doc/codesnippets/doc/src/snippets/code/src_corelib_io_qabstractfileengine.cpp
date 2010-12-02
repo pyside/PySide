@@ -1,6 +1,6 @@
 //! [0]
-class ZipEngineHandler(QAbstractFileEngineHandler)
-    def create(fileName):
+class ZipEngineHandler(QAbstractFileEngineHandler):
+    def create(self, fileName):
         # ZipEngineHandler returns a ZipEngine for all .zip files
         if fileName.toLower().endsWith(".zip"):
             return ZipEngine(fileName)
@@ -22,7 +22,7 @@ def main():
 //! [1]
 def create(fileName):
     # ZipEngineHandler returns a ZipEngine for all .zip files
-    if fileName.toLower().endsWith(".zip"):
+    if fileName.lower().endswith(".zip"):
         return ZipEngine(fileName)
     else
         return None
@@ -52,9 +52,9 @@ class CustomIterator(QAbstractFileEngineIterator):
         return self.index < self.entries.size() - 1
 
     def next(self):
-       if !self.hasNext():
-           return QString()
-       index++
+       if not self.hasNext():
+           return None
+       index += 1
        return currentFilePath()
 
     def currentFileName(self):

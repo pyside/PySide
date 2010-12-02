@@ -5,5 +5,5 @@ class HelloWorldTask(QRunnable):
 
 hello = HelloWorldTask()
 # QThreadPool takes ownership and deletes 'hello' automatically
-QThreadPool.globalInstance()->start(hello)
+QThreadPool.globalInstance().start(hello)
 //! [0]

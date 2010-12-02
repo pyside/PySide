@@ -11,7 +11,7 @@ info1.size()                # returns 56201
 info1.symLinkTarget()       # returns "/opt/pretty++/bin/untabify"
 
 info2 = QFileInfo(info1.symLinkTarget())
-info1.isSymLink()           # returns false
+info1.isSymLink()           # returns False
 info1.absoluteFilePath()    # returns "/opt/pretty++/bin/untabify"
 info1.size()                # returns 56201
 
@@ -20,25 +20,25 @@ info1.size()                # returns 56201
 
 //! [1]
 info1 = QFileInfo("C:\\Documents and Settings\\Bob\\untabify.lnk")
-info1.isSymLink()           # returns true
+info1.isSymLink()           # returns True
 info1.absoluteFilePath()    # returns "C:/Documents and Settings/Bob/untabify.lnk"
 info1.size()                # returns 743
 info1.symLinkTarget()       # returns "C:/Pretty++/untabify"
 
 info2 = QFileInfo(info1.symLinkTarget())
-info1.isSymLink()           # returns false
+info1.isSymLink()           # returns False
 info1.absoluteFilePath()    # returns "C:/Pretty++/untabify"
 info1.size()                # returns 63942
 //! [1]
 
 
 //! [2]
-absolute = QString("/local/bin")
-relative = QString("local/bin")
+absolute = "/local/bin"
+relative = "local/bin"
 absFile = QFileInfo(absolute)
 relFile = QFileInfo(relative)
 
-QDir.setCurrent(QDir::rootPath())
+QDir.setCurrent(QDir.rootPath())
 # absFile and relFile now point to the same file
 
 QDir.setCurrent("/tmp")

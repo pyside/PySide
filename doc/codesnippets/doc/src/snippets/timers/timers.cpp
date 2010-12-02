@@ -39,7 +39,7 @@
 **
 ****************************************************************************/
 
-#include <QTimer>
+from PySide.QtCore import QTimer
 
 class Foo : public QObject
 {
@@ -52,7 +52,7 @@ Foo::Foo()
 //! [0]
     timer = QTimer(self)
 //! [0] //! [1]
-    self.connect(timer, SIGNAL("timeout()"), self.updateCaption)
+    timer.timeout.connect(self.updateCaption)
 //! [1] //! [2]
     timer.start(1000)
 //! [2]
@@ -66,7 +66,7 @@ Foo::Foo()
 //! [4]
     timer = QTimer(self)
 //! [4] //! [5]
-    self.connect(timer, SIGNAL("timeout()"), self.processOneThing)
+    timer.timeout.connect(self.processOneThing)
 //! [5] //! [6]
     timer.start()
 //! [6]
@@ -75,5 +75,5 @@ Foo::Foo()
 
 int main()
 {
-    
+
 }

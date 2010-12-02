@@ -45,7 +45,7 @@ bool zip()
 {
 //! [0]
     gzip = QProcess()
-    gzip.start("gzip", QStringList() << "-c")
+    gzip.start("gzip", ["-c"])
     if not gzip.waitForStarted():
         return False
 

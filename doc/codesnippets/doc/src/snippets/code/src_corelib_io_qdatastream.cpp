@@ -2,27 +2,27 @@ void wrapInFunction()
 {
 
 //! [0]
-file = QFile("file.dat")
-file.open(QIODevice.WriteOnly)
+file_ = QFile("file.dat")
+file_.open(QIODevice.WriteOnly)
 # we will serialize the data into the file
-out = QDataStream(file)
+out = QDataStream(file_)
 # serialize a string
-out << "the answer is"    
+out.writeQString("the answer is")
 # serialize an integer
 out.writeInt32(42)
 //! [0]
 
 
 //! [1]
-file = QFile("file.dat")
-file.open(QIODevice.ReadOnly)
+file_ = QFile("file.dat")
+file_.open(QIODevice.ReadOnly)
 # read the data serialized from the file
-i = QDataStream(file)
-str = QString()
+i = QDataStream(file_)
+string = ''
 a = 0
 # extract "the answer is" and 42
-i >> str
-a = i.readInt32()                  
+string = i.readQString()
+a = i.readInt32()
 //! [1]
 
 
@@ -32,15 +32,15 @@ stream.setVersion(QDataStream.Qt_4_0)
 
 
 //! [3]
-file = QFile("file.xxx")
-file.open(QIODevice.WriteOnly)
-out = QDataStream(file)
+file_ = QFile("file.xxx")
+file_.open(QIODevice.WriteOnly)
+out = QDataStream(file_)
 
 # Write a header with a "magic number" and a version
 out.writeInt32(0xA0B0C0D0)
 out.writeInt32(123)
 
-out.setVersion(QDataStream.Qt_4_0);
+out.setVersion(QDataStream.Qt_4_0)
 
 // Write the data
 out << lots_of_interesting_data
@@ -48,9 +48,9 @@ out << lots_of_interesting_data
 
 
 //! [4]
-file = QFile("file.xxx")
-file.open(QIODevice.ReadOnly)
-i = QDataStream(file)
+file_ = QFile("file.xxx")
+file_.open(QIODevice.ReadOnly)
+i = QDataStream(file_)
 
 // Read and check the header
 magic = i.readInt32()
@@ -65,20 +65,20 @@ if version > 123:
     return XXX_BAD_FILE_TOO_NEW
 
 if version <= 110:
-    in.setVersion(QDataStream.Qt_3_2)
+    in_.setVersion(QDataStream.Qt_3_2)
 else:
-    in.setVersion(QDataStream.Qt_4_0)
+    in_.setVersion(QDataStream.Qt_4_0)
 
 // Read the data
-in >> lots_of_interesting_data
+in_ >> lots_of_interesting_data
 if version >= 120:
-    in >> data_new_in_XXX_version_1_2
-in >> other_interesting_data
+    in_ >> data_new_in_XXX_version_1_2
+in_ >> other_interesting_data
 //! [4]
 
 
 //! [5]
-out = QDataStream(file)
+out = QDataStream(file_)
 out.setVersion(QDataStream.Qt_4_0)
 //! [5]
 

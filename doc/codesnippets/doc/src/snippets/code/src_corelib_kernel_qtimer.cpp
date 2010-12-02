@@ -6,5 +6,5 @@ def main():
     app = QApplication([])
     QTimer.singleShot(600000, app, SLOT('quit()'))
     ...
-    return app.exec()
+    return app.exec_()
 //! [0]
