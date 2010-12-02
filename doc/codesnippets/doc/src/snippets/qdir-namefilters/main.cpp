@@ -39,28 +39,21 @@
 **
 ****************************************************************************/
 
-#include <QDir>
-#include <iostream>
+from PySide.QtCore import *
 
-int main(int argc, char *argv[])
-{
-    QDir dir;
-    dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-    dir.setSorting(QDir::Size | QDir::Reversed);
+def main():
+    dir_ = QDir()
+    dir_.setFilter(QDir.Files | QDir.Hidden | QDir.NoSymLinks)
+    dir_.setSorting(QDir.Size | QDir.Reversed)
 
 //! [0]
-    filters = QStringList()
-    filters << "*.cpp" << "*.cxx" << "*.cc"
-    dir.setNameFilters(filters)
+    filters = ["*.cpp", "*.cxx", "*.cc"]
+    dir_.setNameFilters(filters)
 //! [0]
+//
+    lst = d.entryInfoList()
 
-    QFileInfoList list = dir.entryInfoList();
-    std::cout << "     Bytes Filename" << std::endl;
-    for (int i = 0; i < list.size(); ++i) {
-        QFileInfo fileInfo = list.at(i);
-        std::cout << qPrintable(QString("%1 %2").arg(fileInfo.size(), 10)
-                                                .arg(fileInfo.fileName()));
-        std::cout << std::endl;
-    }
-    return 0;
-}
+    print "     Bytes Filename"
+    for fileInfo in lst:
+        print '%d %s' % (fileInfo.size(), fileInfo.fileName())
+

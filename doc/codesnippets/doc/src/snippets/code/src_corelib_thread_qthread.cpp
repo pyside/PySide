@@ -5,5 +5,5 @@ class MyThread (QThread):
         # connect QTcpSocket's signals somewhere meaningful
         # ...
         socket.connectToHost(hostName, portNumber)
-        exec_()
+        self.exec_()
 //! [0]

@@ -44,10 +44,15 @@
 void startProcess()
 {
 //! [0]
+import re
+from PySide.QtCore import QProcess
+
 process = QProcess()
+
 env = QProcess.systemEnvironment()
-env << "TMPDIR=C:\\MyApp\\temp" # Add an environment variable
-env.replaceInStrings(QRegExp("^PATH=(.*)", Qt.CaseInsensitive), "PATH=\\1;C:\\Bin")
+env.append("TMPDIR=C:\\MyApp\\temp") # Add an environment variable
+regex = re.compile(r'^PATH=(.*)', re.IGNORECASE)
+env = [regex.sub(r'PATH=\1;C:\\Bin', var) for var in env]
 process.setEnvironment(env)
 process.start("myapp")
 //! [0]

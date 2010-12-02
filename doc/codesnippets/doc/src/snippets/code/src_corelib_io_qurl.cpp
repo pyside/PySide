@@ -12,10 +12,10 @@ url = QUrl.fromEncoded("http://qtsoftware.com/List%20of%20holidays.xml")
 //! [2]
 def checkUrl(url):
     if !url.isValid():
-        print QString("Invalid URL: %1").arg(url.toString())
-        return false
+        print "Invalid URL: %s" % url.toString()
+        return False
 
-    return true
+    return True
 
 //! [2]
 
@@ -41,6 +41,6 @@ print baseUrl.resolved(relativeUrl).toString()
 
 //! [6]
 ba = QUrl.toPercentEncoding("{a fishy string?}", "{}", "s")
-print ba.constData()
+print ba
 # prints "{a fi%73hy %73tring%3F}"
 //! [6]

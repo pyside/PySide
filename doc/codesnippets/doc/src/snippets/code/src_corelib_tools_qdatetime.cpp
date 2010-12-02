@@ -36,7 +36,7 @@ QDate.isValid(1202, 6, 6)   # True (even though 1202 is pre-Gregorian)
 
 
 //! [5]
-n = QTime(14, 0, 0)                # n == 14:00:00
+n = QTime(14, 0, 0)              # n == 14:00:00
 t = QTime()
 t = n.addSecs(70)                # t == 14:01:10
 t = n.addSecs(-70)               # t == 13:58:50

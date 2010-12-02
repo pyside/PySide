@@ -106,8 +106,8 @@ settings.endGroup()
 
 //! [15]
 class Login:
-    userName = QString()
-    password = QString()
+    userName = ''
+    password = ''
 
     logins = []
     ...
@@ -127,8 +127,8 @@ class Login:
 
 //! [16]
 class Login:
-    userName = QString()
-    password = QString()
+    userName = ''
+    password = ''
 
     logins = []
     ...

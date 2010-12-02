@@ -42,7 +42,7 @@
 //! [0]
     Act = QAction(tr("&New"), self)
     Act.setShortcut(tr("Ctrl+N"))
-    Act.setStatusTip(tr("Create a new file"))
-    Act.setWhatsThis(tr("Click self option to create a new file."))
+    Act.setStatusTip(QObject.tr("Create a new file"))
+    Act.setWhatsThis(QObject.tr("Click self option to create a new file."))
 //! [0]
 

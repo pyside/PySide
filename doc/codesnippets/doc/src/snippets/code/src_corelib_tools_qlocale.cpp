@@ -14,15 +14,18 @@ hebrew = QLocale() # Constructs a default QLocale
 s1 = hebrew.toString(15714.3, 'e')
 
 QLocale.setDefault(QLocale(QLocale.C))
-(d, ok) = QString("1234,56").toDouble()   # ok == false
-(d, ok) = QString("1234.56").toDouble()   # ok == true, d == 1234.56
+c = QLocale()
+(d, ok) = c.toDouble("1234,56")   # ok == false
+(d, ok) = c.toDouble("1234.56")   # ok == true, d == 1234.56
 
 QLocale.setDefault(QLocale(QLocale.German))
-(d, ok) = QString("1234,56").toDouble()   # ok == true, d == 1234.56
-(d, ok) = QString("1234.56").toDouble()   # ok == true, d == 1234.56
+german = QLocale()
+(d, ok) = german.toDouble("1234,56")   # ok == true, d == 1234.56
+(d, ok) = german.toDouble("1234.56")   # ok == true, d == 1234.56
 
 QLocale.setDefault(QLocale(QLocale.English, QLocale.UnitedStates))
-string = QString("%1 %L2 %L3").arg(12345).arg(12345).arg(12345, 0, 16)
+english = QLocale()
+string = '%s %s %10x' % (12345, english.toString(12345), 12345)
 # string == "12345 12,345 3039"
 //! [1]
 

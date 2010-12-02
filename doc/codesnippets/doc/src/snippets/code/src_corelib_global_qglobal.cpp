@@ -1,5 +1,5 @@
 //! [0]
-label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 //! [0]
 
 
@@ -73,60 +73,58 @@ quint64 value = Q_UINT64_C(932838457459459);
 
 
 //! [10]
-int absoluteValue;
-int myValue = -4;
-
-absoluteValue = qAbs(myValue);
+myValue = -4
+absoluteValue = qAbs(myValue)
 // absoluteValue == 4
 //! [10]
 
 
 //! [11]
-qreal valueA = 2.3;
-qreal valueB = 2.7;
+valueA = 2.3
+valueB = 2.7
 
-int roundedValueA = qRound(valueA);
+roundedValueA = qRound(valueA)
 // roundedValueA = 2
-int roundedValueB = qRound(valueB);
+roundedValueB = qRound(valueB)
 // roundedValueB = 3
 //! [11]
 
 
 //! [12]
-qreal valueA = 42949672960.3;
-qreal valueB = 42949672960.7;
+valueA = 42949672960.3
+valueB = 42949672960.7
 
-int roundedValueA = qRound(valueA);
+roundedValueA = qRound(valueA)
 // roundedValueA = 42949672960
-int roundedValueB = qRound(valueB);
+roundedValueB = qRound(valueB)
 // roundedValueB = 42949672961
 //! [12]
 
 
 //! [13]
-int myValue = 6;
-int yourValue = 4;
+myValue = 6
+yourValue = 4
 
-int minValue = qMin(myValue, yourValue);
+minValue = qMin(myValue, yourValue)
 // minValue == yourValue
 //! [13]
 
 
 //! [14]
-int myValue = 6;
-int yourValue = 4;
+myValue = 6
+yourValue = 4
 
-int maxValue = qMax(myValue, yourValue);
+maxValue = qMax(myValue, yourValue)
 // maxValue == myValue
 //! [14]
 
 
 //! [15]
-int myValue = 10;
-int minValue = 2;
-int maxValue = 6;
+myValue = 10
+minValue = 2
+maxValue = 6
 
-int boundedValue = qBound(minValue, myValue, maxValue);
+boundedValue = qBound(minValue, myValue, maxValue)
 // boundedValue == 6
 //! [15]
 
@@ -436,7 +434,7 @@ namespace QT_NAMESPACE {
 //! [43]
 class MyClass : public QObject
 {
-    
+
   private:
     Q_DISABLE_COPY(MyClass)
 };
@@ -446,7 +444,7 @@ class MyClass : public QObject
 //! [44]
 class MyClass : public QObject
 {
-    
+
   private:
      MyClass(const MyClass &);
      MyClass &operator=(const MyClass &);
@@ -454,7 +452,7 @@ class MyClass : public QObject
 //! [44]
 
 //! [45]
-  QWidget w = QWidget();
+  w = QWidget()
 //! [45]
 
 //! [46]

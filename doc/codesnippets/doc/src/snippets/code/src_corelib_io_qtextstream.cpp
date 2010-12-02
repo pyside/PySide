@@ -1,6 +1,6 @@
 //! [0]
 data = QFile("output.txt")
-if data.open(QFile.WriteOnly | QFile::Truncate):
+if data.open(QFile.WriteOnly | QFile.Truncate):
     out = QTextStream(&data)
     out << "Result: " << qSetFieldWidth(10) << left << 3.14 << 2.7
     # writes "Result: 3.14      2.7       "
@@ -19,15 +19,15 @@ while(True):
 
 
 //! [2]
-in = QTextStream("0x50 0x20")
+in_ = QTextStream("0x50 0x20")
 firstNumber = 0
 secondNumber = 0
 
-in >> firstNumber             # firstNumber == 80
-in >> dec >> secondNumber     # secondNumber == 0
+in_ >> firstNumber             # firstNumber == 80
+in_ >> dec >> secondNumber     # secondNumber == 0
 
 ch = None
-in >> ch                      # ch == 'x'
+in_ >> ch                      # ch == 'x'
 //! [2]
 
 
@@ -36,16 +36,16 @@ def main():
     # read numeric arguments (123, 0x20, 4.5...)
     for i in sys.argv():
           number = None
-          QTextStream in(i)
-          in >> number
+          QTextStream in_(i)
+          in_ >> number
           ...
 //! [3]
 
 
 //! [4]
 str = QString()
-in = QTextStream(sys.stdin.fileno())
-in >> str
+in_ = QTextStream(sys.stdin.fileno())
+in_ >> str
 //! [4]
 
 
@@ -65,11 +65,11 @@ out << "Qt" << "rocks!"
 
 
 //! [7]
-in = QTextStream(file)
+in_ = QTextStream(file)
 ch1 = QChar()
 ch2 = QChar()
 ch3 = QChar()
-in >> ch1 >> ch2 >> ch3;
+in_ >> ch1 >> ch2 >> ch3;
 //! [7]
 
 

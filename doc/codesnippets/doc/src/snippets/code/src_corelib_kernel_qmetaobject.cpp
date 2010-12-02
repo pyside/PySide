@@ -48,17 +48,13 @@ class MyClass:
 
 //! [propertyCount]
 metaObject = obj.metaObject()
-properties = QStringList()
-for i in range(metaObject.propertyOffset(), metaObject.propertyCount()):
-    properties << QString.fromLatin1(metaObject.property(i).name())
+properties = [metaObject.property(i).name() for i in range(metaObject.propertyOffset(), metaObject.propertyCount())]
 //! [propertyCount]
 
 
 //! [methodCount]
 metaObject = obj.metaObject()
-methods = QStringList()
-for i in rang(metaObject.methodOffset(), metaObject->methodCount()):
-    methods << QString.fromLatin1(metaObject.method(i).signature())
+methods = [metaObject.method(i).signature() for i in range(metaObject.methodOffset(), metaObject.methodCount())]
 //! [methodCount]
 
 //! [6]

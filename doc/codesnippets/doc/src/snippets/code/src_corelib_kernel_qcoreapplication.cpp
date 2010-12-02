@@ -6,7 +6,7 @@ QApplication.sendEvent(mainWindow, event)
 
 //! [1]
 quitButton = QPushButton("Quit")
-QObject.connect(quitButton, SIGNAL("clicked()"), app, SLOT("quit()"))
+quitButton.clicked.connect(app.quit)
 //! [1]
 
 
@@ -22,19 +22,11 @@ myEventFilter(message, result)
 
 
 //! [4]
-static int *global_ptr = 0;
+def cleanup_stuff():
+    # do the cleanup stuff
 
-static void cleanup_ptr()
-{
-    delete [] global_ptr;
-    global_ptr = 0;
-}
-
-void init_ptr()
-{
-    global_ptr = new int[100];      // allocate data
-    qAddPostRoutine(cleanup_ptr);   // delete later
-}
+def init_stuff():
+    qAddPostRoutine(cleanup_stuff)
 //! [4]
 
 
