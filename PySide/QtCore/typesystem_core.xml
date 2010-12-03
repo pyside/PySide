@@ -1390,6 +1390,41 @@
             </insert-template>
         </inject-code>
     </add-function>
+    <add-function signature="replace(QString, QString)" return-type="QString">
+        <modify-argument index="1">
+            <rename to="sourceString"/>
+        </modify-argument>
+        <modify-argument index="2">
+            <rename to="after"/>
+        </modify-argument>
+        <inject-documentation format="target" mode="append">
+        Replaces every occurrence of the regular expression in *sourceString* with *after*.
+        Returns a new Python string with the modified contents. For example:
+
+        ::
+
+            s = "Banana"
+            re = QRegExp("a[mn]")
+            s = re.replace(s, "ox")
+            # s == "Boxoxa"
+
+
+        For regular expressions containing capturing parentheses, occurrences of \1, \2, ..., in *after*
+        are replaced with rx.cap(1), cap(2), ...
+
+        ::
+
+            t = "A &lt;i>bon mot&lt;/i>."
+            re = QRegExp("&lt;i>([^&lt;]*)&lt;/i>")
+            t = re.replace(t, "\\emph{\\1}")
+            # t == "A \\emph{bon mot}."
+
+        </inject-documentation>
+        <inject-code class="target" position="beginning">
+        %1.replace(*%CPPSELF, %2);
+        %PYARG_0 = %CONVERTTOPYTHON[QString](%1);
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QFileInfo">
     <extra-includes>
