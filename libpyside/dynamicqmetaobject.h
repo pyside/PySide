@@ -30,7 +30,7 @@
 namespace PySide
 {
 
-class PYSIDE_API DynamicQMetaObject : public QMetaObject
+class DynamicQMetaObject : public QMetaObject
 {
 public:
     DynamicQMetaObject(const char* className, const QMetaObject* metaObject);
@@ -43,9 +43,6 @@ public:
     void removeSignal(uint idex);
     void removeSlot(uint index);
     void removeProperty(uint index);
-
-    //Retrieve Python metadata to create QMetaObject (class name, signals, slot)
-    static DynamicQMetaObject* createBasedOn(PyObject* obj, PyTypeObject* type, const QMetaObject* base);
 
 private:
     class DynamicQMetaObjectPrivate;

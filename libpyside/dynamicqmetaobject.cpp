@@ -386,64 +386,6 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
     m_d->updateMetaObject(this);
 }
 
-
-DynamicQMetaObject* DynamicQMetaObject::createBasedOn(PyObject* pyObj, PyTypeObject* type, const QMetaObject* base)
-{
-    PyObject* key;
-    PyObject* value;
-    Py_ssize_t pos = 0;
-
-    QString className(type->tp_name);
-    className = className.mid(className.lastIndexOf('.')+1);
-    DynamicQMetaObject *mo = new PySide::DynamicQMetaObject(className.toAscii(), base);
-
-    QList<PyObject*> properties;
-
-    while (PyDict_Next(type->tp_dict, &pos, &key, &value)) {
-
-        //Leave the properties to be register after signals because of notify object
-        if (value->ob_type == &PySidePropertyType)
-            properties.append(key);
-
-        //Register signals
-        if (value->ob_type == &PySideSignalType) {
-            PyObject *attr = PyObject_GetAttr(pyObj, key);
-            PySideSignalInstance *data = reinterpret_cast<PySideSignalInstance*>(attr);
-            while(data) {
-                int index = base->indexOfSignal(data->d->signature);
-                if (index == -1)
-                    mo->addSignal(data->d->signature);
-                data = reinterpret_cast<PySideSignalInstance*>(data->d->next);
-            }
-        }
-
-        if (!PyFunction_Check(value))
-            continue;
-
-        //Register Slots
-        if (PyObject_HasAttrString(value, PYSIDE_SLOT_LIST_ATTR)) {
-            PyObject *signature_list = PyObject_GetAttrString(value, PYSIDE_SLOT_LIST_ATTR);
-            for(Py_ssize_t i = 0, i_max = PyList_Size(signature_list); i < i_max; i++) {
-                PyObject *signature = PyList_GET_ITEM(signature_list, i);
-                QString sig(PyString_AsString(signature));
-                //slot the slot type and signature
-                QStringList slotInfo = sig.split(" ", QString::SkipEmptyParts);
-                int index = base->indexOfSlot(qPrintable(slotInfo[1]));
-                if (index == -1)
-                    mo->addSlot(slotInfo[1].toAscii(), slotInfo[0].toAscii());
-            }
-        }
-    }
-
-    //Register properties
-    foreach(PyObject* key, properties) {
-        PyObject* value = PyDict_GetItem(type->tp_dict, key);
-        mo->addProperty(PyString_AsString(key), value);
-    }
-
-    return mo;
-}
-
 void DynamicQMetaObject::removeSignal(uint index)
 {
     //Current Qt implementation does not support runtime remove signal
