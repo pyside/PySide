@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** This file is part of the documentation of the Qt Toolkit.
+** This file is part of the QtNetwork module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:BSD$
 ** You may use this file under the terms of the BSD license as follows:
@@ -37,42 +37,73 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
 #include <QtCore>
 
-void startProcess()
+void slowOperation1()
 {
-    {
-//! [0]
-import re
-from PySide.QtCore import QProcess
-
-process = QProcess()
-
-env = QProcess.systemEnvironment()
-env.append("TMPDIR=C:\\MyApp\\temp") # Add an environment variable
-regex = re.compile(r'^PATH=(.*)', re.IGNORECASE)
-env = [regex.sub(r'PATH=\1;C:\\Bin', var) for var in env]
-process.setEnvironment(env)
-process.start("myapp")
-//! [0]
-    }
-
-    {
-//! [1]
-process = QProcess()
-env = QProcessEnvironment.systemEnvironment()
-env.insert("TMPDIR", "C:\\MyApp\\temp") # Add an environment variable
-env.insert("PATH", env.value("Path") + ";C:\\Bin")
-process.setProcessEnvironment(env)
-process.start("myapp")
-//! [1]
-    }
+    static char buf[256];
+    for (int i = 0; i < (1<<20); ++i)
+        buf[i % sizeof buf] = i;
 }
 
-int main(int argc, char *argv[])
+void slowOperation2(int) { slowOperation1(); }
+
+void startExample()
+{
+//![0]
+    timer = QElapsedTimer()
+    timer.start()
+
+    slowOperation1()
+
+    sys.stderr.write("The slow operation took" + timer.elapsed() + "milliseconds")
+//![0]
+}
+
+//![1]
+def executeSlowOperations(timeout):
+    timer = QElapsedTimer()
+    timer.start()
+    slowOperation1()
+
+    remainingTime = timeout - timer.elapsed()
+    if remainingTime > 0:
+        slowOperation2(remainingTime)
+//![1]
+
+//![2]
+def executeOperationsForTime(ms):
+    timer = QElapsedTimer()
+    timer.start()
+
+    while not timer.hasExpired(ms):
+        slowOperation1()
+//![2]
+
+int restartExample()
+{
+//![3]
+    timer = QElapsedTimer()
+
+    count = 1
+    timer.start()
+
+    while True:
+        count *= 2
+        slowOperation2(count)
+        if timer.restart() < 250:
+            break
+
+    return count
+//![3]
+}
+
+int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
-    startProcess();
-    return app.exec();
+
+    startExample();
+    restartExample();
+    executeSlowOperations(5);
+    executeOperationsForTime(5);
 }

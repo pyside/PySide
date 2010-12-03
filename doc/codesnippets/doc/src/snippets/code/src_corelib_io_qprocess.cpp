@@ -4,10 +4,10 @@ def wrapInFunction():
 //! [0]
 builder = QProcess()
 builder.setProcessChannelMode(QProcess.MergedChannels)
-builder.start("make", QStringList() << "-j2")
+builder.start("make", ["-j2"])
 
 import sys
-if !builder.waitForFinished():
+if not builder.waitForFinished():
     sys.stderr.write("Make failed:" + builder.errorString())
 else
     sys.stderr.write("Make output:" + builder.readAll())
@@ -57,7 +57,7 @@ class SandboxProcess(QProcess):
 //! [5]
 process = QProcess()
 process.start("del /s *.txt")
-# same as process.start("del", QStringList() << "/s" << "*.txt")
+# same as process.start("del", ["/s", "*.txt"])
 ...
 //! [5]
 
@@ -76,8 +76,8 @@ process.start("dir \"\"\"My Documents\"\"\"")
 
 //! [8]
 environment = QProcess.systemEnvironment()
-# environment = {"PATH=/usr/bin:/usr/local/bin",
-#                "USER=greg", "HOME=/home/greg"}
+# environment = [PATH=/usr/bin:/usr/local/bin",
+#                "USER=greg", "HOME=/home/greg"]
 //! [8]
 
 

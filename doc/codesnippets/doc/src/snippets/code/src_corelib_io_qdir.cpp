@@ -66,8 +66,8 @@ s = dir.relativeFilePath("/home/mary/file.txt")     # s is "../mary/file.txt"
 
 
 //! [8]
-QDir.setSearchPaths("icons", QStringList(QDir.homePath() + "/images"))
-QDir.setSearchPaths("docs", QStringList(":/embeddedDocuments"))
+QDir.setSearchPaths("icons", [QDir.homePath() + "/images"])
+QDir.setSearchPaths("docs", [":/embeddedDocuments"])
 ...
 pixmap = QPixmap("icons:undo.png")  # will look for undo.png in QDir::homePath() + "/images"
 file = QFile("docs:design.odf")     # will look in the :/embeddedDocuments resource path
