@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     program = "./../../../../examples/widgets/analogclock/analogclock";
 
 //! [2]
-    arguments ["-style", "motif"]
+    arguments = ["-style", "motif"]
 
     myProcess = QProcess(parent)
     myProcess.start(program, arguments)

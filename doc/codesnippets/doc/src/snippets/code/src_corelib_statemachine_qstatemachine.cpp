@@ -38,41 +38,18 @@
 **
 ****************************************************************************/
 
-#include <QtCore>
+//! [simple state machine]
+button = QPushButton()
 
-void startProcess()
-{
-    {
-//! [0]
-import re
-from PySide.QtCore import QProcess
+machine = QStateMachine()
+s1 = QState()
+s1.assignProperty(button, "text", "Click me")
 
-process = QProcess()
+s2 = QFinalState()
+s1.addTransition(button, SIGNAL('clicked()'), s2)
 
-env = QProcess.systemEnvironment()
-env.append("TMPDIR=C:\\MyApp\\temp") # Add an environment variable
-regex = re.compile(r'^PATH=(.*)', re.IGNORECASE)
-env = [regex.sub(r'PATH=\1;C:\\Bin', var) for var in env]
-process.setEnvironment(env)
-process.start("myapp")
-//! [0]
-    }
-
-    {
-//! [1]
-process = QProcess()
-env = QProcessEnvironment.systemEnvironment()
-env.insert("TMPDIR", "C:\\MyApp\\temp") # Add an environment variable
-env.insert("PATH", env.value("Path") + ";C:\\Bin")
-process.setProcessEnvironment(env)
-process.start("myapp")
-//! [1]
-    }
-}
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication app(argc, argv);
-    startProcess();
-    return app.exec();
-}
+machine.addState(s1)
+machine.addState(s2)
+machine.setInitialState(s1)
+machine.start()
+//! [simple state machine]

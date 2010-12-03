@@ -31,7 +31,7 @@ def create(fileName):
 
 //! [2]
 # @arg filters QDir.Filters
-# @arg filterNames QStringList
+# @arg filterNames [str, ...]
 # @return QAbstractFileEngineIterator
 def beginEntryList(filters, filterNames):
     return CustomFileEngineIterator(filters, filterNames)
