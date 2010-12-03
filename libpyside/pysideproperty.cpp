@@ -36,24 +36,6 @@
 extern "C"
 {
 
-struct PySidePropertyPrivate {
-    char* typeName;
-    PyObject* type;
-    PyObject* fget;
-    PyObject* fset;
-    PyObject* freset;
-    PyObject* fdel;
-    PyObject* notify;
-    char* notifySignature;
-    char* doc;
-    bool designable;
-    bool scriptable;
-    bool stored;
-    bool user;
-    bool constant;
-    bool final;
-};
-
 static int qpropertyTpInit(PyObject*, PyObject*, PyObject*);
 static void qpropertyFree(void*);
 
