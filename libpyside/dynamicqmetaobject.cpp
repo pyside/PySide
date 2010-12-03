@@ -26,6 +26,7 @@
 #include "pysidesignal_p.h"
 #include "pysideproperty.h"
 #include "pysideproperty_p.h"
+#include "pysideslot_p.h"
 
 #include <QByteArray>
 #include <QString>
