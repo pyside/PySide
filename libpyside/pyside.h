@@ -29,6 +29,8 @@
 #include <QHash>
 #include <QList>
 
+class SbkObjectType;
+
 namespace PySide
 {
 
@@ -75,6 +77,8 @@ template<typename T>
 struct initQtMetaType<T, false> {
 };
 
+PYSIDE_API void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base);
+PYSIDE_API void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds);
 
 typedef void (*CleanupFunction)(void);
 

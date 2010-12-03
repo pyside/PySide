@@ -28,6 +28,7 @@
 #include "pysidesignal_p.h"
 #include "pysideslot_p.h"
 #include "pysidemetafunction_p.h"
+#include "dynamicqmetaobject.h"
 
 #include <basewrapper.h>
 #include <conversions.h>
@@ -132,6 +133,96 @@ void destroyQCoreApplication()
 
     // in the end destroy app
     delete app;
+}
+
+void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base)
+{
+    const char* typeName = type->super.ht_type.tp_name;
+    int len = strlen(typeName);
+    for (int i = len-1; i >= 0; --i)
+        if (typeName[i] == '.')
+            typeName += i + 1;
+    DynamicQMetaObject* mo = new PySide::DynamicQMetaObject(typeName, base);
+    Shiboken::ObjectType::setTypeUserData(type, mo, &Shiboken::callCppDestructor<DynamicQMetaObject>);
+}
+
+void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
+{
+    PyTypeObject* qObjType = Shiboken::TypeResolver::get("QObject*")->pythonType();
+    QByteArray className(PyString_AS_STRING(PyTuple_GET_ITEM(args, 0)));
+
+    PyObject* bases = PyTuple_GET_ITEM(args, 1);
+    int numBases = PyTuple_GET_SIZE(args);
+    QMetaObject* baseMo = 0;
+
+    for (int i = 0; i < numBases; ++i) {
+        PyTypeObject* base = reinterpret_cast<PyTypeObject*>(PyTuple_GET_ITEM(bases, i));
+        if (PyType_IsSubtype(base, qObjType)) {
+            baseMo = reinterpret_cast<QMetaObject*>(Shiboken::ObjectType::getTypeUserData(reinterpret_cast<SbkObjectType*>(base)));
+            // If it's a class like QObject, QWidget, etc, use the original QMetaObject instead of the dynamic one
+            // IMO this if is a bug, however it keeps the current behaviour.
+            if (!Shiboken::ObjectType::isUserType(base))
+                baseMo = const_cast<QMetaObject*>(baseMo->d.superdata);
+            break;
+        }
+    }
+    if (!baseMo) {
+        qWarning("Sub class of QObject not inheriting QObject!? Crash will happen when using %s.", className.constData());
+        return;
+    }
+
+    DynamicQMetaObject* mo = new PySide::DynamicQMetaObject(className.constData(), baseMo);
+
+    Shiboken::ObjectType::setTypeUserData(type, mo, &Shiboken::callCppDestructor<DynamicQMetaObject>);
+
+    PyObject* attrs = PyTuple_GET_ITEM(args, 2);
+    PyObject* key;
+    PyObject* value;
+    Py_ssize_t pos = 0;
+
+    typedef std::pair<const char*, PyObject*> PropPair;
+    QList<PropPair> properties;
+
+    Shiboken::AutoDecRef slotAttrName(PyString_FromString(PYSIDE_SLOT_LIST_ATTR));
+
+    while (PyDict_Next(attrs, &pos, &key, &value)) {
+        if (value->ob_type == &PySidePropertyType) {
+            // Leave the properties to be register after signals because they may depend on notify signals
+            properties << PropPair(PyString_AS_STRING(key), value);
+        } else if (value->ob_type == &PySideSignalType) { // Register signals
+            PySideSignal* data = reinterpret_cast<PySideSignal*>(value);
+            const char* signalName = PyString_AS_STRING(key);
+            data->signalName = strdup(signalName);
+            QByteArray sig;
+            sig.reserve(128);
+            for (int i = 0; i < data->signaturesSize; ++i) {
+                sig = signalName;
+                sig += '(';
+                if (data->signatures[i])
+                    sig += data->signatures[i];
+                sig += ')';
+                if (baseMo->indexOfSignal(sig) == -1)
+                    mo->addSignal(sig);
+            }
+        } else if (PyFunction_Check(value)) { // Register slots
+            if (PyObject_HasAttr(value, slotAttrName)) {
+                PyObject* signatureList = PyObject_GetAttr(value, slotAttrName);
+                for(Py_ssize_t i = 0, i_max = PyList_Size(signatureList); i < i_max; ++i) {
+                    PyObject* signature = PyList_GET_ITEM(signatureList, i);
+                    QByteArray sig(PyString_AS_STRING(signature));
+                    //slot the slot type and signature
+                    QList<QByteArray> slotInfo = sig.split(' ');
+                    int index = baseMo->indexOfSlot(slotInfo[1]);
+                    if (index == -1)
+                        mo->addSlot(slotInfo[1], slotInfo[0]);
+                }
+            }
+        }
+    }
+
+    // Register properties
+    foreach (PropPair propPair, properties)
+        mo->addProperty(propPair.first, propPair.second);
 }
 
 } //namespace PySide
