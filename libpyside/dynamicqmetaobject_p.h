@@ -26,7 +26,6 @@
 #include <Python.h>
 #include <QByteArray>
 
-#define PYSIDE_SLOT_LIST_ATTR "_slots"
 #define GLOBAL_RECEIVER_CLASS_NAME "__GlobalReceiver__"
 
 struct PySideProperty;

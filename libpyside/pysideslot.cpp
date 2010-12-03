@@ -22,6 +22,7 @@
 
 #include "dynamicqmetaobject_p.h"
 #include "pysidesignal_p.h"
+#include "pysideslot_p.h"
 
 #include <shiboken.h>
 #include <QString>

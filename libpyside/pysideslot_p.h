@@ -23,6 +23,7 @@
 #define PYSIDE_SLOT_P_H
 
 #include <Python.h>
+#define PYSIDE_SLOT_LIST_ATTR "_slots"
 
 namespace PySide { namespace Slot {
     void init(PyObject* module);
