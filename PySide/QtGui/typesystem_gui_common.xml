@@ -665,11 +665,33 @@
 
     <modify-function signature="QImage(const char *, const char *)" remove="all" />
     <modify-function signature="QImage(const char **)" remove="all" />
-    <modify-function signature="QImage(const uchar*,int,int,int,QImage::Format)" remove="all" />
+
+    <template name="QImageStringBufferConversionRule">
+        const uchar* %out = reinterpret_cast&lt;const uchar*>(PyString_AS_STRING(%PYARG_1));
+    </template>
+
+    <modify-function signature="QImage(uchar *,int,int,int,QImage::Format)" remove="all"/>
+    <modify-function signature="QImage(const uchar*,int,int,int,QImage::Format)">
+      <modify-argument index="1">
+        <replace-type modified-type="const char*"/>
+        <conversion-rule class="native">
+          <insert-template name="QImageStringBufferConversionRule"/>
+        </conversion-rule>
+        </modify-argument>
+    </modify-function>
     <modify-function signature="bits()const" remove="all" />
     <modify-function signature="scanLine(int)const" remove="all" />
-    <modify-function signature="QImage(const uchar *, int, int, QImage::Format)" remove="all" />
+
     <modify-function signature="QImage(uchar*,int,int,QImage::Format)" remove="all" />
+    <modify-function signature="QImage(const uchar *, int, int, QImage::Format)">
+      <modify-argument index="1">
+        <replace-type modified-type="const char*"/>
+        <conversion-rule class="native">
+          <insert-template name="QImageStringBufferConversionRule"/>
+        </conversion-rule>
+      </modify-argument>
+    </modify-function>
+
     <modify-function signature="loadFromData(const uchar*,int,const char*)" remove="all" />
     <modify-function signature="setText(const char*,const char*,QString)" remove="all" />
     <modify-function signature="text(const char*,const char*)const" remove="all" />
@@ -678,10 +700,6 @@
     <modify-function signature="textLanguages()const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="QImage(const char**)" remove="all"/>
-    <modify-function signature="QImage(const uchar *,int,int,QImage::Format)" remove="all"/>
-    <modify-function signature="QImage(const uchar *,int,int,int,QImage::Format)" remove="all"/>
-    <modify-function signature="QImage(uchar *,int,int,QImage::Format)" remove="all"/>
-    <modify-function signature="QImage(uchar *,int,int,int,QImage::Format)" remove="all"/>
     <modify-function signature="setColorTable(const QVector&lt;uint&gt;)" remove="all"/>
     <modify-function signature="loadFromData(const uchar *,int,const char *)" remove="all"/>
     <modify-function signature="fromData(const uchar *,int,const char *)" remove="all"/>
