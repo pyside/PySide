@@ -1,7 +1,6 @@
 project(QtDeclarative)
 
 set(QtDeclarative_SRC
-${CMAKE_CURRENT_SOURCE_DIR}/pysideqmlregistertype.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativecomponent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativecontext_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativeengine_wrapper.cpp
@@ -50,12 +49,13 @@ set(QtDeclarative_libraries   pyside
                               ${QT_QTDECLARATIVE_LIBRARY})
 
 set(QtDeclarative_deps QtGui QtNetwork)
-
+set(QtDeclarative_registerType "${CMAKE_CURRENT_SOURCE_DIR}/pysideqmlregistertype.cpp")
 create_pyside_module(QtDeclarative
                      QtDeclarative_include_dirs
                      QtDeclarative_libraries
                      QtDeclarative_deps
                      QtDeclarative_typesystem_path
                      QtDeclarative_SRC
-                     "")
+                     ""
+                     QtDeclarative_registerType)
 
