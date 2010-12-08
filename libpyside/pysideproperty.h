@@ -41,6 +41,9 @@ extern "C"
 
 namespace PySide { namespace Property {
 
+typedef void (*MetaCallHandler)(PySideProperty*,PyObject*,QMetaObject::Call, void**);
+
+
 PYSIDE_API bool isPropertyType(PyObject* pyObj);
 
 /**
@@ -81,6 +84,13 @@ PYSIDE_API const char* getNotifyName(PySideProperty* self);
  * @return  Return a new reference to property object
  **/
 PYSIDE_API PySideProperty* getObject(PyObject* source, PyObject* name);
+
+PYSIDE_API void setMetaCallHandler(PySideProperty* self, MetaCallHandler handler);
+
+PYSIDE_API void setTypeName(PySideProperty* self, const char* typeName);
+
+PYSIDE_API void setUserData(PySideProperty* self, void* data);
+PYSIDE_API void* userData(PySideProperty* self);
 
 } //namespace Property
 } //namespace PySide

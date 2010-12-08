@@ -24,6 +24,8 @@
 #define PYSIDE_QPROPERTY_P_H
 
 #include <Python.h>
+#include <QMetaObject>
+#include "pysideproperty.h"
 
 struct PySideProperty;
 
@@ -33,6 +35,7 @@ extern "C"
 struct PySidePropertyPrivate {
     char* typeName;
     PyObject* type;
+    PySide::Property::MetaCallHandler metaCallHandler;
     PyObject* fget;
     PyObject* fset;
     PyObject* freset;
@@ -46,6 +49,7 @@ struct PySidePropertyPrivate {
     bool user;
     bool constant;
     bool final;
+    void* userData;
 };
 
 } // extern "C"

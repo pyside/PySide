@@ -36,6 +36,7 @@
 extern "C"
 {
 
+static PyObject* qpropertyTpNew(PyTypeObject* subtype, PyObject* args, PyObject* kwds);
 static int qpropertyTpInit(PyObject*, PyObject*, PyObject*);
 static void qpropertyFree(void*);
 
@@ -78,7 +79,7 @@ PyTypeObject PySidePropertyType = {
     0,                         /*tp_dictoffset */
     qpropertyTpInit,           /*tp_init */
     0,                         /*tp_alloc */
-    PyType_GenericNew,         /*tp_new */
+    qpropertyTpNew,            /*tp_new */
     qpropertyFree,             /*tp_free */
     0,                         /*tp_is_gc */
     0,                         /*tp_bases */
@@ -89,25 +90,70 @@ PyTypeObject PySidePropertyType = {
     0,                         /*tp_del */
 };
 
+static void qpropertyMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::Call call, void** args)
+{
+    Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(pp->d->typeName);
+    Q_ASSERT(typeResolver);
+
+    switch(call) {
+        case QMetaObject::ReadProperty:
+        {
+            Shiboken::GilState gil;
+            PyObject* value = PySide::Property::getValue(pp, self);
+            if (value) {
+                typeResolver->toCpp(value, &args[0]);
+                Py_DECREF(value);
+            } else if (PyErr_Occurred()) {
+                PyErr_Print(); // Clear any errors but print them to stderr
+            }
+            break;
+        }
+
+        case QMetaObject::WriteProperty:
+        {
+            Shiboken::GilState gil;
+            Shiboken::AutoDecRef value(typeResolver->toPython(args[0]));
+            PySide::Property::setValue(pp, self, value);
+            break;
+        }
+
+        case QMetaObject::ResetProperty:
+        {
+            Shiboken::GilState gil;
+            PySide::Property::reset(pp, self);
+            break;
+        }
+
+        case QMetaObject::QueryPropertyDesignable:
+        case QMetaObject::QueryPropertyScriptable:
+        case QMetaObject::QueryPropertyStored:
+        case QMetaObject::QueryPropertyEditable:
+        case QMetaObject::QueryPropertyUser:
+        // just to avoid gcc warnings
+        case QMetaObject::InvokeMetaMethod:
+        case QMetaObject::CreateInstance:
+            break;
+    }
+}
+
+static PyObject* qpropertyTpNew(PyTypeObject* subtype, PyObject* args, PyObject* kwds)
+{
+    PySideProperty* me = reinterpret_cast<PySideProperty*>(subtype->tp_alloc(subtype, 0));
+    me->d = new PySidePropertyPrivate;
+    memset(me->d, 0, sizeof(PySidePropertyPrivate));
+    PySidePropertyPrivate* pData = me->d;
+    pData->designable = true;
+    pData->scriptable = true;
+    pData->stored = true;
+    return (PyObject*) me;
+}
+
 int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
 {
     PyObject* type = 0;
     PySideProperty* data = reinterpret_cast<PySideProperty*>(self);
-    PySidePropertyPrivate* pData = (PySidePropertyPrivate*) malloc(sizeof(PySidePropertyPrivate));
-    data->d = pData;
-    pData->fset = 0;
-    pData->fget = 0;
-    pData->freset = 0;
-    pData->fdel = 0;
-    pData->final = 0;
-    pData->designable = true;
-    pData->scriptable = true;
-    pData->stored = true;
-    pData->typeName = 0;
-    pData->doc = 0;
-    pData->notify = 0;
-    pData->notifySignature = 0;
-    pData->constant = 0;
+    PySidePropertyPrivate* pData = data->d;
+    pData->metaCallHandler = &qpropertyMetaCall;
 
     static const char *kwlist[] = {"type", "fget", "fset", "freset", "fdel", "doc", "notify",
                                    "designable", "scriptable", "stored", "user",
@@ -119,7 +165,6 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
                                      /*s*/      &(pData->doc),
                                      /*O*/      &(pData->notify),
                                      /*bbbbbb*/ &(pData->designable), &(pData->scriptable), &(pData->stored), &(pData->user), &(pData->constant), &(pData->final))) {
-        free(pData);
         return 0;
     }
 
@@ -141,7 +186,7 @@ void qpropertyFree(void *self)
     free(data->d->typeName);
     free(data->d->doc);
     free(data->d->notifySignature);
-    free(data->d);
+    delete data->d;
     pySelf->ob_type->tp_base->tp_free(self);
 }
 
@@ -163,7 +208,7 @@ void init(PyObject* module)
 bool isPropertyType(PyObject* pyObj)
 {
     if (pyObj) {
-        return pyObj->ob_type == &PySidePropertyType;
+        return PyType_IsSubtype(pyObj->ob_type, &PySidePropertyType);
     }
     return false;
 }
@@ -231,7 +276,7 @@ PySideProperty* getObject(PyObject* source, PyObject* name)
 
 bool isReadable(const PySideProperty* self)
 {
-    return (self->d->fget != 0);
+    return true;
 }
 
 bool isWritable(const PySideProperty* self)
@@ -283,6 +328,26 @@ const char* getNotifyName(PySideProperty* self)
     }
 
     return self->d->notifySignature;
+}
+
+void setMetaCallHandler(PySideProperty* self, MetaCallHandler handler)
+{
+    self->d->metaCallHandler = handler;
+}
+
+void setTypeName(PySideProperty* self, const char* typeName)
+{
+    self->d->typeName = strdup(typeName);
+}
+
+void setUserData(PySideProperty* self, void* data)
+{
+    self->d->userData = data;
+}
+
+void* userData(PySideProperty* self)
+{
+    return self->d->userData;
 }
 
 } //namespace Property
