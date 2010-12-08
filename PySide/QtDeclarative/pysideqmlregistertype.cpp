@@ -105,10 +105,7 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     }
 
     QMetaObject* metaObject = reinterpret_cast<QMetaObject*>(ObjectType::getTypeUserData(reinterpret_cast<SbkObjectType*>(pyObj)));
-    if (!metaObject) {
-        PyErr_SetString(PyExc_TypeError, "FIXME: metaobject not initialized, this error msg should not exists at all!!");
-        return -1;
-    }
+    Q_ASSERT(metaObject);
 
     // All ready... now the ugly code begins... :-)
     pyTypes[nextType] = pyObj;
