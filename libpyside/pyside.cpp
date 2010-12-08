@@ -186,7 +186,7 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
     Shiboken::AutoDecRef slotAttrName(PyString_FromString(PYSIDE_SLOT_LIST_ATTR));
 
     while (PyDict_Next(attrs, &pos, &key, &value)) {
-        if (value->ob_type == &PySidePropertyType) {
+        if (PyType_IsSubtype(value->ob_type, &PySidePropertyType)) {
             // Leave the properties to be register after signals because they may depend on notify signals
             properties << PropPair(PyString_AS_STRING(key), value);
         } else if (value->ob_type == &PySideSignalType) { // Register signals

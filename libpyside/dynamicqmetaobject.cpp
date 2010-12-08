@@ -367,12 +367,14 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
         return;
 
     // retrieve notifyId
-    PySideProperty* property = reinterpret_cast<PySideProperty*>(data);
-    const char* signalNotify = PySide::Property::getNotifyName(property);
     int notifyId = -1;
-    if (signalNotify) {
-        QByteArray signalSignature(signalNotify);
-        notifyId = m_d->m_signals.indexOf(signalNotify);
+    PySideProperty* property = reinterpret_cast<PySideProperty*>(data);
+    if (property->d->notify) {
+        const char* signalNotify = PySide::Property::getNotifyName(property);
+        if (signalNotify) {
+            QByteArray signalSignature(signalNotify);
+            notifyId = m_d->m_signals.indexOf(signalNotify);
+        }
     }
 
     //search for a empty space

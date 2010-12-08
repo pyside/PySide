@@ -248,7 +248,6 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     PySideProperty* pp = 0;
     PyObject* pp_name = 0;
     QMetaProperty mp;
-    Shiboken::TypeResolver* typeResolver = 0;
     PyObject* pySelf = 0;
 
     if (call != QMetaObject::InvokeMetaMethod) {
@@ -262,49 +261,23 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
         pp_name = PyString_FromString(mp.name());
         pp = Property::getObject(pySelf, pp_name);
         if (!pp) {
-            qWarning("Invalid property.");
+            qWarning("Invalid property: %s.", mp.name());
             Py_XDECREF(pp_name);
             return id - metaObject->methodCount();
         }
-        typeResolver = Shiboken::TypeResolver::get(mp.typeName());
-        Q_ASSERT(typeResolver);
     }
 
     switch(call) {
 #ifndef QT_NO_PROPERTIES
         case QMetaObject::ReadProperty:
-        {
-            Shiboken::GilState gil;
-            PyObject* value = Property::getValue(pp, pySelf);
-            if (value) {
-                typeResolver->toCpp(value, &args[0]);
-                Py_DECREF(value);
-            } else if (PyErr_Occurred()) {
-                PyErr_Print(); // Clear any errors but print them to stderr
-            }
-            break;
-        }
-
         case QMetaObject::WriteProperty:
-        {
-            Shiboken::GilState gil;
-            Shiboken::AutoDecRef value(typeResolver->toPython(args[0]));
-            Property::setValue(pp, pySelf, value);
-            break;
-        }
-
         case QMetaObject::ResetProperty:
-        {
-            Shiboken::GilState gil;
-            Property::reset(pp, pp_name);
-            break;
-        }
-
         case QMetaObject::QueryPropertyDesignable:
         case QMetaObject::QueryPropertyScriptable:
         case QMetaObject::QueryPropertyStored:
         case QMetaObject::QueryPropertyEditable:
         case QMetaObject::QueryPropertyUser:
+            pp->d->metaCallHandler(pp, pySelf, call, args);
             break;
 #endif
         case QMetaObject::InvokeMetaMethod:
