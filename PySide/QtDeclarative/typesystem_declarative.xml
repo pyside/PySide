@@ -58,9 +58,9 @@
         </extra-includes>
     </enum-type>
 
-    <inject-code>
+    <inject-code class="target" position="end">
         Shiboken::TypeResolver::createValueTypeResolver&lt; QList&lt;QObject*&gt; &gt;("QList&lt;QObject*&gt;");
-        PySide::initQmlSupport();
+        PySide::initQmlSupport(module);
     </inject-code>
 
     <object-type name="QDeclarativeExtensionInterface"/>

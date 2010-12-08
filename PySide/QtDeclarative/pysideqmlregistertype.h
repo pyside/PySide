@@ -23,14 +23,33 @@
 #ifndef PYSIDEQMLREGISTERTYPE_H
 #define PYSIDEQMLREGISTERTYPE_H
 
-#include <basewrapper.h>
+#include <Python.h>
+
+struct SbkObjectType;
 
 namespace PySide
 {
 
 extern void* nextQmlElementMemoryAddr;
 
-void initQmlSupport();
+/**
+ * Init the QML support doign things like registering QtDeclarative.ListProperty and create the necessary stuff for
+ * qmlRegisterType.
+ *
+ * \param module QtDeclarative python module
+ */
+void initQmlSupport(PyObject* module);
+
+/**
+ * PySide implementation of qmlRegisterType<T> function.
+ *
+ * \param pyObj Python type to be registered.
+ * \param uri QML element uri.
+ * \param versionMajor QML component major version.
+ * \param versionMinor QML component minor version.
+ * \param qmlName QML element name
+ * \return the metatype id of the registered type.
+ */
 int qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, int versionMinor, const char* qmlName);
 
 }
