@@ -21,18 +21,31 @@
  */
 
 #include "pysideqmlregistertype.h"
-#include <Python.h>
+// Qt
 #include <QObject>
 #include <QDeclarativeEngine>
 #include <QMutex>
+// shiboken
 #include <typeresolver.h>
-#include "qdeclarativeitem_wrapper.h"
 #include <sbkdbg.h>
+// pyside
+#include <pyside.h>
+#include <dynamicqmetaobject.h>
+#include <pysideproperty.h>
+
+// auto generated headers
+#include "qdeclarativeitem_wrapper.h"
+#include "pyside_qtcore_python.h"
+#include "pyside_qtdeclarative_python.h"
 
 #ifndef PYSIDE_MAX_QML_TYPES
 // Maximum number of different types the user cna export to QML using qmlRegisterType.
 #define PYSIDE_MAX_QML_TYPES 50
 #endif
+
+// Forward declarations
+static void propListMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::Call call, void** args);
+
 
 // All registered python types
 static PyObject* pyTypes[PYSIDE_MAX_QML_TYPES];
@@ -75,11 +88,6 @@ struct  ElementFactory<0> : ElementFactoryBase<0>
         createFuncs[0] = &ElementFactoryBase<0>::createInto;
     }
 };
-
-void PySide::initQmlSupport()
-{
-    ElementFactory<PYSIDE_MAX_QML_TYPES - 1>::init();
-}
 
 int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, int versionMinor, const char* qmlName)
 {
@@ -138,3 +146,193 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     ++nextType;
     return qmlTypeId;
 }
+
+extern "C"
+{
+
+// This is the user data we store in the property.
+struct DeclarativeListProperty
+{
+    PyTypeObject* type;
+    PyObject* append;
+    PyObject* at;
+    PyObject* clear;
+    PyObject* count;
+};
+
+static int propListTpInit(PyObject* self, PyObject* args, PyObject* kwds)
+{
+    static const char *kwlist[] = {"type", "append", "at", "clear", "count", 0};
+    PySideProperty* pySelf = reinterpret_cast<PySideProperty*>(self);
+    DeclarativeListProperty* data = new DeclarativeListProperty;
+    memset(data, 0, sizeof(DeclarativeListProperty));
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds,
+                                     "OO|OOO:QtDeclarative.ListProperty", (char**) kwlist,
+                                     &data->type,
+                                     &data->append,
+                                     &data->at,
+                                     &data->clear,
+                                     &data->count)) {
+        return 0;
+    }
+    PySide::Property::setMetaCallHandler(pySelf, &propListMetaCall);
+    PySide::Property::setTypeName(pySelf, "QDeclarativeListProperty<QDeclarativeItem>");
+    PySide::Property::setUserData(pySelf, data);
+
+    return 1;
+}
+
+void propListTpFree(void* self)
+{
+    PySideProperty* pySelf = reinterpret_cast<PySideProperty*>(self);
+    delete reinterpret_cast<DeclarativeListProperty*>(PySide::Property::userData(pySelf));
+    // calls base type constructor
+    pySelf->ob_type->tp_base->tp_free(self);
+}
+
+PyTypeObject PropertyListType = {
+    PyObject_HEAD_INIT(0)
+    0,                         /*ob_size*/
+    "ListProperty",            /*tp_name*/
+    sizeof(PySideProperty),    /*tp_basicsize*/
+    0,                         /*tp_itemsize*/
+    0,                         /*tp_dealloc*/
+    0,                         /*tp_print*/
+    0,                         /*tp_getattr*/
+    0,                         /*tp_setattr*/
+    0,                         /*tp_compare*/
+    0,                         /*tp_repr*/
+    0,                         /*tp_as_number*/
+    0,                         /*tp_as_sequence*/
+    0,                         /*tp_as_mapping*/
+    0,                         /*tp_hash */
+    0,                         /*tp_call*/
+    0,                         /*tp_str*/
+    0,                         /*tp_getattro*/
+    0,                         /*tp_setattro*/
+    0,                         /*tp_as_buffer*/
+    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
+    0,                         /*tp_doc */
+    0,                         /*tp_traverse */
+    0,                         /*tp_clear */
+    0,                         /*tp_richcompare */
+    0,                         /*tp_weaklistoffset */
+    0,                         /*tp_iter */
+    0,                         /*tp_iternext */
+    0,                         /*tp_methods */
+    0,                         /*tp_members */
+    0,                         /*tp_getset */
+    &PySidePropertyType,       /*tp_base */
+    0,                         /*tp_dict */
+    0,                         /*tp_descr_get */
+    0,                         /*tp_descr_set */
+    0,                         /*tp_dictoffset */
+    propListTpInit,            /*tp_init */
+    0,                         /*tp_alloc */
+    0,                         /*tp_new */
+    propListTpFree,            /*tp_free */
+    0,                         /*tp_is_gc */
+    0,                         /*tp_bases */
+    0,                         /*tp_mro */
+    0,                         /*tp_cache */
+    0,                         /*tp_subclasses */
+    0,                         /*tp_weaklist */
+    0,                         /*tp_del */
+};
+
+} // extern "C"
+
+// Implementation of QDeclarativeListProperty<T>::AppendFunction callback
+void propListAppender(QDeclarativeListProperty<QDeclarativeItem>* propList, QDeclarativeItem* item)
+{
+    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object, item));
+
+    DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
+    Shiboken::AutoDecRef retVal(PyObject_CallObject(data->append, args));
+
+    if (PyErr_Occurred())
+        PyErr_Print();
+}
+
+// Implementation of QDeclarativeListProperty<T>::CountFunction callback
+int propListCount(QDeclarativeListProperty<QDeclarativeItem>* propList)
+{
+    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object));
+
+    DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
+    Shiboken::AutoDecRef retVal(PyObject_CallObject(data->count, args));
+
+    // Check return type
+    if (PyErr_Occurred())
+        PyErr_Print();
+    else if (Shiboken::Converter<int>::isConvertible(retVal))
+        return Shiboken::Converter<int>::toCpp(retVal);
+
+    return 0;
+}
+
+// Implementation of QDeclarativeListProperty<T>::AtFunction callback
+QDeclarativeItem* propListAt(QDeclarativeListProperty<QDeclarativeItem>* propList, int index)
+{
+    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object, index));
+
+    DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
+    Shiboken::AutoDecRef retVal(PyObject_CallObject(data->at, args));
+
+    if (PyErr_Occurred())
+        PyErr_Print();
+    else if (PyType_IsSubtype(Py_TYPE(retVal), data->type))
+        return Shiboken::Converter<QDeclarativeItem*>::toCpp(retVal);
+
+    return 0;
+}
+
+// Implementation of QDeclarativeListProperty<T>::ClearFunction callback
+void propListClear(QDeclarativeListProperty<QDeclarativeItem>* propList)
+{
+    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object));
+
+    DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
+    Shiboken::AutoDecRef retVal(PyObject_CallObject(data->clear, args));
+
+    if (PyErr_Occurred())
+        PyErr_Print();
+}
+
+// qt_metacall specialization for ListProperties
+static void propListMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::Call call, void** args)
+{
+    if (call != QMetaObject::ReadProperty)
+        return;
+
+    DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(PySide::Property::userData(pp));
+    QDeclarativeListProperty<QDeclarativeItem> declProp(Shiboken::Converter<QObject*>::toCpp(self), data, &propListAppender);
+
+    if (data->count)
+        declProp.count = &propListCount;
+    if (data->at)
+        declProp.at = &propListAt;
+    if (data->clear)
+        declProp.clear = &propListClear;
+
+    // Copy the data to the memory location requested by the meta call
+    void* v = args[0];
+    *reinterpret_cast<QDeclarativeListProperty<QDeclarativeItem>*>(v) = declProp;
+}
+
+
+void PySide::initQmlSupport(PyObject* module)
+{
+    ElementFactory<PYSIDE_MAX_QML_TYPES - 1>::init();
+
+    // Export DeclarativeListProperty type
+    if (PyType_Ready(&PropertyListType) < 0)
+        return;
+
+    Py_INCREF((PyObject*)&PropertyListType);
+    PyModule_AddObject(module, PropertyListType.tp_name, (PyObject*)&PropertyListType);
+
+}
+
+
