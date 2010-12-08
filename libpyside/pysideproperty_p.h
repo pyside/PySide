@@ -34,7 +34,6 @@ extern "C"
 
 struct PySidePropertyPrivate {
     char* typeName;
-    PyObject* type;
     PySide::Property::MetaCallHandler metaCallHandler;
     PyObject* fget;
     PyObject* fset;
