@@ -2,5 +2,12 @@
 <typesystem package="testbinding">
     <load-typesystem name="typesystem_core.xml" generate="no" />
     <object-type name="TestObject" />
+    <object-type name="TestView" >
+        <modify-function signature="setModel(QObject*)">
+            <modify-argument index="1">
+                <reference-count action="add"/>
+            </modify-argument>
+        </modify-function>
+    </object-type>
 </typesystem>
 

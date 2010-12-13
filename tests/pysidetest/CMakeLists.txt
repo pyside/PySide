@@ -12,16 +12,19 @@ add_definitions(-DRXX_ALLOCATOR_INIT_0)
 
 set(pysidetest_SRC
 testobject.cpp
+testview.cpp
 )
 
 set(pysidetest_MOC_HEADERS
 testobject.h
+testview.h
 )
 
 qt4_wrap_cpp(pysidetest_MOC_SRC ${pysidetest_MOC_HEADERS})
 
 set(testbinding_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/testbinding/testobject_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/testbinding/testview_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/testbinding/testbinding_module_wrapper.cpp
 )
 
@@ -63,5 +66,6 @@ add_dependencies(testbinding pyside QtCore libpyside pysidetest)
 
 
 PYSIDE_TEST(homonymoussignalandmethod_test.py)
+PYSIDE_TEST(modelview_test.py)
 PYSIDE_TEST(version_test.py)
 
