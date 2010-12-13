@@ -14,7 +14,7 @@ class Obj(QObject):
     def connectNotify(self, signal):
         self.signal = signal
 
-def callback():
+def callback(arg=None):
     pass
 
 class TestConnectNotifyWithNewStyleSignals(UsesQCoreApplication):
@@ -33,7 +33,11 @@ class TestConnectNotifyWithNewStyleSignals(UsesQCoreApplication):
 
     def testNewStyle(self):
         sender = Obj()
+
         sender.destroyed.connect(callback)
+        self.assertEqual(sender.signal, SIGNAL('destroyed()'))
+
+        sender.destroyed[QObject].connect(callback)
         self.assertEqual(sender.signal, SIGNAL('destroyed(QObject*)'))
 
 if __name__ == '__main__':
