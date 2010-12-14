@@ -20,6 +20,7 @@ if(USE_XVFB)
     endif()
 endif()
 
+option(BUILD_TESTS "Build tests." TRUE)
 option(ENABLE_VERSION_SUFFIX "Used to use current version in suffix to generated files. This is used to allow multiples versions installed simultaneous." FALSE)
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
 set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed (default is /lib${LIB_SUFFIX})" FORCE)
@@ -147,15 +148,16 @@ endif()
 
 set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
 
-enable_testing()
-
 add_subdirectory(libpyside)
 if(QT_QTUITOOLS_FOUND AND QT_QTDESIGNER_FOUND)
     add_subdirectory(plugins)
 endif()
 # project directories
 add_subdirectory(PySide)
-add_subdirectory(tests)
+if (BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif ()
 
 find_program(DOT_EXEC dot)
 if (QT_SRC_DIR AND DOT_EXEC)
