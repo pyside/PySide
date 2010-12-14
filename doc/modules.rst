@@ -4,6 +4,7 @@ PySide modules
 .. toctree::
 
     PySide/QtCore/index.rst
+    PySide/QtDeclarative/index.rst
     PySide/QtGui/index.rst
     PySide/QtHelp/index.rst
     PySide/QtMaemo5/index.rst
