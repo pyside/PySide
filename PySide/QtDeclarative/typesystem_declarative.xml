@@ -69,9 +69,11 @@
     </object-type>
     <object-type name="QDeclarativeContext">
       <modify-function signature="setContextProperty(const QString &amp;, QObject*)">
-        <modify-argument index="2">
-          <reference-count action="add"/>
-        </modify-argument>
+      <inject-code class="target" position="end">
+        QByteArray key("%FUNCTION_NAME_");
+        key.append(%1.toLocal8Bit());
+        Shiboken::Object::keepReference(reinterpret_cast&lt;SbkObject*&gt;(%PYSELF), key.constData(),  %PYARG_2);
+      </inject-code>
       </modify-function>
     </object-type>
 
