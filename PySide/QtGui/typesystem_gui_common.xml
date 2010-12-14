@@ -2670,7 +2670,29 @@
         addLayoutOwnership(%CPPSELF, %1);
       </inject-code>
     </modify-function>
-    <modify-function signature="getItemPosition(int,int*,int*,int*,int*)" remove="all" />
+    <modify-function signature="getItemPosition(int,int*,int*,int*,int*)">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject*" />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="5">
+            <remove-argument/>
+            <remove-default-expression/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            int a, b, c, d;
+            %CPPSELF.%FUNCTION_NAME(%1, &amp;a, &amp;b, &amp;c, &amp;d);
+            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+        </inject-code>
+    </modify-function>
   </object-type>
 
   <object-type name="QGraphicsView">
