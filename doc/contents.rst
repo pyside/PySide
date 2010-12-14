@@ -6,10 +6,8 @@ PySide Documentation contents
 
     modules.rst
 
-Indices and tables
-==================
+Module Index
+============
 
-* :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
 
