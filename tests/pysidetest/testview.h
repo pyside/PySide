@@ -14,7 +14,7 @@ class PYSIDE_API TestView : public QObject
 public:
     TestView(QAbstractListModel* model, QObject* parent = 0) : QObject(parent), m_model(model) {}
     QAbstractListModel* model() { return m_model; }
-    QObject* getData();
+    QVariant getData();
 private:
     QAbstractListModel* m_model;
 };
