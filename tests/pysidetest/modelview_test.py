@@ -12,12 +12,15 @@ class MyObject(QObject):
     pass
 
 class ListModelKeepsReference(QAbstractListModel):
+    def __init__(self, parent=None):
+        QAbstractListModel.__init__(self, parent)
+        self.obj = MyObject()
+        self.obj.setObjectName(object_name)
+
     def rowCount(self, parent=QModelIndex()):
         return 1
 
     def data(self, index, role):
-        self.obj = MyObject()
-        self.obj.setObjectName(object_name)
         return self.obj
 
 class ListModelDoesntKeepsReference(QAbstractListModel):
@@ -29,7 +32,24 @@ class ListModelDoesntKeepsReference(QAbstractListModel):
         obj.setObjectName(object_name)
         return obj
 
+class ListModelThatReturnsString(QAbstractListModel):
+    def rowCount(self, parent=QModelIndex()):
+        return 1
+
+    def data(self, index, role):
+        self.obj = 'string'
+        return self.obj
+        #return 'string'
+
+
 class ModelViewTest(unittest.TestCase):
+
+    def testListModelDoesntKeepsReference(self):
+        model = ListModelDoesntKeepsReference()
+        view = TestView(model)
+        obj = view.getData()
+        self.assertEqual(type(obj), QObject)
+        self.assertEqual(obj.objectName(), object_name)
 
     def testListModelKeepsReference(self):
         model = ListModelKeepsReference()
@@ -38,13 +58,12 @@ class ModelViewTest(unittest.TestCase):
         self.assertEqual(type(obj), MyObject)
         self.assertEqual(obj.objectName(), object_name)
 
-    def testListModelDoesntKeepsReference(self):
-        model = ListModelDoesntKeepsReference()
+    def testListModelThatReturnsString(self):
+        model = ListModelThatReturnsString()
         view = TestView(model)
         obj = view.getData()
-        self.assertEqual(type(obj), MyObject)
-        self.assertEqual(obj.objectName(), object_name)
-
+        self.assertEqual(type(obj), unicode)
+        self.assertEqual(obj, 'string')
 
 if __name__ == '__main__':
     unittest.main()
