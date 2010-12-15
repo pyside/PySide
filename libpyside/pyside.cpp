@@ -28,6 +28,7 @@
 #include "pysidesignal_p.h"
 #include "pysideslot_p.h"
 #include "pysidemetafunction_p.h"
+#include "pysidemetafunction.h"
 #include "dynamicqmetaobject.h"
 
 #include <basewrapper.h>
@@ -223,6 +224,55 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
     // Register properties
     foreach (PropPair propPair, properties)
         mo->addProperty(propPair.first, propPair.second);
+}
+
+PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* name)
+{
+    PyObject* attr = PyObject_GenericGetAttr(self, name);
+    if (attr && Property::isPropertyType(attr)) {
+        PyObject *value = Property::getValue(reinterpret_cast<PySideProperty*>(attr), self);
+        if (!value)
+            return 0;
+        Py_DECREF(attr);
+        Py_INCREF(value);
+        attr = value;
+    }
+
+    //mutate native signals to signal instance type
+    if (attr && PyObject_TypeCheck(attr, &PySideSignalType)) {
+        PyObject* signal = reinterpret_cast<PyObject*>(Signal::initialize(reinterpret_cast<PySideSignal*>(attr), name, self));
+        PyObject_SetAttr(self, name, reinterpret_cast<PyObject*>(signal));
+        return signal;
+    }
+
+    //search on metaobject (avoid internal attributes started with '__')
+    if (!attr && !QString(PyString_AS_STRING(name)).startsWith("__")) {
+        const QMetaObject* metaObject = cppSelf->metaObject();
+        QByteArray cname(PyString_AS_STRING(name));
+        cname += '(';
+        //signal
+        QList<QMetaMethod> signalList;
+        for(int i=0, i_max = metaObject->methodCount(); i < i_max; i++) {
+            QMetaMethod method = metaObject->method(i);
+            if (QString(method.signature()).startsWith(cname)) {
+                if (method.methodType() == QMetaMethod::Signal) {
+                    signalList.append(method);
+                } else {
+                    PySideMetaFunction* func = MetaFunction::newObject(cppSelf, i);
+                    if (func) {
+                        PyObject_SetAttr(self, name, (PyObject*)func);
+                        return (PyObject*)func;
+                    }
+                }
+            }
+        }
+        if (signalList.size() > 0) {
+            PyObject* pySignal = reinterpret_cast<PyObject*>(Signal::newObjectFromMethod(self, signalList));
+            PyObject_SetAttr(self, name, pySignal);
+            return pySignal;
+        }
+    }
+    return attr;
 }
 
 } //namespace PySide
