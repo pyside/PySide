@@ -93,6 +93,15 @@ PYSIDE_API void runCleanupFunctions();
  */
 PYSIDE_API void destroyQCoreApplication();
 
+/**
+ * Check for properties and signals registered on MetaObject and return these
+ * \param cppSelf Is the QObject which contains the metaobject
+ * \param self Python object of cppSelf
+ * \param name Name of the argument which the function will try retrieve from MetaData
+ * \return The Python object which contains the Data obtained in metaObject or the Python attribute related with name
+ */
+PYSIDE_API PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* name);
+
 } //namespace PySide
 
 
