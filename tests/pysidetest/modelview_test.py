@@ -39,7 +39,6 @@ class ListModelThatReturnsString(QAbstractListModel):
     def data(self, index, role):
         self.obj = 'string'
         return self.obj
-        #return 'string'
 
 
 class ModelViewTest(unittest.TestCase):
@@ -50,6 +49,7 @@ class ModelViewTest(unittest.TestCase):
         obj = view.getData()
         self.assertEqual(type(obj), MyObject)
         self.assertEqual(obj.objectName(), object_name)
+        obj.metaObject()
 
     def testListModelKeepsReference(self):
         model = ListModelKeepsReference()
