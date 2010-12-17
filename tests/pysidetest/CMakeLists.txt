@@ -54,6 +54,9 @@ target_link_libraries(pysidetest ${QT_QTCORE_LIBRARY})
 
 add_library(testbinding MODULE ${testbinding_SRC})
 set_property(TARGET testbinding PROPERTY PREFIX "")
+if(WIN32)
+	set_target_properties(testbinding PROPERTIES SUFFIX ".pyd")
+endif()
 target_link_libraries(testbinding
                       pysidetest
                       pyside
