@@ -16,7 +16,7 @@ class TestConnectionWithInvalidSignature(TimedQApplication):
         self.buttonClicked = False
         self.buttonFailClicked = False
         view = QtDeclarative.QDeclarativeView()
-        view.setSource(QtCore.QUrl(adjust_filename('connect_python_qml.qml', __file__)))
+        view.setSource(QtCore.QUrl.fromLocalFile(adjust_filename('connect_python_qml.qml', __file__)))
         root = view.rootObject()
         button = root.findChild(QtCore.QObject, "buttonMouseArea")
         self.assertRaises(TypeError, QtCore.QObject.connect, [button,QtCore.SIGNAL('clicked()'), self.onButtonFailClicked])

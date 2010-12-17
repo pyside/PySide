@@ -42,7 +42,7 @@ class TestBug(unittest.TestCase):
         obj = PythonObject()
         context = view.rootContext()
         context.setContextProperty("python", obj)
-        view.setSource(adjust_filename('bug_451.qml', __file__))
+        view.setSource(QtCore.QUrl.fromLocalFile(adjust_filename('bug_451.qml', __file__)))
         root = view.rootObject()
         root.simpleFunction()
         self.assertEqual(obj.called, "simpleFunction")
