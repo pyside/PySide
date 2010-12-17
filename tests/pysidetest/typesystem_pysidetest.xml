@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <typesystem package="testbinding">
     <load-typesystem name="typesystem_core.xml" generate="no" />
+    <load-typesystem name="typesystem_gui.xml" generate="no"/>
     <object-type name="TestObject" />
     <object-type name="TestView" >
         <modify-function signature="TestView(QAbstractListModel*,QObject*)">

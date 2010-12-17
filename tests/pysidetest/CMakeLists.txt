@@ -32,8 +32,8 @@ set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic
 add_custom_command(OUTPUT ${testbinding_SRC}
 COMMAND ${GENERATORRUNNER_BINARY} ${GENERATOR_EXTRA_FLAGS}
         ${CMAKE_CURRENT_SOURCE_DIR}/global.h
-        --include-paths=${CMAKE_CURRENT_SOURCE_DIR}${PATH_SEP}${QT_INCLUDE_DIR}${PATH_SEP}${QT_QTCORE_INCLUDE_DIR}
-        --typesystem-paths=${CMAKE_CURRENT_SOURCE_DIR}${PATH_SEP}${pyside_SOURCE_DIR}${PATH_SEP}${QtCore_SOURCE_DIR}
+        --include-paths=${CMAKE_CURRENT_SOURCE_DIR}${PATH_SEP}${QT_INCLUDE_DIR}${PATH_SEP}${QT_QTCORE_INCLUDE_DIR}${PATH_SEP}${QT_QTGUI_INCLUDE_DIR}
+        --typesystem-paths=${CMAKE_CURRENT_SOURCE_DIR}${PATH_SEP}${pyside_SOURCE_DIR}${PATH_SEP}${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_pysidetest.xml
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -44,8 +44,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${QT_INCLUDE_DIR}
                     ${QT_QTCORE_INCLUDE_DIR}
+                    ${QT_QTGUI_INCLUDE_DIR}
                     ${SHIBOKEN_INCLUDE_DIR}
+                    ${pyside_SOURCE_DIR}
                     ${QtCore_BINARY_DIR}/PySide/QtCore
+                    ${QtGui_BINARY_DIR}/PySide/QtGui
                     ${libpyside_SOURCE_DIR}
                     ${PYTHON_INCLUDE_PATH})
 
@@ -63,12 +66,14 @@ target_link_libraries(testbinding
                       ${PYTHON_LIBRARIES}
                       ${SHIBOKEN_LIBRARY}
                       ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
                       ${SBK_PYTHON_LIBRARIES})
 
 add_dependencies(testbinding pyside QtCore libpyside pysidetest)
 
 
 PYSIDE_TEST(homonymoussignalandmethod_test.py)
+PYSIDE_TEST(delegatecreateseditor_test.py)
 PYSIDE_TEST(modelview_test.py)
 PYSIDE_TEST(version_test.py)
 
