@@ -32,8 +32,8 @@ set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic
 add_custom_command(OUTPUT ${testbinding_SRC}
 COMMAND ${GENERATORRUNNER_BINARY} ${GENERATOR_EXTRA_FLAGS}
         ${CMAKE_CURRENT_SOURCE_DIR}/global.h
-        --include-paths=${CMAKE_CURRENT_SOURCE_DIR}:${QT_INCLUDE_DIR}:${QT_QTCORE_INCLUDE_DIR}
-        --typesystem-paths=${CMAKE_CURRENT_SOURCE_DIR}:${pyside_SOURCE_DIR}:${QtCore_SOURCE_DIR}
+        --include-paths=${CMAKE_CURRENT_SOURCE_DIR}${PATH_SEP}${QT_INCLUDE_DIR}${PATH_SEP}${QT_QTCORE_INCLUDE_DIR}
+        --typesystem-paths=${CMAKE_CURRENT_SOURCE_DIR}${PATH_SEP}${pyside_SOURCE_DIR}${PATH_SEP}${QtCore_SOURCE_DIR}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_pysidetest.xml
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
