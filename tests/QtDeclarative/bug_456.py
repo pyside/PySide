@@ -29,7 +29,7 @@ class TestConnectionWithInvalidSignature(TimedQApplication):
 
         context = view.rootContext()
         context.setContextProperty("rotatevalue", rotatevalue)
-        view.setSource(adjust_filename('bug_456.qml', __file__))
+        view.setSource(QtCore.QUrl.fromLocalFile(adjust_filename('bug_456.qml', __file__)))
         root = view.rootObject()
         button = root.findChild(QtCore.QObject, "buttonMouseArea")
         view.show()
