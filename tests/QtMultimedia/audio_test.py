@@ -9,7 +9,11 @@ from PySide.QtMultimedia import *
 class testAudioDevices(unittest.TestCase):
 
     def testListDevices(self):
-        for devInfo in QAudioDeviceInfo.availableDevices(QAudio.AudioOutput):
+        devices = QAudioDeviceInfo.availableDevices(QAudio.AudioOutput)
+        if not len(devices):
+            return
+
+        for devInfo in devices:
             if devInfo.deviceName() == 'null':
                 continue
             fmt = QAudioFormat()
