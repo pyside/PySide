@@ -3047,6 +3047,9 @@
       <modify-argument index="1">
         <define-ownership owner="c++"/>
       </modify-argument>
+      <modify-argument index="return">
+        <define-ownership class="native" owner="c++"/>
+      </modify-argument>
     </modify-function>
   </object-type>
   <object-type name="QTableWidgetItem" >
