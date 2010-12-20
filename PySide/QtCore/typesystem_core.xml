@@ -1433,7 +1433,7 @@
 
    <modify-function signature="sender() const">
       <modify-argument index="return">
-         <define-ownership owner="target"/>
+         <define-ownership owner="default"/>
       </modify-argument>
     </modify-function>
   </object-type>
