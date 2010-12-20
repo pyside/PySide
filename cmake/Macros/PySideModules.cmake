@@ -77,7 +77,7 @@ macro(check_qt_class module class global_sources)
         file(WRITE ${SRC_FILE}
              "#include <${include_file}>\n"
              "#include <typeinfo>\n"
-	     "${NAMESPACE_USE}\n" 
+             "${NAMESPACE_USE}\n"
              "int main() { typeid(${class}); }\n"
         )
         try_compile(Q_WORKS ${CMAKE_BINARY_DIR}
