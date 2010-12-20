@@ -3,7 +3,7 @@
 
 import unittest
 
-from PySide.QtCore import QPoint, QRect
+from PySide.QtCore import QPoint, QRect, QRectF
 
 class RectConstructor(unittest.TestCase):
 
@@ -96,6 +96,16 @@ class RectOperator(unittest.TestCase):
         rect2 = QRect(15, 15, 5, 5)
         rect3 = rect1 | rect2
         self.assertEqual(rect3, rect1)
+
+    def testGetCoordsAndRect(self):
+        rect1 = QRect(1, 2, 3, 4)
+        self.assertEqual(rect1.getRect(), (1, 2, 3, 4))
+        self.assertEqual(rect1.getCoords(), (1, 2, 3, 5))
+
+        rect1 = QRectF(1, 2, 3, 4)
+        self.assertEqual(rect1.getRect(), (1, 2, 3, 4))
+        self.assertEqual(rect1.getCoords(), (1, 2, 4, 6))
+
 
 
 if __name__ == '__main__':
