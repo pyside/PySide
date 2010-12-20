@@ -4909,11 +4909,13 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="print(QPrinter*)const" rename="print_" />
   </object-type>
   <object-type name="QPrintPreviewDialog"/>
   <object-type name="QPrintPreviewWidget">
       <enum-type name="ViewMode"/>
       <enum-type name="ZoomMode"/>
+      <modify-function signature="print()" rename="print_" />
   </object-type>
   <object-type name="QStyledItemDelegate">
     <modify-function signature="setItemEditorFactory(QItemEditorFactory*)">
