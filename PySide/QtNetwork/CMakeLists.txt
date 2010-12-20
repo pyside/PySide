@@ -44,6 +44,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
 ${QtNetwork_47_SRC}
 )
 
+check_qt_class(QtNetwork QSslCertificate QtNetwork_SRC)
 check_qt_class(QtNetwork QSslCipher QtNetwork_SRC)
 check_qt_class(QtNetwork QSslConfiguration QtNetwork_SRC)
 check_qt_class(QtNetwork QSslError QtNetwork_SRC)

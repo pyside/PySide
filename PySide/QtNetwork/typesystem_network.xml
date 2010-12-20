@@ -33,8 +33,8 @@
     </namespace-type>
 
     <rejection class="QIPv6Address" field-name="c"/>
-    <rejection class="QSslCertificate"/>
 
+    <value-type name="QSslCertificate"/>
     <object-type name="QAbstractSocket">
         <enum-type name="NetworkLayerProtocol"/>
         <enum-type name="SocketError"/>
