@@ -862,10 +862,48 @@
       };
     </inject-code>
     <modify-function signature="getCoords(int*,int*,int*,int*)const">
-      <remove/>
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target">
+            int a, b, c, d;
+            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
+            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+        </inject-code>
     </modify-function>
     <modify-function signature="getRect(int*,int*,int*,int*)const">
-      <remove/>
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target">
+            int a, b, c, d;
+            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
+            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+        </inject-code>
     </modify-function>
   </value-type>
   <value-type name="QRectF">
@@ -881,8 +919,50 @@
             </insert-template>
         </inject-code>
     </add-function>
-    <modify-function signature="getCoords(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
-    <modify-function signature="getRect(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
+    <modify-function signature="getCoords(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target">
+            qreal a, b, c, d;
+            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
+            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getRect(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target">
+            qreal a, b, c, d;
+            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
+            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+        </inject-code>
+    </modify-function>
   </value-type>
   <value-type name="QSize" hash-function="PySide::hash">
     <add-function signature="__reduce__" return-type="PyObject*">
