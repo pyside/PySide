@@ -52,7 +52,7 @@ public:
 
 private:
     QScopedPointer<PyCustomWidgetPrivate> m_data;
-    
+    QString m_name;
 };
 
 #endif

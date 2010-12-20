@@ -35,6 +35,7 @@ PyCustomWidget::PyCustomWidget(PyObject* objectType)
     : m_data(new PyCustomWidgetPrivate())
 {
     m_data->pyObject = objectType;
+    m_name = QString(reinterpret_cast<PyTypeObject*>(objectType)->tp_name);
 }
 
 PyCustomWidget::~PyCustomWidget()
@@ -73,11 +74,7 @@ QString PyCustomWidget::includeFile() const
 
 QString PyCustomWidget::name() const
 {
-    static QString objectName;
-    if (objectName.isEmpty()) {
-        objectName = QString(reinterpret_cast<PyTypeObject*>(m_data->pyObject)->tp_name);
-    }
-    return objectName;
+    return m_name;
 }
 
 QString PyCustomWidget::toolTip() const
