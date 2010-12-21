@@ -238,5 +238,11 @@
         return %CONVERTTOPYTHON[%TRANSPOSED_TYPE](%CPPSELF.transposed());
     </template>
 
+    <!-- Replace '#' for the argument number you want. -->
+    <template name="return_argument">
+        Py_INCREF(%PYARG_#);
+        %PYARG_0 = %PYARG_#;
+    </template>
+
 </typesystem>
 
