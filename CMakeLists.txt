@@ -15,7 +15,7 @@ option(USE_XVFB "Uses xvfb-run with the unit tests to avoid QtGui tests popping 
 if(USE_XVFB)
     find_program(XVFB_RUN NAMES xvfb-run)
     if (NOT ${XVFB_RUN} MATCHES "XVFB_RUN-NOTFOUND")
-        set(XVFB_EXEC ${XVFB_RUN})
+        set(XVFB_EXEC ${XVFB_RUN} -a)
         message(STATUS "Using xvfb-run to perform QtGui tests.")
     endif()
 endif()
