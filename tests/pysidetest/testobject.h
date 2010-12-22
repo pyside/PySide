@@ -14,6 +14,7 @@ public:
     TestObject(int idValue, QObject* parent = 0) : QObject(parent), m_idValue(idValue) {}
     int idValue() const { return m_idValue; }
     static int staticMethodDouble(int value) { return value * 2; }
+    void addChild(QObject* c) { m_children.append(c); emit childrenChanged(m_children); }
 
     void emitIdValueSignal();
     void emitStaticMethodDoubleSignal();
@@ -22,9 +23,11 @@ signals:
     void idValue(int newValue);
     void justASignal();
     void staticMethodDouble();
+    void childrenChanged(const QList<QObject*>);
 
 private:
     int m_idValue;
+    QList<QObject*> m_children;
 };
 
 #endif // TESTOBJECT_H
