@@ -9,13 +9,19 @@ from PySide.QtMultimedia import *
 class testAudioDevices(unittest.TestCase):
 
     def testListDevices(self):
+        valid = False
         devices = QAudioDeviceInfo.availableDevices(QAudio.AudioOutput)
         if not len(devices):
             return
 
+        valid = True
         for devInfo in devices:
             if devInfo.deviceName() == 'null':
-                continue
+                # skip the test if the only device found is a invalid device
+                if len(devices) == 1:
+                    return
+                else:
+                    continue
             fmt = QAudioFormat()
             for codec in devInfo.supportedCodecs():
                 fmt.setCodec(codec)
