@@ -199,7 +199,7 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
 
     int i;
     for (i = 0; i < argsGiven; ++i) {
-        const char* typeName = argTypes[i].toAscii().constData();
+        QByteArray typeName = argTypes[i].toAscii();
         Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
         if (typeResolver) {
             int typeId = QMetaType::type(typeName);

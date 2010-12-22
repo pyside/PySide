@@ -138,6 +138,7 @@ PYSIDE_API QString getCallbackSignature(const char* signal, QObject* receiver, P
  * @param   signature       The signal signature
  * @param   isShortCircuit  If this is a shortCircuit(python<->python) signal
  * @return  Return true if this is a Qt Signal of false if not
+ * @todo    replace return type to QList<QByteArray>
  **/
 QStringList getArgsFromSignature(const char* signature, bool* isShortCircuit = 0);
 
