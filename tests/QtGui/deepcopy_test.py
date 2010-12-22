@@ -53,6 +53,10 @@ class QMatrixDeepCopy(DeepCopyHelper, unittest.TestCase):
     def setUp(self):
         self.original = QMatrix(1, 2, 3, 4, 5, 6)
 
+
+# Avoid these tests until get gcc fixed
+# Related bug: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43247
+"""
 class QMatrix2x2DeepCopy(DeepCopyHelper, unittest.TestCase):
     def setUp(self):
         self.original = QMatrix2x2([1, 2, 3, 4])
@@ -88,6 +92,7 @@ class QMatrix4x3DeepCopy(DeepCopyHelper, unittest.TestCase):
 class QMatrix4x4DeepCopy(DeepCopyHelper, unittest.TestCase):
     def setUp(self):
         self.original = QMatrix4x4([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+"""
 
 if __name__ == '__main__':
     unittest.main()
