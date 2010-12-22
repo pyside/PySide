@@ -76,4 +76,5 @@ PYSIDE_TEST(homonymoussignalandmethod_test.py)
 PYSIDE_TEST(delegatecreateseditor_test.py)
 PYSIDE_TEST(modelview_test.py)
 PYSIDE_TEST(version_test.py)
+PYSIDE_TEST(list_signal_test.py)
 
