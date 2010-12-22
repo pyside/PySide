@@ -69,7 +69,7 @@ target_link_libraries(testbinding
                       ${QT_QTGUI_LIBRARY}
                       ${SBK_PYTHON_LIBRARIES})
 
-add_dependencies(testbinding pyside QtCore libpyside pysidetest)
+add_dependencies(testbinding pyside QtCore QtGui libpyside pysidetest)
 
 
 PYSIDE_TEST(homonymoussignalandmethod_test.py)
