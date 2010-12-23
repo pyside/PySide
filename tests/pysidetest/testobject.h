@@ -23,7 +23,7 @@ signals:
     void idValue(int newValue);
     void justASignal();
     void staticMethodDouble();
-    void childrenChanged(const QList<QObject*>);
+    void childrenChanged(const QList<QObject*>&);
 
 private:
     int m_idValue;
