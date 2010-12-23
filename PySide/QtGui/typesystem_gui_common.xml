@@ -4834,10 +4834,48 @@
   </object-type>
   <!-- a QObject so main-thread delete redundant -->
   <object-type name="QGraphicsWidget">
-    <!-- FIXME: What to do with this function? -->
-    <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
-    <!-- FIXME: What to do with this function? -->
-    <modify-function signature="getWindowFrameMargins(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
+    <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getWindowFrameMargins(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+        </inject-code>
+    </modify-function>
     <!-- a QObject so main-thread delete redundant -->
     <!-- Duplicate function to QObject::children() to override accidental shadowing which is not present in Jambi -->
     <modify-function signature="children()const" remove="all"/>
