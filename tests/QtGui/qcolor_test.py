@@ -2,7 +2,7 @@
 import unittest
 import colorsys
 
-from PySide.QtCore import Qt
+from PySide.QtCore import Qt, qFuzzyCompare
 from PySide.QtGui import QColor
 
 
@@ -14,12 +14,6 @@ class QColorGetTest(unittest.TestCase):
     def testGetRgb(self):
         self.assertEqual(self.color.getRgb(), (20, 40, 60, 80))
 
-    def testGetRgbF(self):
-        self.assertEqual(self.color.getRgbF(), (20.0/255, 40.0/255, 60.0/255, 80.0/255))
-
-    def testGetHsl(self):
-        self.assertEqual(self.color.getHsl(), (210, 128, 40, self.color.alpha()))
-
     def testGetHslF(self):
         hls = colorsys.rgb_to_hls(20.0/255, 40.0/255, 60.0/255)
         hsla = hls[0], hls[2], hls[1], self.color.alphaF()
@@ -30,11 +24,6 @@ class QColorGetTest(unittest.TestCase):
         hsv = colorsys.rgb_to_hsv(20.0/255, 40.0/255, 60.0/255)
         hsva = int(hsv[0]*360.0), int(hsv[1]*255), int(hsv[2]*256), self.color.alpha()
         self.assertEqual(self.color.getHsv(), hsva)
-
-    def testGetHsvF(self):
-        hsv = colorsys.rgb_to_hsv(20.0/255, 40.0/255, 60.0/255)
-        hsva = hsv[0], hsv[1], hsv[2], self.color.alphaF()
-        self.assertEqual(self.color.getHsvF(), hsva)
 
     def testGetCmyk(self): # not supported by colorsys
         self.assertEqual(self.color.getCmyk(), (170, 85, 0, 195, 80))
