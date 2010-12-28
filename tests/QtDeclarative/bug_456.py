@@ -33,7 +33,7 @@ class TestConnectionWithInvalidSignature(TimedQApplication):
         root = view.rootObject()
         button = root.findChild(QtCore.QObject, "buttonMouseArea")
         view.show()
-        button.clicked.emit()
+        button.entered.emit()
         self.assertEqual(rotatevalue.rotation, 100)
 
 if __name__ == '__main__':

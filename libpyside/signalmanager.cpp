@@ -188,7 +188,7 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     Shiboken::AutoDecRef sequence(PySequence_Fast(args, 0));
     int argsGiven = PySequence_Fast_GET_SIZE(sequence.object());
 
-    if (argsGiven > argTypes.count()) {
+    if (argsGiven != argTypes.count()) {
         PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", signal, argTypes.count(), argsGiven);
         return false;
     }
