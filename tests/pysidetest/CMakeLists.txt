@@ -53,12 +53,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${PYTHON_INCLUDE_PATH})
 
 add_library(pysidetest SHARED ${pysidetest_SRC} ${pysidetest_MOC_SRC})
-target_link_libraries(pysidetest ${QT_QTCORE_LIBRARY})
+target_link_libraries(pysidetest ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 add_library(testbinding MODULE ${testbinding_SRC})
 set_property(TARGET testbinding PROPERTY PREFIX "")
 if(WIN32)
-	set_target_properties(testbinding PROPERTIES SUFFIX ".pyd")
+    set_target_properties(testbinding PROPERTIES SUFFIX ".pyd")
 endif()
 target_link_libraries(testbinding
                       pysidetest
