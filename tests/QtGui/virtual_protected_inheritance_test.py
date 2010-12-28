@@ -57,7 +57,7 @@ class TimerEventTest(UsesQApplication):
 
         self.widget.killTimer(timer_id)
 
-        self.assertEqual(self.widget.runs, 5)
+        self.assert_(self.widget.runs >= self.widget.max_runs)
 
 
 if __name__ == '__main__':
