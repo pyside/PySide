@@ -138,11 +138,7 @@ void destroyQCoreApplication()
 
 void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base)
 {
-    const char* typeName = type->super.ht_type.tp_name;
-    int len = strlen(typeName);
-    for (int i = len-1; i >= 0; --i)
-        if (typeName[i] == '.')
-            typeName += i + 1;
+    QByteArray typeName = QByteArray(type->super.ht_type.tp_name).split('.').last();
     DynamicQMetaObject* mo = new PySide::DynamicQMetaObject(typeName, base);
     Shiboken::ObjectType::setTypeUserData(type, mo, &Shiboken::callCppDestructor<DynamicQMetaObject>);
 }
