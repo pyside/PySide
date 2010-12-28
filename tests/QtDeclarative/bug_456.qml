@@ -56,7 +56,7 @@ Rectangle {
             id: buttonMouseArea
             objectName: "buttonMouseArea"
             anchors.fill: parent
-            onClicked: {
+            onEntered: {
                     rotatevalue.rotation = rotatevalue.val()
             }
         }

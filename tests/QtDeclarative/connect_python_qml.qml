@@ -6,15 +6,15 @@ Rectangle {
     color: "lightgray"
 
     Rectangle {
-	id: button
-	width: 150; height: 40
-	color: "darkgray"
-	anchors.horizontalCenter: page.horizontalCenter
-	y: 150
-	MouseArea {
-	    id: buttonMouseArea
-	    objectName: "buttonMouseArea"
-	    anchors.fill: parent
-	}
+        id: button
+        width: 150; height: 40
+        color: "darkgray"
+        anchors.horizontalCenter: page.horizontalCenter
+        y: 150
+        MouseArea {
+            id: buttonMouseArea
+            objectName: "buttonMouseArea"
+            anchors.fill: parent
+        }
     }
 }
