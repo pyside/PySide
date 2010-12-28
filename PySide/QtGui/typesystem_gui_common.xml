@@ -3074,9 +3074,6 @@
     <!--### Obsolete in 4.3-->
     <modify-function signature="textColor()const" remove="all"/>
     <!--### Obsolete in 4.3-->
-    <modify-function signature="operator&lt;(QTableWidgetItem)const">
-      <modify-argument index="1" invalidate-after-use="yes"/>
-    </modify-function>
     <modify-function signature="read(QDataStream&amp;)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -3085,8 +3082,6 @@
     </modify-function>
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
-    <modify-function signature="QTableWidgetItem(QTableWidgetItem)" remove="all"/>
-    <modify-function signature="operator&lt;(QTableWidgetItem)const" remove="all"/>
   </object-type>
   <object-type name="QListWidgetItem" >
     <enum-type name="ItemType"/>
@@ -3110,9 +3105,6 @@
         <define-ownership owner="target"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="operator&lt;(QListWidgetItem)const">
-      <modify-argument index="1" invalidate-after-use="yes"/>
-    </modify-function>
     <modify-function signature="read(QDataStream&amp;)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -3129,8 +3121,6 @@
     <!--### Obsolete in 4.3-->
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
-    <modify-function signature="QListWidgetItem(QListWidgetItem)" remove="all"/>
-    <modify-function signature="operator&lt;(QListWidgetItem)const" remove="all"/>
   </object-type>
   <object-type name="QGraphicsTextItem">
     <!-- a QObject so main-thread delete redundant -->
@@ -3165,16 +3155,12 @@
   <object-type name="QTreeWidgetItem" hash-function="qHash">
     <enum-type name="ChildIndicatorPolicy"/>
     <enum-type name="ItemType"/>
-    <modify-function signature="operator&lt;(QTreeWidgetItem)const">
-      <modify-argument index="1" invalidate-after-use="yes"/>
-    </modify-function>
     <modify-function signature="read(QDataStream&amp;)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
     <modify-function signature="write(QDataStream&amp;)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="QTreeWidgetItem(const QTreeWidgetItem &amp;)" remove="all"/>
     <modify-function signature="QTreeWidgetItem(QTreeWidget *,int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
@@ -3259,7 +3245,6 @@
     <modify-function signature="read(QDataStream &amp;)" remove="all"/>
     <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
     <modify-function signature="QTreeWidgetItem(QTreeWidgetItem)" remove="all"/>
-    <modify-function signature="operator&lt;(QTreeWidgetItem)const" remove="all"/>
   </object-type>
   <object-type name="QListWidget">
     <modify-function signature="setItemWidget(QListWidgetItem *, QWidget *)">
