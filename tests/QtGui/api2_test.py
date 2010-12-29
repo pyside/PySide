@@ -2,6 +2,7 @@
 
 
 import unittest
+import sys
 
 from PySide.QtCore import QObject
 from PySide.QtGui import *
@@ -38,23 +39,21 @@ class DoubleQObjectInheritanceTest(UsesQApplication):
 
         obj.setRange(1, 10)
         obj.setValue(0)
-        print "Value:", obj.value()
+        self.assertEqual(obj.value(), 1)
 
 class QClipboardTest(UsesQApplication):
 
     def testQClipboard(self):
-        clip = QClipboard()
+        #skip this test on MacOS because the clipboard is not available during the ssh session
+        #this cause problems in the buildbot
+        if sys.platform == 'darwin':
+            return
+        clip = QApplication.clipboard()
         clip.setText("Testing this thing!")
 
         text, subtype = clip.text("")
         self.assertEqual(subtype, "plain")
         self.assertEqual(text, "Testing this thing!")
-
-#class QFileDialog(UsesQApplication):
-#
-#    def testQFileDialog(self):
-#        string, filtr = QFileDialog.getOpenFileName()
-#        print string, filtr
 
 if __name__ == '__main__':
     unittest.main()
