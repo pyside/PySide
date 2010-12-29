@@ -128,7 +128,6 @@
   <rejection class="QBrush" function-name="cleanUp"/>
   <rejection class="QFont" enum-name="ResolveProperties"/>
   <rejection class="QMotifStyle" field-name="focus"/>
-  <rejection class="QKeyEvent" function-name="operator=="/>
   <rejection class="QPictureIO" function-name="defineIOHandler"/>
   <rejection class="QPolygon" function-name="putPoints"/>
   <rejection class="QPolygon" function-name="setPoints"/>
@@ -2427,7 +2426,13 @@
   <object-type name="QInputEvent" copyable="false">
     <modify-function signature="modifiers()const" access="non-final"/>
   </object-type>
-  <object-type name="QKeyEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::KeyPress || %1-&gt;type() == QEvent::KeyRelease"/>
+  <object-type name="QKeyEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::KeyPress || %1-&gt;type() == QEvent::KeyRelease">
+      <add-function signature="operator!=(QKeySequence::StandardKey)">
+          <inject-code class="target">
+              %PYARG_0 = %CONVERTTOPYTHON[bool](!(&amp;%CPPSELF == %1));
+          </inject-code>
+      </add-function>
+  </object-type>
   <object-type name="QMouseEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::MouseButtonDblClick || %1-&gt;type() == QEvent::MouseButtonPress || %1-&gt;type() == QEvent::MouseButtonRelease || %1-&gt;type() == QEvent::MouseMove"/>
   <object-type name="QPaintEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Paint"/>
   <object-type name="QAccessibleEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::AccessibilityDescription || %1-&gt;type() == QEvent::AccessibilityHelp"/>
