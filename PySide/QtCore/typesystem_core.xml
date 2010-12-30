@@ -1734,7 +1734,15 @@
       <modify-argument index="0" replace-value="this"/>
     </modify-function>
     <modify-function signature="startsWith(const char *)const" remove="all"/>
-    <modify-function signature="fromRawData(const char*,int)" remove="all"/>
+    <modify-function signature="fromRawData(const char*,int)">
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <inject-code class="target">
+            // %FUNCTION_NAME() - avoid generation of default function call
+            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](QByteArray(%1));
+        </inject-code>
+    </modify-function>
     <modify-function signature="number(int,int)">
       <rename to="fromInt"/>
     </modify-function>
