@@ -102,5 +102,12 @@ class QByteArrayOnQVariant(unittest.TestCase):
         a = QSettings().value("some_prop", QByteArray())
         self.assertEqual(type(a), QByteArray)
 
+class QByteArrayBug514(unittest.TestCase):
+    def testIt(self):
+        data = "foobar"
+        a = QByteArray.fromRawData(data)
+        self.assertEqual(type(a), QByteArray)
+        self.assertEqual(a.data(), data)
+
 if __name__ == '__main__':
     unittest.main()
