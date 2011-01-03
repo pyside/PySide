@@ -6,6 +6,7 @@ import sys
 
 from PySide.QtCore import QObject, SIGNAL, QUrl
 from PySide.QtWebKit import *
+from PySide.QtNetwork import QNetworkRequest
 
 from helper import adjust_filename, TimedQApplication
 
@@ -60,6 +61,9 @@ class TestLoadFinished(TimedQApplication):
         self.app.quit()
         if ok:
             self.called = True
+
+    def testNamedArgumentTypeChecking(self):
+        self.assertRaises(TypeError, self.view.load, QNetworkRequest(), body=unicode('foo'))
 
 if __name__ == '__main__':
     unittest.main()
