@@ -3231,7 +3231,7 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="parent()">
+    <modify-function signature="parent() const">
       <modify-argument index="this">
         <parent index="return" action="add"/>
       </modify-argument>

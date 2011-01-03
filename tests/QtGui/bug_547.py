@@ -6,8 +6,8 @@ import sys
 import unittest
 
 class MyMainWindow(unittest.TestCase):
-    def testClearFunction(self):
-        app = QtGui.QApplication(sys.argv)
+    app = QtGui.QApplication(sys.argv)
+    def testCase1(self):
         self._tree = QtGui.QTreeWidget()
         self._tree.setColumnCount(2)
         self._i1 = None
@@ -24,6 +24,21 @@ class MyMainWindow(unittest.TestCase):
         self.assertEqual(sys.getrefcount(self._i1), 3)
         self.assertEqual(sys.getrefcount(self._i11), 3)
 
+    def testCase2(self):
+        self._tree = QtGui.QTreeWidget()
+        self._tree.setColumnCount(2)
+        self._i1 = None
+        self._i11 = None
+
+        self._updateTree()
+        self.assertEqual(sys.getrefcount(self._i1), 3)
+        self.assertEqual(sys.getrefcount(self._i11), 3)
+
+        self._i11.parent().setExpanded(True)
+        self._i11.setExpanded(True)
+
+        self.assertEqual(sys.getrefcount(self._i1), 3)
+        self.assertEqual(sys.getrefcount(self._i11), 3)
 
     def _updateTree(self):
         self._tree.clear()
@@ -32,7 +47,9 @@ class MyMainWindow(unittest.TestCase):
             self.assertEqual(sys.getrefcount(self._i11), 2)
 
         self._i1 = QtGui.QTreeWidgetItem(self._tree, ['1', ])
+        self.assertEqual(sys.getrefcount(self._i1), 3)
         self._i11 = QtGui.QTreeWidgetItem(self._i1, ['11', ])
+        self.assertEqual(sys.getrefcount(self._i11), 3)
 
 if __name__ == '__main__':
     unittest.main()
