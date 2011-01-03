@@ -3287,6 +3287,24 @@
 
     <enum-type name="RenderFlag" flags="QWidget::RenderFlags"/>
 
+    <modify-function signature="setParent(QWidget*)">
+      <modify-argument index="this">
+        <parent index="1" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="setParent(QWidget*, Qt::WindowFlags)">
+      <modify-argument index="this">
+        <parent index="1" action="add"/>
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="parentWidget()const">
+      <modify-argument index="return">
+        <define-ownership owner="target"/>
+      </modify-argument>
+    </modify-function>
+
     <modify-function signature="actionEvent(QActionEvent*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -3411,11 +3429,6 @@
     <modify-function signature="insertAction(QAction *, QAction *)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <modify-function signature="parentWidget()const">
-      <modify-argument index="return">
-        <define-ownership owner="target"/>
       </modify-argument>
     </modify-function>
 
