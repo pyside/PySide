@@ -308,7 +308,7 @@ class QDataStreamShiftBitArray(unittest.TestCase):
 
         self._check_bitarray(data)
 
-class QDataStreamShiftBitArray(unittest.TestCase):
+class QDataStreamRawData(unittest.TestCase):
     def testRawData(self):
         data = QDataStream()
         self.assertEqual(data.readRawData(4), '\x00\x00\x00\x00')
