@@ -2,7 +2,7 @@
 model = QStandardItemModel (4, 4)
 for row in range(4):
     for column in range(4):
-        item = QStandardItem(QString("row %0, column %1").arg(row).arg(column))
+        item = QStandardItem("row %d, column %d" % (row, column))
         model.setItem(row, column, item)
 //! [0]
 
@@ -11,7 +11,7 @@ for row in range(4):
 model = QStandardItemModel()
 parentItem = model.invisibleRootItem()
 for i in range(4):
-    item = QStandardItem(QString("item %0").arg(i))
+    item = QStandardItem("item %d" % i)
     parentItem.appendRow(item)
     parentItem = item
 //! [1]
@@ -20,8 +20,7 @@ for i in range(4):
 //! [2]
 treeView = QTreeView(self)
 treeView.setModel(myStandardItemModel)
-connect(treeView, SIGNAL('clicked(QModelIndex)')
-        this, SLOT('clicked(QModelIndex)'))
+treeView.clicked[QModelIndex].connect(self.clicked)
 //! [2]
 
 
