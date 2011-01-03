@@ -596,6 +596,37 @@
     </inject-code>
   </add-function>
 
+  <inject-code class="native" position="beginning">
+    namespace PySide {
+    static QStack&lt;PyObject*&gt; globalPostRoutineFunctions;
+    void globalPostRoutineCallback()
+    {
+        foreach(PyObject* callback, globalPostRoutineFunctions) {
+            Shiboken::AutoDecRef result(PyObject_CallObject(callback, NULL));
+            Py_DECREF(callback);
+        }
+        globalPostRoutineFunctions.clear();
+    }
+    void addPostRoutine(PyObject* callback)
+    {
+        if (PyCallable_Check(callback)) {
+            globalPostRoutineFunctions &lt;&lt; callback;
+            Py_INCREF(callback);
+        } else {
+            PyErr_SetString(PyExc_TypeError, "qAddPostRoutine: The argument must be a callable object.");
+        }
+    }
+    } // namespace
+  </inject-code>
+  <add-function signature="qAddPostRoutine(PyObject*)">
+    <inject-code class="target" position="beginning">
+        PySide::addPostRoutine(%1);
+    </inject-code>
+  </add-function>
+  <inject-code class="target" position="end">
+    qAddPostRoutine(PySide::globalPostRoutineCallback);
+  </inject-code>
+
   <inject-code class="target" position="end" file="glue/qt_version.cpp" />
 
   <add-function signature="__moduleShutdown()">
