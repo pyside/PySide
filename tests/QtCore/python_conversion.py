@@ -44,7 +44,18 @@ class TestDateTimeConversions (unittest.TestCase):
 
         self.assertEqual(dateTime, other.toPython())
 
+        # with 6 arguments
+        other = QDateTime(2010, 04, 23, 11, 14, 01)
 
+        otherDate = other.date()
+        self.assertEqual(2010, otherDate.year())
+        self.assertEqual(4, otherDate.month())
+        self.assertEqual(23, otherDate.day())
+
+        otherTime = other.time()
+        self.assertEqual(11, otherTime.hour())
+        self.assertEqual(14, otherTime.minute())
+        self.assertEqual(1, otherTime.second())
 
 if __name__ == '__main__':
     unittest.main()
