@@ -311,15 +311,15 @@ class QDataStreamShiftBitArray(unittest.TestCase):
 class QDataStreamRawData(unittest.TestCase):
     def testRawData(self):
         data = QDataStream()
-        self.assertEqual(data.readRawData(4), '\x00\x00\x00\x00')
+        self.assertEqual(data.readRawData(4), None)
 
         ba = QByteArray()
         data = QDataStream(ba, QIODevice.WriteOnly)
-        data.writeRawData('ABC')
-        self.assertEqual(ba, 'ABC')
+        data.writeRawData('AB\x00C')
+        self.assertEqual(ba.data(), 'AB\x00C')
 
         data = QDataStream(ba)
-        self.assertEqual(data.readRawData(4), 'ABC\x00')
+        self.assertEqual(data.readRawData(4), 'AB\x00C')
 
 if __name__ == '__main__':
     unittest.main()

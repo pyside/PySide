@@ -2388,8 +2388,13 @@
         <inject-code class="target">
             QByteArray data;
             data.resize(%2);
-            %CPPSELF.%FUNCTION_NAME(data.data(), data.size());
-            %PYARG_0 = PyString_FromStringAndSize(data.constData(), data.size());
+            int result = %CPPSELF.%FUNCTION_NAME(data.data(), data.size());
+            if (result == -1) {
+                Py_INCREF(Py_None);
+                %PYARG_0 = Py_None;
+            } else {
+                %PYARG_0 = PyString_FromStringAndSize(data.data(), result);
+            }
         </inject-code>
     </modify-function>
     <!-- deprecated method -->
