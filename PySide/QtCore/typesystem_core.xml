@@ -650,13 +650,13 @@
     // Define a global variable to handle qInstallMsgHandler callback
     static PyObject* qtmsghandler = 0;
 
-    void
-    msghandlercallback(QtMsgType type, const char* msg)
+    static void msgHandlerCallback(QtMsgType type, const char* msg)
     {
+        Shiboken::GilState state;
         Shiboken::AutoDecRef arglist(Shiboken::makeTuple(type, msg));
         Shiboken::AutoDecRef ret(PyObject_CallObject(qtmsghandler, arglist));
     }
-    void QtCoreModuleExit()
+    static void QtCoreModuleExit()
     {
         PySide::SignalManager::instance().clear();
     }
@@ -673,7 +673,7 @@
         %PYARG_0 = qtmsghandler ? qtmsghandler : Py_None;
         Py_INCREF(%PYARG_1);
         qtmsghandler = %PYARG_1;
-        qInstallMsgHandler(msghandlercallback);
+        qInstallMsgHandler(msgHandlerCallback);
       }
 
       if (%PYARG_0 == Py_None)

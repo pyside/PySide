@@ -27,6 +27,7 @@
 #include <QMutex>
 // shiboken
 #include <typeresolver.h>
+#include <gilstate.h>
 #include <sbkdbg.h>
 // pyside
 #include <pyside.h>
@@ -63,6 +64,7 @@ struct ElementFactoryBase
     {
         QMutexLocker locker(&nextQmlElementMutex);
         PySide::nextQmlElementMemoryAddr = memory;
+        Shiboken::GilState state;
         PyObject* obj = PyObject_CallObject(pyTypes[N], 0);
         if (!obj || PyErr_Occurred())
             PyErr_Print();
@@ -246,6 +248,7 @@ PyTypeObject PropertyListType = {
 // Implementation of QDeclarativeListProperty<T>::AppendFunction callback
 void propListAppender(QDeclarativeListProperty<QDeclarativeItem>* propList, QDeclarativeItem* item)
 {
+    Shiboken::GilState state;
     Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object, item));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
@@ -258,6 +261,7 @@ void propListAppender(QDeclarativeListProperty<QDeclarativeItem>* propList, QDec
 // Implementation of QDeclarativeListProperty<T>::CountFunction callback
 int propListCount(QDeclarativeListProperty<QDeclarativeItem>* propList)
 {
+    Shiboken::GilState state;
     Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
@@ -275,6 +279,7 @@ int propListCount(QDeclarativeListProperty<QDeclarativeItem>* propList)
 // Implementation of QDeclarativeListProperty<T>::AtFunction callback
 QDeclarativeItem* propListAt(QDeclarativeListProperty<QDeclarativeItem>* propList, int index)
 {
+    Shiboken::GilState state;
     Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object, index));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
@@ -291,6 +296,7 @@ QDeclarativeItem* propListAt(QDeclarativeListProperty<QDeclarativeItem>* propLis
 // Implementation of QDeclarativeListProperty<T>::ClearFunction callback
 void propListClear(QDeclarativeListProperty<QDeclarativeItem>* propList)
 {
+    Shiboken::GilState state;
     Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
