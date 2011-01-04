@@ -76,6 +76,7 @@ PYSIDE_TEST(tr_noop_test.py)
 PYSIDE_TEST(translation_test.py)
 PYSIDE_TEST(unaryoperator_test.py)
 PYSIDE_TEST(unicode_test.py)
+PYSIDE_TEST(versioninfo_test.py)
 
 if(X11)
     PYSIDE_TEST(qhandle_test.py)
