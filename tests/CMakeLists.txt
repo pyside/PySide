@@ -7,7 +7,7 @@ else()
 
    if(WIN32)
         set(TEST_PYTHONPATH     "${CMAKE_BINARY_DIR};${CMAKE_SOURCE_DIR}/tests/util;${testbinding_BINARY_DIR}")
-        set(TEST_LIBRARY_PATH   "${libpyside_BINARY_DIR};${pysidetest_BINARY_DIR};$ENV{PATH}")
+        set(TEST_LIBRARY_PATH   "${libpyside_BINARY_DIR};${pysidetest_BINARY_DIR};${SHIBOKEN_INCLUDE_DIR}/../../bin;$ENV{PATH}")
         set(LIBRARY_PATH_VAR    "PATH")
         string(REPLACE "\\" "/" TEST_PYTHONPATH "${TEST_PYTHONPATH}")
         string(REPLACE "\\" "/" TEST_LIBRARY_PATH "${TEST_LIBRARY_PATH}")
