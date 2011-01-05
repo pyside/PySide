@@ -38,9 +38,13 @@ class TestSimplePlaying(UsesQCoreApplication):
         del self.source
 
     def testFinishedSignal(self):
-        # Should pass if finished() is called
-        self.media.play()
-        self.app.exec_()
+        # Check for ogg support before playing it
+        if (phonon.Phonon.BackendCapabilities.isMimeTypeAvailable('audio/ogg')):
+            # Should pass if finished() is called
+            self.media.play()
+            self.app.exec_()
+        else:
+            print 'Ogg format not supported! Playback test skipped!'
 
     def testMediaSource(self):
         self.assertEqual(self.media.currentSource(), self.source)
