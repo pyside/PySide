@@ -19,20 +19,26 @@ class AccessManagerCase(UsesQCoreApplication):
 
     def tearDown(self):
         super(AccessManagerCase, self).tearDown()
+        if self.httpd:
+            self.httpd.shutdown()
+            self.httpd = None
+
+    def goAway(self):
         self.httpd.shutdown()
+        self.app.quit()
+        self.httpd = None
 
     def slot_replyFinished(self, reply):
         self.assertEqual(type(reply), QNetworkReply)
         self.called = True
-        self.app.quit()
+        self.goAway()
 
     def testNetworkRequest(self):
         manager = QNetworkAccessManager()
         manager.finished.connect(self.slot_replyFinished)
-        manager.get(QNetworkRequest(QUrl("http://localhost:%s" % self.httpd.port())))
+        manager.get(QNetworkRequest(QUrl("http://127.0.0.1:%s" % self.httpd.port())))
         self.app.exec_()
         self.assert_(self.called)
-        self.httpd.shutdown()
 
 if __name__ == '__main__':
     unittest.main()
