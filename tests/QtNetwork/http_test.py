@@ -16,18 +16,24 @@ class HttpSignalsCase(UsesQCoreApplication):
         super(HttpSignalsCase, self).setUp()
         self.httpd = TestServer()
         self.httpd.start()
-        self.http = QHttp('localhost' , self.httpd.port())
+        self.http = QHttp("127.0.0.1" , self.httpd.port())
         self.called = False
 
     def tearDown(self):
-        self.httpd.shutdown()
+        if self.httpd:
+            self.httpd.shutdown()
+            del self.httpd
         self.http = None
         self.httpd = None
         super(HttpSignalsCase, self).tearDown()
 
+    def goAway(self):
+        self.httpd.shutdown()
+        self.app.quit()
+
     def callback(self, ident):
         self.called = True
-        self.app.quit()
+        self.goAway()
 
     def testDefaultArgs(self):
         #QHttp signal requestStarted signal
