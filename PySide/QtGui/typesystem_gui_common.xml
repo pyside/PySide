@@ -3293,7 +3293,7 @@
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="setParent(QWidget*, Qt::WindowFlags)">
+    <modify-function signature="setParent(QWidget*, QFlags&lt;Qt::WindowType&gt;)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
