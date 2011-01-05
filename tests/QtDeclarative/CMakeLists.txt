@@ -1,5 +1,6 @@
 PYSIDE_TEST(bug_451.py)
 PYSIDE_TEST(bug_456.py)
+PYSIDE_TEST(bug_557.py)
 PYSIDE_TEST(qdeclarativenetwork_test.py)
 PYSIDE_TEST(qdeclarativeview_test.py)
 PYSIDE_TEST(connect_python_qml.py)
