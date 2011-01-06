@@ -3232,13 +3232,28 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="parent() const">
-      <modify-argument index="this">
-        <parent index="return" action="add"/>
-      </modify-argument>
       <modify-argument index="return">
         <define-ownership class="target" owner="default"/>
       </modify-argument>
+      <inject-code class="target" position="end">
+          // Only call the parent function if this return some value
+          // the parent can be the TreeWidget
+          if (%0)
+            Shiboken::Object::setParent(%PYARG_0, %PYSELF);
+      </inject-code>
     </modify-function>
+    <modify-function signature="treeWidget() const">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+          // Only call the parent function if this return some value
+          // the parent can be the TreeWidgetItem
+          if (%0)
+            Shiboken::Object::setParent(%PYARG_0, %PYSELF);
+      </inject-code>
+    </modify-function>
+
     <modify-function signature="backgroundColor(int)const" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(int, QColor)" remove="all"/>
