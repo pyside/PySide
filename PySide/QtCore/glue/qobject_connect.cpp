@@ -1,9 +1,20 @@
+static bool isDecorator(PyObject* method, PyObject* self)
+{
+    Shiboken::AutoDecRef methodName(PyObject_GetAttrString(method, "__name__"));
+    if (!PyObject_HasAttr(self, methodName))
+        return true;
+    Shiboken::AutoDecRef otherMethod(PyObject_GetAttr(self, methodName));
+    return otherMethod.object() != method;
+}
+
 static bool getReceiver(PyObject* callback, QObject** receiver, PyObject** self)
 {
+    bool forceGlobalReceiver = false;
     if (PyMethod_Check(callback)) {
         *self = PyMethod_GET_SELF(callback);
         if (Shiboken::Converter<QObject*>::checkType(*self))
             *receiver = Shiboken::Converter<QObject*>::toCpp(*self);
+        forceGlobalReceiver = isDecorator(callback, *self);
     } else if (PyCFunction_Check(callback)) {
         *self = PyCFunction_GET_SELF(callback);
         if (*self && Shiboken::Converter<QObject*>::checkType(*self))
@@ -14,7 +25,7 @@ static bool getReceiver(PyObject* callback, QObject** receiver, PyObject** self)
         *self = 0;
     }
 
-    bool usingGlobalReceiver = !*receiver;
+    bool usingGlobalReceiver = !*receiver || forceGlobalReceiver;
     if (usingGlobalReceiver) {
         PySide::SignalManager& signalManager = PySide::SignalManager::instance();
         *receiver = signalManager.globalReceiver();

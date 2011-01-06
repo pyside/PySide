@@ -72,9 +72,10 @@ target_link_libraries(testbinding
 add_dependencies(testbinding pyside QtCore QtGui libpyside pysidetest)
 
 
-PYSIDE_TEST(homonymoussignalandmethod_test.py)
+PYSIDE_TEST(decoratedslot_test.py)
 PYSIDE_TEST(delegatecreateseditor_test.py)
+PYSIDE_TEST(homonymoussignalandmethod_test.py)
+PYSIDE_TEST(list_signal_test.py)
 PYSIDE_TEST(modelview_test.py)
 PYSIDE_TEST(version_test.py)
-PYSIDE_TEST(list_signal_test.py)
 
