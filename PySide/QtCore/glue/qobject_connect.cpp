@@ -4,7 +4,8 @@ static bool isDecorator(PyObject* method, PyObject* self)
     if (!PyObject_HasAttr(self, methodName))
         return true;
     Shiboken::AutoDecRef otherMethod(PyObject_GetAttr(self, methodName));
-    return otherMethod.object() != method;
+    return reinterpret_cast<PyMethodObject*>(otherMethod.object())->im_func != \
+           reinterpret_cast<PyMethodObject*>(method)->im_func;
 }
 
 static bool getReceiver(PyObject* callback, QObject** receiver, PyObject** self)
