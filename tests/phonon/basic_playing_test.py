@@ -1,34 +1,35 @@
 
 import os
 import unittest
-
-from PySide import QtCore
-from PySide import phonon
-
+from PySide.phonon import Phonon
 from helper import UsesQCoreApplication
 
-# XXX Hack to get the correct filename
-example_file = os.path.join(os.path.dirname(__file__),'tone.ogg')
+sample_file = os.path.join(os.path.dirname(__file__), 'tone.wav')
+
+def checkBackendCapabilities(func):
+    def function(self, *args, **kw):
+        if Phonon.BackendCapabilities.isMimeTypeAvailable('audio/x-wav'):
+            func(self, *args, **kw)
+        else:
+            print 'Wav format not supported! Playback test skipped!'
+    return function
+
 
 class TestSimplePlaying(UsesQCoreApplication):
     def setUp(self):
         super(TestSimplePlaying, self).setUp()
         self.app.setApplicationName('Dummy')
-        self.source = phonon.Phonon.MediaSource(example_file)
-        self.media = phonon.Phonon.MediaObject()
+        self.source = Phonon.MediaSource(sample_file)
+        self.media = Phonon.MediaObject()
         self.media.setCurrentSource(self.source)
 
-        QtCore.QObject.connect(self.media,
-                QtCore.SIGNAL('finished()'),
-                self.app,
-                QtCore.SLOT('quit()'))
-
+        self.media.finished.connect(self.app.quit)
         self.called = False
 
         # prevent locking with:
         # request to play a stream, but no valid audio ...
-        self.output = phonon.Phonon.AudioOutput()
-        self.path = phonon.Phonon.createPath(self.media, self.output)
+        self.output = Phonon.AudioOutput()
+        self.path = Phonon.createPath(self.media, self.output)
 
     def tearDown(self):
         super(TestSimplePlaying, self).tearDown()
@@ -37,14 +38,11 @@ class TestSimplePlaying(UsesQCoreApplication):
         del self.media
         del self.source
 
+    @checkBackendCapabilities
     def testFinishedSignal(self):
-        # Check for ogg support before playing it
-        if (phonon.Phonon.BackendCapabilities.isMimeTypeAvailable('audio/ogg')):
-            # Should pass if finished() is called
-            self.media.play()
-            self.app.exec_()
-        else:
-            print 'Ogg format not supported! Playback test skipped!'
+        # Should pass if finished() is called
+        self.media.play()
+        self.app.exec_()
 
     def testMediaSource(self):
         self.assertEqual(self.media.currentSource(), self.source)
@@ -57,18 +55,14 @@ class TestSimplePlaying(UsesQCoreApplication):
     def state_cb(self, newState, OldState):
         self.called = True
 
+    @checkBackendCapabilities
     def testStateChanged(self):
-        # Check for ogg support before playing it
-        if (phonon.Phonon.BackendCapabilities.isMimeTypeAvailable('audio/ogg')):
-            QtCore.QObject.connect(self.media,
-                QtCore.SIGNAL('stateChanged(Phonon::State, Phonon::State)'),
-                self.state_cb)
+        self.media.stateChanged['Phonon::State', 'Phonon::State'].connect(self.state_cb)
+        self.media.play()
+        self.app.exec_()
+        self.assert_(self.called)
 
-            self.media.play()
-            self.app.exec_()
-            self.assert_(self.called)
-        else:
-            print 'Ogg format not supported! Playback test skipped!'
 
 if __name__ == '__main__':
     unittest.main()
+
