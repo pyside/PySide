@@ -19,6 +19,8 @@ struct Converter<QVariant>
         if (PyObject_TypeCheck(type, &SbkObjectType_Type)) {
             SbkObjectType* sbkType = reinterpret_cast<SbkObjectType*>(type);
             const char* typeName = Shiboken::ObjectType::getOriginalName(sbkType);
+            if (!typeName)
+                return 0;
             bool valueType = '*' != typeName[qstrlen(typeName) - 1];
 
             // Do not convert user type of value
