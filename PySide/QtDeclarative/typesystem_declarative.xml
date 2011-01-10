@@ -97,7 +97,7 @@
     <object-type name="QDeclarativeImageProvider">
         <enum-type name="ImageType" />
     </object-type>
-    <object-type name="QDeclarativeItem">
+    <object-type name="QDeclarativeItem" polymorphic-id-expression="qgraphicsitem_cast&lt;QDeclarativeItem*>(%1)">
         <extra-includes>
             <include file-name="pysideqmlregistertype.h" location="local"/>
         </extra-includes>
