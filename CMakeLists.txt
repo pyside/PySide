@@ -56,7 +56,7 @@ else()
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
+    set(CMAKE_BUILD_TYPE ${SHIBOKEN_BUILD_TYPE})
 endif()
 
 set(BINDING_NAME PySide)
