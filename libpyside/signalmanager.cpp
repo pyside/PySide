@@ -324,8 +324,14 @@ static int PySide::callMethod(QObject* object, int id, void** args)
             void* data = args[i+1];
             const char* dataType = paramTypes[i].constData();
 
-            PyObject* arg = Shiboken::TypeResolver::get(dataType)->toPython(data);
-            PyTuple_SET_ITEM(preparedArgs, i, arg);
+            Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(dataType);
+            if (tr) {
+                PyObject* arg = tr->toPython(data);
+                PyTuple_SET_ITEM(preparedArgs, i, arg);
+            } else {
+                PyErr_Format(PyExc_TypeError, "Can't call meta function because I have no idea how to handle %s", dataType);
+                return -1;
+            }
         }
 
         QString methodName = method.signature();
