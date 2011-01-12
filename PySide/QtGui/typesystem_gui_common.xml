@@ -71,11 +71,86 @@
   <rejection class="*" function-name="qDrawBorderPixmap"/>
   <rejection class="*" function-name="qDrawPixmaps"/>
   <rejection class="*" function-name="qGenericMatrixToMatrix4x4"/>
-  <rejection class="QTouchEvent" field-name="_touchPointStates"/>
 
   <rejection class="*" function-name="d_func"/>
   <rejection class="*" field-name="d_ptr"/>
   <rejection class="*" field-name="d"/>
+
+  <!--
+    Event classes have a lot of non-documented protected fields, those fields
+    are removed from PySide because they are Qt implementation details,
+    besides the fact they are accessible by ordinary event methods.
+    -->
+
+  <rejection class="QInputEvent" field-name="modState"/>
+  <rejection class="QInputEvent" field-name="modState"/>
+
+  <rejection class="QMouseEvent" field-name="p"/>
+  <rejection class="QMouseEvent" field-name="g"/>
+  <rejection class="QMouseEvent" field-name="b"/>
+  <rejection class="QMouseEvent" field-name="mouseState"/>
+
+  <rejection class="QHoverEvent" field-name="p"/>
+  <rejection class="QHoverEvent" field-name="op"/>
+
+  <rejection class="QWheelEvent" field-name="p"/>
+  <rejection class="QWheelEvent" field-name="g"/>
+  <rejection class="QWheelEvent" field-name="mouseState"/>
+  <rejection class="QWheelEvent" field-name="o"/>
+
+  <rejection class="QTabletEvent" field-name="mPos"/>
+  <rejection class="QTabletEvent" field-name="mGPos"/>
+  <rejection class="QTabletEvent" field-name="mHiResGlobalPos"/>
+  <rejection class="QTabletEvent" field-name="mDev"/>
+  <rejection class="QTabletEvent" field-name="mPointerType"/>
+  <rejection class="QTabletEvent" field-name="mXT"/>
+  <rejection class="QTabletEvent" field-name="mYT"/>
+  <rejection class="QTabletEvent" field-name="mZ"/>
+  <rejection class="QTabletEvent" field-name="mPress"/>
+  <rejection class="QTabletEvent" field-name="mTangential"/>
+  <rejection class="QTabletEvent" field-name="mRot"/>
+  <rejection class="QTabletEvent" field-name="mUnique"/>
+  <rejection class="QTabletEvent" field-name="mExtra"/>
+
+  <rejection class="QKeyEvent" field-name="txt"/>
+  <rejection class="QKeyEvent" field-name="k"/>
+  <rejection class="QKeyEvent" field-name="c"/>
+  <rejection class="QKeyEvent" field-name="auto"/>
+
+  <rejection class="QPaintEvent" field-name="m_rect"/>
+  <rejection class="QPaintEvent" field-name="m_region"/>
+  <rejection class="QPaintEvent" field-name="m_erased"/>
+
+  <rejection class="QMoveEvent" field-name="p"/>
+  <rejection class="QMoveEvent" field-name="oldp"/>
+
+  <rejection class="QResizeEvent" field-name="s"/>
+  <rejection class="QResizeEvent" field-name="olds"/>
+
+  <rejection class="QContextMenuEvent" field-name="p"/>
+  <rejection class="QContextMenuEvent" field-name="gp"/>
+  <rejection class="QContextMenuEvent" field-name="reas"/>
+
+  <rejection class="QDropEvent" field-name="p"/>
+  <rejection class="QDropEvent" field-name="mouseState"/>
+  <rejection class="QDropEvent" field-name="modState"/>
+  <rejection class="QDropEvent" field-name="act"/>
+  <rejection class="QDropEvent" field-name="drop_action"/>
+  <rejection class="QDropEvent" field-name="default_action"/>
+  <rejection class="QDropEvent" field-name="mdata"/>
+  <rejection class="QDropEvent" field-name="fmts"/>
+
+  <rejection class="QDragMoveEvent" field-name="rect"/>
+
+  <rejection class="QShortcutEvent" field-name="sequence"/>
+  <rejection class="QShortcutEvent" field-name="ambig"/>
+  <rejection class="QShortcutEvent" field-name="sid"/>
+
+  <rejection class="QTouchEvent" field-name="_widget"/>
+  <rejection class="QTouchEvent" field-name="_deviceType"/>
+  <rejection class="QTouchEvent" field-name="_touchPointStates"/>
+  <rejection class="QTouchEvent" field-name="_touchPoints"/>
+
   <rejection class="QWindowsCEStyle"/>
   <rejection class="QWindowsMobileStyle"/>
   <rejection class="QAbstractUndoItem"/>
@@ -144,7 +219,6 @@
   <rejection class="QWidgetItem" field-name="wid"/>
   <rejection class="QActionGroup" function-name="selected"/>
   <rejection class="QPaintEngine" function-name="fix_neg_rect"/>
-  <rejection class="QTabletEvent" field-name="mExtra"/>
   <rejection class="*" enum-name="enum_1"/>
   <value-type name="QTransform">
     <enum-type name="TransformationType"/>
