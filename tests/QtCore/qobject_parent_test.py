@@ -25,6 +25,13 @@ class ParentRefCountCase(unittest.TestCase):
         self.child.setParent(self.parent)
         self.assertEqual(getrefcount(self.child), 3)
 
+    def testSetParentTwice(self):
+        self.assertEqual(getrefcount(self.child), 2)
+        self.child.setParent(self.parent)
+        self.assertEqual(getrefcount(self.child), 3)
+        self.child.setParent(self.parent)
+        self.assertEqual(getrefcount(self.child), 3)
+
     def testConstructor(self):
         #QObject(QObject) refcount changes
         child = QObject(self.parent)
