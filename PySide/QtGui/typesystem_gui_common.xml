@@ -3475,6 +3475,19 @@
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="winId()const">
+        <inject-documentation mode="replace" format="target">
+            Returns the window system identifier of the widget.
+
+            Portable in principle, but if you use it you are probably about to do something non-portable. Be careful.
+
+            If a widget is non-native (alien) and winId() is invoked on it, that widget will be provided a native handle.
+
+            On X11 the type returned is long, on other platforms it's a PyCObject.
+
+            This value may change at run-time. An event with type PySide.QtCore.QEvent.WinIdChange will be sent to the widget following a change in window system identifier.
+        </inject-documentation>
+    </modify-function>
   </object-type>
   <object-type name="QMessageBox">
     <enum-type name="ButtonRole"/>
