@@ -56,17 +56,6 @@
     <rejection class="QMetaObject" function-name="changeGuard"/>
     <rejection class="QMetaObject" function-name="removeGuard"/>
 
-  <rejection class="QFutureSynchronizer"/>
-  <rejection class="QByteArray" function-name="contains"/>
-  <rejection class="QLatin1String" />
-  <rejection class="QLatin1Char" />
-  <rejection class="QStringMatcher" />
-  <rejection class="QSharedPointer"/>
-  <rejection class="QWeakPointer"/>
-  <rejection class="std::string"/>
-  <rejection class="std::wstring"/>
-  <rejection class="QStdWString"/>
-  <rejection class="QByteRef"/>
   <rejection class="QChildEvent" field-name="c"/>
   <rejection class="QTimerEvent" field-name="id"/>
   <rejection class="QEvent" field-name="t"/>
@@ -88,9 +77,11 @@
   <rejection class="*" function-name="qReallocAligned"/>
   <rejection class="*" function-name="qMallocAligned"/>
   <rejection class="*" function-name="qFreeAligned"/>
+  <rejection class="QMetaMethod" enum-name="Attributes" />
 
   <enum-type name="QtValidLicenseForOpenVGModule"/>
   <enum-type name="QtValidLicenseForMultimediaModule"/>
+  <enum-type name="QtValidLicenseForDeclarativeModule" />
   <!-- From Qt4.6 ^^^ -->
 
   <enum-type name="QtMsgType"/>
@@ -182,26 +173,6 @@
     <conversion-rule file="qstack_conversion.h"/>
   </container-type>
 
-  <rejection class="QVector" function-name="back"/>
-  <rejection class="QVector" function-name="begin"/>
-  <rejection class="QVector" function-name="constBegin"/>
-  <rejection class="QVector" function-name="constData"/>
-  <rejection class="QVector" function-name="constEnd"/>
-  <rejection class="QVector" function-name="data"/>
-  <rejection class="QVector" function-name="end"/>
-  <rejection class="QVector" function-name="erase"/>
-  <rejection class="QVector" function-name="first"/>
-  <rejection class="QVector" function-name="free"/>
-  <rejection class="QVector" function-name="front"/>
-  <rejection class="QVector" function-name="insert"/>
-  <rejection class="QVector" function-name="last"/>
-  <rejection class="QVector" function-name="malloc"/>
-  <rejection class="QVector" function-name="alloc"/>
-  <rejection class="QVector" function-name="operator+="/>
-  <rejection class="QVector" function-name="operator[]"/>
-  <rejection class="QVector" function-name="toStdVector"/>
-  <rejection class="QVector" function-name="fromStdVector"/>
-
   <container-type name="QQueue" type="queue"/>
 
   <container-type name="QHash" type="hash">
@@ -256,239 +227,6 @@
   <rejection class="" enum-name="QtValidLicenseForScriptModule"/>
   <rejection class="" enum-name="QtValidLicenseForHelpModule"/>
   <rejection class="QtConcurrent" enum-name="enum_1"/>
-  <rejection class="QFuture::const_iterator"/>
-  <rejection class="QFutureInterface"/>
-  <rejection class="QFutureInterfaceBase"/>
-  <rejection class="QtConcurrent::BlockSizeManager"/>
-  <rejection class="QtConcurrent::ConstMemberFunctionWrapper"/>
-  <rejection class="QtConcurrent::Exception"/>
-  <rejection class="QtConcurrent::FilterKernel"/>
-  <rejection class="QtConcurrent::FilteredEachKernel"/>
-  <rejection class="QtConcurrent::FilteredReducedKernel"/>
-  <rejection class="QtConcurrent::FunctionWrapper0"/>
-  <rejection class="QtConcurrent::FunctionWrapper1"/>
-  <rejection class="QtConcurrent::FunctionWrapper2"/>
-  <rejection class="QtConcurrent::IntermediateResults"/>
-  <rejection class="QtConcurrent::IterateKernel"/>
-  <rejection class="QtConcurrent::MapKernel"/>
-  <rejection class="QtConcurrent::MappedEachKernel"/>
-  <rejection class="QtConcurrent::MappedReducedKernel"/>
-  <rejection class="QtConcurrent::Median"/>
-  <rejection class="QtConcurrent::MemberFunctionWrapper"/>
-  <rejection class="QtConcurrent::MemberFunctionWrapper1"/>
-  <rejection class="QtConcurrent::ReduceKernel"/>
-  <rejection class="QtConcurrent::ResultItem"/>
-  <rejection class="QtConcurrent::ResultIterator"/>
-  <rejection class="QtConcurrent::ResultIteratorBase"/>
-  <rejection class="QtConcurrent::ResultReporter"/>
-  <rejection class="QtConcurrent::ResultStore"/>
-  <rejection class="QtConcurrent::ResultStoreBase"/>
-  <rejection class="QtConcurrent::RunFunctionTask"/>
-  <rejection class="QtConcurrent::RunFunctionTaskBase"/>
-  <rejection class="QtConcurrent::SelectSpecialization"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall0"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall1"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall2"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall3"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall4"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionCall5"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall0"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall1"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall2"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall3"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall4"/>
-  <rejection class="QtConcurrent::SelectStoredConstMemberFunctionPointerCall5"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorCall0"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorCall1"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorCall2"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorCall3"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorCall4"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorCall5"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall0"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall1"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall2"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall3"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall4"/>
-  <rejection class="QtConcurrent::SelectStoredFunctorPointerCall5"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall0"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall1"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall2"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall3"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall4"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionCall5"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall0"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall1"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall2"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall3"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall4"/>
-  <rejection class="QtConcurrent::SelectStoredMemberFunctionPointerCall5"/>
-  <rejection class="QtConcurrent::SequenceHolder1"/>
-  <rejection class="QtConcurrent::SequenceHolder2"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionCall0"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionCall1"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionCall2"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionCall3"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionCall4"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionCall5"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall0"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall1"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall2"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall3"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall4"/>
-  <rejection class="QtConcurrent::StoredConstMemberFunctionPointerCall5"/>
-  <rejection class="QtConcurrent::StoredFunctorCall0"/>
-  <rejection class="QtConcurrent::StoredFunctorCall1"/>
-  <rejection class="QtConcurrent::StoredFunctorCall2"/>
-  <rejection class="QtConcurrent::StoredFunctorCall3"/>
-  <rejection class="QtConcurrent::StoredFunctorCall4"/>
-  <rejection class="QtConcurrent::StoredFunctorCall5"/>
-  <rejection class="QtConcurrent::StoredFunctorPointerCall0"/>
-  <rejection class="QtConcurrent::StoredFunctorPointerCall1"/>
-  <rejection class="QtConcurrent::StoredFunctorPointerCall2"/>
-  <rejection class="QtConcurrent::StoredFunctorPointerCall3"/>
-  <rejection class="QtConcurrent::StoredFunctorPointerCall4"/>
-  <rejection class="QtConcurrent::StoredFunctorPointerCall5"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionCall0"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionCall1"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionCall2"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionCall3"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionCall4"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionCall5"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall0"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall1"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall2"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall3"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall4"/>
-  <rejection class="QtConcurrent::StoredMemberFunctionPointerCall5"/>
-  <rejection class="QtConcurrent::ThreadEngine"/>
-  <rejection class="QtConcurrent::ThreadEngineBase"/>
-  <rejection class="QtConcurrent::ThreadEngineSemaphore"/>
-  <rejection class="QtConcurrent::ThreadEngineStarter"/>
-  <rejection class="QtConcurrent::ThreadEngineStarterBase"/>
-  <rejection class="QtConcurrent::UnhandledException"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall0"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall1"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall2"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall3"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall4"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionCall5"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall0"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall1"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall2"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall3"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall4"/>
-  <rejection class="QtConcurrent::VoidStoredConstMemberFunctionPointerCall5"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorCall0"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorCall1"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorCall2"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorCall3"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorCall4"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorCall5"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall0"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall1"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall2"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall3"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall4"/>
-  <rejection class="QtConcurrent::VoidStoredFunctorPointerCall5"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall0"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall1"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall2"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall3"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall4"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionCall5"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall0"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall1"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall2"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall3"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall4"/>
-  <rejection class="QtConcurrent::VoidStoredMemberFunctionPointerCall5"/>
-  <rejection class="QMdi"/>
-  <rejection class="stdext"/>
-  <rejection class="QAlgorithmsPrivate"/>
-  <rejection class="QAtomic"/>
-  <rejection class="QAtomicPointer"/>
-  <rejection class="QAtomicInt"/>
-  <rejection class="QBasicAtomicInt"/>
-  <rejection class="QBasicAtomic"/>
-  <rejection class="QBasicAtomicPointer"/>
-  <rejection class="QBitRef"/>
-  <rejection class="QCache"/>
-  <rejection class="QCharRef"/>
-  <rejection class="QDebug"/>
-  <rejection class="QExplicitlySharedDataPointer"/>
-  <rejection class="QFlag"/>
-  <rejection class="QFlags"/>
-  <rejection class="QForeachContainer"/>
-  <rejection class="QForeachContainerBase"/>
-  <rejection class="QGlobalStatic"/>
-  <rejection class="QInternal"/>
-  <rejection class="QMetaType"/>
-  <rejection class="QMetaTypeId"/>
-  <rejection class="QNoImplicitBoolCast"/>
-  <rejection class="QObjectCleanupHandler"/>
-  <rejection class="QObjectData"/>
-  <rejection class="QObjectUserData"/>
-  <rejection class="QPointer"/>
-  <rejection class="QSetIterator"/>
-  <rejection class="QSharedData"/>
-  <rejection class="QSharedDataPointer"/>
-  <rejection class="QStack"/>
-  <rejection class="QThreadStorage"/>
-  <rejection class="QThreadStorageData"/>
-  <rejection class="QTypeInfo"/>
-  <rejection class="QTypeInfo"/>
-  <rejection class="QVFbKeyData"/>
-  <rejection class="QVariantComparisonHelper"/>
-  <rejection class="QVectorData"/>
-  <rejection class="QVectorIterator"/>
-  <rejection class="QVectorTypedData"/>
-  <rejection class="QtPrivate"/>
-  <rejection class="qGreater"/>
-  <rejection class="qLess"/>
-  <rejection class="std"/>
-  <rejection class="QAbstractFileEngine::ExtensionOption"/>
-  <rejection class="QAbstractFileEngine::ExtensionReturn"/>
-  <rejection class="QByteArray::Data"/>
-  <rejection class="QIntForType"/>
-  <rejection class="QMetaTypeId2"/>
-  <rejection class="QMutableSetIterator"/>
-  <rejection class="QSubString"/>
-  <rejection class="QUintForType"/>
-  <rejection class="QtConcurrent::internal"/>
-  <rejection class="QLocale::Data"/>
-  <rejection class="QGlobalStaticDeleter"/>
-  <rejection class="QSharedMemory"/>
-  <!-- Temporarily until we know how to implement it in Java -->
-  <rejection class="QVarLengthArray"/>
-  <!-- DBus -->
-  <rejection class="QDBusAbstractAdaptor"/>
-  <rejection class="QDBusAbstractInterface"/>
-  <rejection class="QDBusArgument"/>
-  <rejection class="QDBusConnection"/>
-  <rejection class="QDBusConnectionInterface"/>
-  <rejection class="QDBusContext"/>
-  <rejection class="QDBusError"/>
-  <rejection class="QDBusInterface"/>
-  <rejection class="QDBusMessage"/>
-  <rejection class="QDBusMetaType"/>
-  <rejection class="QDBusObjectPath"/>
-  <rejection class="QDBusReply"/>
-  <rejection class="QDBusServer"/>
-  <rejection class="QDBusSignature"/>
-  <rejection class="QDBusVariant"/>
-  <rejection class="_Revbidit"/>
-  <rejection class="_complex"/>
-  <rejection class="_exception"/>
-  <rejection class="_iobuf"/>
-  <rejection class="_stat"/>
-  <rejection class="_wfinddata_t"/>
-  <rejection class="exception"/>
-  <rejection class="istreambuf_iterator"/>
-  <rejection class="ostreambuf_iterator"/>
-  <rejection class="reverse_bidirectional_iterator"/>
-  <rejection class="reverse_iterator"/>
-  <rejection class="stat"/>
-  <rejection class="tm"/>
   <rejection class="QAbstractEventDispatcher" function-name="filterEvent"/>
   <rejection class="QAbstractEventDispatcher" function-name="setEventFilter"/>
   <rejection class="QAbstractFileEngine" function-name="beginEntryList"/>
@@ -506,7 +244,6 @@
   <rejection class="QSettings" function-name="registerFormat"/>
   <rejection class="QAbstractFileEngineIterator" function-name="entryInfo"/>
   <rejection class="QAbstractFileEngineIterator" enum-name="EntryInfoType"/>
-  <rejection class="QDataStream" enum-name="ByteOrder"/>
   <namespace-type name="Qt">
     <enum-type name="AlignmentFlag" flags="Qt::Alignment" />
     <enum-type name="AnchorAttribute"/>
@@ -1369,12 +1106,6 @@
             %PYARG_0 = %CONVERTTOPYTHON[bool](retval);
         </inject-code>
     </modify-function>
-    <!-- findChildren and findChild causes warnings using generator. They were kept
-         here to avoid generation even removing QT_NO_MEMBER_TEMPLATES and QT_NO_REGEXP
-         from #define section-->
-    <modify-function signature="findChildren(const QRegExp &amp;) const" remove="all"/>
-    <modify-function signature="findChildren(const QString &amp;) const" remove="all"/>
-    <modify-function signature="findChild(const QString &amp;) const" remove="all" />
     <inject-code class="native" file="glue/qobject_findchild.cpp"/>
     <add-function signature="findChild(PyTypeObject*, const QString&amp;)" return-type="PyObject*">
         <inject-code class="target" position="beginning">
@@ -2297,6 +2028,7 @@
     <enum-type name="FloatingPointPrecision"/>
     <enum-type name="Status"/>
     <enum-type name="Version"/>
+    <enum-type name="ByteOrder"/>
     <extra-includes>
       <include file-name="QtCore/QtCore" location="global"/>
     </extra-includes>
@@ -2608,6 +2340,7 @@
     <modify-function signature="mid(int, int) const" remove="all"/>
     <modify-function signature="toList() const" remove="all"/>
     <modify-function signature="fromList(const QList&lt;QXmlStreamAttribute&gt; &amp;)" remove="all"/>
+    <modify-function signature="operator+=(QVector)" remove="all" />
   </value-type>
   <value-type name="QXmlStreamNamespaceDeclaration"/>
   <value-type name="QXmlStreamNotationDeclaration"/>
@@ -2651,6 +2384,7 @@
   <value-type name="QMetaMethod">
     <enum-type name="Access"/>
     <enum-type name="MethodType"/>
+    <modify-function signature="attributes()const" remove="all" />
   </value-type>
   <object-type name="QMetaObject">
     <enum-type name="Call"/>
@@ -2759,8 +2493,6 @@
     </modify-function>
   </object-type>
 
-  <rejection class="QContiguousCache"/>
-
   <!-- FIXME: setCustomType() actually takes a pointer to function type
   (EasingFunction), but for some reason apiextractor thinks it is a float/double:
   http://bugs.openbossa.org/show_bug.cgi?id=201 -->
@@ -2800,8 +2532,6 @@
   <value-type name="QProcessEnvironment"/>
 
   <object-type name="QPropertyAnimation"/>
-
-  <rejection class="QScopedPointer"/>
 
   <object-type name="QSequentialAnimationGroup"/>
 
@@ -2997,10 +2727,6 @@
   <suppress-warning text="Unable to decide type of property: 'QLibrary::LoadHints' in class 'QPluginLoader'" />
   <suppress-warning text="enum '_ISalnum' does not have a type entry or is not an enum" />
   <suppress-warning text="enum 'Qt::Initialization' does not have a type entry or is not an enum" />
-  <suppress-warning text="signature 'contais(QXmlStreamAttribute)' for function modification in 'QXmlStreamAttributes' not found."/>
-  <suppress-warning text="signature 'findChildren(QRegExp)const' for function modification in 'QObject' not found"/>
-  <suppress-warning text="signature 'findChildren(QString)const' for function modification in 'QObject' not found."/>
-  <suppress-warning text="signature 'findChild(QString)const' for function modification in 'QObject' not found."/>
   <suppress-warning text="skipping function '*'"/>
   <suppress-warning text="visibility of function '*' modified in class '*'"/>
   <suppress-warning text="hiding of function '*' in class '*'"/>
@@ -3016,8 +2742,6 @@
   <suppress-warning text="signal '*' in class '*' is overloaded."/>
   <suppress-warning text="enum 'enum_3' does not have a type entry or is not an enum"/>
   <suppress-warning text="Shadowing: QFile::fileName() const and QTemporaryFile::fileName() const"/>
-  <suppress-warning text="enum 'QtValidLicenseForDeclarativeModule' does not have a type entry or is not an enum"/>
-  <suppress-warning text="enum 'QMetaMethod::Attributes' does not have a type entry or is not an enum"/>
   <suppress-warning text="unhandled enum value: ~0u in Qt::GestureType"/>
   <suppress-warning text="unhandled enum value: (sizeof(void*)&lt;&lt;3) in QSysInfo::Sizes"/>
   <suppress-warning text="unmatched enum ~0u"/>
@@ -3025,6 +2749,7 @@
   <suppress-warning text="signature 'setCustomType(float)' for function modification in 'QEasingCurve' not found. Possible candidates: setCustomType(double) in QEasingCurve"/>
   <suppress-warning text="enum 'enum_4' does not have a type entry or is not an enum" />
   <suppress-warning text="enum 'enum_5' does not have a type entry or is not an enum" />
+  <suppress-warning text="enum 'FP_NORMAL' does not have a type entry or is not an enum" />
   <suppress-warning text="Shadowing: *" />
   <!-- this enum is defined on Qt global header but only used in QtDeclarative module -->
   <suppress-warning text="enum 'QML_HAS_ATTACHED_PROPERTIES' does not have a type entry or is not an enum" />

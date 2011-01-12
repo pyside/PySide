@@ -151,53 +151,6 @@
   <rejection class="QTouchEvent" field-name="_touchPointStates"/>
   <rejection class="QTouchEvent" field-name="_touchPoints"/>
 
-  <rejection class="QWindowsCEStyle"/>
-  <rejection class="QWindowsMobileStyle"/>
-  <rejection class="QAbstractUndoItem"/>
-  <rejection class="QBrushData"/>
-  <rejection class="QImageTextKeyLang"/>
-  <rejection class="QItemEditorCreator"/>
-  <rejection class="QLibrary"/>
-  <rejection class="QLinkedList"/>
-  <rejection class="QLinkedListData"/>
-  <rejection class="QLinkedListIterator"/>
-  <rejection class="QLinkedListNode"/>
-  <rejection class="QMimeSource"/>
-  <rejection class="QPainterPathPrivate"/>
-  <rejection class="QRegionData"/>
-  <rejection class="QStandardItemEditorCreator"/>
-  <rejection class="QStyleOptionQ3DockWindow"/>
-  <rejection class="QStyleOptionQ3ListView"/>
-  <rejection class="QStyleOptionQ3ListViewItem"/>
-  <rejection class="QTextFrameLayoutData"/>
-  <rejection class="QUpdateLaterEvent"/>
-  <rejection class="QVFbHeader"/>
-  <rejection class="QWidgetData"/>
-  <rejection class="QWindowSurface"/>
-  <rejection class="QWindowsXPStyle"/>
-  <rejection class="QWindowsVistaStyle"/>
-  <rejection class="QWSEmbedWidget"/>
-  <rejection class="QRegion::QRegionData"/>
-  <rejection class="JObject_key"/>
-  <rejection class="QIconEngineFactoryInterface"/>
-  <rejection class="QIconEnginePlugin"/>
-  <rejection class="QWidgetItemV2"/>
-  <rejection class="QAccessibleApplication"/>
-  <rejection class="QAccessibleFactoryInterface"/>
-  <rejection class="QAccessibleEditableTextInterface"/>
-  <rejection class="QAccessibleSimpleEditableTextInterface"/>
-  <rejection class="QAccessibleTextInterface"/>
-  <rejection class="QAccessibleValueInterface"/>
-  <rejection class="QAccessibleObjectEx"/>
-  <rejection class="QAccessibleObject"/>
-  <rejection class="QAccessible"/>
-  <rejection class="QAccessible2"/>
-  <rejection class="QAccessibleInterface"/>
-  <rejection class="QAccessibleBridgePlugin"/>
-  <rejection class="QAccessibleBridgeFactoryInterface"/>
-  <rejection class="QAccessibleInterfaceEx"/>
-  <rejection class="QAccessibleWidget"/>
-  <rejection class="QAccessibleWidgetEx"/>
   <rejection class="QAbstractTextDocumentLayout::PaintContext" field-name="selections"/>
   <rejection class="QApplication" function-name="compressEvent"/>
   <rejection class="QBrush" function-name="cleanUp"/>
@@ -561,7 +514,7 @@
 
 
     <modify-function signature="QPolygon(int, const int *)" remove="all"/>
-    <modify-function signature="operator+(QVector&lt;QPoint&gt;)const" remove="all"/>
+    <modify-function signature="operator+=(QVector)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QPoint)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QVector&lt;QPoint&gt;)" remove="all"/>
   </value-type>
@@ -570,7 +523,7 @@
       <include file-name="QMatrix" location="global"/>
       <include file-name="QTransform" location="global"/>
     </extra-includes>
-    <modify-function signature="operator+(QVector&lt;QPointF&gt;)const" remove="all"/>
+    <modify-function signature="operator+=(QVector)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QPointF)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QVector&lt;QPointF&gt;)" remove="all"/>
   </value-type>
@@ -2136,8 +2089,6 @@
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="read(QDataStream &amp;)" remove="all"/>
-    <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
     <modify-function signature="operator&lt;(QStandardItem)const" remove="all"/>
   </object-type>
   <object-type name="QStatusBar">
@@ -3159,8 +3110,6 @@
     <modify-function signature="write(QDataStream&amp;)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="read(QDataStream &amp;)" remove="all"/>
-    <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
   </object-type>
   <object-type name="QListWidgetItem" >
     <enum-type name="ItemType"/>
@@ -3198,8 +3147,6 @@
     <!--### Obsolete in 4.3-->
     <modify-function signature="textColor()const" remove="all"/>
     <!--### Obsolete in 4.3-->
-    <modify-function signature="read(QDataStream &amp;)" remove="all"/>
-    <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
   </object-type>
   <object-type name="QGraphicsTextItem">
     <!-- a QObject so main-thread delete redundant -->
@@ -3336,9 +3283,6 @@
     <!--### Obsolete in 4.3-->
     <modify-function signature="textColor(int)const" remove="all"/>
     <!--### Obsolete in 4.3-->
-    <modify-function signature="read(QDataStream &amp;)" remove="all"/>
-    <modify-function signature="write(QDataStream &amp;)const" remove="all"/>
-    <modify-function signature="QTreeWidgetItem(QTreeWidgetItem)" remove="all"/>
   </object-type>
   <object-type name="QListWidget">
     <modify-function signature="setItemWidget(QListWidgetItem *, QWidget *)">
@@ -5760,11 +5704,11 @@
   <suppress-warning text="signature 'addToolbar(Qt::ToolBarArea,QToolBar*)' for function modification in 'QMainWindow' not found."/>
   <suppress-warning text="signature 'addToolbar(QToolBar*)' for function modification in 'QMainWindow' not found."/>
   <suppress-warning text="signature 'addToolbar(QString)' for function modification in 'QMainWindow' not found."/>
-  <suppress-warning text="namespace 'PySide.QtGui.QInputMethodEvent' for enum 'AttributeType' is not declared"/>
-  <suppress-warning text="type 'QInputMethodEvent::Attribute' is specified in typesystem, but not defined."/>
   <suppress-warning text="unhandled enum value: ~FlagMask in QMessageBox::StandardButton"/>
   <suppress-warning text="unmatched enum ~FlagMask"/>
-  <suppress-warning text="Argument 1 on function 'QTabWidget::setUpLayout(bool)' has default expressiont but does not have name."/>
   <suppress-warning text="enum 'QMatrix4x4::enum_1' is specified in typesystem, but not declared"/>
   <suppress-warning text="type 'QGtkStyle' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
+  <suppress-warning text="class not found for setup inheritance 'QMimeSource'"/>
+  <suppress-warning text="class 'QDropEvent' inherits from unknown base class 'QMimeSource'"/>
+
 </typesystem>
