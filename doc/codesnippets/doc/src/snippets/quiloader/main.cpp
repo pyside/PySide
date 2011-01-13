@@ -50,7 +50,7 @@ def loadCustomWidget(parent):
 
     availableWidgets = loader.availableWidgets()
 
-    if (availableWidgets.contains("AnalogClock")):
+    if availableWidgets.contains("AnalogClock"):
         myWidget = loader.createWidget("AnalogClock", parent)
 
     return myWidget
