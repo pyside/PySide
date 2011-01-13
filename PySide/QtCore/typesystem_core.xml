@@ -433,7 +433,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(iiii)" />
+              <replace from="%REDUCE_FORMAT" to="iiii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" />
             </insert-template>
         </inject-code>
@@ -451,7 +451,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(dddd)" />
+              <replace from="%REDUCE_FORMAT" to="dddd" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" />
             </insert-template>
         </inject-code>
@@ -504,7 +504,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(iii)" />
+              <replace from="%REDUCE_FORMAT" to="iii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.year(), %CPPSELF.month(), %CPPSELF.day()" />
             </insert-template>
         </inject-code>
@@ -569,7 +569,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(iiiiiiii)" />
+              <replace from="%REDUCE_FORMAT" to="iiiiiiii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.date().year(), %CPPSELF.date().month(), %CPPSELF.date().day(), %CPPSELF.time().hour(), %CPPSELF.time().minute(), %CPPSELF.time().second(), %CPPSELF.time().msec(), (int)%CPPSELF.timeSpec()" />
             </insert-template>
         </inject-code>
@@ -581,7 +581,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(s)" />
+              <replace from="%REDUCE_FORMAT" to="s" />
               <replace from="%REDUCE_ARGS" to="qPrintable(%CPPSELF.path())" />
             </insert-template>
         </inject-code>
@@ -593,7 +593,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(ii)" />
+              <replace from="%REDUCE_FORMAT" to="ii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
             </insert-template>
         </inject-code>
@@ -612,7 +612,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(dd)" />
+              <replace from="%REDUCE_FORMAT" to="dd" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
             </insert-template>
         </inject-code>
@@ -624,7 +624,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(iiii)" />
+              <replace from="%REDUCE_FORMAT" to="iiii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.width(), %CPPSELF.height()" />
             </insert-template>
         </inject-code>
@@ -689,7 +689,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(dddd)" />
+              <replace from="%REDUCE_FORMAT" to="dddd" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.width(), %CPPSELF.height()" />
             </insert-template>
         </inject-code>
@@ -743,7 +743,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(ii)" />
+              <replace from="%REDUCE_FORMAT" to="ii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.width(), %CPPSELF.height()" />
             </insert-template>
         </inject-code>
@@ -762,7 +762,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(dd)" />
+              <replace from="%REDUCE_FORMAT" to="dd" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.width(), %CPPSELF.height()" />
             </insert-template>
         </inject-code>
@@ -775,7 +775,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(iiii)" />
+              <replace from="%REDUCE_FORMAT" to="iiii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.hour(), %CPPSELF.minute(), %CPPSELF.second(), %CPPSELF.msec()" />
             </insert-template>
         </inject-code>
@@ -795,7 +795,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(s)" />
+              <replace from="%REDUCE_FORMAT" to="s" />
               <replace from="%REDUCE_ARGS" to="qPrintable(%CPPSELF.toString())" />
             </insert-template>
         </inject-code>
@@ -1224,7 +1224,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(s)" />
+              <replace from="%REDUCE_FORMAT" to="s" />
               <replace from="%REDUCE_ARGS" to="qPrintable(%CPPSELF.toString())" />
             </insert-template>
         </inject-code>
@@ -1239,7 +1239,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(sii)" />
+              <replace from="%REDUCE_FORMAT" to="sii" />
               <replace from="%REDUCE_ARGS" to="qPrintable(%CPPSELF.pattern()), (int)%CPPSELF.caseSensitivity(), (int)%CPPSELF.patternSyntax()" />
             </insert-template>
         </inject-code>
@@ -1288,7 +1288,7 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(s)" />
+              <replace from="%REDUCE_FORMAT" to="s" />
               <replace from="%REDUCE_ARGS" to="qPrintable(%CPPSELF.filePath())" />
             </insert-template>
         </inject-code>
@@ -1301,8 +1301,8 @@
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(s)" />
-              <replace from="%REDUCE_ARGS" to="%CPPSELF.constData()" />
+                <replace from="%REDUCE_FORMAT" to="N" />
+                <replace from="%REDUCE_ARGS" to="PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size())" />
             </insert-template>
         </inject-code>
     </add-function>
