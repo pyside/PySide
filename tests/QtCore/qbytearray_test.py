@@ -4,6 +4,8 @@
 import unittest
 import ctypes
 import sys
+import pickle
+import cStringIO
 
 from PySide.QtCore import *
 
@@ -108,6 +110,15 @@ class QByteArrayBug514(unittest.TestCase):
         a = QByteArray.fromRawData(data)
         self.assertEqual(type(a), QByteArray)
         self.assertEqual(a.data(), data)
+
+class TestPickler(unittest.TestCase):
+    def testIt(self):
+        ba = QByteArray("321\x00123")
+        output = cStringIO.StringIO()
+        pickle.dump(ba, output)
+        ba2 = pickle.loads(output.getvalue())
+        self.assertEqual(ba, ba2)
+
 
 if __name__ == '__main__':
     unittest.main()

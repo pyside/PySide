@@ -499,14 +499,14 @@
     </extra-includes>
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            PyObject *points = PyList_New(%CPPSELF.count());
-            for (int i = 0; i &lt; %CPPSELF.count(); ++i){
+            PyObject* points = PyList_New(%CPPSELF.count());
+            for (int i = 0, max = %CPPSELF.count(); i &lt; max; ++i){
                 int x, y;
                 %CPPSELF.point(i, &amp;x, &amp;y);
                 PyList_SET_ITEM(points, i, %CONVERTTOPYTHON[QPoint](QPoint(x, y)));
             }
             <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="(N)" />
+              <replace from="%REDUCE_FORMAT" to="N" />
               <replace from="%REDUCE_ARGS" to="points" />
             </insert-template>
         </inject-code>

@@ -188,10 +188,7 @@
     </template>
     <!-- templates for __reduce__ -->
     <template name="reduce_code">
-        PyObject *type = PyObject_Type(%PYSELF);
-        PyObject *args = NULL;
-        args = Py_BuildValue("%REDUCE_FORMAT", %REDUCE_ARGS);
-        %PYARG_0 = Py_BuildValue("(NN)", type, args);
+        %PYARG_0 = Py_BuildValue("(N(%REDUCE_FORMAT))", PyObject_Type(%PYSELF), %REDUCE_ARGS);
     </template>
     <template name="reduce_code_matrix">
         QList&lt; %MATRIX_TYPE &gt; cppArgs;
