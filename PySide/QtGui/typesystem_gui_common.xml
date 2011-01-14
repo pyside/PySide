@@ -3339,82 +3339,134 @@
     </modify-function>
 
     <modify-function signature="actionEvent(QActionEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="changeEvent(QEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="closeEvent(QCloseEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="contextMenuEvent(QContextMenuEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="dragEnterEvent(QDragEnterEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="dragLeaveEvent(QDragLeaveEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="dragMoveEvent(QDragMoveEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="dropEvent(QDropEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="enterEvent(QEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="focusInEvent(QFocusEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="focusOutEvent(QFocusEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="hideEvent(QHideEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="inputMethodEvent(QInputMethodEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="keyPressEvent(QKeyEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="keyReleaseEvent(QKeyEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="leaveEvent(QEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="mouseDoubleClickEvent(QMouseEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="mouseMoveEvent(QMouseEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="mousePressEvent(QMouseEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="mouseReleaseEvent(QMouseEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="moveEvent(QMoveEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="paintEvent(QPaintEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="resizeEvent(QResizeEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="showEvent(QShowEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="tabletEvent(QTabletEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
     <modify-function signature="wheelEvent(QWheelEvent*)">
-        <modify-argument index="1" invalidate-after-use="yes"/>
+        <modify-argument index="1" invalidate-after-use="yes">
+            <rename to="event"/>
+        </modify-argument>
     </modify-function>
 
     <modify-function signature="setStyle(QStyle*)">
