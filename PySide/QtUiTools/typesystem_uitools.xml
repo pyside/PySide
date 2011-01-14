@@ -30,6 +30,40 @@
           Q_IMPORT_PLUGIN(uiplugin);
       </inject-code>
       <add-function signature="registerCustomWidget(PyObject*)" return-type="void">
+         <modify-argument index="1">
+            <rename to="customWidgetType" />
+         </modify-argument>
+         <inject-documentation format="target" mode="append">
+         Registers a Python created custom widget to QUiLoader, so it can be recognized when
+         loading a `.ui` file. The custom widget type is passed via the ``customWidgetType`` argument.
+         This is needed when you want to override a virtual method of some widget in the interface,
+         since duck punching will not work with widgets created by QUiLoader based on the contents
+         of the `.ui` file.
+
+         (Remember that `duck punching virtual methods is an invitation for your own demise!
+         &lt;http://www.pyside.org/docs/shiboken/wordsofadvice.html#duck-punching-and-virtual-methods>`_)
+
+         Let's see an obvious example. If you want to create a new widget it's probable you'll end up
+         overriding :class:`~PySide.QtGui.QWidget`'s :meth:`~PySide.QtGui.QWidget.paintEvent` method.
+
+         .. code-block:: python
+
+            class Circle(QWidget):
+                def paintEvent(self, event):
+                    painter = QPainter(self)
+                    painter.setPen(self.pen)
+                    painter.setBrush(QBrush(self.color))
+                    painter.drawEllipse(event.rect().center(), 20, 20)
+
+            # ...
+
+            loader = QUiLoader()
+            loader.registerCustomWidget(Circle)
+            circle = loader.load('circle.ui')
+            circle.show()
+
+            # ...
+         </inject-documentation>
          <inject-code class="target" position="beginning">
              registerCustomWidget(%PYARG_1);
              %CPPSELF.addPluginPath(""); // force reload widgets
