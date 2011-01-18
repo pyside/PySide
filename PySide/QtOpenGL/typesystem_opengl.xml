@@ -20,7 +20,6 @@
 -->
 <typesystem package="PySide.QtOpenGL">
   <load-typesystem name="typesystem_gui.xml" generate="no" />
-  <primitive-type name="GLuint" target-lang-api-name="PyLong" />
 
   <rejection class="QGLColormap::QGLColormapData"/>
   <rejection class="QGLWidget" function-name="setMouseTracking"/>

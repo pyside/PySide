@@ -1490,6 +1490,7 @@ QT_END_HEADER
 /* For compatibility with OpenGL v1.0 */
 #define GL_LOGIC_OP GL_INDEX_LOGIC_OP
 #define GL_TEXTURE_COMPONENTS GL_TEXTURE_INTERNAL_FORMAT
+#include <@GL_H@>
 #include <QtOpenGL/QtOpenGL>
 #endif // QT_NO_OPENGL
 
