@@ -3748,7 +3748,6 @@
         QWidget* tab = %CPPSELF.widget(%1);
         if (tab) {
             Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](tab));
-            Shiboken::Object::setParent(0, pyWidget);
             %CPPSELF.%FUNCTION_NAME(%1);
         }
     </inject-code>
