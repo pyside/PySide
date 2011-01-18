@@ -14,7 +14,7 @@ static inline void qwidgetReparentLayout(QWidget *parent, QLayout *layout)
 
     for (int i=0; i < layout->count(); i++) {
         QLayoutItem* item = layout->itemAt(i);
-        if (PyErr_Occurred())
+        if (PyErr_Occurred() || !item)
             return;
 
         QWidget* w = item->widget();
