@@ -22,7 +22,6 @@
   <load-typesystem name="typesystem_gui.xml" generate="no" />
 
   <rejection class="QGLColormap::QGLColormapData"/>
-  <rejection class="QGLWidget" function-name="setMouseTracking"/>
   <rejection class="QGLContext" field-name="currentCtx"/>
 
   <namespace-type name="QGL">
