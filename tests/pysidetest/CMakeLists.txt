@@ -2,7 +2,6 @@ project(pysidetest)
 project(testbinding)
 
 cmake_minimum_required(VERSION 2.6)
-find_package(PythonLibs REQUIRED)
 
 set(QT_USE_QTCORE 1)
 include(${QT_USE_FILE})
@@ -50,7 +49,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${QtCore_BINARY_DIR}/PySide/QtCore
                     ${QtGui_BINARY_DIR}/PySide/QtGui
                     ${libpyside_SOURCE_DIR}
-                    ${PYTHON_INCLUDE_PATH})
+                    ${SHIBOKEN_PYTHON_INCLUDE_DIR})
 
 add_library(pysidetest SHARED ${pysidetest_SRC} ${pysidetest_MOC_SRC})
 target_link_libraries(pysidetest ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
