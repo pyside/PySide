@@ -19,11 +19,15 @@ public:
     void emitIdValueSignal();
     void emitStaticMethodDoubleSignal();
 
+    void emitSignalWithDefaultValue_void();
+    void emitSignalWithDefaultValue_bool();
+
 signals:
     void idValue(int newValue);
     void justASignal();
     void staticMethodDouble();
     void childrenChanged(const QList<QObject*>&);
+    void signalWithDefaultValue(bool value = false);
 
 private:
     int m_idValue;
