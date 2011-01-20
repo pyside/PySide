@@ -179,7 +179,7 @@ void SignalManager::addGlobalSlot(const char* slot, PyObject* callback)
 static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args)
 {
     void* signalArgs[2] = {0, args};
-    QMetaObject::activate(source, signalIndex, signalArgs);
+    source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
     return true;
 }
 
@@ -215,7 +215,7 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
 
     bool ok = i == argsGiven;
     if (ok)
-        QMetaObject::activate(source, signalIndex, signalArgs);
+        source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
 
     delete[] signalArgs;
     delete[] signalValues;
