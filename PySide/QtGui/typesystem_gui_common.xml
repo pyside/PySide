@@ -4333,6 +4333,26 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="del()" rename="del_" />
+    <modify-function signature="getTextMargins(int *, int *, int *, int *) const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject *" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+          <insert-template name="fix_int*,int*,int*,int*"/>
+        </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QLCDNumber">
       <enum-type name="Mode"/>
