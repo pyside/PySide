@@ -766,10 +766,44 @@
     </extra-includes>
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            <insert-template name="reduce_code">
-              <replace from="%REDUCE_FORMAT" to="iiii" />
-              <replace from="%REDUCE_ARGS" to="%CPPSELF.red(), %CPPSELF.green(), %CPPSELF.blue(), %CPPSELF.alpha()" />
-            </insert-template>
+          PyObject *createFunction = 0;
+
+          switch(%CPPSELF.spec()) {
+            case QColor::Rgb:
+            {
+                qreal r, g, b, a;
+                createFunction = PyObject_GetAttrString(%PYSELF, "fromRgbF");
+                %CPPSELF.getRgbF(&amp;r, &amp;g, &amp;b, &amp;a);
+                %PYARG_0 = Py_BuildValue("(N(ffff))", createFunction, r, g, b, a);
+                break;
+            }
+            case QColor::Hsv:
+            {
+                qreal h, s, v, a;
+                createFunction = PyObject_GetAttrString(%PYSELF, "fromHsvF");
+                %CPPSELF.getHsvF(&amp;h, &amp;s, &amp;v, &amp;a);
+                %PYARG_0 = Py_BuildValue("(N(ffff))", createFunction, h, s, v, a);
+                break;
+            }
+            case QColor::Cmyk:
+            {
+                qreal c, m, y, k, a;
+                createFunction = PyObject_GetAttrString(%PYSELF, "fromCmykF");
+                %CPPSELF.getCmykF(&amp;c, &amp;m, &amp;y, &amp;k, &amp;a);
+                %PYARG_0 = Py_BuildValue("(N(fffff))", createFunction, c, m, y, k, a);
+                break;
+            }
+            case QColor::Hsl:
+            {
+                qreal h, s, l, a;
+                createFunction = PyObject_GetAttrString(%PYSELF, "fromHslF");
+                %CPPSELF.getHsvF(&amp;h, &amp;s, &amp;l, &amp;a);
+                %PYARG_0 = Py_BuildValue("(N(ffff))", createFunction, h, s, l, a);
+                break;
+            }
+            default:
+                %PYARG_0 = 0;
+          }
         </inject-code>
     </add-function>
     <modify-function signature="QColor(QColor::Spec)" remove="all"/>

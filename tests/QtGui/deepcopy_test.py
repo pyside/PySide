@@ -17,9 +17,34 @@ class DeepCopyHelper:
         self.assert_(copy is not self.original)
         self.assertEqual(copy, self.original)
 
+class DeepCopyColorHelperF:
+    def testCopy(self):
+        copy = deepcopy([self.original])[0]
+        self.assert_(copy is not self.original)
+        self.assertEqual(copy.spec(), self.original.spec())
+        # impossible to compare float point
+        # self.assertEqual(copy, self.original)
+
+
 class QColorDeepCopy(DeepCopyHelper, unittest.TestCase):
     def setUp(self):
         self.original = QColor("red")
+
+class QColorRGBDeepCopy(DeepCopyColorHelperF, unittest.TestCase):
+    def setUp(self):
+        self.original = QColor.fromRgbF(0.2, 0.3, 0.4, 0.5)
+
+class QColorHSLDeepCopy(DeepCopyColorHelperF, unittest.TestCase):
+    def setUp(self):
+        self.original = QColor.fromHslF(0.2, 0.3, 0.4, 0.5)
+
+class QColorHSVDeepCopy(DeepCopyColorHelperF, unittest.TestCase):
+    def setUp(self):
+        self.original = QColor.fromHsvF(0.2, 0.3, 0.4, 0.5)
+
+class QColorCMYKDeepCopy(DeepCopyColorHelperF, unittest.TestCase):
+    def setUp(self):
+        self.original = QColor.fromCmykF(0.2, 0.3, 0.4, 0.5, 0.6)
 
 class QTransformDeepCopy(DeepCopyHelper, unittest.TestCase):
     def setUp(self):
