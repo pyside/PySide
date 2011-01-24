@@ -18,7 +18,7 @@ configure_file("conf.py.in" "rst/conf.py" @ONLY)
 configure_file(typesystem_doc.xml.in typesystem_doc.xml @ONLY)
 
 add_custom_target("docrsts"
-    COMMAND ${GENERATORRUNNER_BINARY} --generatorSet=qtdoc
+    COMMAND ${GENERATORRUNNER_BINARY} --generator-set=qtdoc
             ${pyside_BINARY_DIR}/global.h
             --include-paths="${QT_INCLUDE_DIR}${PATH_SEP}${pyside_SOURCE_DIR}"
             --api-version=${SUPPORTED_QT_VERSION}
