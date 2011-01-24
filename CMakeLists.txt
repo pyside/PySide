@@ -156,7 +156,7 @@ if (NOT SITE_PACKAGE)
     endif()
 endif()
 
-set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic)
+set(GENERATOR_EXTRA_FLAGS --generatorSet=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic --use-isnull-as-nb_nonzero)
 
 add_subdirectory(libpyside)
 if(QT_QTUITOOLS_FOUND AND QT_QTDESIGNER_FOUND)

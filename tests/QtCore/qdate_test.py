@@ -23,6 +23,11 @@ class TestQDate (unittest.TestCase):
         self.assertEqual(week, 52)
         self.assertEqual(yearNumber, 1999)
 
+    def testBooleanCast(self):
+        today = QDate.currentDate()
+        self.assertTrue(today)
+        nodate = QDate()
+        self.assertFalse(nodate)
 
 if __name__ == '__main__':
     unittest.main()
