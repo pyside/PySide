@@ -263,10 +263,8 @@ hr {
 }
 
 #logo {
-    background-image: url(pysidelogo.png);
-    background-repeat: no-repeat;
-/*     background-position: 0px 4px; */
-    height: 112px;
+    text-align: left;
+    margin-bottom: 10px;
 }
 
 #search_box {
