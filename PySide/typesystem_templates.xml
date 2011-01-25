@@ -179,7 +179,7 @@
     </template>
 
     <template name="return_for_QFileDialog">
-        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, %5);
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2, %3, %4, %5, %6);
         %PYARG_0 = Shiboken::makeTuple(retval_, %4);
     </template>
    <template name="set_qapp_parent_for_orphan">
