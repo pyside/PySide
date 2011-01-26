@@ -175,11 +175,22 @@
   <rejection class="*" enum-name="enum_1"/>
   <value-type name="QTransform">
     <enum-type name="TransformationType"/>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f, %f, %f, %f, %f, %f, %f, %f" />
+               <replace from="%REPR_ARGS"
+                        to="%CPPSELF.m11(), %CPPSELF.m12(), %CPPSELF.m13(), %CPPSELF.m21(), %CPPSELF.m22(), %CPPSELF.m23(), %CPPSELF.m31(), %CPPSELF.m32(), %CPPSELF.m33()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
               <replace from="%REDUCE_FORMAT" to="ddddddddd" />
-              <replace from="%REDUCE_ARGS" to="%CPPSELF.m11(), %CPPSELF.m12(), %CPPSELF.m13(), %CPPSELF.m21(), %CPPSELF.m22(), %CPPSELF.m23(), %CPPSELF.m31(), %CPPSELF.m32(), %CPPSELF.m33()" />
+              <replace from="%REDUCE_ARGS"
+                       to="%CPPSELF.m11(), %CPPSELF.m12(), %CPPSELF.m13(), %CPPSELF.m21(), %CPPSELF.m22(), %CPPSELF.m23(), %CPPSELF.m31(), %CPPSELF.m32(), %CPPSELF.m33()" />
             </insert-template>
         </inject-code>
     </add-function>
@@ -420,6 +431,16 @@
     <enum-type name="SequenceFormat"/>
     <enum-type name="SequenceMatch"/>
     <enum-type name="StandardKey"/>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i, %i, %i" />
+               <replace from="%REPR_ARGS"
+                        to="(*%CPPSELF)[0], (*%CPPSELF)[1], (*%CPPSELF)[2], (*%CPPSELF)[3]" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -511,7 +532,6 @@
             </insert-template>
         </inject-code>
     </add-function>
-
 
     <modify-function signature="QPolygon(int, const int *)" remove="all"/>
     <modify-function signature="operator+=(QVector)" remove="all"/>
@@ -634,6 +654,16 @@
     <extra-includes>
       <include file-name="QPainterPath" location="global"/>
     </extra-includes>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f, %f, %f, %f, %f" />
+               <replace from="%REPR_ARGS"
+                        to="%CPPSELF.m11(), %CPPSELF.m12(), %CPPSELF.m21(), %CPPSELF.m22(), %CPPSELF.dx(), %CPPSELF.dy()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -5148,6 +5178,15 @@
   </object-type>
 
   <value-type name="QMatrix2x2">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="4" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5209,6 +5248,15 @@
   </value-type>
 
   <value-type name="QMatrix2x3">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="6" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5270,6 +5318,15 @@
   </value-type>
 
   <value-type name="QMatrix2x4">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="8" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5331,6 +5388,15 @@
  </value-type>
 
   <value-type name="QMatrix3x2">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="6" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5392,6 +5458,15 @@
   </value-type>
 
   <value-type name="QMatrix3x3">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="9" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5453,6 +5528,15 @@
   </value-type>
 
   <value-type name="QMatrix3x4">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="12" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5514,6 +5598,15 @@
   </value-type>
 
   <value-type name="QMatrix4x2">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="8" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5575,6 +5668,15 @@
   </value-type>
 
   <value-type name="QMatrix4x3">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="12" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5637,6 +5739,15 @@
 
 
   <value-type name="QMatrix4x4">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code_matrix">
+               <replace from="%MATRIX_SIZE" to="16" />
+               <replace from="%MATRIX_TYPE" to="qreal" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code_matrix">
@@ -5732,6 +5843,15 @@
       <enum-type name="ChangeFlag" flags="QPinchGesture::ChangeFlags"/>
   </object-type>
   <value-type name="QQuaternion">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f, %f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.scalar(), %CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -5766,6 +5886,15 @@
   </object-type>
 
   <value-type name="QVector2D">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -5779,6 +5908,15 @@
     <extra-includes>
       <include file-name="QMatrix4x4" location="global"/>
     </extra-includes>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -5792,6 +5930,15 @@
     <extra-includes>
       <include file-name="QMatrix4x4" location="global"/>
     </extra-includes>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f, %f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z(), %CPPSELF.w()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
