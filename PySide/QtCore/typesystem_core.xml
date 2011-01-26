@@ -430,6 +430,15 @@
     </extra-includes>
   </object-type>
   <value-type name="QLine" hash-function="PySide::hash">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i, %i, %i" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -501,6 +510,15 @@
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
     <enum-type name="MonthNameType"/>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i, %i" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.year(), %CPPSELF.month(), %CPPSELF.day()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -559,6 +577,14 @@
             %0 = new %TYPE(date, time, Qt::TimeSpec(%8));
         </inject-code>
     </add-function>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i, %i, %i, %i, %i, %i, %i" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.date().year(), %CPPSELF.date().month(), %CPPSELF.date().day(), %CPPSELF.time().hour(), %CPPSELF.time().minute(), %CPPSELF.time().second(), %CPPSELF.time().msec(), (int)%CPPSELF.timeSpec()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -583,6 +609,15 @@
   </value-type>
 
   <value-type name="QPoint" hash-function="PySide::hash">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -614,6 +649,14 @@
     <modify-function signature="ry()" remove="all"/>
   </value-type>
   <value-type name="QRect" hash-function="PySide::hash">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i, %i, %i" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.width(), %CPPSELF.height()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -675,6 +718,15 @@
     </modify-function>
   </value-type>
   <value-type name="QRectF">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f, %f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.width(), %CPPSELF.height()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
    <!--
          FIXME These functions return qreal. Will convert to double (format
          string) mess things up in other architectures?
@@ -733,6 +785,15 @@
     </modify-function>
   </value-type>
   <value-type name="QSize" hash-function="PySide::hash">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.width(), %CPPSELF.height()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -765,6 +826,14 @@
   </value-type>
 
   <value-type name="QTime" hash-function="PySide::hash">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%i, %i, %i, %i" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.hour(), %CPPSELF.minute(), %CPPSELF.second(), %CPPSELF.msec()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -785,6 +854,14 @@
   <value-type name="QUuid">
     <enum-type name="Variant"/>
     <enum-type name="Version"/>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="'%s'" />
+               <replace from="%REPR_ARGS" to="qPrintable(%CPPSELF.toString())" />
+             </insert-template>
+        </inject-code>
+    </add-function>
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -1214,6 +1291,15 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="'%s'" />
+               <replace from="%REPR_ARGS" to="qPrintable(%CPPSELF.toString())" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -1229,6 +1315,15 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="'%s', %i, %i" />
+               <replace from="%REPR_ARGS" to="qPrintable(%CPPSELF.pattern()), (int)%CPPSELF.caseSensitivity(), (int)%CPPSELF.patternSyntax()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -1291,6 +1386,17 @@
     <extra-includes>
       <include file-name="QNoImplicitBoolCast" location="global"/>
     </extra-includes>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            PyObject* str = PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size());
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="'%s'" />
+               <replace from="%REPR_ARGS" to="PyString_AS_STRING(str)" />
+             </insert-template>
+             Py_DECREF(str);
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">

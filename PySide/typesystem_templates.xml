@@ -187,6 +187,29 @@
         if (!Shiboken::Object::hasParentInfo(_pySelf))
             Shiboken::Object::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
     </template>
+    <!-- templates for __repr__ -->
+    <template name="repr_code">
+        QString format = QString().sprintf("%s(%REPR_FORMAT)", ((PyObject*)%PYSELF)->ob_type->tp_name, %REPR_ARGS);
+        %PYARG_0 = PyString_FromString(qPrintable(format));
+    </template>
+    <template name="repr_code_matrix">
+        QString format= QString("%1((").arg(((PyObject*)%PYSELF)->ob_type->tp_name);
+
+        QList&lt; %MATRIX_TYPE &gt; cppArgs;
+        %MATRIX_TYPE data[%MATRIX_SIZE];
+        %CPPSELF.copyDataTo(data);
+        int matrixSize = %MATRIX_SIZE;
+        for(int size=0; size &lt; matrixSize; size++) {
+            if (size > 0)
+                format += ", ";
+            format += QString::number(data[size]);
+        }
+        format += "))";
+
+        %PYARG_0 = PyString_FromString(qPrintable(format));
+    </template>
+
+
     <!-- templates for __reduce__ -->
     <template name="reduce_code">
         %PYARG_0 = Py_BuildValue("(N(%REDUCE_FORMAT))", PyObject_Type(%PYSELF), %REDUCE_ARGS);
