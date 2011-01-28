@@ -201,8 +201,8 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     for (i = 0; i < argsGiven; ++i) {
         QByteArray typeName = argTypes[i].toAscii();
         Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
-        if (typeResolver) {
-            int typeId = QMetaType::type(typeName);
+        int typeId = QMetaType::type(typeName);
+        if (typeResolver && typeId) {
             if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType)
                 signalValues[i] = QVariant(typeId, (void*) 0);
             signalArgs[i+1] = signalValues[i].data();
