@@ -722,45 +722,85 @@
     <modify-function signature="QImage(const char *, const char *)" remove="all" />
     <modify-function signature="QImage(const char **)" remove="all" />
 
-    <template name="QImageStringBufferConversionRule">
-        const uchar* %out = reinterpret_cast&lt;const uchar*>(PyString_AS_STRING(%PYARG_1));
+    <template name="qimage_buffer_constructor">
+        PyTypeObject* pyType = reinterpret_cast&lt;PyTypeObject*>(%PYARG_1->ob_type);
+        if (pyType->tp_as_buffer
+            &amp;&amp; pyType->tp_as_buffer->bf_getreadbuffer
+            &amp;&amp; pyType->tp_as_buffer->bf_getsegcount(%PYARG_1, 0) == 1) {
+            void* ptr;
+            pyType->tp_as_buffer->bf_getreadbuffer(%PYARG_1, 0, &amp;ptr);
+            %0 = new %TYPE((uchar*)ptr, %ARGS);
+        } else {
+            PyErr_SetString(PyExc_TypeError, "The object must support buffer protocol with just one segment.");
+        }
     </template>
-
-    <modify-function signature="QImage(uchar *,int,int,int,QImage::Format)" remove="all"/>
-    <modify-function signature="QImage(const uchar*,int,int,int,QImage::Format)">
-      <modify-argument index="1">
-        <replace-type modified-type="const char*"/>
-        <conversion-rule class="native">
-          <insert-template name="QImageStringBufferConversionRule"/>
-        </conversion-rule>
+    <modify-function signature="QImage(uchar *,int,int,int,QImage::Format)">
+        <modify-argument index="1">
+            <replace-type modified-type="PyObject"/>
         </modify-argument>
+        <inject-code>
+            <insert-template name="qimage_buffer_constructor">
+                <replace from="%ARGS" to="%2, %3, %4, %5" />
+            </insert-template>
+        </inject-code>
     </modify-function>
-    <modify-function signature="bits()const" remove="all" />
-    <modify-function signature="scanLine(int)const" remove="all" />
+    <modify-function signature="QImage(uchar*,int,int,QImage::Format)">
+        <modify-argument index="1">
+            <replace-type modified-type="PyObject"/>
+        </modify-argument>
+        <inject-code>
+            <insert-template name="qimage_buffer_constructor">
+                <replace from="%ARGS" to="%2, %3, %4" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
 
-    <modify-function signature="QImage(uchar*,int,int,QImage::Format)" remove="all" />
-    <modify-function signature="QImage(const uchar *, int, int, QImage::Format)">
-      <modify-argument index="1">
-        <replace-type modified-type="const char*"/>
-        <conversion-rule class="native">
-          <insert-template name="QImageStringBufferConversionRule"/>
-        </conversion-rule>
-      </modify-argument>
-    </modify-function>
+    <!-- The non-const versions are already used -->
+    <modify-function signature="QImage(const uchar*,int,int,int,QImage::Format)" remove="all"/>
+    <modify-function signature="QImage(const uchar *, int, int, QImage::Format)" remove="all" />
+
 
     <modify-function signature="loadFromData(const uchar*,int,const char*)" remove="all" />
+    <!-- Functions removed because we already have overloads using QString -->
     <modify-function signature="setText(const char*,const char*,QString)" remove="all" />
     <modify-function signature="text(const char*,const char*)const" remove="all" />
+    <!--### Obsolete in 4.3-->
     <modify-function signature="serialNumber()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="textLanguages()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="QImage(const char**)" remove="all"/>
-    <modify-function signature="setColorTable(const QVector&lt;uint&gt;)" remove="all"/>
+    <!--### end of obsolete section -->
     <modify-function signature="loadFromData(const uchar *,int,const char *)" remove="all"/>
     <modify-function signature="fromData(const uchar *,int,const char *)" remove="all"/>
-    <modify-function signature="bits()" remove="all"/>
-    <modify-function signature="scanLine(int)" remove="all"/>
+
+    <modify-function signature="constBits()const" since="4.7">
+        <inject-code>
+            %PYARG_0 = PyBuffer_FromMemory(const_cast&lt;uchar*>(%CPPSELF.%FUNCTION_NAME()), %CPPSELF.byteCount());
+        </inject-code>
+    </modify-function>
+    <modify-function signature="bits()">
+        <inject-code>
+            // byteCount() is only available on Qt4.7, so we use bytesPerLine * height
+            %PYARG_0 = PyBuffer_FromReadWriteMemory(%CPPSELF.%FUNCTION_NAME(), %CPPSELF.bytesPerLine() * %CPPSELF.height());
+        </inject-code>
+    </modify-function>
+    <modify-function signature="constScanLine(int)const" since="4.7">
+        <inject-code>
+            %PYARG_0 = PyBuffer_FromMemory(const_cast&lt;uchar*>(%CPPSELF.%FUNCTION_NAME(%1)), %CPPSELF.bytesPerLine());
+        </inject-code>
+    </modify-function>
+    <modify-function signature="scanLine(int)">
+        <inject-code>
+            %PYARG_0 = PyBuffer_FromReadWriteMemory(%CPPSELF.%FUNCTION_NAME(%1), %CPPSELF.bytesPerLine());
+        </inject-code>
+    </modify-function>
+    <!--
+        Only the non-const version of bits() and scanLine() is exported to Python
+        If the user don't want to detach the QImage data he must use constBits or constScanLine
+        as Python doesn't have the concept of constness.
+    -->
+    <modify-function signature="bits()const" remove="all"/>
+    <modify-function signature="scanLine(int)const" remove="all"/>
+
     <modify-function signature="invertPixels(QImage::InvertMode)">
       <modify-argument index="1">
         <rename to="mode"/>
