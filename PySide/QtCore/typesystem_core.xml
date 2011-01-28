@@ -457,6 +457,15 @@
   </value-type>
   <value-type name="QLineF">
     <enum-type name="IntersectType" />
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f, %f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -645,6 +654,15 @@
     <modify-function signature="ry()" remove="all"/>
   </value-type>
   <value-type name="QPointF">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -821,6 +839,15 @@
     <modify-function signature="rwidth()" remove="all"/>
   </value-type>
   <value-type name="QSizeF">
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="repr_code">
+               <replace from="%REPR_FORMAT" to="%f, %f" />
+               <replace from="%REPR_ARGS" to="%CPPSELF.width(), %CPPSELF.height()" />
+             </insert-template>
+        </inject-code>
+    </add-function>
+
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
