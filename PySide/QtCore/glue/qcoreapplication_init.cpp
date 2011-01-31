@@ -4,7 +4,7 @@ static char** QCoreApplicationArgValues;
 
 int Sbk_QCoreApplication_Init(PyObject* self, PyObject* args, PyObject*)
 {
-    if (Shiboken::Object::isUserType(self) && !Shiboken::ObjectType::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication >()))
+    if (Shiboken::Object::isUserType(self) && !Shiboken::ObjectType::canCallConstructor(self->ob_type, Shiboken::SbkType<QCoreApplication >()))
         return -1;
 
 
