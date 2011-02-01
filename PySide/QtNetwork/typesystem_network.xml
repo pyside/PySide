@@ -223,8 +223,13 @@
     </value-type>
 
     <value-type name="QNetworkProxy">
-        <enum-type name="Capability"/>
+        <enum-type name="Capability" flags="QNetworkProxy::Capabilities" />
         <enum-type name="ProxyType"/>
+    </value-type>
+
+    <object-type name="QNetworkProxyFactory" />
+    <value-type name="QNetworkProxyQuery">
+        <enum-type name="QueryType" />
     </value-type>
 
     <value-type name="QUrlInfo">

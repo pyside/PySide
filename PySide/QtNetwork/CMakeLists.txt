@@ -32,6 +32,8 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkcookiejar_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkdiskcache_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkinterface_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkproxy_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkproxyfactory_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkproxyquery_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkreply_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qnetworkrequest_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qssl_wrapper.cpp
