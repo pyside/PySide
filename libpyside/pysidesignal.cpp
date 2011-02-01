@@ -379,14 +379,14 @@ PyObject* signalInstanceGetItem(PyObject* self, PyObject* key)
 
 PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
 {
-    PySideSignalInstance *source = reinterpret_cast<PySideSignalInstance*>(self);
+    PySideSignalInstance* source = reinterpret_cast<PySideSignalInstance*>(self);
     Shiboken::AutoDecRef pyArgs(PyList_New(0));
 
-    PyObject *slot;
-    if PyTuple_Check(args)
+    PyObject* slot;
+    if (PyTuple_Check(args) && PyTuple_GET_SIZE(args))
         slot = PyTuple_GET_ITEM(args, 0);
     else
-        slot = args;
+        slot = Py_None;
 
     bool match = false;
     if (slot->ob_type == &PySideSignalInstanceType) {
@@ -407,6 +407,9 @@ PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
         Shiboken::AutoDecRef signature(PySide::Signal::buildQtCompatible(source->d->signature));
         PyList_Append(pyArgs, signature);
 
+        // disconnect all, so we need to use the c++ signature disconnect(qobj, signal, 0, 0)
+        if (slot == Py_None)
+            PyList_Append(pyArgs, slot);
         PyList_Append(pyArgs, slot);
         match = true;
     }
@@ -414,7 +417,7 @@ PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
     if (match) {
         Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
         Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->d->source, "disconnect"));
-        return  PyObject_CallObject(pyMethod, tupleArgs);
+        return PyObject_CallObject(pyMethod, tupleArgs);
     }
 
     return 0;
