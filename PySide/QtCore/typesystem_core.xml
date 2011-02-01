@@ -1060,16 +1060,32 @@
   <object-type name="QAbstractFileEngineIterator"/>
   <object-type name="QAbstractItemModel">
     <modify-function signature="createIndex(int, int, void*) const" remove="all"/>
-    <modify-function signature="createIndex(int,int,quint32)const" remove="all" />
+    <modify-function signature="createIndex(int,int, quint32)const" remove="all" />
     <modify-function signature="createIndex(int, int, int) const">
         <modify-argument index="3">
             <replace-default-expression with="0" />
         </modify-argument>
     </modify-function>
-    <add-function signature="createIndex(int,int,PyObject*)const" return-type="QModelIndex">
+    <add-function signature="createIndex(int, int, PyObject*)const" return-type="QModelIndex">
+        <modify-argument index="1">
+            <rename to="row"/>
+        </modify-argument>
+        <modify-argument index="2">
+            <rename to="column"/>
+        </modify-argument>
+        <modify-argument index="3">
+            <rename to="ptr"/>
+        </modify-argument>
         <inject-code class="target" position="beginning">
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3));
         </inject-code>
+        <inject-documentation mode="append" format="target">
+            Creates a model index for the given row and column with the internal pointer ptr.
+            When using a QSortFilterProxyModel, its indexes have their own internal pointer. It is not advisable to access this internal pointer outside of the model. Use the data() function instead.
+            This function provides a consistent interface that model subclasses must use to create model indexes.
+
+            .. warning:: Because of some Qt/Python itegration rules, the ptr argument do not get the reference incremented during the QModelIndex life time. So it is necessary to keep the object used on ptr argument alive during the whole process. Do not destroy the object if you are not sure about that.
+        </inject-documentation>
     </add-function>
     <modify-function signature="mimeData(QList&lt;QModelIndex&gt;) const">
       <modify-argument index="return">
