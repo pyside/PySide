@@ -1632,7 +1632,13 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QWizardPage" />
+  <object-type name="QWizardPage">
+    <modify-function signature="wizard()const">
+      <modify-argument index="this">
+        <parent index="return" action="add"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
   <object-type name="QFocusFrame">
     <modify-function signature="setWidget(QWidget*)">
       <modify-argument index="1">
