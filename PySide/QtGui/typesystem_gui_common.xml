@@ -4831,10 +4831,6 @@
     <modify-function signature="QApplication(int&amp;,char**,QApplication::Type)" remove="all"/>
     <modify-function signature="QApplication(int&amp;,char**,QApplication::Type, int)" remove="all"/>
 
-    <modify-function signature="font(const char*)" remove="all"/>
-    <modify-function signature="setFont(QFont,const char*)" remove="all"/>
-    <modify-function signature="palette(const char*)" remove="all" />
-
     <!-- ownership control transfer to qApp -->
     <modify-function signature="setStyle(QStyle*)">
         <inject-code class="target" position="end">
