@@ -491,6 +491,11 @@
       <modify-function signature="operator++(int)" remove="all"/>
       <modify-function signature="operator--(int)" remove="all"/>
     </value-type>
+    <modify-function signature="setUserData(QTextBlockUserData*)">
+        <modify-argument index="1">
+            <parent index="this" action="add"/>
+        </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QTextBlockFormat" />
   <value-type name="QTextTableCellFormat" />
