@@ -2216,12 +2216,15 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
-    <modify-function signature="setSystemIniPath(const QString&amp;)" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="setSystemIniPath(const QString&amp;)" remove="all"/>
     <modify-function signature="setUserIniPath(const QString&amp;)" remove="all"/>
     <!--### Obsolete in 4.3-->
-    <modify-function signature="iniCodec()const" remove="all"/>
-    <!--TODO-->
+    <modify-function signature="iniCodec()const">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
   </object-type>
   <object-type name="QEvent"  polymorphic-id-expression="%1-&gt;type() == QEvent::None">
     <enum-type name="Type" extensible="yes" />
@@ -2579,7 +2582,11 @@
   <object-type name="QXmlStreamWriter">
     <!-- Removed because it expect QString to be mutable -->
     <modify-function signature="QXmlStreamWriter(QString *)" remove="all" />
-    <modify-function signature="codec()const" remove="all"/>
+    <modify-function signature="codec()const">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
   </object-type>
   <value-type name="QModelIndex">
     <modify-function signature="internalPointer()const">
