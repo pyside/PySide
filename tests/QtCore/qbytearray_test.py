@@ -49,6 +49,7 @@ class QByteArrayData(unittest.TestCase):
         ba = QByteArray(s1)
         s2 = ba.data()
         self.assertEqual(s1, s2)
+        self.assertEqual(s1, ba)
 
 class QByteArrayOperatorAtSetter(unittest.TestCase):
     '''Test case for operator QByteArray[] - __setitem__'''
