@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="quote.txt">quoteEnUS.txt</file>
+        <file alias="sample.png">sample.png</file>
     </qresource>
 </RCC>
 
