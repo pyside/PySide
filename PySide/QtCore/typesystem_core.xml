@@ -920,8 +920,16 @@
     </extra-includes>
   </value-type>
   <value-type name="QPersistentModelIndex">
-    <modify-function signature="internalPointer()const" remove="all"/>
-    <modify-function signature="operator const QModelIndex&amp;()const" remove="all" /> <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="internalPointer()const">
+        <inject-code class="target" position="beginning">
+            %PYARG_0 = (PyObject*)%CPPSELF.%FUNCTION_NAME();
+            if (!%PYARG_0)
+                %PYARG_0 = Py_None;
+            Py_XINCREF(%PYARG_0);
+        </inject-code>
+    </modify-function>
+    <!-- FIXME Removed due to a shiboken bug-->
+    <modify-function signature="operator const QModelIndex&amp;()const" remove="all" />
   </value-type>
   <value-type name="QUuid">
     <enum-type name="Variant"/>
