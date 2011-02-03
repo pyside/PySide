@@ -643,7 +643,6 @@
             </insert-template>
         </inject-code>
     </add-function>
-    <modify-function signature="QDir(QString,QString,QFlags&lt;QDir::SortFlag>,QFlags&lt;QDir::Filter>)" remove="all" />
   </value-type>
 
   <value-type name="QPoint" hash-function="PySide::hash">
@@ -1040,7 +1039,6 @@
     </modify-function>
   </value-type>
   <value-type name="QBitArray" hash-function="qHash" >
-    <modify-function signature="fill(bool,int)" remove="all"/> <!-- FIXME Removed due to a shiboken bug-->
     <add-function signature="__len__">
         <inject-code class="target" position="beginning">
             return %CPPSELF.size();
