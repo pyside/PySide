@@ -318,10 +318,12 @@
     <enum-type name="WindowState" flags="Qt::WindowStates"/>
     <enum-type name="WindowType" flags="Qt::WindowFlags"/>
 
+   <!--### These functions are part of QtGui, not QtCore -->
     <modify-function signature="codecForHtml(const QByteArray &amp;)" remove="all"/>
     <modify-function signature="mightBeRichText(const QString &amp;)" remove="all"/>
     <modify-function signature="escape(const QString&amp;)" remove="all"/>
     <modify-function signature="convertFromPlainText(const QString &amp;, Qt::WhiteSpaceMode)" remove="all"/>
+    <!--### -->
     <extra-includes>
       <include file-name="QTextDocument" location="global"/>
     </extra-includes>
@@ -568,6 +570,7 @@
         %PYARG_0 = Shiboken::makeTuple(week, yearNumber);
         </inject-code>
     </modify-function>
+    <!-- This function isn't part of Qt public API -->
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
   </value-type>
   <value-type name="QDateTime" hash-function="PySide::hash">
@@ -642,8 +645,10 @@
           }
       };
     </inject-code>
+    <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rx()" remove="all"/>
     <modify-function signature="ry()" remove="all"/>
+    <!--### -->
   </value-type>
   <value-type name="QPointF">
     <add-function signature="__repr__" return-type="PyObject*">
@@ -663,8 +668,10 @@
             </insert-template>
         </inject-code>
     </add-function>
+    <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rx()" remove="all"/>
     <modify-function signature="ry()" remove="all"/>
+    <!--### -->
   </value-type>
   <value-type name="QRect" hash-function="PySide::hash">
     <add-function signature="__repr__" return-type="PyObject*">
@@ -827,8 +834,10 @@
           }
       };
     </inject-code>
+    <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rheight()" remove="all"/>
     <modify-function signature="rwidth()" remove="all"/>
+    <!--### -->
   </value-type>
   <value-type name="QSizeF">
     <add-function signature="__repr__" return-type="PyObject*">
@@ -848,8 +857,10 @@
             </insert-template>
         </inject-code>
     </add-function>
+    <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rheight()" remove="all" />
     <modify-function signature="rwidth()" remove="all" />
+    <!--### -->
   </value-type>
 
   <value-type name="QTime" hash-function="PySide::hash">
@@ -897,6 +908,7 @@
             </insert-template>
         </inject-code>
     </add-function>
+    <!-- Removed because we already have the QString overload -->
     <modify-function signature="QUuid(const char*)" remove="all" />
   </value-type>
 
@@ -906,9 +918,11 @@
     <enum-type name="Language" />
     <enum-type name="MeasurementSystem"/>
     <enum-type name="NumberOption" flags="QLocale::NumberOptions"/>
+    <!--### All those C++ number types have the same representation in Python -->
     <modify-function signature="toString(qulonglong) const" remove="all"/>
     <modify-function signature="toString(ushort) const" remove="all"/>
     <modify-function signature="toString(unsigned int) const" remove="all"/>
+    <!--### -->
     <extra-includes>
       <include file-name="QDate" location="global"/>
     </extra-includes>
@@ -1051,9 +1065,11 @@
   </object-type>
   <object-type name="QAbstractFileEngineIterator"/>
   <object-type name="QAbstractItemModel">
+    <!-- This function was replaced by a added function -->
     <modify-function signature="createIndex(int, int, void*) const" remove="all"/>
+    <!-- This function is the same as createIndex(int, int, int) const -->
     <modify-function signature="createIndex(int,int, quint32)const" remove="all" />
-    <modify-function signature="createIndex(int, int, int) const">
+    <modify-function signature="createIndex(int, int, int)const">
         <modify-argument index="3">
             <replace-default-expression with="0" />
         </modify-argument>
@@ -1569,6 +1585,7 @@
         <insert-template name="fix_bool*,arg"/>
       </inject-code>
     </modify-function>
+    <!-- QByteArray(const char *) do the job of this constructor -->
     <modify-function signature="QByteArray(const char*,int)" remove="all"/>
     <modify-function signature="replace(const char*,int,const char*,int)" remove="all"/>
     <modify-function signature="append(QByteArray)">
@@ -1751,6 +1768,7 @@
   <value-type name="QTextBoundaryFinder">
     <enum-type name="BoundaryReason" flags="QTextBoundaryFinder::BoundaryReasons"/>
     <enum-type name="BoundaryType"/>
+    <!-- There's no QChar in PySide -->
     <modify-function signature="QTextBoundaryFinder(QTextBoundaryFinder::BoundaryType,const QChar*,int,unsigned char*,int)" remove="all"/>
   </value-type>
   <object-type name="QXmlStreamEntityResolver"/>
@@ -2433,6 +2451,7 @@
     <enum-type name="Status"/>
     <!-- Removed because it expect QString to be mutable -->
     <modify-function signature="QTextStream(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" />
+    <!-- Remvoed because we use the non-const version -->
     <modify-function signature="QTextStream(const QByteArray&amp;, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
     <!-- Removed because it expect QString to be mutable -->
     <modify-function signature="setString(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
@@ -2533,6 +2552,7 @@
   <value-type name="QMetaMethod">
     <enum-type name="Access"/>
     <enum-type name="MethodType"/>
+    <!-- This isn't part of Qt public API -->
     <modify-function signature="attributes()const" remove="all" />
   </value-type>
   <object-type name="QMetaObject">
@@ -2777,8 +2797,6 @@
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="defaultAnimations() const" remove="all"/>
-
     <add-function signature="configuration()" return-type="list of QAbstractState" >
         <inject-code class="target" position="beginning">
             %PYARG_0 = PySet_New(0);
@@ -2790,6 +2808,8 @@
         </inject-code>
     </add-function>
 
+   <!-- Replaced by a added function -->
+    <modify-function signature="defaultAnimations() const" remove="all"/>
     <add-function signature="defaultAnimations()" return-type="list of QAbstractAnimation" >
         <inject-code class="target" position="beginning">
             %PYARG_0 = PyList_New(0);
