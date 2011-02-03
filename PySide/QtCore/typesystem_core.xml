@@ -1511,7 +1511,7 @@
     <modify-function signature="QByteArray(const char *)">
         <!-- Keep \x00 bytes passed in python strings -->
         <inject-code class="target" position="beginning">
-            int size = PyString_Size(pyargs[0]);
+            int size = PyString_GET_SIZE(pyargs[0]);
             %0 = new QByteArray(%1, size);
         </inject-code>
     </modify-function>
@@ -2362,7 +2362,7 @@
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-            int r = %CPPSELF.%FUNCTION_NAME(%1, PyString_Size(%PYARG_1));
+            int r = %CPPSELF.%FUNCTION_NAME(%1, PyString_GET_SIZE(%PYARG_1));
             %PYARG_0 = %CONVERTTOPYTHON[int](r);
         </inject-code>
     </modify-function>
