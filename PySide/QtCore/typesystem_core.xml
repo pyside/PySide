@@ -1926,7 +1926,14 @@
   </object-type>
   <object-type name="QCryptographicHash">
     <enum-type name="Algorithm"/>
-    <modify-function signature="addData(const char*,int)" remove="all"/>
+    <modify-function signature="addData(const char*,int)">
+        <modify-argument index="2">
+            <remove-argument />
+        </modify-argument>
+        <inject-code>
+            %CPPSELF.%FUNCTION_NAME(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1));
+        </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QLibraryInfo">
     <enum-type name="LibraryLocation"/>
