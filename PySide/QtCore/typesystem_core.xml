@@ -491,25 +491,51 @@
     </modify-function>
   </value-type>
   <object-type name="QResource">
-    <modify-function signature="registerResource(const uchar*, const QString&amp;)" remove="all"/>
-    <modify-function signature="unregisterResource(const uchar*, const QString&amp;)" remove="all"/>
-    <modify-function signature="data()const" remove="all"/>
-    <!-- TODO: find a way for this mimic the PyQt4 behaviour, remove it for now.
+    <modify-function signature="data()const">
+        <inject-documentation>
+            Returns a read only buffer object pointing to the segment of data that this resource represents. If the resource is compressed the data returns is compressed and qUncompress() must be used to access the data. If the resource is a directory None is returned.
+        </inject-documentation>
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <inject-code>
+            const uchar* d = %CPPSELF.%FUNCTION_NAME();
+            if (d) {
+                %PYARG_0 = PyBuffer_FromMemory(const_cast&lt;uchar*>(d), %CPPSELF.size());
+            } else {
+                Py_INCREF(Py_None);
+                %PYARG_0 = Py_None;
+            }
+        </inject-code>
+    </modify-function>
+    <template name="QResource_registerResource">
+        PyTypeObject* pyType = %PYARG_1->ob_type;
+        if (pyType->tp_as_buffer
+            &amp;&amp; pyType->tp_as_buffer->bf_getreadbuffer
+            &amp;&amp; pyType->tp_as_buffer->bf_getsegcount(%PYARG_1, 0) == 1) {
+            void* ptr;
+            pyType->tp_as_buffer->bf_getreadbuffer(%PYARG_1, 0, &amp;ptr);
+            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>((uchar*)ptr), %2));
+        } else {
+            PyErr_SetString(PyExc_TypeError, "The object must support buffer protocol with just one segment.");
+        }
+    </template>
+
     <modify-function signature="unregisterResource(const uchar*, const QString&amp;)" rename="unregisterResourceData">
       <modify-argument index="1">
-        <replace-type modified-type="const char*"/>
+        <replace-type modified-type="PyObject"/>
       </modify-argument>
+      <inject-code>
+        <insert-template name="QResource_registerResource" />
+      </inject-code>
     </modify-function>
-    <modify-function signature="registerResource(const uchar*, const QString&amp;)" rename="registerResourceData"/>
+    <modify-function signature="registerResource(const uchar*, const QString&amp;)" rename="registerResourceData">
       <modify-argument index="1">
-        <replace-type modified-type="const char*"/>
+        <replace-type modified-type="PyObject"/>
       </modify-argument>
-    </modify-function>
-    -->
-    <modify-function signature="data() const">
-      <modify-argument index="return">
-        <replace-type modified-type="str"/>
-      </modify-argument>
+      <inject-code>
+        <insert-template name="QResource_registerResource" />
+      </inject-code>
     </modify-function>
   </object-type>
 

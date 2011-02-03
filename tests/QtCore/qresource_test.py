@@ -4,27 +4,38 @@
 
 import unittest
 import os
+from helper import adjust_filename
 from PySide.QtCore import QFile, QIODevice
 import resources_mc
 
 class ResourcesUsage(unittest.TestCase):
     '''Test case for resources usage'''
 
-    def setUp(self):
-        f = open(os.path.join(os.path.dirname(__file__), 'quoteEnUS.txt'))
-        self.text = f.read()
-        f.close()
-
-    def tearDown(self):
-        self.text = None
-
     def testPhrase(self):
         #Test loading of quote.txt resource
+        f = open(adjust_filename('quoteEnUS.txt', __file__))
+        orig = f.read()
+        f.close()
+
         f = QFile(':/quote.txt')
         f.open(QIODevice.ReadOnly|QIODevice.Text)
-        content = f.readAll()
+        copy = f.readAll()
         f.close()
-        self.assertEqual(self.text, content)
+        self.assertEqual(orig, copy)
+
+    def testImage(self):
+        #Test loading of sample.png resource
+        f = open(adjust_filename('sample.png', __file__))
+        orig = f.read()
+        f.close()
+
+        f = QFile(':/sample.png')
+        f.open(QIODevice.ReadOnly)
+        copy = f.readAll()
+        f.close()
+        self.assertEqual(len(orig), len(copy))
+        self.assertEqual(orig, copy)
+
 
 if __name__ == '__main__':
     unittest.main()
