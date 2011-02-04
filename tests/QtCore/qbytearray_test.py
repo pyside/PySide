@@ -105,6 +105,15 @@ class QByteArrayOnQVariant(unittest.TestCase):
         a = QSettings().value("some_prop", QByteArray())
         self.assertEqual(type(a), QByteArray)
 
+class TestBug666(unittest.TestCase):
+    '''QByteArray does not support slices'''
+    def testIt(self):
+        ba = QByteArray('1234567890')
+        self.assertEqual(ba[2:4], '34')
+        self.assertEqual(ba[:4], '1234')
+        self.assertEqual(ba[4:], '567890')
+        self.assertEqual(len(ba[4:1]), 0)
+
 class QByteArrayBug514(unittest.TestCase):
     def testIt(self):
         data = "foobar"

@@ -1811,6 +1811,17 @@
                 return !result ? -1 : 0;
         </inject-code>
     </add-function>
+    <add-function signature="__getslice__">
+        <inject-code class="target" position="beginning">
+            Py_ssize_t max = %CPPSELF.count();
+            _i1 = qBound(Py_ssize_t(0), _i1, max);
+            _i2 = qBound(Py_ssize_t(0), _i2, max);
+
+            if (_i1 >= _i2)
+                return %CONVERTTOPYTHON[QByteArray](QByteArray());
+            return %CONVERTTOPYTHON[QByteArray](%CPPSELF.mid(_i1, _i2 - _i1));
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QTextBoundaryFinder">
     <enum-type name="BoundaryReason" flags="QTextBoundaryFinder::BoundaryReasons"/>
