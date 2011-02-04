@@ -1137,7 +1137,8 @@
     </add-function>
     <modify-function signature="mimeData(QList&lt;QModelIndex&gt;) const">
       <modify-argument index="return">
-        <define-ownership owner="c++"/>
+        <define-ownership class="native" owner="c++"/>
+        <define-ownership class="target" owner="default"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="data(const QModelIndex&amp;,int) const">
