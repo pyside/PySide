@@ -1,12 +1,10 @@
 project(pyside)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" "${CMAKE_CURRENT_BINARY_DIR}/private.py"
-        DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}${pyside_SUFFIX}")
 
 include(PySideModules)
 
 # Configure include based on platform
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/global.h" @ONLY)
+               "${CMAKE_CURRENT_BINARY_DIR}/pyside_global.h" @ONLY)
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in"
                "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" @ONLY)
@@ -38,6 +36,10 @@ HAS_QT_MODULE(QT_PHONON_FOUND phonon)
 HAS_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)
 
 # install
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" "${CMAKE_CURRENT_BINARY_DIR}/private.py"
+        DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}${pyside_SUFFIX}")
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_templates.xml
         DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyside_global.h
+        DESTINATION include/${BINDING_NAME}${pyside_SUFFIX})
 
