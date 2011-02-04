@@ -9,7 +9,7 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
 
     add_custom_command(OUTPUT ${${module_sources}}
                         COMMAND ${GENERATORRUNNER_BINARY} ${GENERATOR_EXTRA_FLAGS}
-                        ${CMAKE_BINARY_DIR}/PySide/global.h
+                        ${pyside_BINARY_DIR}/pyside_global.h
                         --include-paths=${pyside_SOURCE_DIR}${PATH_SEP}${QT_INCLUDE_DIR}
                         --typesystem-paths=${pyside_SOURCE_DIR}${PATH_SEP}${${module_typesystem_path}}
                         --output-directory=${CMAKE_CURRENT_BINARY_DIR}
