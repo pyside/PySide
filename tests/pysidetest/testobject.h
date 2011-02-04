@@ -2,6 +2,7 @@
 #define TESTOBJECT_H
 
 #include <QObject>
+#include <QMetaType>
 #ifdef pysidetest_EXPORTS
 #define PYSIDE_EXPORTS 1
 #endif
@@ -33,6 +34,56 @@ private:
     int m_idValue;
     QList<QObject*> m_children;
 };
+
+
+typedef int PySideInt;
+
+
+namespace PySideCPP {
+
+class PYSIDE_API TestObjectWithNamespace :  public QObject
+{
+    Q_OBJECT
+public:
+    TestObjectWithNamespace(QObject* parent) : QObject(parent) {}
+    QString name() { return "TestObjectWithNamespace"; }
+
+    void callSignal(TestObjectWithNamespace* obj) { emitSignal(obj); }
+    void callSignalWithNamespace(TestObjectWithNamespace* obj) { emitSignalWithNamespace(obj); }
+    void callSignalWithTypedef(int val) { emitSignalWithTypedef(val); }
+
+signals:
+    void emitSignal(TestObjectWithNamespace* obj);
+    void emitSignalWithNamespace(PySideCPP::TestObjectWithNamespace* obj);
+    void emitSignalWithTypedef(PySideInt val);
+};
+
+
+} // Namespace PySideCPP
+
+namespace PySideCPP2 {
+
+typedef long PySideLong;
+
+class PYSIDE_API TestObjectWithoutNamespace :  public QObject
+{
+    Q_OBJECT
+public:
+    TestObjectWithoutNamespace(QObject* parent) : QObject(parent) {}
+    QString name() { return "TestObjectWithoutNamespace"; }
+
+    void callSignal(TestObjectWithoutNamespace* obj) { emitSignal(obj); }
+    void callSignalWithNamespace(TestObjectWithoutNamespace* obj) { emitSignalWithNamespace(obj); }
+    void callSignalWithTypedef(long val) { emitSignalWithTypedef(val); }
+
+signals:
+    void emitSignal(TestObjectWithoutNamespace* obj);
+    void emitSignalWithNamespace(PySideCPP2::TestObjectWithoutNamespace* obj);
+    void emitSignalWithTypedef(PySideLong val);
+};
+
+
+} // Namespace PySideCPP2
 
 #endif // TESTOBJECT_H
 

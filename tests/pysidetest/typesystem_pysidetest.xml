@@ -3,6 +3,32 @@
     <load-typesystem name="typesystem_core.xml" generate="no" />
     <load-typesystem name="typesystem_gui.xml" generate="no"/>
     <object-type name="TestObject" />
+
+    <inject-code>
+        qRegisterMetaType&lt;PySideInt>("PySideInt");
+        qRegisterMetaType&lt;PySideCPP2::PySideLong>("PySideLong");
+    </inject-code>
+
+    <namespace-type name="PySideCPP">
+        <object-type name="TestObjectWithNamespace" >
+            <modify-function signature="emitSignal(PySideCPP::TestObjectWithNamespace*)">
+              <modify-argument index="1">
+                <replace-type modified-type="TestObjectWithNamespace*"/>
+              </modify-argument>
+            </modify-function>
+        </object-type>
+    </namespace-type>
+
+    <namespace-type name="PySideCPP2" generate="no">
+        <object-type name="TestObjectWithoutNamespace" >
+            <modify-function signature="emitSignalWithNamespace(PySideCPP2::TestObjectWithoutNamespace*)">
+              <modify-argument index="1">
+                <replace-type modified-type="PySideCPP2::TestObjectWithoutNamespace*"/>
+              </modify-argument>
+            </modify-function>
+        </object-type>
+    </namespace-type>
+
     <object-type name="TestView" >
         <modify-function signature="TestView(QAbstractListModel*,QObject*)">
             <modify-argument index="1">

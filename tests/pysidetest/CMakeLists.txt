@@ -23,6 +23,9 @@ qt4_wrap_cpp(pysidetest_MOC_SRC ${pysidetest_MOC_HEADERS})
 
 set(testbinding_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/testbinding/testobject_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/testbinding/pysidecpp_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/testbinding/pysidecpp_testobjectwithnamespace_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/testbinding/pysidecpp2_testobjectwithoutnamespace_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/testbinding/testview_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/testbinding/testbinding_module_wrapper.cpp
 )
@@ -75,6 +78,7 @@ PYSIDE_TEST(delegatecreateseditor_test.py)
 PYSIDE_TEST(homonymoussignalandmethod_test.py)
 PYSIDE_TEST(list_signal_test.py)
 PYSIDE_TEST(modelview_test.py)
+PYSIDE_TEST(signalandnamespace_test.py)
 PYSIDE_TEST(signalwithdefaultvalue_test.py)
 PYSIDE_TEST(signalemissionfrompython_test.py)
 PYSIDE_TEST(version_test.py)
