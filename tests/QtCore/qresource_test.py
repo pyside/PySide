@@ -13,7 +13,7 @@ class ResourcesUsage(unittest.TestCase):
 
     def testPhrase(self):
         #Test loading of quote.txt resource
-        f = open(adjust_filename('quoteEnUS.txt', __file__))
+        f = open(adjust_filename('quoteEnUS.txt', __file__), "r")
         orig = f.read()
         f.close()
 
@@ -25,7 +25,7 @@ class ResourcesUsage(unittest.TestCase):
 
     def testImage(self):
         #Test loading of sample.png resource
-        f = open(adjust_filename('sample.png', __file__))
+        f = open(adjust_filename('sample.png', __file__), "rb")
         orig = f.read()
         f.close()
 
