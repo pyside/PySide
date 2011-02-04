@@ -201,10 +201,15 @@ static bool emitNormalSignal(QObject* source, int signalIndex, const char* signa
     for (i = 0; i < argsGiven; ++i) {
         QByteArray typeName = argTypes[i].toAscii();
         Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
-        int typeId = QMetaType::type(typeName);
-        if (typeResolver && typeId) {
-            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType)
+        if (typeResolver) {
+            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType) {
+                int typeId = QMetaType::type(typeName);
+                if (!typeId) {
+                    PyErr_Format(PyExc_TypeError, "Value type used on signal needs to be registered on meta type: %s", typeName.data());
+                    break;
+                }
                 signalValues[i] = QVariant(typeId, (void*) 0);
+            }
             signalArgs[i+1] = signalValues[i].data();
             typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i), &signalArgs[i+1]);
         } else {
