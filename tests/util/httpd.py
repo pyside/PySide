@@ -8,6 +8,7 @@ import random
 
 class TestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     DATA = "PySide Server"
+    allow_reuse_address = True
 
     def do_GET(self):
         self.send_head()
@@ -24,6 +25,7 @@ class TestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 class TestSecureHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     DATA = "PySide"
+    allow_reuse_address = True
 
     def do_GET(self):
         self.send_head()
