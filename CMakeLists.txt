@@ -157,6 +157,13 @@ if (NOT SITE_PACKAGE)
 endif()
 
 set(GENERATOR_EXTRA_FLAGS --generator-set=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic --use-isnull-as-nb_nonzero)
+if(WIN32 OR DEFINED AVOID_PROTECTED_HACK)
+    message(STATUS "PySide will be generated avoiding the protected hack!")
+    set(GENERATOR_EXTRA_FLAGS ${GENERATOR_EXTRA_FLAGS} --avoid-protected-hack)
+    add_definitions(-DAVOID_PROTECTED_HACK)
+else()
+    message(STATUS "PySide will be generated using the protected hack!")
+endif()
 
 add_subdirectory(libpyside)
 if(QT_QTUITOOLS_FOUND AND QT_QTDESIGNER_FOUND)
