@@ -16,14 +16,6 @@ class TranslationTest(UsesQCoreApplication):
     def setUp(self):
         super(TranslationTest, self).setUp()
         self.trdir = os.path.join(os.path.dirname(__file__), 'translations')
-        # os.system is probably not the best way to do it
-	for file in glob.glob('%s/*.ts'  % self.trdir):
-	    self.assertFalse(os.system('lrelease -silent %s' % file))
-
-    def tearDown(self):
-	for file in glob.glob('%s/*.qm'  % self.trdir):
-	    os.remove(file)
-        super(TranslationTest, self).tearDown()
 
     def testLatin(self):
         #Set string value to Latin
