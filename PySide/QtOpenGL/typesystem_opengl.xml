@@ -123,12 +123,18 @@
       </inject-code>
     </modify-function>
     <modify-function signature="map(QGLBuffer::Access)">
-      <inject-code class="target" position="beginning">
-        void *data = %CPPSELF.map(%1);
-        QByteArray ret;
-        if (data)
-            ret.append((const char*)data, %CPPSELF.size());
-        %PYARG_0 = %CONVERTTOPYTHON[QByteArray](ret);
+      <inject-code>
+        Py_ssize_t dataSize = %CPPSELF.size();
+        void* data = %CPPSELF.map(%1);
+
+        if (!data) {
+            Py_INCREF(Py_None);
+            %PYARG_0 = Py_None;
+        } else if (%1 == QGLBuffer::ReadOnly) {
+            %PYARG_0 = PyBuffer_FromMemory(data, dataSize);
+        } else {
+            %PYARG_0 = PyBuffer_FromReadWriteMemory(data, dataSize);
+        }
       </inject-code>
     </modify-function>
     <modify-function signature="read(int, void*, int)">
