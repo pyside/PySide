@@ -1,0 +1,5 @@
+﻿<object-type name="QPageSetupDialog">
+    <enum-type name="PageSetupDialogOption" flags="QPageSetupDialog::PageSetupDialogOptions"/>
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
+</object-type>
+

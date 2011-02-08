@@ -162,8 +162,6 @@
   <rejection class="QPolygon" function-name="setPoint"/>
   <rejection class="QPolygon" function-name="points"/>
   <rejection class="QPolygon" function-name="point"/>
-  <rejection class="QPrinter" function-name="printerSelectionOption"/>
-  <rejection class="QPrinter" function-name="setPrinterSelectionOption"/>
   <rejection class="QWidget" function-name="create"/>
   <rejection class="QWidget" function-name="find"/>
   <rejection class="QWidget" function-name="handle"/>
@@ -1260,7 +1258,6 @@
       <enum-type name="Type"/>
   </value-type>
   <value-type name="QLinearGradient" polymorphic-id-expression="%1-&gt;type() == QGradient::LinearGradient" />
-  <value-type name="QPrinterInfo" />
   <object-type name="QLayoutItem">
 
     <modify-function signature="widget()">
@@ -1476,11 +1473,6 @@
     <!-- ### because the CursorAction enum is protected -->
     <modify-function signature="moveCursor(QAbstractItemView::CursorAction,QFlags&lt;Qt::KeyboardModifier&gt;)" remove="all"/>
   </object-type>
-  <object-type name="QAbstractPrintDialog">
-      <enum-type name="PrintDialogOption" flags="QAbstractPrintDialog::PrintDialogOptions"/>
-      <enum-type name="PrintRange"/>
-      <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
-  </object-type>
   <object-type name="QAbstractSlider">
     <enum-type name="SliderAction"/>
     <enum-type name="SliderChange"/>
@@ -1518,16 +1510,6 @@
   </object-type>
   <object-type name="QCDEStyle">
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
-  </object-type>
-  <object-type name="QGtkStyle">
-    <modify-function signature="standardPixmap(QStyle::StandardPixmap,const QStyleOption*,const QWidget*)const">
-      <modify-argument index="2">
-        <replace-default-expression with="0"/>
-      </modify-argument>
-      <modify-argument index="3">
-        <replace-default-expression with="0"/>
-      </modify-argument>
-    </modify-function>
   </object-type>
   <object-type name="QCheckBox"/>
   <object-type name="QCleanlooksStyle">
@@ -2078,12 +2060,6 @@
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
     <modify-function signature="layoutSpacingImplementation(QSizePolicy::ControlType, QSizePolicy::ControlType, Qt::Orientation, const QStyleOption *, const QWidget *) const" virtual-slot="yes"/>
   </object-type>
-  <object-type name="QPrintDialog">
-      <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
-  </object-type>
-  <object-type name="QPrintEngine">
-      <enum-type name="PrintEnginePropertyKey" />
-  </object-type>
   <object-type name="QProgressBar">
       <enum-type name="Direction"/>
   </object-type>
@@ -2095,12 +2071,6 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-  </object-type>
-  <object-type name="QSessionManager">
-    <extra-includes>
-    </extra-includes>
-    <enum-type name="RestartHint"/>
-    <modify-function signature="handle()const" remove="all"/>
   </object-type>
 
   <object-type name="QShortcut">
@@ -2118,7 +2088,6 @@
       </inject-code>
     </add-function>
   </object-type>
-  <object-type name="QSizeGrip"/>
   <object-type name="QSound"/>
   <object-type name="QSpacerItem"/>
   <object-type name="QStandardItem">
@@ -2259,15 +2228,6 @@
     <modify-function signature="setDocument(QTextDocument*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-  </object-type>
-  <object-type name="QSystemTrayIcon">
-    <enum-type name="ActivationReason"/>
-    <enum-type name="MessageIcon"/>
-    <modify-function signature="setContextMenu(QMenu*)">
-      <modify-argument index="1">
-        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
   </object-type>
@@ -3818,11 +3778,6 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <object-type name="QAbstractPageSetupDialog"/>
-  <object-type name="QPageSetupDialog">
-      <enum-type name="PageSetupDialogOption" flags="QPageSetupDialog::PageSetupDialogOptions"/>
-      <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
-  </object-type>
   <object-type name="QTabWidget">
     <enum-type name="TabPosition"/>
     <enum-type name="TabShape"/>
@@ -4668,32 +4623,6 @@
     </modify-function>
     <modify-function signature="print(QPrinter*) const" rename="print_"/>
   </object-type>
-  <object-type name="QPrinter" >
-    <enum-type name="ColorMode"/>
-    <enum-type name="DuplexMode"/>
-    <enum-type name="Orientation"/>
-    <enum-type name="OutputFormat"/>
-    <enum-type name="PageOrder"/>
-    <enum-type name="PageSize" />
-    <enum-type name="PaperSource"/>
-    <enum-type name="PrintRange"/>
-    <enum-type name="PrinterMode"/>
-    <enum-type name="PrinterState"/>
-    <enum-type name="Unit"/>
-    <!-- TODO: What to do with this function? -->
-    <modify-function signature="getPageMargins(qreal*,qreal*,qreal*,qreal*,QPrinter::Unit)const" remove="all" />
-    <modify-function signature="setEngines(QPrintEngine*,QPaintEngine*)">
-      <modify-argument index="1">
-        <parent index="this" action="add"/>
-      </modify-argument>
-      <modify-argument index="2">
-        <parent index="this" action="add"/>
-      </modify-argument>
-    </modify-function>
-    <extra-includes>
-      <include file-name="QPrinterInfo" location="global"/>
-    </extra-includes>
-  </object-type>
   <object-type name="QAction">
     <enum-type name="ActionEvent"/>
     <enum-type name="MenuRole"/>
@@ -5199,12 +5128,6 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="print(QPrinter*)const" rename="print_" />
-  </object-type>
-  <object-type name="QPrintPreviewDialog"/>
-  <object-type name="QPrintPreviewWidget">
-      <enum-type name="ViewMode"/>
-      <enum-type name="ZoomMode"/>
-      <modify-function signature="print()" rename="print_" />
   </object-type>
   <object-type name="QStyledItemDelegate">
     <modify-function signature="setItemEditorFactory(QItemEditorFactory*)">
@@ -6006,7 +5929,6 @@
   <suppress-warning text="unhandled enum value: ~FlagMask in QMessageBox::StandardButton"/>
   <suppress-warning text="unmatched enum ~FlagMask"/>
   <suppress-warning text="enum 'QMatrix4x4::enum_1' is specified in typesystem, but not declared"/>
-  <suppress-warning text="type 'QGtkStyle' is specified in typesystem, but not defined. This could potentially lead to compilation errors."/>
   <suppress-warning text="class not found for setup inheritance 'QMimeSource'"/>
   <suppress-warning text="class 'QDropEvent' inherits from unknown base class 'QMimeSource'"/>
 

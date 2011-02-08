@@ -1,0 +1,30 @@
+﻿<rejection class="QPrinter" function-name="printerSelectionOption"/>
+<rejection class="QPrinter" function-name="setPrinterSelectionOption"/>
+
+<object-type name="QPrinter" >
+    <enum-type name="ColorMode"/>
+    <enum-type name="DuplexMode"/>
+    <enum-type name="Orientation"/>
+    <enum-type name="OutputFormat"/>
+    <enum-type name="PageOrder"/>
+    <enum-type name="PageSize" />
+    <enum-type name="PaperSource"/>
+    <enum-type name="PrintRange"/>
+    <enum-type name="PrinterMode"/>
+    <enum-type name="PrinterState"/>
+    <enum-type name="Unit"/>
+    <!-- TODO: What to do with this function? -->
+    <modify-function signature="getPageMargins(qreal*,qreal*,qreal*,qreal*,QPrinter::Unit)const" remove="all" />
+    <modify-function signature="setEngines(QPrintEngine*,QPaintEngine*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+      <modify-argument index="2">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <extra-includes>
+      <include file-name="QPrinterInfo" location="global"/>
+    </extra-includes>
+</object-type>
+

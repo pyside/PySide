@@ -1,0 +1,3 @@
+﻿<object-type name="QPrintDialog">
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
+</object-type>

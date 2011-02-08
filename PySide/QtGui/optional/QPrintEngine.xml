@@ -1,0 +1,3 @@
+﻿<object-type name="QPrintEngine">
+  <enum-type name="PrintEnginePropertyKey" />
+</object-type>
