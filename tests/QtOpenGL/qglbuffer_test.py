@@ -9,12 +9,11 @@ from PySide.QtOpenGL import QGLBuffer, QGLWidget
 from helper import UsesQApplication
 
 class QGLBufferTest(UsesQApplication):
-    def usageCheck(self, t):
+    def testIt(self):
         w = QGLWidget()
         w.makeCurrent()
 
-        b = QGLBuffer(t)
-        self.assertEqual(b.usagePattern(), QGLBuffer.StaticDraw)
+        b = QGLBuffer()
         b.setUsagePattern(QGLBuffer.DynamicDraw)
 
         self.assert_(b.create())
@@ -26,24 +25,19 @@ class QGLBufferTest(UsesQApplication):
         self.assertEqual(b.size(), data.size())
 
         m = b.map(QGLBuffer.ReadOnly)
-        self.assertEqual(m.data(), data.data())
-        b.unmap()
+        if m:
+            self.assertEqual(m, buffer(data.data()))
+            b.unmap()
 
-        other_data = QByteArray("67")
-        b.write(0, other_data)
-        m = b.map(QGLBuffer.ReadOnly)
-        self.assertEqual(m.mid(0, other_data.size()).data(), other_data.data())
-        b.unmap()
-
-        result, rdata = b.read(0, other_data.size())
-        print result, rdata
-        self.assert_(result)
-        self.assertEqual(other_data.data(), rdata.data())
-
+            m = b.map(QGLBuffer.ReadWrite)
+            m[3] = 'A'
+            b.unmap()
+            result, rdata = b.read(3, 1)
+            self.assertTrue(result)
+            self.assertEqual('A', rdata.data())
+        else:
+            print " memory mapping is not possible in this OpenGL implementation."
         b.release()
-
-    def testUsage(self):
-        self.usageCheck(QGLBuffer.IndexBuffer)
 
 if __name__ == '__main__':
     unittest.main()
