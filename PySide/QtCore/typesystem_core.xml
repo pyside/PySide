@@ -1535,17 +1535,11 @@
     <modify-function signature="operator const void *()const" remove="all"/>
     <modify-function signature="operator+=(const char*)" remove="all"/>
     <modify-function signature="operator==(const char*,QByteArray)" remove="all" />
-    <modify-function signature="operator==(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator!=(const char*,QByteArray)" remove="all" />
-    <modify-function signature="operator!=(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator&lt;(const char*,QByteArray)" remove="all" />
-    <modify-function signature="operator&lt;(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator&lt;=(const char*,QByteArray)" remove="all" />
-    <modify-function signature="operator&lt;=(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator>(const char*,QByteArray)" remove="all" />
-    <modify-function signature="operator>(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator>=(const char*,QByteArray)" remove="all" />
-    <modify-function signature="operator>=(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator[](int)const" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
     <modify-function signature="push_back(char)" remove="all"/>
