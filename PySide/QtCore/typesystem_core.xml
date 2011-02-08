@@ -1151,7 +1151,7 @@
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
       </inject-code>
       <modify-argument index="return">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="deleteLater()">
@@ -2671,7 +2671,7 @@
 
     <modify-function signature="addAnimation(QAbstractAnimation*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
 
@@ -2683,27 +2683,27 @@
 
     <modify-function signature="setTargetState(QAbstractState*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
 
     <modify-function signature="targetState() const">
       <modify-argument index="return">
-        <reference-count action="add" variable-name="setTargetState(QAbstractState*)1" />
+        <reference-count action="set" variable-name="setTargetState(QAbstractState*)1" />
       </modify-argument>
     </modify-function>
 
 
     <modify-function signature="targetStates() const">
       <modify-argument index="return">
-        <reference-count action="add" variable-name="setTargetState(QAbstractState*)1" />
+        <reference-count action="set" variable-name="setTargetState(QAbstractState*)1" />
       </modify-argument>
     </modify-function>
 
 
     <modify-function signature="setTargetStates(QList&lt;QAbstractState*&gt;)">
       <modify-argument index="1">
-        <reference-count action="add" variable-name="setTargetState(QAbstractState*)1" />
+        <reference-count action="set" variable-name="setTargetState(QAbstractState*)1" />
       </modify-argument>
     </modify-function>
 

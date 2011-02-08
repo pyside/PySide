@@ -1448,17 +1448,17 @@
     <enum-type name="State"/>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setSelectionModel(QItemSelectionModel*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="model() const">
@@ -1558,12 +1558,12 @@
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
   </object-type>
@@ -1776,7 +1776,7 @@
   <object-type name="QItemEditorFactory">
       <modify-function signature="registerEditor(QVariant::Type, QItemEditorCreatorBase *)">
       <modify-argument index="2">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
       <inject-code>
         Shiboken::Object::releaseOwnership(%PYARG_2);
@@ -2830,7 +2830,7 @@
     <modify-function signature="setupViewport(QWidget *)" access="non-final"/>
     <modify-function signature="setScene(QGraphicsScene*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="scene()const">
@@ -3271,7 +3271,7 @@
     <enum-type name="ModelSorting"/>
     <modify-function signature="setModel(QAbstractItemModel *)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="setPopup(QAbstractItemView *)">
@@ -3772,7 +3772,7 @@
     </extra-includes>
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
   </object-type>
@@ -3989,7 +3989,7 @@
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
 
@@ -4605,7 +4605,7 @@
     </modify-function>
     <modify-function signature="setItemDelegate(QAbstractItemDelegate *)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
@@ -4622,7 +4622,7 @@
     <modify-function signature="setModel(QAbstractItemModel *)">
       <modify-argument index="1">
         <no-null-pointer/>
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="autoCompletion()const" remove="all"/>
@@ -5174,7 +5174,7 @@
     </modify-function>
     <modify-function signature="setModelData(QWidget*,QAbstractItemModel*,QModelIndex)const">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
   </object-type>

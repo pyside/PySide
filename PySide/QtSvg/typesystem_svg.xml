@@ -27,7 +27,7 @@
   <object-type name="QSvgGenerator">
     <modify-function signature="setOutputDevice(QIODevice*)">
       <modify-argument index="1">
-          <reference-count action="add"/>
+          <reference-count action="set"/>
       </modify-argument>
     </modify-function>
 

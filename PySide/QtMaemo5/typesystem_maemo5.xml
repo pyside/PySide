@@ -47,7 +47,7 @@
   <object-type name="QMaemo5InformationBox">
     <modify-function signature="setWidget(QWidget*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
      </modify-function>
      <modify-function signature="paintEvent(QPaintEvent*)">
@@ -61,7 +61,7 @@
   <object-type name="QMaemo5ListPickSelector">
     <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
 

@@ -31,7 +31,7 @@
   <object-type name="QWebView">
     <modify-function signature="setPage(QWebPage*)">
         <modify-argument index="1">
-            <reference-count action="add"/>
+            <reference-count action="set"/>
         </modify-argument>
     </modify-function>
     <modify-function signature="page() const">
@@ -77,12 +77,12 @@
 
    <modify-function signature="setNetworkAccessManager(QNetworkAccessManager*)">
         <modify-argument index="1">
-            <reference-count action="add"/>
+            <reference-count action="set"/>
         </modify-argument>
    </modify-function>
    <modify-function signature="networkAccessManager()const">
         <modify-argument index="return">
-            <reference-count action="add" variable-name="setNetworkAccessManager(QNetworkAccessManager*)1" />
+            <reference-count action="set" variable-name="setNetworkAccessManager(QNetworkAccessManager*)1" />
         </modify-argument>
    </modify-function>
    <modify-function signature="view()const">

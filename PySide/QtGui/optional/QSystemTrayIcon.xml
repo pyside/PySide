@@ -3,7 +3,7 @@
     <enum-type name="MessageIcon"/>
     <modify-function signature="setContextMenu(QMenu*)">
       <modify-argument index="1">
-        <reference-count action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
 </object-type>
