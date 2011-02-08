@@ -1,0 +1,6 @@
+﻿<object-type name="QAbstractPrintDialog">
+      <enum-type name="PrintDialogOption" flags="QAbstractPrintDialog::PrintDialogOptions"/>
+      <enum-type name="PrintRange"/>
+      <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
+</object-type>
+

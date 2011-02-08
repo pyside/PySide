@@ -43,19 +43,37 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
     install(FILES ${typesystem_files} DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
 endmacro()
 
-#macro(check_qt_class_with_namespace module namespace class global_sources [namespace])
-macro(check_qt_class module class global_sources)
-    if (${ARGC} GREATER 3)
+macro(append_class_xml commom_xml class_xml)
+    INCLUDE(FindPythonInterp)
+    set(REPLACE_PROGRAM "import string; \\
+                commomFile = open('${commom_xml}', 'r'); \\
+                commomData = commomFile.read(); \\
+                commomFile.close(); \\
+                objectFile = open('${class_xml}', 'r'); \\
+                objectData = objectFile.read(); \\
+                objectFile.close(); \\
+                commomData = string.replace(commomData, '</typesystem>', '%s\\n</typesystem>' % objectData); \\
+                commomFile = open('${commom_xml}', 'w'); \\
+                commomFile.write(commomData); \\
+                commomFile.close();")
+    execute_process(
+        COMMAND ${PYTHON_EXECUTABLE} -c "${REPLACE_PROGRAM}")
+endmacro()
+
+#macro(check_qt_class_with_namespace module namespace class global_sources commom_xml class_xml [namespace] [module])
+macro(check_qt_class module class global_sources commom_xml)
+    if (${ARGC} GREATER 4)
         set (namespace ${ARGV3})
         string(TOLOWER ${namespace} _namespace)
     else ()
         set (namespace "")
     endif ()
-    if (${ARGC} GREATER 4)
+    if (${ARGC} GREATER 5)
         set (include_file ${ARGV4})
     else ()
         set (include_file ${module})
     endif ()
+    append_class_xml(${commom_xml} "${CMAKE_CURRENT_SOURCE_DIR}/optional/${class}.xml")
     string(TOLOWER ${class} _class)
     string(TOUPPER ${module} _module)
     if (_namespace)

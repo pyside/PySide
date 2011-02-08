@@ -1,0 +1,4 @@
+﻿<value-type name="QSslError">
+  <enum-type name="SslError"/>
+</value-type>
+

@@ -34,7 +34,6 @@
 
     <rejection class="QIPv6Address" field-name="c"/>
 
-    <value-type name="QSslCertificate"/>
     <object-type name="QAbstractSocket">
         <enum-type name="NetworkLayerProtocol"/>
         <enum-type name="SocketError"/>
@@ -256,27 +255,10 @@
         <enum-type name="KnownHeaders"/>
     </value-type>
 
-
-    <value-type name="QSslCipher"/>
-    <value-type name="QSslError">
-        <enum-type name="SslError"/>
-    </value-type>
-    <value-type name="QSslKey"/>
-
     <!-- TODO QSslCertificate requires QMultiMap which isn't implemented yet
     <value-type name="QSslCertificate"/>
     -->
     <enum-type name="QSslCertificate::SubjectInfo"/>
-
-    <value-type name="QSslConfiguration"/>
-
-    <object-type name="QSslSocket">
-        <enum-type name="SslMode"/>
-        <enum-type name="PeerVerifyMode"/>
-        <modify-function signature="connectToHostEncrypted(const QString&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
-        <modify-function signature="waitForEncrypted(int)" allow-thread="yes" />
-    </object-type>
-
 
     <!-- Qt 4.7 -->
     <value-type name="QNetworkConfiguration" since="4.7">

@@ -381,24 +381,24 @@ ${SPECIFIC_OS_FILES}
 ${QtGui_46_SRC}
 )
 
-
+set(TARGET_TYPESYSTEM "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui.xml.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
+               "${TARGET_TYPESYSTEM}" @ONLY)
 
-check_qt_class(QtGui QGtkStyle QtGui_SRC)
-check_qt_class(QtGui QSessionManager QtGui_SRC)
-check_qt_class(QtGui QSizeGrip QtGui_SRC)
-check_qt_class(QtGui QSystemTrayIcon QtGui_SRC)
+check_qt_class(QtGui QGtkStyle QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QSessionManager QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QSizeGrip QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QSystemTrayIcon QtGui_SRC ${TARGET_TYPESYSTEM})
 
-check_qt_class(QtGui QAbstractPageSetupDialog QtGui_SRC)
-check_qt_class(QtGui QAbstractPrintDialog QtGui_SRC)
-check_qt_class(QtGui QPageSetupDialog QtGui_SRC)
-check_qt_class(QtGui QPrintDialog QtGui_SRC)
-check_qt_class(QtGui QPrintPreviewWidget QtGui_SRC)
-check_qt_class(QtGui QPrintPreviewDialog QtGui_SRC)
-check_qt_class(QtGui QPrinter QtGui_SRC)
-check_qt_class(QtGui QPrinterInfo QtGui_SRC)
-check_qt_class(QtGui QPrintEngine QtGui_SRC)
+check_qt_class(QtGui QAbstractPageSetupDialog QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QAbstractPrintDialog QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QPageSetupDialog QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QPrintDialog QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QPrintPreviewWidget QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QPrintPreviewDialog QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QPrinter QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QPrinterInfo QtGui_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtGui QPrintEngine QtGui_SRC ${TARGET_TYPESYSTEM})
 
 set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}")
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -421,7 +421,7 @@ create_pyside_module(QtGui
                      QtGui_deps
                      QtGui_typesystem_path
                      QtGui_SRC
-                     "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml"
+                     ${TARGET_TYPESYSTEM}
                      QPYTEXTOBJECT_MOC)
 
 

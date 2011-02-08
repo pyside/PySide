@@ -1,0 +1,7 @@
+﻿<object-type name="QSessionManager">
+    <extra-includes>
+    </extra-includes>
+    <enum-type name="RestartHint"/>
+    <modify-function signature="handle()const" remove="all"/>
+</object-type>
+

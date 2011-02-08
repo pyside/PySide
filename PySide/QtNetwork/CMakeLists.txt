@@ -46,12 +46,16 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
 ${QtNetwork_47_SRC}
 )
 
-check_qt_class(QtNetwork QSslCertificate QtNetwork_SRC)
-check_qt_class(QtNetwork QSslCipher QtNetwork_SRC)
-check_qt_class(QtNetwork QSslConfiguration QtNetwork_SRC)
-check_qt_class(QtNetwork QSslError QtNetwork_SRC)
-check_qt_class(QtNetwork QSslKey QtNetwork_SRC)
-check_qt_class(QtNetwork QSslSocket QtNetwork_SRC)
+set(TARGET_TYPESYSTEM "${CMAKE_CURRENT_BINARY_DIR}/typesystem_network.xml")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_network.xml"
+               "${TARGET_TYPESYSTEM}" @ONLY)
+
+check_qt_class(QtNetwork QSslCertificate QtNetwork_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtNetwork QSslCipher QtNetwork_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtNetwork QSslConfiguration QtNetwork_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtNetwork QSslError QtNetwork_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtNetwork QSslKey QtNetwork_SRC ${TARGET_TYPESYSTEM})
+check_qt_class(QtNetwork QSslSocket QtNetwork_SRC ${TARGET_TYPESYSTEM})
 
 set(QtNetwork_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtNetwork_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -75,4 +79,4 @@ create_pyside_module(QtNetwork
                      QtNetwork_deps
                      QtNetwork_typesystem_path
                      QtNetwork_SRC
-                     "")
+                     ${TARGET_TYPESYSTEM})
