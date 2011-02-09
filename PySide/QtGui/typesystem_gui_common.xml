@@ -488,7 +488,24 @@
       <modify-function signature="operator--()" remove="all"/>
       <modify-function signature="operator++(int)" remove="all"/>
       <modify-function signature="operator--(int)" remove="all"/>
+      <add-function signature="__iter__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+          Py_INCREF(%PYSELF);
+          %PYARG_0 = %PYSELF;
+        </inject-code>
+      </add-function>
+      <add-function signature="__next__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+          if (!%CPPSELF.atEnd())
+              %PYARG_0 = %CONVERTTOPYTHON[QTextBlock::iterator]((*%CPPSELF)++);
+        </inject-code>
+      </add-function>
     </value-type>
+    <add-function signature="__iter__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            %PYARG_0 = %CONVERTTOPYTHON[QTextBlock::iterator](%CPPSELF.begin());
+        </inject-code>
+    </add-function>
     <modify-function signature="setUserData(QTextBlockUserData*)">
         <modify-argument index="1">
             <parent index="this" action="add"/>
