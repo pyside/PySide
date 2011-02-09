@@ -44,7 +44,11 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_backendcapabilities_notifierwrapper_wrapper.cpp
 )
 
-check_qt_class("phonon" "VideoCaptureDevice" phonon_SRC "Phonon" "ObjectDescription")
+set(TARGET_TYPESYSTEM "${CMAKE_CURRENT_BINARY_DIR}/typesystem_phonon.xml")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_phonon.xml"
+               "${TARGET_TYPESYSTEM}" @ONLY)
+
+check_qt_class("phonon" "VideoCaptureDevice" phonon_SRC ${TARGET_TYPESYSTEM} "Phonon" "ObjectDescription")
 
 set(phonon_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${phonon_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 set(phonon_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
@@ -70,4 +74,4 @@ create_pyside_module(phonon
                      phonon_deps
                      phonon_typesystem_path
                      phonon_SRC
-                     "")
+                     ${TARGET_TYPESYSTEM})
