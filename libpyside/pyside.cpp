@@ -113,7 +113,9 @@ static void destructionVisitor(SbkObject* pyObj, void* data)
 
     if (pyObj != pyQApp && PyObject_TypeCheck(pyObj, pyQObjectType)) {
         if (Shiboken::Object::hasOwnership(pyObj) && Shiboken::Object::isValid(pyObj, false)) {
+            Py_BEGIN_ALLOW_THREADS
             Shiboken::callCppDestructor<QObject>(Shiboken::Object::cppPointer(pyObj, pyQObjectType));
+            Py_END_ALLOW_THREADS
             Shiboken::Object::setValidCpp(pyObj, false);
         }
     }
