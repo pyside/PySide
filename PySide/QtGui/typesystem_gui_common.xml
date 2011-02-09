@@ -4531,8 +4531,30 @@
     </modify-function>
   </object-type>
   <object-type name="QToolBar">
-    <modify-function signature="addAction(QIcon,QString,const QObject*,const char*)" remove="all"/>
-    <modify-function signature="addAction(QString,const QObject*,const char*)" remove="all"/>
+    <modify-function signature="addAction(QIcon,QString,const QObject*,const char*)">
+      <modify-argument index="3">
+        <replace-type modified-type="PyObject" />
+      </modify-argument>
+      <modify-argument index="4">
+        <remove-argument />
+      </modify-argument>
+      <inject-code>
+        %PYARG_0 = %CONVERTTOPYTHON[QAction*](%CPPSELF.addAction(%1, %2));
+        Shiboken::AutoDecRef result(PyObject_CallMethod(%PYARG_0, "connect", "OsO", %PYARG_0, SIGNAL(triggered()), %PYARG_3));
+      </inject-code>
+    </modify-function>
+    <modify-function signature="addAction(QString,const QObject*,const char*)">
+      <modify-argument index="2">
+        <replace-type modified-type="PyObject" />
+      </modify-argument>
+      <modify-argument index="3">
+        <remove-argument />
+      </modify-argument>
+      <inject-code>
+        %PYARG_0 = %CONVERTTOPYTHON[QAction*](%CPPSELF.addAction(%1));
+        Shiboken::AutoDecRef result(PyObject_CallMethod(%PYARG_0, "connect", "OsO", %PYARG_0, SIGNAL(triggered()), %PYARG_2));
+      </inject-code>
+    </modify-function>
     <modify-function signature="addAction(const QString &amp;)">
       <modify-argument index="return">
         <parent index="this" action="add"/>
