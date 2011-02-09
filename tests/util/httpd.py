@@ -124,11 +124,12 @@ class TestServer(threading.Thread):
         else:
             handle = TestHandler
 
-        try:
-            self.httpd = CompatTCPServer((''  , self._port), handle)
-        except:
-            self._port = self._port + random.randint(1, 100)
-            self.httpd = CompatTCPServer((''  , self._port), handle)
+        while True:
+            try:
+                self.httpd = CompatTCPServer((''  , self._port), handle)
+                break
+            except:
+                self._port = self._port + random.randint(1, 100)
 
     def port(self):
         return self._port
