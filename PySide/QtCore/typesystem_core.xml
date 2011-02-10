@@ -2833,6 +2833,7 @@
         if (PySide::SignalManager::registerMetaMethod(%1, signalName.mid(1).toAscii().data(), QMetaMethod::Signal)) {
           %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->addTransition(%1, %2, %3));
         } else {
+          Py_INCREF(Py_None);
           %PYARG_0 = Py_None;
         }
       </inject-code>
