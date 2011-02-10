@@ -15,7 +15,7 @@ class Bug617(unittest.TestCase):
 
     def testOutOfBounds(self):
         e = MyEvent()
-        self.assertEqual(repr(e.type()), '<enum-item Type.#out of bounds# (999)>')
+        self.assertEqual(repr(e.type()), '<enum-item PySide.QtCore.QEvent.Type.#out of bounds# (999)>')
 
 if __name__ == "__main__":
    unittest.main()
