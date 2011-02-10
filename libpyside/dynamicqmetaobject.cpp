@@ -465,6 +465,7 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
                     n_properties, 0, // prop count and prop indexes
                     0, 0,         // enum count and enum index
                     0, 0,         // constructors
+                    0,            // flags
                     n_signals};
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
