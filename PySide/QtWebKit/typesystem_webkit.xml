@@ -65,7 +65,6 @@
     <enum-type name="WebGraphic"/>
   </object-type>
   <object-type name="QWebPage">
-    <enum-type name="ErrorDomain"/>
     <enum-type name="FindFlag" flags="QWebPage::FindFlags"/>
     <enum-type name="LinkDelegationPolicy"/>
     <enum-type name="NavigationType"/>
