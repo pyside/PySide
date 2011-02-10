@@ -63,15 +63,15 @@ endmacro()
 #macro(check_qt_class_with_namespace module namespace class global_sources commom_xml class_xml [namespace] [module])
 macro(check_qt_class module class global_sources commom_xml)
     if (${ARGC} GREATER 4)
-        set (namespace ${ARGV3})
+        set (namespace ${ARGV4})
         string(TOLOWER ${namespace} _namespace)
     else ()
         set (namespace "")
     endif ()
     if (${ARGC} GREATER 5)
-        set (include_file ${ARGV4})
+        set (include_file ${ARGV5})
     else ()
-        set (include_file ${module})
+        set (include_file ${class})
     endif ()
     string(TOLOWER ${class} _class)
     string(TOUPPER ${module} _module)
@@ -93,9 +93,8 @@ macro(check_qt_class module class global_sources commom_xml)
         set(SRC_FILE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/test${class}.cxx)
         file(WRITE ${SRC_FILE}
              "#include <${include_file}>\n"
-             "#include <typeinfo>\n"
              "${NAMESPACE_USE}\n"
-             "int main() { typeid(${class}); }\n"
+             "int main() { sizeof(${class}); }\n"
         )
         try_compile(Q_WORKS ${CMAKE_BINARY_DIR}
                     ${SRC_FILE}

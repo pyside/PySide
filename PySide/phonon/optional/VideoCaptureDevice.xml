@@ -1,0 +1,5 @@
+<value-type name="VideoCaptureDevice">
+    <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+    <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+    <modify-function signature="fromIndex(int)" remove="all"/>
+</value-type>
