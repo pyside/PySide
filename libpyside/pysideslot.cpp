@@ -121,6 +121,9 @@ int slotTpInit(PyObject *self, PyObject *args, PyObject *kw)
             } else {
                 data->args = typeName;
             }
+        } else {
+            PyErr_Format(PyExc_TypeError, "Unknown signal argument type: %s", argType->ob_type->tp_name);
+            return -1;
         }
     }
 
