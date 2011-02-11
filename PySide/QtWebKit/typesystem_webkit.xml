@@ -74,6 +74,13 @@
     <enum-type name="ErrorDomain"/>
     <enum-type name="Extension"/>
 
+   <value-type name="ChooseMultipleFilesExtensionOption" />
+   <value-type name="ChooseMultipleFilesExtensionReturn" />
+   <value-type name="ErrorPageExtensionOption" since="4.6" />
+   <value-type name="ErrorPageExtensionReturn" since="4.6" />
+   <value-type name="ExtensionOption" />
+   <value-type name="ExtensionReturn" />
+
    <modify-function signature="setNetworkAccessManager(QNetworkAccessManager*)">
         <modify-argument index="1">
             <reference-count action="set"/>
