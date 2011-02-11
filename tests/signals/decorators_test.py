@@ -56,5 +56,14 @@ class StaticMetaObjectTest(unittest.TestCase):
         m = mo.method(i)
         self.assertEqual(m.typeName(), "int")
 
+
+class SlotWithoutArgs(unittest.TestCase):
+
+    def testError(self):
+        # It should be an error to call the slot without the
+        # arguments, as just @Slot would end up in a slot
+        # accepting argument functions
+        self.assertRaises(TypeError, Slot, lambda: 3)
+
 if __name__ == '__main__':
     unittest.main()
