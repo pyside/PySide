@@ -7,6 +7,8 @@ else ()
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebelementcollection_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebinspector_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpage_errorpageextensionoption_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpage_errorpageextensionreturn_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qgraphicswebview_wrapper.cpp
     )
 endif ()
@@ -20,6 +22,10 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebhistoryitem_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebhistory_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebhittestresult_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpage_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpage_choosemultiplefilesextensionoption_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpage_choosemultiplefilesextensionreturn_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpage_extensionoption_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpage_extensionreturn_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpluginfactory_mimetype_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpluginfactory_plugin_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebpluginfactory_wrapper.cpp
