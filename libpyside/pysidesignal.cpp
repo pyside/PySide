@@ -664,12 +664,10 @@ PySideSignal* newObject(const char* name, ...)
 
 PyObject* buildQtCompatible(const char* signature)
 {
-    char* qtSignature;
-    qtSignature = reinterpret_cast<char*>(malloc(strlen(signature)+2));
-    sprintf(qtSignature, "%c%s", QT_SIGNAL_SENTINEL, signature);
-    PyObject* ret = PyString_FromString(qtSignature);
-    free(qtSignature);
-    return ret;
+    QByteArray ba;
+    ba.append(QT_SIGNAL_SENTINEL);
+    ba.append(signature);
+    return PyString_FromStringAndSize(ba, ba.size());
 }
 
 void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal)
