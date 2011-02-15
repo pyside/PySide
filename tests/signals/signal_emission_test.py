@@ -107,5 +107,18 @@ class EmitUnknownType(UsesQCoreApplication):
         a.connect(SIGNAL('foobar(Dummy)'), lambda x: 42) # Just connect with an unknown type
         self.assertRaises(TypeError, a.emit, SIGNAL('foobar(Dummy)'), 22)
 
+class EmitEnum(UsesQCoreApplication):
+    """Test emission of enum arguments"""
+
+    def slot(self, arg):
+        self.arg = arg
+
+    def testIt(self):
+        self.arg = None
+        p = QProcess()
+        p.stateChanged.connect(self.slot)
+        p.stateChanged.emit(QProcess.NotRunning)
+        self.assertEqual(self.arg, QProcess.NotRunning)
+
 if __name__ == '__main__':
     unittest.main()
