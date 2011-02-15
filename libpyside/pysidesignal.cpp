@@ -496,7 +496,7 @@ char* getTypeName(PyObject* type)
 {
     if (PyType_Check(type)) {
         char *typeName = NULL;
-        if (type->ob_type == &SbkObjectType_Type) {
+        if (PyType_IsSubtype(reinterpret_cast<PyTypeObject*>(type), reinterpret_cast<PyTypeObject*>(&SbkObject_Type))) {
             SbkObjectType* objType = reinterpret_cast<SbkObjectType*>(type);
             typeName = strdup(Shiboken::ObjectType::getOriginalName(objType));
         } else {
