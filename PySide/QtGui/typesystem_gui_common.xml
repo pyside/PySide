@@ -3083,9 +3083,11 @@
     </modify-function>
 
     <modify-function signature="addWidget(QWidget*,QFlags&lt;Qt::WindowType&gt;)">
-      <modify-argument index="return">
-        <parent index="this" action="add" />
-      </modify-argument>
+        <!-- TODO: Add a keeper attribute to reference-count tag to do what this inject code do. -->
+        <inject-code>
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2));
+            Shiboken::Object::keepReference((SbkObject*)%PYARG_0, "setWidget(QWidget*)1", %PYARG_1);
+        </inject-code>
     </modify-function>
 
     <!-- use glue code -->
@@ -5062,7 +5064,7 @@
     </modify-function>
     <modify-function signature="setWidget(QWidget*)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
   </object-type>
