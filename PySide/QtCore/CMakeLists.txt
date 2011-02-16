@@ -34,8 +34,6 @@ else()
     )
 endif()
 
-
-
 set(QtCore_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qabstracteventdispatcher_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qabstractfileengine_wrapper.cpp
@@ -60,7 +58,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qdiriterator_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qdynamicpropertychangeevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qevent_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qeventloop_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/qfactoryinterface_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qfactoryinterface_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qfile_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qfileinfo_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qfilesystemwatcher_wrapper.cpp
@@ -154,5 +152,4 @@ create_pyside_module(QtCore
                      QtCore_libraries
                      ""
                      QtCore_typesystem_path
-                     QtCore_SRC
-                     "")
+                     QtCore_SRC)

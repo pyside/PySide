@@ -5,6 +5,10 @@ if (NOT QT_PHONON_INCLUDE_DIR AND CMAKE_HOST_APPLE)
     set(QT_PHONON_INCLUDE_DIR "${QT_LIBRARY_DIR}/phonon.framework/Headers")
 endif ()
 
+set(phonon_OPTIONAL_SRC )
+set(phonon_DROPPED_ENTRIES )
+check_qt_class(phonon VideoCaptureDevice    phonon_OPTIONAL_SRC phonon_DROPPED_ENTRIES Phonon ObjectDescription)
+
 set(phonon_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_abstractaudiooutput_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_abstractmediastream_wrapper.cpp
@@ -42,13 +46,8 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumefaderinterface_wrapper.cp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_volumeslider_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/phonon/phonon_backendcapabilities_notifierwrapper_wrapper.cpp
+${phonon_OPTIONAL_SRC}
 )
-
-set(TARGET_TYPESYSTEM "${CMAKE_CURRENT_BINARY_DIR}/typesystem_phonon.xml")
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_phonon.xml"
-               "${TARGET_TYPESYSTEM}" @ONLY)
-
-check_qt_class("phonon" "VideoCaptureDevice" phonon_SRC ${TARGET_TYPESYSTEM} "Phonon" "ObjectDescription")
 
 set(phonon_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${phonon_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 set(phonon_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
@@ -74,4 +73,5 @@ create_pyside_module(phonon
                      phonon_deps
                      phonon_typesystem_path
                      phonon_SRC
-                     ${TARGET_TYPESYSTEM})
+                     ""
+                     phonon_DROPPED_ENTRIES)

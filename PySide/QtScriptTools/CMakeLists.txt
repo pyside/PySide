@@ -33,5 +33,4 @@ create_pyside_module(QtScriptTools
                      QtScriptTools_libraries
                      QtScriptTools_deps
                      QtScriptTools_typesystem_path
-                     QtScriptTools_SRC
-                     "")
+                     QtScriptTools_SRC)

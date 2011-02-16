@@ -45,6 +45,5 @@ create_pyside_module(QtXmlPatterns
                      QtXmlPatterns_libraries
                      QtXmlPatterns_deps
                      QtXmlPatterns_typesystem_path
-                     QtXmlPatterns_SRC
-                     "")
+                     QtXmlPatterns_SRC)
 

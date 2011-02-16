@@ -5,7 +5,7 @@ if(ENABLE_X11)
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11info_wrapper.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11embedcontainer_wrapper.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qx11embedwidget_wrapper.cpp
-       )
+    )
 
     if(Q_WS_MAEMO_5)
         set(SPECIFIC_OS_FILES
@@ -59,6 +59,22 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qvector4d_wrapper.cpp
     )
 endif ()
+
+set(QtGui_OPTIONAL_SRC )
+set(QtGui_DROPPED_ENTRIES )
+check_qt_class(QtGui QAbstractPageSetupDialog   QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QAbstractPrintDialog       QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QGtkStyle                  QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QPageSetupDialog           QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QPrintDialog               QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QPrintEngine               QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QPrintPreviewDialog        QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QPrintPreviewWidget        QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QPrinter                   QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QPrinterInfo               QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QSessionManager            QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QSizeGrip                  QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QSystemTrayIcon            QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
 
 qt4_wrap_cpp(QPYTEXTOBJECT_MOC "${pyside_SOURCE_DIR}/qpytextobject.h")
 
@@ -378,27 +394,13 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qwizard_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qworkspace_wrapper.cpp
 
 ${SPECIFIC_OS_FILES}
+${QPYTEXTOBJECT_MOC}
 ${QtGui_46_SRC}
+${QtGui_OPTIONAL_SRC}
 )
 
-set(TARGET_TYPESYSTEM "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui.xml.in"
-               "${TARGET_TYPESYSTEM}" @ONLY)
-
-check_qt_class(QtGui QGtkStyle QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QSessionManager QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QSizeGrip QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QSystemTrayIcon QtGui_SRC ${TARGET_TYPESYSTEM})
-
-check_qt_class(QtGui QAbstractPageSetupDialog QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QAbstractPrintDialog QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QPageSetupDialog QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QPrintDialog QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QPrintPreviewWidget QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QPrintPreviewDialog QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QPrinter QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QPrinterInfo QtGui_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtGui QPrintEngine QtGui_SRC ${TARGET_TYPESYSTEM})
+               "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
 
 set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}")
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -421,8 +423,6 @@ create_pyside_module(QtGui
                      QtGui_deps
                      QtGui_typesystem_path
                      QtGui_SRC
-                     ${TARGET_TYPESYSTEM}
-                     QPYTEXTOBJECT_MOC)
-
+                     ${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml)
 
 install(FILES ${pyside_SOURCE_DIR}/qpytextobject.h DESTINATION include/PySide/QtGui/)

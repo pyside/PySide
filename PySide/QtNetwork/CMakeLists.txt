@@ -10,6 +10,15 @@ else()
     set(QtNetwork_47_SRC )
 endif ()
 
+set(QtNetwork_OPTIONAL_SRC )
+set(QtNetwork_DROPPED_ENTRIES )
+check_qt_class(QtNetwork QSslCertificate    QtNetwork_OPTIONAL_SRC QtNetwork_DROPPED_ENTRIES)
+check_qt_class(QtNetwork QSslCipher         QtNetwork_OPTIONAL_SRC QtNetwork_DROPPED_ENTRIES)
+check_qt_class(QtNetwork QSslConfiguration  QtNetwork_OPTIONAL_SRC QtNetwork_DROPPED_ENTRIES)
+check_qt_class(QtNetwork QSslError          QtNetwork_OPTIONAL_SRC QtNetwork_DROPPED_ENTRIES)
+check_qt_class(QtNetwork QSslKey            QtNetwork_OPTIONAL_SRC QtNetwork_DROPPED_ENTRIES)
+check_qt_class(QtNetwork QSslSocket         QtNetwork_OPTIONAL_SRC QtNetwork_DROPPED_ENTRIES)
+
 set(QtNetwork_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qabstractnetworkcache_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qabstractsocket_wrapper.cpp
@@ -44,18 +53,8 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qudpsocket_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/qurlinfo_wrapper.cpp
 
 ${QtNetwork_47_SRC}
+${QtNetwork_OPTIONAL_SRC}
 )
-
-set(TARGET_TYPESYSTEM "${CMAKE_CURRENT_BINARY_DIR}/typesystem_network.xml")
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_network.xml"
-               "${TARGET_TYPESYSTEM}" @ONLY)
-
-check_qt_class(QtNetwork QSslCertificate QtNetwork_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtNetwork QSslCipher QtNetwork_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtNetwork QSslConfiguration QtNetwork_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtNetwork QSslError QtNetwork_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtNetwork QSslKey QtNetwork_SRC ${TARGET_TYPESYSTEM})
-check_qt_class(QtNetwork QSslSocket QtNetwork_SRC ${TARGET_TYPESYSTEM})
 
 set(QtNetwork_typesystem_path "${QtCore_SOURCE_DIR}")
 set(QtNetwork_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -79,4 +78,5 @@ create_pyside_module(QtNetwork
                      QtNetwork_deps
                      QtNetwork_typesystem_path
                      QtNetwork_SRC
-                     ${TARGET_TYPESYSTEM})
+                     ""
+                     QtNetwork_DROPPED_ENTRIES)
