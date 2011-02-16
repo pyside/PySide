@@ -1329,20 +1329,39 @@
           <replace-default-expression with="-1"/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            QString result;
             if (QCoreApplication::instance()) {
-                PyObject *klass = PyObject_GetAttrString(%PYSELF, "__class__");
-                PyObject *cname = PyObject_GetAttrString(klass, "__name__");
-                result = QString(QCoreApplication::instance()->translate(PyString_AsString(cname), %1, %2, QCoreApplication::UnicodeUTF8, %3));
-
-                Py_DECREF(klass);
-                Py_DECREF(cname);
+                Shiboken::AutoDecRef klass(PyObject_GetAttrString(%PYSELF, "__class__"));
+                Shiboken::AutoDecRef cname(PyObject_GetAttrString(klass, "__name__"));
+                QString result = QCoreApplication::instance()->translate(PyString_AS_STRING(cname.object()), %1, %2, QCoreApplication::UnicodeUTF8, %3);
+                %PYARG_0 = %CONVERTTOPYTHON[QString](result);
             } else {
-                result = QString(QString::fromLatin1(%1));
+                Py_INCREF(%PYARG_1);
+                %PYARG_0 = %PYARG_1;
             }
-            %PYARG_0 = %CONVERTTOPYTHON[QString](result);
         </inject-code>
     </add-function>
+
+    <add-function signature="trUtf8(PyUnicode, const char *, int)" return-type="QString">
+        <modify-argument index="2">
+          <replace-default-expression with="0"/>
+        </modify-argument>
+        <modify-argument index="3">
+          <replace-default-expression with="-1"/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            if (QCoreApplication::instance()) {
+                Shiboken::AutoDecRef klass(PyObject_GetAttrString(%PYSELF, "__class__"));
+                Shiboken::AutoDecRef cname(PyObject_GetAttrString(klass, "__name__"));
+                Shiboken::AutoDecRef str(PyUnicode_AsUTF8String(%1));
+                QString result = QCoreApplication::instance()->translate(PyString_AS_STRING(cname.object()), PyString_AS_STRING(str.object()), %2, QCoreApplication::UnicodeUTF8, %3);
+                %PYARG_0 = %CONVERTTOPYTHON[QString](result);
+            } else {
+                Py_INCREF(%PYARG_1);
+                %PYARG_0 = %PYARG_1;
+            }
+        </inject-code>
+    </add-function>
+
 
    <modify-function signature="receivers(const char*) const">
      <inject-code class="target" position="beginning">
