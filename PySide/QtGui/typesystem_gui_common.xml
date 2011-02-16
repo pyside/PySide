@@ -6002,4 +6002,94 @@
   <suppress-warning text="class not found for setup inheritance 'QMimeSource'"/>
   <suppress-warning text="class 'QDropEvent' inherits from unknown base class 'QMimeSource'"/>
 
+
+  <!-- The following entries may be present in the system or not. Keep this section organized. -->
+  <object-type name="QAbstractPageSetupDialog"/>
+  <object-type name="QAbstractPrintDialog">
+    <enum-type name="PrintDialogOption" flags="QAbstractPrintDialog::PrintDialogOptions"/>
+    <enum-type name="PrintRange"/>
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
+  </object-type>
+
+  <object-type name="QGtkStyle">
+    <modify-function signature="standardPixmap(QStyle::StandardPixmap,const QStyleOption*,const QWidget*)const">
+      <modify-argument index="2">
+        <replace-default-expression with="0"/>
+      </modify-argument>
+      <modify-argument index="3">
+        <replace-default-expression with="0"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+
+  <object-type name="QPageSetupDialog">
+    <enum-type name="PageSetupDialogOption" flags="QPageSetupDialog::PageSetupDialogOptions"/>
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
+  </object-type>
+
+  <object-type name="QPrintDialog">
+    <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
+  </object-type>
+  <object-type name="QPrintEngine">
+    <enum-type name="PrintEnginePropertyKey" />
+  </object-type>
+  <value-type name="QPrinterInfo" />
+  <rejection class="QPrinter" function-name="printerSelectionOption"/>
+  <rejection class="QPrinter" function-name="setPrinterSelectionOption"/>
+
+  <object-type name="QPrinter" >
+    <enum-type name="ColorMode"/>
+    <enum-type name="DuplexMode"/>
+    <enum-type name="Orientation"/>
+    <enum-type name="OutputFormat"/>
+    <enum-type name="PageOrder"/>
+    <enum-type name="PageSize" />
+    <enum-type name="PaperSource"/>
+    <enum-type name="PrintRange"/>
+    <enum-type name="PrinterMode"/>
+    <enum-type name="PrinterState"/>
+    <enum-type name="Unit"/>
+    <!-- TODO: What to do with this function? -->
+    <modify-function signature="getPageMargins(qreal*,qreal*,qreal*,qreal*,QPrinter::Unit)const" remove="all" />
+    <modify-function signature="setEngines(QPrintEngine*,QPaintEngine*)">
+      <modify-argument index="1">
+        <parent index="this" action="add"/>
+      </modify-argument>
+      <modify-argument index="2">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
+    <extra-includes>
+      <include file-name="QPrinterInfo" location="global"/>
+    </extra-includes>
+  </object-type>
+
+  <object-type name="QPrintPreviewDialog"/>
+  <object-type name="QPrintPreviewWidget">
+    <enum-type name="ViewMode"/>
+    <enum-type name="ZoomMode"/>
+    <modify-function signature="print()" rename="print_" />
+  </object-type>
+
+  <object-type name="QSessionManager">
+    <extra-includes>
+    </extra-includes>
+    <enum-type name="RestartHint"/>
+    <modify-function signature="handle()const" remove="all"/>
+  </object-type>
+
+  <object-type name="QSizeGrip"/>
+
+  <object-type name="QSystemTrayIcon">
+    <enum-type name="ActivationReason"/>
+    <enum-type name="MessageIcon"/>
+    <modify-function signature="setContextMenu(QMenu*)">
+      <modify-argument index="1">
+        <reference-count action="set"/>
+      </modify-argument>
+    </modify-function>
+  </object-type>
+  <!-- The above entries may be present in the system or not. Keep this section organized. -->
+
 </typesystem>
+

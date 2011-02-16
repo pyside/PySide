@@ -1,6 +1,0 @@
-﻿<object-type name="QPrintPreviewWidget">
-    <enum-type name="ViewMode"/>
-    <enum-type name="ZoomMode"/>
-    <modify-function signature="print()" rename="print_" />
-</object-type>
-

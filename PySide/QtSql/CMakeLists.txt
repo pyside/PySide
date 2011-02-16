@@ -43,5 +43,4 @@ create_pyside_module(QtSql
                      QtSql_libraries
                      QtSql_deps
                      QtSql_typesystem_path
-                     QtSql_SRC
-                     "")
+                     QtSql_SRC)

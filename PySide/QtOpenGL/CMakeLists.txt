@@ -54,5 +54,4 @@ create_pyside_module(QtOpenGL
                     QtOpenGL_libraries
                     QtOpenGL_deps
                     QtOpenGL_typesystem_path
-                    QtOpenGL_SRC
-                    "")
+                    QtOpenGL_SRC)

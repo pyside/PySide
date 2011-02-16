@@ -63,6 +63,5 @@ create_pyside_module(QtWebKit
                      QtWebKit_libraries
                      QtWebKit_deps
                      QtWebKit_typesystem_path
-                     QtWebKit_SRC
-                     "")
+                     QtWebKit_SRC)
 

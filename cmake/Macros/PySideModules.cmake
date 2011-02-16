@@ -1,6 +1,18 @@
-macro(create_pyside_module module_name module_include_dir module_libraries module_deps module_typesystem_path module_sources typesystem_name)
+macro(create_pyside_module module_name module_include_dir module_libraries module_deps module_typesystem_path module_sources)
     string(TOLOWER ${module_name} _module)
     string(REGEX REPLACE ^qt "" _module ${_module})
+
+    if(${ARGC} GREATER 6)
+        set (typesystem_name ${ARGV6})
+    else()
+        set (typesystem_name "")
+    endif()
+    if(${ARGC} GREATER 7)
+        string(REPLACE ";" "\\;" dropped_entries "${${ARGV7}}")
+    else()
+        set (dropped_entries "")
+    endif()
+
     if (NOT EXISTS ${typesystem_name})
         set(typesystem_path ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_${_module}.xml)
     else()
@@ -16,11 +28,12 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
                         --license-file=${CMAKE_CURRENT_SOURCE_DIR}/../licensecomment.txt
                         ${typesystem_path}
                         --api-version=${SUPPORTED_QT_VERSION}
+                        --drop-type-entries="${dropped_entries}"
                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                         COMMENT "Running generator for ${module_name}...")
 
     include_directories(${module_name} ${${module_include_dir}} ${pyside_SOURCE_DIR})
-    add_library(${module_name} MODULE ${${module_sources}} ${${ARGN}})
+    add_library(${module_name} MODULE ${${module_sources}})
     set_target_properties(${module_name} PROPERTIES PREFIX "" LIBRARY_OUTPUT_DIRECTORY ${pyside_BINARY_DIR})
     if(WIN32)
         set_target_properties(${module_name} PROPERTIES SUFFIX ".pyd")
@@ -43,25 +56,8 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
     install(FILES ${typesystem_files} DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
 endmacro()
 
-macro(append_class_xml commom_xml class_xml)
-    INCLUDE(FindPythonInterp)
-    set(REPLACE_PROGRAM "import string; \\
-                commomFile = open('${commom_xml}', 'r'); \\
-                commomData = commomFile.read(); \\
-                commomFile.close(); \\
-                objectFile = open('${class_xml}', 'r'); \\
-                objectData = objectFile.read(); \\
-                objectFile.close(); \\
-                commomData = string.replace(commomData, '</typesystem>', '%s\\n</typesystem>' % objectData); \\
-                commomFile = open('${commom_xml}', 'w'); \\
-                commomFile.write(commomData); \\
-                commomFile.close();")
-    execute_process(
-        COMMAND ${PYTHON_EXECUTABLE} -c "${REPLACE_PROGRAM}")
-endmacro()
-
-#macro(check_qt_class_with_namespace module namespace class global_sources commom_xml class_xml [namespace] [module])
-macro(check_qt_class module class global_sources commom_xml)
+#macro(check_qt_class_with_namespace module namespace class optional_source_files dropped_entries [namespace] [module])
+macro(check_qt_class module class optional_source_files dropped_entries)
     if (${ARGC} GREATER 4)
         set (namespace ${ARGV4})
         string(TOLOWER ${namespace} _namespace)
@@ -82,7 +78,9 @@ macro(check_qt_class module class global_sources commom_xml)
     endif ()
     if (DEFINED PYSIDE_${class})
         if (PYSIDE_${class})
-            list(APPEND ${global_sources} ${_cppfile})
+            list(APPEND ${optional_source_files} ${_cppfile})
+        else()
+            list(APPEND ${dropped_entries} PySide.${module}.${class})
         endif()
     else()
         if (NOT ${namespace} STREQUAL "" )
@@ -108,10 +106,10 @@ macro(check_qt_class module class global_sources commom_xml)
         set("PYSIDE_${class}" ${Q_WORKS} CACHE STRING "Has ${class} class been found?")
         if(Q_WORKS)
             message(STATUS "Checking for ${class} in ${module} -- found")
-            list(APPEND ${global_sources} ${_cppfile})
-            append_class_xml(${commom_xml} "${CMAKE_CURRENT_SOURCE_DIR}/optional/${class}.xml")
+            list(APPEND ${optional_source_files} ${_cppfile})
         else()
             message(STATUS "Checking for ${class} in ${module} -- not found")
+            list(APPEND ${dropped_entries} PySide.${module}.${class})
         endif()
     endif()
 endmacro()

@@ -231,6 +231,15 @@
                 </modify-argument>
             </modify-function>
         </object-type>
-    </namespace-type>
 
+
+        <!-- The following entries may be present in the system or not. Keep this section organized. -->
+        <value-type name="VideoCaptureDevice">
+            <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
+            <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <modify-function signature="fromIndex(int)" remove="all"/>
+        </value-type>
+        <!-- The above entries may be present in the system or not. Keep this section organized. -->
+
+    </namespace-type>
 </typesystem>

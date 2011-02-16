@@ -38,5 +38,4 @@ create_pyside_module(QtHelp
                      QtHelp_libraries
                      QtHelp_deps
                      QtHelp_typesystem_path
-                     QtHelp_SRC
-                     "")
+                     QtHelp_SRC)

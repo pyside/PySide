@@ -44,5 +44,4 @@ create_pyside_module(QtMultimedia
                      QtMultimedia_libraries
                      QtMultimedia_deps
                      QtMultimedia_typesystem_path
-                     QtMultimedia_SRC
-                     "")
+                     QtMultimedia_SRC)
