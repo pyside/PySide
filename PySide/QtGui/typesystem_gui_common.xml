@@ -3099,7 +3099,21 @@
 
     <modify-function signature="createItemGroup(const QList&lt;QGraphicsItem*&gt;&amp;)" remove="all"/>
     <modify-function signature="destroyItemGroup(QGraphicsItemGroup*)" remove="all"/>
-    <modify-function signature="clear()" remove="all"/>
+    <modify-function signature="clear()">
+        <inject-code>
+            const QList&lt;QGraphicsItem*> items = %CPPSELF.items();
+            Shiboken::BindingManager&amp; bm = Shiboken::BindingManager::instance();
+            foreach (QGraphicsItem* item, items) {
+                SbkObject* obj = bm.retrieveWrapper(item);
+                if (obj) {
+                    if (obj->ob_refcnt > 1) // If the refcnt is 1 the object will vannish anyway.
+                        Shiboken::Object::invalidate(obj);
+                    Shiboken::Object::removeParent(obj);
+                }
+            }
+            %CPPSELF.%FUNCTION_NAME();
+        </inject-code>
+    </modify-function>
 
     <modify-function signature="removeItem(QGraphicsItem*)">
       <modify-argument index="1">
