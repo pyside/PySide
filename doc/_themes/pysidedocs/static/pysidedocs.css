@@ -136,6 +136,12 @@ pre * {
     font: 100% monospace;
 }
 
+.pre {
+    font: 100% monospace;
+    background-color: #fafafa;
+    color: black;
+}
+
 .headerlink {
     display: none;
 }
