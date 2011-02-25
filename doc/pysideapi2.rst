@@ -1,3 +1,6 @@
+
+.. _pysideapi2:
+
 PySide API 2
 ************
 
@@ -14,18 +17,10 @@ back. Thus remember to update your source code to the new API, this will ensure
 your code will run on both bindings.
 
 
-Changes:
-
-- __hash__() function return value
-- QString
-- QTextStream
-- QVariant
-
-
 __hash__() function return value
 ================================
 
-The hash value returned for the classes QDate, QDateTime, QTime, QUrl will be
+The hash value returned for the classes :class:`PySide.QtCore.QDate`, :class:`PySide.QtCore.QDateTime`, :class:`PySide.QtCore.QTime`, :class:`PySide.QtCore.QUrl` will be
 based on their string representations, thus objects with the same value will
 produce the same hash.
 
