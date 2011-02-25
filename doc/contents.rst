@@ -6,6 +6,22 @@ PySide Documentation contents
 
     modules.rst
 
+Tutorials
+=========
+
+.. toctree::
+    :maxdepth: 2
+
+    tutorials/index.rst
+
+Other stuff
+===========
+
+.. toctree::
+    :maxdepth: 1
+
+    pysideapi2.rst
+
 Module Index
 ============
 
