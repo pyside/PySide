@@ -95,13 +95,12 @@ void MainWindow::setupContents()
 void MainWindow::setupDockWindow()
 {
 //! [0]
-    contentsWindow = new QDockWidget(tr("Table of Contents"), this);
-    contentsWindow->setAllowedAreas(Qt::LeftDockWidgetArea
-                                  | Qt::RightDockWidgetArea);
-    addDockWidget(Qt::LeftDockWidgetArea, contentsWindow);
+    contentsWindow = QDockWidget(tr("Table of Contents"), self)
+    contentsWindow.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
+    addDockWidget(Qt.LeftDockWidgetArea, contentsWindow)
 
-    headingList = new QListWidget(contentsWindow);
-    contentsWindow->setWidget(headingList);
+    headingList = QListWidget(contentsWindow)
+    contentsWindow.setWidget(headingList)
 //! [0]
 }
 

@@ -2,9 +2,9 @@
 q = QSqlQuery()
 q.prepare("insert into test (i1, i2, s) values (?, ?, ?)")
 
-col1 = QVariant([1, 3])
-col2 = QVariant([2, 4])
-col3 = QVariant(["hello", "world"])
+col1 = [1, 3]
+col2 = [2, 4]
+col3 = ["hello", "world"]
 
 q.bindValue(0, col1)
 q.bindValue(1, col2)

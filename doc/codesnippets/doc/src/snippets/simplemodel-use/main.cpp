@@ -67,30 +67,29 @@ int main(int argc, char *argv[])
     title->setBackgroundRole(QPalette::Base);
     title->setMargin(8);
     layout->addWidget(title);
-    
+
 //! [0]
-    QDirModel *model = new QDirModel;
-    QModelIndex parentIndex = model->index(QDir::currentPath());
-    int numRows = model->rowCount(parentIndex);
+    model = QDirModel()
+    parentIndex = model.index(QDir.currentPath())
+    numRows = model.rowCount(parentIndex)
 //! [0]
 
 //! [1]
-    for (int row = 0; row < numRows; ++row) {
-        QModelIndex index = model->index(row, 0, parentIndex);
+    for row in range(numRows):
+        index = model.index(row, 0, parentIndex)
 //! [1]
 
 //! [2]
-        QString text = model->data(index, Qt::DisplayRole).toString();
+        text = model.data(index, Qt.DisplayRole)
         // Display the text in a widget.
 //! [2]
 
-        QLabel *label = new QLabel(text, window);
-        layout->addWidget(label);
+        label = QLabel(text, window)
+        layout.addWidget(label)
 //! [3]
-    }
 //! [3]
 
-    window->setWindowTitle("A simple model example");
-    window->show();
-    return app.exec();
+    window.setWindowTitle("A simple model example")
+    window.show()
+    return app.exec_()
 }

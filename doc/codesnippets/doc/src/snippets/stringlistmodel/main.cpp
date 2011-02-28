@@ -52,33 +52,29 @@
 #include "model.h"
 
 //! [0]
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
+
+app = QApplication(sys.argv)
 
 // Unindented for quoting purposes:
 //! [1]
-QStringList numbers;
-numbers << "One" << "Two" << "Three" << "Four" << "Five";
+numbers = ["One", "Two", "Three", "Four", "Five"]
 
-QAbstractItemModel *model = new StringListModel(numbers);
+model = StringListModel(numbers)
 //! [0] //! [1] //! [2] //! [3]
-QListView *view = new QListView;
+view = QListView()
 //! [2]
-view->setWindowTitle("View onto a string list model");
+view.setWindowTitle("View onto a string list model")
 //! [4]
-view->setModel(model);
+view.setModel(model)
 //! [3] //! [4]
 
-    model->insertRows(5, 7, QModelIndex());
+    model.insertRows(5, 7, QModelIndex())
 
-    for (int row = 5; row < 12; ++row) {
-        QModelIndex index = model->index(row, 0, QModelIndex());
-        model->setData(index, QString::number(row+1));
-    }
+    for row in range(5, 12):
+        index = model.index(row, 0, QModelIndex())
+        model.setData(index, str(row+1))
 
 //! [5]
-    view->show();
-    return app.exec();
-}
+    view.show()
+    sys.exit(app.exec_())
 //! [5]

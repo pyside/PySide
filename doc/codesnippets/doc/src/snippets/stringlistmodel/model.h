@@ -39,45 +39,35 @@
 **
 ****************************************************************************/
 
-#ifndef MODEL_H
-#define MODEL_H
-
-#include <QAbstractListModel>
-#include <QObject>
-#include <QStringList>
-
 //! [0]
-class StringListModel : public QAbstractListModel
-{
-    Q_OBJECT
+class StringListModel (QAbstractListModel):
+    def __init__(strings, parent = None):
+        QAbstractListModel.__init__(self, parent)
+//! [5]
+        self.stringList = strings
+//! [5]
 
-public:
-    StringListModel(const QStringList &strings, QObject *parent = 0)
-        : QAbstractListModel(parent), stringList(strings) {}
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    QVariant headerData(int section, Qt::Orientation orientation,
+    def rowCount(self, parent = QModelIndex()):
+        # ...
+    def data(self, index, role):
+        # ...
+    def headerData(self, section, orientation,
 //! [0] //! [1]
-                        int role = Qt::DisplayRole) const;
+                        role = Qt.DisplayRole):
 //! [1]
 
 //! [2]
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    bool setData(const QModelIndex &index, const QVariant &value,
+    def flags(self, index):
+        # ...
+    def setData(self, index, value,
 //! [2] //! [3]
-                 int role = Qt::EditRole);
+                 role = Qt.EditRole)
 //! [3]
 
 //! [4]
-    bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
-    bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
+    def insertRows(self, position, rows, index = QModelIndex()):
+        # ...
+    def removeRows(self, position, rows, index = QModelIndex()):
+        # ...
 //! [4]
 
-//! [5]
-private:
-    QStringList stringList;
-};
-//! [5]
-
-#endif
