@@ -87,7 +87,7 @@ def QSqlQuery_snippets():
 //! [7]
     query = QSqlQuery("SELECT country FROM artist")
     while query.next():
-        country = query.value(0).toString()
+        country = query.value(0)
         doSomething(country)
 //! [7]
 
@@ -97,7 +97,7 @@ def QSqlQuery_snippets():
     query = QSqlQuery("SELECT * FROM artist")
     fieldNo = query.record().indexOf("country")
     while query.next():
-        country = query.value(fieldNo).toString()
+        country = query.value(fieldNo)
         doSomething(country)
 //! [8]
 
@@ -152,7 +152,7 @@ def QSqlQuery_snippets():
     query.bindValue(0, "A")
     query.bindValue(1, 0, QSql.Out)
     query.exec_()
-    i = query.boundValue(1).toInt() # i is 65
+    i = query.boundValue(1) # i is 65
 //! [13]
 
     query = QSqlQuery()
@@ -162,7 +162,7 @@ def QSqlQuery_snippets():
     i = query.boundValues()
     while i.hasNext():
         i.next()
-        print i.key().toAscii().data(), ": ", i.value().toString().toAscii().data()
+        print i.key(), ": ", i.value()
 //! [14]
 
     # examine with positional binding
@@ -193,11 +193,11 @@ def QSqlQueryModel_snippets():
 //! [21]
     model = QSqlQueryModel()
     model.setQuery("SELECT * FROM employee")
-    salary = model.record(4).value("salary").toInt()
+    salary = model.record(4).value("salary")
 //! [21]
 
 //! [22]
-    salary = model.data(model.index(4, 2)).toInt()
+    salary = model.data(model.index(4, 2))
 //! [22]
 
     for row in range(model.rowCount()):
@@ -238,7 +238,7 @@ def QSqlTableModel_snippets():
 //! [25]
     model = QSqlTableModel()
     model.setTable("employee")
-    QString name = model.record(4).value("name").toString()
+    QString name = model.record(4).value("name")
 //! [25]
 
 def sql_intro_snippets():
@@ -273,8 +273,8 @@ def sql_intro_snippets():
 
 //! [32]
     while query.next():
-        name = query.value(0).toString()
-        salary = query.value(1).toInt()
+        name = query.value(0)
+        salary = query.value(1)
         print name, salary
 //! [32]
 
@@ -339,7 +339,7 @@ def sql_intro_snippets():
     query = QSqlQuery()
     query.exec_("SELECT id FROM employee WHERE name = 'Torild Halvorsen'")
     if query.next():
-        employeeId = query.value(0).toInt()
+        employeeId = query.value(0)
         query.exec_("INSERT INTO project (id, name, ownerid) "
                     "VALUES (201, 'Manhattan Project', "
                     + QString.number(employeeId) + ')')
@@ -353,8 +353,8 @@ def sql_intro_snippets():
     model.setQuery("SELECT * FROM employee")
 
     for i in range(model.rowCount()):
-        _id = model.record(i).value("id").toInt()
-        name = model.record(i).value("name").toString()
+        _id = model.record(i).value("id")
+        name = model.record(i).value("name")
         print _id, name
 
 //! [40]
@@ -370,8 +370,8 @@ def sql_intro_snippets():
     model.select()
 
     for i in range(model.rowCount()):
-        name = model.record(i).value("name").toString()
-        salary = model.record(i).value("salary").toInt()
+        name = model.record(i).value("name")
+        salary = model.record(i).value("salary")
         print "%s: %d" % (name, salary)
 
 //! [41]
@@ -383,7 +383,7 @@ def sql_intro_snippets():
 //! [42]
     for i in range(model.rowCount()):
         record = model.record(i)
-        salary = record.value("salary").toInt()
+        salary = record.value("salary")
         salary *= 1.1
         record.setValue("salary", salary)
         model.setRecord(i, record)

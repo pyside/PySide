@@ -117,8 +117,8 @@ class Login:
     for i in range(size):
         settings.setArrayIndex(i)
         login = Login()
-        login.userName = settings.value("userName").toString()
-        login.password = settings.value("password").toString()
+        login.userName = settings.value("userName")
+        login.password = settings.value("password")
         logins.append(login)
 
     settings.endArray()
@@ -148,8 +148,8 @@ class Login:
 settings = QSettings()
 settings.setValue("fridge/color", Qt.white)
 settings.setValue("fridge/size", QSize(32, 96))
-settings.setValue("sofa", true)
-settings.setValue("tv", false)
+settings.setValue("sofa", True)
+settings.setValue("tv", False)
 
 keys = settings.allKeys();
 # keys: ["fridge/color", "fridge/size", "sofa", "tv"]
@@ -167,8 +167,8 @@ keys = settings.allKeys()
 settings = QSettings()
 settings.setValue("fridge/color", Qt.white)
 settings.setValue("fridge/size", QSize(32, 96))
-settings.setValue("sofa", true)
-settings.setValue("tv", false)
+settings.setValue("sofa", True)
+settings.setValue("tv", False)
 
 keys = settings.childKeys()
 # keys: ["sofa", "tv"]
@@ -186,8 +186,8 @@ keys = settings.childKeys()
 settings = QSettings()
 settings.setValue("fridge/color", Qt.white)
 settings.setValue("fridge/size", QSize(32, 96));
-settings.setValue("sofa", true)
-settings.setValue("tv", false)
+settings.setValue("sofa", True)
+settings.setValue("tv", False)
 
 groups = settings.childGroups()
 # group: ["fridge"]
@@ -204,10 +204,10 @@ groups = settings.childGroups()
 //! [23]
 settings = QSettings()
 settings.setValue("interval", 30)
-settings.value("interval").toInt()      # returns 30
+settings.value("interval")      # returns 30
 
 settings.setValue("interval", 6.55)
-settings.value("interval").toDouble()  # returns 6.55
+settings.value("interval")  # returns 6.55
 //! [23]
 
 
@@ -243,9 +243,9 @@ keys = settings.allKeys()
 //! [26]
 settings = QSettings()
 settings.setValue("animal/snake", 58)
-settings.value("animal/snake", 1024).toInt()   # returns 58
-settings.value("animal/zebra", 1024).toInt()   # returns 1024
-settings.value("animal/zebra").toInt()         # returns 0
+settings.value("animal/snake", 1024)   # returns 58
+settings.value("animal/zebra", 1024)   # returns 1024
+settings.value("animal/zebra")         # returns 0
 //! [26]
 
 

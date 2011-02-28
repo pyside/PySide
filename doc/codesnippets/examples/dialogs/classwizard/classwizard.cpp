@@ -224,7 +224,7 @@ class CodeStylePage(QWizardPage):
 //! [16]
     def initializePage(self):
         className = self.field("className")
-        self.macroNameLineEdit.setText(className.toUpper() + "_H")
+        self.macroNameLineEdit.setText(className.upper() + "_H")
 
         baseClass = self.field("baseClass")
 
@@ -238,13 +238,13 @@ class CodeStylePage(QWizardPage):
         elsif QRegExp("Q[A-Z].*").exactMatch(baseClass):
             baseIncludeLineEdit.setText("<" + baseClass + ">")
         else:
-            baseIncludeLineEdit.setText("\"" + baseClass.toLower() + ".h\"")
+            baseIncludeLineEdit.setText("\"" + baseClass.lower() + ".h\"")
 //! [16]
 
 //! [17]
     def initializePage(self):
-        className = field("className").toString()
-        self.headerLineEdit.setText(className.toLower() + ".h")
-        self.implementationLineEdit.setText(className.toLower() + ".cpp")
+        className = field("className")
+        self.headerLineEdit.setText(className.lower() + ".h")
+        self.implementationLineEdit.setText(className.lower() + ".cpp")
         self.outputDirLineEdit.setText(QDir.convertSeparators(QDir.tempPath()))
 //! [17]

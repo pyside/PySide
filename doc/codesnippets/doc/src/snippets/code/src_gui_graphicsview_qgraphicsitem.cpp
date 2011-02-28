@@ -102,7 +102,7 @@ def paint(self, painter, option, widget):
 ObjectName = 0;
 
 item = scene.itemAt(100, 50)
-if item.data(ObjectName).toString().isEmpty():
+if len(item.data(ObjectName)) == 0:
     if isinstance(ButtonItem, item):
         item.setData(ObjectName, "Button")
 //! [11]
@@ -145,13 +145,12 @@ def dragEnterEvent(self, event):
 def itemChange(self, change, value):
     if change == ItemPositionChange && scene():
         # value is the new position.
-        newPos = value.toPointF()
         rect = scene()->sceneRect()
-        if !rect.contains(newPos):
+        if !rect.contains(value):
             # Keep the item inside the scene rect.
-            newPos.setX(qMin(rect.right(), qMax(newPos.x(), rect.left())))
-            newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())))
-            return newPos
+            value.setX(qMin(rect.right(), qMax(value.x(), rect.left())))
+            value.setY(qMin(rect.bottom(), qMax(value.y(), rect.top())))
+            return value
     return QGraphicsItem.itemChange(self, change, value)
 //! [15]
 

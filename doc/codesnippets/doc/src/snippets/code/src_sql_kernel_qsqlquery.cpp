@@ -11,7 +11,7 @@ print "Number of columns: %d" % rec.count()
 
 nameCol = rec.indexOf("name") # index of the field "name"
 while q.next():
-    print q.value(nameCol).toString() # output all names
+    print q.value(nameCol) # output all names
 //! [1]
 
 
@@ -19,12 +19,10 @@ while q.next():
 q = QSqlQuery()
 q.prepare("insert into myTable values (?, ?)")
 
-QVariantList ints
-ints << 1 << 2 << 3 << 4
+ints = [1, 2, 3, 4]
 q.addBindValue(ints)
 
-QVariantList names
-names << "Harald" << "Boris" << "Trond" << QVariant(QVariant.String)
+names = ["Harald", "Boris", "Trond", ""]
 q.addBindValue(names)
 
 if not q.execBatch():

@@ -45,18 +45,14 @@
   A simple model that uses a QStringList as its data source.
 */
 
-#include "model.h"
-
 /*!
     Returns the number of items in the string list as the number of rows
     in the model.
 */
 
 //! [0]
-int StringListModel::rowCount(const QModelIndex &parent) const
-{
-    return stringList.count();
-}
+def rowCount(self, parent):
+    return len(self.stringList)
 //! [0]
 
 /*!
@@ -67,19 +63,17 @@ int StringListModel::rowCount(const QModelIndex &parent) const
 */
 
 //! [1]
-QVariant StringListModel::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
+def data(self, index, role):
+    if not index.isValid():
+        return None
 
-    if (index.row() >= stringList.size())
-        return QVariant();
+    if index.row() >= stringList.size():
+        return None
 
-    if (role == Qt::DisplayRole)
-        return stringList.at(index.row());
+    if role == Qt.DisplayRole:
+        return stringList[index.row()]
     else
-        return QVariant();
-}
+        return None
 //! [1]
 
 /*!
@@ -89,17 +83,14 @@ QVariant StringListModel::data(const QModelIndex &index, int role) const
 */
 
 //! [2]
-QVariant StringListModel::headerData(int section, Qt::Orientation orientation,
-                                     int role) const
-{
-    if (role != Qt::DisplayRole)
-        return QVariant();
+def headerData(self, section, orientation, role):
+    if role != Qt::DisplayRole:
+        return None
 
-    if (orientation == Qt::Horizontal)
-        return QString("Column %1").arg(section);
-    else
-        return QString("Row %1").arg(section);
-}
+    if orientation == Qt::Horizontal:
+        return "Column %s" % section
+    else:
+        return "Row %s" % section
 //! [2]
 
 /*!
@@ -108,13 +99,11 @@ QVariant StringListModel::headerData(int section, Qt::Orientation orientation,
 */
 
 //! [3]
-Qt::ItemFlags StringListModel::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return Qt::ItemIsEnabled;
+def flags(self, index):
+    if not index.isValid()
+        return Qt.ItemIsEnabled
 
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
-}
+    return QAbstractItemModel.flags(index) | Qt.ItemIsEditable
 //! [3]
 
 /*!
@@ -129,17 +118,13 @@ Qt::ItemFlags StringListModel::flags(const QModelIndex &index) const
 */
 
 //! [4]
-bool StringListModel::setData(const QModelIndex &index,
-                              const QVariant &value, int role)
-{
-    if (index.isValid() && role == Qt::EditRole) {
-
-        stringList.replace(index.row(), value.toString());
-        emit dataChanged(index, index);
-        return true;
-    }
+def setData(self, index, value, role):
+    if index.isValid() and role == Qt.EditRole:
+        self.stringList[index.row()] = value
+        self.dataChanged.emit(index, index)
+        return True;
 //! [4] //! [5]
-    return false;
+    return False;
 }
 //! [5]
 
@@ -148,18 +133,15 @@ bool StringListModel::setData(const QModelIndex &index,
 */
 
 //! [6]
-bool StringListModel::insertRows(int position, int rows, const QModelIndex &parent)
-{
-    beginInsertRows(QModelIndex(), position, position+rows-1);
+def insertRows(self, position, rows, parent):
+    self.beginInsertRows(QModelIndex(), position, position+rows-1)
 
-    for (int row = 0; row < rows; ++row) {
-        stringList.insert(position, "");
-    }
+    for row in range(0, rows):
+        self.stringList.insert(position, "")
 
-    endInsertRows();
-    return true;
+    self.endInsertRows()
+    return True;
 //! [6] //! [7]
-}
 //! [7]
 
 /*!
@@ -167,16 +149,13 @@ bool StringListModel::insertRows(int position, int rows, const QModelIndex &pare
 */
 
 //! [8]
-bool StringListModel::removeRows(int position, int rows, const QModelIndex &parent)
-{
-    beginRemoveRows(QModelIndex(), position, position+rows-1);
+def removeRows(self, position, rows, parent):
+    self.beginRemoveRows(QModelIndex(), position, position+rows-1)
 
-    for (int row = 0; row < rows; ++row) {
-        stringList.removeAt(position);
-    }
+    for row in range(0, rows):
+        del self.stringList[position]
 
-    endRemoveRows();
-    return true;
+    self.endRemoveRows()
+    return True;
 //! [8] //! [9]
-}
 //! [9]

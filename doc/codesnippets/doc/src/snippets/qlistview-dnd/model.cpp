@@ -132,23 +132,17 @@ Qt::ItemFlags DragDropListModel::flags(const QModelIndex &index) const
 //! [7]
 
 //! [8]
-QMimeData *DragDropListModel::mimeData(const QModelIndexList &indexes) const
-{
-    QMimeData *mimeData = new QMimeData();
-    QByteArray encodedData;
+def mimeData(self, indexes):
+    mimeData = QMimeData()
+    encodedData = QByteArray()
+    stream = QDataStream(encodedData, QIODevice.WriteOnly)
 
-    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    for index in indexes:
+        if index.isValid():
+            stream << data(index, Qt.DisplayRole)
 
-    foreach (QModelIndex index, indexes) {
-        if (index.isValid()) {
-            QString text = data(index, Qt::DisplayRole).toString();
-            stream << text;
-        }
-    }
-
-    mimeData->setData("application/vnd.text.list", encodedData);
+    mimeData.setData("application/vnd.text.list", encodedData)
     return mimeData;
-}
 //! [8]
 
 //! [9]

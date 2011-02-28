@@ -64,10 +64,10 @@ def filterAcceptsRow(self, sourceRow, sourceParent):
     index1 = sourceModel().index(sourceRow, 1, sourceParent)
     index2 = sourceModel().index(sourceRow, 2, sourceParent)
 
-    return (sourceModel().data(index0).toString().contains(filterRegExp())
-            || sourceModel().data(index1).toString().contains(filterRegExp()))
-           && dateInRange(sourceModel().data(index2).toDate())
-
+    regex = filterRegExp()
+    return (regex.indexIn(sourceModel().data(index0)) != -1
+            or regex.indexIn(sourceModel().data(index1)) != -1
+           and dateInRange(sourceModel().data(index2))
 //! [3]
 
 //! [4] //! [5]
@@ -77,20 +77,18 @@ def lessThan(self, left, right):
 //! [4]
 
 //! [6]
-    if leftData.type() == QVariant.DateTime:
-        return leftData.toDateTime() < rightData.toDateTime()
+    if isinstance(leftData, QDateTime):
+        return leftData < rightData
     else:
         emailPattern = QRegExp("([\\w\\.]*@[\\w\\.]*)")
 
-        leftString = leftData.toString()
-        if left.column() == 1 && emailPattern.indexIn(leftString) != -1:
-            leftString = emailPattern.cap(1)
+        if left.column() == 1 && emailPattern.indexIn(leftData) != -1:
+            leftData = emailPattern.cap(1)
 
-        rightString = rightData.toString()
-        if right.column() == 1 && emailPattern.indexIn(rightString) != -1:
-            rightString = emailPattern.cap(1)
+        if right.column() == 1 && emailPattern.indexIn(rightData) != -1:
+            rightData = emailPattern.cap(1)
 
-        return QString.localeAwareCompare(leftString, rightString) < 0
+        return leftString < rightString
 
 //! [5] //! [6]
 
