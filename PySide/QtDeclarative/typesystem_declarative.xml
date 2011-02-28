@@ -127,7 +127,20 @@
         <enum-type name="Type" />
     </value-type>
 
-    <object-type name="QDeclarativePropertyMap" />
+    <object-type name="QDeclarativePropertyMap">
+        <modify-documentation xpath="description/code[1]">&lt;code># create our data
+ownerData = QDeclarativePropertyMap()
+ownerData.insert(&quot;name&quot;, &quot;John Smith&quot;)
+ownerData.insert(&quot;phone&quot;, &quot;555-5555&quot;)
+
+# expose it to the UI layer
+view = QDeclarativeView()
+ctxt = view.rootContext()
+ctxt.setContextProperty(&quot;owner&quot;, ownerData)
+
+view.setSource(QUrl.fromLocalFile(&quot;main.qml&quot;))
+view.show()&lt;/code></modify-documentation>
+    </object-type>
     <object-type name="QDeclarativePropertyValueSource" />
     <value-type name="QDeclarativeScriptString" />
     <object-type name="QDeclarativeView">
