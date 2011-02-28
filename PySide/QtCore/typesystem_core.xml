@@ -492,7 +492,7 @@
   </value-type>
   <object-type name="QResource">
     <modify-function signature="data()const">
-        <inject-documentation>
+        <inject-documentation format="target">
             Returns a read only buffer object pointing to the segment of data that this resource represents. If the resource is compressed the data returns is compressed and qUncompress() must be used to access the data. If the resource is a directory None is returned.
         </inject-documentation>
         <modify-argument index="return">
