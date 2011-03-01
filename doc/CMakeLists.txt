@@ -27,7 +27,7 @@ add_custom_target("docrsts"
             --documentation-only
             --documentation-data-dir=${DOC_DATA_DIR}
             --output-directory=${CMAKE_CURRENT_BINARY_DIR}/rst
-            --documentation-code-snippets-dir=${CMAKE_CURRENT_SOURCE_DIR}/codesnippets
+            --documentation-code-snippets-dir=${CMAKE_CURRENT_SOURCE_DIR}/codesnippets${PATH_SEP}${CMAKE_CURRENT_SOURCE_DIR}/codesnippets/examples
             --documentation-extra-sections-dir=${CMAKE_CURRENT_SOURCE_DIR}/extras
             ${CMAKE_CURRENT_BINARY_DIR}/typesystem_doc.xml
     WORKING_DIRECTORY ${${module}_SOURCE_DIR}
