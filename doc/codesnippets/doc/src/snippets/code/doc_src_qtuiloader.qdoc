@@ -1,8 +1,0 @@
-//! [0]
-CONFIG += uitools
-//! [0]
-
-
-//! [1]
-#include <QtUiTools>
-//! [1]

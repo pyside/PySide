@@ -1,3 +1,0 @@
-//! [0]
-qmake -spec macx-xcode project.pro
-//! [0]
