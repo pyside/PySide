@@ -12,15 +12,21 @@ button.setIcon(QIcon())
 //! [2]
 def drawIcon(self, painter, pos):
     enabledStatus = QIcon.Normal
-    if !isEnabled():
+    if not isEnabled():
         enabledStatus = QIcon::Disabled
 
     onOff = QIcon.On
-    if !isOn():
+    if not isOn():
         onOff = QIcon.Off
 
-    pixmap = icon.pixmap(QSize(22, 22),
-                        enabledStatus,
-                        onOff)
+    pixmap = self.icon.pixmap(QSize(22, 22), enabledStatus, onOff)
     painter.drawPixmap(pos, pixmap)
 //! [2]
+
+//! [3]
+    undoicon = QIcon.fromTheme("edit-undo")
+//! [3]
+
+//! [4]
+    undoicon = QIcon.fromTheme("edit-undo", QIcon(":/undo.png"))
+//! [4]

@@ -145,7 +145,7 @@ def dragEnterEvent(self, event):
 def itemChange(self, change, value):
     if change == ItemPositionChange && scene():
         # value is the new position.
-        rect = scene()->sceneRect()
+        rect = scene().sceneRect()
         if !rect.contains(value):
             # Keep the item inside the scene rect.
             value.setX(qMin(rect.right(), qMax(value.x(), rect.left())))
@@ -182,3 +182,18 @@ class CustomItem(QGraphicsItem):
        return self.Type
     ...
 //! [QGraphicsItem type]
+
+//! [18]
+class QGraphicsPathItem (QAbstractGraphicsShapeItem):
+    Type = 2
+
+    def type(self):
+        return QGraphicsPathItem.Type
+# ...
+//! [18]
+
+//! [19]
+xform = item.deviceTransform(view.viewportTransform())
+deviceRect = xform.mapRect(rect).toAlignedRect()
+view.viewport().scroll(dx, dy, deviceRect)
+//! [19]
