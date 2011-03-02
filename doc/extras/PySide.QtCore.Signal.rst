@@ -60,7 +60,7 @@ Defining New Signals with QtCore.Signal()
             # The following will create exactly the same overloaded signal as
             # above and demonstrates the use of C++ type names instead of Python
             # type objects, and lists instead of tuples.
-            valueChanged = QtCore.pyqtSignal(['int'], ['unicode'])
+            valueChanged = QtCore.Signal(['int'], ['unicode'])
 
     New signals should only be defined in sub-classes of QObject.
 
@@ -79,7 +79,7 @@ Connecting, Disconnecting and Emitting Signals
 
         class Foo(QtCore.QObject):
             # Define a new signal called 'trigger' that has no arguments.
-            trigger = QtCore.pyqtSignal()
+            trigger = QtCore.Signal()
 
             def connect_and_emit_trigger(self):
                 # Connect the trigger signal to a slot.
@@ -101,8 +101,7 @@ Connecting, Disconnecting and Emitting Signals
         class Bar(QtGui.QComboBox):
 
             def connect_activated(self):
-                # The PyQt documentation will define what the default overload is.
-                # In this case it is the overload with the single integer argument.
+                # Avoid using default overloads, they are not safe and can change in the future.
                 self.activated.connect(self.handle_int)
 
                 # For non-default overloads we have to specify which we want to
