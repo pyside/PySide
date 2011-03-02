@@ -92,4 +92,23 @@
     @if_phonon@
     <load-typesystem name="typesystem_phonon.xml" generate="yes" />
     @end_phonon@
+
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix4x3, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix4x3.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix3x4, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix3x4.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix2x3, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix2x3.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix4x2, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix4x2.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix3x3, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix3x3.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix2x2, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix2x2.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix3x2, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix3x2.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class QMatrix2x4, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/qmatrix2x4.xml" />
+
+    <!-- These classes are documented in ObjectDescription<T> or other base template class -->
+    <suppress-warning text="Can't find qdoc3 file for class AudioCaptureDevice, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-audiocapturedevice.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class VideoCaptureDevice, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-videocapturedevice.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class AudioOutputDevice, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-audiooutputdevice.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class AudioChannelDescription, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-audiochanneldescription.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class EffectDescription, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-effectdescription.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class SubtitleDescription, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-subtitledescription.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class EffectDescriptionModel, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-effectdescriptionmodel.xml" />
+    <suppress-warning text="Can't find qdoc3 file for class AudioOutputDeviceModel, tried: /home/hugo/src/pyside/build/doc/qdoc3-output/phonon-audiooutputdevicemodel.xml" />
 </typesystem>
