@@ -982,6 +982,9 @@
             <remove-argument />
             <remove-default-expression />
         </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(int, bool ok)"/>
+        </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_arg,bool*,arg" />
         </inject-code>
@@ -990,6 +993,9 @@
         <modify-argument index="2">
             <remove-argument />
             <remove-default-expression />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(int, bool ok)"/>
         </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_arg,bool*,arg" />
@@ -1000,6 +1006,9 @@
             <remove-argument />
             <remove-default-expression />
         </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(float, bool ok)"/>
+        </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_args,bool*" />
         </inject-code>
@@ -1009,6 +1018,9 @@
             <remove-argument />
             <remove-default-expression />
         </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(float, bool ok)"/>
+        </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_args,bool*" />
         </inject-code>
@@ -1016,6 +1028,9 @@
     <modify-function signature="toInt(QString,bool*,int)const">
         <modify-argument index="2">
             <remove-argument />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(int, bool ok)"/>
         </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_arg,bool*,arg" />
@@ -1025,6 +1040,9 @@
         <modify-argument index="2">
             <remove-argument />
         </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(int, bool ok)"/>
+        </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_arg,bool*,arg" />
         </inject-code>
@@ -1033,6 +1051,9 @@
         <modify-argument index="2">
             <remove-argument />
         </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(int, bool ok)"/>
+        </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_arg,bool*,arg" />
         </inject-code>
@@ -1040,6 +1061,9 @@
     <modify-function signature="toUShort(QString,bool*,int)const">
         <modify-argument index="2">
             <remove-argument />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(int, bool ok)"/>
         </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_arg,bool*,arg" />
