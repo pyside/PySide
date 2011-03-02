@@ -10,3 +10,9 @@ static const char * const start_xpm[]={
 myPixmap = QPixmap()
 myPixmap.setMask(myPixmap.createHeuristicMask())
 //! [1]
+
+//! [2]
+pixmap = QPixmap("background.png")
+exposed = QRegion()
+pixmap.scroll(10, 10, pixmap.rect(), exposed)
+//! [2]

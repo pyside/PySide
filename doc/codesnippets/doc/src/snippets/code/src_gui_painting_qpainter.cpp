@@ -193,3 +193,19 @@ image = QImage(":/images/myImage.png")
 painter = QPainter(self)
 painter.drawImage(target, image, source)
 //! [20]
+
+//! [21]
+painter = QPainter(self)
+painter.fillRect(0, 0, 128, 128, Qt.green)
+painter.beginNativePainting()
+
+glEnable(GL_SCISSOR_TEST)
+glScissor(0, 0, 64, 64)
+
+glClearColor(1, 0, 0, 1)
+glClear(GL_COLOR_BUFFER_BIT)
+
+glDisable(GL_SCISSOR_TEST)
+
+painter.endNativePainting()
+//! [21]
