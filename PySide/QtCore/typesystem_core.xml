@@ -1458,6 +1458,13 @@
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
+    <!-- Fixes #540 - Duplicated entries in QRexExp docs
+        These functions have two entries each differing only in const-ness -->
+    <modify-function signature="cap(int) const" remove="all" />
+    <modify-function signature="capturedTexts() const" remove="all" />
+    <modify-function signature="pos(int) const" remove="all" />
+    <modify-function signature="errorString() const" remove="all" />
+    <!-- Done fixing #540 -->
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code">
