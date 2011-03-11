@@ -1592,26 +1592,27 @@
     <modify-function signature="operator>=(const char*,QByteArray)" remove="all" />
     <modify-function signature="operator[](int)const" remove="all"/>
     <modify-function signature="operator[](uint)const" remove="all"/>
+    <!-- Those types have the same representation in Python, an overload would be useless. -->
+    <modify-function signature="setNum(uint,int)" remove="all"/>
+    <modify-function signature="setNum(ushort,int)" remove="all"/>
+    <modify-function signature="setNum(float,char,int)" remove="all"/>
+    <modify-function signature="setNum(short,int)" remove="all"/>
+    <modify-function signature="setNum(qulonglong,int)" remove="all"/>
+
+    <!--### -->
+
+    <modify-function signature="operator const char *()const" remove="all"/>
+    <modify-function signature="operator const void *()const" remove="all"/>
+
+    <!--### STL compatibility functions not supported by PySide -->
     <modify-function signature="push_back(char)" remove="all"/>
     <modify-function signature="push_back(const QByteArray&amp;)" remove="all"/>
     <modify-function signature="push_back(const char*)" remove="all"/>
     <modify-function signature="push_front(char)" remove="all"/>
     <modify-function signature="push_front(const QByteArray&amp;)" remove="all"/>
     <modify-function signature="push_front(const char*)" remove="all"/>
-    <modify-function signature="setNum(uint,int)" remove="all"/>
-    <modify-function signature="setNum(qlonglong,int)" remove="all"/>
-    <modify-function signature="setNum(ushort,int)" remove="all"/>
-    <modify-function signature="split(char)const">
-        <modify-argument index="1">
-            <replace-type modified-type="PyString" />
-        </modify-argument>
-        <inject-code class="target" position="beginning">
-            char c = PyString_AS_STRING(%PYARG_1)[0];
-            if (c) {
-               %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(c));
-            }
-        </inject-code>
-    </modify-function>
+    <!--### -->
+
     <modify-function signature="toLong(bool*, int) const">
       <modify-argument index="1">
         <remove-argument/>
@@ -1678,81 +1679,8 @@
     </modify-function>
     <!-- QByteArray(const char *) do the job of this constructor -->
     <modify-function signature="QByteArray(const char*,int)" remove="all"/>
+    <!-- QByteArray(const char*, const char*) do the job of this function -->
     <modify-function signature="replace(const char*,int,const char*,int)" remove="all"/>
-    <modify-function signature="append(QByteArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="append(QString)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="append(const char *)" remove="all">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="append(char)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="appendByte"/>
-    </modify-function>
-    <modify-function signature="count(const char *)const" remove="all"/>
-    <modify-function signature="data()" remove="all"/>
-    <modify-function signature="endsWith(const char *)const" remove="all"/>
-    <modify-function signature="fill(char,int)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="indexOf(const char*,int)const" remove="all"/>
-    <modify-function signature="indexOf(char,int)const">
-      <rename to="indexOfByte"/>
-    </modify-function>
-    <modify-function signature="insert(int,QByteArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="insert(int,QString)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="insert(int,const char *)" remove="all"/>
-    <modify-function signature="insert(int,char)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="insertByte"/>
-    </modify-function>
-    <modify-function signature="lastIndexOf(const char*,int)const" remove="all"/>
-    <modify-function signature="lastIndexOf(char,int)const">
-      <rename to="lastIndexOfByte"/>
-    </modify-function>
-    <modify-function signature="prepend(QByteArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="prepend(const char *)" remove="all"/>
-    <modify-function signature="prepend(char)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="prependByte"/>
-    </modify-function>
-    <modify-function signature="remove(int,int)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="replace(int,int,QByteArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="replace(int,int,const char *)" remove="all"/>
-    <modify-function signature="replace(QByteArray,QByteArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="replace(const char*,QByteArray)" remove="all"/>
-    <modify-function signature="replace(QByteArray,const char *)" remove="all"/>
-    <modify-function signature="replace(QString,QByteArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="replace(QString,const char *)" remove="all"/>
-    <modify-function signature="replace(const char *,const char *)" remove="all"/>
-    <modify-function signature="replace(char,QByteArray)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="replace(char,QString)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="replace(char,const char *)" remove="all"/>
-    <modify-function signature="replace(char,char)">
-      <modify-argument index="0" replace-value="this"/>
-    </modify-function>
-    <modify-function signature="startsWith(const char *)const" remove="all"/>
     <modify-function signature="fromRawData(const char*,int)">
         <modify-argument index="2">
             <remove-argument />
@@ -1761,50 +1689,6 @@
             // %FUNCTION_NAME() - avoid generation of default function call
             %PYARG_0 = %CONVERTTOPYTHON[QByteArray](QByteArray(%1));
         </inject-code>
-    </modify-function>
-    <modify-function signature="number(int,int)">
-      <rename to="fromInt"/>
-    </modify-function>
-    <modify-function signature="number(uint,int)">
-      <rename to="fromUInt"/>
-    </modify-function>
-    <modify-function signature="number(qlonglong,int)">
-      <rename to="fromLongLong"/>
-    </modify-function>
-    <modify-function signature="number(qulonglong,int)">
-      <rename to="fromULongLong"/>
-    </modify-function>
-    <modify-function signature="setNum(int,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setInt"/>
-    </modify-function>
-    <modify-function signature="setNum(uint,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setUInt"/>
-    </modify-function>
-    <modify-function signature="setNum(short,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setShort"/>
-    </modify-function>
-    <modify-function signature="setNum(ushort,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setUShort"/>
-    </modify-function>
-    <modify-function signature="setNum(qlonglong,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setLongLong"/>
-    </modify-function>
-    <modify-function signature="setNum(qulonglong,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setULongLong"/>
-    </modify-function>
-    <modify-function signature="setNum(double,char,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setDouble"/>
-    </modify-function>
-    <modify-function signature="setNum(float,char,int)">
-      <modify-argument index="0" replace-value="this"/>
-      <rename to="setFloat"/>
     </modify-function>
     <modify-function signature="toDouble(bool*)const">
       <modify-argument index="1">
