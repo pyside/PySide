@@ -28,6 +28,25 @@ class QByteArrayTestToNumber(unittest.TestCase):
         self.assertEqual((ctypes.c_double(37.109).value, True),
                          obj.toDouble())
 
+    def testSetNum(self):
+        b = QByteArray()
+        b.setNum(-124124L)
+        self.assertEqual(b, "-124124")
+        b = QByteArray()
+        b.setNum(-124124)
+        self.assertEqual(b, "-124124")
+        b = QByteArray()
+        b.setNum(-0.5)
+        self.assertEqual(b, "-0.5")
+
+    def testAppend(self):
+        b = QByteArray()
+        b.append("A")
+        self.assertEqual(b.size(), 1)
+        b.append("AB")
+        self.assertEqual(b.size(), 3)
+
+
 class QByteArraySplit(unittest.TestCase):
     '''Test case for QByteArray.split'''
 
