@@ -4601,6 +4601,26 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="clear()">
+      <inject-code>
+        QList&lt;PyObject* &gt; lst;
+        Shiboken::BindingManager&amp; bm = Shiboken::BindingManager::instance();
+        foreach(QToolButton* child, %CPPSELF.findChildren&lt;QToolButton*&gt;()) {
+            if (bm.hasWrapper(child)) {
+                PyObject* pyChild = %CONVERTTOPYTHON[QToolButton*](child);
+            	Shiboken::Object::setParent(0, pyChild);
+                lst &lt;&lt; pyChild;
+            }
+        }
+
+        %CPPSELF.clear();
+
+        foreach(PyObject* obj, lst) {
+            Shiboken::Object::invalidate(reinterpret_cast&lt;SbkObject* &gt;(obj));
+            Py_XDECREF(obj);
+        }
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QPaintEngine">
     <enum-type name="DirtyFlag" flags="QPaintEngine::DirtyFlags"/>
