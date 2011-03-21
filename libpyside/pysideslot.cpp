@@ -153,13 +153,15 @@ PyObject* slotCall(PyObject* self, PyObject* args, PyObject* kw)
             data->slotName = strdup(PyString_AS_STRING(funcName));
         }
 
-        QString signature;
-        signature.sprintf("%s %s(%s)", data->resultType, data->slotName, data->args);
 
+        QByteArray returnType = QMetaObject::normalizedType(data->resultType);
+	QByteArray signature = QString().sprintf("%s(%s)", data->slotName, data->args).toAscii();
+        signature = returnType + " " + signature;
+                               
         if (!pySlotName)
             pySlotName = PyString_FromString(PYSIDE_SLOT_LIST_ATTR);
 
-        PyObject *pySignature = PyString_FromString(QMetaObject::normalizedSignature(signature.toAscii()));
+        PyObject *pySignature = PyString_FromString(signature);
         PyObject *signatureList = 0;
         if (PyObject_HasAttr(callback, pySlotName)) {
             signatureList = PyObject_GetAttr(callback, pySlotName);
