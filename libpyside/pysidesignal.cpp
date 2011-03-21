@@ -736,7 +736,7 @@ QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* ca
         numArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
     } else if (PyCFunction_Check(callback)) {
         functionName = ((PyCFunctionObject*)callback)->m_ml->ml_name;
-        useSelf = ((PyCFunctionObject*)callback)->m_self;
+        useSelf = 0;//((PyCFunctionObject*)callback)->m_self; // commented out to fix bug 736
         int flags = ((PyCFunctionObject*)callback)->m_ml->ml_flags;
 
         if (receiver) {
