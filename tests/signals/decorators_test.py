@@ -32,6 +32,10 @@ class MyObject(QObject):
     def mySlot5(self):
         self._slotCalledCount = self._slotCalledCount + 1
 
+    @Slot(result=QObject)
+    def mySlot6(self):
+        self._slotCalledCount = self._slotCalledCount + 1
+
 class StaticMetaObjectTest(unittest.TestCase):
 
     def testSignalPropagation(self):
@@ -56,6 +60,12 @@ class StaticMetaObjectTest(unittest.TestCase):
         m = mo.method(i)
         self.assertEqual(m.typeName(), "int")
 
+    def testResultObject(self):
+        o = MyObject()
+        mo = o.metaObject()
+        i = mo.indexOfSlot('mySlot6()')
+        m = mo.method(i)
+        self.assertEqual(m.typeName(), "QObject*")
 
 class SlotWithoutArgs(unittest.TestCase):
 
