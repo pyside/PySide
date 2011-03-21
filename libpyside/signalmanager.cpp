@@ -320,10 +320,10 @@ static int PySide::callMethod(QObject* object, int id, void** args)
         QList<QByteArray> paramTypes = method.parameterTypes();
         PyObject* self = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(object);
         PyObject* preparedArgs = NULL;
-        Py_ssize_t args_size = paramTypes.count();
+        Py_ssize_t argsSize = paramTypes.count();
 
-        if (args_size)
-            preparedArgs = PyTuple_New(args_size);
+        if (argsSize)
+            preparedArgs = PyTuple_New(argsSize);
 
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {
             void* data = args[i+1];
