@@ -34,9 +34,17 @@ class MainWindow(QMainWindow):
     def __init__(self, *args):
         self._menu = QMenu(self.dontexist) # attribute called with invalid C++ object
 
+class MainWindow2(QMainWindow):
+    def __init__(self):
+        self.show()
+
 class Bug696(UsesQApplication):
     def testContructorInitialization(self):
-        self.assertRaises(RuntimeError, MainWindow)
+        self.assertRaises(AttributeError, MainWindow)
+
+    def testContructorInitializationAndCPPFunction(self):
+        self.assertRaises(RuntimeError, MainWindow2)
+
 
 if __name__ == '__main__':
     unittest.main()
