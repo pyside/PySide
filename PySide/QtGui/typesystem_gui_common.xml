@@ -193,9 +193,12 @@
         </inject-code>
     </add-function>
 
-
-    <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
+    <!-- ### See bug 739 -->
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
+    <!-- ### This is just an overload to "map(qreal,qreal,qreal*,qreal*)const" and can be discarded in Python -->
+    <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
+    <!-- ### -->
+
     <modify-function signature="inverted(bool*)const">
       <modify-argument index="1">
         <remove-argument/>
@@ -212,8 +215,8 @@
     <enum-type name="OptionType" extensible="yes"/>
     <enum-type name="StyleOptionType"/>
     <enum-type name="StyleOptionVersion"/>
-    <modify-function signature="init(const QWidget*)" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="init(const QWidget*)" remove="all"/>
   </value-type>
   <value-type name="QStyleOptionGraphicsItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionGraphicsItem::Type &amp;&amp; %1-&gt;version == QStyleOptionGraphicsItem::Version">
       <enum-type name="StyleOptionType"/>
@@ -361,9 +364,8 @@
   </value-type>
   <value-type name="QTextFragment" />
   <value-type name="QBitmap" >
-    <modify-function signature="QBitmap(QString,const char*)" remove="all" />
+    <!-- ### See bug 740 -->
     <modify-function signature="fromData(QSize,const uchar*,QImage::Format)" remove="all" />
-    <modify-function signature="fromData(QSize,const uchar*,QImage::Format)" remove="all"/>
   </value-type>
   <value-type name="QTextInlineObject" />
   <value-type name="QSizePolicy">
@@ -382,6 +384,7 @@
   <value-type name="QTextLine" >
     <enum-type name="CursorPosition"/>
     <enum-type name="Edge"/>
+    <!-- ### See bug 741 -->
     <modify-function signature="cursorToX(int*,QTextLine::Edge)const" remove="all" />
     <modify-function signature="xToCursor(qreal,QTextLine::CursorPosition)const">
       <modify-argument index="2">
@@ -400,8 +403,8 @@
       <enum-type name="Type"/>
   </value-type>
   <value-type name="QItemSelectionRange" hash-function="qHash">
-    <modify-function signature="intersect(QItemSelectionRange)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="intersect(QItemSelectionRange)const" remove="all"/>
   </value-type>
   <value-type name="QPainterPath">
     <enum-type name="ElementType"/>
@@ -410,20 +413,17 @@
       <modify-field name="y" write="false"/>
       <modify-field name="type" write="false"/>
       <include file-name="QPainterPath" location="global"/>
-      <modify-function signature="operator QPointF()const" remove="all"/>
     </value-type>
   </value-type>
   <value-type name="QPalette">
     <enum-type name="ColorGroup" />
     <enum-type name="ColorRole" />
+    <!--### Obsolete in 4.3-->
     <modify-function signature="QPalette(QColor, QColor, QColor, QColor, QColor, QColor, QColor)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="background()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="foreground()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="serialNumber()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
   </value-type>
   <value-type name="QKeySequence">
     <enum-type name="SequenceFormat"/>
@@ -448,46 +448,56 @@
         </inject-code>
     </add-function>
 
+    <!-- ### See bug 775 -->
     <modify-function signature="operator QVariant()const" remove="all"/>
-    <modify-function signature="operator int()const" remove="all"/>
+    <!-- ### See bug 774 -->
     <modify-function signature="operator[](uint)const" remove="all"/>
+    <!-- ### -->
+    <!-- ### Obsolete -->
+    <modify-function signature="operator int()const" remove="all"/>
+    <modify-function signature="operator QString()const" remove="all"/>
+    <!-- ### End of obsolete section -->
   </value-type>
   <value-type name="QPicture" >
     <modify-function signature="load(QIODevice*, const char*)" allow-thread="yes"/>
     <modify-function signature="load(const QString&amp;, const char*)" allow-thread="yes"/>
     <modify-function signature="save(QIODevice*, const char*)" allow-thread="yes"/>
     <modify-function signature="save(const QString&amp;, const char*)" allow-thread="yes"/>
+    <!-- ### Obsolete in 4.3-->
     <modify-function signature="pictureFormat(QString)" remove="all" />
     <modify-function signature="inputFormatList()" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="inputFormats()" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="outputFormatList()" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="outputFormats()" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!-- ### End of obsolete section -->
+    <!-- See bug 759 -->
     <modify-function signature="setData(const char*,uint)" remove="all"/>
   </value-type>
   <value-type name="QRegion" >
     <enum-type name="RegionType"/>
-    <modify-function signature="operator&amp;=(QRegion)" remove="all"/>
+    <!-- ### Obsolete in 4.3-->
     <modify-function signature="eor(QRegion)const" remove="all"/>
-    <!--### Obsolete in 4.3-->
-    <modify-function signature="subtract(QRegion)const" remove="all"/>
-    <modify-function signature="unite(QRegion)const" remove="all"/>
-    <modify-function signature="operator&amp;=(QRect)" remove="all"/>
-    <modify-function signature="operator+=(QRect)" remove="all"/>
-    <!--### Obsolete in 4.x-->
     <modify-function signature="intersect(QRect)const" remove="all" />
     <modify-function signature="intersect(QRegion)const" remove="all" />
+    <modify-function signature="subtract(QRegion)const" remove="all"/>
+    <modify-function signature="unite(QRegion)const" remove="all"/>
+    <modify-function signature="unite(QRect)const" remove="all"/>
+    <!-- ### End of obsolete section -->
+    <!-- ### This operator does not make sense in Python. -->
+    <modify-function signature="operator&amp;=(QRegion)" remove="all"/>
+    <modify-function signature="operator&amp;=(QRect)" remove="all"/>
+    <!-- ### -->
   </value-type>
   <value-type name="QTextBlock">
     <value-type name="iterator" >
       <include file-name="QTextBlock" location="global"/>
+      <!-- ### These operators where removed because they don't make sense in Python.
+           The iterator methods (__iter__, next) replace this functionality. -->
       <modify-function signature="operator++()" remove="all"/>
       <modify-function signature="operator--()" remove="all"/>
       <modify-function signature="operator++(int)" remove="all"/>
       <modify-function signature="operator--(int)" remove="all"/>
+      <!-- ### -->
       <add-function signature="__iter__()" return-type="PyObject*">
         <inject-code class="target" position="beginning">
           Py_INCREF(%PYSELF);
@@ -518,10 +528,10 @@
     <enum-type name="UnderlineStyle"/>
     <enum-type name="VerticalAlignment"/>
     <modify-function signature="isValid()const" access="non-final"/>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="anchorName()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setAnchorName(QString)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
   </value-type>
   <value-type name="QTextFormat" >
     <enum-type name="FormatType"/>
@@ -553,25 +563,34 @@
         </inject-code>
     </add-function>
 
+    <!-- ### "QPolygon(int, const int*)" is an internal constructor. -->
     <modify-function signature="QPolygon(int, const int *)" remove="all"/>
+    <!-- ### A QVector parameter, for no defined type, will generate wrong code. -->
     <modify-function signature="operator+=(QVector)" remove="all"/>
+    <!-- ### See bug 776 -->
     <modify-function signature="operator&lt;&lt;(QPoint)" remove="all"/>
+    <!-- ### See bug 777 -->
     <modify-function signature="operator&lt;&lt;(QVector&lt;QPoint&gt;)" remove="all"/>
+    <!-- ### -->
   </value-type>
   <value-type name="QPolygonF">
     <extra-includes>
       <include file-name="QMatrix" location="global"/>
       <include file-name="QTransform" location="global"/>
     </extra-includes>
+    <!-- ### A QVector parameter, for no defined type, will generate wrong code. -->
     <modify-function signature="operator+=(QVector)" remove="all"/>
+    <!-- ### See bug 776 -->
     <modify-function signature="operator&lt;&lt;(QPointF)" remove="all"/>
+    <!-- ### See bug 777 -->
     <modify-function signature="operator&lt;&lt;(QVector&lt;QPointF&gt;)" remove="all"/>
+    <!-- ### -->
   </value-type>
   <value-type name="QIcon" >
     <enum-type name="Mode"/>
     <enum-type name="State"/>
-    <modify-function signature="serialNumber()const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="serialNumber()const" remove="all"/>
     <modify-function signature="QIcon(QIconEngineV2 *)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -596,11 +615,14 @@
         </inject-code>
     </add-function>
     <enum-type name="IteratorFlag" flags="QTreeWidgetItemIterator::IteratorFlags"/>
+    <!-- ### See bug 778 -->
     <modify-function signature="operator++(int)" remove="all"/>
     <modify-function signature="operator--(int)" remove="all"/>
     <modify-function signature="operator++()" remove="all"/>
     <modify-function signature="operator--()" remove="all"/>
+    <!-- ### Operator* doesn't make sense in Python. -->
     <modify-function signature="operator*()const" remove="all"/>
+    <!-- ### -->
   </value-type>
   <value-type name="QPixmap" >
     <conversion-rule file="qpixmap_conversion.h" />
@@ -618,10 +640,14 @@
         </inject-code>
     </add-function>
 
+    <!-- ### Operator ! doesn't make sense in Python. -->
     <modify-function signature="operator!()const" remove="all"/>
+    <!-- ### See bug 757 -->
     <modify-function signature="QPixmap(const char **)" remove="all"/>
-    <modify-function signature="serialNumber()const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="serialNumber()const" remove="all"/>
+    <!-- ### -->
+
     <modify-function signature="loadFromData(const uchar*,uint,const char*,QFlags&lt;Qt::ImageConversionFlag&gt;)">
       <modify-argument index="1">
         <replace-type modified-type="const char*"/>
@@ -645,6 +671,7 @@
     <enum-type name="MoveMode"/>
     <enum-type name="MoveOperation"/>
     <enum-type name="SelectionType"/>
+    <!-- ### See bug 758 -->
     <modify-function signature="selectedTableCells(int*,int*,int*,int*)const" remove="all" />
     <modify-function signature="currentFrame()const">
       <modify-argument index="return">
@@ -664,11 +691,13 @@
   </value-type>
 
   <value-type name="QItemSelection" >
+    <!-- See bug 785 -->
     <modify-function signature="operator+(const QList&lt;QItemSelectionRange&gt;&amp;)const" remove="all"/>
     <modify-function signature="operator+=(const QList&lt;QItemSelectionRange&gt;&amp;)" remove="all"/>
     <modify-function signature="operator+=(const QItemSelectionRange&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const QList&lt;QItemSelectionRange&gt;&amp;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QItemSelectionRange)" remove="all"/>
+    <!-- ### -->
   </value-type>
   <value-type name="QMatrix">
     <extra-includes>
@@ -692,7 +721,9 @@
             </insert-template>
         </inject-code>
     </add-function>
+    <!-- ### See bug 760 -->
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
+    <!-- ### See bug 761 -->
     <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
     <modify-function signature="inverted(bool*)const">
       <modify-argument index="1">
@@ -739,9 +770,6 @@
       <include file-name="QMatrix" location="global"/>
     </extra-includes>
 
-    <modify-function signature="QImage(const char *, const char *)" remove="all" />
-    <modify-function signature="QImage(const char **)" remove="all" />
-
     <template name="qimage_buffer_constructor">
         PyTypeObject* pyType = reinterpret_cast&lt;PyTypeObject*>(%PYARG_1->ob_type);
         if (pyType->tp_as_buffer
@@ -777,20 +805,28 @@
 
     <!-- The non-const versions are already used -->
     <modify-function signature="QImage(const uchar*,int,int,int,QImage::Format)" remove="all"/>
-    <modify-function signature="QImage(const uchar *, int, int, QImage::Format)" remove="all" />
+    <modify-function signature="QImage(const uchar*,int,int,QImage::Format)" remove="all" />
+    <!-- ### -->
 
-
+    <!-- ### See bug 766 -->
+    <modify-function signature="QImage(const char**)" remove="all" />
+    <!-- ### "QImage(const char*,const char*)" is just an overload for "QImage(QString,const char*)" -->
+    <modify-function signature="QImage(const char*,const char*)" remove="all" />
+    <!-- ### There is already an fromData with a QByteArray type (that is convertible from Python's str) as the first type. -->
+    <modify-function signature="fromData(const uchar*,int,const char*)" remove="all"/>
+    <!-- ### There is already an loadFromData with a QByteArray type (that is convertible from Python's str) as the first type. -->
     <modify-function signature="loadFromData(const uchar*,int,const char*)" remove="all" />
-    <!-- Functions removed because we already have overloads using QString -->
+
+    <!-- ### Functions removed because we already have overloads using QString -->
     <modify-function signature="setText(const char*,const char*,QString)" remove="all" />
     <modify-function signature="text(const char*,const char*)const" remove="all" />
+    <!-- ### -->
+
     <!--### Obsolete in 4.3-->
     <modify-function signature="serialNumber()const" remove="all"/>
     <modify-function signature="textLanguages()const" remove="all"/>
     <modify-function signature="QImage(const char**)" remove="all"/>
     <!--### end of obsolete section -->
-    <modify-function signature="loadFromData(const uchar *,int,const char *)" remove="all"/>
-    <modify-function signature="fromData(const uchar *,int,const char *)" remove="all"/>
 
     <modify-function signature="constBits()const" since="4.7">
         <inject-code>
@@ -896,8 +932,11 @@
           }
         </inject-code>
     </add-function>
+    <!-- ### "QColor(QColor::Spec)" is an internal method. -->
     <modify-function signature="QColor(QColor::Spec)" remove="all"/>
+    <!-- ### Constructor removed because we already have an overload using QString. -->
     <modify-function signature="QColor(const char*)" remove="all" />
+    <!-- ### -->
     <add-function signature="QColor(QVariant)">
         <inject-code class="target" position="beginning">
         if (%1.type() == QVariant::Color)
@@ -1083,9 +1122,10 @@
             <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
         </inject-code>
     </modify-function>
-    <modify-function signature="dark(int)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="dark(int)const" remove="all"/>
     <modify-function signature="light(int)const" remove="all"/>
+    <!--### End of obsolete section -->
   </value-type>
   <value-type name="QFontMetricsF" >
 
@@ -1339,6 +1379,7 @@
           <define-ownership class="target" owner="default"/>
         </modify-argument>
     </modify-function>
+    <!-- ### Obsolete -->
     <modify-function signature="setMatrix(QMatrix, bool)" remove="all"/>
     <modify-function signature="paint(QPainter*,const QStyleOptionGraphicsItem*,QWidget*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
@@ -1423,17 +1464,17 @@
     <modify-function signature="wheelEvent(QGraphicsSceneWheelEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="children()const" remove="all"/>
     <modify-function signature="matrix()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="resetMatrix()" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="sceneMatrix()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setMatrix(QMatrix, bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
+    <!-- ### These methods are internal on Qt. -->
     <modify-function signature="supportsExtension(QGraphicsItem::Extension)const" remove="all"/>
     <modify-function signature="setExtension(QGraphicsItem::Extension,QVariant)" remove="all"/>
+    <!-- ### -->
   </object-type>
   <object-type name="QAbstractGraphicsShapeItem"/>
   <object-type name="QAbstractItemView">
@@ -1473,14 +1514,12 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="horizontalStepsPerItem()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setHorizontalStepsPerItem(int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setVerticalStepsPerItem(int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="verticalStepsPerItem()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
     <modify-function signature="edit(QModelIndex,QAbstractItemView::EditTrigger,QEvent*)">
       <modify-argument index="3" invalidate-after-use="yes"/>
     </modify-function>
@@ -1493,7 +1532,6 @@
   <object-type name="QAbstractSlider">
     <enum-type name="SliderAction"/>
     <enum-type name="SliderChange"/>
-    <modify-function signature="sliderChange(QAbstractSlider::SliderChange)" remove="all"/>
   </object-type>
   <object-type name="QAbstractTextDocumentLayout">
     <value-type name="PaintContext" >
@@ -1530,13 +1568,13 @@
   </object-type>
   <object-type name="QCheckBox"/>
   <object-type name="QCleanlooksStyle">
-    <modify-function signature="standardPixmap(QStyle::StandardPixmap,const QStyleOption*,const QWidget*)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="standardPixmap(QStyle::StandardPixmap,const QStyleOption*,const QWidget*)const" remove="all"/>
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
   </object-type>
   <object-type name="QCommonStyle">
-    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*,const QWidget*)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*,const QWidget*)const" remove="all"/>
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
   </object-type>
   <object-type name="QDataWidgetMapper">
@@ -1573,16 +1611,14 @@
   </object-type>
   <object-type name="QDialog">
     <enum-type name="DialogCode"/>
-    <modify-function signature="setExtension(QWidget*)" remove="all"/>
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="extension()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="orientation()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setOrientation(Qt::Orientation)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="showExtension(bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <modify-function signature="setExtension(QWidget*)" remove="all"/>
+    <!--### End of obsolete section -->
   </object-type>
   <object-type name="QDialogButtonBox">
     <enum-type name="ButtonLayout"/>
@@ -1601,6 +1637,8 @@
   </object-type>
   <object-type name="QDirModel" polymorphic-id-expression="qobject_cast&lt;QDirModel*&gt;(%1)">
     <enum-type name="Roles"/>
+    <!-- ### This reimplementation of "QObject::parent()" is used in C++ only
+         when "using QObject::parent;" is not available. It's useless in Python. -->
     <modify-function signature="parent()const" remove="all"/>
     <modify-function signature="setIconProvider(QFileIconProvider*)">
       <modify-argument index="1">
@@ -1730,6 +1768,7 @@
     <modify-function signature="write(QDataStream&amp;)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
+    <!-- ### This makes little sense in Python. Could be reassessed later. -->
     <modify-function signature="virtual_hook(int,void*)" remove="all"/>
   </object-type>
   <object-type name="QImageWriter">
@@ -1740,15 +1779,19 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="write(const QImage&amp;)" allow-thread="yes"/>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="description()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setDescription(QString)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
   </object-type>
   <object-type name="QInputContextFactory"/>
   <object-type name="QIntValidator" />
   <object-type name="QItemDelegate">
+    <!-- ### "doLayout(...)" is an internal method. -->
     <modify-function signature="doLayout(QStyleOptionViewItem,QRect*,QRect*,QRect*,bool)const" remove="all" />
+    <!-- ### "selected(QPixmap,QPalette,bool)" is an internal method. -->
+    <modify-function signature="selected(QPixmap,QPalette,bool)const" remove="all"/>
+    <!-- ### -->
     <modify-function signature="drawCheck(QPainter*,QStyleOptionViewItem,QRect,Qt::CheckState)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -1761,7 +1804,6 @@
     <modify-function signature="drawFocus(QPainter*,QStyleOptionViewItem,QRect)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="selected(QPixmap,QPalette,bool)const" remove="all"/>
     <modify-function signature="setItemEditorFactory(QItemEditorFactory*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -1977,6 +2019,7 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <!-- ### "setNoReplayFor(QWidget*)" is an internal method. -->
     <modify-function signature="setNoReplayFor(QWidget*)" remove="all" />
 
     <add-function signature="addAction(const QString&amp;, PyObject*, const QKeySequence&amp;)">
@@ -2049,31 +2092,27 @@
     </modify-function>
   </object-type>
   <object-type name="QMotifStyle">
-    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*, const QWidget*)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*, const QWidget*)const" remove="all"/>
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
   </object-type>
   <object-type name="QPainterPathStroker" copyable="false"/>
   <object-type name="QPictureIO">
-    <modify-function signature="QPictureIO(QIODevice*,const char*)" remove="all"/>
     <modify-function signature="setIODevice(QIODevice*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QPictureIO(QString,const char*)" remove="all" />
-    <modify-function signature="format()const" remove="all" />
-    <modify-function signature="parameters()const" remove="all" />
-    <modify-function signature="setFormat(const char*)" remove="all" />
-    <modify-function signature="setParameters(const char*)" remove="all"/>
   </object-type>
   <object-type name="QPixmapCache">
+    <!-- ### Obsolete. -->
     <modify-function signature="find(QString)" remove="all"/>
     <modify-function signature="find(QString,QPixmap&amp;)" remove="all"/>
+    <!--### End of obsolete section -->
   </object-type>
   <object-type name="QPlastiqueStyle">
-    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*, const QWidget*)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*, const QWidget*)const" remove="all"/>
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
     <modify-function signature="layoutSpacingImplementation(QSizePolicy::ControlType, QSizePolicy::ControlType, Qt::Orientation, const QStyleOption *, const QWidget *) const" virtual-slot="yes"/>
   </object-type>
@@ -2109,6 +2148,7 @@
   <object-type name="QSpacerItem"/>
   <object-type name="QStandardItem">
     <enum-type name="ItemType"/>
+    <!-- ### See bug 771 -->
     <modify-function signature="QStandardItem(const QStandardItem &amp;)" remove="all"/>
     <modify-function signature="operator&lt;(QStandardItem)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
@@ -2190,6 +2230,7 @@
       </modify-argument>
     </modify-function>
 
+    <!-- ??? -->
     <modify-function signature="operator&lt;(QStandardItem)const" remove="all"/>
   </object-type>
   <object-type name="QStatusBar">
@@ -2259,8 +2300,8 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="sortByColumn(int)" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="sortByColumn(int)" remove="all"/>
   </object-type>
   <object-type name="QTextBlockGroup" />
   <object-type name="QTextBlockUserData" />
@@ -2330,8 +2371,8 @@
     <modify-function signature="drawRow(QPainter*,QStyleOptionViewItem,QModelIndex)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="sortByColumn(int)" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="sortByColumn(int)" remove="all"/>
   </object-type>
   <object-type name="QUndoCommand">
     <modify-function signature="mergeWith(const QUndoCommand*)">
@@ -2459,8 +2500,8 @@
   </object-type>
   <object-type name="QWidgetItem" polymorphic-id-expression="%1-&gt;widget()" />
   <object-type name="QWindowsStyle">
-    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*, const QWidget*)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="standardPixmap(QStyle::StandardPixmap, const QStyleOption*, const QWidget*)const" remove="all"/>
     <modify-function signature="standardIconImplementation(QStyle::StandardPixmap, const QStyleOption *, const QWidget *)const" virtual-slot="yes"/>
   </object-type>
   <object-type name="QWorkspace">
@@ -2486,9 +2527,13 @@
         <define-ownership owner="target"/>
       </modify-argument>
     </modify-function>
+    <!--### Method encodedData(const char*) exists only for Qt3 compatibility. -->
     <modify-function signature="encodedData(const char*)const" remove="all"/>
+    <!--### Method format(int) exists only for Qt3 compatibility. -->
     <modify-function signature="format(int)const" remove="all"/>
+    <!--### Method provides(const char*) exists only for Qt3 compatibility. -->
     <modify-function signature="provides(const char*)const" remove="all"/>
+    <!-- ### -->
   </object-type>
   <object-type name="QFileOpenEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FileOpen" />
   <object-type name="QFocusEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::FocusIn || %1-&gt;type() == QEvent::FocusOut" />
@@ -2496,10 +2541,14 @@
       <enum-type name="Reason"/>
   </object-type>
   <object-type name="QGraphicsSceneDragDropEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneDragEnter || %1-&gt;type() == QEvent::GraphicsSceneDragLeave || %1-&gt;type() == QEvent::GraphicsSceneDragMove || %1-&gt;type() == QEvent::GraphicsSceneDrop" >
+    <!-- ### "setMimeData(const QMimeData*)" is an internal method. -->
     <modify-function signature="setMimeData(const QMimeData *)" remove="all"/>
+    <!-- ### "setSource(QWidget*)" is an internal method. -->
     <modify-function signature="setSource(QWidget *)" remove="all"/>
+    <!-- ### -->
   </object-type>
   <object-type name="QGraphicsSceneEvent" copyable="false">
+    <!-- ### "setWidget(QWidget*)" is an internal method. -->
     <modify-function signature="setWidget(QWidget *)" remove="all"/>
   </object-type>
   <object-type name="QGraphicsSceneMoveEvent" copyable="false" polymorphic-id-expression="%1-&gt;type() == QEvent::GraphicsSceneMove" />
@@ -2529,6 +2578,7 @@
     <modify-function signature="isAmbiguous()" remove="all"/>
     <modify-function signature="shortcutId()" remove="all"/>
     <modify-function signature="key()" remove="all"/>
+    <!-- ### -->
   </object-type>
   <object-type name="QShowEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Show"/>
   <object-type name="QStatusTipEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::StatusTip"/>
@@ -2613,6 +2663,7 @@
     <modify-function signature="drawItemText(QPainter*,QRect,int,QPalette,bool,QString,QPalette::ColorRole)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
+    <!-- ### See bug 765 -->
     <modify-function signature="itemTextRect(QFontMetrics,QRect,int,bool,QString)const" remove="all"/>
   </object-type>
   <object-type name="QColorDialog">
@@ -2678,10 +2729,12 @@
       </inject-code>
     </modify-function>
 
+    <!-- ### See bug 764 -->
     <modify-function signature="getContentsMargins(int*,int*,int*,int*)const" remove="all" />
-    <!--### Obsolete in 4.3-->
-    <!-- <modify-function signature="setMargin(int)" remove="all"/> -->
-    <!--### Obsolete in 4.3-->
+    <!-- ### Obsolete in 4.3 -->
+    <modify-function signature="setMargin(int)" remove="all"/>
+    <modify-function signature="margin(int)" remove="all"/>
+    <!-- ### -->
   </object-type>
 
   <object-type name="QStackedLayout">
@@ -2962,7 +3015,15 @@
     </extra-includes>
     <enum-type name="ItemIndexMethod"/>
     <enum-type name="SceneLayer" flags="QGraphicsScene::SceneLayers"/>
+
+    <!-- ### Obsolete -->
     <modify-function signature="drawItems(QPainter*,int,QGraphicsItem**,const QStyleOptionGraphicsItem*,QWidget*)" remove="all" />
+    <!-- ### See bug 768 -->
+    <modify-function signature="createItemGroup(const QList&lt;QGraphicsItem*&gt;&amp;)" remove="all"/>
+    <!-- ### See bug 769 -->
+    <modify-function signature="destroyItemGroup(QGraphicsItemGroup*)" remove="all"/>
+    <!-- ### -->
+
     <modify-function signature="contextMenuEvent(QGraphicsSceneContextMenuEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -3097,8 +3158,6 @@
         </modify-argument>
     </modify-function>
 
-    <modify-function signature="createItemGroup(const QList&lt;QGraphicsItem*&gt;&amp;)" remove="all"/>
-    <modify-function signature="destroyItemGroup(QGraphicsItemGroup*)" remove="all"/>
     <modify-function signature="clear()">
         <inject-code>
             const QList&lt;QGraphicsItem*> items = %CPPSELF.items();
@@ -3134,10 +3193,10 @@
     <extra-includes>
       <include file-name="QTextCharFormat" location="global"/>
     </extra-includes>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="isHeaderVisible()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setHeaderVisible(bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
     <modify-function signature="paintCell(QPainter*,QRect,QDate)const">
       <modify-argument invalidate-after-use="yes" index="1"/>
     </modify-function>
@@ -3146,6 +3205,7 @@
     <modify-function signature="dropMimeData(QTreeWidgetItem*,int,const QMimeData*,Qt::DropAction)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
+    <!-- ### "indexOfTopLevelItem(QTreeWidgetItem*)" is an internal method. -->
     <modify-function signature="indexOfTopLevelItem(QTreeWidgetItem *)" remove="all"/>
     <modify-function signature="addTopLevelItem(QTreeWidgetItem *)">
       <modify-argument index="1">
@@ -3195,8 +3255,8 @@
         }
         </inject-code>
     </modify-function>
-   <modify-function signature="items(const QMimeData*)const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="items(const QMimeData*)const" remove="all"/>
   </object-type>
   <object-type name="QAbstractItemDelegate">
     <enum-type name="EndEditHint"/>
@@ -3206,8 +3266,8 @@
     <modify-function signature="editorEvent(QEvent*,QAbstractItemModel*,QStyleOptionViewItem,QModelIndex)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="elidedText(QFontMetrics, int, Qt::TextElideMode, QString)" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="elidedText(QFontMetrics, int, Qt::TextElideMode, QString)" remove="all"/>
     <modify-function signature="createEditor(QWidget*,QStyleOptionViewItem,QModelIndex)const">
       <modify-argument index="1">
         <define-ownership owner="c++"/>
@@ -3219,14 +3279,12 @@
   </object-type>
   <object-type name="QTableWidgetItem" >
     <enum-type name="ItemType"/>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="backgroundColor()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(QColor)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setTextColor(QColor)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="textColor()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
     <modify-function signature="read(QDataStream&amp;)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -3262,14 +3320,12 @@
     <modify-function signature="write(QDataStream&amp;)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="backgroundColor()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(QColor)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setTextColor(QColor)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="textColor()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
   </object-type>
   <object-type name="QGraphicsTextItem">
     <!-- a QObject so main-thread delete redundant -->
@@ -3398,14 +3454,12 @@
       </inject-code>
     </modify-function>
 
+    <!--### Obsolete in 4.3-->
     <modify-function signature="backgroundColor(int)const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setBackgroundColor(int, QColor)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setTextColor(int, QColor)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="textColor(int)const" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
   </object-type>
   <object-type name="QListWidget">
     <modify-function signature="setItemWidget(QListWidgetItem *, QWidget *)">
@@ -3423,10 +3477,12 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="setItemHidden(const QListWidgetItem*,bool)" remove="all"/>
     <modify-function signature="isItemHidden(const QListWidgetItem*)const" remove="all"/>
     <modify-function signature="setItemSelected(const QListWidgetItem*,bool)" remove="all"/>
     <modify-function signature="isItemSelected(const QListWidgetItem*)const" remove="all"/>
+    <!--### End of obsolete section -->
     <modify-function signature="takeItem(int)">
       <modify-argument index="return">
         <define-ownership owner="default"/>
@@ -3633,6 +3689,7 @@
         <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
+    <!-- ### See bug 756 -->
     <modify-function signature="getContentsMargins(int*,int*,int*,int*)const" remove="all" />
     <modify-function signature="insertAction(QAction *, QAction *)">
       <modify-argument index="2">
@@ -3646,22 +3703,16 @@
         // %FUNCTION_NAME() - disable generation of function call.
       </inject-code>
     </modify-function>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="enabledChange(bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="fontChange(QFont)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="isEnabledToTLW()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="isTopLevel()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="paletteChange(QPalette)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setShown(bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="topLevelWidget()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="windowActivationChange(bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
     <modify-function signature="raise()" rename="raise_" />
     <modify-function signature="setParent(QWidget*, QFlags&lt;Qt::WindowType>)">
       <modify-argument index="this">
@@ -3686,8 +3737,6 @@
     <enum-type name="ButtonRole"/>
     <enum-type name="Icon"/>
     <enum-type name="StandardButton" flags="QMessageBox::StandardButtons" />
-    <modify-function signature="setWindowTitle(const QString &amp;)" remove="all"/>
-    <modify-function signature="setWindowModality(Qt::WindowModality)" remove="all"/>
     <modify-function signature="removeButton(QAbstractButton*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -3696,30 +3745,20 @@
     <extra-includes>
       <include file-name="QPixmap" location="global"/>
     </extra-includes>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="QMessageBox(QString,QString,QMessageBox::Icon,int,int,int,QWidget*,QFlags&lt;Qt::WindowType&gt;)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="buttonText(int)const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setButtonText(int, QString)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="standardIcon(QMessageBox::Icon)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="critical(QWidget*,QString,QString,int,int,int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="critical(QWidget*,QString,QString,QString,QString,QString,int,int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="information(QWidget*,QString,QString,int,int,int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="information(QWidget*,QString,QString,QString,QString,QString,int,int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="question(QWidget*, QString, QString, int, int, int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="question(QWidget*, QString, QString, QString, QString, QString, int, int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="warning(QWidget*, QString, QString, int, int, int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="warning(QWidget*, QString, QString, QString, QString, QString, int, int)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
 
     <modify-function signature="critical(QWidget*, const QString&amp;, const QString&amp;, QFlags&lt;QMessageBox::StandardButton&gt;, QMessageBox::StandardButton)" allow-thread="yes"/>
     <modify-function signature="information(QWidget*, const QString&amp;, const QString&amp;, QFlags&lt;QMessageBox::StandardButton&gt;, QMessageBox::StandardButton)" allow-thread="yes"/>
@@ -3759,10 +3798,14 @@
     </extra-includes>
     <value-type name="iterator" >
       <include file-name="QTextFrame" location="global"/>
+      <!-- ### These operators where removed because they don't make sense in Python.
+           Instead iterator methods (__iter__, next) should be implemented.
+           See bug 688 -->
       <modify-function signature="operator++(int)" remove="all"/>
       <modify-function signature="operator--(int)" remove="all"/>
       <modify-function signature="operator++()" remove="all"/>
       <modify-function signature="operator--()" remove="all"/>
+      <!-- ### -->
     </value-type>
   </object-type>
   <object-type name="QImageIOHandler">
@@ -3770,16 +3813,17 @@
       <include file-name="QRect" location="global"/>
     </extra-includes>
     <enum-type name="ImageOption"/>
-    <modify-function signature="setFormat(const QByteArray &amp;)const" remove="all"/>
     <modify-function signature="setDevice(QIODevice*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="name()const" remove="all"/>
     <!--### Obsolete in 4.3-->
+    <modify-function signature="name()const" remove="all"/>
   </object-type>
   <object-type name="QProxyModel" polymorphic-id-expression="qobject_cast&lt;QProxyModel*&gt;(%1)">
+    <!-- ### This reimplementation of "QObject::parent()" is used in C++ only
+         when "using QObject::parent;" is not available. It's useless in Python. -->
     <modify-function signature="parent()const" remove="all"/>
     <extra-includes>
       <include file-name="QPixmap" location="global"/>
@@ -3801,7 +3845,8 @@
       <include file-name="QImage" location="global"/>
     </extra-includes>
     <enum-type name="ImageReaderError"/>
-    <!-- this method does nto makes sense in python -->
+    <!-- ### This method does not make sense in Python.
+         Update: perhaps it does, but no one is missing it. -->
     <modify-function signature="read(QImage*)" remove="all" />
     <modify-function signature="setDevice(QIODevice*)">
       <modify-argument index="1">
@@ -3819,6 +3864,7 @@
     </extra-includes>
     <enum-type name="CacheMode"/>
     <enum-type name="MovieState"/>
+    <!-- ### "cacheMode()" is an internal method. -->
     <modify-function signature="cacheMode()" remove="all"/>
     <modify-function signature="setDevice(QIODevice*)">
       <modify-argument index="1">
@@ -3872,8 +3918,8 @@
     </modify-function>
     <modify-function signature="clear()">
         <inject-code class="target" position="beginning">
-            for (int i=0; i &lt; %CPPSELF.count(); i++) {
-            	Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](%CPPSELF.widget(i)));
+            for (int i = 0; i &lt; %CPPSELF.count(); i++) {
+                Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](%CPPSELF.widget(i)));
                 Shiboken::Object::setParent(0, pyWidget);
             }
             %CPPSELF.%FUNCTION_NAME();
@@ -3902,7 +3948,7 @@
     </modify-function>
     <modify-function signature="setMimeData(QMimeData *)">
       <modify-argument index="1">
-        <!-- TODO: mybe this is not the best solution -->
+        <!-- TODO: maybe this is not the best solution -->
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
@@ -3918,6 +3964,8 @@
     </modify-function>
   </object-type>
   <object-type name="QSortFilterProxyModel">
+    <!-- ### This reimplementation of "QObject::parent()" is used in C++ only
+         when "using QObject::parent;" is not available. It's useless in Python. -->
     <modify-function signature="parent()const" remove="all"/>
     <extra-includes>
       <include file-name="QItemSelection" location="global"/>
@@ -3929,10 +3977,10 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="clear()" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="filterChanged()" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
   </object-type>
   <object-type name="QSlider">
       <enum-type name="TickPosition" />
@@ -3942,6 +3990,7 @@
       <include file-name="QTextFormat" location="global"/>
     </extra-includes>
     <enum-type name="StandardFormat"/>
+    <!-- ### See bug 755 -->
     <modify-function signature="setFocusWidget(QWidget*)" remove="all"/>
     <modify-function signature="filterEvent(const QEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
@@ -4357,8 +4406,10 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <!-- ### Obsolete -->
     <modify-function signature="setItemSelected(const QTableWidgetItem*,bool)" remove="all"/>
     <modify-function signature="isItemSelected(const QTableWidgetItem*)const" remove="all"/>
+    <!-- ### -->
   </object-type>
   <object-type name="QTextDocument">
     <extra-includes>
@@ -4370,6 +4421,7 @@
     <enum-type name="MetaInformation"/>
     <enum-type name="ResourceType"/>
     <enum-type name="Stacks" since="4.7"/>
+    <!-- ### See bug 754 -->
     <modify-function signature="redo(QTextCursor*)" remove="all" />
     <modify-function signature="setDocumentLayout(QAbstractTextDocumentLayout*)">
       <modify-argument index="1">
@@ -4391,10 +4443,12 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <!-- ### See bug 753 -->
     <modify-function signature="undo(QTextCursor*)" remove="all" />
     <modify-function signature="print(QPrinter*)const" rename="print_" />
   </object-type>
   <object-type name="QSplitter">
+    <!-- ### See bug 752 -->
     <modify-function signature="getRange(int,int*,int*)const" remove="all" />
     <modify-function signature="addWidget(QWidget *)">
       <modify-argument index="1">
@@ -4471,6 +4525,7 @@
       <enum-type name="SegmentStyle"/>
   </object-type>
   <object-type name="QSplashScreen">
+    <!-- ### See bug 751 -->
     <modify-function signature="repaint()" remove="all"/>
     <modify-function signature="drawContents(QPainter*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
@@ -4639,6 +4694,7 @@
     <extra-includes>
       <include file-name="QVarLengthArray" location="global"/>
     </extra-includes>
+    <!-- ### "setPaintDevice(QPaintDevice*)" is an internal method. -->
     <modify-function signature="setPaintDevice(QPaintDevice*)" remove="all"/>
     <modify-field name="state" read="false" write="false"/>
   </object-type>
@@ -4677,14 +4733,12 @@
         <reference-count action="set"/>
       </modify-argument>
     </modify-function>
+    <!--### Obsolete in 4.3-->
     <modify-function signature="autoCompletion()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="autoCompletionCaseSensitivity()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setAutoCompletion(bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setAutoCompletionCaseSensitivity(Qt::CaseSensitivity)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
   </object-type>
   <object-type name="QTextEdit">
     <enum-type name="AutoFormattingFlag" flags="QTextEdit::AutoFormatting"/>
@@ -4727,21 +4781,32 @@
     <enum-type name="CompositionMode"/>
     <enum-type name="PixmapFragmentHint" flags="QPainter::PixmapFragmentHints" since="4.7"/>
     <enum-type name="RenderHint" flags="QPainter::RenderHints"/>
+
+    <!-- ### "drawText(...)" is an internal method. -->
     <modify-function signature="drawText(const QPointF &amp;, const QString &amp;, int, int)" remove="all"/>
+    <!-- ### See bug 772 -->
     <modify-function signature="drawConvexPolygon(const QPoint *, int)" remove="all" />
     <modify-function signature="drawConvexPolygon(const QPointF *, int)" remove="all" />
+    <!-- ### See bug 779 -->
     <modify-function signature="drawLines(const QLine *, int)" remove="all" />
     <modify-function signature="drawLines(const QLineF *, int)" remove="all" />
+    <!-- ### See bug 780 -->
     <modify-function signature="drawLines(const QPoint *, int)" remove="all" />
     <modify-function signature="drawLines(const QPointF *, int)" remove="all" />
+    <!-- ### See bug 781 -->
     <modify-function signature="drawPoints(const QPoint *, int)" remove="all" />
     <modify-function signature="drawPoints(const QPointF *, int)" remove="all" />
+    <!-- ### See bug 782 -->
     <modify-function signature="drawPolygon(const QPoint *, int, Qt::FillRule)" remove="all" />
     <modify-function signature="drawPolygon(const QPointF *, int, Qt::FillRule)" remove="all" />
+    <!-- ### See bug 783 -->
     <modify-function signature="drawPolyline(const QPoint *, int)" remove="all" />
     <modify-function signature="drawPolyline(const QPointF *, int)" remove="all" />
+    <!-- ### See bug 784 -->
     <modify-function signature="drawRects(const QRect *, int)" remove="all" />
     <modify-function signature="drawRects(const QRectF *, int)" remove="all" />
+    <!-- ### -->
+
     <modify-function signature="drawRoundRect(int, int, int, int, int, int)">
       <modify-argument index="5">
         <rename to="xRound"/>
@@ -4813,15 +4878,15 @@
         <insert-template name="fix_args,QRect*"/>
       </inject-code>
     </modify-function>
+    <!--### Obsoleted by QWidget::render() -->
     <modify-function signature="redirected(const QPaintDevice*,QPoint*)" remove="all" />
+    <!--### Obsolete in 4.3-->
     <modify-function signature="matrix()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="matrixEnabled()const" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setMatrix(QMatrix, bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
     <modify-function signature="setMatrixEnabled(bool)" remove="all"/>
-    <!--### Obsolete in 4.3-->
+    <!--### End of obsolete section -->
+    <!-- ### See bug 750 -->
     <modify-function signature="fontInfo()const" remove="all"/>
   </object-type>
   <!-- qApp macro -->
@@ -4841,19 +4906,18 @@
       <include file-name="QLocale" location="global"/>
       <include file-name="QStyle" location="global"/>
     </extra-includes>
-    <modify-function signature="QApplication(int &amp;, char  **)" access="private" />
-    <modify-function signature="QApplication(int &amp;, char  **, bool)" remove="all" />
-    <modify-function signature="QApplication(int &amp;, char  **, QApplication::Type)" remove="all" />
+    <modify-function signature="QApplication(int&amp;,char**)" access="private" />
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
     <inject-code class="native" file="glue/qapplication_init.cpp" position="beginning" />
 
-    <!-- Causes warnings using generator. They were kept here to avoid generation even
-    removing Q_INTERNAL_QAPP_SRC || qdoc from #define section-->
+    <!-- ### Causes warnings using generator. They were kept here to avoid generation even
+         removing Q_INTERNAL_QAPP_SRC || qdoc from #define section-->
     <modify-function signature="QApplication(int&amp;,char**,int)" remove="all"/>
     <modify-function signature="QApplication(int&amp;,char**,bool)" remove="all"/>
     <modify-function signature="QApplication(int&amp;,char**,bool,int)" remove="all"/>
     <modify-function signature="QApplication(int&amp;,char**,QApplication::Type)" remove="all"/>
-    <modify-function signature="QApplication(int&amp;,char**,QApplication::Type, int)" remove="all"/>
+    <modify-function signature="QApplication(int&amp;,char**,QApplication::Type,int)" remove="all"/>
+    <!-- ### -->
 
     <!-- ownership control transfer to qApp -->
     <modify-function signature="setStyle(QStyle*)">
@@ -4925,10 +4989,12 @@
     <enum-type name="ItemRole"/>
     <enum-type name="RowWrapPolicy"/>
 
-    <!-- FIXME: What to do with this function!? -->
+    <!-- ### See bug 746 -->
     <modify-function signature="getLayoutPosition(QLayout*,int*,QFormLayout::ItemRole*)const" remove="all" />
-    <!-- FIXME: What to do with this function!? -->
+    <!-- ### See bug 747 -->
     <modify-function signature="getWidgetPosition(QWidget*,int*,QFormLayout::ItemRole*)const" remove="all" />
+    <!-- ### -->
+
     <modify-function signature="addRow(QWidget*,QWidget*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -5011,9 +5077,11 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setItem(int,QFormLayout::ItemRole,QLayoutItem*)" remove="all"/>
-    <!-- FIXME: Check what to do with this function! -->
+    <!-- ### See bug 748 -->
     <modify-function signature="getItemPosition(int,int*,QFormLayout::ItemRole*)const" remove="all" />
+    <!-- ### See bug 749 -->
+    <modify-function signature="setItem(int,QFormLayout::ItemRole,QLayoutItem*)" remove="all"/>
+    <!-- ### -->
   </object-type>
   <object-type name="QGraphicsGridLayout" >
     <modify-function signature="addItem(QGraphicsLayoutItem*,int,int,QFlags&lt;Qt::AlignmentFlag&gt;)">
@@ -5033,13 +5101,14 @@
     </modify-function>
   </object-type>
   <object-type name="QGraphicsLayout">
-    <!-- FIXME: Check what to do with this function! -->
+    <!-- ### See bug 744 -->
     <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
     <modify-function signature="widgetEvent(QEvent*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
   </object-type>
   <object-type name="QGraphicsLayoutItem" copyable="false">
+    <!-- ### See bug 745 -->
     <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
     <modify-function signature="setParentLayoutItem(QGraphicsLayoutItem*)">
       <modify-argument index="1">
@@ -5810,7 +5879,10 @@
             </insert-template>
         </inject-code>
     </add-function>
+
+    <!-- ### "QMatrix4x4(const qreal*,int,int)" is an internal constructor. -->
     <modify-function signature="QMatrix4x4(const qreal*,int,int)" remove="all"/>
+
     <modify-function signature="QMatrix4x4(const qreal*)">
       <modify-argument index="1">
         <replace-type modified-type="PySequence" />
@@ -5854,10 +5926,18 @@
         }
       </inject-code>
     </modify-function>
+
+    <!-- ### The following operators are used to get the value from a given matrix position.
+         They doesn't make sense in Python, but an implementation of the sequence protocol
+         does. See bug 743.
+    -->
     <modify-function signature="operator()(int, int)" remove="all"/>
     <modify-function signature="operator()(int, int)const" remove="all"/>
+    <!-- ### -->
+    <!-- ### "constData() const" and "data() const" are unnecessary in Python and their function is performed by "data()". -->
     <modify-function signature="data() const" remove="all"/>
     <modify-function signature="constData() const" remove="all"/>
+    <!-- ### -->
   </value-type>
 
   <object-type name="QGesture">
@@ -6063,7 +6143,7 @@
     <enum-type name="PrinterMode"/>
     <enum-type name="PrinterState"/>
     <enum-type name="Unit"/>
-    <!-- TODO: What to do with this function? -->
+    <!-- ### See bug 742 -->
     <modify-function signature="getPageMargins(qreal*,qreal*,qreal*,qreal*,QPrinter::Unit)const" remove="all" />
     <modify-function signature="setEngines(QPrintEngine*,QPaintEngine*)">
       <modify-argument index="1">
@@ -6089,7 +6169,9 @@
     <extra-includes>
     </extra-includes>
     <enum-type name="RestartHint"/>
+    <!-- ### "handle()const" is an internal method. -->
     <modify-function signature="handle()const" remove="all"/>
+    <!-- ### -->
   </object-type>
 
   <object-type name="QSizeGrip"/>
