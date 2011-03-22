@@ -16,7 +16,7 @@ class TestBug679(unittest.TestCase):
         scene.clear()
         self.assertEqual(sys.getrefcount(hello), 2)
         self.assertEqual(len(scene.items()), 0)
-        self.assertRaises(RuntimeError, lambda: hello.isVisible) # the C++ object was deleted
+        self.assertRaises(RuntimeError, hello.isVisible) # the C++ object was deleted
 
 if __name__ == '__main__':
     unittest.main()
