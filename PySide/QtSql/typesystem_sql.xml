@@ -113,7 +113,9 @@
     <modify-function signature="commitTransaction()" allow-thread="yes" />
     <modify-function signature="rollbackTransaction()" allow-thread="yes" />
     <modify-function signature="open(const QString &amp;, const QString&amp;, const QString&amp;, const QString&amp;, int, const QString&amp;)" allow-thread="yes" />
+    <!-- ### This is too low level for Python, and pointer would be useless for the Python programmer -->
     <modify-function signature="handle() const" remove="all"/>
+    <!-- ### -->
   </object-type>
 
   <object-type name="QSqlQueryModel">
@@ -143,7 +145,9 @@
         <include file-name="QStringList" location="global"/>
         <include file-name="QSize" location="global"/>
       </extra-includes>
+      <!-- ### This isn't part of Qt public API -->
       <modify-function signature="virtual_hook(int,void*)" remove="all" />
+      <!-- ### -->
       <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
       <modify-function signature="fetchLast()" allow-thread="yes" />
       <modify-function signature="fetchFirst()" allow-thread="yes" />

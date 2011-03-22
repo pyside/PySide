@@ -92,7 +92,6 @@
             <include file-name="autoarraypointer.h" location="global"/>
         </extra-includes>
 
-        <modify-function signature="closeConnection()" remove="all"/>
         <modify-function signature="readAll()" allow-thread="yes"/>
         <modify-function signature="read(char*, qint64)" allow-thread="yes">
           <modify-argument index="return">
@@ -105,6 +104,9 @@
             <insert-template name="read_wrapper"/>
           </inject-code>
         </modify-function>
+        <!-- ### Obsolete methods -->
+        <modify-function signature="closeConnection()" remove="all"/>
+        <!-- ### -->
     </object-type>
     <object-type name="QTcpServer">
         <modify-function signature="waitForNewConnection(int,bool*)" allow-thread="yes">
@@ -148,13 +150,13 @@
             </modify-argument>
             <inject-code class="target" position="beginning" file="glue/qudpsocket_read_datagram_glue.cpp"/>
         </modify-function>
-        <modify-function signature="writeDatagram(const char*,qint64,const QHostAddress&amp;,quint16)" remove="all"/>
         <modify-function signature="writeDatagram(const QByteArray&amp;, const QHostAddress&amp;, quint16)" allow-thread="yes"/>
+        <!-- ### writeDatagram(QByteArray, ...) does the trick -->
+        <modify-function signature="writeDatagram(const char*,qint64,const QHostAddress&amp;,quint16)" remove="all"/>
+        <!-- ### -->
     </object-type>
 
-    <object-type name="QHttpHeader">
-        <modify-function signature="QHttpHeader(QHttpHeader)" remove="all"/>
-    </object-type>
+    <object-type name="QHttpHeader" />
     <object-type name="QLocalServer">
         <modify-function signature="waitForNewConnection(int,bool*)" allow-thread="yes">
             <!-- FIXME -->
@@ -203,7 +205,9 @@
 
     <value-type name="QHostAddress" hash-function="qHash">
         <enum-type name="SpecialAddress"/>
+        <!-- ### QHostAddress(QIPv6Address) does this -->
         <modify-function signature="QHostAddress(quint8*)" remove="all" />
+        <!-- ### -->
     </value-type>
 
     <value-type name="QHostInfo">
@@ -235,9 +239,12 @@
         <enum-type name="PermissionSpec"/>
     </value-type>
 
+    <rejection class="QIPv6Address" field-name="c"/>
     <value-type name="QIPv6Address">
+        <!-- ### See bug 788 -->
         <modify-function signature="operator[](int)const" remove="all" />
         <modify-function signature="operator[](int)" remove="all" />
+        <!-- ### -->
     </value-type>
 
     <value-type name="QAuthenticator" />

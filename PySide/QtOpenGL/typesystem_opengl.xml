@@ -42,6 +42,7 @@
     <enum-type name="OpenGLVersionFlag" flags="QGLFormat::OpenGLVersionFlags"/>
   </value-type>
 
+  <rejection class="QGLContext" field-name="currentCtx" />
   <object-type name="QGLContext">
     <enum-type name="BindOption" flags="QGLContext::BindOptions"/>
     <modify-function signature="chooseContext(const QGLContext*)">
@@ -51,16 +52,10 @@
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
 
-    <modify-function signature="getProcAddress(QString)const">
-        <remove/>
-    </modify-function>
-    <modify-field name="currentCtx" read="false" write="false"/>
-    <modify-function signature="setDevice(QPaintDevice*)">
-        <remove/>
-    </modify-function>
+    <!-- ### Obsolete functions and ctors -->
     <modify-function signature="generateFontDisplayLists(QFont, int)" remove="all"/>
-    <modify-function signature="tryVisual(const QGLFormat&amp;, int)" remove="all"/>
-    <modify-function signature="chooseVisual()" remove="all"/>
+    <modify-function signature="QGLContext(const QGLFormat&amp;, QPaintDevice*)" remove="all" />
+    <!-- ### -->
   </object-type>
   <object-type name="QGLFramebufferObject">
     <enum-type name="Attachment"/>
@@ -83,10 +78,13 @@
         <parent index="2" action="add"/>
       </modify-argument>
     </modify-function>
-    <!--- Obsolete -->
+    <!-- ### Not part of Qt public API -->
     <modify-function signature="setContext(QGLContext*,const QGLContext*,bool)" remove="all" />
+    <!-- ### -->
+    <!--- ### Obsolete functions -->
     <modify-function signature="fontDisplayListBase(QFont, int)" remove="all"/>
     <modify-function signature="setFormat(QGLFormat)" remove="all"/>
+    <!-- ### -->
   </object-type>
 
   <value-type name="QGLFramebufferObjectFormat"/>
@@ -94,13 +92,14 @@
     <enum-type name="ShaderTypeBit" flags="QGLShader::ShaderType"/>
   </object-type>
   <object-type name="QGLShaderProgram">
-    <!-- use QMatrixZxY overloads -->
+    <!-- ### Use QMatrixZxY overloads -->
     <modify-function signature="setUniformValue(int, Array)" remove="all" />
     <modify-function signature="setUniformValue(const char*, Array)" remove="all" />
     <modify-function signature="setAttributeValue(int,const float*,int,int)" remove="all" />
     <modify-function signature="setAttributeValue(const char*,const float*,int,int)" remove="all" />
     <modify-function signature="setAttributeArray(int, uint, const void*, int, int)" remove="all" since="4.7" />
     <modify-function signature="setAttributeArray(const char*, uint, const void*, int, int)" remove="all" since="4.7" />
+    <!-- ### -->
   </object-type>
 
   <!-- Qt 4.7 -->

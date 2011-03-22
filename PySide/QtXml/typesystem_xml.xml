@@ -27,33 +27,23 @@
     <rejection class="QXmlInputSource" field-name="EndOfData"/>
     <rejection class="QXmlInputSource" field-name="EndOfDocument"/>
 
-    <value-type name="QDomAttr">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomCDATASection">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomCharacterData">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomComment">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
+    <value-type name="QDomAttr" />
+    <value-type name="QDomCDATASection" />
+    <value-type name="QDomCharacterData" />
+    <value-type name="QDomComment" />
 
     <template name="qdomdocument_setcontent">
         QString _errorMsg_;
         int _errorLine_ = 0;
         int _errorColumn_ = 0;
+
+        PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
         bool _ret_ = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_errorMsg_, &amp;_errorLine_, &amp;_errorColumn_);
+        PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
         %PYARG_0 = Shiboken::makeTuple(_ret_, _errorMsg_, _errorLine_, _errorColumn_);
     </template>
 
     <value-type name="QDomDocument">
-        <modify-function signature="nodeType()const" remove="all"/>
-
         <!-- will be replaced in inject code -->
         <modify-function signature="setContent(const QByteArray&amp;, bool, QString*, int*, int*)">
             <modify-argument index="3">
@@ -217,22 +207,10 @@
         </modify-function>
     </value-type>
 
-    <value-type name="QDomDocumentFragment">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomDocumentType">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomEntity">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomEntityReference">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
+    <value-type name="QDomDocumentFragment" />
+    <value-type name="QDomDocumentType" />
+    <value-type name="QDomEntity" />
+    <value-type name="QDomEntityReference" />
     <value-type name="QDomImplementation">
         <enum-type name="InvalidDataPolicy"/>
     </value-type>
@@ -247,29 +225,12 @@
     </value-type>
 
     <value-type name="QDomNodeList" />
+    <value-type name="QDomNotation" />
+    <value-type name="QDomProcessingInstruction" />
 
-    <value-type name="QDomNotation">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomProcessingInstruction">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
-
-    <value-type name="QDomText">
-        <modify-function signature="nodeType()const" remove="all"/>
-    </value-type>
+    <value-type name="QDomText" />
 
     <object-type name="QXmlParseException"/>
-
-<!-- These are defined in QtCore
-    <value-type name="QXmlStreamAttribute"/>
-    <value-type name="QXmlStreamAttributes"/>
-
-    <value-type name="QXmlStreamNamespaceDeclaration"/>
-    <value-type name="QXmlStreamNotationDeclaration"/>
-    <value-type name="QXmlStreamEntityDeclaration"/>
--->
 
     <value-type name="QXmlAttributes"/>
 
@@ -309,7 +270,11 @@
             </modify-argument>
             <inject-code class="target" position="end">
                 QXmlInputSource* _qxmlinputsource_arg_ = 0;
+
+                PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
                 %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, %2, _qxmlinputsource_arg_);
+                PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
+
                 %PYARG_0 = Shiboken::makeTuple(%0, _qxmlinputsource_arg_);
             </inject-code>
         </modify-function>
@@ -332,23 +297,15 @@
             </modify-argument>
             <inject-code class="target" position="end">
                 QXmlInputSource* _qxmlinputsource_arg_ = 0;
+                PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
                 %RETURN_TYPE %0 = %CPPSELF.%TYPE::%FUNCTION_NAME(%1, %2, _qxmlinputsource_arg_);
+                PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
                 %PYARG_0 = Shiboken::makeTuple(%0, _qxmlinputsource_arg_);
             </inject-code>
         </modify-function>
     </object-type>
     <object-type name="QXmlInputSource"/>
     <object-type name="QXmlLocator"/>
-
-<!-- These are defined already in QtCore
-    <object-type name="QXmlStreamReader">
-        <enum-type name="Error" />
-        <enum-type name="TokenType" />
-    </object-type>
-
-    <object-type name="QXmlStreamWriter">
-    </object-type>
--->
 
     <object-type name="QXmlReader">
         <modify-function signature="parse(const QXmlInputSource*)">
@@ -452,9 +409,5 @@
             </inject-code>
         </modify-function>
     </object-type>
-
-    <suppress-warning text="Shadowing: QDomNode::attributes() const and QDomElement::attributes() const"/>
-    <suppress-warning text="Shadowing: QDomNode::nodeType() const and QDomElement::nodeType() const"/>
-
 </typesystem>
 
