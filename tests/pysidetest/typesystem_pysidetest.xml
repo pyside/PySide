@@ -32,7 +32,7 @@
     <object-type name="TestView" >
         <modify-function signature="TestView(QAbstractListModel*,QObject*)">
             <modify-argument index="1">
-                <reference-count action="add"/>
+                <reference-count action="set"/>
             </modify-argument>
         </modify-function>
     </object-type>
