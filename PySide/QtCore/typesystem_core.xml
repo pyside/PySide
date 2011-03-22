@@ -1325,6 +1325,18 @@
         <modify-argument index="return">
             <parent index="this" action="add"/>
         </modify-argument>
+        <modify-argument index="2">
+            <replace-default-expression with="QString()" />
+        </modify-argument>
+    </add-function>
+    <add-function signature="findChildren(PyTypeObject*, const QRegExp&amp;)" return-type="PySequence*" >
+        <inject-code class="target" position="beginning">
+            %PYARG_0 = PyList_New(0);
+            _findChildrenHelper(%CPPSELF, %2, (PyTypeObject*)%PYARG_1, %PYARG_0);
+        </inject-code>
+        <modify-argument index="return">
+            <parent index="this" action="add"/>
+        </modify-argument>
     </add-function>
 
     <add-function signature="tr(const char *, const char *, int)" return-type="QString">

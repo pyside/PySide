@@ -4,7 +4,7 @@
 import unittest
 from sys import getrefcount
 
-from PySide.QtCore import QObject, QTimer
+from PySide.QtCore import *
 
 class ParentRefCountCase(unittest.TestCase):
     '''Test case for the refcount changes of setParent'''
@@ -107,6 +107,15 @@ class ParentCase(unittest.TestCase):
         test_children = parent.findChildren(QObject, target_name)
 
         self.assertEqual(sorted(target_children), sorted(test_children))
+
+        # test findChildren default value
+        res = parent.findChildren(QTimer)
+        self.assertEqual(len(res), 20)
+
+        # test findChildre with a regex
+        res = parent.findChildren(QObject, QRegExp("^fo+"))
+        self.assertEqual(sorted(res), sorted(test_children))
+
 
     def testParentEquality(self):
         #QObject.parent() == parent
