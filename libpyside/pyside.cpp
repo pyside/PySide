@@ -228,10 +228,10 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
 
 PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* name)
 {
-    if (!Shiboken::Object::isValid(self)) 
-        return 0;
-
     PyObject* attr = PyObject_GenericGetAttr(self, name);
+    if (!Shiboken::Object::isValid(reinterpret_cast<SbkObject*>(self), false)) 
+        return attr;
+
     if (attr && Property::isPropertyType(attr)) {
         PyObject *value = Property::getValue(reinterpret_cast<PySideProperty*>(attr), self);
         if (!value)
