@@ -44,6 +44,7 @@
     <object-type name="QXmlFormatter" />
     <value-type name="QXmlItem" />
     <value-type name="QXmlName">
+        <!-- ### These methods aren't part of Qt public API -->
         <modify-function signature="QXmlName(short, short, short)" remove="all" />
         <modify-function signature="setNamespaceURI(short)" remove="all" />
         <modify-function signature="localName()const" remove="all" />
@@ -55,14 +56,19 @@
         <modify-function signature="setPrefix(short)" remove="all" />
         <modify-function signature="setLocalName(short)" remove="all" />
         <modify-function signature="code()const" remove="all" />
+        <!-- ### -->
     </value-type>
     <value-type name="QXmlNamePool" />
+
+    <rejection class="QXmlNodeModelIndex" function-name="type" />
+    <rejection class="QXmlNodeModelIndex" function-name="sequencedTypedValue" />
+    <rejection class="QXmlNodeModelIndex" function-name="iterate" />
+    <!-- ### This enum isn't part of Qt public API -->
+    <suppress-warning text="enum 'QXmlNodeModelIndex::Axis' does not have a type entry or is not an enum"/>
     <value-type name="QXmlNodeModelIndex">
-        <enum-type name="Axis"/>
         <enum-type name="DocumentOrder" />
         <enum-type name="NodeKind" />
-        <modify-function signature="internalPointer()const" remove="all" />
-        <!-- Qt internal methods -->
+        <!-- ### Qt internal methods -->
         <modify-function signature="name()const" remove="all" />
         <modify-function signature="root()const" remove="all" />
         <modify-function signature="documentUri()const" remove="all" />
@@ -76,6 +82,7 @@
         <modify-function signature="stringValue()const" remove="all" />
         <modify-function signature="is(const QXmlNodeModelIndex &amp;)const" remove="all" />
         <modify-function signature="reset()" remove="all" />
+        <!-- ### -->
     </value-type>
 
     <value-type name="QXmlQuery">
@@ -84,7 +91,6 @@
     <object-type name="QXmlResultItems" />
     <object-type name="QXmlSerializer" />
 
-
-    <suppress-warning text="unhandled enum value: ForwardAxis in QXmlNodeModelIndex::Axis"/>
-    <suppress-warning text="unhandled enum value: ReverseAxis in QXmlNodeModelIndex::Axis"/>
+    <suppress-warning text="class 'QAbstractXmlNodeModel' inherits from unknown base class 'QSharedData'"/>
+    <suppress-warning text="class not found for setup inheritance 'QSharedData'"/>
 </typesystem>

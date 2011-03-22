@@ -66,6 +66,7 @@
     <object-type name="QDeclarativeExtensionInterface"/>
     <object-type name="QDeclarativeComponent">
         <enum-type name="Status"/>
+        <!-- This ctor isn't part of Qt public API -->
         <modify-function signature="QDeclarativeComponent(QObject*)" remove="all" />
     </object-type>
     <object-type name="QDeclarativeContext">

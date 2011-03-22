@@ -54,7 +54,7 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="print(QPrinter*)const" rename="print_" />
-    <!-- TODO QMultiMap isn't implemented yet -->
+    <!-- See BUG 773 -->
     <modify-function signature="metaData()const" remove="all" />
   </object-type>
 

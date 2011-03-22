@@ -78,10 +78,12 @@
                 <include file-name="backendcapabilities.h" location="global"/>
                 <include file-name="pyside_phonon.h" location="local"/>
 
+                <!-- ### This isn't part of Qt public API -->
                 <modify-function signature="notifier()" remove="all"/>
                 <modify-function signature="Phonon::BackendCapabilities::NotifierWrapper(Phonon::BackendCapabilities::Notifier*)">
                   <access modifier="private"/>
-              </modify-function>
+                </modify-function>
+                <!-- ### -->
               <inject-code class="target" position="end">
                    PySideSignal* signal_item;
 
@@ -127,21 +129,19 @@
 
         <value-type name="EffectParameter">
             <enum-type name="Hint" flags="Phonon::EffectParameter::Hints"/>
-            <modify-function signature="EffectParameter()" remove="all"/> <!-- internal -->
-            <modify-function signature="operator&lt;(const Phonon::EffectParameter &amp;)const" remove="all"/> <!-- internal -->
-            <modify-function signature="operator&gt;(const Phonon::EffectParameter &amp;)const" remove="all"/> <!-- internal -->
-            <modify-function signature="id()const" remove="all"/> <!-- internal -->
-            <modify-function signature="operator=(Phonon::EffectParameter)" remove="all"/> <!-- Covered by copy constructor -->
-            <modify-function signature="EffectParameter(Phonon::EffectParameter)" remove="all"/>
+            <!-- ### Internal methods and ctors -->
+            <modify-function signature="EffectParameter()" remove="all"/>
+            <modify-function signature="operator&lt;(const Phonon::EffectParameter &amp;)const" remove="all"/>
+            <modify-function signature="operator&gt;(const Phonon::EffectParameter &amp;)const" remove="all"/>
+            <modify-function signature="id()const" remove="all"/>
             <modify-function signature="operator==(Phonon::EffectParameter)const" remove="all"/>
+            <!-- ### -->
         </value-type>
         <value-type name="MediaSource">
             <enum-type name="Type"/>
-            <modify-function signature="operator=(Phonon::MediaSource)" remove="all"/> <!-- Covered by copy constructor -->
         </value-type>
         <value-type name="Path">
             <modify-function signature="disconnect()" rename="disconnectPath"/>
-            <modify-function signature="operator=(Phonon::Path)" remove="all"/> <!-- Covered by copy constructor -->
             <modify-function signature="insertEffect(Phonon::EffectDescription,Phonon::Effect*)">
                 <modify-argument index="1">
                     <parent index="this" action="add"/>
@@ -170,29 +170,49 @@
         </value-type>
         <value-type name="ObjectDescription" generate="no"/>
         <value-type name="EffectDescription">
+            <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <!-- ### -->
+            <!-- ### See bug 787 -->
             <modify-function signature="fromIndex(int)" remove="all"/>
+            <!-- ### -->
         </value-type>
         <value-type name="AudioOutputDevice">
+            <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <!-- ### -->
+            <!-- ### See bug 787 -->
             <modify-function signature="fromIndex(int)" remove="all"/>
+            <!-- ### -->
         </value-type>
        <value-type name="AudioCaptureDevice">
+            <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <!-- ### -->
+            <!-- ### See bug 787 -->
             <modify-function signature="fromIndex(int)" remove="all"/>
+            <!-- ### -->
         </value-type>
         <value-type name="AudioChannelDescription">
+            <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <!-- ### -->
+            <!-- ### See bug 787 -->
             <modify-function signature="fromIndex(int)" remove="all"/>
+            <!-- ### -->
         </value-type>
         <value-type name="SubtitleDescription">
+            <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <!-- ### -->
+            <!-- ### See bug 787 -->
             <modify-function signature="fromIndex(int)" remove="all"/>
+            <!-- ### -->
         </value-type>
 
 
@@ -232,14 +252,16 @@
             </modify-function>
         </object-type>
 
-
-        <!-- The following entries may be present in the system or not. Keep this section organized. -->
+        <!-- ### The following entries may be present in the system or not. Keep this section organized. -->
         <value-type name="VideoCaptureDevice">
+            <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
+            <!-- ### -->
+            <!-- ### See bug 787 -->
             <modify-function signature="fromIndex(int)" remove="all"/>
+            <!-- ### -->
         </value-type>
-        <!-- The above entries may be present in the system or not. Keep this section organized. -->
-
+        <!-- ### -->
     </namespace-type>
 </typesystem>
