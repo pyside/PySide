@@ -2733,7 +2733,7 @@
     <modify-function signature="getContentsMargins(int*,int*,int*,int*)const" remove="all" />
     <!-- ### Obsolete in 4.3 -->
     <modify-function signature="setMargin(int)" remove="all"/>
-    <modify-function signature="margin(int)" remove="all"/>
+    <modify-function signature="margin()const" remove="all"/>
     <!-- ### -->
   </object-type>
 
