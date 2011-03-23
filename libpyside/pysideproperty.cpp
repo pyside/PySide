@@ -168,14 +168,14 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
         return 0;
     }
 
-    if (pData->constant && (pData->fset || pData->notify)) {
-        free(pData);
-        PyErr_SetString(PyExc_AttributeError, "A constant property cannot have a WRITE method or a NOTIFY signal.");
-        return 0;
-
-    }
     pData->typeName = PySide::Signal::getTypeName(type);
-    return 1;
+
+    if (!pData->typeName)
+        PyErr_SetString(PyExc_TypeError, "Invalid property type or type name.");
+    else if (pData->constant && (pData->fset || pData->notify))
+        PyErr_SetString(PyExc_TypeError, "A constant property cannot have a WRITE method or a NOTIFY signal.");
+
+    return PyErr_Occurred() ? -1 : 1;
 }
 
 void qpropertyFree(void *self)
