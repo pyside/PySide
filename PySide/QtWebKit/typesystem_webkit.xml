@@ -81,6 +81,29 @@
    <value-type name="ExtensionOption" />
    <value-type name="ExtensionReturn" />
 
+   <modify-function signature="extension(QWebPage::Extension, const QWebPage::ExtensionOption*, QWebPage::ExtensionReturn*)">
+       <modify-argument index="2" invalidate-after-use="yes">
+            <conversion-rule class="target">
+                PyObject* %out = 0;
+                // Cast the parameters according to the extension type
+                if (extension == QWebPage::ChooseMultipleFilesExtension)
+                    %out = %CONVERTTOPYTHON[ChooseMultipleFilesExtensionOption*](reinterpret_cast&lt;const ChooseMultipleFilesExtensionOption*>(option));
+                else if (extension == QWebPage::ErrorPageExtension)
+                    %out = %CONVERTTOPYTHON[ErrorPageExtensionOption*](reinterpret_cast&lt;const ErrorPageExtensionOption*>(option));
+            </conversion-rule>
+        </modify-argument>
+        <modify-argument index="3" invalidate-after-use="yes">
+            <conversion-rule class="target">
+                PyObject* %out = 0;
+                // Cast the parameters according to the extension type
+                if (extension == QWebPage::ChooseMultipleFilesExtension)
+                    %out = %CONVERTTOPYTHON[ChooseMultipleFilesExtensionReturn*](reinterpret_cast&lt;const ChooseMultipleFilesExtensionReturn*>(output));
+                else if (extension == QWebPage::ErrorPageExtension)
+                    %out = %CONVERTTOPYTHON[ErrorPageExtensionReturn*](reinterpret_cast&lt;const ErrorPageExtensionReturn*>(output));
+            </conversion-rule>
+        </modify-argument>
+   </modify-function>
+
    <modify-function signature="setNetworkAccessManager(QNetworkAccessManager*)">
         <modify-argument index="1">
             <reference-count action="set"/>
