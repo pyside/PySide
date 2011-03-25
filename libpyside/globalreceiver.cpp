@@ -104,6 +104,7 @@ void DynamicSlotData::clear()
 
 DynamicSlotData::~DynamicSlotData()
 {
+    Shiboken::GilState gil;
     Py_DECREF(m_callback);
 }
 
