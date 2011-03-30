@@ -5079,9 +5079,12 @@
     </modify-function>
     <!-- ### See bug 748 -->
     <modify-function signature="getItemPosition(int,int*,QFormLayout::ItemRole*)const" remove="all" />
-    <!-- ### See bug 749 -->
-    <modify-function signature="setItem(int,QFormLayout::ItemRole,QLayoutItem*)" remove="all"/>
     <!-- ### -->
+    <modify-function signature="setItem(int,QFormLayout::ItemRole,QLayoutItem*)">
+      <modify-argument index="3">
+        <parent index="this" action="add"/>
+      </modify-argument>
+    </modify-function>
   </object-type>
   <object-type name="QGraphicsGridLayout" >
     <modify-function signature="addItem(QGraphicsLayoutItem*,int,int,QFlags&lt;Qt::AlignmentFlag&gt;)">

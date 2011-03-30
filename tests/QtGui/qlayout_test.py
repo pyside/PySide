@@ -2,7 +2,8 @@ import unittest
 import sys
 
 from helper import UsesQApplication
-from PySide.QtGui import QLayout, QWidget, QPushButton, QWidgetItem, QHBoxLayout
+from PySide.QtCore import *
+from PySide.QtGui import *
 
 class MyLayout(QLayout):
     def __init__(self, parent=None):
@@ -94,6 +95,18 @@ class QLayoutTest(UsesQApplication):
         l.addWidget(b)
 
         self.assertRaises(RuntimeError, w.setLayout, l)
+
+    def testQFormLayout(self):
+        w = QWidget()
+        formLayout = QFormLayout()
+        spacer = QSpacerItem(100, 30)
+        formLayout.setItem(0, QFormLayout.SpanningRole, spacer)
+        w.setLayout(formLayout)
+        w.show()
+        QTimer.singleShot(10, w.close)
+        self.app.exec_()
+        del w
+        self.assertRaises(RuntimeError, spacer.isEmpty)
 
 if __name__ == '__main__':
     unittest.main()
