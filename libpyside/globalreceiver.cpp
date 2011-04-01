@@ -225,14 +225,12 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
     }
 
     Shiboken::GilState gil;
-    int numArgs;
     PyObject* retval = 0;
     PyObject* callback = data->callback();
     if (m_shortCircuitSlots.contains(id)) {
         retval = PyObject_CallObject(callback, reinterpret_cast<PyObject*>(args[1]));
     } else {
         QList<QByteArray> paramTypes = slot.parameterTypes();
-        numArgs = paramTypes.count();
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {
             PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
