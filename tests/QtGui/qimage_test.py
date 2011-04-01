@@ -2,8 +2,8 @@
 '''Test cases for QImage'''
 
 import unittest
-from PySide.QtGui import *
-from helper import *
+from PySide.QtGui import QImage
+from helper import UsesQApplication, adjust_filename
 
 class QImageTest(UsesQApplication):
     '''Test case for calling setPixel with float as argument'''
@@ -26,6 +26,13 @@ class QImageTest(UsesQApplication):
         self.assertEqual(data1, data2)
         self.assertEquals(str(data1), img0.bits()[:img0.bytesPerLine()])
         self.assertEquals(str(data2), img0.bits()[:img0.bytesPerLine()])
+
+    def testEmptyBuffer(self):
+        img = QImage(buffer(''), 100, 100, QImage.Format_ARGB32)
+
+    def testEmptyStringAsBuffer(self):
+        img = QImage('', 100, 100, QImage.Format_ARGB32)
+
 
 if __name__ == '__main__':
     unittest.main()
