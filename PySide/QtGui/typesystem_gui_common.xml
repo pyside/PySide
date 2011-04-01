@@ -803,6 +803,21 @@
         </inject-code>
     </modify-function>
 
+    <add-function signature="QImage(QString,int,int,int,QImage::Format)">
+        <inject-code>
+            <insert-template name="qimage_buffer_constructor">
+                <replace from="%ARGS" to="%2, %3, %4, %5" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="QImage(QString,int,int,QImage::Format)">
+        <inject-code>
+            <insert-template name="qimage_buffer_constructor">
+                <replace from="%ARGS" to="%2, %3, %4" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
     <!-- The non-const versions are already used -->
     <modify-function signature="QImage(const uchar*,int,int,int,QImage::Format)" remove="all"/>
     <modify-function signature="QImage(const uchar*,int,int,QImage::Format)" remove="all" />
