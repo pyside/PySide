@@ -16,6 +16,13 @@ class TestQModelIndexInternalPointer(unittest.TestCase):
         foo = Foo()
         idx = m.createIndex(0,0, foo)
 
+    def testPassQPersistentModelIndexAsQModelIndex(self):
+        # Related to bug #716
+        m = MyModel()
+        idx = QPersistentModelIndex()
+        m.span(idx)
+
+
 if __name__ == '__main__':
     unittest.main()
 
