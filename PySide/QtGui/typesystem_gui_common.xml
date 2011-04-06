@@ -671,8 +671,33 @@
     <enum-type name="MoveMode"/>
     <enum-type name="MoveOperation"/>
     <enum-type name="SelectionType"/>
-    <!-- ### See bug 758 -->
-    <modify-function signature="selectedTableCells(int*,int*,int*,int*)const" remove="all" />
+    <modify-function signature="selectedTableCells(int*,int*,int*,int*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
+        </inject-code>
+        <inject-code class="native" position="end">
+            <insert-template name="fix_native_return_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <modify-function signature="currentFrame()const">
       <modify-argument index="return">
         <define-ownership class="target" owner="default"/>
@@ -2756,8 +2781,33 @@
       </inject-code>
     </modify-function>
 
-    <!-- ### See bug 764 -->
-    <modify-function signature="getContentsMargins(int*,int*,int*,int*)const" remove="all" />
+    <modify-function signature="getContentsMargins(int*,int*,int*,int*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
+        </inject-code>
+        <inject-code class="native" position="end">
+            <insert-template name="fix_native_return_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <!-- ### Obsolete in 4.3 -->
     <modify-function signature="setMargin(int)" remove="all"/>
     <modify-function signature="margin()const" remove="all"/>
@@ -3716,8 +3766,33 @@
         <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
-    <!-- ### See bug 756 -->
-    <modify-function signature="getContentsMargins(int*,int*,int*,int*)const" remove="all" />
+    <modify-function signature="getContentsMargins(int*,int*,int*,int*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
+        </inject-code>
+        <inject-code class="native" position="end">
+            <insert-template name="fix_native_return_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <modify-function signature="insertAction(QAction *, QAction *)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
@@ -5133,15 +5208,65 @@
     </modify-function>
   </object-type>
   <object-type name="QGraphicsLayout">
-    <!-- ### See bug 744 -->
-    <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
+    <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
+        </inject-code>
+        <inject-code class="native" position="end">
+            <insert-template name="fix_native_return_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <modify-function signature="widgetEvent(QEvent*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
   </object-type>
   <object-type name="QGraphicsLayoutItem" copyable="false">
-    <!-- ### See bug 745 -->
-    <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const" remove="all" />
+    <modify-function signature="getContentsMargins(qreal*,qreal*,qreal*,qreal*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
+        </inject-code>
+        <inject-code class="native" position="end">
+            <insert-template name="fix_native_return_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <modify-function signature="setParentLayoutItem(QGraphicsLayoutItem*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>

@@ -150,6 +150,23 @@
         %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
     </template>
 
+    <template name="fix_native_return_number*,number*,number*,number*">
+        PyObject* _obj = %PYARG_0.object();
+        if (!PySequence_Check(_obj)
+            || PySequence_Fast_GET_SIZE(_obj) != 4
+            || !SbkNumber_Check(PySequence_Fast_GET_ITEM(_obj, 0))
+            || !SbkNumber_Check(PySequence_Fast_GET_ITEM(_obj, 1))
+            || !SbkNumber_Check(PySequence_Fast_GET_ITEM(_obj, 2))
+            || !SbkNumber_Check(PySequence_Fast_GET_ITEM(_obj, 3))) {
+            PyErr_SetString(PyExc_TypeError, "Sequence of 4 numbers expected");
+        } else {
+            *%1 = %CONVERTTOCPP[$TYPE](PySequence_Fast_GET_ITEM(_obj, 0));
+            *%2 = %CONVERTTOCPP[$TYPE](PySequence_Fast_GET_ITEM(_obj, 1));
+            *%3 = %CONVERTTOCPP[$TYPE](PySequence_Fast_GET_ITEM(_obj, 2));
+            *%4 = %CONVERTTOCPP[$TYPE](PySequence_Fast_GET_ITEM(_obj, 3));
+        }
+    </template>
+
     <template name="fix_int*,int*,int*,int*,int*">
         int a, b, c, d, e;
         PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
