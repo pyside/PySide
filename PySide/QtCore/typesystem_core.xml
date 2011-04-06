@@ -232,7 +232,6 @@
   <rejection class="QAbstractFileEngine" function-name="beginEntryList"/>
   <rejection class="QAbstractFileEngine" function-name="endEntryList"/>
   <rejection class="QAbstractFileEngine" function-name="extension"/>
-  <rejection class="QAbstractFileEngine" function-name="map"/>
   <rejection class="QCoreApplication" function-name="compressEvent"/>
   <rejection class="QCoreApplication" function-name="eventFilter"/>
   <rejection class="QCoreApplication" function-name="filterEvent"/>
@@ -2078,7 +2077,7 @@
         </inject-code>
     </add-function>
   </object-type>
-  <object-type name="QAbstractFileEngineHandler"/>
+  <object-type name="QAbstractFileEngineHandler" />
   <!-- <object-type name="QAbstractFileEngine::MapExtensionOption" /> -->
   <!-- <object-type name="QAbstractFileEngine::MapExtensionReturn" /> -->
   <!-- <object-type name="QAbstractFileEngine::UnMapExtensionOption" /> -->
@@ -2104,8 +2103,23 @@
     <modify-function signature="rmdir(const QString&amp;, bool)const" allow-thread="yes" />
     <modify-function signature="write(const char*, qint64)" allow-thread="yes" />
 
-    <!-- ### See bug 724 -->
-    <modify-function signature="unmap(uchar*)" remove="all"/>
+    <modify-function signature="unmap(uchar*)">
+        <modify-argument index="1">
+            <replace-type modified-type="PyBuffer"/>
+        </modify-argument>
+        <inject-code>
+            const void* ptr;
+            Py_ssize_t len;
+            PyObject_AsReadBuffer(%PYARG_1, &amp;ptr, &amp;len);
+            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME((uchar*)ptr));
+        </inject-code>
+    </modify-function>
+    <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)">
+        <inject-code>
+            %PYARG_0 = PyBuffer_FromReadWriteMemory(%CPPSELF.%FUNCTION_NAME(%1, %2, %3), %2);
+        </inject-code>
+    </modify-function>
+
     <!-- ### See bug 723 -->
     <modify-function signature="read(char*, qint64)" allow-thread="yes" remove="all" />
     <modify-function signature="readLine(char*, qint64)" allow-thread="yes" remove="all" />
