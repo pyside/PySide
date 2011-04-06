@@ -509,25 +509,25 @@
            The iterator methods (__iter__, next) replace this functionality. -->
       <modify-function signature="operator++()" remove="all"/>
       <modify-function signature="operator--()" remove="all"/>
-      <modify-function signature="operator++(int)" remove="all"/>
-      <modify-function signature="operator--(int)" remove="all"/>
       <!-- ### -->
       <add-function signature="__iter__()" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-          Py_INCREF(%PYSELF);
-          %PYARG_0 = %PYSELF;
+          <insert-template name="__iter__" />
         </inject-code>
       </add-function>
       <add-function signature="__next__()" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-          if (!%CPPSELF.atEnd())
-              %PYARG_0 = %CONVERTTOPYTHON[QTextBlock::iterator]((*%CPPSELF)++);
+          <insert-template name="__next__">
+            <replace from="%CPPSELF_TYPE" to="QTextBlock::iterator" />
+          </insert-template>
         </inject-code>
       </add-function>
     </value-type>
     <add-function signature="__iter__()" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            %PYARG_0 = %CONVERTTOPYTHON[QTextBlock::iterator](%CPPSELF.begin());
+          <insert-template name="__iter_parent__">
+            <replace from="%CPPSELF_TYPE" to="QTextBlock::iterator" />
+          </insert-template>
         </inject-code>
     </add-function>
     <modify-function signature="setUserData(QTextBlockUserData*)">
@@ -3917,12 +3917,29 @@
       <!-- ### These operators where removed because they don't make sense in Python.
            Instead iterator methods (__iter__, next) should be implemented.
            See bug 688 -->
-      <modify-function signature="operator++(int)" remove="all"/>
-      <modify-function signature="operator--(int)" remove="all"/>
       <modify-function signature="operator++()" remove="all"/>
       <modify-function signature="operator--()" remove="all"/>
       <!-- ### -->
+      <add-function signature="__iter__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+          <insert-template name="__iter__" />
+        </inject-code>
+      </add-function>
+      <add-function signature="__next__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+          <insert-template name="__next__">
+            <replace from="%CPPSELF_TYPE" to="QTextFrame::iterator" />
+          </insert-template>
+        </inject-code>
+      </add-function>
     </value-type>
+    <add-function signature="__iter__()" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+          <insert-template name="__iter_parent__">
+            <replace from="%CPPSELF_TYPE" to="QTextFrame::iterator" />
+          </insert-template>
+        </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QImageIOHandler">
     <extra-includes>
