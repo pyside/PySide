@@ -320,5 +320,20 @@
         %PYARG_0 = %PYARG_#;
     </template>
 
+    <!-- Iterator -->
+    <template name="__iter__">
+        Py_INCREF(%PYSELF);
+        %PYARG_0 = %PYSELF;
+    </template>
+
+    <template name="__iter_parent__">
+        %PYARG_0 = %CONVERTTOPYTHON[%CPPSELF_TYPE](%CPPSELF.begin());
+    </template>
+
+    <template name="__next__">
+        if (!%CPPSELF.atEnd())
+            %PYARG_0 = %CONVERTTOPYTHON[%CPPSELF_TYPE]((*%CPPSELF)++);
+    </template>
+
 </typesystem>
 
