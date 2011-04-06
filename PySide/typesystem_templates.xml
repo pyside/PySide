@@ -142,18 +142,10 @@
         %PYARG_0 = Shiboken::makeTuple(retval_, val_);
     </template>
 
-    <template name="fix_int*,int*,int*,int*">
-        int a, b, c, d;
+    <template name="fix_number*,number*,number*,number*">
+        $TYPE a, b, c, d;
         PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
-        %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
-        PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
-        %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
-    </template>
-
-    <template name="fix_qreal*,qreal*,qreal*,qreal*">
-        qreal a, b, c, d;
-        PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
-        %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
+        %CPPSELF->::%TYPE::%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
         PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
         %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
     </template>
