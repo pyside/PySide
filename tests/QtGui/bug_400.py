@@ -1,4 +1,4 @@
-''' Test bug 389: http://bugs.openbossa.org/show_bug.cgi?id=389'''
+''' Test bug 400: http://bugs.openbossa.org/show_bug.cgi?id=400'''
 
 import unittest
 from helper import UsesQApplication
