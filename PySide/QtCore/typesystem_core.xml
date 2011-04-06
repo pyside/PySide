@@ -1542,12 +1542,13 @@
     </extra-includes>
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            PyObject* str = PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size());
-            <insert-template name="repr_code">
-               <replace from="%REPR_FORMAT" to="'%s'" />
-               <replace from="%REPR_ARGS" to="PyString_AS_STRING(str)" />
-             </insert-template>
-             Py_DECREF(str);
+            QByteArray b(((PyObject*)%PYSELF)->ob_type->tp_name);
+            b += "(\"";
+            QByteArray contents(*%CPPSELF);
+            contents.replace("\"", "\\\"");
+            b += contents;
+            b += "\")";
+            %PYARG_0 = PyString_FromStringAndSize(b.constData(), b.size());
         </inject-code>
     </add-function>
 
@@ -1718,9 +1719,9 @@
         <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
-    <add-function signature="__str__()" return-type="PyObject*">
+    <add-function signature="__str__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            %PYARG_0 = PyString_FromString(%CPPSELF.data());
+            %PYARG_0 = PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size());
         </inject-code>
     </add-function>
     <add-function signature="__len__">
