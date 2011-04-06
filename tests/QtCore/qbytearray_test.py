@@ -148,6 +148,12 @@ class TestPickler(unittest.TestCase):
         ba2 = pickle.loads(output.getvalue())
         self.assertEqual(ba, ba2)
 
+class QByteArrayBug720(unittest.TestCase):
+    def testIt(self):
+        ba = QByteArray("32\"1\x00123")
+        self.assertEqual(str(ba), "32\"1\x00123")
+        self.assertEqual(repr(ba), "PySide.QtCore.QByteArray(\"32\\\"1\x00123\")")
+
 
 if __name__ == '__main__':
     unittest.main()
