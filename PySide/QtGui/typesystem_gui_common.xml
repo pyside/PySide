@@ -1029,7 +1029,9 @@
             <remove-default-expression/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_int*,int*,int*,int*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getHslF(qreal*,qreal*,qreal*,qreal*)const">
@@ -1050,7 +1052,9 @@
             <remove-default-expression/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getHsv(int*,int*,int*,int*)const">
@@ -1071,7 +1075,9 @@
             <remove-default-expression/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_int*,int*,int*,int*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getHsvF(qreal*,qreal*,qreal*,qreal*)const">
@@ -1092,7 +1098,9 @@
             <remove-default-expression/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getRgb(int*,int*,int*,int*)const">
@@ -1113,7 +1121,9 @@
             <remove-default-expression/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_int*,int*,int*,int*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getRgbF(qreal*,qreal*,qreal*,qreal*)const">
@@ -1134,7 +1144,9 @@
             <remove-default-expression/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <!--### Obsolete in 4.3-->
@@ -4531,7 +4543,9 @@
             <remove-argument/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-          <insert-template name="fix_int*,int*,int*,int*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
         </inject-code>
     </modify-function>
   </object-type>
@@ -5203,7 +5217,9 @@
         </modify-argument>
 
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getWindowFrameMargins(qreal*,qreal*,qreal*,qreal*)const">
@@ -5224,7 +5240,9 @@
         </modify-argument>
 
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*"/>
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <!-- a QObject so main-thread delete redundant -->
