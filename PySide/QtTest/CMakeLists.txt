@@ -29,4 +29,5 @@ create_pyside_module(QtTest
                      QtTest_libraries
                      QtTest_deps
                      QtTest_typesystem_path
-                     QtTest_SRC)
+                     QtTest_SRC
+                     "")

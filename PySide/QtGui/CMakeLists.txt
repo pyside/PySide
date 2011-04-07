@@ -423,6 +423,7 @@ create_pyside_module(QtGui
                      QtGui_deps
                      QtGui_typesystem_path
                      QtGui_SRC
+                     ""
                      ${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml)
 
 install(FILES ${pyside_SOURCE_DIR}/qpytextobject.h DESTINATION include/PySide/QtGui/)
