@@ -196,6 +196,14 @@
         %PYARG_0 = Shiboken::makeTuple(_ret, _arg);
     </template>
 
+    <template name="fix_args,number*,number*">
+        $TYPE a, b;
+        PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
+        %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;a, &amp;b);
+        PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
+        %PYARG_0 = Shiboken::makeTuple(a, b);
+    </template>
+
     <template name="fix_virtual_method_return_value_and_bool*">
         Shiboken::AutoDecRef _py_ret_(PySequence_GetItem(%PYARG_0, 0));
         Shiboken::AutoDecRef _py_ok_(PySequence_GetItem(%PYARG_0, 1));
