@@ -5121,11 +5121,57 @@
     <enum-type name="ItemRole"/>
     <enum-type name="RowWrapPolicy"/>
 
-    <!-- ### See bug 746 -->
-    <modify-function signature="getLayoutPosition(QLayout*,int*,QFormLayout::ItemRole*)const" remove="all" />
-    <!-- ### See bug 747 -->
-    <modify-function signature="getWidgetPosition(QWidget*,int*,QFormLayout::ItemRole*)const" remove="all" />
-    <!-- ### -->
+    <template name="fix_args,int*,ItemRole*">
+        int _row;
+        QFormLayout::ItemRole _role;
+        PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
+        %CPPSELF->%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_row, &amp;_role);
+        PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
+        %PYARG_0 = Shiboken::makeTuple(_row, _role);
+    </template>
+
+    <modify-function signature="getLayoutPosition(QLayout*,int*,QFormLayout::ItemRole*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,int*,ItemRole*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getWidgetPosition(QWidget*,int*,QFormLayout::ItemRole*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,int*,ItemRole*"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getItemPosition(int,int*,QFormLayout::ItemRole*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,int*,ItemRole*"/>
+        </inject-code>
+    </modify-function>
 
     <modify-function signature="addRow(QWidget*,QWidget*)">
       <modify-argument index="1">
@@ -5209,9 +5255,6 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <!-- ### See bug 748 -->
-    <modify-function signature="getItemPosition(int,int*,QFormLayout::ItemRole*)const" remove="all" />
-    <!-- ### -->
     <modify-function signature="setItem(int,QFormLayout::ItemRole,QLayoutItem*)">
       <modify-argument index="3">
         <parent index="this" action="add"/>
