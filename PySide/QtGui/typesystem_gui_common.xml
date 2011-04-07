@@ -193,8 +193,22 @@
         </inject-code>
     </add-function>
 
-    <!-- ### See bug 739 -->
-    <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
+    <modify-function signature="map(qreal,qreal,qreal*,qreal*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <!-- ### This is just an overload to "map(qreal,qreal,qreal*,qreal*)const" and can be discarded in Python -->
     <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
     <!-- ### -->
@@ -4550,8 +4564,22 @@
     <modify-function signature="print(QPrinter*)const" rename="print_" />
   </object-type>
   <object-type name="QSplitter">
-    <!-- ### See bug 752 -->
-    <modify-function signature="getRange(int,int*,int*)const" remove="all" />
+    <modify-function signature="getRange(int,int*,int*)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <modify-function signature="addWidget(QWidget *)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
