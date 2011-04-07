@@ -21,7 +21,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativeproperty_wrapper.cp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativescriptstring_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativeview_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qtdeclarative_module_wrapper.cpp
-${QtDeclarative_registerType}
 )
 
 set(QtDeclarative_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtNetwork_SOURCE_DIR}${PATH_SEP}${QtDeclarative_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
@@ -58,5 +57,6 @@ create_pyside_module(QtDeclarative
                      QtDeclarative_libraries
                      QtDeclarative_deps
                      QtDeclarative_typesystem_path
-                     QtDeclarative_SRC)
+                     QtDeclarative_SRC
+                     QtDeclarative_registerType)
 

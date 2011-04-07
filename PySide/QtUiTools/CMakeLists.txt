@@ -33,5 +33,6 @@ create_pyside_module(QtUiTools
                      QtUiTools_libraries
                      QtUiTools_deps
                      QtUiTools_typesystem_path
-                     QtUiTools_SRC)
+                     QtUiTools_SRC
+                     "")
 

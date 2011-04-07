@@ -31,4 +31,5 @@ create_pyside_module(QtSvg
                      QtSvg_libraries
                      QtSvg_deps
                      QtSvg_typesystem_path
-                     QtSvg_SRC)
+                     QtSvg_SRC
+                     "")

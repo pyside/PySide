@@ -74,4 +74,5 @@ create_pyside_module(phonon
                      phonon_typesystem_path
                      phonon_SRC
                      ""
+                     ""
                      phonon_DROPPED_ENTRIES)
