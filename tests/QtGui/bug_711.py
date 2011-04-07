@@ -1,5 +1,4 @@
 import unittest
-import sys
 from PySide.QtGui import QToolBar, QApplication, QAction, QToolButton
 
 class TestLabelPixmap(unittest.TestCase):
@@ -9,7 +8,7 @@ class TestLabelPixmap(unittest.TestCase):
         for i in xrange(20):
             toolbar.addAction(QAction("Action %d" % i, None))
 
-	buttons = toolbar.findChildren(QToolButton, "")
+        buttons = toolbar.findChildren(QToolButton, "")
         toolbar.clear()
 
         for b in buttons:
