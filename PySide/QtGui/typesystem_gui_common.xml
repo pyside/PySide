@@ -5124,9 +5124,9 @@
     <template name="fix_args,int*,ItemRole*">
         int _row;
         QFormLayout::ItemRole _role;
-        PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
+        %BEGIN_ALLOW_THREADS
         %CPPSELF->%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_row, &amp;_role);
-        PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
+        %END_ALLOW_THREADS
         %PYARG_0 = Shiboken::makeTuple(_row, _role);
     </template>
 

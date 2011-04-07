@@ -37,9 +37,9 @@
         int _errorLine_ = 0;
         int _errorColumn_ = 0;
 
-        PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
+        %BEGIN_ALLOW_THREADS
         bool _ret_ = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_errorMsg_, &amp;_errorLine_, &amp;_errorColumn_);
-        PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
+        %END_ALLOW_THREADS
         %PYARG_0 = Shiboken::makeTuple(_ret_, _errorMsg_, _errorLine_, _errorColumn_);
     </template>
 
@@ -271,9 +271,9 @@
             <inject-code class="target" position="end">
                 QXmlInputSource* _qxmlinputsource_arg_ = 0;
 
-                PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
+                %BEGIN_ALLOW_THREADS
                 %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, %2, _qxmlinputsource_arg_);
-                PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
+                %END_ALLOW_THREADS
 
                 %PYARG_0 = Shiboken::makeTuple(%0, _qxmlinputsource_arg_);
             </inject-code>
@@ -297,9 +297,9 @@
             </modify-argument>
             <inject-code class="target" position="end">
                 QXmlInputSource* _qxmlinputsource_arg_ = 0;
-                PyThreadState* _save = PyEval_SaveThread(); // Py_BEGIN_ALLOW_THREADS
+                %BEGIN_ALLOW_THREADS
                 %RETURN_TYPE %0 = %CPPSELF.%TYPE::%FUNCTION_NAME(%1, %2, _qxmlinputsource_arg_);
-                PyEval_RestoreThread(_save); // Py_END_ALLOW_THREADS
+                %END_ALLOW_THREADS
                 %PYARG_0 = Shiboken::makeTuple(%0, _qxmlinputsource_arg_);
             </inject-code>
         </modify-function>
