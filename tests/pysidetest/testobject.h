@@ -2,6 +2,7 @@
 #define TESTOBJECT_H
 
 #include <QObject>
+#include <QApplication>
 #include <QMetaType>
 #ifdef pysidetest_EXPORTS
 #define PYSIDE_EXPORTS 1
@@ -12,6 +13,8 @@ class PYSIDE_API TestObject : public QObject
 {
     Q_OBJECT
 public:
+    static void createApp() { int argc=0; new QApplication(argc, 0); };
+
     TestObject(int idValue, QObject* parent = 0) : QObject(parent), m_idValue(idValue) {}
     int idValue() const { return m_idValue; }
     static int staticMethodDouble(int value) { return value * 2; }
