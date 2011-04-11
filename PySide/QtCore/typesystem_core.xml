@@ -2178,9 +2178,17 @@
     <modify-function signature="sendPostedEvents(QObject*, int)" allow-thread="yes"/>
     <modify-function signature="sendPostedEvents()" allow-thread="yes"/>
     <modify-function signature="instance()">
-      <modify-argument index="return">
-        <define-ownership owner="c++"/>
-      </modify-argument>
+      <inject-code class="target">
+        QCoreApplication* app = QCoreApplication::instance();
+        PyObject* pyApp = Py_None;
+        if (app) {
+            pyApp = reinterpret_cast&lt;PyObject*&gt;(Shiboken::BindingManager::instance().retrieveWrapper(app));
+            if (!pyApp)
+                pyApp = %CONVERTTOPYTHON[QCoreApplication*](app); // this will keep app live after python exit (extra ref)
+        }
+        %PYARG_0 = pyApp;
+        Py_XINCREF(%PYARG_0);
+      </inject-code>
     </modify-function>
 
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
