@@ -1854,11 +1854,15 @@
             <remove-argument />
         </modify-argument>
         <modify-argument index="return">
-            <replace-type modified-type="QByteArray"/>
+            <replace-type modified-type="PyObject"/>
             <conversion-rule class="native">
-            const QByteArray ba(%CONVERTTOCPP[QByteArray](%PYARG_0));
-            memcpy(%1, ba.data(), ba.size());
-            long long %out = ba.size();
+                %RETURN_TYPE %out;
+                if (!PyString_Check(%PYARG_0)) {
+                    %out = -1;
+                } else {
+                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
+                    qstrncpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out + 1);
+                }
             </conversion-rule>
         </modify-argument>
     </modify-function>
@@ -1873,11 +1877,15 @@
             <remove-argument />
         </modify-argument>
         <modify-argument index="return">
-            <replace-type modified-type="QByteArray"/>
+            <replace-type modified-type="PyObject"/>
             <conversion-rule class="native">
-            const QByteArray ba(%CONVERTTOCPP[QByteArray](%PYARG_0));
-            memcpy(data, ba.data(), ba.size());
-            long long %out = ba.size();
+                %RETURN_TYPE %out;
+                if (!PyString_Check(%PYARG_0)) {
+                    %out = -1;
+                } else {
+                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
+                    qstrncpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out + 1);
+                }
             </conversion-rule>
         </modify-argument>
     </modify-function>
