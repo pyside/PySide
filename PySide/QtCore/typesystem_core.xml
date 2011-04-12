@@ -2070,7 +2070,13 @@
         </inject-code>
     </add-function>
   </object-type>
-  <object-type name="QAbstractFileEngineHandler" />
+  <object-type name="QAbstractFileEngineHandler">
+      <modify-function signature="create(const QString&map;)const">
+        <modify-argument index="return">
+            <define-ownership owner="c++"/>
+        </modify-argument>
+      </modify-function>
+  </object-type>
   <!-- <object-type name="QAbstractFileEngine::MapExtensionOption" /> -->
   <!-- <object-type name="QAbstractFileEngine::MapExtensionReturn" /> -->
   <!-- <object-type name="QAbstractFileEngine::UnMapExtensionOption" /> -->
@@ -2113,10 +2119,52 @@
         </inject-code>
     </modify-function>
 
-    <!-- ### See bug 723 -->
-    <modify-function signature="read(char*, qint64)" allow-thread="yes" remove="all" />
-    <modify-function signature="readLine(char*, qint64)" allow-thread="yes" remove="all" />
-    <!-- ### -->
+    <modify-function signature="read(char*, qint64)" allow-thread="yes">
+        <inject-code class="target">
+            QByteArray ba;
+            ba.resize(%2);
+            %CPPSELF.%FUNCTION_NAME(ba.data(), ba.size());
+            %PYARG_0 = PyString_FromStringAndSize(ba.constData(), ba.size());
+        </inject-code>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject"/>
+            <conversion-rule class="native">
+                %RETURN_TYPE %out;
+                if (!PyString_Check(%PYARG_0)) {
+                    %out = -1;
+                } else {
+                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
+                    qstrncpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out + 1);
+                }
+            </conversion-rule>
+        </modify-argument>
+    </modify-function>
+    <modify-function signature="readLine(char*, qint64)" allow-thread="yes">
+        <inject-code class="target">
+            QByteArray ba;
+            ba.resize(%2);
+            %CPPSELF.%FUNCTION_NAME(ba.data(), ba.size());
+            %PYARG_0 = PyString_FromStringAndSize(ba.constData(), ba.size());
+        </inject-code>
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject"/>
+            <conversion-rule class="native">
+                %RETURN_TYPE %out;
+                if (!PyString_Check(%PYARG_0)) {
+                    %out = -1;
+                } else {
+                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
+                    qstrncpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out + 1);
+                }
+            </conversion-rule>
+        </modify-argument>
+    </modify-function>
   </object-type>
   <object-type name="QProcess">
     <enum-type name="ExitStatus"/>
