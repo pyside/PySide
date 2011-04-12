@@ -6176,13 +6176,6 @@
       </inject-code>
     </modify-function>
 
-    <!-- ### The following operators are used to get the value from a given matrix position.
-         They doesn't make sense in Python, but an implementation of the sequence protocol
-         does. See bug 743.
-    -->
-    <modify-function signature="operator()(int, int)" remove="all"/>
-    <modify-function signature="operator()(int, int)const" remove="all"/>
-    <!-- ### -->
     <!-- ### "constData() const" and "data() const" are unnecessary in Python and their function is performed by "data()". -->
     <modify-function signature="data() const" remove="all"/>
     <modify-function signature="constData() const" remove="all"/>
