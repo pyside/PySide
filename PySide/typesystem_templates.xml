@@ -150,6 +150,14 @@
         %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
     </template>
 
+    <template name="fix_number*,number*,number*,number*,args">
+        $TYPE a, b, c, d;
+        %BEGIN_ALLOW_THREADS
+        %CPPSELF->::%TYPE::%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d, %ARGUMENT_NAMES);
+        %END_ALLOW_THREADS
+        %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+    </template>
+
     <template name="fix_native_return_number*,number*,number*,number*">
         PyObject* _obj = %PYARG_0.object();
         if (!PySequence_Check(_obj)

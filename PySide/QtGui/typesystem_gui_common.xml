@@ -6410,8 +6410,28 @@
     <enum-type name="PrinterMode"/>
     <enum-type name="PrinterState"/>
     <enum-type name="Unit"/>
-    <!-- ### See bug 742 -->
-    <modify-function signature="getPageMargins(qreal*,qreal*,qreal*,qreal*,QPrinter::Unit)const" remove="all" />
+    <modify-function signature="getPageMargins(qreal*,qreal*,qreal*,qreal*,QPrinter::Unit)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <modify-argument index="1">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="3">
+            <remove-argument/>
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_number*,number*,number*,number*,args">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
+        </inject-code>
+    </modify-function>
     <modify-function signature="setEngines(QPrintEngine*,QPaintEngine*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
