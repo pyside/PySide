@@ -984,8 +984,11 @@
             Py_XINCREF(%PYARG_0);
         </inject-code>
     </modify-function>
-    <!-- BUG 716 -->
-    <modify-function signature="operator const QModelIndex&amp;()const" remove="all" />
+    <modify-function signature="operator const QModelIndex&amp;()const">
+        <modify-argument index="return">
+            <parent index="this" action="add"/>
+        </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QUuid">
     <enum-type name="Variant"/>
