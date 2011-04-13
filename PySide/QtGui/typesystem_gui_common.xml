@@ -378,8 +378,17 @@
   </value-type>
   <value-type name="QTextFragment" />
   <value-type name="QBitmap" >
-    <!-- ### See bug 740 -->
-    <modify-function signature="fromData(QSize,const uchar*,QImage::Format)" remove="all" />
+    <modify-function signature="fromData(QSize,const uchar*,QImage::Format)">
+      <modify-argument index="2">
+        <replace-type modified-type="PyObject"/>
+      </modify-argument>
+      <inject-code>
+        const void* buffer;
+        Py_ssize_t size;
+        if (PyObject_AsReadBuffer(%PYARG_2, &amp;buffer, &amp;size) != -1)
+            %PYARG_0 = %CONVERTTOPYTHON[QBitmap](QBitmap::fromData(%1, (const uchar*)buffer, %3));
+      </inject-code>
+    </modify-function>
   </value-type>
   <value-type name="QTextInlineObject" />
   <value-type name="QSizePolicy">
