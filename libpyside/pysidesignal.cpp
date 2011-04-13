@@ -509,7 +509,7 @@ char* getTypeName(PyObject* type)
             else if (objType == &PyLong_Type)
                 typeName = strdup("long");
             else if (objType == &PyFloat_Type)
-                typeName = strdup("qreal");
+                typeName = strdup("double");
             else if (objType == &PyBool_Type)
                 typeName = strdup("bool");
             else
