@@ -6189,6 +6189,24 @@
     <modify-function signature="data() const" remove="all"/>
     <modify-function signature="constData() const" remove="all"/>
     <!-- ### -->
+    <modify-function signature="operator()(int, int) const" remove="all"/>
+    <modify-function signature="operator()(int, int)" remove="all"/>
+    <add-function signature="__mgetitem__" return-type="PyObject*">
+       <inject-code>
+         if (PySequence_Check(_key)) {
+             Shiboken::AutoDecRef key(PySequence_Fast(_key, "Invalid matrix index."));
+             if (PySequence_Fast_GET_SIZE(key.object()) == 2) {
+                 PyObject* posx = PySequence_Fast_GET_ITEM(key.object(), 0);
+                 PyObject* posy = PySequence_Fast_GET_ITEM(key.object(), 1);
+                 Py_ssize_t x = PyInt_AsSsize_t(posx);
+                 Py_ssize_t y = PyInt_AsSsize_t(posy);
+                 return %CONVERTTOPYTHON[qreal]((*%CPPSELF)(x,y));
+             }
+         }
+         PyErr_SetString(PyExc_IndexError, "Invalid matrix index.");
+         return 0;
+       </inject-code>
+    </add-function>
   </value-type>
 
   <object-type name="QGesture">
