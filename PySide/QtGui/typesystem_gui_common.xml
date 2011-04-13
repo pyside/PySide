@@ -407,8 +407,18 @@
   <value-type name="QTextLine" >
     <enum-type name="CursorPosition"/>
     <enum-type name="Edge"/>
-    <!-- ### See bug 741 -->
     <modify-function signature="cursorToX(int*,QTextLine::Edge)const" remove="all" />
+    <modify-function signature="cursorToX(int,QTextLine::Edge)const">
+        <modify-argument index="0">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            %BEGIN_ALLOW_THREADS
+            %RETURN_TYPE %0 = %CPPSELF->::%TYPE::%FUNCTION_NAME(&amp;%1, %2);
+            %END_ALLOW_THREADS
+            %PYARG_0 = Shiboken::makeTuple(%0, %1);
+        </inject-code>
+    </modify-function>
     <modify-function signature="xToCursor(qreal,QTextLine::CursorPosition)const">
       <modify-argument index="2">
         <rename to="edge"/>
