@@ -4683,7 +4683,7 @@
       <enum-type name="SegmentStyle"/>
   </object-type>
   <object-type name="QSplashScreen">
-    <!-- ### See bug 751 -->
+    <!-- Override QWidget.painter -->
     <modify-function signature="repaint()" remove="all"/>
     <modify-function signature="drawContents(QPainter*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
