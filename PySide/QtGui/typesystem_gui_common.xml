@@ -4573,8 +4573,6 @@
     <enum-type name="MetaInformation"/>
     <enum-type name="ResourceType"/>
     <enum-type name="Stacks" since="4.7"/>
-    <!-- ### See bug 754 -->
-    <modify-function signature="redo(QTextCursor*)" remove="all" />
     <modify-function signature="setDocumentLayout(QAbstractTextDocumentLayout*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -4595,8 +4593,6 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <!-- ### See bug 753 -->
-    <modify-function signature="undo(QTextCursor*)" remove="all" />
     <modify-function signature="print(QPrinter*)const" rename="print_" />
   </object-type>
   <object-type name="QSplitter">
