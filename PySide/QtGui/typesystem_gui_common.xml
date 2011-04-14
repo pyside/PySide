@@ -5044,8 +5044,6 @@
     <modify-function signature="setMatrix(QMatrix, bool)" remove="all"/>
     <modify-function signature="setMatrixEnabled(bool)" remove="all"/>
     <!--### End of obsolete section -->
-    <!-- ### See bug 750 -->
-    <modify-function signature="fontInfo()const" remove="all"/>
   </object-type>
   <!-- qApp macro -->
   <inject-code class="native" position="beginning">
