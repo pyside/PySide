@@ -4142,8 +4142,6 @@
       <include file-name="QTextFormat" location="global"/>
     </extra-includes>
     <enum-type name="StandardFormat"/>
-    <!-- ### See bug 755 -->
-    <modify-function signature="setFocusWidget(QWidget*)" remove="all"/>
     <modify-function signature="filterEvent(const QEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
