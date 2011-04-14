@@ -1540,14 +1540,82 @@
     <extra-includes>
       <include file-name="QNoImplicitBoolCast" location="global"/>
     </extra-includes>
+
+    <!-- ### These overloads must be removed accept strings with \x00 in their contents -->
+    <modify-function signature="append(const char*,int)" remove="all" />
+    <modify-function signature="append(const char*)" remove="all" />
+    <modify-function signature="append(QString)" remove="all" />
+    <modify-function signature="contains(const char*)const" remove="all" />
+    <modify-function signature="count(const char*)const" remove="all" />
+    <modify-function signature="endsWith(const char*)const" remove="all" />
+    <modify-function signature="indexOf(const char*,int)const" remove="all" />
+    <modify-function signature="indexOf(char,int)const" remove="all" />
+    <modify-function signature="indexOf(QString,int)const" remove="all" />
+    <modify-function signature="insert(int,const char*)" remove="all" />
+    <modify-function signature="insert(int,char)" remove="all" />
+    <modify-function signature="insert(int,const char*,int)" remove="all" />
+    <modify-function signature="insert(int,QString)" remove="all" />
+    <modify-function signature="lastIndexOf(const char*,int)const" remove="all" />
+    <modify-function signature="lastIndexOf(QString,int)const" remove="all" />
+    <modify-function signature="lastIndexOf(char,int)const" remove="all" />
+    <modify-function signature="prepend(const char*)" remove="all" />
+    <modify-function signature="prepend(const char*,int)" remove="all" />
+    <modify-function signature="replace(QByteArray,const char*)" remove="all" />
+    <modify-function signature="replace(const char*,int,const char*,int)" remove="all"/>
+    <modify-function signature="replace(QString,const char*)" remove="all" />
+    <modify-function signature="replace(const char*,QByteArray)" remove="all" />
+    <modify-function signature="replace(const char*,const char*)" remove="all" />
+    <modify-function signature="replace(int,int,const char*)" remove="all" />
+    <modify-function signature="replace(int,int,const char*,int)" remove="all" />
+    <modify-function signature="replace(char,const char*)" remove="all" />
+    <modify-function signature="replace(char,QString)" remove="all" />
+    <modify-function signature="startsWith(const char*)const" remove="all" />
+    <modify-function signature="operator==(QString)const" remove="all" />
+    <modify-function signature="operator>(QString)const" remove="all" />
+    <modify-function signature="operator>=(QString)const" remove="all" />
+    <modify-function signature="operator&lt;(QString)const" remove="all" />
+    <modify-function signature="operator&lt;=(QString)const" remove="all" />
+    <modify-function signature="operator!=(QString)const" remove="all" />
+    <modify-function signature="operator+=(QString)" remove="all" />
+    <modify-function signature="operator+(QByteArray,const char*)" remove="all" />
+    <modify-function signature="operator+(const char*,QByteArray)" remove="all" />
+    <modify-function signature="operator+(QString,QByteArray)" remove="all" />
+    <modify-function signature="operator+(QByteArray,QString)" remove="all" />
+    <add-function signature="operator+(PyUnicode)">
+        <inject-code>
+            Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(arg));
+            if (!str.isNull()) {
+                QByteArray b(PyString_AS_STRING(str.object()), PyString_GET_SIZE(str.object()));
+                b.prepend(*%CPPSELF);
+                %PYARG_0 = %CONVERTTOPYTHON[QByteArray](b);
+            }
+        </inject-code>
+    </add-function>
+    <add-function signature="operator+(PyUnicode, QByteArray)">
+        <inject-code>
+            Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(arg));
+            if (!str.isNull()) {
+                QByteArray b(PyString_AS_STRING(str.object()), PyString_GET_SIZE(str.object()));
+                b.append(*%CPPSELF);
+                %PYARG_0 = %CONVERTTOPYTHON[QByteArray](b);
+            }
+        </inject-code>
+    </add-function>
+    <add-function signature="operator+(PyString, QByteArray)">
+        <inject-code>
+            QByteArray b(PyString_AS_STRING(arg), PyString_GET_SIZE(arg));
+            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](b + *%CPPSELF);
+        </inject-code>
+    </add-function>
+    <!-- ### -->
+
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             QByteArray b(((PyObject*)%PYSELF)->ob_type->tp_name);
-            b += "(\"";
-            QByteArray contents(*%CPPSELF);
-            contents.replace("\"", "\\\"");
-            b += contents;
-            b += "\")";
+            b += '(';
+            Shiboken::AutoDecRef contents(PyObject_Repr(PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size())));
+            b += PyString_AS_STRING(contents.object());
+            b += ")";
             %PYARG_0 = PyString_FromStringAndSize(b.constData(), b.size());
         </inject-code>
     </add-function>
@@ -1692,8 +1760,6 @@
     </modify-function>
     <!-- QByteArray(const char *) do the job of this constructor -->
     <modify-function signature="QByteArray(const char*,int)" remove="all"/>
-    <!-- QByteArray(const char*, const char*) do the job of this function -->
-    <modify-function signature="replace(const char*,int,const char*,int)" remove="all"/>
     <modify-function signature="fromRawData(const char*,int)">
         <modify-argument index="2">
             <remove-argument />

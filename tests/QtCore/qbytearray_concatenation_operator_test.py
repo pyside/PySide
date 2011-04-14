@@ -12,20 +12,17 @@ class QByteArrayConcatenationOperatorTest(unittest.TestCase):
     def testConcatQByteArrayAndPythonString(self):
         #Test concatenation of a QByteArray with a Python string, in this order
         qba = QByteArray('foo')
-        result = qba + 'bar'
-        self.assert_(isinstance(result, QByteArray))
-        self.assertEqual(result, 'foobar')
-        # NOTICE: the standard behavior of PyQt is to return a QString object
-        # for this case. As this is a minor issue the assertion will be left commented.
-        #self.assertEqual(result.__class__.__name__, 'QString')
+        result = qba + '\x00bar'
+        self.assertEqual(type(result), QByteArray)
+        self.assertEqual(result, 'foo\x00bar')
 
     def testConcatPythonStringAndQByteArray(self):
         #Test concatenation of a Python string with a QByteArray, in this order
         concat_python_string_add_qbytearray_worked = True
         qba = QByteArray('foo')
-        result = 'bar' + qba
-        self.assert_(isinstance(result, QByteArray))
-        self.assertEqual(result, 'barfoo')
+        result = 'bar\x00' + qba
+        self.assertEqual(type(result), QByteArray)
+        self.assertEqual(result, 'bar\x00foo')
 
     # NOTICE: Does not makes sense concat a unicode string with a QByteArray, because the
     # user does not know nothing about the internal representation of the unicode string.
