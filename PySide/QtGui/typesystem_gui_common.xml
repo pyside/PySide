@@ -659,24 +659,43 @@
   </value-type>
   <value-type name="QPixmap" >
     <conversion-rule file="qpixmap_conversion.h" />
-    <extra-includes>
-      <include file-name="QVariant" location="global"/>
-    </extra-includes>
-    <add-function signature="QPixmap(QVariant)">
+    <add-function signature="QPixmap(const QImage&amp;)">
+        <modify-argument index="1">
+            <rename to="image"/>
+        </modify-argument>
         <inject-code class="target" position="beginning">
-        if (%1.type() == QVariant::Pixmap)
-            %0 = new %TYPE(%1.value&lt;QPixmap>());
-        else if (%1.type() == QVariant::Image)
-            %0 = new %TYPE(QPixmap::fromImage(%1.value&lt;QImage>()));
-        else
-            PyErr_SetString(PyExc_TypeError, "QVariant must be holding a QPixmap");
+        %0 = new %TYPE(QPixmap::fromImage(%1));
         </inject-code>
     </add-function>
+    <modify-function signature="QPixmap(const char **)">
+        <modify-argument index="1">
+            <replace-type modified-type="PySequence" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+        Shiboken::AutoDecRef strList(PySequence_Fast(%PYARG_1, "Invalid sequence."));
+        int lineCount = PySequence_Fast_GET_SIZE(strList.object());
+        for (int line = 0; line &lt; lineCount; ++line) {
+            if (!PyString_Check(PySequence_Fast_GET_ITEM(strList.object(), line))) {
+                PyErr_SetString(PyExc_TypeError, "The argument must be a sequence of strings.");
+                break;
+            }
+        }
+
+        const char** xpm = (const char**) malloc (lineCount * sizeof(const char**));
+        for (int line = 0; line &lt; lineCount; ++line) {
+            xpm[line] = PyString_AS_STRING(PySequence_Fast_GET_ITEM(strList.object(), line));
+        }
+
+        %BEGIN_ALLOW_THREADS
+        %0 = new %TYPE(xpm);
+        %END_ALLOW_THREADS
+
+        free(xpm);
+        </inject-code>
+    </modify-function>
 
     <!-- ### Operator ! doesn't make sense in Python. -->
     <modify-function signature="operator!()const" remove="all"/>
-    <!-- ### See bug 757 -->
-    <modify-function signature="QPixmap(const char **)" remove="all"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="serialNumber()const" remove="all"/>
     <!-- ### -->
