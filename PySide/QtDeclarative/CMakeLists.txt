@@ -1,6 +1,9 @@
 project(QtDeclarative)
 
-set(QtDeclarative_registerType "${CMAKE_CURRENT_SOURCE_DIR}/pysideqmlregistertype.cpp")
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/pysideqmlregistertype.cpp"
+                                                              "${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/pysideqmlregistertype.cpp")
+
+set(QtDeclarative_registerType "${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/pysideqmlregistertype.cpp")
 
 set(QtDeclarative_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtDeclarative/qdeclarativecomponent_wrapper.cpp
