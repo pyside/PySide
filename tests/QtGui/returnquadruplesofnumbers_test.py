@@ -21,23 +21,23 @@ class ReturnsQuadruplesOfNumbers(UsesQApplication):
         obj = GraphicsLayout()
         values = (10.0, 20.0, 30.0, 40.0)
         obj.setContentsMargins(*values)
-        self.assertEquals(obj.getContentsMargins(), values)
+        self.assertEquals(round(obj.getContentsMargins()), values)
 
     def testQGraphicsLayoutItemGetContentsMargins(self):
         obj = GraphicsLayoutItem()
-        self.assertEquals(obj.getContentsMargins(), (0.0, 0.0, 0.0, 0.0))
+        self.assertEquals(round(obj.getContentsMargins()), (0.0, 0.0, 0.0, 0.0))
 
     def testQWidgetGetContentsMargins(self):
         obj = QWidget()
         values = (10, 20, 30, 40)
         obj.setContentsMargins(*values)
-        self.assertEquals(obj.getContentsMargins(), values)
+        self.assertEquals(round(obj.getContentsMargins()), values)
 
     def testQLayoutGetContentsMargins(self):
         obj = Layout()
         values = (10, 20, 30, 40)
         obj.setContentsMargins(*values)
-        self.assertEquals(obj.getContentsMargins(), values)
+        self.assertEquals(round(obj.getContentsMargins()), values)
 
     def testQTextCursorSelectedTableCells(self):
         obj = QTextCursor()
@@ -48,7 +48,7 @@ class ReturnsQuadruplesOfNumbers(UsesQApplication):
         obj = QPrinter()
         values = (10.0, 20.0, 30.0, 40.0, QPrinter.Point)
         obj.setPageMargins(*values)
-        self.assertEquals(obj.getPageMargins(QPrinter.Point), values[:-1])
+        self.assertEquals(round(obj.getPageMargins(QPrinter.Point)), values[:-1])
 
 if __name__ == "__main__":
    unittest.main()
