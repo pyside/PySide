@@ -173,49 +173,71 @@
             <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
-            <!-- ### -->
-            <!-- ### See bug 787 -->
-            <modify-function signature="fromIndex(int)" remove="all"/>
-            <!-- ### -->
+            <modify-function signature="fromIndex(int)">
+              <modify-argument index="return">
+                <replace-type modified-type="EffectDescription"/>
+              </modify-argument>
+              <inject-code>
+                <insert-template name="ObjectDescription.fromIndex" />
+              </inject-code>
+            </modify-function>
         </value-type>
         <value-type name="AudioOutputDevice">
             <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
             <!-- ### -->
-            <!-- ### See bug 787 -->
-            <modify-function signature="fromIndex(int)" remove="all"/>
-            <!-- ### -->
+            <modify-function signature="fromIndex(int)">
+              <modify-argument index="return">
+                <replace-type modified-type="AudioOutputDevice"/>
+              </modify-argument>
+              <inject-code>
+                <insert-template name="ObjectDescription.fromIndex" />
+              </inject-code>
+            </modify-function>
         </value-type>
        <value-type name="AudioCaptureDevice">
             <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
             <!-- ### -->
-            <!-- ### See bug 787 -->
-            <modify-function signature="fromIndex(int)" remove="all"/>
-            <!-- ### -->
+            <modify-function signature="fromIndex(int)">
+              <modify-argument index="return">
+                <replace-type modified-type="AudioCaptureDevice"/>
+              </modify-argument>
+              <inject-code>
+                <insert-template name="ObjectDescription.fromIndex" />
+              </inject-code>
+            </modify-function>
         </value-type>
         <value-type name="AudioChannelDescription">
             <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
             <!-- ### -->
-            <!-- ### See bug 787 -->
-            <modify-function signature="fromIndex(int)" remove="all"/>
-            <!-- ### -->
+            <modify-function signature="fromIndex(int)">
+              <modify-argument index="return">
+                <replace-type modified-type="AudioChannelDescription"/>
+              </modify-argument>
+              <inject-code>
+                <insert-template name="ObjectDescription.fromIndex" />
+              </inject-code>
+            </modify-function>
         </value-type>
         <value-type name="SubtitleDescription">
             <!-- ### See bug 786 -->
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
             <!-- ### -->
-            <!-- ### See bug 787 -->
-            <modify-function signature="fromIndex(int)" remove="all"/>
-            <!-- ### -->
+            <modify-function signature="fromIndex(int)">
+              <modify-argument index="return">
+                <replace-type modified-type="SubtitleDescription"/>
+              </modify-argument>
+              <inject-code>
+                <insert-template name="ObjectDescription.fromIndex" />
+              </inject-code>
+            </modify-function>
         </value-type>
-
-
         <object-type name="ObjectDescriptionModel" generate="no"/>
         <object-type name="EffectDescriptionModel" />
         <object-type name="AudioOutputDeviceModel" />
@@ -258,9 +280,14 @@
             <modify-function signature="operator==(Phonon::ObjectDescription)const" remove="all"/>
             <modify-function signature="operator!=(Phonon::ObjectDescription)const" remove="all"/>
             <!-- ### -->
-            <!-- ### See bug 787 -->
-            <modify-function signature="fromIndex(int)" remove="all"/>
-            <!-- ### -->
+            <modify-function signature="fromIndex(int)">
+              <modify-argument index="return">
+                <replace-type modified-type="VideoCaptureDevice"/>
+              </modify-argument>
+              <inject-code>
+                <insert-template name="ObjectDescription.fromIndex" />
+              </inject-code>
+            </modify-function>
         </value-type>
         <!-- ### -->
     </namespace-type>

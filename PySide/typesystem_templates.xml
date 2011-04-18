@@ -343,5 +343,9 @@
             %PYARG_0 = %CONVERTTOPYTHON[%CPPSELF_TYPE]((*%CPPSELF)++);
     </template>
 
+    <template name="ObjectDescription.fromIndex">
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%RETURN_TYPE::fromIndex(%1));
+    </template>
+
 </typesystem>
 
