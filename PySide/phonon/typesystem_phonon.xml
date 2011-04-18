@@ -104,6 +104,7 @@
         <enum-type name="MetaData"/>
         <enum-type name="ObjectDescriptionType"/>
         <enum-type name="State"/>
+        <enum-type name="CaptureCategory"/>
 
         <object-type name="AbstractVideoOutput"/>
         <object-type name="AddonInterface">
@@ -249,6 +250,7 @@
         <object-type name="EffectWidget"/>
         <object-type name="MediaController">
             <enum-type name="Feature" flags="Phonon::MediaController::Features"/>
+            <enum-type name="NavigationMenu"/>
         </object-type>
         <object-type name="MediaObject" />
         <object-type name="SeekSlider">
