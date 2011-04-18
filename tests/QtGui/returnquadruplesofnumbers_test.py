@@ -16,28 +16,33 @@ class GraphicsLayoutItem(QGraphicsLayoutItem):
         QGraphicsLayoutItem.__init__(self)
 
 class ReturnsQuadruplesOfNumbers(UsesQApplication):
+    def compareTuples(self, ta, tb):
+        for va,vb in zip(ta, tb):
+            if round(va) != round(vb):
+                return False
+        return True
 
     def testQGraphicsLayoutGetContentsMargins(self):
         obj = GraphicsLayout()
         values = (10.0, 20.0, 30.0, 40.0)
         obj.setContentsMargins(*values)
-        self.assertEquals(round(obj.getContentsMargins()), values)
+        self.assert_(self.compareTuples(obj.getContentsMargins(), values))
 
     def testQGraphicsLayoutItemGetContentsMargins(self):
         obj = GraphicsLayoutItem()
-        self.assertEquals(round(obj.getContentsMargins()), (0.0, 0.0, 0.0, 0.0))
+        self.assert_(self.compareTuples(obj.getContentsMargins(), (0.0, 0.0, 0.0, 0.0)))
 
     def testQWidgetGetContentsMargins(self):
         obj = QWidget()
         values = (10, 20, 30, 40)
         obj.setContentsMargins(*values)
-        self.assertEquals(round(obj.getContentsMargins()), values)
+        self.assert_(self.compareTuples(obj.getContentsMargins(), values))
 
     def testQLayoutGetContentsMargins(self):
         obj = Layout()
         values = (10, 20, 30, 40)
         obj.setContentsMargins(*values)
-        self.assertEquals(round(obj.getContentsMargins()), values)
+        self.assert_(self.compareTuples(obj.getContentsMargins(), values))
 
     def testQTextCursorSelectedTableCells(self):
         obj = QTextCursor()
@@ -48,7 +53,7 @@ class ReturnsQuadruplesOfNumbers(UsesQApplication):
         obj = QPrinter()
         values = (10.0, 20.0, 30.0, 40.0, QPrinter.Point)
         obj.setPageMargins(*values)
-        self.assertEquals(round(obj.getPageMargins(QPrinter.Point)), values[:-1])
+        self.assert_(self.compareTuples(obj.getPageMargins(QPrinter.Point), values[:-1]))
 
 if __name__ == "__main__":
    unittest.main()
