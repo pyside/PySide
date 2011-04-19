@@ -15,7 +15,7 @@ import unittest
 class ListModel(QAbstractListModel):
     def __init__(self):
         QAbstractListModel.__init__(self)
-        self.setRoleNames({0: 'modelData'})
+        self.setRoleNames({0: 'pysideModelData'})
 
     def rowCount(self, parent=QModelIndex()):
         return 3
