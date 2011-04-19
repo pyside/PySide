@@ -550,9 +550,25 @@
         </inject-code>
     </add-function>
     <modify-function signature="setUserData(QTextBlockUserData*)">
-        <modify-argument index="1">
-            <parent index="this" action="add"/>
+        <inject-code class="target" position="end">
+            const QTextDocument* doc = %CPPSELF.document();
+            if (doc) {
+                Shiboken::AutoDecRef pyDocument(%CONVERTTOPYTHON[QTextDocument*](doc));
+                Shiboken::Object::setParent(pyDocument, %PYARG_1);
+            }
+        </inject-code>
+    </modify-function>
+    <modify-function signature="userData() const">
+        <modify-argument index="return">
+            <define-ownership class="target" owner="default"/>
         </modify-argument>
+        <inject-code class="target" position="end">
+            const QTextDocument* doc = %CPPSELF.document();
+            if (doc) {
+                Shiboken::AutoDecRef pyDocument(%CONVERTTOPYTHON[QTextDocument*](doc));
+                Shiboken::Object::setParent(pyDocument, %PYARG_0);
+            }
+        </inject-code>
     </modify-function>
   </value-type>
   <value-type name="QTextBlockFormat" />
