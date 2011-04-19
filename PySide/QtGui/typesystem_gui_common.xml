@@ -840,10 +840,33 @@
             </insert-template>
         </inject-code>
     </add-function>
-    <!-- ### See bug 760 -->
-    <modify-function signature="map(int,int,int*,int*)const" remove="all"/>
-    <!-- ### See bug 761 -->
-    <modify-function signature="map(qreal,qreal,qreal*,qreal*)const" remove="all"/>
+    <template name="qmatrix_map">
+        %ARG1_TYPE a, b;
+        %CPPSELF.%FUNCTION_NAME(%1, %2, &amp;a, &amp;b);
+        %PYARG_0 = Shiboken::makeTuple(a, b);
+    </template>
+    <modify-function signature="map(int,int,int*,int*)const">
+        <modify-argument index="3">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument />
+        </modify-argument>
+        <inject-code>
+            <insert-template name="qmatrix_map" />
+        </inject-code>
+    </modify-function>
+    <modify-function signature="map(qreal,qreal,qreal*,qreal*)const">
+        <modify-argument index="3">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="4">
+            <remove-argument />
+        </modify-argument>
+        <inject-code>
+            <insert-template name="qmatrix_map" />
+        </inject-code>
+    </modify-function>
     <modify-function signature="inverted(bool*)const">
       <modify-argument index="1">
         <remove-argument/>
