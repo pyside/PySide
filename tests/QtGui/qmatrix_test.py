@@ -44,6 +44,15 @@ class QMatrixTest(unittest.TestCase):
         d = m.copyDataTo()
         self.assert_(my_data == list(d))
 
+    def testMatrixMapping(self):
+        m = QMatrix(1.0, 2.0, 1.0, 3.0, 100.0, 200.0)
+        res = m.map(5, 5)
+        self.assertAlmostEqual(res[0], 5 * 1.0 + 5 * 1.0 + 100.0)
+        self.assertAlmostEqual(res[1], 5 * 2.0 + 5 * 3.0 + 200.0)
+        res = m.map(5.0, 5.0)
+        self.assertAlmostEqual(res[0], 5.0 * 1.0 + 5.0 * 1.0 + 100.0)
+        self.assertAlmostEqual(res[1], 5.0 * 2.0 + 5.0 * 3.0 + 200.0)
+
 if __name__ == '__main__':
     unittest.main()
 
