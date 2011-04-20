@@ -2832,8 +2832,6 @@
     <modify-function signature="drawItemText(QPainter*,QRect,int,QPalette,bool,QString,QPalette::ColorRole)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <!-- ### See bug 765 -->
-    <modify-function signature="itemTextRect(QFontMetrics,QRect,int,bool,QString)const" remove="all"/>
   </object-type>
   <object-type name="QColorDialog">
     <enum-type name="ColorDialogOption" flags="QColorDialog::ColorDialogOptions"/>
