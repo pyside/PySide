@@ -2100,7 +2100,8 @@
                                 %PYARG_2,
                                 %3)
         );
-        Shiboken::Object::invalidate((SbkObject*)pyTimer);
+        Shiboken::Object::releaseOwnership((SbkObject*)pyTimer);
+        Py_XDECREF(pyTimer);
         timer->setSingleShot(true);
         timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
         timer->start(%1);
@@ -2114,7 +2115,6 @@
         Shiboken::SbkType&lt;QTimer>()->tp_init(pyTimer, emptyTuple, 0);
         QTimer* timer = %CONVERTTOCPP[QTimer*](pyTimer);
         timer->setSingleShot(true);
-        timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
 
         if (PyObject_TypeCheck(%2, &amp;PySideSignalInstanceType)) {
             PySideSignalInstance* signalInstance = reinterpret_cast&lt;PySideSignalInstance*&gt;(%2);
@@ -2138,7 +2138,10 @@
                                     pyargs[1])
             );
         }
-        Shiboken::Object::invalidate((SbkObject*)pyTimer);
+
+        timer->connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()), Qt::DirectConnection);
+        Shiboken::Object::releaseOwnership((SbkObject*)pyTimer);
+        Py_XDECREF(pyTimer);
         timer->start(%1);
         </inject-code>
     </add-function>
