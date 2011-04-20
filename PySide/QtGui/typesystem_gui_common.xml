@@ -504,7 +504,33 @@
     <modify-function signature="outputFormats()" remove="all"/>
     <!-- ### End of obsolete section -->
     <!-- See bug 759 -->
-    <modify-function signature="setData(const char*,uint)" remove="all"/>
+    <modify-function signature="data() const">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject"/>
+        </modify-argument>
+        <inject-code>
+            %PYARG_0 = PyBuffer_FromMemory(const_cast&lt;char*&gt;(%CPPSELF.data()), %CPPSELF.size());
+        </inject-code>
+    </modify-function>
+    <modify-function signature="setData(const char*,uint)">
+        <modify-argument index="1">
+            <replace-type modified-type="PyBuffer"/>
+            <conversion-rule class="target">
+                PyObject *%out = PyBuffer_FromMemory(const_cast&lt;char*&gt;(%in), size);
+            </conversion-rule>
+            <conversion-rule class="native">
+                const char *%out;
+                Py_ssize_t buffer_len;
+                PyObject_AsCharBuffer(arg, &amp;%out, &amp;buffer_len);
+            </conversion-rule>
+        </modify-argument>
+        <modify-argument index="2">
+            <remove-argument/>
+            <conversion-rule class="native">
+                uint %out = buffer_len;
+            </conversion-rule>
+        </modify-argument>
+    </modify-function>
   </value-type>
   <value-type name="QRegion" >
     <enum-type name="RegionType"/>
