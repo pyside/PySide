@@ -148,5 +148,21 @@ class ItemRetrieve(UsesQApplication):
         self.assertEqual(self.scene.itemAt(50, 150), self.bottomleft)
         self.assertEqual(self.scene.itemAt(150, 150), self.bottomright)
 
+class TestGraphicsGroup(UsesQApplication):
+    def testIt(self):
+        scene = QGraphicsScene()
+        i1 = QGraphicsRectItem()
+        scene.addItem(i1)
+        i2 = QGraphicsRectItem(i1)
+        i3 = QGraphicsRectItem()
+        i4 = QGraphicsRectItem()
+        group = scene.createItemGroup((i2, i3, i4))
+        scene.removeItem(i1)
+        del i1 # this shouldn't delete i2
+        self.assertEqual(i2.scene(), scene)
+        scene.destroyItemGroup(group)
+        self.assertRaises(RuntimeError, group.type)
+
+
 if __name__ == '__main__':
     unittest.main()

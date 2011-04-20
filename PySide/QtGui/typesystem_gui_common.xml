@@ -3210,11 +3210,29 @@
 
     <!-- ### Obsolete -->
     <modify-function signature="drawItems(QPainter*,int,QGraphicsItem**,const QStyleOptionGraphicsItem*,QWidget*)" remove="all" />
-    <!-- ### See bug 768 -->
-    <modify-function signature="createItemGroup(const QList&lt;QGraphicsItem*&gt;&amp;)" remove="all"/>
-    <!-- ### See bug 769 -->
-    <modify-function signature="destroyItemGroup(QGraphicsItemGroup*)" remove="all"/>
     <!-- ### -->
+
+    <modify-function signature="createItemGroup(const QList&lt;QGraphicsItem*&gt;&amp;)">
+        <modify-argument index="1">
+            <parent index="return" action="add" />
+        </modify-argument>
+        <modify-argument index="return">
+            <define-ownership owner="default"/>
+        </modify-argument>
+    </modify-function>
+
+    <modify-function signature="destroyItemGroup(QGraphicsItemGroup*)">
+        <inject-code>
+            Shiboken::AutoDecRef parent(%CONVERTTOPYTHON[QGraphicsItem*](%1->parentObject()));
+            foreach (QGraphicsItem* item, %1->children())
+                Shiboken::Object::setParent(parent, %CONVERTTOPYTHON[QGraphicsItem*](item));
+            %BEGIN_ALLOW_THREADS
+            %CPPSELF.%FUNCTION_NAME(%1);
+            %END_ALLOW_THREADS
+            // the arg was destroyed by Qt.
+            Shiboken::Object::invalidate(%PYARG_1);
+        </inject-code>
+    </modify-function>
 
     <modify-function signature="contextMenuEvent(QGraphicsSceneContextMenuEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
