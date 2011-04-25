@@ -2317,8 +2317,6 @@
   <object-type name="QSpacerItem"/>
   <object-type name="QStandardItem">
     <enum-type name="ItemType"/>
-    <!-- ### See bug 771 -->
-    <modify-function signature="QStandardItem(const QStandardItem &amp;)" remove="all"/>
     <modify-function signature="operator&lt;(QStandardItem)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -5046,29 +5044,73 @@
 
     <!-- ### "drawText(...)" is an internal method. -->
     <modify-function signature="drawText(const QPointF &amp;, const QString &amp;, int, int)" remove="all"/>
-    <!-- ### See bug 772 -->
+
+    <template name="qpainter_drawlist">
+        %BEGIN_ALLOW_THREADS
+        %CPPSELF.%FUNCTION_NAME(%1.data(), %1.size());
+        %END_ALLOW_THREADS
+    </template>
+
     <modify-function signature="drawConvexPolygon(const QPoint *, int)" remove="all" />
+    <add-function signature="drawConvexPolygon(QVector&lt;QPoint>)">
+        <inject-code>
+            <insert-template name="qpainter_drawlist" />
+        </inject-code>
+    </add-function>
     <modify-function signature="drawConvexPolygon(const QPointF *, int)" remove="all" />
-    <!-- ### See bug 779 -->
+    <add-function signature="drawConvexPolygon(QVector&lt;QPointF>)">
+        <inject-code>
+            <insert-template name="qpainter_drawlist" />
+        </inject-code>
+    </add-function>
+    <!-- ### Overloads using QVector<T> does the job of these methods -->
     <modify-function signature="drawLines(const QLine *, int)" remove="all" />
     <modify-function signature="drawLines(const QLineF *, int)" remove="all" />
-    <!-- ### See bug 780 -->
     <modify-function signature="drawLines(const QPoint *, int)" remove="all" />
     <modify-function signature="drawLines(const QPointF *, int)" remove="all" />
-    <!-- ### See bug 781 -->
-    <modify-function signature="drawPoints(const QPoint *, int)" remove="all" />
-    <modify-function signature="drawPoints(const QPointF *, int)" remove="all" />
-    <!-- ### See bug 782 -->
-    <modify-function signature="drawPolygon(const QPoint *, int, Qt::FillRule)" remove="all" />
-    <modify-function signature="drawPolygon(const QPointF *, int, Qt::FillRule)" remove="all" />
-    <!-- ### See bug 783 -->
-    <modify-function signature="drawPolyline(const QPoint *, int)" remove="all" />
-    <modify-function signature="drawPolyline(const QPointF *, int)" remove="all" />
-    <!-- ### See bug 784 -->
     <modify-function signature="drawRects(const QRect *, int)" remove="all" />
     <modify-function signature="drawRects(const QRectF *, int)" remove="all" />
     <!-- ### -->
-
+    <modify-function signature="drawPoints(const QPoint *, int)" remove="all" />
+    <add-function signature="drawPoints(QVector&lt;QPoint>)">
+        <inject-code>
+            <insert-template name="qpainter_drawlist" />
+        </inject-code>
+    </add-function>
+    <modify-function signature="drawPoints(const QPointF *, int)" remove="all" />
+    <add-function signature="drawPoints(QVector&lt;QPointF>)">
+        <inject-code>
+            <insert-template name="qpainter_drawlist" />
+        </inject-code>
+    </add-function>
+    <modify-function signature="drawPolygon(const QPoint *, int, Qt::FillRule)" remove="all" />
+    <add-function signature="drawPolygon(QVector&lt;QPoint>, Qt::FillRule)">
+        <inject-code>
+            %BEGIN_ALLOW_THREADS
+            %CPPSELF.%FUNCTION_NAME(%1.data(), %1.size(), %2);
+            %END_ALLOW_THREADS
+        </inject-code>
+    </add-function>
+    <modify-function signature="drawPolygon(const QPointF *, int, Qt::FillRule)" remove="all" />
+    <add-function signature="drawPolygon(QVector&lt;QPointF>, Qt::FillRule)">
+        <inject-code>
+            %BEGIN_ALLOW_THREADS
+            %CPPSELF.%FUNCTION_NAME(%1.data(), %1.size(), %2);
+            %END_ALLOW_THREADS
+        </inject-code>
+    </add-function>
+    <modify-function signature="drawPolyline(const QPoint *, int)" remove="all" />
+    <add-function signature="drawPolyline(QVector&lt;QPoint>)">
+        <inject-code>
+            <insert-template name="qpainter_drawlist" />
+        </inject-code>
+    </add-function>
+    <modify-function signature="drawPolyline(const QPointF *, int)" remove="all" />
+    <add-function signature="drawPolyline(QVector&lt;QPointF>)">
+        <inject-code>
+            <insert-template name="qpainter_drawlist" />
+        </inject-code>
+    </add-function>
     <modify-function signature="drawRoundRect(int, int, int, int, int, int)">
       <modify-argument index="5">
         <rename to="xRound"/>
