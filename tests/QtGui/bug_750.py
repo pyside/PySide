@@ -2,6 +2,7 @@ import unittest
 
 from helper import UsesQApplication
 
+from PySide.QtCore import QTimer
 from PySide.QtGui import QPainter, QFont, QFontInfo, QWidget, qApp
 
 class MyWidget(QWidget):
@@ -16,7 +17,7 @@ class TestQPainter(UsesQApplication):
         w = MyWidget()
         w._app = self.app
         w._info = None
-        w.show()
+        QTimer.singleShot(300, w.show)
         self.app.exec_()
         self.assert_(w._info)
 
