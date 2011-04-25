@@ -462,6 +462,7 @@
     <enum-type name="SequenceFormat"/>
     <enum-type name="SequenceMatch"/>
     <enum-type name="StandardKey"/>
+
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code">
@@ -481,11 +482,19 @@
         </inject-code>
     </add-function>
 
+    <modify-function signature="operator[](uint) const" remove="all"/>
+    <add-function signature="__getitem__">
+        <inject-code class="target" position="beginning">
+            if (_i &lt; 0 || _i >= %CPPSELF.count()) {
+                PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                return 0;
+            }
+            return %CONVERTTOPYTHON[int]((*%CPPSELF)[_i]);
+        </inject-code>
+    </add-function>
+
     <!-- ### See bug 775 -->
     <modify-function signature="operator QVariant()const" remove="all"/>
-    <!-- ### See bug 774 -->
-    <modify-function signature="operator[](uint)const" remove="all"/>
-    <!-- ### -->
     <!-- ### Obsolete -->
     <modify-function signature="operator int()const" remove="all"/>
     <modify-function signature="operator QString()const" remove="all"/>
