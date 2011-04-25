@@ -493,7 +493,7 @@
         </inject-code>
     </add-function>
 
-    <!-- ### See bug 775 -->
+    <!-- ### Not necessary due the PySide QVariant conversion rules -->
     <modify-function signature="operator QVariant()const" remove="all"/>
     <!-- ### Obsolete -->
     <modify-function signature="operator int()const" remove="all"/>

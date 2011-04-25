@@ -82,16 +82,10 @@ struct Converter<QVariant>
         } else if (Shiboken::isShibokenEnum(pyObj)) {
             // QVariant(enum)
             return QVariant(Converter<int>::toCpp(pyObj));
-        } else if (PyDict_Check(pyObj)) {
-            return convertToVariantMap(pyObj);
-        } else if (PySequence_Check(pyObj)) {
-            return convertToVariantList(pyObj);
-        } else {
+        } else if (Shiboken::Object::checkType(pyObj)) {
             // a class supported by QVariant?
-            if (Shiboken::Object::checkType(pyObj)) {
                 int typeCode;
                 const char* typeName = resolveMetaType(pyObj->ob_type, &typeCode);
-
                 if (typeCode && typeName) {
                     Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(typeName);
                     QVariant var(typeCode, (void*)0);
@@ -99,10 +93,17 @@ struct Converter<QVariant>
                     tr->toCpp(pyObj, args);
                     return var;
                 }
-            }
-            // Is a shiboken type not known by Qt
-            return QVariant::fromValue<PySide::PyObjectWrapper>(pyObj);
         }
+
+        //sequence and dictornay
+        if (PyDict_Check(pyObj)) {
+            return convertToVariantMap(pyObj);
+        } else if (PySequence_Check(pyObj)) {
+            return convertToVariantList(pyObj);
+        }
+
+        // Is a shiboken type not known by Qt
+        return QVariant::fromValue<PySide::PyObjectWrapper>(pyObj);
     }
 
     static PyObject* toPython(void* cppObj)
