@@ -54,8 +54,19 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="print(QPrinter*)const" rename="print_" />
-    <!-- See BUG 773 -->
-    <modify-function signature="metaData()const" remove="all" />
+    <modify-function signature="metaData()const">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
+        <inject-code position="end">
+            <insert-template name="convertFromMultiMap">
+                <replace from="%MAP_NAME" to="%0"/>
+                <replace from="%RETURN_NAME" to="%PYARG_0"/>
+                <replace from="%KEY_TYPE" to="QString"/>
+                <replace from="%VALUE_TYPE" to="QString"/>
+            </insert-template>
+        </inject-code>
+    </modify-function>
   </object-type>
 
   <object-type name="QWebSettings">
