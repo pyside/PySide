@@ -36,13 +36,39 @@ class QPainterDrawText(unittest.TestCase):
 
         self.assert_(isinstance(newRect, QRectF))
 
-    def testDrawLinesOverloads(self):
+    def testDrawOverloads(self):
         '''Calls QPainter.drawLines overloads, if something is
            wrong Exception and chaos ensues. Bug #395'''
         self.painter.drawLines([QLine(QPoint(0,0), QPoint(1,1))])
         self.painter.drawLines([QPoint(0,0), QPoint(1,1)])
         self.painter.drawLines([QPointF(0,0), QPointF(1,1)])
         self.painter.drawLines([QLineF(QPointF(0,0), QPointF(1,1))])
+        self.painter.drawPoints([QPoint(0,0), QPoint(1,1)])
+        self.painter.drawPoints([QPointF(0,0), QPointF(1,1)])
+        self.painter.drawConvexPolygon([QPointF(10.0, 80.0),
+                                        QPointF(20.0, 10.0),
+                                        QPointF(80.0, 30.0),
+                                        QPointF(90.0, 70.0)])
+        self.painter.drawConvexPolygon([QPoint(10.0, 80.0),
+                                        QPoint(20.0, 10.0),
+                                        QPoint(80.0, 30.0),
+                                        QPoint(90.0, 70.0)])
+        self.painter.drawPolygon([QPointF(10.0, 80.0),
+                                  QPointF(20.0, 10.0),
+                                  QPointF(80.0, 30.0),
+                                  QPointF(90.0, 70.0)])
+        self.painter.drawPolygon([QPoint(10.0, 80.0),
+                                  QPoint(20.0, 10.0),
+                                  QPoint(80.0, 30.0),
+                                  QPoint(90.0, 70.0)])
+        self.painter.drawPolyline([QPointF(10.0, 80.0),
+                                   QPointF(20.0, 10.0),
+                                   QPointF(80.0, 30.0),
+                                   QPointF(90.0, 70.0)])
+        self.painter.drawPolyline([QPoint(10.0, 80.0),
+                                   QPoint(20.0, 10.0),
+                                   QPoint(80.0, 30.0),
+                                   QPoint(90.0, 70.0)])
 
 class SetBrushWithOtherArgs(unittest.TestCase):
     '''Using qpainter.setBrush with args other than QBrush'''
