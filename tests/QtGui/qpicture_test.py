@@ -2,6 +2,7 @@ import unittest
 
 import os
 from helper import UsesQApplication
+from PySide.QtCore import QTimer
 from PySide.QtGui import QPicture, QPainter, QWidget
 
 class MyWidget(QWidget):
@@ -27,7 +28,8 @@ class QPictureTest(UsesQApplication):
         w = MyWidget()
         w._picture = picture2
         w._app = self.app
-        w.show()
+
+        QTimer.singleShot(300, w.show)
         self.app.exec_()
 
 if __name__ == '__main__':
