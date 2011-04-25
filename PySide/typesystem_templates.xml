@@ -346,6 +346,19 @@
     <template name="ObjectDescription.fromIndex">
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%RETURN_TYPE::fromIndex(%1));
     </template>
+    <template name="convertFromMultiMap">
+        %RETURN_NAME = PyDict_New();
+        foreach(%KEY_TYPE _key, %MAP_NAME.keys()) {
+            Shiboken::AutoDecRef _pyValueList(PyList_New(0));
+            foreach(%VALUE_TYPE _value, %MAP_NAME.values(_key)) {
+                Shiboken::AutoDecRef _pyValue(%CONVERTTOPYTHON[%VALUE_TYPE](_value));
+                PyList_Append(_pyValueList, _pyValue);
+            }
+
+            Shiboken::AutoDecRef _pyKey(%CONVERTTOPYTHON[%KEY_TYPE](_key));
+            PyDict_SetItem(%RETURN_NAME, _pyKey, _pyValueList);
+        }
+    </template>
 
 </typesystem>
 
