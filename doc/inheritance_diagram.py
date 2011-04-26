@@ -100,15 +100,22 @@ class InheritanceGraph(object):
             __import__(fullname)
             todoc = sys.modules[fullname]
         except ImportError:
+            # else it is a class, then import the module
+            if not path:
+                if currmodule:
+                    # try the current module
+                    path = currmodule
+                else:
+                    raise InheritanceException(
+                        'Could not import class %r specified for '
+                        'inheritance diagram' % base)
             try:
-                __import__(currmodule)
-                todoc = sys.modules[currmodule]
-                for attr in name.split('.'):
-                    todoc = getattr(todoc, attr)
+                __import__(path)
+                todoc = getattr(sys.modules[path], base)
             except (ImportError, AttributeError):
                 raise InheritanceException(
                     'Could not import class or module %r specified for '
-                    'inheritance diagram' % (currmodule + '.' + name))
+                    'inheritance diagram' % (path + '.' + base))
 
         # If a class, just return it
         if inspect.isclass(todoc):
