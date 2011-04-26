@@ -11,11 +11,11 @@ class QInputContextTest(UsesQApplication):
         widget = QPushButton()
         widget.show()
 
-        if not widget.testAttribute(Qt.WA_InputMethodEnabled):
-            widget.setAttribute(Qt.WA_InputMethodEnabled)
-
         context = self.app.inputContext()
         self.assertEqual(context.focusWidget(), None)
+
+        if not widget.testAttribute(Qt.WA_InputMethodEnabled):
+            widget.setAttribute(Qt.WA_InputMethodEnabled)
 
         context.setFocusWidget(widget)
         self.assertEqual(context.focusWidget(), widget)
