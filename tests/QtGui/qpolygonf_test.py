@@ -18,5 +18,11 @@ class QPolygonFNotIterableTest(unittest.TestCase):
             self.assertEqual(int(point.y()), i)
             i += 1;
 
+    def testPolygonShiftOperators(self):
+        p = QPolygon()
+        self.assertEqual(len(p), 0)
+        p << QPoint(10, 20) << QPoint(20, 30) << [QPoint(20, 30), QPoint(40, 50)]
+        self.assertEqual(len(p), 4)
+
 if __name__ == '__main__':
     unittest.main()
