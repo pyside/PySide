@@ -651,10 +651,20 @@
     <modify-function signature="QPolygon(int, const int *)" remove="all"/>
     <!-- ### A QVector parameter, for no defined type, will generate wrong code. -->
     <modify-function signature="operator+=(QVector)" remove="all"/>
-    <!-- ### See bug 776 -->
-    <modify-function signature="operator&lt;&lt;(QPoint)" remove="all"/>
-    <!-- ### See bug 777 -->
-    <modify-function signature="operator&lt;&lt;(QVector&lt;QPoint&gt;)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(QPoint)">
+        <inject-code>
+            // %FUNCTION_NAME()
+            *%CPPSELF &lt;&lt; %1;
+            %PYARG_0 = %CONVERTTOPYTHON[QPolygon*](%CPPSELF);
+        </inject-code>
+    </modify-function>
+    <modify-function signature="operator&lt;&lt;(QVector&lt;QPoint&gt;)">
+        <inject-code>
+            // %FUNCTION_NAME()
+            *%CPPSELF &lt;&lt; %1;
+            %PYARG_0 = %CONVERTTOPYTHON[QPolygon*](%CPPSELF);
+        </inject-code>
+    </modify-function>
     <!-- ### -->
   </value-type>
   <value-type name="QPolygonF">
