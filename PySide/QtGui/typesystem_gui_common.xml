@@ -692,6 +692,19 @@
             <parent index="1" action="add" />
         </modify-argument>
     </modify-function>
+
+    <add-function signature="__iter__()" return-type="PyObject*">
+      <inject-code class="target" position="beginning">
+        <insert-template name="__iter__" />
+      </inject-code>
+    </add-function>
+    <add-function signature="__next__()" return-type="PyObject*">
+      <inject-code class="target" position="beginning">
+        if (**%CPPSELF)
+            %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItemIterator*](new QTreeWidgetItemIterator((*%CPPSELF)++));
+      </inject-code>
+    </add-function>
+
     <add-function signature="value()" return-type="QTreeWidgetItem*">
         <inject-code>
             %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItem*](%CPPSELF.operator*());
