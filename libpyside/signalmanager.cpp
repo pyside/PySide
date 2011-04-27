@@ -87,6 +87,47 @@ PyObjectWrapper::operator PyObject*() const
     return m_me;
 }
 
+QDataStream &operator<<(QDataStream &out, const PyObjectWrapper &myObj)
+{
+    static PyObject *reduce_func  = 0;
+
+    Shiboken::GilState gil;
+    if (!reduce_func) {
+        Shiboken::AutoDecRef pickleModule(PyImport_ImportModule("pickle"));
+        reduce_func = PyObject_GetAttrString(pickleModule, "dumps");
+    }
+    Shiboken::AutoDecRef repr(PyObject_CallFunctionObjArgs(reduce_func, (PyObject*)myObj, NULL));
+    if (repr.object()) {
+        char* buff;
+        Py_ssize_t size;
+        PyString_AsStringAndSize(repr.object(), &buff, &size);
+        QByteArray data(buff, size);
+        out << data;
+    }
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, PyObjectWrapper &myObj)
+{
+    static PyObject *eval_func  = 0;
+
+    Shiboken::GilState gil;
+    if (!eval_func) {
+        Shiboken::AutoDecRef pickleModule(PyImport_ImportModule("pickle"));
+        eval_func = PyObject_GetAttrString(pickleModule, "loads");
+    }
+
+    QByteArray repr;
+    in >> repr;
+    Shiboken::AutoDecRef pyCode(PyString_FromStringAndSize(repr.data(), repr.size()));
+    Shiboken::AutoDecRef value(PyObject_CallFunctionObjArgs(eval_func, pyCode.object(), 0));
+    if (!value.object()) {
+        value = Py_None;
+    }
+    myObj = PyObjectWrapper(value);
+    return in;
+}
+
 };
 
 namespace Shiboken {
@@ -132,6 +173,7 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
 
     // Register PyObject type to use in queued signal and slot connections
     qRegisterMetaType<PyObjectWrapper>(PYTHON_TYPE);
+    qRegisterMetaTypeStreamOperators<PyObjectWrapper>(PYTHON_TYPE);
 
     TypeResolver::createValueTypeResolver<PyObjectWrapper>(PYTHON_TYPE);
     TypeResolver::createValueTypeResolver<PyObjectWrapper>("object");
