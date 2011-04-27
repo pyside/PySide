@@ -154,7 +154,7 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
     QByteArray className(PyString_AS_STRING(PyTuple_GET_ITEM(args, 0)));
 
     PyObject* bases = PyTuple_GET_ITEM(args, 1);
-    int numBases = PyTuple_GET_SIZE(args);
+    int numBases = PyTuple_GET_SIZE(bases);
     QMetaObject* baseMo = 0;
 
     for (int i = 0; i < numBases; ++i) {
@@ -230,7 +230,7 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
 PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* name)
 {
     PyObject* attr = PyObject_GenericGetAttr(self, name);
-    if (!Shiboken::Object::isValid(reinterpret_cast<SbkObject*>(self), false)) 
+    if (!Shiboken::Object::isValid(reinterpret_cast<SbkObject*>(self), false))
         return attr;
 
     if (attr && Property::isPropertyType(attr)) {
