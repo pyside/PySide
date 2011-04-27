@@ -97,7 +97,9 @@ struct Converter<QVariant>
 
         //sequence and dictornay
         if (PyDict_Check(pyObj)) {
-            return convertToVariantMap(pyObj);
+            QVariant ret = convertToVariantMap(pyObj);
+            if (ret.isValid())
+                return ret;
         } else if (PySequence_Check(pyObj)) {
             return convertToVariantList(pyObj);
         }
@@ -170,7 +172,7 @@ struct Converter<QVariant>
                 ret.insert(Converter<QString>::toCpp(key), toCpp(value));
             return QVariant(ret);
         } else {
-            return toCpp(map);
+            return QVariant();
         }
     }
 
