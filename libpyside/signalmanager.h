@@ -28,6 +28,7 @@
 #include <Qt>
 #include <QStringList>
 #include <QMetaMethod>
+#include <QMetaType>
 
 class QObject;
 
@@ -48,6 +49,9 @@ private:
     PyObject* m_me;
     void*     m_data; //future
 };
+
+PYSIDE_API QDataStream &operator<<(QDataStream& out, const PyObjectWrapper& myObj);
+PYSIDE_API QDataStream &operator>>(QDataStream& in, PyObjectWrapper& myObj);
 
 class PYSIDE_API SignalManager
 {
