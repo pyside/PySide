@@ -2368,7 +2368,7 @@
     <modify-field name="c" read="false" write="false"/>
     <modify-function signature="child() const">
       <modify-argument index="return">
-         <define-ownership owner="target"/>
+         <define-ownership class="target" owner="default"/>
       </modify-argument>
     </modify-function>
   </object-type>
