@@ -21,6 +21,7 @@ Other stuff
     :maxdepth: 1
 
     pysideapi2.rst
+    pysideversion.rst
 
 Module Index
 ============
