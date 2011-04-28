@@ -2800,7 +2800,7 @@
   <object-type name="QInputEvent" copyable="false">
     <modify-function signature="modifiers()const" access="non-final"/>
   </object-type>
-  <object-type name="QKeyEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::KeyPress || %1-&gt;type() == QEvent::KeyRelease">
+  <object-type name="QKeyEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::KeyPress || %1-&gt;type() == QEvent::KeyRelease || %1-&gt;type() == QEvent::ShortcutOverride">
       <add-function signature="operator!=(QKeySequence::StandardKey)">
           <inject-code class="target">
               %PYARG_0 = %CONVERTTOPYTHON[bool](!(&amp;%CPPSELF == %1));
