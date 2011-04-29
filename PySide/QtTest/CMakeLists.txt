@@ -2,6 +2,7 @@ project(QtTest)
 
 set(QtTest_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qtest_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qtest_pysideqtoucheventsequence_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qttest_module_wrapper.cpp
 )
 

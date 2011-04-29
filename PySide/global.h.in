@@ -334,7 +334,7 @@ QT_END_HEADER
   #undef qdoc
 #endif
 #include <QtGui/QtGui>
-#include "qpytextobject.h"
+#include "qpytextobject.h"  // PySide class
 #if @ENABLE_X11@
   #include <QtGui/QX11Info>
   #include <QtGui/QX11EmbedContainer>
@@ -365,6 +365,7 @@ QT_END_HEADER
 
 #if @QT_QTTEST_FOUND@
 #  include <QtTest/QtTest>
+#  include "pysideqtesttouch.h"
 #endif
 
 // Phonon

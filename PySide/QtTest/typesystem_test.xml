@@ -51,6 +51,7 @@
   <rejection class="QTest" function-name="toString&lt;ushort>"/>
 
   <rejection class="QTest" function-name="compare_helper"/>
+  <rejection class="QTest" function-name="touchEvent"/>
 
   <namespace-type name="QTest">
     <enum-type name="AttributeIndex"/>
@@ -64,9 +65,35 @@
         <include file-name="QtTest" location="global"/>
     </extra-includes>
     <!--<modify-function signature="qCompare<char>(char">-->
+    <rejection class="QTouchEventSequence"/>
+    <object-type name="PySideQTouchEventSequence" target-lang-name="QTouchEventSequence" >
+        <modify-function signature="press(int, const QPoint&amp;, QWidget*)">
+            <modify-argument index="return">
+                <define-ownership class="target" owner="default"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="move(int, const QPoint&amp;, QWidget*)">
+            <modify-argument index="return">
+                <define-ownership class="target" owner="default"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="release(int, const QPoint&amp;, QWidget*)">
+            <modify-argument index="return">
+                <define-ownership class="target" owner="default"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="stationary(int)">
+            <modify-argument index="return">
+                <define-ownership class="target" owner="default"/>
+            </modify-argument>
+        </modify-function>
+    </object-type>
+    <modify-function signature="generateTouchEvent(QWidget*, QTouchEvent::DeviceType)" rename="touchEvent">
+        <modify-argument index="return">
+            <define-ownership class="target" owner="target"/>
+        </modify-argument>
+    </modify-function>
   </namespace-type>
-
-  <rejection class="QTouchEventSequence"/>
 
   <rejection class="QSignalSpy"/>
   <rejection class="QTestEventList"/>
