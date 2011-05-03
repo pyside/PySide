@@ -78,4 +78,9 @@ else()
     TEST_QT_MODULE(QT_QTMULTIMEDIA_FOUND QtMultimedia)
     TEST_QT_MODULE(QT_PHONON_FOUND phonon)
     TEST_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)
+
+    #platform specific
+    if (ENABLE_MAC)
+        add_subdirectory(mac)
+    endif ()
 endif()
