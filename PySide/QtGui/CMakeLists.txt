@@ -75,6 +75,7 @@ check_qt_class(QtGui QPrinterInfo               QtGui_OPTIONAL_SRC QtGui_DROPPED
 check_qt_class(QtGui QSessionManager            QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
 check_qt_class(QtGui QSizeGrip                  QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
 check_qt_class(QtGui QSystemTrayIcon            QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
+check_qt_class(QtGui QMacStyle                  QtGui_OPTIONAL_SRC QtGui_DROPPED_ENTRIES)
 
 qt4_wrap_cpp(QPYTEXTOBJECT_MOC "${pyside_SOURCE_DIR}/qpytextobject.h")
 

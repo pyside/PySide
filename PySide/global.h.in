@@ -339,6 +339,8 @@ QT_END_HEADER
   #include <QtGui/QX11Info>
   #include <QtGui/QX11EmbedContainer>
   #include <QtGui/QX11EmbedWidget>
+#elif @ENABLE_MAC@
+  #include <QtGui/qmacstyle_mac.h>
 #endif
 #include <QtXml/QtXml>
 #include <QtUiTools/QtUiTools>
