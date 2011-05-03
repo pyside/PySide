@@ -2437,6 +2437,13 @@
       </modify-argument>
     </modify-function>
 
+    <modify-function signature="clone() const">
+      <modify-argument index="return">
+        <define-ownership class="native" owner="c++"/>
+        <define-ownership class="target" owner="target"/>
+      </modify-argument>
+    </modify-function>
+
     <!-- ??? -->
     <modify-function signature="operator&lt;(QStandardItem)const" remove="all"/>
   </object-type>
