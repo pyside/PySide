@@ -6428,7 +6428,7 @@
   <object-type name="QGraphicsEffectSource"/>
   -->
 
-  <object-type name="QGraphicsObject" polymorphic-id-expression="qgraphicsitem_cast&lt;QGraphicsObject*>(%1)" />
+  <object-type name="QGraphicsObject" />
   <object-type name="QGraphicsOpacityEffect"/>
   <object-type name="QGraphicsRotation"/>
   <object-type name="QGraphicsScale"/>
