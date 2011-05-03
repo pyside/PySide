@@ -844,15 +844,7 @@
     </modify-function>
   </value-type>
 
-  <value-type name="QItemSelection" >
-    <!-- See bug 785 -->
-    <modify-function signature="operator+(const QList&lt;QItemSelectionRange&gt;&amp;)const" remove="all"/>
-    <modify-function signature="operator+=(const QList&lt;QItemSelectionRange&gt;&amp;)" remove="all"/>
-    <modify-function signature="operator+=(const QItemSelectionRange&amp;)" remove="all"/>
-    <modify-function signature="operator&lt;&lt;(const QList&lt;QItemSelectionRange&gt;&amp;)" remove="all"/>
-    <modify-function signature="operator&lt;&lt;(QItemSelectionRange)" remove="all"/>
-    <!-- ### -->
-  </value-type>
+  <value-type name="QItemSelection" />
   <value-type name="QMatrix">
     <extra-includes>
       <include file-name="QPainterPath" location="global"/>
