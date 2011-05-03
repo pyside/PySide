@@ -1,8 +1,6 @@
 import sys
 
-from PySide.QtCore import *
-from PySide.QtGui import *
-from PySide.QtTest import *
+from PySide.QtGui import QStandardItem, QStandardItemModel, QMainWindow, QTreeView, QAbstractItemView, QApplication, QMessageBox
 
 class Item(QStandardItem):
     def __init__(self, text):
@@ -43,7 +41,7 @@ def main():
     app = QApplication(sys.argv)
     w = MainWindow()
     w.show()
-    QMessageBox.information(None, "Info", "Just drag and drop the itens.")
+    QMessageBox.information(None, "Info", "Just drag and drop the items.")
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
