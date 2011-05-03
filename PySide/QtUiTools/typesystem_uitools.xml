@@ -105,7 +105,7 @@
           <parent index="2" action="add"/>
         </modify-argument>
         <inject-code>
-            //Avoid calling the original function: %CPPSELF.load
+            // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
             %PYARG_0 = quiloader_load_ui_from_device(%CPPSELF, %1, %2);
         </inject-code>
      </modify-function>
@@ -123,7 +123,7 @@
           <parent index="2" action="add"/>
         </modify-argument>
         <inject-code>
-            //Avoid calling the original function: %CPPSELF.load
+            // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
             %PYARG_0 = quiloader_load_ui(%CPPSELF, %1, %2);
         </inject-code>
       </add-function>
