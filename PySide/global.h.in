@@ -20,6 +20,7 @@
 
 #undef QT_NO_STL
 #undef QT_NO_STL_WCHAR
+#define Q_BYTE_ORDER // used to enable QSysInfo.Endian detection on MacOSX
 
 #include <QtCore/qnamespace.h>
 
