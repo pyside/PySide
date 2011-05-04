@@ -731,7 +731,7 @@ QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* ca
     if (isMethod || isFunction) {
         PyObject* function = isMethod ? PyMethod_GET_FUNCTION(callback) : callback;
         PyCodeObject* objCode = reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(function));
-        functionName = PyString_AS_STRING(objCode->co_name);
+        functionName = PyString_AS_STRING(reinterpret_cast<PyFunctionObject*>(function)->func_name);
         useSelf = isMethod;
         numArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
     } else if (PyCFunction_Check(callback)) {
