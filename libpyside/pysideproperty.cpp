@@ -255,7 +255,6 @@ int reset(PySideProperty* self, PyObject* source)
     return -1;
 }
 
-
 const char* getTypeName(const PySideProperty* self)
 {
     return self->d->typeName;
@@ -263,14 +262,25 @@ const char* getTypeName(const PySideProperty* self)
 
 PySideProperty* getObject(PyObject* source, PyObject* name)
 {
-    PyObject* attr = PyObject_GenericGetAttr(source, name);
-    if (attr && isPropertyType(attr))
+    PyObject* attr = 0;
+
+    if (Shiboken::Object::isUserType(source)) {
+        PyObject* dict = reinterpret_cast<SbkObject*>(source)->ob_dict;
+        if (dict)
+            attr = PyDict_GetItem(dict, name);
+    }
+
+    if (!attr)
+        attr = PyDict_GetItem(source->ob_type->tp_dict, name);
+
+    if (attr && isPropertyType(attr)) {
+        Py_INCREF(attr);
         return reinterpret_cast<PySideProperty*>(attr);
+    }
 
     if (!attr)
         PyErr_Clear(); //Clear possible error caused by PyObject_GenericGetAttr
-    else
-        Py_DECREF(attr);
+
     return 0;
 }
 
