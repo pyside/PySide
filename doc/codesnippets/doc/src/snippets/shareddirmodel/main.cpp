@@ -55,7 +55,8 @@ def main():
     splitter = QSplitter()
 
 //! [2] //! [3]
-    model =  QDirModel()
+    model = QFileSystemModel()
+    model.setRootPath(QDir.currentPath())
 //! [0] //! [2] //! [4] //! [5]
     tree =  QTreeView(splitter)
 //! [3] //! [6]

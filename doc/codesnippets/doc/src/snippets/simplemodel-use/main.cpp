@@ -57,19 +57,18 @@
     order to indicate that we want top-level items.
 */
 
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
+def main():
+    app = QApplication(sys.argc, sys.argv)
 
-    QWidget *window = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout(window);
-    QLabel *title = new QLabel("Some items from the directory model", window);
-    title->setBackgroundRole(QPalette::Base);
-    title->setMargin(8);
-    layout->addWidget(title);
+    window = QWidget()
+    layout = QVBoxLayout(window)
+    title = QLabel("Some items from the directory model", window)
+    title.setBackgroundRole(QPalette.Base)
+    title.setMargin(8)
+    layout.addWidget(title)
 
 //! [0]
-    model = QDirModel()
+    model = QFileSystemModel()
     parentIndex = model.index(QDir.currentPath())
     numRows = model.rowCount(parentIndex)
 //! [0]
