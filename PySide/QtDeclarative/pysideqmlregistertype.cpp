@@ -104,11 +104,6 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
         return -1;
     }
 
-    if (pyObj->ob_type != &SbkObjectType_Type) {
-        PyErr_Format(PyExc_TypeError, "A shiboken-based python type expected, got %s.", pyObj->ob_type->tp_name);
-        return -1;
-    }
-
     if (!PySequence_Contains(((PyTypeObject*)pyObj)->tp_mro, (PyObject*)declarativeItemType)) {
         PyErr_Format(PyExc_TypeError, "A type inherited from %s expected, got %s.", declarativeItemType->tp_name, ((PyTypeObject*)pyObj)->tp_name);
         return -1;
