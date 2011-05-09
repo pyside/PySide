@@ -87,8 +87,13 @@ PyObjectWrapper::operator PyObject*() const
     return m_me;
 }
 
-QDataStream &operator<<(QDataStream &out, const PyObjectWrapper &myObj)
+QDataStream &operator<<(QDataStream& out, const PyObjectWrapper& myObj)
 {
+    if (Py_IsInitialized() == 0) {
+        qWarning() << "Stream operator for PyObject called without python interpreter.";
+        return out;
+    }
+
     static PyObject *reduce_func  = 0;
 
     Shiboken::GilState gil;
@@ -107,8 +112,13 @@ QDataStream &operator<<(QDataStream &out, const PyObjectWrapper &myObj)
     return out;
 }
 
-QDataStream &operator>>(QDataStream &in, PyObjectWrapper &myObj)
+QDataStream &operator>>(QDataStream& in, PyObjectWrapper& myObj)
 {
+    if (Py_IsInitialized() == 0) {
+        qWarning() << "Stream operator for PyObject called without python interpreter.";
+        return in;
+    }
+
     static PyObject *eval_func  = 0;
 
     Shiboken::GilState gil;
