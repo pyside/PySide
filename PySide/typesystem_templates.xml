@@ -357,5 +357,9 @@
         }
     </template>
 
+    <template name="to_tuple">
+        %PYARG_0 = Py_BuildValue("%TT_FORMAT", %TT_ARGS);
+    </template>
+
 </typesystem>
 
