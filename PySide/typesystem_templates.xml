@@ -293,7 +293,7 @@
     <!-- Matrix Aux functions -->
     <template name="matrix_constructor">
         if (PySequence_Size(%PYARG_1) == %SIZE) {
-            Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_1, "Fail to parse sequnce on %TYPE constructor."));
+            Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_1, "Failed to parse sequence on %TYPE constructor."));
             qreal values[%SIZE];
             for(int i=0; i &lt; %SIZE; i++) {
                 PyObject *pv = PySequence_Fast_GET_ITEM(fast.object(), i);
