@@ -224,6 +224,41 @@
         <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
+    <add-function signature="quadToQuad(const QPolygonF&amp;, const QPolygonF&amp;)" return-type="PyObject*" static="true">
+      <inject-code>
+        QTransform _result;
+        if (QTransform::quadToQuad(%1, %2, _result)) {
+            %PYARG_0 = %CONVERTTOPYTHON[QTransform](_result);
+        } else {
+            Py_INCREF(Py_None);
+            %PYARG_0 = Py_None;
+        }
+      </inject-code>
+    </add-function>
+    <add-function signature="quadToSquare(const QPolygonF &amp;)" return-type="PyObject*" static="true">
+      <inject-code>
+        QTransform _result;
+        if (QTransform::quadToSquare(%1, _result)) {
+            %PYARG_0 = %CONVERTTOPYTHON[QTransform](_result);
+        } else {
+            Py_INCREF(Py_None);
+            %PYARG_0 = Py_None;
+        }
+      </inject-code>
+    </add-function>
+
+    <add-function signature="squareToQuad(const QPolygonF &amp;)" return-type="PyObject*" static="true">
+      <inject-code>
+        QTransform _result;
+        if (QTransform::squareToQuad(%1, _result)) {
+            %PYARG_0 = %CONVERTTOPYTHON[QTransform](_result);
+        } else {
+            Py_INCREF(Py_None);
+            %PYARG_0 = Py_None;
+        }
+      </inject-code>
+    </add-function>
+
   </value-type>
   <value-type name="QStyleOption" polymorphic-id-expression="%1-&gt;type == QStyleOption::SO_Default">
     <enum-type name="OptionType" extensible="yes"/>
