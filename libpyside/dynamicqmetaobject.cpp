@@ -38,12 +38,6 @@
 #include <QDebug>
 #include <QMetaMethod>
 
-#define MAX_SIGNALS_COUNT 50
-#define MAX_SLOTS_COUNT 50
-
-#define MAX_GLOBAL_SIGNALS_COUNT 500
-#define MAX_GLOBAL_SLOTS_COUNT 500
-
 #define EMPTY_META_METHOD "0()"
 
 using namespace PySide;
@@ -71,16 +65,29 @@ enum PropertyFlags  {
     Notify = 0x00400000
 };
 
+// these values are from moc source code, generator.cpp:66
+enum MethodFlags {
+    AccessPrivate = 0x00,
+    AccessProtected = 0x01,
+    AccessPublic = 0x02,
+    MethodMethod = 0x00,
+    MethodSignal = 0x04,
+    MethodSlot = 0x08,
+    MethodConstructor = 0x0c,
+    MethodCompatibility = 0x10,
+    MethodCloned = 0x20,
+    MethodScriptable = 0x40
+};
+
 class DynamicQMetaObject::DynamicQMetaObjectPrivate
 {
 public:
-    QList<MethodData> m_signals;
-    QList<MethodData> m_slots;
+    QList<MethodData> m_methods;
     QList<PropertyData> m_properties;
     QByteArray m_className;
 
     void updateMetaObject(QMetaObject* metaObj);
-    void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int maxCount, int nullIndex, int flags);
+    void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int nullIndex, int flags);
 };
 
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
@@ -130,20 +137,6 @@ static bool isVariantType(const char* type)
 static bool isQRealType(const char *type)
 {
     return strcmp(type, "qreal") == 0;
-}
-
-
-/*
- * Avoid API break keep this on cpp
- */
-static inline int maxSlotsCount(const QByteArray& className)
-{
-    return className == GLOBAL_RECEIVER_CLASS_NAME ? MAX_GLOBAL_SIGNALS_COUNT : MAX_SLOTS_COUNT;
-}
-
-static inline int maxSignalsCount(const QByteArray& className)
-{
-    return className == GLOBAL_RECEIVER_CLASS_NAME ? MAX_GLOBAL_SIGNALS_COUNT : MAX_SIGNALS_COUNT;
 }
 
 uint PropertyData::flags() const
@@ -206,7 +199,7 @@ MethodData::MethodData() : m_signature(m_emptySig)
 {
 }
 
-MethodData::MethodData(const char* signature, const char* type) : m_signature(signature), m_type(type)
+MethodData::MethodData(QMetaMethod::MethodType mtype, const char* signature, const char* type) : m_signature(signature), m_type(type), m_mtype(mtype)
 {
 }
 
@@ -218,12 +211,7 @@ void MethodData::clear()
 
 bool MethodData::operator==(const MethodData& other) const
 {
-    return m_signature == other.signature();
-}
-
-bool MethodData::operator==(const char* other) const
-{
-    return m_signature == other;
+    return ((m_signature == other.signature()) && (m_mtype == other.methodType()));
 }
 
 QByteArray MethodData::signature() const
@@ -241,6 +229,11 @@ QByteArray MethodData::type() const
 bool MethodData::isValid() const
 {
     return m_signature.size();
+}
+
+QMetaMethod::MethodType MethodData::methodType() const
+{
+    return m_mtype;
 }
 
 PropertyData::PropertyData()
@@ -302,62 +295,61 @@ DynamicQMetaObject::~DynamicQMetaObject()
     delete m_d;
 }
 
-void DynamicQMetaObject::addSignal(const char* signal, const char* type)
+void DynamicQMetaObject::addMethod(QMetaMethod::MethodType mtype, const char* signature, const char* type)
 {
-    int index = m_d->m_signals.indexOf(signal);
-    if (index != -1)
-        return;
-
-    //search for a empty space
+    int index = -1;
+    int counter = 0;
     MethodData blank;
-    index = m_d->m_signals.indexOf(blank);
-    if (index != -1) {
-        m_d->m_signals[index] = MethodData(signal, type);
-        m_d->updateMetaObject(this);
-        return;
+
+    QList<MethodData>::iterator it = m_d->m_methods.begin();
+    for (; it != m_d->m_methods.end(); ++it) {
+        if ((it->signature() == signature) && (it->methodType() == mtype))
+            return;
+        else if (*it == blank)
+            index = counter;
+        counter++;
     }
 
-    int maxSignals = maxSignalsCount(m_d->m_className);
-    if (m_d->m_signals.size() >= maxSignals) {
-        qWarning() << "Fail to add dynamic signal to QObject. PySide support at most" << maxSignals << "dynamic signals.";
-        return;
-    }
+    //has blank method
+    if (index != -1)
+        m_d->m_methods[index] = MethodData(mtype, signature, type);
+    else
+        m_d->m_methods << MethodData(mtype, signature, type);
 
-    m_d->m_signals << MethodData(signal, type);
     m_d->updateMetaObject(this);
 }
 
-void DynamicQMetaObject::addSlot(const char* slot, const char* type)
-{
-    int index = m_d->m_slots.indexOf(slot);
-    if (index != -1)
-        return;
-
-    //search for a empty space
-    MethodData blank;
-    index = m_d->m_slots.indexOf(blank);
-    if (index != -1) {
-        m_d->m_slots[index] = MethodData(slot, type);
-    } else if (m_d->m_slots.size() < maxSlotsCount(m_d->m_className)) {
-        m_d->m_slots << MethodData(slot, type);
-    } else {
-        qWarning() << "Fail to add dynamic slot to QObject. PySide support at most" << maxSlotsCount(m_d->m_className) << "dynamic slots.";
-        return;
-    }
-    m_d->updateMetaObject(this);
-}
-
-void DynamicQMetaObject::removeSlot(uint index)
+void DynamicQMetaObject::removeMethod(QMetaMethod::MethodType mtype, uint index)
 {
     const char* methodSig = method(index).signature();
-    QList<MethodData>::iterator it = m_d->m_slots.begin();
-    for (; it != m_d->m_slots.end(); ++it) {
-        if (it->signature() == methodSig) {
+    QList<MethodData>::iterator it = m_d->m_methods.begin();
+    for (; it != m_d->m_methods.end(); ++it) {
+        if ((it->signature() == methodSig) && (it->methodType() == mtype)){
             it->clear();
             m_d->updateMetaObject(this);
             break;
         }
     }
+}
+
+void DynamicQMetaObject::addSignal(const char* signal, const char* type)
+{
+    addMethod(QMetaMethod::Signal, signal, type);
+}
+
+void DynamicQMetaObject::addSlot(const char* slot, const char* type)
+{
+    addMethod(QMetaMethod::Slot, slot, type);
+}
+
+void DynamicQMetaObject::removeSlot(uint index)
+{
+    removeMethod(QMetaMethod::Slot, index);
+}
+
+void DynamicQMetaObject::removeSignal(uint index)
+{
+    removeMethod(QMetaMethod::Signal, index);
 }
 
 void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
@@ -372,8 +364,8 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
     if (property->d->notify) {
         const char* signalNotify = PySide::Property::getNotifyName(property);
         if (signalNotify) {
-            QByteArray signalSignature(signalNotify);
-            notifyId = m_d->m_signals.indexOf(signalNotify);
+            MethodData signalObject(QMetaMethod::Signal, signalNotify, "");
+            notifyId = m_d->m_methods.indexOf(signalObject);
         }
     }
 
@@ -388,31 +380,16 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
     m_d->updateMetaObject(this);
 }
 
-void DynamicQMetaObject::removeSignal(uint index)
-{
-    //Current Qt implementation does not support runtime remove signal
-    QMetaMethod m = method(index);
-    foreach(MethodData md, m_d->m_signals) {
-        if (md.signature() == m.signature()) {
-            md.clear();
-            m_d->updateMetaObject(this);
-            break;
-        }
-    }
-}
 
 void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList<MethodData>& methods,
                                                                      unsigned int** data,
                                                                      QList<QByteArray>* strings,
                                                                      int* prtIndex,
-                                                                     int maxCount,
                                                                      int nullIndex,
                                                                      int flags)
 {
     int index = *prtIndex;
-
     int emptyIndex = registerString(EMPTY_META_METHOD, strings);
-
     QList<MethodData>::const_iterator it = methods.begin();
 
     for (; it != methods.end(); ++it) {
@@ -423,50 +400,23 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList
         (*data)[index++] = nullIndex; // arguments
         (*data)[index++] = (it->type().size() > 0 ? registerString(it->type(), strings) : nullIndex); // normalized type
         (*data)[index++] = nullIndex; // tags
-        (*data)[index++] = flags;
-    }
-
-    for (int i = methods.count(); i < maxCount; ++i) {
-        (*data)[index++] = emptyIndex; // func name
-        (*data)[index++] = nullIndex; // arguments
-        (*data)[index++] = nullIndex; // normalized type
-        (*data)[index++] = nullIndex; // tags
-        (*data)[index++] = flags;
+        (*data)[index++] = flags  |  (it->methodType() == QMetaMethod::Signal ? MethodSignal : MethodSlot);
     }
     *prtIndex = index;
 }
 
 void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject* metaObj)
 {
-    // these values are from moc source code, generator.cpp:66
-    enum MethodFlags {
-        AccessPrivate = 0x00,
-        AccessProtected = 0x01,
-        AccessPublic = 0x02,
-        MethodMethod = 0x00,
-        MethodSignal = 0x04,
-        MethodSlot = 0x08,
-        MethodConstructor = 0x0c,
-        MethodCompatibility = 0x10,
-        MethodCloned = 0x20,
-        MethodScriptable = 0x40
-    };
-
-    int maxSignals = maxSignalsCount(m_className);
-    int maxSlots = maxSlotsCount(m_className);
-
-    uint n_signals = maxSignals;
-    uint n_methods = n_signals + maxSlots;
+    uint n_methods = m_methods.size();
     uint n_properties = m_properties.size();
-    int header[] = {5,            // revision
+    int header[] = {3,            // revision
                     0,            // class name index in m_metadata
                     0, 0,         // classinfo and classinfo index, not used by us
                     n_methods, 0, // method count and method list index
                     n_properties, 0, // prop count and prop indexes
                     0, 0,         // enum count and enum index
                     0, 0,         // constructors
-                    0,            // flags
-                    n_signals};
+                    0};           // flags
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
@@ -481,11 +431,8 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
     const int NULL_INDEX = registerString("", &strings); // register a null string
     int index = HEADER_LENGHT;
 
-    //write signals
-    writeMethodsData(m_signals, &data, &strings, &index, maxSignals, NULL_INDEX, AccessPublic | MethodSignal);
-
-    //write slots
-    writeMethodsData(m_slots, &data, &strings, &index, maxSlots, NULL_INDEX, AccessPublic | MethodSlot);
+    //write signals/slots
+    writeMethodsData(m_methods, &data, &strings, &index, NULL_INDEX, AccessPublic);
 
     if (m_properties.size())
         data[7] = index;

@@ -25,6 +25,7 @@
 
 #include <Python.h>
 #include <QByteArray>
+#include <QMetaMethod>
 
 #define GLOBAL_RECEIVER_CLASS_NAME "__GlobalReceiver__"
 
@@ -39,17 +40,18 @@ namespace PySide
          * \param signature method signature
          * \param type method return type
          */
-        MethodData(const char* signature, const char* type = 0);
+        MethodData(QMetaMethod::MethodType mtype, const char* signature, const char* type = 0);
         void clear();
         bool isValid() const;
         QByteArray signature() const;
         QByteArray type() const;
+        QMetaMethod::MethodType methodType() const;
         bool operator==(const MethodData& other) const;
-        bool operator==(const char* other) const;
 
     private:
         QByteArray m_signature;
         QByteArray m_type;
+        QMetaMethod::MethodType m_mtype;
         static const QByteArray m_emptySig;
     };
 

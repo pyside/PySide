@@ -26,6 +26,7 @@
 #include "pysidemacros.h"
 #include <Python.h>
 #include <QMetaObject>
+#include <QMetaMethod>
 
 namespace PySide
 {
@@ -36,6 +37,9 @@ public:
     DynamicQMetaObject(const char* className, const QMetaObject* metaObject);
     ~DynamicQMetaObject();
 
+
+    void addMethod(QMetaMethod::MethodType mtype, const char* signature, const char* type);
+    void removeMethod(QMetaMethod::MethodType mtype, uint index);
     void addSignal(const char* signal, const char* type = 0);
     void addSlot(const char* slot, const char* type = 0);
     void addProperty(const char* property, PyObject* data);
