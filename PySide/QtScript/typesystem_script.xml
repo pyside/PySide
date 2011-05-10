@@ -38,7 +38,7 @@
         <enum-type name="Extension"/>
     </object-type>
     <object-type name="QScriptEngine">
-        <enum-type name="QObjectWrapOption" flags="QScriptEngine::QObjectWrapOptions"/>
+        <enum-type name="QObjectWrapOption" flags="QObjectWrapOptions"/>
         <enum-type name="ValueOwnership"/>
     </object-type>
     <object-type name="QScriptExtensionInterface"/>
@@ -46,8 +46,8 @@
     <value-type name="QScriptProgram"/>
     <value-type name="QScriptString"/>
     <value-type name="QScriptValue">
-        <enum-type name="PropertyFlag" flags="QScriptValue::PropertyFlags"/>
-        <enum-type name="ResolveFlag" flags="QScriptValue::ResolveFlags"/>
+        <enum-type name="PropertyFlag" flags="PropertyFlags"/>
+        <enum-type name="ResolveFlag" flags="ResolveFlags"/>
         <enum-type name="SpecialValue"/>
     </value-type>
     <object-type name="QScriptValueIterator"/>

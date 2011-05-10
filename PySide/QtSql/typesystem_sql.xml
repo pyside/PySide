@@ -27,7 +27,7 @@
 
   <namespace-type name="QSql">
     <enum-type name="Location"/>
-    <enum-type name="ParamTypeFlag" flags="QSql::ParamType"/>
+    <enum-type name="ParamTypeFlag" flags="ParamType"/>
     <enum-type name="TableType"/>
     <enum-type name="NumericalPrecisionPolicy"/>
     <extra-includes>

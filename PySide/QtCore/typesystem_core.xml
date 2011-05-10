@@ -244,7 +244,7 @@
   <rejection class="QAbstractFileEngineIterator" function-name="entryInfo"/>
   <rejection class="QAbstractFileEngineIterator" enum-name="EntryInfoType"/>
   <namespace-type name="Qt">
-    <enum-type name="AlignmentFlag" flags="Qt::Alignment" />
+    <enum-type name="AlignmentFlag" flags="Alignment" />
     <enum-type name="AnchorAttribute"/>
     <enum-type name="AnchorPoint"/>
     <enum-type name="ApplicationAttribute"/>
@@ -263,33 +263,33 @@
     <enum-type name="CursorShape" />
     <enum-type name="DateFormat" />
     <enum-type name="DayOfWeek"/>
-    <enum-type name="DockWidgetArea" flags="Qt::DockWidgetAreas" />
+    <enum-type name="DockWidgetArea" flags="DockWidgetAreas" />
     <enum-type name="DockWidgetAreaSizes"/>
-    <enum-type name="DropAction" flags="Qt::DropActions"/>
+    <enum-type name="DropAction" flags="DropActions"/>
     <enum-type name="EventPriority"/>
     <enum-type name="FillRule"/>
     <enum-type name="FocusPolicy"/>
     <enum-type name="FocusReason"/>
-    <enum-type name="GestureFlag" flags="Qt::GestureFlags"/>
+    <enum-type name="GestureFlag" flags="GestureFlags"/>
     <enum-type name="GestureState"/>
     <enum-type name="GestureType"/>
     <enum-type name="GlobalColor"/>
     <enum-type name="HitTestAccuracy"/>
-    <enum-type name="ImageConversionFlag" flags="Qt::ImageConversionFlags" />
-    <enum-type name="InputMethodHint" flags="Qt::InputMethodHints"/>
+    <enum-type name="ImageConversionFlag" flags="ImageConversionFlags" />
+    <enum-type name="InputMethodHint" flags="InputMethodHints"/>
     <enum-type name="InputMethodQuery"/>
     <enum-type name="ItemDataRole" force-integer="yes" />
-    <enum-type name="ItemFlag" flags="Qt::ItemFlags"/>
+    <enum-type name="ItemFlag" flags="ItemFlags"/>
     <enum-type name="ItemSelectionMode"/>
     <enum-type name="Key" />
-    <enum-type name="KeyboardModifier" flags="Qt::KeyboardModifiers"/>
+    <enum-type name="KeyboardModifier" flags="KeyboardModifiers"/>
     <enum-type name="LayoutDirection"/>
     <enum-type name="MaskMode"/>
-    <enum-type name="MatchFlag" flags="Qt::MatchFlags"/>
+    <enum-type name="MatchFlag" flags="MatchFlags"/>
     <enum-type name="Modifier"/>
-    <enum-type name="MouseButton" flags="Qt::MouseButtons"/>
+    <enum-type name="MouseButton" flags="MouseButtons"/>
     <enum-type name="NavigationMode"/>
-    <enum-type name="Orientation" flags="Qt::Orientations"/>
+    <enum-type name="Orientation" flags="Orientations"/>
     <enum-type name="PenCapStyle"/>
     <enum-type name="PenJoinStyle"/>
     <enum-type name="PenStyle"/>
@@ -301,10 +301,10 @@
     <enum-type name="TextElideMode"/>
     <enum-type name="TextFlag"/>
     <enum-type name="TextFormat"/>
-    <enum-type name="TextInteractionFlag" flags="Qt::TextInteractionFlags"/>
+    <enum-type name="TextInteractionFlag" flags="TextInteractionFlags"/>
     <enum-type name="TileRule"/>
     <enum-type name="TimeSpec"/>
-    <enum-type name="ToolBarArea" flags="Qt::ToolBarAreas" />
+    <enum-type name="ToolBarArea" flags="ToolBarAreas" />
     <enum-type name="ToolBarAreaSizes"/>
     <enum-type name="ToolButtonStyle"/>
     <enum-type name="TouchPointState"/>
@@ -314,8 +314,8 @@
     <enum-type name="WidgetAttribute" />
     <enum-type name="WindowFrameSection"/>
     <enum-type name="WindowModality"/>
-    <enum-type name="WindowState" flags="Qt::WindowStates"/>
-    <enum-type name="WindowType" flags="Qt::WindowFlags"/>
+    <enum-type name="WindowState" flags="WindowStates"/>
+    <enum-type name="WindowType" flags="WindowFlags"/>
 
    <!--### These functions are part of QtGui, not QtCore -->
     <modify-function signature="codecForHtml(const QByteArray &amp;)" remove="all"/>
@@ -640,8 +640,8 @@
     </add-function>
   </value-type>
   <value-type name="QDir">
-    <enum-type name="Filter" flags="QDir::Filters"/>
-    <enum-type name="SortFlag" flags="QDir::SortFlags" />
+    <enum-type name="Filter" flags="Filters"/>
+    <enum-type name="SortFlag" flags="SortFlags" />
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
@@ -955,7 +955,7 @@
     <enum-type name="FormatType"/>
     <enum-type name="Language" />
     <enum-type name="MeasurementSystem"/>
-    <enum-type name="NumberOption" flags="QLocale::NumberOptions"/>
+    <enum-type name="NumberOption" flags="NumberOptions"/>
     <!--### All those C++ number types have the same representation in Python -->
     <modify-function signature="toString(qulonglong) const" remove="all"/>
     <modify-function signature="toString(ushort) const" remove="all"/>
@@ -1107,7 +1107,7 @@
     <modify-function signature="relock()" allow-thread="yes" />
   </object-type>
   <object-type name="QDirIterator">
-    <enum-type name="IteratorFlag" flags="QDirIterator::IteratorFlags"/>
+    <enum-type name="IteratorFlag" flags="IteratorFlags"/>
   </object-type>
   <object-type name="QThread">
     <enum-type name="Priority"/>
@@ -1435,7 +1435,7 @@
     </extra-includes>
   </object-type>
   <value-type name="QUrl" hash-function="PySide::hash">
-    <enum-type name="FormattingOption" flags="QUrl::FormattingOptions"/>
+    <enum-type name="FormattingOption" flags="FormattingOptions"/>
     <enum-type name="ParsingMode"/>
     <modify-documentation xpath='description/para[3]'>
         &lt;para>URLs can be represented in two forms: encoded or unencoded. The unencoded representation is suitable for showing to users, but the encoded representation is typically what you would send to a web server. For example, the unencoded URL &quot;http://bühler.example.com&quot; would be sent to the server as &quot;http://xn--bhler-kva.example.com/List%20of%20applicants.xml&quot;.&lt;/para>
@@ -1830,7 +1830,7 @@
     </add-function>
   </value-type>
   <value-type name="QTextBoundaryFinder">
-    <enum-type name="BoundaryReason" flags="QTextBoundaryFinder::BoundaryReasons"/>
+    <enum-type name="BoundaryReason" flags="BoundaryReasons"/>
     <enum-type name="BoundaryType"/>
     <!-- There's no QChar in PySide -->
     <modify-function signature="QTextBoundaryFinder(QTextBoundaryFinder::BoundaryType,const QChar*,int,unsigned char*,int)" remove="all"/>
@@ -1843,7 +1843,7 @@
     <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag>)" allow-thread="yes"/>
   </object-type>
   <object-type name="QEventLoop">
-      <enum-type name="ProcessEventsFlag" flags="QEventLoop::ProcessEventsFlags"/>
+      <enum-type name="ProcessEventsFlag" flags="ProcessEventsFlags"/>
       <modify-function signature="exec(QFlags&lt;QEventLoop::ProcessEventsFlag>)" rename="exec_" allow-thread="yes" />
       <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag>)" allow-thread="yes" />
       <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag>, int)" allow-thread="yes" />
@@ -1851,7 +1851,7 @@
   <object-type name="QFile">
     <enum-type name="FileError"/>
     <enum-type name="MemoryMapFlags"/>
-    <enum-type name="Permission" flags="QFile::Permissions"/>
+    <enum-type name="Permission" flags="Permissions"/>
     <extra-includes>
       <include file-name="QAbstractFileEngine" location="global"/>
     </extra-includes>
@@ -1882,7 +1882,7 @@
     <modify-function signature="flush()" allow-thread="yes"/>
   </object-type>
   <object-type name="QIODevice">
-    <enum-type name="OpenModeFlag" flags="QIODevice::OpenMode"/>
+    <enum-type name="OpenModeFlag" flags="OpenMode"/>
     <modify-function signature="open(QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes"/>
     <modify-function signature="close()" allow-thread="yes"/>
     <modify-function signature="seek(qint64)" allow-thread="yes"/>
@@ -2012,7 +2012,7 @@
     </extra-includes>
   </object-type>
   <object-type name="QTextCodec">
-    <enum-type name="ConversionFlag" flags="QTextCodec::ConversionFlags"/>
+    <enum-type name="ConversionFlag" flags="ConversionFlags"/>
 
     <object-type name="ConverterState">
       <include file-name="QTextCodec" location="global"/>
@@ -2166,7 +2166,7 @@
   <!-- <object-type name="QAbstractFileEngine::UnMapExtensionOption" /> -->
   <object-type name="QAbstractFileEngine">
     <enum-type name="Extension" extensible="yes"/>
-    <enum-type name="FileFlag" flags="QAbstractFileEngine::FileFlags"/>
+    <enum-type name="FileFlag" flags="FileFlags"/>
     <enum-type name="FileName"/>
     <enum-type name="FileOwner"/>
     <enum-type name="FileTime"/>
@@ -2646,7 +2646,7 @@
   </value-type>
   <object-type name="QTextStream" stream="yes">
     <enum-type name="FieldAlignment"/>
-    <enum-type name="NumberFlag" flags="QTextStream::NumberFlags"/>
+    <enum-type name="NumberFlag" flags="NumberFlags"/>
     <enum-type name="RealNumberNotation"/>
     <enum-type name="Status"/>
     <!-- Removed because it expect QString to be mutable -->
@@ -2689,7 +2689,7 @@
     <enum-type name="SystemSemaphoreError"/>
   </object-type>
   <namespace-type name="QtConcurrent" target-type="class">
-    <enum-type name="ReduceOption" flags="QtConcurrent::ReduceOptions"/>
+    <enum-type name="ReduceOption" flags="ReduceOptions"/>
     <extra-includes>
       <include file-name="qtconcurrentreducekernel.h" location="global"/>
       <include file-name="qtconcurrentthreadengine.h" location="global"/>

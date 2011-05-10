@@ -25,7 +25,7 @@
   <rejection class="QGLContext" field-name="currentCtx"/>
 
   <namespace-type name="QGL">
-    <enum-type name="FormatOption" flags="QGL::FormatOptions" force-integer="yes"/>
+    <enum-type name="FormatOption" flags="FormatOptions" force-integer="yes"/>
     <extra-includes>
         <include file-name="qgl.h" location="global"/>
     </extra-includes>
@@ -39,12 +39,12 @@
 
   <value-type name="QGLFormat">
     <enum-type name="OpenGLContextProfile" since="4.7"/>
-    <enum-type name="OpenGLVersionFlag" flags="QGLFormat::OpenGLVersionFlags"/>
+    <enum-type name="OpenGLVersionFlag" flags="OpenGLVersionFlags"/>
   </value-type>
 
   <rejection class="QGLContext" field-name="currentCtx" />
   <object-type name="QGLContext">
-    <enum-type name="BindOption" flags="QGLContext::BindOptions"/>
+    <enum-type name="BindOption" flags="BindOptions"/>
     <modify-function signature="chooseContext(const QGLContext*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -89,7 +89,7 @@
 
   <value-type name="QGLFramebufferObjectFormat"/>
   <object-type name="QGLShader">
-    <enum-type name="ShaderTypeBit" flags="QGLShader::ShaderType"/>
+    <enum-type name="ShaderTypeBit" flags="ShaderType"/>
   </object-type>
   <object-type name="QGLShaderProgram">
     <!-- ### Use QMatrixZxY overloads -->
