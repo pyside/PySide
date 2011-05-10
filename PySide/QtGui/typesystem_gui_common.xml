@@ -1158,6 +1158,43 @@
           }
         </inject-code>
     </add-function>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+          switch(%CPPSELF.spec()) {
+          case QColor::Rgb:
+          {
+                int r, g, b, a;
+                %CPPSELF.getRgb(&amp;r, &amp;g, &amp;b, &amp;a);
+                %PYARG_0 = Py_BuildValue("iiii", r, g, b, a);
+                break;
+          }
+          case QColor::Hsv:
+          {
+                int h, s, v, a;
+                %CPPSELF.getHsv(&amp;h, &amp;s, &amp;v, &amp;a);
+                %PYARG_0 = Py_BuildValue("iiii", h, s, v, a);
+                break;
+          }
+          case QColor::Cmyk:
+          {
+                int c, m, y, k, a;
+                %CPPSELF.getCmyk(&amp;c, &amp;m, &amp;y, &amp;k, &amp;a);
+                %PYARG_0 = Py_BuildValue("iiiii", c, m, y, k, a);
+                break;
+          }
+          case QColor::Hsl:
+          {
+                int h, s, l, a;
+                %CPPSELF.getHsv(&amp;h, &amp;s, &amp;l, &amp;a);
+                %PYARG_0 = Py_BuildValue("iiii", h, s, l, a);
+                break;
+          }
+          default:
+                %PYARG_0 = 0;
+          }
+        </inject-code>
+    </add-function>
     <!-- ### "QColor(QColor::Spec)" is an internal method. -->
     <modify-function signature="QColor(QColor::Spec)" remove="all"/>
     <!-- ### Constructor removed because we already have an overload using QString. -->
@@ -6533,6 +6570,16 @@
             </insert-template>
         </inject-code>
     </add-function>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="dd" />
+                <replace from="%TT_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
   </value-type>
   <value-type name="QVector3D" since="4.6">
     <extra-includes>
@@ -6555,6 +6602,16 @@
             </insert-template>
         </inject-code>
     </add-function>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="ddd" />
+                <replace from="%TT_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
   </value-type>
   <value-type name="QVector4D" since="4.6">
     <extra-includes>
@@ -6574,6 +6631,15 @@
             <insert-template name="reduce_code">
               <replace from="%REDUCE_FORMAT" to="dddd" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z(), %CPPSELF.w()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="dddd" />
+                <replace from="%TT_ARGS" to="%CPPSELF.x(), %CPPSELF.y(), %CPPSELF.z(), %CPPSELF.w()" />
             </insert-template>
         </inject-code>
     </add-function>
