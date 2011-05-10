@@ -455,6 +455,15 @@
           }
       };
     </inject-code>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="iiii" />
+                <replace from="%TT_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" /> 
+            </insert-template>
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QLineF">
     <enum-type name="IntersectType" />
@@ -472,6 +481,15 @@
             <insert-template name="reduce_code">
               <replace from="%REDUCE_FORMAT" to="dddd" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="dddd" />
+                <replace from="%TT_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" /> 
             </insert-template>
         </inject-code>
     </add-function>
@@ -677,6 +695,16 @@
           }
       };
     </inject-code>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="ii" />
+                <replace from="%TT_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
     <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rx()" remove="all"/>
     <modify-function signature="ry()" remove="all"/>
@@ -700,6 +728,16 @@
             </insert-template>
         </inject-code>
     </add-function>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="dd" />
+                <replace from="%TT_ARGS" to="%CPPSELF.x(), %CPPSELF.y()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
     <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rx()" remove="all"/>
     <modify-function signature="ry()" remove="all"/>
@@ -866,6 +904,16 @@
           }
       };
     </inject-code>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="ii" />
+                <replace from="%TT_ARGS" to="%CPPSELF.width(), %CPPSELF.height()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
     <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rheight()" remove="all"/>
     <modify-function signature="rwidth()" remove="all"/>
@@ -889,6 +937,16 @@
             </insert-template>
         </inject-code>
     </add-function>
+
+    <add-function signature="toTuple" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="to_tuple">
+                <replace from="%TT_FORMAT" to="dd" />
+                <replace from="%TT_ARGS" to="%CPPSELF.width(), %CPPSELF.height()" />
+            </insert-template>
+        </inject-code>
+    </add-function>
+
     <!--### Functions removed because they return references to Python imutable objects -->
     <modify-function signature="rheight()" remove="all" />
     <modify-function signature="rwidth()" remove="all" />
