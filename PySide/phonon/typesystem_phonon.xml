@@ -129,7 +129,7 @@
         <object-type name="VolumeFaderInterface"/>
 
         <value-type name="EffectParameter">
-            <enum-type name="Hint" flags="Phonon::EffectParameter::Hints"/>
+            <enum-type name="Hint" flags="Hints"/>
             <!-- ### Internal methods and ctors -->
             <modify-function signature="EffectParameter()" remove="all"/>
             <modify-function signature="operator&lt;(const Phonon::EffectParameter &amp;)const" remove="all"/>
@@ -265,7 +265,7 @@
         <object-type name="Effect"/>
         <object-type name="EffectWidget"/>
         <object-type name="MediaController">
-            <enum-type name="Feature" flags="Phonon::MediaController::Features"/>
+            <enum-type name="Feature" flags="Features"/>
             <enum-type name="NavigationMenu"/>
         </object-type>
         <object-type name="MediaObject" />

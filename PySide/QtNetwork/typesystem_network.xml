@@ -128,7 +128,7 @@
     </object-type>
     <object-type name="QTcpSocket"/>
     <object-type name="QUdpSocket">
-        <enum-type name="BindFlag" flags="QUdpSocket::BindMode"/>
+        <enum-type name="BindFlag" flags="BindMode"/>
         <extra-includes>
             <include file-name="autoarraypointer.h" location="global"/>
         </extra-includes>
@@ -222,11 +222,11 @@
     <value-type name="QNetworkAddressEntry" />
 
     <value-type name="QNetworkInterface">
-        <enum-type name="InterfaceFlag" flags="QNetworkInterface::InterfaceFlags"/>
+        <enum-type name="InterfaceFlag" flags="InterfaceFlags"/>
     </value-type>
 
     <value-type name="QNetworkProxy">
-        <enum-type name="Capability" flags="QNetworkProxy::Capabilities" />
+        <enum-type name="Capability" flags="Capabilities" />
         <enum-type name="ProxyType"/>
     </value-type>
 
@@ -304,11 +304,11 @@
     <value-type name="QNetworkConfiguration" since="4.7">
         <enum-type name="BearerType" />
         <enum-type name="Purpose" since="4.7"/>
-        <enum-type name="StateFlag" flags="QNetworkConfiguration::StateFlags" since="4.7"/>
+        <enum-type name="StateFlag" flags="StateFlags" since="4.7"/>
         <enum-type name="Type" since="4.7"/>
     </value-type>
     <object-type name="QNetworkConfigurationManager" since="4.7">
-        <enum-type name="Capability" flags="QNetworkConfigurationManager::Capabilities" since="4.7"/>
+        <enum-type name="Capability" flags="Capabilities" since="4.7"/>
     </object-type>
     <object-type name="QNetworkSession" since="4.7">
         <enum-type name="SessionError" since="4.7"/>

@@ -76,7 +76,7 @@
     <enum-type name="WebGraphic"/>
   </object-type>
   <object-type name="QWebPage">
-    <enum-type name="FindFlag" flags="QWebPage::FindFlags"/>
+    <enum-type name="FindFlag" flags="FindFlags"/>
     <enum-type name="LinkDelegationPolicy"/>
     <enum-type name="NavigationType"/>
     <enum-type name="WebAction"/>
