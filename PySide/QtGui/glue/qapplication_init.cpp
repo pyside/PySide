@@ -5,38 +5,22 @@ static int QApplicationArgCount;
 static char** QApplicationArgValues;
 static const char QAPP_MACRO[] = "qApp";
 
-int Sbk_QApplication_Init(PyObject* self, PyObject* args, PyObject*)
+void QApplication_constructor(PyObject* self, PyObject* args, QApplicationWrapper** cptr)
 {
-    if (Shiboken::Object::isUserType(self) && !Shiboken::ObjectType::canCallConstructor(self->ob_type, Shiboken::SbkType<QApplication>()))
-        return -1;
-
     if (QApplication::instance()) {
         PyErr_SetString(PyExc_RuntimeError, "A QApplication instance already exists.");
-        return -1;
+        return;
     }
 
     int numArgs = PyTuple_GET_SIZE(args);
-    if (numArgs != 1) {
+    if (numArgs != 1
+        || !Shiboken::sequenceToArgcArgv(PyTuple_GET_ITEM(args, 0), &QApplicationArgCount, &QApplicationArgValues, "PySideApp")) {
         PyErr_BadArgument();
-        return -1;
+        return;
     }
 
-    if (!Shiboken::sequenceToArgcArgv(PyTuple_GET_ITEM(args, 0), &QApplicationArgCount, &QApplicationArgValues, "PySideApp")) {
-        PyErr_BadArgument();
-        return -1;
-    }
-
-    SbkObject* sbkSelf = reinterpret_cast<SbkObject*>(self);
-    QApplicationWrapper* cptr = new QApplicationWrapper(QApplicationArgCount, QApplicationArgValues);
-    Shiboken::Object::setCppPointer(sbkSelf,
-                                     Shiboken::SbkType<QApplication>(),
-                                     cptr);
-    Shiboken::Object::setValidCpp(sbkSelf, true);
-    Shiboken::Object::setHasCppWrapper(sbkSelf, true);
-    Shiboken::Object::releaseOwnership(sbkSelf);
-    Shiboken::BindingManager::instance().registerWrapper(sbkSelf, cptr);
-    PySide::Signal::updateSourceObject(self);
-    cptr->metaObject();
+    *cptr = new QApplicationWrapper(QApplicationArgCount, QApplicationArgValues);
+    Shiboken::Object::releaseOwnership(reinterpret_cast<SbkObject*>(self));
 
     // Verify if qApp is in main module
     PyObject* globalsDict = PyEval_GetGlobals();
@@ -49,5 +33,4 @@ int Sbk_QApplication_Init(PyObject* self, PyObject* args, PyObject*)
     PyObject_SetAttrString(moduleQtGui, QAPP_MACRO, self);
     PySide::registerCleanupFunction(&PySide::destroyQCoreApplication);
     Py_INCREF(self);
-    return 1;
 }
