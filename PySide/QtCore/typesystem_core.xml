@@ -2302,6 +2302,11 @@
     in a more convenient form by the :meth:`~QCoreApplication.arguments()`
     method.
     </inject-documentation>
+    <add-function signature="QCoreApplication(PySequence)">
+        <inject-code>
+            QCoreApplication_constructor(%PYSELF, args, &amp;%0);
+        </inject-code>
+    </add-function>
     <!-- blocking functions -->
     <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag&gt;, int)" allow-thread="yes"/>
     <modify-function signature="processEvents(QFlags&lt;QEventLoop::ProcessEventsFlag&gt;)" allow-thread="yes"/>

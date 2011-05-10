@@ -5286,6 +5286,11 @@
       <include file-name="QStyle" location="global"/>
     </extra-includes>
     <modify-function signature="QApplication(int&amp;,char**)" access="private" />
+    <add-function signature="QApplication(PySequence)">
+        <inject-code>
+            QApplication_constructor(%PYSELF, args, &amp;%0);
+        </inject-code>
+    </add-function>
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
     <inject-code class="native" file="glue/qapplication_init.cpp" position="beginning" />
 
