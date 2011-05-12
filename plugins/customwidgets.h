@@ -44,7 +44,7 @@ public:
     void registerWidgetType(PyObject* widget);
 
 private:
-    QScopedPointer<PyCustomWidgetsPrivate> m_data;
+    PyCustomWidgetsPrivate* m_data;
 };
 
 #endif

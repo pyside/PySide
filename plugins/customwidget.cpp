@@ -40,6 +40,7 @@ PyCustomWidget::PyCustomWidget(PyObject* objectType)
 
 PyCustomWidget::~PyCustomWidget()
 {
+    delete m_data;
 }
 
 bool PyCustomWidget::isContainer() const
