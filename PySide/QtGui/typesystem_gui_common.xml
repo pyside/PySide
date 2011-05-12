@@ -3297,7 +3297,7 @@
 
     <modify-function signature="destroyItemGroup(QGraphicsItemGroup*)">
         <inject-code>
-            Shiboken::AutoDecRef parent(%CONVERTTOPYTHON[QGraphicsItem*](%1->parentObject()));
+            Shiboken::AutoDecRef parent(%CONVERTTOPYTHON[QGraphicsItem*](%1->parentItem()));
             foreach (QGraphicsItem* item, %1->children())
                 Shiboken::Object::setParent(parent, %CONVERTTOPYTHON[QGraphicsItem*](item));
             %BEGIN_ALLOW_THREADS
