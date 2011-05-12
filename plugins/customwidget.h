@@ -51,7 +51,7 @@ public:
     void initialize(QDesignerFormEditorInterface *core);
 
 private:
-    QScopedPointer<PyCustomWidgetPrivate> m_data;
+    PyCustomWidgetPrivate* m_data;
     QString m_name;
 };
 

@@ -52,6 +52,7 @@ PyCustomWidgets::PyCustomWidgets(QObject *parent)
 
 PyCustomWidgets::~PyCustomWidgets()
 {
+    delete m_data;
 }
 
 void PyCustomWidgets::registerWidgetType(PyObject* widget)
