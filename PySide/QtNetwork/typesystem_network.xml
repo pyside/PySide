@@ -37,7 +37,7 @@
     <object-type name="QAbstractSocket">
         <enum-type name="NetworkLayerProtocol"/>
         <enum-type name="SocketError"/>
-        <enum-type name="SocketOption"/>
+        <enum-type name="SocketOption" since="4.6"/>
         <enum-type name="SocketState"/>
         <enum-type name="SocketType"/>
         <modify-function signature="connectToHost(const QString&amp;, quint16, QFlags&lt;QIODevice::OpenModeFlag>)" allow-thread="yes" />
@@ -191,7 +191,7 @@
         <modify-function signature="post(const QNetworkRequest &amp;, const QByteArray &amp;)" allow-thread="yes"/>
         <modify-function signature="put(const QNetworkRequest &amp;, QIODevice *)" allow-thread="yes"/>
         <modify-function signature="put(const QNetworkRequest &amp;, const QByteArray &amp;)" allow-thread="yes"/>
-        <modify-function signature="sendCustomRequest(const QNetworkRequest &amp;, const QByteArray &amp;, QIODevice *)" allow-thread="yes"/>
+        <modify-function signature="sendCustomRequest(const QNetworkRequest &amp;, const QByteArray &amp;, QIODevice *)" allow-thread="yes" since="4.7" />
         <modify-function signature="setCookieJar(QNetworkCookieJar*)">
             <modify-argument index="1">
                 <define-ownership class="target" owner="c++"/>

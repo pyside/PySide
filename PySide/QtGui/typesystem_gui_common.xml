@@ -1222,7 +1222,7 @@
             <insert-template name="fix_qreal*,qreal*,qreal*,qreal*,qreal*"/>
         </inject-code>
     </modify-function>
-    <modify-function signature="getHsl(int*,int*,int*,int*)const">
+    <modify-function signature="getHsl(int*,int*,int*,int*)const" since="4.6">
         <modify-argument index="0">
             <replace-type modified-type="PyObject *" />
         </modify-argument>
@@ -1245,7 +1245,7 @@
             </insert-template>
         </inject-code>
     </modify-function>
-    <modify-function signature="getHslF(qreal*,qreal*,qreal*,qreal*)const">
+    <modify-function signature="getHslF(qreal*,qreal*,qreal*,qreal*)const" since="4.6">
         <modify-argument index="0">
             <replace-type modified-type="PyObject *" />
         </modify-argument>
@@ -1582,7 +1582,7 @@
     <enum-type name="Extension"/>
     <enum-type name="GraphicsItemChange"/>
     <enum-type name="GraphicsItemFlag" flags="GraphicsItemFlags"/>
-    <enum-type name="PanelModality"/>
+    <enum-type name="PanelModality" since="4.6"/>
     <inject-code class="target" position="end">
         PyObject* userTypeConstant =  PyInt_FromLong(QGraphicsItem::UserType);
         PyDict_SetItemString(Sbk_QGraphicsItem_Type.super.ht_type.tp_dict, "UserType", userTypeConstant);
@@ -1658,7 +1658,7 @@
     <modify-function signature="inputMethodEvent(QInputMethodEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="isBlockedByModalPanel(QGraphicsItem**)const">
+    <modify-function signature="isBlockedByModalPanel(QGraphicsItem**)const" since="4.6">
       <modify-argument index="1">
         <remove-argument/>
       </modify-argument>
@@ -2846,7 +2846,7 @@
   <object-type name="QMouseEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::MouseButtonDblClick || %1-&gt;type() == QEvent::MouseButtonPress || %1-&gt;type() == QEvent::MouseButtonRelease || %1-&gt;type() == QEvent::MouseMove"/>
   <object-type name="QPaintEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::Paint"/>
   <object-type name="QAccessibleEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::AccessibilityDescription || %1-&gt;type() == QEvent::AccessibilityHelp"/>
-  <object-type name="QGestureEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Gesture || %1-&gt;type() == QEvent::GestureOverride">
+  <object-type name="QGestureEvent" polymorphic-id-expression="%1-&gt;type() == QEvent::Gesture || %1-&gt;type() == QEvent::GestureOverride" since="4.6">
     <modify-function signature="activeGestures()const">
       <modify-argument index="return">
         <define-ownership owner="default"/>
@@ -2880,7 +2880,7 @@
     <enum-type name="ControlElement" extensible="yes"/>
     <enum-type name="PixelMetric" extensible="yes" />
     <enum-type name="PrimitiveElement" extensible="yes" />
-    <enum-type name="RequestSoftwareInputPanel"/>
+    <enum-type name="RequestSoftwareInputPanel" since="4.6"/>
     <enum-type name="StandardPixmap" extensible="yes"/>
     <enum-type name="StateFlag" flags="State"/>
     <enum-type name="StyleHint" extensible="yes" />
@@ -5103,8 +5103,8 @@
   <object-type name="QAction">
     <enum-type name="ActionEvent"/>
     <enum-type name="MenuRole"/>
-    <enum-type name="Priority"/>
-    <enum-type name="SoftKeyRole"/>
+    <enum-type name="Priority" since="4.6"/>
+    <enum-type name="SoftKeyRole" since="4.6"/>
     <modify-function signature="setMenu(QMenu*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -5786,7 +5786,7 @@
     </modify-function>
   </object-type>
 
-  <value-type name="QMatrix2x2">
+  <value-type name="QMatrix2x2" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -5856,7 +5856,7 @@
     <add-function signature="operator==(const QMatrix2x2&amp;)" return-type="bool" />
   </value-type>
 
-  <value-type name="QMatrix2x3">
+  <value-type name="QMatrix2x3" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -5926,7 +5926,7 @@
     <add-function signature="operator==(const QMatrix2x3&amp;)" return-type="bool" />
   </value-type>
 
-  <value-type name="QMatrix2x4">
+  <value-type name="QMatrix2x4" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -5996,7 +5996,7 @@
     <add-function signature="operator==(const QMatrix2x4&amp;)" return-type="bool" />
  </value-type>
 
-  <value-type name="QMatrix3x2">
+  <value-type name="QMatrix3x2" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -6066,7 +6066,7 @@
     <add-function signature="operator==(const QMatrix3x2&amp;)" return-type="bool" />
   </value-type>
 
-  <value-type name="QMatrix3x3">
+  <value-type name="QMatrix3x3" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -6136,7 +6136,7 @@
     <add-function signature="operator==(const QMatrix3x3&amp;)" return-type="bool" />
   </value-type>
 
-  <value-type name="QMatrix3x4">
+  <value-type name="QMatrix3x4" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -6206,7 +6206,7 @@
     <add-function signature="operator==(const QMatrix3x4&amp;)" return-type="bool" />
   </value-type>
 
-  <value-type name="QMatrix4x2">
+  <value-type name="QMatrix4x2" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -6276,7 +6276,7 @@
     <add-function signature="operator==(const QMatrix4x2&amp;)" return-type="bool" />
   </value-type>
 
-  <value-type name="QMatrix4x3">
+  <value-type name="QMatrix4x3" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -6346,8 +6346,7 @@
     <add-function signature="operator==(const QMatrix4x3&amp;)" return-type="bool" />
   </value-type>
 
-
-  <value-type name="QMatrix4x4">
+  <value-type name="QMatrix4x4" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code_matrix">
@@ -6437,23 +6436,23 @@
     </add-function>
   </value-type>
 
-  <object-type name="QGesture">
+  <object-type name="QGesture" since="4.6">
       <enum-type name="GestureCancelPolicy"/>
   </object-type>
-  <object-type name="QGestureRecognizer">
+  <object-type name="QGestureRecognizer" since="4.6">
       <enum-type name="ResultFlag" flags="Result"/>
   </object-type>
-  <object-type name="QTapAndHoldGesture"/>
-  <object-type name="QTapGesture"/>
-  <object-type name="QGraphicsAnchor"/>
-  <object-type name="QGraphicsAnchorLayout"/>
-  <object-type name="QGraphicsBlurEffect">
+  <object-type name="QTapAndHoldGesture" since="4.6"/>
+  <object-type name="QTapGesture" since="4.6"/>
+  <object-type name="QGraphicsAnchor" since="4.6"/>
+  <object-type name="QGraphicsAnchorLayout" since="4.6"/>
+  <object-type name="QGraphicsBlurEffect" since="4.6">
       <enum-type name="BlurHint" flags="BlurHints"/>
   </object-type>
-  <object-type name="QGraphicsColorizeEffect"/>
-  <object-type name="QGraphicsDropShadowEffect"/>
+  <object-type name="QGraphicsColorizeEffect" since="4.6"/>
+  <object-type name="QGraphicsDropShadowEffect" since="4.6"/>
 
-  <object-type name="QGraphicsEffect">
+  <object-type name="QGraphicsEffect" since="4.6">
       <enum-type name="ChangeFlag" flags="ChangeFlags"/>
       <enum-type name="PixmapPadMode"/>
   </object-type>
@@ -6462,18 +6461,18 @@
   <object-type name="QGraphicsEffectSource"/>
   -->
 
-  <object-type name="QGraphicsObject" />
-  <object-type name="QGraphicsOpacityEffect"/>
-  <object-type name="QGraphicsRotation"/>
-  <object-type name="QGraphicsScale"/>
-  <object-type name="QGraphicsTransform"/>
-  <object-type name="QKeyEventTransition"/>
-  <object-type name="QMouseEventTransition"/>
-  <object-type name="QPanGesture"/>
-  <object-type name="QPinchGesture">
+  <object-type name="QGraphicsObject" since="4.6" />
+  <object-type name="QGraphicsOpacityEffect" since="4.6"/>
+  <object-type name="QGraphicsRotation" since="4.6"/>
+  <object-type name="QGraphicsScale" since="4.6"/>
+  <object-type name="QGraphicsTransform" since="4.6"/>
+  <object-type name="QKeyEventTransition" since="4.6"/>
+  <object-type name="QMouseEventTransition" since="4.6"/>
+  <object-type name="QPanGesture" since="4.6"/>
+  <object-type name="QPinchGesture" since="4.6">
       <enum-type name="ChangeFlag" flags="ChangeFlags"/>
   </object-type>
-  <value-type name="QQuaternion">
+  <value-type name="QQuaternion" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code">
@@ -6505,18 +6504,18 @@
   </object-type>
   -->
 
-  <object-type name="QSwipeGesture">
+  <object-type name="QSwipeGesture" since="4.6">
       <enum-type name="SwipeDirection"/>
   </object-type>
 
-  <value-type name="QTileRules"/>
+  <value-type name="QTileRules" since="4.6"/>
 
-  <object-type name="QTouchEvent">
+  <object-type name="QTouchEvent" since="4.6">
       <enum-type name="DeviceType"/>
-      <value-type name="TouchPoint"/>
+      <value-type name="TouchPoint" since="4.6"/>
   </object-type>
 
-  <value-type name="QVector2D">
+  <value-type name="QVector2D" since="4.6">
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code">
@@ -6535,7 +6534,7 @@
         </inject-code>
     </add-function>
   </value-type>
-  <value-type name="QVector3D">
+  <value-type name="QVector3D" since="4.6">
     <extra-includes>
       <include file-name="QMatrix4x4" location="global"/>
     </extra-includes>
@@ -6557,7 +6556,7 @@
         </inject-code>
     </add-function>
   </value-type>
-  <value-type name="QVector4D">
+  <value-type name="QVector4D" since="4.6">
     <extra-includes>
       <include file-name="QMatrix4x4" location="global"/>
     </extra-includes>

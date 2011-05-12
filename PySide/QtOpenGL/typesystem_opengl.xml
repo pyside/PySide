@@ -44,7 +44,7 @@
 
   <rejection class="QGLContext" field-name="currentCtx" />
   <object-type name="QGLContext">
-    <enum-type name="BindOption" flags="BindOptions"/>
+    <enum-type name="BindOption" flags="BindOptions" since="4.6"/>
     <modify-function signature="chooseContext(const QGLContext*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -87,11 +87,11 @@
     <!-- ### -->
   </object-type>
 
-  <value-type name="QGLFramebufferObjectFormat"/>
-  <object-type name="QGLShader">
+  <value-type name="QGLFramebufferObjectFormat" since="4.6"/>
+  <object-type name="QGLShader" since="4.6">
     <enum-type name="ShaderTypeBit" flags="ShaderType"/>
   </object-type>
-  <object-type name="QGLShaderProgram">
+  <object-type name="QGLShaderProgram" since="4.6">
     <!-- ### Use QMatrixZxY overloads -->
     <modify-function signature="setUniformValue(int, Array)" remove="all" />
     <modify-function signature="setUniformValue(const char*, Array)" remove="all" />
