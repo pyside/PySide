@@ -24,7 +24,7 @@
 
     <object-type name="QScriptEngineDebugger">
         <enum-type name="DebuggerAction"/>
-        <enum-type name="DebuggerState"/>
+        <enum-type name="DebuggerState" since="4.6"/>
         <enum-type name="DebuggerWidget"/>
         <extra-includes>
             <include file-name="QScriptEngine" location="global"/>

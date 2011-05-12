@@ -21,8 +21,8 @@
 <typesystem package="PySide.QtXmlPatterns">
     <load-typesystem name="typesystem_core.xml" generate="no"/>
 
-    <object-type name="QXmlSchema"/> <!-- Qt scoped pointer does not allow declare this as value type -->
-    <object-type name="QXmlSchemaValidator">
+    <object-type name="QXmlSchema" since="4.6" /> <!-- Qt scoped pointer does not allow declare this as value type -->
+    <object-type name="QXmlSchemaValidator" since="4.6">
       <modify-function signature="schema() const">
         <modify-argument index="return">
           <replace-type modified-type="QXmlSchema*"/>

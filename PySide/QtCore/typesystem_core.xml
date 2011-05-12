@@ -22,26 +22,26 @@
     <load-typesystem name="typesystem_templates.xml" generate="no"/>
 
     <function signature="qAcos(qreal)" />
-    <function signature="qAsin(qreal)" />
-    <function signature="qAtan(qreal)" />
-    <function signature="qAtan2(qreal,qreal)" />
+    <function signature="qAsin(qreal)" since="4.6" />
+    <function signature="qAtan(qreal)" since="4.6" />
+    <function signature="qAtan2(qreal,qreal)" since="4.6" />
     <function signature="qChecksum(const char*,uint)" />
     <function signature="qCritical(const char*)" />
     <function signature="qDebug(const char*)" />
-    <function signature="qExp(qreal)" />
-    <function signature="qFabs(qreal)" />
-    <function signature="qFastCos(qreal)" />
-    <function signature="qFastSin(qreal)" />
+    <function signature="qExp(qreal)" since="4.6" />
+    <function signature="qFabs(qreal)" since="4.6" />
+    <function signature="qFastCos(qreal)" since="4.6"/>
+    <function signature="qFastSin(qreal)" since="4.6" />
     <function signature="qFatal(const char*)" />
     <function signature="qFuzzyCompare(double,double)" />
-    <function signature="qFuzzyIsNull(double)" />
+    <function signature="qFuzzyIsNull(double)" since="4.6" />
     <function signature="qIsFinite(double)" />
     <function signature="qIsInf(double)" />
     <function signature="qIsNaN(double)" />
     <function signature="qIsNull(double)" />
     <function signature="qRound(qreal)" />
-    <function signature="qTan(qreal)" />
-    <function signature="qtTrId(const char *, int)" />
+    <function signature="qTan(qreal)" since="4.6" />
+    <function signature="qtTrId(const char *, int)" since="4.6" />
     <function signature="qVersion()" />
     <function signature="qWarning(const char*)" />
     <function signature="qrand()" />
@@ -246,7 +246,7 @@
   <namespace-type name="Qt">
     <enum-type name="AlignmentFlag" flags="Alignment" />
     <enum-type name="AnchorAttribute"/>
-    <enum-type name="AnchorPoint"/>
+    <enum-type name="AnchorPoint" since="4.6" />
     <enum-type name="ApplicationAttribute"/>
     <enum-type name="ArrowType"/>
     <enum-type name="AspectRatioMode"/>
@@ -258,7 +258,7 @@
     <enum-type name="ClipOperation"/>
     <enum-type name="ConnectionType"/>
     <enum-type name="ContextMenuPolicy"/>
-    <enum-type name="CoordinateSystem"/>
+    <enum-type name="CoordinateSystem" since="4.6"/>
     <enum-type name="Corner"/>
     <enum-type name="CursorShape" />
     <enum-type name="DateFormat" />
@@ -270,13 +270,13 @@
     <enum-type name="FillRule"/>
     <enum-type name="FocusPolicy"/>
     <enum-type name="FocusReason"/>
-    <enum-type name="GestureFlag" flags="GestureFlags"/>
-    <enum-type name="GestureState"/>
-    <enum-type name="GestureType"/>
+    <enum-type name="GestureFlag" flags="GestureFlags" since="4.6"/>
+    <enum-type name="GestureState" since="4.6"/>
+    <enum-type name="GestureType" since="4.6"/>
     <enum-type name="GlobalColor"/>
     <enum-type name="HitTestAccuracy"/>
     <enum-type name="ImageConversionFlag" flags="ImageConversionFlags" />
-    <enum-type name="InputMethodHint" flags="InputMethodHints"/>
+    <enum-type name="InputMethodHint" flags="InputMethodHints" since="4.6"/>
     <enum-type name="InputMethodQuery"/>
     <enum-type name="ItemDataRole" force-integer="yes" />
     <enum-type name="ItemFlag" flags="ItemFlags"/>
@@ -288,7 +288,7 @@
     <enum-type name="MatchFlag" flags="MatchFlags"/>
     <enum-type name="Modifier"/>
     <enum-type name="MouseButton" flags="MouseButtons"/>
-    <enum-type name="NavigationMode"/>
+    <enum-type name="NavigationMode" since="4.6"/>
     <enum-type name="Orientation" flags="Orientations"/>
     <enum-type name="PenCapStyle"/>
     <enum-type name="PenJoinStyle"/>
@@ -302,12 +302,12 @@
     <enum-type name="TextFlag"/>
     <enum-type name="TextFormat"/>
     <enum-type name="TextInteractionFlag" flags="TextInteractionFlags"/>
-    <enum-type name="TileRule"/>
+    <enum-type name="TileRule" since="4.6"/>
     <enum-type name="TimeSpec"/>
     <enum-type name="ToolBarArea" flags="ToolBarAreas" />
     <enum-type name="ToolBarAreaSizes"/>
     <enum-type name="ToolButtonStyle"/>
-    <enum-type name="TouchPointState"/>
+    <enum-type name="TouchPointState" since="4.6"/>
     <enum-type name="TransformationMode"/>
     <enum-type name="UIEffect"/>
     <enum-type name="WhiteSpaceMode" />
@@ -1553,20 +1553,20 @@
     <modify-function signature="indexOf(QString,int)const" remove="all" />
     <modify-function signature="insert(int,const char*)" remove="all" />
     <modify-function signature="insert(int,char)" remove="all" />
-    <modify-function signature="insert(int,const char*,int)" remove="all" />
+    <modify-function signature="insert(int,const char*,int)" since="4.6" remove="all" />
     <modify-function signature="insert(int,QString)" remove="all" />
     <modify-function signature="lastIndexOf(const char*,int)const" remove="all" />
     <modify-function signature="lastIndexOf(QString,int)const" remove="all" />
     <modify-function signature="lastIndexOf(char,int)const" remove="all" />
     <modify-function signature="prepend(const char*)" remove="all" />
-    <modify-function signature="prepend(const char*,int)" remove="all" />
+    <modify-function signature="prepend(const char*,int)" since="4.6" remove="all" />
     <modify-function signature="replace(QByteArray,const char*)" remove="all" />
     <modify-function signature="replace(const char*,int,const char*,int)" remove="all"/>
     <modify-function signature="replace(QString,const char*)" remove="all" />
     <modify-function signature="replace(const char*,QByteArray)" remove="all" />
     <modify-function signature="replace(const char*,const char*)" remove="all" />
     <modify-function signature="replace(int,int,const char*)" remove="all" />
-    <modify-function signature="replace(int,int,const char*,int)" remove="all" />
+    <modify-function signature="replace(int,int,const char*,int)" since="4.6" remove="all" />
     <modify-function signature="replace(char,const char*)" remove="all" />
     <modify-function signature="replace(char,QString)" remove="all" />
     <modify-function signature="startsWith(const char*)const" remove="all" />
@@ -2391,7 +2391,7 @@
   </template>
 
   <object-type name="QDataStream" stream="yes">
-    <enum-type name="FloatingPointPrecision"/>
+    <enum-type name="FloatingPointPrecision" since="4.6"/>
     <enum-type name="Status"/>
     <enum-type name="Version"/>
     <enum-type name="ByteOrder"/>
@@ -2712,7 +2712,7 @@
   <object-type name="QXmlStreamReader">
     <enum-type name="Error"/>
     <enum-type name="TokenType"/>
-    <enum-type name="ReadElementTextBehaviour"/>
+    <enum-type name="ReadElementTextBehaviour" since="4.6"/>
   </object-type>
   <object-type name="QXmlStreamWriter">
     <!-- Removed because it expect QString to be mutable -->
@@ -2772,15 +2772,15 @@
     <modify-function signature="enclosingMetaObject()const" remove="all" />
   </value-type>
   <!-- From Qt4.6 -->
-  <object-type name="QAbstractAnimation">
+  <object-type name="QAbstractAnimation" since="4.6">
     <enum-type name="DeletionPolicy"/>
     <enum-type name="Direction"/>
     <enum-type name="State"/>
   </object-type>
 
-  <object-type name="QAbstractState"/>
+  <object-type name="QAbstractState" since="4.6" />
 
-  <object-type name="QAbstractTransition">
+  <object-type name="QAbstractTransition" since="4.6">
     <modify-function signature="QAbstractTransition(QState*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -2827,7 +2827,7 @@
 
   </object-type>
 
-  <object-type name="QAnimationGroup">
+  <object-type name="QAnimationGroup" since="4.6">
     <modify-function signature="addAnimation(QAbstractAnimation*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -2870,13 +2870,13 @@
   Se also bug:
   http://bugs.pyside.org/show_bug.cgi?id=725
   -->
-  <rejection class="QEasingCurve" function-name="setCustomType"/>
-  <value-type name="QEasingCurve">
-    <enum-type name="Type"/>
+  <rejection class="QEasingCurve" function-name="setCustomType" />
+  <value-type name="QEasingCurve" since="4.6">
+    <enum-type name="Type" />
     <modify-function signature="customType() const" remove="all"/>
   </value-type>
 
-  <object-type name="QEventTransition">
+  <object-type name="QEventTransition" since="4.6">
     <modify-function signature="QEventTransition(QState*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
@@ -2891,25 +2891,25 @@
 
   </object-type>
 
-  <object-type name="QFinalState"/>
+  <object-type name="QFinalState" since="4.6" />
 
-  <object-type name="QHistoryState">
+  <object-type name="QHistoryState" since="4.6">
     <enum-type name="HistoryType" />
   </object-type>
 
-  <value-type name="QMargins"/>
+  <value-type name="QMargins" since="4.6"/>
 
-  <object-type name="QParallelAnimationGroup"/>
+  <object-type name="QParallelAnimationGroup" since="4.6"/>
 
-  <object-type name="QPauseAnimation"/>
+  <object-type name="QPauseAnimation" since="4.6"/>
 
-  <value-type name="QProcessEnvironment"/>
+  <value-type name="QProcessEnvironment" since="4.6"/>
 
-  <object-type name="QPropertyAnimation"/>
+  <object-type name="QPropertyAnimation" since="4.6"/>
 
-  <object-type name="QSequentialAnimationGroup"/>
+  <object-type name="QSequentialAnimationGroup" since="4.6"/>
 
-  <object-type name="QSignalTransition">
+  <object-type name="QSignalTransition" since="4.6">
     <add-function signature="QSignalTransition(PyObject*, QState*)" return-type="QSignalTransition*">
         <modify-argument index="2">
             <replace-default-expression with="0" />
@@ -2929,7 +2929,7 @@
     </add-function>
   </object-type>
 
-  <object-type name="QState">
+  <object-type name="QState" since="4.6">
     <enum-type name="ChildMode"/>
     <modify-function signature="addTransition(QAbstractTransition*)">
       <modify-argument index="1">
@@ -2984,13 +2984,13 @@
     </modify-function>
   </object-type>
 
-  <object-type name="QStateMachine">
+  <object-type name="QStateMachine" since="4.6">
     <enum-type name="Error"/>
     <enum-type name="EventPriority"/>
     <enum-type name="RestorePolicy"/>
 
-    <value-type name="SignalEvent"/>
-    <value-type name="WrappedEvent"/>
+    <value-type name="SignalEvent" since="4.6"/>
+    <value-type name="WrappedEvent" since="4.6"/>
 
     <modify-function signature="addState(QAbstractState *)">
       <modify-argument index="1">
@@ -3028,7 +3028,7 @@
     </add-function>
   </object-type>
 
-  <object-type name="QVariantAnimation"/>
+  <object-type name="QVariantAnimation" since="4.6"/>
 
   <!-- From Qt4.6 ^^^ -->
 
