@@ -1,9 +1,17 @@
 project(QtTest)
 
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
+    set(QtTest_46_SRC "")
+else()
+    set(QtTest_46_SRC
+        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qtest_pysideqtoucheventsequence_wrapper.cpp
+        )
+endif()
+
 set(QtTest_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qtest_wrapper.cpp
-${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qtest_pysideqtoucheventsequence_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtTest/qttest_module_wrapper.cpp
+${QtTest_46_SRC}
 )
 
 set(QtTest_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")

@@ -17,7 +17,7 @@ endif()
 
 
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
-    set (QtGui_46_SRC )
+    set(QtGui_46_SRC "")
 else()
     set(QtGui_46_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qmatrix2x2_wrapper.cpp
