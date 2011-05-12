@@ -1143,6 +1143,7 @@
                 %PYARG_0 = Py_BuildValue("(N(fffff))", createFunction, c, m, y, k, a);
                 break;
             }
+            #if QT_VERSION >= 0x040600
             case QColor::Hsl:
             {
                 qreal h, s, l, a;
@@ -1151,6 +1152,7 @@
                 %PYARG_0 = Py_BuildValue("(N(ffff))", createFunction, h, s, l, a);
                 break;
             }
+            #endif
             default:
                 %PYARG_0 = 0;
           }
