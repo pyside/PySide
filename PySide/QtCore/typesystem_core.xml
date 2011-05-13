@@ -2842,7 +2842,7 @@
 
     <modify-function signature="addAnimation(QAbstractAnimation*)">
       <modify-argument index="1">
-        <reference-count action="set"/>
+        <reference-count action="add"/>
       </modify-argument>
     </modify-function>
 
