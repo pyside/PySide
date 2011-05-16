@@ -253,7 +253,7 @@
                 }
 
                 if (_i &lt; 0)
-                    _i = 16 - abs(_i);
+                    _i = 16 - qAbs(_i);
 
                 return %CONVERTTOPYTHON[uint](%CPPSELF->c[_i]);
             </inject-code>
@@ -271,7 +271,7 @@
                 }
 
                 if (_i &lt; 0)
-                    _i = 16 - abs(_i);
+                    _i = 16 - qAbs(_i);
 
                 %CPPSELF->c[_i] = %CONVERTTOCPP[quint8](_value);
 
