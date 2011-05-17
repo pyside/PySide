@@ -460,7 +460,7 @@
         <inject-code class="target" position="beginning">
             <insert-template name="to_tuple">
                 <replace from="%TT_FORMAT" to="iiii" />
-                <replace from="%TT_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" /> 
+                <replace from="%TT_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" />
             </insert-template>
         </inject-code>
     </add-function>
@@ -489,7 +489,7 @@
         <inject-code class="target" position="beginning">
             <insert-template name="to_tuple">
                 <replace from="%TT_FORMAT" to="dddd" />
-                <replace from="%TT_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" /> 
+                <replace from="%TT_ARGS" to="%CPPSELF.x1(), %CPPSELF.y1(), %CPPSELF.x2(), %CPPSELF.y2()" />
             </insert-template>
         </inject-code>
     </add-function>
