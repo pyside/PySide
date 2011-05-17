@@ -1154,10 +1154,32 @@
     <modify-function signature="tryLockForWrite(int)" allow-thread="yes"/>
   </object-type>
   <object-type name="QReadLocker">
+    <modify-function signature="QReadLocker(QReadWriteLock*)">
+        <modify-argument index="1">
+            <reference-count action="set"/>
+        </modify-argument>
+    </modify-function>
     <modify-function signature="relock()" allow-thread="yes" />
+    <add-function signature="__enter__()" />
+    <add-function signature="__exit__(PyObject*, PyObject*, PyObject*)">
+        <inject-code>
+            %CPPSELF.unlock();
+        </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QWriteLocker">
+    <modify-function signature="QWriteLocker(QReadWriteLock*)">
+        <modify-argument index="1">
+            <reference-count action="set"/>
+        </modify-argument>
+    </modify-function>
     <modify-function signature="relock()" allow-thread="yes" />
+    <add-function signature="__enter__()" />
+    <add-function signature="__exit__(PyObject*, PyObject*, PyObject*)">
+        <inject-code>
+            %CPPSELF.unlock();
+        </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QDirIterator">
     <enum-type name="IteratorFlag" flags="IteratorFlags"/>
@@ -2023,13 +2045,23 @@
     <enum-type name="LibraryLocation"/>
   </object-type>
   <object-type name="QMutexLocker" copyable="no">
-    <modify-function signature="QMutexLocker(QMutex*)" allow-thread="yes" />
+    <modify-function signature="QMutexLocker(QMutex*)" allow-thread="yes">
+        <modify-argument index="1">
+            <reference-count action="set" variable-name="mutex()const0"/>
+        </modify-argument>
+    </modify-function>
     <modify-function signature="relock()" allow-thread="yes"/>
     <modify-function signature="mutex() const">
       <modify-argument index="return">
-        <parent index="this" action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
+    <add-function signature="__enter__()" />
+    <add-function signature="__exit__(PyObject*, PyObject*, PyObject*)">
+        <inject-code>
+            %CPPSELF.unlock();
+        </inject-code>
+    </add-function>
   </object-type>
 
   <object-type name="QMutex">
