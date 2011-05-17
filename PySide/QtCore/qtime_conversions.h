@@ -1,36 +1,45 @@
 namespace Shiboken {
-template <>
-struct PythonConverter<QTime>
+
+inline bool Converter<QTime>::checkType(PyObject* pyObj)
 {
-    static bool isPythonConvertible(PyObject* pyObj)
-    {
-        if (!PyDateTimeAPI)
-            PyDateTime_IMPORT;
+    return ValueTypeConverter<QTime>::checkType(pyObj);
+}
 
-        return pyObj && PyTime_Check(pyObj);
+inline PyObject* Converter<QTime>::toPython(const ::QTime& cppObj)
+{
+    return ValueTypeConverter<QTime>::toPython(cppObj);
+}
+
+inline bool Converter<QTime>::isConvertible(PyObject* pyObj)
+{
+    if (ValueTypeConverter<QTime>::isConvertible(pyObj))
+        return true;
+
+    if (!PyDateTimeAPI)
+        PyDateTime_IMPORT;
+
+    SbkObjectType* shiboType = reinterpret_cast<SbkObjectType*>(SbkType< ::QTime >());
+    return PyTime_Check(pyObj) || ObjectType::isExternalConvertible(shiboType, pyObj);
+}
+
+inline QTime Converter<QTime>::toCpp(PyObject* pyObj)
+{
+    if (!PyDateTimeAPI)
+        PyDateTime_IMPORT;
+
+    if (pyObj == Py_None) {
+        return QTime();
+    } else if (PyObject_TypeCheck(pyObj, SbkType<QTime>())) {
+        return *Converter<QTime*>::toCpp(pyObj);
+    } else  if (PyTime_Check(pyObj)) {
+        int hour = PyDateTime_TIME_GET_HOUR(pyObj);
+        int min = PyDateTime_TIME_GET_MINUTE(pyObj);
+        int sec = PyDateTime_TIME_GET_SECOND(pyObj);
+        int msec = PyDateTime_TIME_GET_MICROSECOND(pyObj);
+        return QTime(hour, min, sec, msec);
+    } else {
+        return ValueTypeConverter<QTime>::toCpp(pyObj);
     }
+}
 
-    static QTime* transformFromPython(PyObject* obj)
-    {
-        if (isPythonConvertible(obj)) {
-            int hour = PyDateTime_TIME_GET_HOUR(obj);
-            int min = PyDateTime_TIME_GET_MINUTE(obj);
-            int sec = PyDateTime_TIME_GET_SECOND(obj);
-            int msec = PyDateTime_TIME_GET_MICROSECOND(obj);
-            return new QTime(hour, min, sec, msec);
-        }
-        return 0;
-    }
-
-    static PyObject* transformToPython(QTime* d)
-    {
-        if (d) {
-            if (!PyDateTimeAPI) 
-                PyDateTime_IMPORT;
-
-            return PyTime_FromTime(d->hour(), d->minute(), d->second(), d->msec());
-        }
-        return 0;
-    }
-};
 }

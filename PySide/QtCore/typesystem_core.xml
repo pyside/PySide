@@ -140,6 +140,7 @@
     <conversion-rule file="qstringlist_conversions.h" />
   </container-type>
   <primitive-type name="QStringRef">
+    <include file-name="datetime.h" location="global"/>
     <conversion-rule file="qstringref_conversions.h" />
   </primitive-type>
   <primitive-type name="QChar">
@@ -559,7 +560,7 @@
   <value-type name="QBasicTimer"/>
   <value-type name="QByteArrayMatcher"/>
   <value-type name="QDate" hash-function="PySide::hash" >
-    <conversion-rule class="target" file="qdate_conversions.h"/>
+    <conversion-rule file="qdate_conversions.h"/>
     <extra-includes>
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
@@ -579,6 +580,12 @@
               <replace from="%REDUCE_FORMAT" to="iii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.year(), %CPPSELF.month(), %CPPSELF.day()" />
             </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="toPython()" return-type="PyObject">
+        <inject-code class="target" position="beginning">
+            if (!PyDateTimeAPI) PyDateTime_IMPORT;
+            %PYARG_0 = PyDate_FromDate(%CPPSELF.year(), %CPPSELF.month(), %CPPSELF.day());
         </inject-code>
     </add-function>
     <modify-function signature="getDate(int*,int*,int*)" >
@@ -617,7 +624,7 @@
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
   </value-type>
   <value-type name="QDateTime" hash-function="PySide::hash">
-    <conversion-rule class="target" file="qdatetime_conversions.h"/>
+    <conversion-rule file="qdatetime_conversions.h"/>
     <extra-includes>
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
@@ -654,6 +661,14 @@
               <replace from="%REDUCE_FORMAT" to="iiiiiiii" />
               <replace from="%REDUCE_ARGS" to="%CPPSELF.date().year(), %CPPSELF.date().month(), %CPPSELF.date().day(), %CPPSELF.time().hour(), %CPPSELF.time().minute(), %CPPSELF.time().second(), %CPPSELF.time().msec(), (int)%CPPSELF.timeSpec()" />
             </insert-template>
+        </inject-code>
+    </add-function>
+    <add-function signature="toPython()" return-type="PyObject">
+        <inject-code class="target" position="beginning">
+            QDate date = %CPPSELF.date();
+            QTime time = %CPPSELF.time();
+            if (!PyDateTimeAPI) PyDateTime_IMPORT;
+            %PYARG_0 = PyDateTime_FromDateAndTime(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second(), time.msec());
         </inject-code>
     </add-function>
   </value-type>
@@ -954,6 +969,11 @@
   </value-type>
 
   <value-type name="QTime" hash-function="PySide::hash">
+    <conversion-rule file="qtime_conversions.h"/>
+    <extra-includes>
+      <include file-name="datetime.h" location="global"/>
+    </extra-includes>
+
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code">
@@ -970,10 +990,12 @@
             </insert-template>
         </inject-code>
     </add-function>
-    <conversion-rule class="target" file="qtime_conversions.h"/>
-    <extra-includes>
-      <include file-name="datetime.h" location="global"/>
-    </extra-includes>
+    <add-function signature="toPython()" return-type="PyObject">
+        <inject-code class="target" position="beginning">
+            if (!PyDateTimeAPI) PyDateTime_IMPORT;
+            %PYARG_0 = PyTime_FromTime(%CPPSELF.hour(), %CPPSELF.minute(), %CPPSELF.second(), %CPPSELF.msec());
+        </inject-code>
+    </add-function>
   </value-type>
   <value-type name="QPersistentModelIndex">
     <modify-function signature="internalPointer()const">
