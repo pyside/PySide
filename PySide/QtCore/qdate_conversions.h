@@ -1,35 +1,45 @@
 namespace Shiboken {
-template <>
-struct PythonConverter<QDate>
+
+inline bool Converter<QDate>::checkType(PyObject* pyObj)
 {
-    static bool isPythonConvertible(PyObject* pyObj)
-    {
-        if (!PyDateTimeAPI)
-            PyDateTime_IMPORT;
+    return ValueTypeConverter<QDate>::checkType(pyObj);
+}
 
-        return pyObj && PyDate_Check(pyObj);
+inline PyObject* Converter<QDate>::toPython(const ::QDate& cppObj)
+{
+    return ValueTypeConverter<QDate>::toPython(cppObj);
+}
+
+inline bool Converter<QDate>::isConvertible(PyObject* pyObj)
+{
+    if (ValueTypeConverter<QDate>::isConvertible(pyObj))
+        return true;
+
+    if (!PyDateTimeAPI)
+        PyDateTime_IMPORT;
+
+    SbkObjectType* shiboType = reinterpret_cast<SbkObjectType*>(SbkType< ::QDate >());
+    return PyDate_Check(pyObj) || ObjectType::isExternalConvertible(shiboType, pyObj);
+}
+
+inline QDate Converter<QDate>::toCpp(PyObject* pyObj)
+{
+    if (!PyDateTimeAPI)
+        PyDateTime_IMPORT;
+
+    if (pyObj == Py_None) {
+        return QDate();
+    } else if (PyObject_TypeCheck(pyObj, SbkType<QDate>())) {
+        return *Converter<QDate*>::toCpp(pyObj);
+    } else if (PyDate_Check(pyObj)) {
+        int day = PyDateTime_GET_DAY(pyObj);
+        int month = PyDateTime_GET_MONTH(pyObj);
+        int year = PyDateTime_GET_YEAR(pyObj);
+        return QDate(year, month, day);
+    } else {
+        return ValueTypeConverter<QDate>::toCpp(pyObj);
     }
+}
 
-    static QDate* transformFromPython(PyObject* obj)
-    {
-        if (isPythonConvertible(obj)) {
-            int day = PyDateTime_GET_DAY(obj);
-            int month = PyDateTime_GET_MONTH(obj);
-            int year = PyDateTime_GET_YEAR(obj);
-            return new QDate(year, month, day);
-        }
-        return 0;
-    }
 
-    static PyObject* transformToPython(QDate* d)
-    {
-        if (d) {
-            if (!PyDateTimeAPI) 
-                PyDateTime_IMPORT;
-
-            return PyDate_FromDate(d->year(), d->month(), d->day());
-        }
-        return 0;
-    }
-};
 }
