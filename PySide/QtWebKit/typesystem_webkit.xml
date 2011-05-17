@@ -175,5 +175,20 @@
   <value-type name="QWebElement" since="4.6">
     <enum-type name="StyleResolveStrategy"/>
   </value-type>
-  <value-type name="QWebElementCollection" since="4.6"/>
+  <value-type name="QWebElementCollection" since="4.6">
+    <add-function signature="__len__">
+        <inject-code>
+            return %CPPSELF.count();
+        </inject-code>
+    </add-function>
+    <add-function signature="__getitem__">
+        <inject-code>
+            if (_i &lt; 0 || _i >= %CPPSELF.count()) {
+                PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                return 0;
+            }
+            return %CONVERTTOPYTHON[QWebElement](%CPPSELF.at(_i));
+        </inject-code>
+    </add-function>
+  </value-type>
 </typesystem>
