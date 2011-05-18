@@ -8,6 +8,7 @@ set(libpyside_SRC
     pysidesignal.cpp
     pysideslot.cpp
     pysideproperty.cpp
+    pysideweakref.cpp
     pyside.cpp
 )
 
@@ -41,6 +42,7 @@ set(libpyside_HEADERS
     pysidemetafunction.h
     pysidesignal.h
     pysideproperty.h
+    pysideweakref.h
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
