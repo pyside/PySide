@@ -84,6 +84,7 @@
   <enum-type name="QtValidLicenseForDeclarativeModule" />
   <!-- From Qt4.6 ^^^ -->
 
+
   <enum-type name="QtMsgType"/>
 
   <primitive-type name="qint8"/>
@@ -2979,16 +2980,31 @@
     </modify-function>
   </object-type>
 
-  <!-- FIXME: setCustomType() actually takes a pointer to function type
-  (EasingFunction), but for some reason apiextractor thinks it is a float/double:
-  http://bugs.pyside.org/show_bug.cgi?id=201
-  Se also bug:
-  http://bugs.pyside.org/show_bug.cgi?id=725
-  -->
-  <rejection class="QEasingCurve" function-name="setCustomType" />
+  <!-- We will use inject code to implement the function below -->
+  <rejection class="QEasingCurve" function-name="setCustomType" /> 
+  <rejection class="QEasingCurve" function-name="customType" /> 
   <value-type name="QEasingCurve" since="4.6">
+    <extra-includes>
+      <include file-name="pysideweakref.h" location="global"/>
+      <include file-name="glue/qeasingcurve_glue.h" location="local"/>
+    </extra-includes>
+    <inject-code>
+        PySideEasingCurveFunctor::init();
+    </inject-code>
     <enum-type name="Type" />
-    <modify-function signature="customType() const" remove="all"/>
+    <add-function signature="setCustomType(PyObject*)">
+      <inject-code>
+        QEasingCurve::EasingFunction func = PySideEasingCurveFunctor::createCustomFuntion(%PYSELF, %PYARG_1);
+        if (func)
+            %CPPSELF.%FUNCTION_NAME(func);
+      </inject-code>
+    </add-function>
+    <add-function signature="customType()" return-type="PyObject">
+      <inject-code>
+        //%FUNCTION_NAME()
+        %PYARG_0 = PySideEasingCurveFunctor::callable(%PYSELF);
+      </inject-code>
+    </add-function>
   </value-type>
 
   <object-type name="QEventTransition" since="4.6">

@@ -1,5 +1,7 @@
 project(QtCore)
 
+set(QtCore_gluecode "${CMAKE_CURRENT_SOURCE_DIR}/glue/qeasingcurve_glue.cpp")
+
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set (QtCore_46_SRC )
 else()
@@ -153,4 +155,4 @@ create_pyside_module(QtCore
                      ""
                      QtCore_typesystem_path
                      QtCore_SRC
-                     "")
+                     QtCore_gluecode)
