@@ -2380,6 +2380,7 @@
     </modify-function>
   </object-type>
   <object-type name="QPixmapCache">
+    <value-type name="Key"/>
     <!-- ### Obsolete. -->
     <modify-function signature="find(QString)" remove="all"/>
     <modify-function signature="find(QString,QPixmap&amp;)" remove="all"/>
