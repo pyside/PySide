@@ -84,6 +84,7 @@ class DynamicQMetaObject::DynamicQMetaObjectPrivate
 public:
     QList<MethodData> m_methods;
     QList<PropertyData> m_properties;
+    QMap<QByteArray, QByteArray> m_info;
     QByteArray m_className;
 
     void updateMetaObject(QMetaObject* metaObj);
@@ -380,6 +381,20 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
     m_d->updateMetaObject(this);
 }
 
+void DynamicQMetaObject::addInfo(const char* key, const char* value)
+{
+    m_d->m_info[key] = value;
+}
+
+void DynamicQMetaObject::addInfo(QMap<QByteArray, QByteArray> info)
+{
+    QMap<QByteArray, QByteArray>::const_iterator i = info.constBegin();
+    while (i != info.constEnd()) {
+        m_d->m_info[i.key()] = i.value();
+        ++i;
+    }
+    m_d->updateMetaObject(this);
+}
 
 void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList<MethodData>& methods,
                                                                      unsigned int** data,
@@ -409,27 +424,41 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
 {
     uint n_methods = m_methods.size();
     uint n_properties = m_properties.size();
-    int header[] = {3,            // revision
-                    0,            // class name index in m_metadata
-                    0, 0,         // classinfo and classinfo index, not used by us
-                    n_methods, 0, // method count and method list index
-                    n_properties, 0, // prop count and prop indexes
-                    0, 0,         // enum count and enum index
-                    0, 0,         // constructors
-                    0};           // flags
+    uint n_info = m_info.size();
+    int header[] = {3,                  // revision
+                    0,                  // class name index in m_metadata
+                    n_info, 0,          // classinfo and classinfo index
+                    n_methods, 0,       // method count and method list index
+                    n_properties, 0,    // prop count and prop indexes
+                    0, 0,               // enum count and enum index
+                    0, 0,               // constructors
+                    0};                 // flags
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
     // header size + 5 indexes per method + an ending zero
     delete[] metaObj->d.data;
     unsigned int* data;
-    data = new unsigned int[HEADER_LENGHT + n_methods*5 + n_properties*4 + 1];
+    data = new unsigned int[HEADER_LENGHT + n_methods*5 + n_properties*4 + n_info*2 + 1];
     std::memcpy(data, header, sizeof(header));
 
     QList<QByteArray> strings;
     registerString(m_className, &strings); // register class string
     const int NULL_INDEX = registerString("", &strings); // register a null string
     int index = HEADER_LENGHT;
+
+    //write class info
+    if (n_info) {
+        data[3] = index;
+        QMap<QByteArray, QByteArray>::const_iterator i = m_info.constBegin();
+        while (i != m_info.constEnd()) {
+            int valueIndex = registerString(i.value(), &strings);
+            int keyIndex = registerString(i.key(), &strings);
+            data[index++] = keyIndex;
+            data[index++] = valueIndex;
+            i++;
+        }
+    }
 
     //write signals/slots
     writeMethodsData(m_methods, &data, &strings, &index, NULL_INDEX, AccessPublic);

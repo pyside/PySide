@@ -22,6 +22,7 @@
 
 #include "pyside.h"
 #include "signalmanager.h"
+#include "pysideclassinfo_p.h"
 #include "pysideproperty_p.h"
 #include "pysideproperty.h"
 #include "pysidesignal.h"
@@ -47,6 +48,7 @@ namespace PySide
 
 void init(PyObject *module)
 {
+    ClassInfo::init(module);
     Signal::init(module);
     Slot::init(module);
     Property::init(module);
@@ -188,10 +190,10 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
     Shiboken::AutoDecRef slotAttrName(PyString_FromString(PYSIDE_SLOT_LIST_ATTR));
 
     while (PyDict_Next(attrs, &pos, &key, &value)) {
-        if (PyType_IsSubtype(value->ob_type, &PySidePropertyType)) {
+        if (Property::checkType(value)) {
             // Leave the properties to be register after signals because they may depend on notify signals
             properties << PropPair(PyString_AS_STRING(key), value);
-        } else if (value->ob_type == &PySideSignalType) { // Register signals
+        } else if (Signal::checkType(value)) { // Register signals
             PySideSignal* data = reinterpret_cast<PySideSignal*>(value);
             const char* signalName = PyString_AS_STRING(key);
             data->signalName = strdup(signalName);

@@ -43,6 +43,8 @@ public:
     void addSignal(const char* signal, const char* type = 0);
     void addSlot(const char* slot, const char* type = 0);
     void addProperty(const char* property, PyObject* data);
+    void addInfo(const char* key, const char* value);
+    void addInfo(QMap<QByteArray, QByteArray> info);
 
     void removeSignal(uint idex);
     void removeSlot(uint index);
