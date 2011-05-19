@@ -4,6 +4,7 @@ set(libpyside_SRC
     dynamicqmetaobject.cpp
     signalmanager.cpp
     globalreceiver.cpp
+    pysideclassinfo.cpp
     pysidemetafunction.cpp
     pysidesignal.cpp
     pysideslot.cpp
@@ -35,6 +36,7 @@ set_target_properties(pyside PROPERTIES
 set(libpyside_HEADERS
     dynamicqmetaobject.h
     globalreceiver.h
+    pysideclassinfo.h
     pysideconversions.h
     pysidemacros.h
     signalmanager.h
