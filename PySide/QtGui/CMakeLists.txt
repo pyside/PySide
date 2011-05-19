@@ -242,6 +242,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpen_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpictureio_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpicture_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpixmapcache_wrapper.cpp
+${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpixmapcache_key_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpixmap_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qplaintextdocumentlayout_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qplaintextedit_wrapper.cpp
