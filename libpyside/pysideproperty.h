@@ -43,7 +43,9 @@ namespace PySide { namespace Property {
 
 typedef void (*MetaCallHandler)(PySideProperty*,PyObject*,QMetaObject::Call, void**);
 
+PYSIDE_API bool checkType(PyObject* pyObj);
 
+//Deprecated (use checkType)
 PYSIDE_API bool isPropertyType(PyObject* pyObj);
 
 /**

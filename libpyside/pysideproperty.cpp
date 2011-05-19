@@ -205,12 +205,17 @@ void init(PyObject* module)
     PyModule_AddObject(module, QPROPERTY_CLASS_NAME, ((PyObject*)&PySidePropertyType));
 }
 
-bool isPropertyType(PyObject* pyObj)
+bool checkType(PyObject* pyObj)
 {
     if (pyObj) {
         return PyType_IsSubtype(pyObj->ob_type, &PySidePropertyType);
     }
     return false;
+}
+
+bool isPropertyType(PyObject* pyObj)
+{
+    return checkType(pyObj);
 }
 
 int setValue(PySideProperty* self, PyObject* source, PyObject* value)

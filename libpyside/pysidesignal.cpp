@@ -473,6 +473,13 @@ void init(PyObject* module)
     Py_INCREF(&PySideSignalInstanceType);
 }
 
+bool checkType(PyObject* pyObj)
+{
+    if (pyObj)
+        return PyType_IsSubtype(pyObj->ob_type, &PySideSignalType);
+    return false;
+}
+
 void updateSourceObject(PyObject* source)
 {
     PyTypeObject * objType = reinterpret_cast<PyTypeObject *>(PyObject_Type(source));
