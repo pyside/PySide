@@ -49,6 +49,8 @@ extern "C"
 
 namespace PySide { namespace Signal {
 
+PYSIDE_API bool checkType(PyObject* type);
+
 /**
  * This function creates a Signal object which stay attached to QObject class
  *
