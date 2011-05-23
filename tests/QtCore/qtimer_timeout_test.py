@@ -3,6 +3,7 @@
 
 import unittest
 import os
+import sys
 from tempfile import mkstemp
 from PySide.QtCore import QObject, QTimer, SIGNAL
 from helper import UsesQCoreApplication
@@ -44,6 +45,7 @@ class TestTimeoutSignal(UsesQCoreApplication):
 
     def testTimeoutSignal(self):
         #Test the QTimer timeout() signal
+        refCount = sys.getrefcount(self.timer)
         QObject.connect(self.timer, SIGNAL('timeout()'), self.callback)
         self.timer.start(4)
         self.watchdog.startTimer(10)
@@ -51,6 +53,7 @@ class TestTimeoutSignal(UsesQCoreApplication):
         self.app.exec_()
 
         self.assert_(self.called)
+        self.assertEqual(sys.getrefcount(self.timer), refCount)
 
 if __name__ == '__main__':
     unittest.main()
