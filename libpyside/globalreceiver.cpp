@@ -233,7 +233,8 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         QList<QByteArray> paramTypes = slot.parameterTypes();
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {
-            PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]);
+            PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]); // Do not increment the reference
+            Py_INCREF(arg);
             PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
         }
 
