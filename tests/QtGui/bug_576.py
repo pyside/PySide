@@ -8,6 +8,7 @@ import unittest
 class Bug576(unittest.TestCase):
     def onButtonDestroyed(self, button):
         self._destroyed = True
+        self.assert_(isinstance(button, QtGui.QPushButton))
 
     def testWidgetParent(self):
         self._destroyed = False
