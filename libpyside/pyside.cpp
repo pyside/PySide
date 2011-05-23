@@ -31,6 +31,7 @@
 #include "pysidemetafunction_p.h"
 #include "pysidemetafunction.h"
 #include "dynamicqmetaobject.h"
+#include "destroylistener.h"
 
 #include <basewrapper.h>
 #include <conversions.h>
@@ -101,10 +102,12 @@ void registerCleanupFunction(CleanupFunction func)
 
 void runCleanupFunctions()
 {
+    //PySide::DestroyListener::instance()->destroy();
     while (!cleanupFunctionList.isEmpty()) {
         CleanupFunction f = cleanupFunctionList.pop();
         f();
     }
+    PySide::DestroyListener::destroy();
 }
 
 static void destructionVisitor(SbkObject* pyObj, void* data)

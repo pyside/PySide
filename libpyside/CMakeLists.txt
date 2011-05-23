@@ -1,7 +1,11 @@
 project(libpyside)
 
+
+qt4_wrap_cpp(DESTROYLISTENER_MOC "destroylistener.h")
+
 set(libpyside_SRC
     dynamicqmetaobject.cpp
+    destroylistener.cpp
     signalmanager.cpp
     globalreceiver.cpp
     pysideclassinfo.cpp
@@ -11,6 +15,7 @@ set(libpyside_SRC
     pysideproperty.cpp
     pysideweakref.cpp
     pyside.cpp
+    ${DESTROYLISTENER_MOC}
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
@@ -34,6 +39,7 @@ set_target_properties(pyside PROPERTIES
 #
 
 set(libpyside_HEADERS
+    destroylistener.h
     dynamicqmetaobject.h
     globalreceiver.h
     pysideclassinfo.h
