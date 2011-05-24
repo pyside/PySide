@@ -63,7 +63,7 @@ void deleteData(void* data)
 
 void PySideEasingCurveFunctor::init()
 {
-    CustomFunctions<MAX_CUSTOM_FUNCTIONS>::init();
+    CustomFunctions<MAX_CUSTOM_FUNCTIONS-1>::init();
 }
 
 QEasingCurve::EasingFunction PySideEasingCurveFunctor::createCustomFuntion(PyObject* parent, PyObject* pyFunc)
