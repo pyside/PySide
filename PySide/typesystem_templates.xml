@@ -272,6 +272,12 @@
         %PYARG_0 = PyString_FromString(qPrintable(format));
     </template>
 
+    <template name="return_internal_pointer">
+        %PYARG_0 = reinterpret_cast&lt;PyObject*>(%CPPSELF.%FUNCTION_NAME());
+        if (!%PYARG_0)
+            %PYARG_0 = Py_None;
+        Py_INCREF(%PYARG_0);
+    </template>
 
     <!-- templates for __reduce__ -->
     <template name="reduce_code">

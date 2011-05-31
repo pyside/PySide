@@ -985,10 +985,7 @@
   <value-type name="QPersistentModelIndex">
     <modify-function signature="internalPointer()const">
         <inject-code class="target" position="beginning">
-            %PYARG_0 = (PyObject*)%CPPSELF.%FUNCTION_NAME();
-            if (!%PYARG_0)
-                %PYARG_0 = Py_None;
-            Py_XINCREF(%PYARG_0);
+            <insert-template name="return_internal_pointer" />
         </inject-code>
     </modify-function>
     <modify-function signature="operator const QModelIndex&amp;()const">
@@ -2825,10 +2822,7 @@
   <value-type name="QModelIndex">
     <modify-function signature="internalPointer()const">
         <inject-code class="target" position="beginning">
-            %PYARG_0 = (PyObject*)%CPPSELF.%FUNCTION_NAME();
-            if (!%PYARG_0)
-                %PYARG_0 = Py_None;
-            Py_XINCREF(%PYARG_0);
+            <insert-template name="return_internal_pointer" />
         </inject-code>
     </modify-function>
     <modify-function signature="model()const">
