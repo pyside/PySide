@@ -1286,6 +1286,16 @@
         <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="installEventFilter(QObject*)">
+      <inject-code>
+        Shiboken::Object::keepReference((SbkObject*)%PYARG_1, "eventFilter", %PYSELF, true);
+      </inject-code>
+    </modify-function>
+    <modify-function signature="removeEventFilter(QObject*)">
+      <inject-code>
+        Shiboken::Object::removeReference((SbkObject*)%PYARG_1, "eventFilter", %PYSELF);
+      </inject-code>
+    </modify-function>
     <!-- Invalidate-after-use stuff -->
     <modify-function signature="childEvent(QChildEvent*)">
         <modify-argument index="1" invalidate-after-use="yes"/>
