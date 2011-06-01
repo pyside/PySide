@@ -130,9 +130,9 @@
             Py_INCREF(Py_None);
             %PYARG_0 = Py_None;
         } else if (%1 == QGLBuffer::ReadOnly) {
-            %PYARG_0 = PyBuffer_FromMemory(data, dataSize);
+            %PYARG_0 = Shiboken::Buffer::newObject(data, dataSize, Shiboken::Buffer::ReadOnly);
         } else {
-            %PYARG_0 = PyBuffer_FromReadWriteMemory(data, dataSize);
+            %PYARG_0 = Shiboken::Buffer::newObject(data, dataSize, Shiboken::Buffer::ReadWrite);
         }
       </inject-code>
     </modify-function>

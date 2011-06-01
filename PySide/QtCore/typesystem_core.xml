@@ -518,9 +518,9 @@
             <replace-type modified-type="PyObject" />
         </modify-argument>
         <inject-code>
-            const uchar* d = %CPPSELF.%FUNCTION_NAME();
+            const void* d = %CPPSELF.%FUNCTION_NAME();
             if (d) {
-                %PYARG_0 = PyBuffer_FromMemory(const_cast&lt;uchar*>(d), %CPPSELF.size());
+                %PYARG_0 = Shiboken::Buffer::newObject(d, %CPPSELF.size());
             } else {
                 Py_INCREF(Py_None);
                 %PYARG_0 = Py_None;
@@ -528,21 +528,13 @@
         </inject-code>
     </modify-function>
     <template name="QResource_registerResource">
-        PyTypeObject* pyType = %PYARG_1->ob_type;
-        if (pyType->tp_as_buffer
-            &amp;&amp; pyType->tp_as_buffer->bf_getreadbuffer
-            &amp;&amp; pyType->tp_as_buffer->bf_getsegcount(%PYARG_1, 0) == 1) {
-            void* ptr;
-            pyType->tp_as_buffer->bf_getreadbuffer(%PYARG_1, 0, &amp;ptr);
-            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>((uchar*)ptr), %2));
-        } else {
-            PyErr_SetString(PyExc_TypeError, "The object must support buffer protocol with just one segment.");
-        }
+        uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1);
+        %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>(ptr), %2));
     </template>
 
     <modify-function signature="unregisterResource(const uchar*, const QString&amp;)" rename="unregisterResourceData">
       <modify-argument index="1">
-        <replace-type modified-type="PyObject"/>
+        <replace-type modified-type="PyBuffer"/>
       </modify-argument>
       <inject-code>
         <insert-template name="QResource_registerResource" />
@@ -550,7 +542,7 @@
     </modify-function>
     <modify-function signature="registerResource(const uchar*, const QString&amp;)" rename="registerResourceData">
       <modify-argument index="1">
-        <replace-type modified-type="PyObject"/>
+        <replace-type modified-type="PyBuffer"/>
       </modify-argument>
       <inject-code>
         <insert-template name="QResource_registerResource" />
@@ -1968,15 +1960,13 @@
             <replace-type modified-type="PyBuffer"/>
         </modify-argument>
         <inject-code>
-        const void* ptr;
-        Py_ssize_t len;
-        PyObject_AsReadBuffer(%PYARG_1, &amp;ptr, &amp;len);
-        %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME((uchar*)ptr));
+        uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1);
+        %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(ptr));
         </inject-code>
     </modify-function>
     <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)">
         <inject-code>
-            %PYARG_0 = PyBuffer_FromReadWriteMemory(%CPPSELF.%FUNCTION_NAME(%1, %2, %3), %2);
+            %PYARG_0 = Shiboken::Buffer::newObject(%CPPSELF.%FUNCTION_NAME(%1, %2, %3), %2, Shiboken::Buffer::ReadWrite);
         </inject-code>
     </modify-function>
     <modify-function signature="remove()" allow-thread="yes"/>
@@ -2175,22 +2165,15 @@
   <object-type name="QTranslator">
     <modify-function signature="load(const uchar*, int)">
         <modify-argument index="1">
-            <replace-type modified-type="PyObject" />
+            <replace-type modified-type="PyBuffer" />
         </modify-argument>
         <modify-argument index="2">
             <remove-argument />
         </modify-argument>
         <inject-code>
-            PyTypeObject* pyType = %PYARG_1->ob_type;
-            if (pyType->tp_as_buffer
-                &amp;&amp; pyType->tp_as_buffer->bf_getreadbuffer
-                &amp;&amp; pyType->tp_as_buffer->bf_getsegcount(%PYARG_1, 0) == 1) {
-                void* ptr;
-                Py_ssize_t size = pyType->tp_as_buffer->bf_getreadbuffer(%PYARG_1, 0, &amp;ptr);
-                %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>((uchar*)ptr), size));
-            } else {
-                PyErr_SetString(PyExc_TypeError, "The object must support buffer protocol with just one segment.");
-            }
+            Py_ssize_t size;
+            uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1, &amp;size);
+            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>(ptr), size));
         </inject-code>
     </modify-function>
   </object-type>
@@ -2309,15 +2292,13 @@
             <replace-type modified-type="PyBuffer"/>
         </modify-argument>
         <inject-code>
-            const void* ptr;
-            Py_ssize_t len;
-            PyObject_AsReadBuffer(%PYARG_1, &amp;ptr, &amp;len);
-            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME((uchar*)ptr));
+            uchar* ptr = (uchar*)Shiboken::Buffer::getPointer(%PYARG_1);
+            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(ptr));
         </inject-code>
     </modify-function>
     <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)">
         <inject-code>
-            %PYARG_0 = PyBuffer_FromReadWriteMemory(%CPPSELF.%FUNCTION_NAME(%1, %2, %3), %2);
+            %PYARG_0 = Shiboken::Buffer::newObject(%CPPSELF.%FUNCTION_NAME(%1, %2, %3), %2, Shiboken::Buffer::ReadWrite);
         </inject-code>
     </modify-function>
 
@@ -2983,8 +2964,8 @@
   </object-type>
 
   <!-- We will use inject code to implement the function below -->
-  <rejection class="QEasingCurve" function-name="setCustomType" /> 
-  <rejection class="QEasingCurve" function-name="customType" /> 
+  <rejection class="QEasingCurve" function-name="setCustomType" />
+  <rejection class="QEasingCurve" function-name="customType" />
   <value-type name="QEasingCurve" since="4.6">
     <extra-includes>
       <include file-name="pysideweakref.h" location="global"/>
