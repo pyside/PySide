@@ -231,7 +231,7 @@
   <rejection class="QtConcurrent" enum-name="enum_1"/>
   <rejection class="QAbstractEventDispatcher" function-name="filterEvent"/>
   <rejection class="QAbstractEventDispatcher" function-name="setEventFilter"/>
-  <rejection class="QAbstractFileEngine" function-name="beginEntryList"/>
+  <!-- Internal -->
   <rejection class="QAbstractFileEngine" function-name="endEntryList"/>
   <rejection class="QAbstractFileEngine" function-name="extension"/>
   <rejection class="QCoreApplication" function-name="compressEvent"/>
@@ -2283,6 +2283,12 @@
     <modify-function signature="mkdir(const QString&amp;, bool)const" allow-thread="yes" />
     <modify-function signature="rmdir(const QString&amp;, bool)const" allow-thread="yes" />
     <modify-function signature="write(const char*, qint64)" allow-thread="yes" />
+
+    <modify-function signature="beginEntryList(QFlags&lt;QDir::Filter>,const QStringList&amp;)">
+      <modify-argument index="return">
+        <define-ownership class="native" owner="c++"/>
+      </modify-argument>
+    </modify-function>
 
     <modify-function signature="unmap(uchar*)">
         <modify-argument index="1">
