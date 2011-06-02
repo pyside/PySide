@@ -6,6 +6,10 @@ from PySide import QtCore, QtGui
 
 from helper import UsesQApplication
 
+import warnings
+warnings.simplefilter('error')
+
+
 class MyWidget(QtGui.QWidget):
     def __init__(self, parent=None):
         super(MyWidget, self).__init__(parent)
@@ -17,7 +21,7 @@ class testCase(UsesQApplication):
 
     def testVirtualReturn(self):
         w = MyWidget()
-        self.assertRaises(TypeError, w.show)
+        self.assertRaises(RuntimeWarning, w.show)
 
 if __name__ == '__main__':
     unittest.main()
