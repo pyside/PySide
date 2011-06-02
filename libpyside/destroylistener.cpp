@@ -1,6 +1,6 @@
+#include <Python.h>
 #include "destroylistener.h"
 
-#include <Python.h>
 #include <QObject>
 #include <shiboken.h>
 #include <QDebug>
