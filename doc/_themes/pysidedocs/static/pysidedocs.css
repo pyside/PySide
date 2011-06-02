@@ -142,7 +142,13 @@ pre * {
 }
 
 .headerlink {
-    display: none;
+    font-size: 100%;
+    color: inherit;
+    float: right;
+}
+
+h1 .headerlink {
+    padding-right: 50px;
 }
 
 a, a:visited {
