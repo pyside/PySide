@@ -2104,6 +2104,20 @@
   </object-type>
   <object-type name="QSocketNotifier">
     <enum-type name="Type"/>
+    <add-function signature="QSocketNotifier(PyObject*, QSocketNotifier::Type, QObject*)">
+        <modify-argument index="3">
+            <replace-default-expression with="0" />
+            <rename to="parent" />
+        </modify-argument>
+        <inject-code>
+            Shiboken::AutoDecRef fileNo(PyObject_GetAttrString(%PYARG_1, "fileno"));
+            if (!fileNo.isNull()) {
+                Shiboken::AutoDecRef fileNoValue(PyObject_CallObject(fileNo, 0));
+                if (Shiboken::Converter&lt;int>::checkType(fileNoValue))
+                    %0 = new %TYPE(%CONVERTTOCPP[int](fileNoValue), %2, %3);
+            }
+        </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QSystemLocale">
     <enum-type name="QueryType"/>
