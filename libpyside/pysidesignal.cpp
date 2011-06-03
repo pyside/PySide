@@ -727,8 +727,8 @@ QStringList getArgsFromSignature(const char* signature, bool* isShortCircuit)
 
 QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName)
 {
-    QString functionName;
-    QString signature;
+    QByteArray functionName;
+    QByteArray signature;
     QStringList args;
     int numArgs = -1;
     bool useSelf = false;
@@ -743,31 +743,32 @@ QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* ca
         numArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
     } else if (PyCFunction_Check(callback)) {
         functionName = ((PyCFunctionObject*)callback)->m_ml->ml_name;
-        useSelf = 0;//((PyCFunctionObject*)callback)->m_self; // commented out to fix bug 736
+        useSelf = ((PyCFunctionObject*)callback)->m_self;
         int flags = ((PyCFunctionObject*)callback)->m_ml->ml_flags;
 
         if (receiver) {
             //Search for signature on metaobject
             const QMetaObject *mo = receiver->metaObject();
+            QByteArray prefix(functionName);
+            prefix += '(';
             for(int i=0; i < mo->methodCount(); i++) {
-            QMetaMethod me = mo->method(i);
-                if (QString(me.signature()).startsWith(functionName)) {
-                    numArgs = me.parameterTypes().size()+1;
+                QMetaMethod me = mo->method(i);
+                if ((strncmp(me.signature(), prefix, prefix.size()) == 0) &&
+                    QMetaObject::checkConnectArgs(signal, me.signature())) {
+                    numArgs = me.parameterTypes().size() + useSelf;
                     break;
                 }
            }
         }
 
         if (numArgs == -1) {
-            if (flags & METH_O)
-                numArgs = 1;
-            else if (flags & METH_VARARGS)
+            if (flags & METH_VARARGS)
                 numArgs = -1;
             else if (flags & METH_NOARGS)
                 numArgs = 0;
         }
     } else if (PyCallable_Check(callback)) {
-        functionName = "__callback"+QString::number((size_t)callback);
+        functionName = "__callback"+QByteArray::number((qlonglong)callback);
     }
 
     Q_ASSERT(!functionName.isEmpty());
@@ -775,7 +776,7 @@ QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* ca
     bool isShortCircuit = false;
 
     if (encodeName)
-        signature = codeCallbackName(callback, functionName);
+        signature = qPrintable(codeCallbackName(callback, functionName));
     else
         signature = functionName;
 
@@ -785,7 +786,7 @@ QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* ca
         signature.append('(');
         if (numArgs == -1)
             numArgs = std::numeric_limits<int>::max();
-        while (args.count() && args.count() > numArgs - useSelf) {
+        while (args.count() && (args.count() > (numArgs - useSelf))) {
             args.removeLast();
         }
         signature.append(args.join(","));
