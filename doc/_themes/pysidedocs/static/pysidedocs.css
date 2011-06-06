@@ -145,10 +145,15 @@ pre * {
     font-size: 100%;
     color: inherit;
     float: right;
+    visibility: Hidden
 }
 
 h1 .headerlink {
     padding-right: 50px;
+}
+
+h1:hover .headerlink, h2:hover .headerlink, h3:hover .headerlink {
+    visibility: Visible;
 }
 
 a, a:visited {
