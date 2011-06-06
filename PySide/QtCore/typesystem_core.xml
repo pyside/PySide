@@ -1676,14 +1676,27 @@
     <modify-function signature="replace(char,QString)" remove="all" />
     <modify-function signature="startsWith(const char*)const" remove="all" />
     <modify-function signature="operator==(QString)const" remove="all" />
+    <modify-function signature="operator==(const char*,QByteArray)" remove="all" />
+    <modify-function signature="operator==(QByteArray, const char*)" remove="all" />
     <modify-function signature="operator>(QString)const" remove="all" />
+    <modify-function signature="operator>(const char*,QByteArray)" remove="all" />
+    <modify-function signature="operator>(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator>=(QString)const" remove="all" />
+    <modify-function signature="operator>=(const char*,QByteArray)" remove="all" />
+    <modify-function signature="operator>=(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator&lt;(QString)const" remove="all" />
+    <modify-function signature="operator&lt;(const char*,QByteArray)" remove="all" />
     <modify-function signature="operator&lt;=(QString)const" remove="all" />
+    <modify-function signature="operator&lt;=(const char*,QByteArray)" remove="all" />
+    <modify-function signature="operator&lt;=(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator!=(QString)const" remove="all" />
+    <modify-function signature="operator!=(const char*,QByteArray)" remove="all" />
+    <modify-function signature="operator!=(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator+=(QString)" remove="all" />
+    <modify-function signature="operator+=(const char*)" remove="all" />
     <modify-function signature="operator+(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator+(const char*,QByteArray)" remove="all" />
+    <modify-function signature="operator+(QByteArray,const char*)" remove="all" />
     <modify-function signature="operator+(QString,QByteArray)" remove="all" />
     <modify-function signature="operator+(QByteArray,QString)" remove="all" />
     <add-function signature="operator+(PyUnicode)">
