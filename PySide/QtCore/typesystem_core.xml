@@ -2485,6 +2485,29 @@
         <define-ownership owner="c++"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="winEventFilter(MSG*, long*)">
+      <modify-argument index="2">
+        <remove-argument />
+        <conversion-rule class="native">
+            long *%out = new long;
+            %out = 0;
+        </conversion-rule>
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyObject"/>
+        <conversion-rule class="native">
+            %RETURN_TYPE %out = false;
+            if (PySequence_Check(%PYARG_0) &amp;&amp; (PySequence_Size(%PYARG_0) == 2)) {
+                Shiboken::AutoDecRef pyResult(PySequence_GetItem(%PYARG_0, 0));
+                %out = %CONVERTTOCPP[bool](pyResult);
+            }
+        </conversion-rule>
+      </modify-argument>
+      <inject-code position="end">
+            %PYARG_0 = Shiboken::makeTuple(%0, *result_out);
+            delete result_out;
+      </inject-code>
+    </modify-function>
   </object-type>
   <object-type name="QSettings">
     <enum-type name="Format"/>
@@ -3251,7 +3274,6 @@
   <suppress-warning text="Unable to decide type of property: 'QLibrary::LoadHints' in class 'QPluginLoader'" />
   <suppress-warning text="enum '_ISalnum' does not have a type entry or is not an enum" />
   <suppress-warning text="enum 'Qt::Initialization' does not have a type entry or is not an enum" />
-  <suppress-warning text="skipping function '*'"/>
   <suppress-warning text="visibility of function '*' modified in class '*'"/>
   <suppress-warning text="hiding of function '*' in class '*'"/>
   <suppress-warning text="namespace '*' does not have a type entry"/>
@@ -3280,4 +3302,16 @@
 
   <!-- this enum is defined on Qt global header but only used in QtGui module -->
   <suppress-warning text="enum 'PM_MessageBoxHeight' does not have a type entry or is not an enum" />
+
+  <!-- this function only exists on Windows -->
+  <suppress-warning text="signature 'winEventFilter(MSG*,long*)' for function modification in 'QCoreApplication' not found. Possible candidates:*"/>
+
+  <!-- this is necessary to avoid warning on other modules -->
+  <suppress-warning text="signature 'operator*(QByteArray,const char*)' for function modification in 'QByteArray' not found. Possible candidates: *"/>
+  <suppress-warning text="signature 'operator+(QByteArray,QString)' for function modification in 'QByteArray' not found. Possible candidates: *"/>
+
+  <!-- TODO: this need be removed -->
+  <suppress-warning text="skipping function '*', unmatched return type '*'"/>
+  <suppress-warning text="skipping function '*', unmatched parameter type '*'"/>
+
 </typesystem>

@@ -319,6 +319,7 @@ QT_END_HEADER
 #elif @ENABLE_MAC@
   #define Q_WS_MAC
 #elif @ENABLE_WIN@
+  #include "pysidewtypes.h"
   #define Q_WS_WIN
 #elif @ENABLE_SIMULATOR@
   #define Q_WS_SIMULATOR
