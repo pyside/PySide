@@ -653,7 +653,7 @@
             QDate date = %CPPSELF.date();
             QTime time = %CPPSELF.time();
             if (!PyDateTimeAPI) PyDateTime_IMPORT;
-            %PYARG_0 = PyDateTime_FromDateAndTime(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second(), time.msec());
+            %PYARG_0 = PyDateTime_FromDateAndTime(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second(), time.msec()*1000);
         </inject-code>
     </add-function>
   </value-type>
@@ -978,7 +978,7 @@
     <add-function signature="toPython()" return-type="PyObject">
         <inject-code class="target" position="beginning">
             if (!PyDateTimeAPI) PyDateTime_IMPORT;
-            %PYARG_0 = PyTime_FromTime(%CPPSELF.hour(), %CPPSELF.minute(), %CPPSELF.second(), %CPPSELF.msec());
+            %PYARG_0 = PyTime_FromTime(%CPPSELF.hour(), %CPPSELF.minute(), %CPPSELF.second(), %CPPSELF.msec()*1000);
         </inject-code>
     </add-function>
   </value-type>
