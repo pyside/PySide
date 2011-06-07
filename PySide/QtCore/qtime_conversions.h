@@ -35,8 +35,8 @@ inline QTime Converter<QTime>::toCpp(PyObject* pyObj)
         int hour = PyDateTime_TIME_GET_HOUR(pyObj);
         int min = PyDateTime_TIME_GET_MINUTE(pyObj);
         int sec = PyDateTime_TIME_GET_SECOND(pyObj);
-        int msec = PyDateTime_TIME_GET_MICROSECOND(pyObj);
-        return QTime(hour, min, sec, msec);
+        int usec = PyDateTime_TIME_GET_MICROSECOND(pyObj);
+        return QTime(hour, min, sec, usec/1000);
     } else {
         return ValueTypeConverter<QTime>::toCpp(pyObj);
     }
