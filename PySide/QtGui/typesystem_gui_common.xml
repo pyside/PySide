@@ -4327,7 +4327,7 @@
     </extra-includes>
     <modify-function signature="setSourceModel(QAbstractItemModel *)">
       <modify-argument index="1">
-        <parent index="this" action="add"/>
+        <reference-count action="set"/>
       </modify-argument>
     </modify-function>
     <!--### Obsolete in 4.3-->
