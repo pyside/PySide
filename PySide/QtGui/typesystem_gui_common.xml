@@ -260,157 +260,157 @@
     </add-function>
 
   </value-type>
-  <value-type name="QStyleOption" polymorphic-id-expression="%1-&gt;type == QStyleOption::SO_Default">
+  <object-type name="QStyleOption" polymorphic-id-expression="%1-&gt;type == QStyleOption::SO_Default">
     <enum-type name="OptionType" extensible="yes"/>
     <enum-type name="StyleOptionType"/>
     <enum-type name="StyleOptionVersion"/>
     <!--### Obsolete in 4.3-->
     <modify-function signature="init(const QWidget*)" remove="all"/>
-  </value-type>
-  <value-type name="QStyleOptionGraphicsItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionGraphicsItem::Type &amp;&amp; %1-&gt;version == QStyleOptionGraphicsItem::Version">
+  </object-type>
+  <object-type name="QStyleOptionGraphicsItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionGraphicsItem::Type &amp;&amp; %1-&gt;version == QStyleOptionGraphicsItem::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionSizeGrip" polymorphic-id-expression="%1-&gt;type == QStyleOptionSizeGrip::Type &amp;&amp; %1-&gt;version == QStyleOptionSizeGrip::Version">
+  </object-type>
+  <object-type name="QStyleOptionSizeGrip" polymorphic-id-expression="%1-&gt;type == QStyleOptionSizeGrip::Type &amp;&amp; %1-&gt;version == QStyleOptionSizeGrip::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionButton::Type &amp;&amp; %1-&gt;version == QStyleOptionButton::Version">
+  </object-type>
+  <object-type name="QStyleOptionButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionButton::Type &amp;&amp; %1-&gt;version == QStyleOptionButton::Version">
       <enum-type name="ButtonFeature" flags="ButtonFeatures"/>
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionComboBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionComboBox::Type &amp;&amp; %1-&gt;version == QStyleOptionComboBox::Version">
+  </object-type>
+  <object-type name="QStyleOptionComboBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionComboBox::Type &amp;&amp; %1-&gt;version == QStyleOptionComboBox::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionComplex" polymorphic-id-expression="%1-&gt;type == QStyleOptionComplex::Type &amp;&amp; %1-&gt;version == QStyleOptionComplex::Version">
+  </object-type>
+  <object-type name="QStyleOptionComplex" polymorphic-id-expression="%1-&gt;type == QStyleOptionComplex::Type &amp;&amp; %1-&gt;version == QStyleOptionComplex::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionDockWidget" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidget::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidget::Version">
+  </object-type>
+  <object-type name="QStyleOptionDockWidget" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidget::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidget::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionDockWidgetV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidgetV2::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidgetV2::Version">
+  </object-type>
+  <object-type name="QStyleOptionDockWidgetV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionDockWidgetV2::Type &amp;&amp; %1-&gt;version == QStyleOptionDockWidgetV2::Version">
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionFocusRect" polymorphic-id-expression="%1-&gt;type == QStyleOptionFocusRect::Type &amp;&amp; %1-&gt;version == QStyleOptionFocusRect::Version">
+  </object-type>
+  <object-type name="QStyleOptionFocusRect" polymorphic-id-expression="%1-&gt;type == QStyleOptionFocusRect::Type &amp;&amp; %1-&gt;version == QStyleOptionFocusRect::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionFrame::Version">
+  </object-type>
+  <object-type name="QStyleOptionFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionFrame::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionFrameV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV2::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV2::Version">
+  </object-type>
+  <object-type name="QStyleOptionFrameV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV2::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV2::Version">
       <enum-type name="FrameFeature" flags="FrameFeatures"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionFrameV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV3::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV3::Version">
+  </object-type>
+  <object-type name="QStyleOptionFrameV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionFrameV3::Type &amp;&amp; %1-&gt;version == QStyleOptionFrameV3::Version">
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionGroupBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionGroupBox::Type &amp;&amp; %1-&gt;version == QStyleOptionGroupBox::Version">
+  </object-type>
+  <object-type name="QStyleOptionGroupBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionGroupBox::Type &amp;&amp; %1-&gt;version == QStyleOptionGroupBox::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionHeader" polymorphic-id-expression="%1-&gt;type == QStyleOptionHeader::Type &amp;&amp; %1-&gt;version == QStyleOptionHeader::Version">
+  </object-type>
+  <object-type name="QStyleOptionHeader" polymorphic-id-expression="%1-&gt;type == QStyleOptionHeader::Type &amp;&amp; %1-&gt;version == QStyleOptionHeader::Version">
       <enum-type name="SectionPosition"/>
       <enum-type name="SelectedPosition"/>
       <enum-type name="SortIndicator"/>
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionMenuItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionMenuItem::Type &amp;&amp; %1-&gt;version == QStyleOptionMenuItem::Version">
+  </object-type>
+  <object-type name="QStyleOptionMenuItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionMenuItem::Type &amp;&amp; %1-&gt;version == QStyleOptionMenuItem::Version">
       <enum-type name="CheckType"/>
       <enum-type name="MenuItemType"/>
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionProgressBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBar::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBar::Version">
+  </object-type>
+  <object-type name="QStyleOptionProgressBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBar::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBar::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionProgressBarV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBarV2::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBarV2::Version">
+  </object-type>
+  <object-type name="QStyleOptionProgressBarV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionProgressBarV2::Type &amp;&amp; %1-&gt;version == QStyleOptionProgressBarV2::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionRubberBand" polymorphic-id-expression="%1-&gt;type == QStyleOptionRubberBand::Type &amp;&amp; %1-&gt;version == QStyleOptionRubberBand::Version">
+  </object-type>
+  <object-type name="QStyleOptionRubberBand" polymorphic-id-expression="%1-&gt;type == QStyleOptionRubberBand::Type &amp;&amp; %1-&gt;version == QStyleOptionRubberBand::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionSlider" polymorphic-id-expression="%1-&gt;type == QStyleOptionSlider::Type &amp;&amp; %1-&gt;version == QStyleOptionSlider::Version">
+  </object-type>
+  <object-type name="QStyleOptionSlider" polymorphic-id-expression="%1-&gt;type == QStyleOptionSlider::Type &amp;&amp; %1-&gt;version == QStyleOptionSlider::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionSpinBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionSpinBox::Type &amp;&amp; %1-&gt;version == QStyleOptionSpinBox::Version">
+  </object-type>
+  <object-type name="QStyleOptionSpinBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionSpinBox::Type &amp;&amp; %1-&gt;version == QStyleOptionSpinBox::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionTab" polymorphic-id-expression="%1-&gt;type == QStyleOptionTab::Type &amp;&amp; %1-&gt;version == QStyleOptionTab::Version">
+  </object-type>
+  <object-type name="QStyleOptionTab" polymorphic-id-expression="%1-&gt;type == QStyleOptionTab::Type &amp;&amp; %1-&gt;version == QStyleOptionTab::Version">
       <enum-type name="CornerWidget" flags="CornerWidgets"/>
       <enum-type name="SelectedPosition"/>
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="TabPosition"/>
-  </value-type>
-  <value-type name="QStyleOptionTabV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV2::Version">
+  </object-type>
+  <object-type name="QStyleOptionTabV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV2::Version">
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionTabV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV3::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV3::Version">
+  </object-type>
+  <object-type name="QStyleOptionTabV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabV3::Type &amp;&amp; %1-&gt;version == QStyleOptionTabV3::Version">
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionTabBarBase" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBase::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBase::Version">
+  </object-type>
+  <object-type name="QStyleOptionTabBarBase" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBase::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBase::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionTabBarBaseV2" delete-in-main-thread="yes" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBaseV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBaseV2::Version">
+  </object-type>
+  <object-type name="QStyleOptionTabBarBaseV2" delete-in-main-thread="yes" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabBarBaseV2::Type &amp;&amp; %1-&gt;version == QStyleOptionTabBarBaseV2::Version">
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionTabWidgetFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabWidgetFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionTabWidgetFrame::Version">
+  </object-type>
+  <object-type name="QStyleOptionTabWidgetFrame" polymorphic-id-expression="%1-&gt;type == QStyleOptionTabWidgetFrame::Type &amp;&amp; %1-&gt;version == QStyleOptionTabWidgetFrame::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionTitleBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionTitleBar::Type &amp;&amp; %1-&gt;version == QStyleOptionTitleBar::Version">
+  </object-type>
+  <object-type name="QStyleOptionTitleBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionTitleBar::Type &amp;&amp; %1-&gt;version == QStyleOptionTitleBar::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionToolBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBar::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBar::Version">
+  </object-type>
+  <object-type name="QStyleOptionToolBar" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBar::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBar::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="ToolBarFeature" flags="ToolBarFeatures"/>
       <enum-type name="ToolBarPosition"/>
-  </value-type>
-  <value-type name="QStyleOptionToolBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBox::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBox::Version">
+  </object-type>
+  <object-type name="QStyleOptionToolBox" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBox::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBox::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionToolBoxV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBoxV2::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBoxV2::Version">
+  </object-type>
+  <object-type name="QStyleOptionToolBoxV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolBoxV2::Type &amp;&amp; %1-&gt;version == QStyleOptionToolBoxV2::Version">
       <enum-type name="SelectedPosition"/>
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="TabPosition"/>
-  </value-type>
-  <value-type name="QStyleOptionToolButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolButton::Type &amp;&amp; %1-&gt;version == QStyleOptionToolButton::Version">
+  </object-type>
+  <object-type name="QStyleOptionToolButton" polymorphic-id-expression="%1-&gt;type == QStyleOptionToolButton::Type &amp;&amp; %1-&gt;version == QStyleOptionToolButton::Version">
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="ToolButtonFeature" flags="ToolButtonFeatures" />
-  </value-type>
-  <value-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version">
+  </object-type>
+  <object-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version">
       <enum-type name="Position"/>
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version">
+  </object-type>
+  <object-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version">
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="ViewItemFeature" flags="ViewItemFeatures"/>
-  </value-type>
-  <value-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version">
+  </object-type>
+  <object-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version">
       <enum-type name="StyleOptionVersion"/>
-  </value-type>
-  <value-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" >
+  </object-type>
+  <object-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" >
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="ViewItemPosition"/>
-  </value-type>
+  </object-type>
   <value-type name="QTextFragment" />
   <value-type name="QBitmap" >
     <modify-function signature="fromData(QSize,const uchar*,QImage::Format)">
