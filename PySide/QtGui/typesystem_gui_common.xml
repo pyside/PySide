@@ -1766,6 +1766,11 @@
         <reference-count action="set"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="viewOptions()const">
+      <modify-argument index="return">
+        <replace-default-expression with="QStyleOptionViewItem()" />
+      </modify-argument>
+    </modify-function>
     <modify-function signature="model() const">
       <modify-argument index="return">
         <!-- Defining ownership as "default" avoids the object to be automatically
