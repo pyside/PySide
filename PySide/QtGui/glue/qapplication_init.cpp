@@ -5,23 +5,18 @@ static int QApplicationArgCount;
 static char** QApplicationArgValues;
 static const char QAPP_MACRO[] = "qApp";
 
-void QApplication_constructor(PyObject* self, PyObject* args, QApplicationWrapper** cptr)
+bool QApplicationConstructorStart(PyObject* argv)
 {
     if (QApplication::instance()) {
         PyErr_SetString(PyExc_RuntimeError, "A QApplication instance already exists.");
-        return;
+        return false;
     }
 
-    int numArgs = PyTuple_GET_SIZE(args);
-    if (numArgs != 1
-        || !Shiboken::sequenceToArgcArgv(PyTuple_GET_ITEM(args, 0), &QApplicationArgCount, &QApplicationArgValues, "PySideApp")) {
-        PyErr_BadArgument();
-        return;
-    }
+    return Shiboken::sequenceToArgcArgv(argv, &QApplicationArgCount, &QApplicationArgValues, "PySideApp");
+}
 
-    *cptr = new QApplicationWrapper(QApplicationArgCount, QApplicationArgValues);
-    Shiboken::Object::releaseOwnership(reinterpret_cast<SbkObject*>(self));
-
+void QApplicationConstructorEnd(PyObject* self)
+{
     // Verify if qApp is in main module
     PyObject* globalsDict = PyEval_GetGlobals();
     if (globalsDict) {
@@ -33,4 +28,23 @@ void QApplication_constructor(PyObject* self, PyObject* args, QApplicationWrappe
     PyObject_SetAttrString(moduleQtGui, QAPP_MACRO, self);
     PySide::registerCleanupFunction(&PySide::destroyQCoreApplication);
     Py_INCREF(self);
+}
+
+static void QApplicationConstructor(PyObject* self, PyObject* argv, QApplicationWrapper** cptr)
+{
+    if (QApplicationConstructorStart(argv)) {
+        *cptr = new QApplicationWrapper(QApplicationArgCount, QApplicationArgValues);
+        Shiboken::Object::releaseOwnership(reinterpret_cast<SbkObject*>(self));
+        QApplicationConstructorEnd(self);
+    }
+}
+
+template <typename T>
+static void QApplicationConstructor(PyObject* self, PyObject* argv, T extraArg, QApplicationWrapper** cptr)
+{
+    if (QApplicationConstructorStart(argv)) {
+        *cptr = new QApplicationWrapper(QApplicationArgCount, QApplicationArgValues, extraArg);
+        Shiboken::Object::releaseOwnership(reinterpret_cast<SbkObject*>(self));
+        QApplicationConstructorEnd(self);
+    }
 }
