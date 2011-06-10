@@ -5322,7 +5322,19 @@
     <modify-function signature="QApplication(int&amp;,char**)" access="private" />
     <add-function signature="QApplication(PySequence)">
         <inject-code>
-            QApplication_constructor(%PYSELF, args, &amp;%0);
+            QApplicationConstructor(%PYSELF, %1, &amp;%0);
+        </inject-code>
+    </add-function>
+    <modify-function signature="QApplication(int&amp;,char**,bool)" access="private"/>
+    <add-function signature="QApplication(PySequence,bool)">
+        <inject-code>
+            QApplicationConstructor(%PYSELF, %1, %2, &amp;%0);
+        </inject-code>
+    </add-function>
+    <modify-function signature="QApplication(int&amp;,char**,QApplication::Type)" access="private" />
+    <add-function signature="QApplication(PySequence,QApplication::Type)">
+        <inject-code>
+            QApplicationConstructor(%PYSELF, %1, %2, &amp;%0);
         </inject-code>
     </add-function>
     <modify-function signature="exec()" rename="exec_" allow-thread="yes"/>
@@ -5331,9 +5343,7 @@
     <!-- ### Causes warnings using generator. They were kept here to avoid generation even
          removing Q_INTERNAL_QAPP_SRC || qdoc from #define section-->
     <modify-function signature="QApplication(int&amp;,char**,int)" remove="all"/>
-    <modify-function signature="QApplication(int&amp;,char**,bool)" remove="all"/>
     <modify-function signature="QApplication(int&amp;,char**,bool,int)" remove="all"/>
-    <modify-function signature="QApplication(int&amp;,char**,QApplication::Type)" remove="all"/>
     <modify-function signature="QApplication(int&amp;,char**,QApplication::Type,int)" remove="all"/>
     <!-- ### -->
 
