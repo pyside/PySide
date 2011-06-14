@@ -2706,6 +2706,43 @@
     </modify-function>
   </object-type>
   <object-type name="QVBoxLayout"/>
+
+  <template name="validator_conversionrule">
+        QValidator::State %out;
+
+        if (PySequence_Check(%PYARG_0)) {
+            Shiboken::AutoDecRef seq(PySequence_Fast(%PYARG_0, 0));
+            int size = PySequence_Fast_GET_SIZE(seq.object());
+
+            if (size > 1) {
+                if (Shiboken::Converter&lt;QString>::isConvertible(PySequence_Fast_GET_ITEM(seq.object(), 1)))
+                    %1 = %CONVERTTOCPP[QString](PySequence_Fast_GET_ITEM(seq.object(), 1));
+                else
+                    qWarning("%TYPE::%FUNCTION_NAME: Second tuple element is not convertible to unicode.");
+            }
+
+            if (size > 2) {
+                if (Shiboken::Converter&lt;int>::isConvertible(PySequence_Fast_GET_ITEM(seq.object(), 2)))
+                    %2 = %CONVERTTOCPP[int](PySequence_Fast_GET_ITEM(seq.object(), 2));
+                else
+                    qWarning("%TYPE::%FUNCTION_NAME: Second tuple element is not convertible to int.");
+            }
+            %PYARG_0 = PySequence_Fast_GET_ITEM(seq.object(), 0);
+            Py_INCREF(%PYARG_0); // we need to incref, because "%PYARG_0 = ..." will decref the tuple and the tuple will be decrefed again at the end of this scope.
+        }
+
+        // check retrun value
+        if (Shiboken::Converter&lt;QValidator::State>::isConvertible(%PYARG_0)) {
+            %out = %CONVERTTOCPP[QValidator::State](%PYARG_0);
+        } else {
+            PyErr_Format(PyExc_TypeError, "Invalid return value in function %s, expected %s, got %s.",
+                        "QValidator.validate",
+                        "PySide.QtGui.QValidator.State, (PySide.QtGui.QValidator.State,), (PySide.QtGui.QValidator.State, unicode) or (PySide.QtGui.QValidator.State, unicode, int)",
+                        pyResult->ob_type->tp_name);
+            return QValidator::State();
+        }
+  </template>
+
   <object-type name="QValidator">
     <enum-type name="State"/>
     <modify-function signature="fixup(QString &amp;)const">
@@ -2720,39 +2757,7 @@
       <modify-argument index="return">
         <replace-type modified-type="PyObject"/>
         <conversion-rule class="native">
-            QValidator::State %out;
-
-            if (PySequence_Check(%PYARG_0)) {
-                Shiboken::AutoDecRef seq(PySequence_Fast(%PYARG_0, 0));
-                int size = PySequence_Fast_GET_SIZE(seq.object());
-
-                if (size > 1) {
-                    if (Shiboken::Converter&lt;QString>::isConvertible(PySequence_Fast_GET_ITEM(seq.object(), 1)))
-                        %1 = %CONVERTTOCPP[QString](PySequence_Fast_GET_ITEM(seq.object(), 1));
-                    else
-                        qWarning("%TYPE::%FUNCTION_NAME: Second tuple element is not convertible to unicode.");
-                }
-
-                if (size > 2) {
-                    if (Shiboken::Converter&lt;int>::isConvertible(PySequence_Fast_GET_ITEM(seq.object(), 2)))
-                        %2 = %CONVERTTOCPP[int](PySequence_Fast_GET_ITEM(seq.object(), 2));
-                    else
-                        qWarning("%TYPE::%FUNCTION_NAME: Second tuple element is not convertible to int.");
-                }
-                %PYARG_0 = PySequence_Fast_GET_ITEM(seq.object(), 0);
-                Py_INCREF(%PYARG_0); // we need to incref, because "%PYARG_0 = ..." will decref the tuple and the tuple will be decrefed again at the end of this scope.
-            }
-
-            // check retrun value
-            if (Shiboken::Converter&lt;QValidator::State>::isConvertible(%PYARG_0)) {
-                %out = %CONVERTTOCPP[QValidator::State](%PYARG_0);
-            } else {
-                PyErr_Format(PyExc_TypeError, "Invalid return value in function %s, expected %s, got %s.",
-                            "QValidator.validate",
-                            "PySide.QtGui.QValidator.State, (PySide.QtGui.QValidator.State,), (PySide.QtGui.QValidator.State, unicode) or (PySide.QtGui.QValidator.State, unicode, int)",
-                            pyResult->ob_type->tp_name);
-                return QValidator::State();
-            }
+            <insert-template name="validator_conversionrule"/>
         </conversion-rule>
       </modify-argument>
       <inject-code class="target" position="end">
@@ -4127,6 +4132,9 @@
     <modify-function signature="validate(QString &amp;, int &amp;)const">
       <modify-argument index="return">
         <replace-type modified-type="PyObject"/>
+        <conversion-rule class="native">
+            <insert-template name="validator_conversionrule"/>
+        </conversion-rule>
       </modify-argument>
       <inject-code class="target" position="end">
         <insert-template name="return_tuple_QValidator_QString_int"/>
