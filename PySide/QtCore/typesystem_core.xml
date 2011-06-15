@@ -2118,7 +2118,7 @@
             Shiboken::AutoDecRef fileNo(PyObject_GetAttrString(%PYARG_1, "fileno"));
             if (!fileNo.isNull()) {
                 Shiboken::AutoDecRef fileNoValue(PyObject_CallObject(fileNo, 0));
-                if (Shiboken::Converter&lt;int>::checkType(fileNoValue))
+                if (%CHECKTYPE[int](fileNoValue))
                     %0 = new %TYPE(%CONVERTTOCPP[int](fileNoValue), %2, %3);
             }
         </inject-code>
