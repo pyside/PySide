@@ -2715,14 +2715,14 @@
             int size = PySequence_Fast_GET_SIZE(seq.object());
 
             if (size > 1) {
-                if (Shiboken::Converter&lt;QString>::isConvertible(PySequence_Fast_GET_ITEM(seq.object(), 1)))
+                if (%ISCONVERTIBLE[QString](PySequence_Fast_GET_ITEM(seq.object(), 1)))
                     %1 = %CONVERTTOCPP[QString](PySequence_Fast_GET_ITEM(seq.object(), 1));
                 else
                     qWarning("%TYPE::%FUNCTION_NAME: Second tuple element is not convertible to unicode.");
             }
 
             if (size > 2) {
-                if (Shiboken::Converter&lt;int>::isConvertible(PySequence_Fast_GET_ITEM(seq.object(), 2)))
+                if (%ISCONVERTIBLE[int](PySequence_Fast_GET_ITEM(seq.object(), 2)))
                     %2 = %CONVERTTOCPP[int](PySequence_Fast_GET_ITEM(seq.object(), 2));
                 else
                     qWarning("%TYPE::%FUNCTION_NAME: Second tuple element is not convertible to int.");
@@ -2732,7 +2732,7 @@
         }
 
         // check retrun value
-        if (Shiboken::Converter&lt;QValidator::State>::isConvertible(%PYARG_0)) {
+        if (%ISCONVERTIBLE[QValidator::State](%PYARG_0)) {
             %out = %CONVERTTOCPP[QValidator::State](%PYARG_0);
         } else {
             PyErr_Format(PyExc_TypeError, "Invalid return value in function %s, expected %s, got %s.",
