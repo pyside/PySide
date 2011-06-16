@@ -2972,6 +2972,9 @@
       <modify-argument index="this">
         <parent index="return" action="add"/>
       </modify-argument>
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
     </modify-function>
 
     <modify-function signature="takeAt(int)">
@@ -3833,9 +3836,12 @@
     </modify-function>
 
     <modify-function signature="parentWidget()const">
-      <modify-argument index="return">
-        <define-ownership owner="target"/>
-      </modify-argument>
+        <modify-argument index="this">
+          <parent index="return" action="add"/>
+        </modify-argument>
+        <modify-argument index="return">
+          <define-ownership class="target" owner="default"/>
+        </modify-argument>
     </modify-function>
 
     <modify-function signature="actionEvent(QActionEvent*)">
