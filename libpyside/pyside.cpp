@@ -284,5 +284,17 @@ PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* nam
     return attr;
 }
 
+bool inherits(PyTypeObject* objType, const char* class_name)
+{
+    if (strcmp(objType->tp_name, class_name) == 0)
+        return true;
+
+    PyTypeObject* base = (objType)->tp_base;
+    if (base == 0)
+        return false;
+
+    return inherits(base, class_name);
+}
+
 } //namespace PySide
 
