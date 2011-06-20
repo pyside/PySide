@@ -1390,25 +1390,6 @@
         %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectDisconnectCallback(%1, %2, %3));
         </inject-code>
     </add-function>
-    <inject-code class="native" position="beginning">
-        static bool
-        qobjectInheritsInternal(PyTypeObject *objType, const char *class_name)
-        {
-            if (strcmp(objType->tp_name, class_name) == 0)
-                return true;
-
-            PyTypeObject* base = (objType)->tp_base;
-            if (base == 0)
-                return false;
-            return qobjectInheritsInternal(base, class_name);
-        }
-    </inject-code>
-    <modify-function signature="inherits(const char*) const">
-        <inject-code class="target" position="beginning">
-            bool retval =  qobjectInheritsInternal(self->ob_type, %1) ? true : %CPPSELF.%FUNCTION_NAME(%1);
-            %PYARG_0 = %CONVERTTOPYTHON[bool](retval);
-        </inject-code>
-    </modify-function>
     <inject-code class="native" file="glue/qobject_findchild.cpp"/>
     <add-function signature="findChild(PyTypeObject*, const QString&amp;)" return-type="PyObject*">
         <inject-code class="target" position="beginning">

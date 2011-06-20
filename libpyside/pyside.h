@@ -102,6 +102,14 @@ PYSIDE_API void destroyQCoreApplication();
  */
 PYSIDE_API PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* name);
 
+/**
+ * Check if self inherits from class_name
+ * \param self Python object
+ * \param class_name strict with the class name
+ * \return Returns true if self object inherits from class_name, otherwise returns false
+ */
+PYSIDE_API bool inherits(PyTypeObject* self, const char* class_name);
+
 } //namespace PySide
 
 
