@@ -4,7 +4,7 @@ import unittest
 
 class TestDestroySignal(unittest.TestCase):
     def onObjectDestroyed(self, timer):
-        self.assert_(isinstance(timer, QTimer))
+        self.assert_(isinstance(timer, QObject))
         self._destroyed = True
 
     def testSignal(self):
