@@ -52,5 +52,12 @@ class InheritsCase(unittest.TestCase):
         # the exception to "reach the surface".
         obj1.objectName()
 
+    def testMultipleInheritance(self):
+        def declareClass():
+            class Foo(object, QObject):
+                pass
+
+        self.assertRaises(TypeError, declareClass)
+
 if __name__ == '__main__':
     unittest.main()
