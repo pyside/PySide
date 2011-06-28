@@ -136,6 +136,7 @@ static void qpropertyMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::C
     }
 }
 
+
 static PyObject* qpropertyTpNew(PyTypeObject* subtype, PyObject* args, PyObject* kwds)
 {
     PySideProperty* me = reinterpret_cast<PySideProperty*>(subtype->tp_alloc(subtype, 0));
@@ -192,6 +193,27 @@ void qpropertyFree(void *self)
 
 
 } // extern "C"
+
+namespace {
+
+static PyObject* getFromType(PyTypeObject* type, PyObject* name)
+{
+    PyObject* attr = 0;
+    attr = PyDict_GetItem(type->tp_dict, name);
+    if (!attr) {
+        PyObject* bases = type->tp_bases;
+        int size = PyTuple_GET_SIZE(bases);
+        for(int i=0; i < size; i++) {
+            PyObject* base = PyTuple_GET_ITEM(bases, i);
+            attr = getFromType(reinterpret_cast<PyTypeObject*>(base), name);
+            if (attr)
+                return attr;
+        }
+    }
+    return attr;
+}
+
+} //namespace
 
 
 namespace PySide { namespace Property {
@@ -275,9 +297,7 @@ PySideProperty* getObject(PyObject* source, PyObject* name)
             attr = PyDict_GetItem(dict, name);
     }
 
-    if (!attr)
-        attr = PyDict_GetItem(source->ob_type->tp_dict, name);
-
+    attr = getFromType(source->ob_type, name);
     if (attr && isPropertyType(attr)) {
         Py_INCREF(attr);
         return reinterpret_cast<PySideProperty*>(attr);
