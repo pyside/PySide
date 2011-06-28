@@ -36,6 +36,12 @@ class MyObject(QObject):
 
     pp = Property(int, readPP, constant=True)
 
+class MySubObject(MyObject):
+    pass
+
+class MyMultipleObject(MyObject, object):
+    pass
+
 class MyObjectWithNotifyProperty(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
@@ -136,6 +142,14 @@ class PropertyCase(unittest.TestCase):
         '''Value types when converted to QVariant is copyed'''
         self.assertFalse(obj.property('rect') is rect)
         self.assertEqual(obj.property('rect'), rect)
+
+    def testSubClassProperty(self):
+        o = MyObject()
+        self.assertEqual(o.property('pp'), 42)
+        so = MySubObject()
+        self.assertEqual(so.property('pp'), 42)
+        mo = MyMultipleObject()
+        self.assertEqual(mo.property('pp'), 42)
 
 class PropertyWithConstructorCase(unittest.TestCase):
     '''Test case for QObject properties set using named arguments in the constructor.'''
