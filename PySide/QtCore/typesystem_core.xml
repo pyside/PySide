@@ -379,6 +379,7 @@
   <inject-code class="target" position="end">
     Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("unicode");
     Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("str");
+    Shiboken::TypeResolver::createValueTypeResolver&lt;QVariantList>("QVariantList");
     PySide::init(module);
     Py_AtExit(QtCoreModuleExit);
   </inject-code>
