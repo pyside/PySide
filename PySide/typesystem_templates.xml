@@ -21,9 +21,10 @@
 <typesystem>
     <template name="replace_child">
         $CHILD_TYPE* oldChild = %CPPSELF.$FUNCTION_GET_OLD();
-        if (oldChild) {
+        if (oldChild &amp;&amp; (oldChild != $CPPARG)) {
             Shiboken::AutoDecRef pyChild(%CONVERTTOPYTHON[$CHILD_TYPE*](oldChild));
-            Shiboken::Object::setParent(NULL, pyChild);
+            Shiboken::Object::setParent(0, pyChild);
+            Shiboken::Object::releaseOwnership(pyChild);
         }
         Shiboken::Object::setParent(%PYSELF, $PYARG);
     </template>
