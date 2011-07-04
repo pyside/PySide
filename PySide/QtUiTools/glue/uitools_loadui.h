@@ -5,73 +5,56 @@
  */
 
 #include <shiboken.h>
+#include <QUiLoader>
+#include <QFile>
+#include <QWidget>
 
-static void
-_populate_parent(PyObject* pyParent, QObject *parent)
+static void createChildrenNameAttributes(PyObject* root, QObject* object)
 {
-    if (parent->children().isEmpty())
-        return;
+    foreach (QObject* child, object->children()) {
+        const QByteArray name = child->objectName().toLocal8Bit();
 
-    foreach(QObject *child, parent->children()) {
-        QString name(child->objectName());
         if (!name.isEmpty() && !name.startsWith("_") && !name.startsWith("qt_")) {
-            bool has_attr = PyObject_HasAttrString(pyParent, qPrintable(name));
-            Shiboken::AutoDecRef pyChild(Shiboken::Converter<QObject*>::toPython(child));
-            if (!has_attr)
-                PyObject_SetAttrString(pyParent, qPrintable(name), pyChild);
-
-            Shiboken::Object::setParent(pyParent, pyChild);
-            _populate_parent(pyChild, qobject_cast<QObject*>(child));
+            bool hasAttr = PyObject_HasAttrString(root, name.constData());
+            if (!hasAttr) {
+                Shiboken::AutoDecRef pyChild(Shiboken::Converter<QObject*>::toPython(child));
+                PyObject_SetAttrString(root, name.constData(), pyChild);
+            }
+            createChildrenNameAttributes(root, child);
         }
+        createChildrenNameAttributes(root, child);
     }
 }
 
-static PyObject*
-quiloader_load_ui_from_device(QUiLoader* self, QIODevice* dev, QWidget *parent)
+static PyObject* QUiLoadedLoadUiFromDevice(QUiLoader* self, QIODevice* dev, QWidget* parent)
 {
-    QWidget *w = self->load(dev, parent);
-    if (w) {
-        QObject* _parent = parent;
-        if (!_parent)
-            _parent = w;
+    QWidget* wdg = self->load(dev, parent);
 
-        if (parent && parent->layout())
+    if (wdg) {
+        PyObject* pyWdg = Shiboken::Converter<QWidget*>::toPython(wdg);
+
+        if (!parent)
+            parent = wdg;
+
+        if (parent->layout())
             parent->layout()->deleteLater();
 
-        PyObject* pyParent = Shiboken::Converter<QWidget*>::toPython(w);
-        _populate_parent(pyParent, _parent);
+        createChildrenNameAttributes(pyWdg, wdg);
+        if (parent) {
+            Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
+            Shiboken::Object::setParent(pyParent, pyWdg);
+        }
 
-        return pyParent;
+        return pyWdg;
     }
 
     if (!PyErr_Occurred())
-        PyErr_SetString(PyExc_RuntimeError, "Unable to open ui file");
+        PyErr_SetString(PyExc_RuntimeError, "Unable to open/read ui device");
     return 0;
 }
 
-static PyObject*
-quiloader_load_ui(QUiLoader* self, const QString &ui_file, QWidget *parent)
+static PyObject* QUiLoaderLoadUiFromFileName(QUiLoader* self, const QString& uiFile, QWidget* parent)
 {
-    QFile fd(ui_file);
-
-    if (fd.exists(ui_file) && fd.open(QFile::ReadOnly)) {
-        QWidget* w = self->load(&fd, parent);
-        fd.close();
-        if (w != 0) {
-            QObject *_parent = parent;
-            if (!_parent)
-                _parent = w;
-
-            Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(_parent));
-            if (parent && parent->layout())
-                parent->layout()->deleteLater();
-
-            _populate_parent(pyParent, _parent);
-
-            return Shiboken::Converter<QWidget*>::toPython(w);
-        }
-    }
-    if (!PyErr_Occurred())
-        PyErr_SetString(PyExc_RuntimeError, "Unable to open ui file");
-    return 0;
+    QFile fd(uiFile);
+    return QUiLoadedLoadUiFromDevice(self, &fd, parent);
 }
