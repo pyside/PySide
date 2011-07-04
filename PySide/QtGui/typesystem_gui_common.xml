@@ -2134,6 +2134,7 @@
            <replace from="$FUNCTION_GET_OLD" to="centralWidget" />
            <replace from="$CHILD_TYPE" to="QWidget" />
            <replace from="$PYARG" to="%PYARG_1" />
+           <replace from="$CPPARG" to="%1" />
          </insert-template>
        </inject-code>
     </modify-function>
@@ -2144,16 +2145,18 @@
            <replace from="$FUNCTION_GET_OLD" to="menuBar" />
            <replace from="$CHILD_TYPE" to="QMenuBar" />
            <replace from="$PYARG" to="%PYARG_1" />
+           <replace from="$CPPARG" to="%1" />
          </insert-template>
        </inject-code>
    </modify-function>
 
-    <modify-function signature="setMenuWidget(QWidget*)">
+   <modify-function signature="setMenuWidget(QWidget*)">
        <inject-code class="target" position="beginning">
          <insert-template name="replace_child">
            <replace from="$FUNCTION_GET_OLD" to="menuWidget" />
            <replace from="$CHILD_TYPE" to="QWidget" />
            <replace from="$PYARG" to="%PYARG_1" />
+           <replace from="$CPPARG" to="%1" />
          </insert-template>
        </inject-code>
     </modify-function>
@@ -2164,6 +2167,7 @@
            <replace from="$FUNCTION_GET_OLD" to="statusBar" />
            <replace from="$CHILD_TYPE" to="QStatusBar" />
            <replace from="$PYARG" to="%PYARG_1" />
+           <replace from="$CPPARG" to="%1" />
          </insert-template>
        </inject-code>
    </modify-function>
