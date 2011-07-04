@@ -1,5 +1,6 @@
 import unittest
 import sys
+import weakref
 
 from PySide import QtGui
 from PySide import QtCore
@@ -34,14 +35,19 @@ class TestMainWindow(UsesQApplication):
         QtCore.QTimer.singleShot(1000, self.app.quit)
         self.app.exec_()
 
+    def objDel(self, obj):
+        self.app.quit()
+
     def testRefCountToNull(self):
         w = QtGui.QMainWindow()
         c = QtGui.QWidget()
         self.assertEqual(sys.getrefcount(c), 2)
         w.setCentralWidget(c)
         self.assertEqual(sys.getrefcount(c), 3)
+        wr = weakref.ref(c, self.objDel)
         w.setCentralWidget(None)
-        self.assertEqual(sys.getrefcount(c), 2)
+        c = None
+        self.app.exec_()
 
     def testRefCountToAnother(self):
         w = QtGui.QMainWindow()
@@ -52,8 +58,13 @@ class TestMainWindow(UsesQApplication):
 
         c2 = QtGui.QWidget()
         w.setCentralWidget(c2)
-        self.assertEqual(sys.getrefcount(c), 2)
         self.assertEqual(sys.getrefcount(c2), 3)
+
+        wr = weakref.ref(c, self.objDel)
+        w.setCentralWidget(None)
+        c = None
+
+        self.app.exec_()
 
     def testSignalDisconect(self):
         w = QtGui.QMainWindow()
