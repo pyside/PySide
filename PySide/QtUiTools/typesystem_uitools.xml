@@ -102,7 +102,8 @@
           <rename to="parentWidget" />
         </modify-argument>
         <modify-argument index="return">
-          <parent index="2" action="add"/>
+           <define-ownership class="target" owner="target"/>
+           <parent index="2" action="add" />
         </modify-argument>
         <inject-code>
             // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
@@ -120,7 +121,8 @@
           <rename to="parentWidget" />
         </modify-argument>
         <modify-argument index="return">
-          <parent index="2" action="add"/>
+          <define-ownership class="target" owner="target"/>
+           <parent index="2" action="add" />
         </modify-argument>
         <inject-code>
             // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
