@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
     This file is part of PySide project.
-    Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2009-2011 Nokia Corporation and/or its subsidiary(-ies).
     Contact: PySide team <contact@pyside.org>
 
     This library is free software; you can redistribute it and/or
@@ -107,7 +107,7 @@
         </modify-argument>
         <inject-code>
             // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
-            %PYARG_0 = quiloader_load_ui_from_device(%CPPSELF, %1, %2);
+            %PYARG_0 = QUiLoadedLoadUiFromDevice(%CPPSELF, %1, %2);
         </inject-code>
      </modify-function>
 
@@ -126,7 +126,7 @@
         </modify-argument>
         <inject-code>
             // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
-            %PYARG_0 = quiloader_load_ui(%CPPSELF, %1, %2);
+            %PYARG_0 = QUiLoaderLoadUiFromFileName(%CPPSELF, %1, %2);
         </inject-code>
       </add-function>
     </object-type>

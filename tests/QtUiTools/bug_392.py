@@ -19,7 +19,7 @@ class BugTest(UsesQApplication):
 
         filePath = os.path.join(os.path.dirname(__file__), 'action.ui')
         result = loader.load(filePath, w)
-        self.assert_(isinstance(result.statusbar.actionFoo, QtGui.QAction))
+        self.assert_(isinstance(result.actionFoo, QtGui.QAction))
 
     def testPythonCustomWidgets(self):
         w = QtGui.QWidget()
