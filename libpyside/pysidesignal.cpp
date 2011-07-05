@@ -519,8 +519,11 @@ char* getTypeName(PyObject* type)
                 typeName = strdup("double");
             else if (objType == &PyBool_Type)
                 typeName = strdup("bool");
-            else
+            else if (objType->ob_type == &SbkEnumType_Type) {
+                typeName = strdup(Shiboken::Enum::getCppName(objType));
+            } else {
                 typeName = strdup("PyObject");
+            }
         }
         return typeName;
     } else if (PyString_Check(type)) {
