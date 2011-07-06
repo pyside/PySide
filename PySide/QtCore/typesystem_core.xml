@@ -1505,7 +1505,7 @@
       <modify-argument index="return">
          <define-ownership owner="default"/>
       </modify-argument>
-    </modify-function>
+   </modify-function>
   </object-type>
   <object-type name="QAbstractListModel" polymorphic-id-expression="qobject_cast&lt;QAbstractListModel*&gt;(%1)">
     <extra-includes>

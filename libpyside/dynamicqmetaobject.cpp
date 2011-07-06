@@ -37,6 +37,7 @@
 #include <cstring>
 #include <QDebug>
 #include <QMetaMethod>
+#include <shiboken.h>
 
 #define EMPTY_META_METHOD "0()"
 
@@ -279,7 +280,22 @@ bool PropertyData::operator==(const char* name) const
 }
 
 
-DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject) : m_d(new DynamicQMetaObjectPrivate)
+DynamicQMetaObject::DynamicQMetaObject(PyTypeObject* type, const QMetaObject* base)
+    : m_d(new DynamicQMetaObjectPrivate)
+{
+    d.superdata = base;
+    d.stringdata = 0;
+    d.data = 0;
+    d.extradata = 0;
+
+    m_d->m_className = QByteArray(type->tp_name).split('.').last();
+    parsePythonType(type);
+    //TODO : fill type userData
+    m_d->updateMetaObject(this);
+}
+
+DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject) 
+    : m_d(new DynamicQMetaObjectPrivate)
 {
     d.superdata = metaObject;
     d.stringdata = 0;
@@ -418,6 +434,59 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList
         (*data)[index++] = flags  |  (it->methodType() == QMetaMethod::Signal ? MethodSignal : MethodSlot);
     }
     *prtIndex = index;
+}
+
+void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
+{
+    PyObject* attrs = type->tp_dict;
+    PyObject* key = 0;
+    PyObject* value = 0;
+    Py_ssize_t pos = 0;
+
+    typedef std::pair<const char*, PyObject*> PropPair;
+    QList<PropPair> properties;
+
+    Shiboken::AutoDecRef slotAttrName(PyString_FromString(PYSIDE_SLOT_LIST_ATTR));
+
+    while (PyDict_Next(attrs, &pos, &key, &value)) {
+        if (Property::checkType(value)) {
+            // Leave the properties to be register after signals because they may depend on notify signals
+            properties << PropPair(PyString_AS_STRING(key), value);
+        } else if (Signal::checkType(value)) { // Register signals
+            PySideSignal* data = reinterpret_cast<PySideSignal*>(value);
+            const char* signalName = PyString_AS_STRING(key);
+            data->signalName = strdup(signalName);
+            QByteArray sig;
+            sig.reserve(128);
+            for (int i = 0; i < data->signaturesSize; ++i) {
+                sig = signalName;
+                sig += '(';
+                if (data->signatures[i])
+                    sig += data->signatures[i];
+                sig += ')';
+                if (d.superdata->indexOfSignal(sig) == -1)
+                    addSignal(sig);
+            }
+        } else if (PyFunction_Check(value)) { // Register slots
+            if (PyObject_HasAttr(value, slotAttrName)) {
+                PyObject* signatureList = PyObject_GetAttr(value, slotAttrName);
+                for(Py_ssize_t i = 0, i_max = PyList_Size(signatureList); i < i_max; ++i) {
+                    PyObject* signature = PyList_GET_ITEM(signatureList, i);
+                    QByteArray sig(PyString_AS_STRING(signature));
+                    //slot the slot type and signature
+                    QList<QByteArray> slotInfo = sig.split(' ');
+                    int index = d.superdata->indexOfSlot(slotInfo[1]);
+                    if (index == -1)
+                        addSlot(slotInfo[1], slotInfo[0]);
+                }
+            }
+        }
+    }
+
+    // Register properties
+    foreach (PropPair propPair, properties)
+        addProperty(propPair.first, propPair.second);
+
 }
 
 void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject* metaObj)
