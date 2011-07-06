@@ -14,5 +14,10 @@ class testAttribute(unittest.TestCase):
         self.assertEqual(mo.className(), 'MyObject')
         self.assertTrue(mo.indexOfSlot('slot1(int,QString)') > -1)
 
+    def testDuplicateSlot(self):
+        mo = MyObject.staticMetaObject
+        self.assertEqual(mo.indexOfSignal('destroyed(void)'), -1)
+        self.assertTrue(mo.indexOfSignal('destroyed()') > -1)
+
 if __name__ == '__main__':
     unittest.main()
