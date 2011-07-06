@@ -661,7 +661,9 @@ PySideSignal* newObject(const char* name, ...)
     sig = va_arg(listSignatures, char*);
 
     while(sig != NULL) {
-        appendSignature(self, strdup(sig));
+        if (strcmp(sig, "void") != 0)
+            appendSignature(self, strdup(sig));
+
         sig = va_arg(listSignatures, char*);
     }
 
