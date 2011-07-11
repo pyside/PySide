@@ -169,6 +169,7 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
         return 0;
     }
 
+
     pData->typeName = PySide::Signal::getTypeName(type);
 
     if (!pData->typeName)
@@ -176,17 +177,38 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
     else if (pData->constant && (pData->fset || pData->notify))
         PyErr_SetString(PyExc_TypeError, "A constant property cannot have a WRITE method or a NOTIFY signal.");
 
-    return PyErr_Occurred() ? -1 : 1;
+    if (!PyErr_Occurred()) {
+        Py_XINCREF(pData->fget);
+        Py_XINCREF(pData->fset);
+        Py_XINCREF(pData->freset);
+        Py_XINCREF(pData->fdel);
+        Py_XINCREF(pData->notify);
+        return 1;
+    } else {
+        pData->fget = 0;
+        pData->fset = 0;
+        pData->freset = 0;
+        pData->fdel = 0;
+        pData->notify = 0;
+        return -1;
+    }
 }
 
 void qpropertyFree(void *self)
 {
     PyObject *pySelf = reinterpret_cast<PyObject*>(self);
     PySideProperty *data = reinterpret_cast<PySideProperty*>(self);
+    PySidePropertyPrivate* pData = data->d;
 
-    free(data->d->typeName);
-    free(data->d->doc);
-    free(data->d->notifySignature);
+    Py_XDECREF(pData->fget);
+    Py_XDECREF(pData->fset);
+    Py_XDECREF(pData->freset);
+    Py_XDECREF(pData->fdel);
+    Py_XDECREF(pData->notify);
+
+    free(pData->typeName);
+    free(pData->doc);
+    free(pData->notifySignature);
     delete data->d;
     pySelf->ob_type->tp_base->tp_free(self);
 }
