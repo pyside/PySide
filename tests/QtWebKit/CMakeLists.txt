@@ -1,6 +1,7 @@
 PYSIDE_TEST(bug_448.py)
 PYSIDE_TEST(bug_694.py)
 PYSIDE_TEST(bug_803.py)
+PYSIDE_TEST(bug_899.py)
 PYSIDE_TEST(qvariantlist_property_test.py)
 PYSIDE_TEST(webpage_test.py)
 PYSIDE_TEST(webview_test.py)
