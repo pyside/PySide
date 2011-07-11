@@ -20,7 +20,9 @@
     </namespace-type>
 
     <namespace-type name="PySideCPP2" generate="no">
+        <enum-type name="Enum1" />
         <object-type name="TestObjectWithoutNamespace" >
+            <enum-type name="Enum2" />
             <modify-function signature="emitSignalWithNamespace(PySideCPP2::TestObjectWithoutNamespace*)">
               <modify-argument index="1">
                 <replace-type modified-type="PySideCPP2::TestObjectWithoutNamespace*"/>

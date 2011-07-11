@@ -68,12 +68,16 @@ signals:
 
 namespace PySideCPP2 {
 
+enum Enum1 { Option1 = 1, Option2 = 2 };
+
+
 typedef long PySideLong;
 
 class PYSIDE_API TestObjectWithoutNamespace :  public QObject
 {
     Q_OBJECT
 public:
+    enum Enum2 { Option3 = 3, Option4 =  4};
     TestObjectWithoutNamespace(QObject* parent) : QObject(parent) {}
     QString name() { return "TestObjectWithoutNamespace"; }
 
