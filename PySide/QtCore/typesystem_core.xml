@@ -2829,7 +2829,24 @@
       <include file-name="qtconcurrentthreadengine.h" location="global"/>
     </extra-includes>
   </namespace-type>
-  <object-type name="QThreadPool" />
+  <object-type name="QThreadPool">
+    <modify-function signature="start(QRunnable*, int)">
+      <modify-argument index="1">
+        <parent index="this" action="add" />
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="tryStart(QRunnable*)">
+      <modify-argument index="1">
+        <parent index="this" action="add" />
+      </modify-argument>
+    </modify-function>
+
+    <modify-function signature="globalInstance()" >
+      <inject-code position="end">
+        Shiboken::Object::releaseOwnership(%PYARG_0);
+      </inject-code>
+    </modify-function>
+  </object-type>
   <value-type name="QXmlStreamAttribute"/>
   <value-type name="QXmlStreamAttributes">
     <modify-function signature="push_back(QXmlStreamAttribute)" remove="all"/>
