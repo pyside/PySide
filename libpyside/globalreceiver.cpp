@@ -26,6 +26,7 @@
 #include <QMetaMethod>
 #include <QDebug>
 #include <QEvent>
+#include <QLinkedList>
 #include <autodecref.h>
 #include <gilstate.h>
 
@@ -52,7 +53,7 @@ class DynamicSlotData
     private:
         int m_id;
         PyObject* m_callback;
-        QSet<const QObject*> m_refs;
+        QLinkedList<const QObject*> m_refs;
 };
 
 }
@@ -68,12 +69,12 @@ DynamicSlotData::DynamicSlotData(int id, PyObject* callback)
 
 void DynamicSlotData::addRef(const QObject *o)
 {
-    m_refs.insert(o);
+    m_refs.append(o);
 }
 
 void DynamicSlotData::decRef(const QObject *o)
 {
-    m_refs.remove(o);
+    m_refs.removeOne(o);
 }
 
 int DynamicSlotData::refCount() const
