@@ -1618,13 +1618,16 @@
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="scene() const">
-      <modify-argument index="return">
-        <define-ownership owner="target"/>
-      </modify-argument>
-      <modify-argument index="this">
-        <parent index="return" action="add"/>
-      </modify-argument>
+      <modify-function signature="scene() const">
+        <inject-code position="end">
+            if (%0) {
+                Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QObject*](%0->parent()));
+                Shiboken::Object::setParent(pyParent, %PYARG_0);
+            }
+        </inject-code>
+        <modify-argument index="this">
+          <parent index="return" action="add"/>
+        </modify-argument>
     </modify-function>
 
     <modify-function signature="parentItem() const">
@@ -3197,6 +3200,12 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="scene()const">
+        <inject-code position="end">
+            if (%0) {
+                Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QObject*](%0->parent()));
+                Shiboken::Object::setParent(pyParent, %PYARG_0);
+            }
+        </inject-code>
         <modify-argument index="return">
             <define-ownership owner="default"/>
         </modify-argument>
