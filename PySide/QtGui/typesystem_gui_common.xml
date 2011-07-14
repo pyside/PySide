@@ -1618,13 +1618,16 @@
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="scene() const">
-      <modify-argument index="return">
-        <define-ownership owner="target"/>
-      </modify-argument>
-      <modify-argument index="this">
-        <parent index="return" action="add"/>
-      </modify-argument>
+      <modify-function signature="scene() const">
+        <inject-code position="end">
+            if (%0) {
+                Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QObject*](%0->parent()));
+                Shiboken::Object::setParent(pyParent, %PYARG_0);
+            }
+        </inject-code>
+        <modify-argument index="this">
+          <parent index="return" action="add"/>
+        </modify-argument>
     </modify-function>
 
     <modify-function signature="parentItem() const">
@@ -2931,12 +2934,30 @@
     <modify-function signature="layoutSpacingImplementation(QSizePolicy::ControlType, QSizePolicy::ControlType, Qt::Orientation, const QStyleOption *, const QWidget *) const" virtual-slot="yes"/>
     <modify-function signature="drawComplexControl(QStyle::ComplexControl,const QStyleOptionComplex*,QPainter*,const QWidget*)const">
       <modify-argument index="3" invalidate-after-use="yes"/>
+      <modify-argument index="4">
+        <replace-default-expression with="0"/>
+        <rename to="widget" />
+      </modify-argument>
     </modify-function>
     <modify-function signature="drawControl(QStyle::ControlElement,const QStyleOption*,QPainter*,const QWidget*)const">
       <modify-argument index="3" invalidate-after-use="yes"/>
+      <modify-argument index="4">
+        <replace-default-expression with="0"/>
+        <rename to="widget" />
+      </modify-argument>
     </modify-function>
     <modify-function signature="drawPrimitive(QStyle::PrimitiveElement,const QStyleOption*,QPainter*,const QWidget*)const">
       <modify-argument index="3" invalidate-after-use="yes"/>
+      <modify-argument index="4">
+        <replace-default-expression with="0"/>
+        <rename to="widget" />
+      </modify-argument>
+    </modify-function>
+    <modify-function signature="hitTestComplexControl(ComplexControl, const QStyleOptionComplex*, const QPoint&amp;, const QWidget*)const">
+      <modify-argument index="4">
+        <replace-default-expression with="0"/>
+        <rename to="widget" />
+      </modify-argument>
     </modify-function>
     <modify-function signature="styleHint(QStyle::StyleHint,const QStyleOption*,const QWidget*,QStyleHintReturn*)const">
       <modify-argument index="4" invalidate-after-use="yes"/>
@@ -3197,6 +3218,12 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="scene()const">
+        <inject-code position="end">
+            if (%0) {
+                Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QObject*](%0->parent()));
+                Shiboken::Object::setParent(pyParent, %PYARG_0);
+            }
+        </inject-code>
         <modify-argument index="return">
             <define-ownership owner="default"/>
         </modify-argument>
