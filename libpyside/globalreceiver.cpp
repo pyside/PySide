@@ -22,6 +22,7 @@
 
 #include "globalreceiver.h"
 #include "dynamicqmetaobject_p.h"
+#include "pysideweakref.h"
 
 #include <QMetaMethod>
 #include <QDebug>
@@ -40,19 +41,25 @@ namespace PySide
 class DynamicSlotData
 {
     public:
-        DynamicSlotData(int id, PyObject* callback);
+        DynamicSlotData(int id, PyObject* callback, GlobalReceiver* parent);
         void addRef(const QObject* o);
         void decRef(const QObject* o);
         void clear();
         bool hasRefTo(const QObject* o) const;
         int refCount() const;
         int id() const;
-        PyObject* callback() const;
+        PyObject* call(PyObject* args);
         ~DynamicSlotData();
+        static void onCallbackDestroyed(void* data);
 
     private:
         int m_id;
+        bool m_isMethod;
         PyObject* m_callback;
+        PyObject* m_pythonSelf;
+        PyObject* m_pyClass;
+        PyObject* m_weakRef;
+        GlobalReceiver* m_parent;
         QLinkedList<const QObject*> m_refs;
 };
 
@@ -60,11 +67,39 @@ class DynamicSlotData
 
 using namespace PySide;
 
-DynamicSlotData::DynamicSlotData(int id, PyObject* callback)
-    : m_id(id)
+DynamicSlotData::DynamicSlotData(int id, PyObject* callback, GlobalReceiver* parent)
+    : m_id(id), m_pythonSelf(0), m_pyClass(0), m_weakRef(0), m_parent(parent)
 {
-    m_callback = callback;
-    Py_INCREF(callback);
+    m_isMethod = PyMethod_Check(callback);
+    if (m_isMethod) {
+        //Can not store calback pointe because this will be destroyed at the end of the scope
+        //To avoid increment intance reference keep the callback information
+        m_callback = PyMethod_GET_FUNCTION(callback);
+        m_pyClass = PyMethod_GET_CLASS(callback);
+        m_pythonSelf = PyMethod_GET_SELF(callback);
+
+        //monitor class from method lifetime
+        m_weakRef = WeakRef::create(m_pythonSelf, DynamicSlotData::onCallbackDestroyed, this);
+    } else {
+        m_callback = callback;
+        Py_INCREF(m_callback);
+    }
+}
+
+PyObject* DynamicSlotData::call(PyObject* args)
+{
+    PyObject* callback = m_callback;
+
+    //create a callback based on method data
+    if (m_isMethod)
+        callback = PyMethod_New(callback, m_pythonSelf, m_pyClass);
+
+    PyObject* result =  PyObject_CallObject(callback, args);
+
+    if (m_isMethod)
+        Py_DECREF(callback);
+
+    return result;
 }
 
 void DynamicSlotData::addRef(const QObject *o)
@@ -82,12 +117,6 @@ int DynamicSlotData::refCount() const
     return m_refs.size();
 }
 
-
-PyObject* DynamicSlotData::callback() const
-{
-    return m_callback;
-}
-
 int DynamicSlotData::id() const
 {
     return m_id;
@@ -95,18 +124,39 @@ int DynamicSlotData::id() const
 
 bool DynamicSlotData::hasRefTo(const QObject *o) const
 {
-    return m_refs.contains(o);
+    if (m_refs.size())
+        return m_refs.contains(o);
+    return false;
 }
 
 void DynamicSlotData::clear()
 {
+    Shiboken::GilState gil;
+    Py_XDECREF(m_weakRef);
+    m_weakRef = 0;
     m_refs.clear();
 }
 
 DynamicSlotData::~DynamicSlotData()
 {
     Shiboken::GilState gil;
-    Py_DECREF(m_callback);
+    clear();
+    if (!m_isMethod)
+       Py_DECREF(m_callback);
+}
+
+void DynamicSlotData::onCallbackDestroyed(void *data)
+{
+    Shiboken::GilState gil;
+    DynamicSlotData* self = reinterpret_cast<DynamicSlotData*>(data);
+
+    //Disconnect all sources
+    QMetaMethod m = self->m_parent->metaObject()->method(self->m_id);
+    QByteArray methodName = QByteArray::number(m.methodType()).append(m.signature());
+    QLinkedList<const QObject*> sources = self->m_refs;
+    foreach(const QObject* src, sources)
+        const_cast<QObject*>(src)->disconnect(self->m_parent, methodName);
+    self->m_weakRef = 0;
 }
 
 GlobalReceiver::GlobalReceiver()
@@ -158,7 +208,7 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
     m_metaObject.addSlot(slot);
     int slotId = m_metaObject.indexOfSlot(slot);
     if (!m_slotReceivers.contains(slotId))
-        m_slotReceivers[slotId] = new DynamicSlotData(slotId, callback);
+        m_slotReceivers[slotId] = new DynamicSlotData(slotId, callback, this);
 
     bool isShortCircuit = true;
     for (int i = 0; slot[i]; ++i) {
@@ -210,10 +260,9 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         QHash<int, DynamicSlotData*> copy = m_slotReceivers;
         QHash<int, DynamicSlotData*>::iterator i = copy.begin();
         while(i != copy.end()) {
-            if (i.value()->hasRefTo(arg)) {
+            //Remove all refs
+            while (i.value()->hasRefTo(arg))
                 disconnectNotify(arg, i.key());
-                break;
-            }
             i++;
         }
         return -1;
@@ -227,9 +276,8 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
 
     Shiboken::GilState gil;
     PyObject* retval = 0;
-    PyObject* callback = data->callback();
     if (m_shortCircuitSlots.contains(id)) {
-        retval = PyObject_CallObject(callback, reinterpret_cast<PyObject*>(args[1]));
+        retval = data->call(reinterpret_cast<PyObject*>(args[1]));
     } else {
         QList<QByteArray> paramTypes = slot.parameterTypes();
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
@@ -237,8 +285,7 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
             PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]); // Do not increment the reference
             PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
         }
-
-        retval = PyObject_CallObject(callback, preparedArgs);
+        retval = data->call(preparedArgs);
     }
 
     if (!retval)
