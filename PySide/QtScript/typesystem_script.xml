@@ -49,6 +49,19 @@
         <enum-type name="PropertyFlag" flags="PropertyFlags"/>
         <enum-type name="ResolveFlag" flags="ResolveFlags"/>
         <enum-type name="SpecialValue"/>
+        <add-function signature="__mgetitem__">
+            <inject-code>
+                Shiboken::AutoDecRef key(PyObject_Str(_key));
+                QVariant res = %CPPSELF.property(PyString_AS_STRING(key.object())).toVariant();
+                if (res.isValid()) {
+                    return %CONVERTTOPYTHON[QVariant](res);
+                } else {
+                    PyObject* errorType = PyInt_Check(_key) ? PyExc_IndexError : PyExc_KeyError;
+                    PyErr_SetString(errorType, "Key not found.");
+                    return 0;
+                }
+            </inject-code>
+        </add-function>
     </value-type>
     <object-type name="QScriptValueIterator"/>
 </typesystem>
