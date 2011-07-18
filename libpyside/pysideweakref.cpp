@@ -6,7 +6,7 @@ typedef struct {
     PyObject_HEAD
     /* Type-specific fields go here. */
     PySideWeakRefFunction weakref_func;
-    void *user_data;
+    void*  user_data;
 } PySideCallableObject;
 
 static PyObject* CallableObject_call(PyObject* callable_object, PyObject* args, PyObject* kw);
@@ -36,13 +36,12 @@ static PyTypeObject PySideCallableObjectType = {
     0,                         /* tp_doc */
 };
 
-
 static PyObject* CallableObject_call(PyObject* callable_object, PyObject* args, PyObject* kw)
 {
     PySideCallableObject* obj = (PySideCallableObject*)(callable_object);
     obj->weakref_func(obj->user_data);
 
-    Py_XDECREF(PyTuple_GET_ITEM(args, 0)); //kill weak ref
+    Py_XDECREF(PyTuple_GET_ITEM(args, 0)); //kill weak ref object
     Py_RETURN_NONE;
 }
 
@@ -68,12 +67,10 @@ PyObject* create(PyObject* obj, PySideWeakRefFunction func, void* userData)
         return 0;
 
     Py_DECREF(callable);
-    if (!weak)
-        return 0;
 
     callable->weakref_func = func;
     callable->user_data = userData;
-    return (PyObject*)callable;
+    return (PyObject*)weak;
 }
 
 } }  //namespace
