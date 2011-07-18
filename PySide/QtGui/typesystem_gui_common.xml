@@ -396,22 +396,22 @@
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="ToolButtonFeature" flags="ToolButtonFeatures" />
   </object-type>
-  <object-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version">
+  <value-type name="QStyleOptionViewItem" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItem::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItem::Version">
       <enum-type name="Position"/>
       <enum-type name="StyleOptionType"/>
       <enum-type name="StyleOptionVersion"/>
-  </object-type>
-  <object-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version">
+  </value-type>
+  <value-type name="QStyleOptionViewItemV2" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV2::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV2::Version">
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="ViewItemFeature" flags="ViewItemFeatures"/>
-  </object-type>
-  <object-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version">
+  </value-type>
+  <value-type name="QStyleOptionViewItemV3" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV3::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV3::Version">
       <enum-type name="StyleOptionVersion"/>
-  </object-type>
-  <object-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" >
+  </value-type>
+  <value-type name="QStyleOptionViewItemV4" polymorphic-id-expression="%1-&gt;type == QStyleOptionViewItemV4::Type &amp;&amp; %1-&gt;version == QStyleOptionViewItemV4::Version" >
       <enum-type name="StyleOptionVersion"/>
       <enum-type name="ViewItemPosition"/>
-  </object-type>
+  </value-type>
   <value-type name="QTextFragment" />
   <value-type name="QBitmap" >
     <modify-function signature="fromData(QSize,const uchar*,QImage::Format)">
