@@ -2,7 +2,7 @@ import unittest
 import sys
 
 from helper import UsesQApplication
-from PySide.QtCore import QObject, QEvent, QTimer
+from PySide.QtCore import QObject, QEvent
 from PySide.QtGui import QWidget
 
 class MyFilter(QObject):
@@ -17,10 +17,10 @@ class EventFilter(UsesQApplication):
         o = QObject()
         filt = MyFilter()
         o.installEventFilter(filt)
-        self.assertEqual(sys.getrefcount(o), 3)
+        self.assertEqual(sys.getrefcount(o), 2)
 
         o.installEventFilter(filt)
-        self.assertEqual(sys.getrefcount(o), 3)
+        self.assertEqual(sys.getrefcount(o), 2)
 
         o.removeEventFilter(filt)
         self.assertEqual(sys.getrefcount(o), 2)
