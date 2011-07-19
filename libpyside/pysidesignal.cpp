@@ -28,6 +28,7 @@
 #include <QDebug>
 
 #define SIGNAL_CLASS_NAME "Signal"
+#define SIGNAL_INSTANCE_NAME "SignalInstance"
 #define QT_SIGNAL_SENTINEL '2'
 
 
@@ -133,7 +134,7 @@ static PyMappingMethods SignalInstance_as_mapping = {
 PyTypeObject PySideSignalInstanceType = {
     PyObject_HEAD_INIT(0)
     /*ob_size*/             0,
-    /*tp_name*/             "PySide.QtCore."SIGNAL_CLASS_NAME,
+    /*tp_name*/             "PySide.QtCore."SIGNAL_INSTANCE_NAME,
     /*tp_basicsize*/        sizeof(PySideSignalInstance),
     /*tp_itemsize*/         0,
     /*tp_dealloc*/          0,
@@ -152,7 +153,7 @@ PyTypeObject PySideSignalInstanceType = {
     /*tp_setattro*/         0,
     /*tp_as_buffer*/        0,
     /*tp_flags*/            Py_TPFLAGS_DEFAULT,
-    /*tp_doc*/              SIGNAL_CLASS_NAME,
+    /*tp_doc*/              SIGNAL_INSTANCE_NAME,
     /*tp_traverse*/         0,
     /*tp_clear*/            0,
     /*tp_richcompare*/      0,
@@ -285,7 +286,7 @@ PyObject* signalInstanceConnect(PyObject* self, PyObject* args, PyObject* kwds)
     static const char *kwlist[] = {"slot", "type", 0};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
-        "O|O:"SIGNAL_CLASS_NAME, (char**) kwlist, &slot, &type))
+        "O|O:"SIGNAL_INSTANCE_NAME, (char**) kwlist, &slot, &type))
         return 0;
 
     PySideSignalInstance *source = reinterpret_cast<PySideSignalInstance*>(self);
