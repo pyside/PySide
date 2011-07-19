@@ -45,7 +45,7 @@ class DynamicSlotData
         void addRef(const QObject* o);
         void decRef(const QObject* o);
         void clear();
-        bool hasRefTo(const QObject* o) const;
+        int hasRefTo(const QObject* o) const;
         int refCount() const;
         int id() const;
         PyObject* call(PyObject* args);
@@ -122,11 +122,9 @@ int DynamicSlotData::id() const
     return m_id;
 }
 
-bool DynamicSlotData::hasRefTo(const QObject *o) const
+int DynamicSlotData::hasRefTo(const QObject *o) const
 {
-    if (m_refs.size())
-        return m_refs.contains(o);
-    return false;
+    return m_refs.count(o);
 }
 
 void DynamicSlotData::clear()
@@ -261,8 +259,11 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         QHash<int, DynamicSlotData*>::iterator i = copy.begin();
         while(i != copy.end()) {
             //Remove all refs
-            while (i.value()->hasRefTo(arg))
+            int refs = i.value()->hasRefTo(arg);
+            while(refs) {
                 disconnectNotify(arg, i.key());
+                refs--;
+            }
             i++;
         }
         return -1;
