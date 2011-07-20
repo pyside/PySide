@@ -2382,8 +2382,18 @@
   </object-type>
   <object-type name="QPixmapCache">
     <value-type name="Key"/>
+    <add-function signature="find(QPixmapCache::Key)">
+        <inject-code>
+            QPixmap p;
+            if (%CPPSELF.%FUNCTION_NAME(%1, &amp;p)) {
+                %PYARG_0 = %CONVERTTOPYTHON[QPixmap](p);
+            } else {
+                %PYARG_0 = Py_None;
+                Py_INCREF(%PYARG_0);
+            }
+        </inject-code>
+    </add-function>
     <!-- ### Obsolete. -->
-    <modify-function signature="find(QString)" remove="all"/>
     <modify-function signature="find(QString,QPixmap&amp;)" remove="all"/>
     <!--### End of obsolete section -->
   </object-type>
