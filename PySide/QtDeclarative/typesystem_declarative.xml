@@ -103,14 +103,6 @@
             <include file-name="pysideqmlregistertype.h" location="local"/>
         </extra-includes>
         <enum-type name="TransformOrigin" />
-        <modify-function signature="QDeclarativeItem(QDeclarativeItem*)">
-            <inject-code class="target">
-                if (PySide::nextQmlElementMemoryAddr)
-                    %0 = new (PySide::nextQmlElementMemoryAddr) ::QDeclarativePrivate::QDeclarativeElement&lt;%TYPE>();
-                else
-                    %0 = new %TYPE(%1);
-            </inject-code>
-        </modify-function>
     </object-type>
 
     <value-type name="QDeclarativeListReference" />

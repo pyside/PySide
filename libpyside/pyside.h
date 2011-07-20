@@ -77,8 +77,13 @@ template<typename T>
 struct initQtMetaType<T, false> {
 };
 
+/// \deprecated
 PYSIDE_API void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base);
+PYSIDE_API void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base, const std::size_t& cppObjSize);
 PYSIDE_API void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds);
+
+/// Return the size in bytes of a type that inherits QObject.
+PYSIDE_API std::size_t getSizeOfQObject(SbkObjectType* type);
 
 typedef void (*CleanupFunction)(void);
 
@@ -109,6 +114,9 @@ PYSIDE_API PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, Py
  * \return Returns true if self object inherits from class_name, otherwise returns false
  */
 PYSIDE_API bool inherits(PyTypeObject* self, const char* class_name);
+
+PYSIDE_API void* nextQObjectMemoryAddr();
+PYSIDE_API void setNextQObjectMemoryAddr(void* addr);
 
 } //namespace PySide
 
