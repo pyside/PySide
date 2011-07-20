@@ -52,9 +52,7 @@ static void propListMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::Ca
 static PyObject* pyTypes[PYSIDE_MAX_QML_TYPES];
 static void (*createFuncs[PYSIDE_MAX_QML_TYPES])(void*);
 
-/// QDeclarativeItem will create objects using placement new then this pointer is non-null.
-void* PySide::nextQmlElementMemoryAddr = 0;
-// Mutex used to avoid race condition on PySide::nextQmlElementMemoryAddr
+// Mutex used to avoid race condition on PySide::nextQObjectMemoryAddr
 static QMutex nextQmlElementMutex;
 
 template<int N>
@@ -63,12 +61,12 @@ struct ElementFactoryBase
     static void createInto(void* memory)
     {
         QMutexLocker locker(&nextQmlElementMutex);
-        PySide::nextQmlElementMemoryAddr = memory;
+        PySide::setNextQObjectMemoryAddr(memory);
         Shiboken::GilState state;
         PyObject* obj = PyObject_CallObject(pyTypes[N], 0);
         if (!obj || PyErr_Occurred())
             PyErr_Print();
-        PySide::nextQmlElementMemoryAddr = 0;
+        PySide::setNextQObjectMemoryAddr(0);
     }
 };
 
@@ -95,8 +93,8 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
 {
     using namespace Shiboken;
 
-    static PyTypeObject* declarativeItemType = TypeResolver::get("QDeclarativeItem*")->pythonType();
-    assert(declarativeItemType);
+    static PyTypeObject* qobjectType = TypeResolver::get("QObject*")->pythonType();
+    assert(qobjectType);
     static int nextType = 0;
 
     if (nextType >= PYSIDE_MAX_QML_TYPES) {
@@ -104,8 +102,8 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
         return -1;
     }
 
-    if (!PySequence_Contains(((PyTypeObject*)pyObj)->tp_mro, (PyObject*)declarativeItemType)) {
-        PyErr_Format(PyExc_TypeError, "A type inherited from %s expected, got %s.", declarativeItemType->tp_name, ((PyTypeObject*)pyObj)->tp_name);
+    if (!PySequence_Contains(((PyTypeObject*)pyObj)->tp_mro, (PyObject*)qobjectType)) {
+        PyErr_Format(PyExc_TypeError, "A type inherited from %s expected, got %s.", qobjectType->tp_name, ((PyTypeObject*)pyObj)->tp_name);
         return -1;
     }
 
@@ -118,9 +116,9 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     // Init proxy object static meta object
     QDeclarativePrivate::RegisterType type;
     type.version = 0;
-    type.typeId = qMetaTypeId<QDeclarativeItem*>();
-    type.listId = qMetaTypeId<QDeclarativeListProperty<QDeclarativeItem> >();
-    type.objectSize = sizeof(QDeclarativeItemWrapper);
+    type.typeId = qMetaTypeId<QObject*>();
+    type.listId = qMetaTypeId<QDeclarativeListProperty<QObject> >();
+    type.objectSize = PySide::getSizeOfQObject(reinterpret_cast<SbkObjectType*>(pyObj));
     type.create = createFuncs[nextType];
     type.uri = uri;
     type.versionMajor = versionMajor;
@@ -128,12 +126,12 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     type.elementName = qmlName;
     type.metaObject = metaObject;
 
-    type.attachedPropertiesFunction = QDeclarativePrivate::attachedPropertiesFunc<QDeclarativeItem>();
-    type.attachedPropertiesMetaObject = QDeclarativePrivate::attachedPropertiesMetaObject<QDeclarativeItem>();
+    type.attachedPropertiesFunction = QDeclarativePrivate::attachedPropertiesFunc<QObject>();
+    type.attachedPropertiesMetaObject = QDeclarativePrivate::attachedPropertiesMetaObject<QObject>();
 
-    type.parserStatusCast = QDeclarativePrivate::StaticCastSelector<QDeclarativeItem,QDeclarativeParserStatus>::cast();
-    type.valueSourceCast = QDeclarativePrivate::StaticCastSelector<QDeclarativeItem,QDeclarativePropertyValueSource>::cast();
-    type.valueInterceptorCast = QDeclarativePrivate::StaticCastSelector<QDeclarativeItem,QDeclarativePropertyValueInterceptor>::cast();
+    type.parserStatusCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativeParserStatus>::cast();
+    type.valueSourceCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativePropertyValueSource>::cast();
+    type.valueInterceptorCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativePropertyValueInterceptor>::cast();
 
     type.extensionObjectCreate = 0;
     type.extensionMetaObject = 0;
