@@ -44,12 +44,14 @@
 #include <QDebug>
 
 static QStack<PySide::CleanupFunction> cleanupFunctionList;
+static void* qobjectNextAddr;
 
 namespace PySide
 {
 
 void init(PyObject *module)
 {
+    qobjectNextAddr = 0;
     ClassInfo::init(module);
     Signal::init(module);
     Slot::init(module);
@@ -148,17 +150,35 @@ void destroyQCoreApplication()
     delete app;
 }
 
-void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base)
+struct TypeUserData {
+    TypeUserData(PyTypeObject* type, const QMetaObject* metaobject) : mo(type, metaobject) {}
+    DynamicQMetaObject mo;
+    std::size_t cppObjSize;
+};
+
+std::size_t getSizeOfQObject(SbkObjectType* type)
+{
+    using namespace Shiboken::ObjectType;
+    TypeUserData* userData = reinterpret_cast<TypeUserData*>(getTypeUserData(reinterpret_cast<SbkObjectType*>(type)));
+    return userData->cppObjSize;
+}
+
+void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base, const std::size_t& cppObjSize)
 {
     //create DynamicMetaObject based on python type
-    DynamicQMetaObject* mo = new PySide::DynamicQMetaObject(reinterpret_cast<PyTypeObject*>(type), base);
-    Shiboken::ObjectType::setTypeUserData(type, mo, Shiboken::callCppDestructor<DynamicQMetaObject>);
+    TypeUserData* userData = new TypeUserData(reinterpret_cast<PyTypeObject*>(type), base);
+    userData->cppObjSize = cppObjSize;
+    Shiboken::ObjectType::setTypeUserData(type, userData, Shiboken::callCppDestructor<TypeUserData>);
 
     //initialize staticQMetaObject property
-    PyObject* pyMetaObject = Shiboken::TypeResolver::get("QMetaObject*")->toPython(&mo);
-
+    void* metaObjectPtr = &userData->mo;
+    Shiboken::AutoDecRef pyMetaObject(Shiboken::TypeResolver::get("QMetaObject*")->toPython(&metaObjectPtr));
     PyObject_SetAttrString(reinterpret_cast<PyObject*>(type), "staticMetaObject", pyMetaObject);
-    Py_DECREF(pyMetaObject);
+}
+
+void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base)
+{
+    initDynamicMetaObject(type, base, 0);
 }
 
 void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
@@ -169,11 +189,13 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
     PyObject* bases = PyTuple_GET_ITEM(args, 1);
     int numBases = PyTuple_GET_SIZE(bases);
     QMetaObject* baseMo = 0;
+    SbkObjectType* qobjBase = 0;
 
     for (int i = 0; i < numBases; ++i) {
         PyTypeObject* base = reinterpret_cast<PyTypeObject*>(PyTuple_GET_ITEM(bases, i));
         if (PyType_IsSubtype(base, qObjType)) {
             baseMo = reinterpret_cast<QMetaObject*>(Shiboken::ObjectType::getTypeUserData(reinterpret_cast<SbkObjectType*>(base)));
+            qobjBase = reinterpret_cast<SbkObjectType*>(base);
             break;
         }
     }
@@ -182,7 +204,8 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
         return;
     }
 
-    initDynamicMetaObject(type, baseMo);
+    TypeUserData* userData = reinterpret_cast<TypeUserData*>(Shiboken::ObjectType::getTypeUserData(qobjBase));
+    initDynamicMetaObject(type, baseMo, userData->cppObjSize);
 }
 
 PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* name)
@@ -247,6 +270,16 @@ bool inherits(PyTypeObject* objType, const char* class_name)
         return false;
 
     return inherits(base, class_name);
+}
+
+void* nextQObjectMemoryAddr()
+{
+    return qobjectNextAddr;
+}
+
+void setNextQObjectMemoryAddr(void* addr)
+{
+    qobjectNextAddr = addr;
 }
 
 } //namespace PySide
