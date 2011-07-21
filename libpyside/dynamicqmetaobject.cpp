@@ -87,6 +87,10 @@ public:
     QList<PropertyData> m_properties;
     QMap<QByteArray, QByteArray> m_info;
     QByteArray m_className;
+    bool m_invalid;
+    int m_methodOffset;
+    int m_propertyOffset;
+    int m_count;
 
     void updateMetaObject(QMetaObject* metaObj);
     void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int nullIndex, int flags);
@@ -95,8 +99,7 @@ public:
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
 {
     int idx = 0;
-    for (int i = 0; i < strings->count(); ++i) {
-        const QString &str = strings->at(i);
+    foreach(QByteArray str, *strings) {
         if (str == s)
             return idx;
         idx += str.length() + 1;
@@ -197,11 +200,13 @@ uint PropertyData::flags() const
 // const QByteArray with EMPTY_META_METHOD, used to save some memory
 const QByteArray MethodData::m_emptySig(EMPTY_META_METHOD);
 
-MethodData::MethodData() : m_signature(m_emptySig)
+MethodData::MethodData()
+    : m_signature(m_emptySig)
 {
 }
 
-MethodData::MethodData(QMetaMethod::MethodType mtype, const char* signature, const char* type) : m_signature(signature), m_type(type), m_mtype(mtype)
+MethodData::MethodData(QMetaMethod::MethodType mtype, const char* signature, const char* type)
+    : m_signature(signature), m_type(type), m_mtype(mtype)
 {
 }
 
@@ -289,9 +294,12 @@ DynamicQMetaObject::DynamicQMetaObject(PyTypeObject* type, const QMetaObject* ba
     d.extradata = 0;
 
     m_d->m_className = QByteArray(type->tp_name).split('.').last();
+    m_d->m_invalid = true;
+    m_d->m_methodOffset = base->methodCount() - 1;
+    m_d->m_propertyOffset = base->propertyCount() - 1;
+    m_d->m_count = 0;
+    //qDebug() << "CREATED: " << m_d->m_className << "OFFSET:" << base->methodOffset() << "COUNT" << base->methodCount();
     parsePythonType(type);
-    //TODO : fill type userData
-    m_d->updateMetaObject(this);
 }
 
 DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject) 
@@ -301,8 +309,11 @@ DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject*
     d.stringdata = 0;
     d.data = 0;
     d.extradata = 0;
+    m_d->m_count = 0;
+    m_d->m_invalid = true;
     m_d->m_className = className;
-    m_d->updateMetaObject(this);
+    m_d->m_methodOffset = metaObject->methodCount() - 1;
+    m_d->m_propertyOffset = metaObject->propertyCount() - 1;
 }
 
 DynamicQMetaObject::~DynamicQMetaObject()
@@ -312,7 +323,7 @@ DynamicQMetaObject::~DynamicQMetaObject()
     delete m_d;
 }
 
-void DynamicQMetaObject::addMethod(QMetaMethod::MethodType mtype, const char* signature, const char* type)
+int DynamicQMetaObject::addMethod(QMetaMethod::MethodType mtype, const char* signature, const char* type)
 {
     int index = -1;
     int counter = 0;
@@ -321,19 +332,24 @@ void DynamicQMetaObject::addMethod(QMetaMethod::MethodType mtype, const char* si
     QList<MethodData>::iterator it = m_d->m_methods.begin();
     for (; it != m_d->m_methods.end(); ++it) {
         if ((it->signature() == signature) && (it->methodType() == mtype))
-            return;
+            return m_d->m_methodOffset + counter;
         else if (*it == blank)
             index = counter;
         counter++;
     }
 
+    //qDebug() << "FIRST:" << index;
     //has blank method
-    if (index != -1)
+    if (index != -1) {
         m_d->m_methods[index] = MethodData(mtype, signature, type);
-    else
+    } else {
         m_d->m_methods << MethodData(mtype, signature, type);
+        index = m_d->m_methods.size();
+    }
 
-    m_d->updateMetaObject(this);
+    m_d->m_invalid = true;
+    return m_d->m_methodOffset + index;
+    //qDebug() << "RESULTS(" << signature << "): " << result << "/" << indexOfMethod(signature) << "/" << m_d->m_methods.size() << "/" << m_d->m_methodOffset << (void*)this;
 }
 
 void DynamicQMetaObject::removeMethod(QMetaMethod::MethodType mtype, uint index)
@@ -343,20 +359,20 @@ void DynamicQMetaObject::removeMethod(QMetaMethod::MethodType mtype, uint index)
     for (; it != m_d->m_methods.end(); ++it) {
         if ((it->signature() == methodSig) && (it->methodType() == mtype)){
             it->clear();
-            m_d->updateMetaObject(this);
+            m_d->m_invalid = true;
             break;
         }
     }
 }
 
-void DynamicQMetaObject::addSignal(const char* signal, const char* type)
+int DynamicQMetaObject::addSignal(const char* signal, const char* type)
 {
-    addMethod(QMetaMethod::Signal, signal, type);
+    return addMethod(QMetaMethod::Signal, signal, type);
 }
 
-void DynamicQMetaObject::addSlot(const char* slot, const char* type)
+int DynamicQMetaObject::addSlot(const char* slot, const char* type)
 {
-    addMethod(QMetaMethod::Slot, slot, type);
+    return addMethod(QMetaMethod::Slot, slot, type);
 }
 
 void DynamicQMetaObject::removeSlot(uint index)
@@ -369,11 +385,11 @@ void DynamicQMetaObject::removeSignal(uint index)
     removeMethod(QMetaMethod::Signal, index);
 }
 
-void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
+int DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
 {
     int index = m_d->m_properties.indexOf(propertyName);
     if (index != -1)
-        return;
+        return m_d->m_propertyOffset + index;
 
     // retrieve notifyId
     int notifyId = -1;
@@ -393,8 +409,10 @@ void DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
         m_d->m_properties[index] = PropertyData(propertyName, notifyId, property);
     } else {
         m_d->m_properties << PropertyData(propertyName, notifyId, property);
+        index = m_d->m_properties.size();
     }
-    m_d->updateMetaObject(this);
+    m_d->m_invalid = true;
+    return  m_d->m_propertyOffset + index;
 }
 
 void DynamicQMetaObject::addInfo(const char* key, const char* value)
@@ -409,7 +427,16 @@ void DynamicQMetaObject::addInfo(QMap<QByteArray, QByteArray> info)
         m_d->m_info[i.key()] = i.value();
         ++i;
     }
-    m_d->updateMetaObject(this);
+    m_d->m_invalid = true;
+}
+
+const QMetaObject* DynamicQMetaObject::update() const
+{
+    if (m_d->m_invalid) {
+        m_d->updateMetaObject(const_cast<DynamicQMetaObject*>(this));
+        m_d->m_invalid = false;
+    }
+    return this;
 }
 
 void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList<MethodData>& methods,
@@ -530,7 +557,8 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
     }
 
     //write signals/slots
-    writeMethodsData(m_methods, &data, &strings, &index, NULL_INDEX, AccessPublic);
+    if (n_methods)
+        writeMethodsData(m_methods, &data, &strings, &index, NULL_INDEX, AccessPublic);
 
     if (m_properties.size())
         data[7] = index;
