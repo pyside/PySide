@@ -12,5 +12,17 @@ class TestQProcess (unittest.TestCase):
         self.assert_(isinstance(value, bool))
         self.assert_(isinstance(pid, long))
 
+    def testPid(self):
+        p = QProcess()
+        p.start("dir")
+        p.waitForStarted()
+        pid = p.pid()
+        # We can't test the pid method result because it returns 0 when the
+        # process isn't running
+        if p.state() == QProcess.Running:
+            self.assertNotEqual(pid, 0)
+        else:
+            print "PROCESS ALREADY DEAD :-/"
+
 if __name__ == '__main__':
     unittest.main()

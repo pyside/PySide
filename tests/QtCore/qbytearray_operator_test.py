@@ -56,6 +56,10 @@ class QByteArrayOperatorAt(unittest.TestCase):
         obj = QByteArray(string)
         self.assertRaises(IndexError, lambda :obj[len(string)])
 
+    def testNullStrings(self):
+        ba = QByteArray('\x00')
+        self.assertEqual(ba.at(0), '\x00')
+        self.assertEqual(ba[0], '\x00')
 
 class QByteArrayOperatorLen(unittest.TestCase):
     '''Test case for __len__ operator of QByteArray'''

@@ -240,7 +240,6 @@
   <rejection class="QCoreApplication" function-name="setEventFilter"/>
   <rejection class="QFile" function-name="setDecodingFunction"/>
   <rejection class="QFile" function-name="setEncodingFunction"/>
-  <rejection class="QProcess" function-name="pid"/>
   <rejection class="QRegion" function-name="cleanUp"/>
   <rejection class="QSettings" function-name="registerFormat"/>
   <rejection class="QAbstractFileEngineIterator" function-name="entryInfo"/>
@@ -1893,7 +1892,7 @@
                     char res[2];
                     res[0] = %CPPSELF.at(_i);
                     res[1] = 0;
-                    return PyString_FromString(res);
+                    return PyString_FromStringAndSize(res, 1);
                 }
         </inject-code>
     </add-function>
@@ -1987,6 +1986,11 @@
     <modify-function signature="readLine(char *,qint64)" remove="all"/>
     <!-- ### write(str) do the job -->
     <modify-function signature="write(const char *,qint64)" remove="all"/>
+    <modify-function signature="write(const char *)">
+        <inject-code>
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, PyString_GET_SIZE(%PYARG_1)));
+        </inject-code>
+    </modify-function>
     <modify-function signature="getChar(char *)">
         <modify-argument index="1">
             <remove-argument />
@@ -2386,6 +2390,20 @@
         %PYARG_0 = Shiboken::makeTuple(retval, pid);
         </inject-code>
     </modify-function>
+    <!-- Function removed because on windows it returns a win32 specific structure -->
+    <modify-function signature="pid()const" remove="all" />
+    <add-function signature="pid()" return-type="long">
+        <inject-code>
+            long result;
+            #ifdef WIN32
+                _PROCESS_INFORMATION* procInfo = %CPPSELF.%FUNCTION_NAME();
+                result = procInfo ? procInfo->dwProcessId : 0;
+            #else
+                result = %CPPSELF.%FUNCTION_NAME();
+            #endif
+            %PYARG_0 = %CONVERTTOPYTHON[long](result);
+        </inject-code>
+    </add-function>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setReadChannelMode(QProcess::ProcessChannelMode)" remove="all"/>
     <modify-function signature="readChannelMode()const" remove="all"/>
