@@ -4,14 +4,12 @@
 # Released under the same terms as PySide itself
 # 2011-05-04 Thomas Perl <m@thp.io>
 
-
 import unittest
 
 from PySide.QtCore import Slot, Signal, QUrl
-from PySide.QtGui import QApplication
 from PySide.QtDeclarative import QDeclarativeView
 
-from helper import adjust_filename, TimedQApplication
+from helper import adjust_filename, UsesQApplication
 
 class View(QDeclarativeView):
     def __init__(self):
@@ -26,9 +24,10 @@ class View(QDeclarativeView):
     called = Signal(int, int)
 
 
-class TestQML(TimedQApplication):
+class TestQML(UsesQApplication):
     def done(self, x, y):
         self._sucess = True
+        self.app.quit()
 
     def testPythonSlot(self):
         self._sucess = False
