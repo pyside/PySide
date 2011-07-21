@@ -15,7 +15,7 @@ Rectangle {
     }
 
     Timer {
-        interval: 1; running: true;
+        interval: 100; running: true;
         onTriggered: {
             if (pythonObject != undefined) {
                 pythonObject.blubb(42, 84)
