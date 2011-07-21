@@ -240,7 +240,6 @@
   <rejection class="QCoreApplication" function-name="setEventFilter"/>
   <rejection class="QFile" function-name="setDecodingFunction"/>
   <rejection class="QFile" function-name="setEncodingFunction"/>
-  <rejection class="QProcess" function-name="pid"/>
   <rejection class="QRegion" function-name="cleanUp"/>
   <rejection class="QSettings" function-name="registerFormat"/>
   <rejection class="QAbstractFileEngineIterator" function-name="entryInfo"/>
@@ -2386,6 +2385,20 @@
         %PYARG_0 = Shiboken::makeTuple(retval, pid);
         </inject-code>
     </modify-function>
+    <!-- Function removed because on windows it returns a win32 specific structure -->
+    <modify-function signature="pid()const" remove="all" />
+    <add-function signature="pid()" return-type="long">
+        <inject-code>
+            long result;
+            #ifdef WIN32
+                _PROCESS_INFORMATION* procInfo = %CPPSELF.%FUNCTION_NAME();
+                result = procInfo ? procInfo->dwProcessId : 0;
+            #else
+                result = %CPPSELF.%FUNCTION_NAME();
+            #endif
+            %PYARG_0 = %CONVERTTOPYTHON[long](result);
+        </inject-code>
+    </add-function>
     <!--### Obsolete in 4.3-->
     <modify-function signature="setReadChannelMode(QProcess::ProcessChannelMode)" remove="all"/>
     <modify-function signature="readChannelMode()const" remove="all"/>
