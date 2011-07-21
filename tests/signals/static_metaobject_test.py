@@ -2,12 +2,10 @@
 
 """Tests covering signal emission and receiving to python slots"""
 
-import sys
 import unittest
-import functools
 
-from PySide.QtCore import *
-from helper import BasicPySlotCase, UsesQCoreApplication
+from PySide.QtCore import QObject, SIGNAL
+from helper import UsesQCoreApplication
 
 class MyObject(QObject):
     def __init__(self, parent=None):
@@ -24,27 +22,21 @@ class StaticMetaObjectTest(UsesQCoreApplication):
         o = MyObject()
         o2 = MyObject()
 
-        m = o.metaObject()
         # SIGNAL foo not created yet
-        self.assertEqual(m.indexOfSignal("foo()"), -1)
+        self.assertEqual(o.metaObject().indexOfSignal("foo()"), -1)
 
         o.connect(SIGNAL("foo()"), o2.mySlot)
         # SIGNAL foo create after connect
-        self.assert_(m.indexOfSignal("foo()") > 0)
+        self.assert_(o.metaObject().indexOfSignal("foo()") > 0)
 
-        m = o2.metaObject()
-        # SIGNAL propagate to others objects of the same type
-        self.assert_(m.indexOfSignal("foo()") > 0)
+        # SIGNAL does not propagate to others objects of the same type
+        self.assertEqual(o2.metaObject().indexOfSignal("foo()"), -1)
 
         del o
-        # SIGNAL foo continues registered after deletion of original object
-        self.assert_(m.indexOfSignal("foo()") > 0)
-
         del o2
         o = MyObject()
-        m = o.metaObject()
-        # new objects still have the SIGNAL foo registered
-        self.assert_(m.indexOfSignal("foo()") > 0)
+        # The SIGNAL was destroyed with old objects
+        self.assertEqual(o.metaObject().indexOfSignal("foo()"), -1)
 
 
     def testSharedSignalEmission(self):
