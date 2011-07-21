@@ -4993,7 +4993,36 @@
       <include file-name="QTextCursor" location="global"/>
     </extra-includes>
   </object-type>
-  <object-type name="QSpinBox"/>
+  <object-type name="QSpinBox">
+      <modify-function signature="valueChanged(int)">
+          <inject-documentation mode="append" format="target">
+::
+
+    def callback_int(value_as_int):
+        print 'int value changed:', repr(value_as_int)
+
+    app = QApplication(sys.argv)
+    spinbox = QSpinBox()
+    spinbox.valueChanged[unicode].connect(callback_unicode)
+    spinbox.show()
+    sys.exit(app.exec_())
+          </inject-documentation>
+      </modify-function>
+      <modify-function signature="valueChanged(QString)">
+          <inject-documentation mode="append" format="target">
+::
+
+    def callback_unicode(value_as_unicode):
+        print 'unicode value changed:', repr(value_as_unicode)
+
+    app = QApplication(sys.argv)
+    spinbox = QSpinBox()
+    spinbox.valueChanged[unicode].connect(callback_unicode)
+    spinbox.show()
+    sys.exit(app.exec_())
+          </inject-documentation>
+      </modify-function>
+  </object-type>
   <object-type name="QTextBrowser"/>
   <object-type name="QDoubleSpinBox"/>
   <object-type name="QButtonGroup">
