@@ -35,9 +35,11 @@ class qmetaobject_test(unittest.TestCase):
         o = DynObject()
         o2 = QObject()
 
-        method_count_base  = o.metaObject().methodCount()
-
         o.connect(o2, SIGNAL("bar()"), o.slot)
+        self.assertTrue(o2.metaObject().indexOfMethod("bar()") > -1)
+        self.assertTrue(o.metaObject().indexOfMethod("bar()") == -1)
+        self.assertTrue(o.metaObject().indexOfMethod("slot()") > -1)
+
         slot_index = o.metaObject().indexOfMethod("slot()")
 
         o.connect(o, SIGNAL("foo()"), o2, SIGNAL("bar()"))
