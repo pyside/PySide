@@ -1978,6 +1978,11 @@
     <modify-function signature="readLine(char *,qint64)" remove="all"/>
     <!-- ### write(str) do the job -->
     <modify-function signature="write(const char *,qint64)" remove="all"/>
+    <modify-function signature="write(const char *)">
+        <inject-code>
+            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, PyString_GET_SIZE(%PYARG_1)));
+        </inject-code>
+    </modify-function>
     <modify-function signature="getChar(char *)">
         <modify-argument index="1">
             <remove-argument />
