@@ -41,7 +41,7 @@ public:
     ~GlobalReceiver();
     int qt_metacall(QMetaObject::Call call, int id, void** args);
     const QMetaObject* metaObject() const;
-    void addSlot(const char* slot, PyObject* callback);
+    int addSlot(const char* slot, PyObject* callback);
     void removeSlot(int slotId);
     void connectNotify(QObject* sender, int slotId);
     void disconnectNotify(QObject* sender, int slotId);

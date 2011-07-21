@@ -25,6 +25,7 @@
 #include "pysideproperty.h"
 #include "pysideproperty_p.h"
 #include "pyside.h"
+#include "dynamicqmetaobject.h"
 
 #include <QHash>
 #include <QStringList>
@@ -45,6 +46,14 @@
 #include "globalreceiver.h"
 
 #define PYTHON_TYPE "PyObject"
+
+namespace {
+    static PyObject *metaObjectAttr = 0;
+    static void destroyMetaObject(void* obj)
+    {
+        delete reinterpret_cast<PySide::DynamicQMetaObject*>(obj);
+    }
+}
 
 namespace PySide {
 
@@ -189,6 +198,9 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
     TypeResolver::createValueTypeResolver<PyObjectWrapper>("object");
     TypeResolver::createValueTypeResolver<PyObjectWrapper>("PySide::PyObjectWrapper");
     PySide::registerCleanupFunction(clearSignalManager);
+
+    if (!metaObjectAttr)
+        metaObjectAttr = PyString_FromString("__METAOBJECT__");
 }
 
 void SignalManager::clear()
@@ -225,7 +237,12 @@ void SignalManager::globalReceiverDisconnectNotify(QObject* source, int slotInde
 
 void SignalManager::addGlobalSlot(const char* slot, PyObject* callback)
 {
-    m_d->m_globalReceiver.addSlot(slot, callback);
+    addGlobalSlotGetIndex(slot, callback);
+}
+
+int SignalManager::addGlobalSlotGetIndex(const char* slot, PyObject* callback)
+{
+    return m_d->m_globalReceiver.addSlot(slot, callback);
 }
 
 static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args)
@@ -412,8 +429,13 @@ static int PySide::callMethod(QObject* object, int id, void** args)
     }
     return -1;
 }
-
 bool SignalManager::registerMetaMethod(QObject* source, const char* signature, QMetaMethod::MethodType type)
+{
+    int ret = registerMetaMethodGetIndex(source, signature, type);
+    return (ret != -1);
+}
+
+int SignalManager::registerMetaMethodGetIndex(QObject* source, const char* signature, QMetaMethod::MethodType type)
 {
     Q_ASSERT(source);
     const QMetaObject* metaObject = source->metaObject();
@@ -423,19 +445,51 @@ bool SignalManager::registerMetaMethod(QObject* source, const char* signature, Q
         SbkObject* self = Shiboken::BindingManager::instance().retrieveWrapper(source);
         if (!Shiboken::Object::hasCppWrapper(self)) {
             qWarning() << "Invalid Signal signature:" << signature;
-            return false;
+            return -1;
         } else {
-            PySide::DynamicQMetaObject* dynMetaObj = reinterpret_cast<PySide::DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
+            DynamicQMetaObject *dmo = 0;
+            PyObject *pySelf = reinterpret_cast<PyObject*>(self);
+            PyObject* dict = self->ob_dict;
+
+            // Create a instance meta object
+            if (!dict || !PyDict_Contains(dict, metaObjectAttr)) {
+                dmo = new DynamicQMetaObject(pySelf->ob_type, metaObject);
+                PyObject *pyDmo = PyCObject_FromVoidPtr(dmo, destroyMetaObject);
+                PyObject_SetAttr(pySelf, metaObjectAttr, pyDmo);
+                Py_DECREF(pyDmo);
+            } else {
+                dmo = reinterpret_cast<DynamicQMetaObject*>(const_cast<QMetaObject*>(metaObject));
+            }
+
             if (type == QMetaMethod::Signal)
-                dynMetaObj->addSignal(signature);
+                return dmo->addSignal(signature);
             else
-                dynMetaObj->addSlot(signature);
+                return dmo->addSlot(signature);
         }
     }
-    return true;
+    return methodIndex;
 }
 
 bool SignalManager::hasConnectionWith(const QObject *object)
 {
     return m_d->m_globalReceiver.hasConnectionWith(object);
 }
+
+const QMetaObject* SignalManager::retriveMetaObject(PyObject *self)
+{
+    Shiboken::GilState gil;
+    DynamicQMetaObject *mo = 0;
+    Q_ASSERT(self);
+
+    PyObject* dict = reinterpret_cast<SbkObject*>(self)->ob_dict;
+    if (dict && PyDict_Contains(dict, metaObjectAttr)) {
+        PyObject *pyMo = PyDict_GetItem(dict, metaObjectAttr);
+        mo = reinterpret_cast<DynamicQMetaObject*>(PyCObject_AsVoidPtr(pyMo));
+    } else {
+        mo = reinterpret_cast<DynamicQMetaObject*>(Shiboken::Object::getTypeUserData(reinterpret_cast<SbkObject*>(self)));
+    }
+
+    mo->update();
+    return mo;
+}
+

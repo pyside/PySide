@@ -59,10 +59,9 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
         return false;
     signal++;
 
-    if (!PySide::SignalManager::registerMetaMethod(source, signal, QMetaMethod::Signal))
+    int signalIndex = PySide::SignalManager::registerMetaMethodGetIndex(source, signal, QMetaMethod::Signal);
+    if (signalIndex == -1)
         return false;
-
-    int signalIndex = source->metaObject()->indexOfMethod(signal);
 
     PySide::SignalManager& signalManager = PySide::SignalManager::instance();
 
@@ -82,13 +81,14 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
             qWarning() << "You can't add dynamic slots on an object originated from C++.";
             return false;
         }
-        if (usingGlobalReceiver) {
-            signalManager.addGlobalSlot(slot, callback);
-        } else {
-            if (!PySide::SignalManager::registerMetaMethod(receiver, slot, QMetaMethod::Slot))
-                return false;
-        }
-        slotIndex = metaObject->indexOfSlot(slot);
+
+        if (usingGlobalReceiver)
+            slotIndex = signalManager.addGlobalSlotGetIndex(slot, callback);
+        else
+            slotIndex = PySide::SignalManager::registerMetaMethodGetIndex(receiver, slot, QMetaMethod::Slot);
+
+        if (slotIndex == -1)
+            return false;
     }
     if (QMetaObject::connect(source, signalIndex, receiver, slotIndex, type)) {
         if (usingGlobalReceiver)
