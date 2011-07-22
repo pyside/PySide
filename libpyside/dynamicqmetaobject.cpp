@@ -99,10 +99,13 @@ public:
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
 {
     int idx = 0;
-    foreach(QByteArray str, *strings) {
-        if (str == s)
+    QList<QByteArray>::const_iterator it = strings->begin();
+    QList<QByteArray>::const_iterator it_end = strings->end();
+    while(it != it_end) {
+        if (strcmp(*it, s) == 0)
             return idx;
-        idx += str.length() + 1;
+        idx += (*it).size() + 1;
+        ++it;
     }
     strings->append(s);
     return idx;
@@ -289,16 +292,15 @@ DynamicQMetaObject::DynamicQMetaObject(PyTypeObject* type, const QMetaObject* ba
     : m_d(new DynamicQMetaObjectPrivate)
 {
     d.superdata = base;
-    d.stringdata = 0;
-    d.data = 0;
-    d.extradata = 0;
+    d.stringdata = NULL;
+    d.data = NULL;
+    d.extradata = NULL;
 
     m_d->m_className = QByteArray(type->tp_name).split('.').last();
     m_d->m_invalid = true;
     m_d->m_methodOffset = base->methodCount() - 1;
     m_d->m_propertyOffset = base->propertyCount() - 1;
     m_d->m_count = 0;
-    //qDebug() << "CREATED: " << m_d->m_className << "OFFSET:" << base->methodOffset() << "COUNT" << base->methodCount();
     parsePythonType(type);
 }
 
@@ -318,8 +320,8 @@ DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject*
 
 DynamicQMetaObject::~DynamicQMetaObject()
 {
-    delete[] d.stringdata;
-    delete[] d.data;
+    free(const_cast<char*>(d.stringdata));
+    free(const_cast<uint*>(d.data));
     delete m_d;
 }
 
@@ -338,7 +340,6 @@ int DynamicQMetaObject::addMethod(QMetaMethod::MethodType mtype, const char* sig
         counter++;
     }
 
-    //qDebug() << "FIRST:" << index;
     //has blank method
     if (index != -1) {
         m_d->m_methods[index] = MethodData(mtype, signature, type);
@@ -349,7 +350,6 @@ int DynamicQMetaObject::addMethod(QMetaMethod::MethodType mtype, const char* sig
 
     m_d->m_invalid = true;
     return m_d->m_methodOffset + index;
-    //qDebug() << "RESULTS(" << signature << "): " << result << "/" << indexOfMethod(signature) << "/" << m_d->m_methods.size() << "/" << m_d->m_methodOffset << (void*)this;
 }
 
 void DynamicQMetaObject::removeMethod(QMetaMethod::MethodType mtype, uint index)
@@ -533,9 +533,10 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
     // header size + 5 indexes per method + an ending zero
-    delete[] metaObj->d.data;
-    unsigned int* data;
-    data = new unsigned int[HEADER_LENGHT + n_methods*5 + n_properties*4 + n_info*2 + 1];
+
+
+    const int dataSize = HEADER_LENGHT + n_methods*5 + n_properties*4 + n_info*2 + 1;
+    uint* data = reinterpret_cast<uint*>(realloc(const_cast<uint*>(metaObj->d.data), dataSize * sizeof(uint)));
     std::memcpy(data, header, sizeof(header));
 
     QList<QByteArray> strings;
@@ -587,9 +588,9 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
         str.append(char(0));
     }
 
-    delete[] metaObj->d.stringdata;
-    char* stringData = new char[str.count()];
-    std::copy(str.begin(), str.end(), stringData);
+    char *stringdata = reinterpret_cast<char*>(realloc(const_cast<char*>(metaObj->d.stringdata), str.count() * sizeof(char)));
+    std::copy(str.begin(), str.end(), stringdata);
+
     metaObj->d.data = data;
-    metaObj->d.stringdata = stringData;
+    metaObj->d.stringdata = stringdata;
 }
