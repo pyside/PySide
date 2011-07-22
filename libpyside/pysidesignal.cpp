@@ -536,9 +536,11 @@ char* getTypeName(PyObject* type)
 
 char* buildSignature(const char *name, const char *signature)
 {
-    QString signal;
-    signal.sprintf("%s(%s)", name, signature);
-    return strdup(QMetaObject::normalizedSignature(signal.toAscii()));
+    QByteArray signal(name);
+    signal += '(';
+    signal += signature;
+    signal += ')';
+    return strdup(QMetaObject::normalizedSignature(signal));
 }
 
 char* parseSignature(PyObject *args)
