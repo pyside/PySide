@@ -39,11 +39,11 @@ public:
     ~DynamicQMetaObject();
 
 
-    void addMethod(QMetaMethod::MethodType mtype, const char* signature, const char* type);
+    int addMethod(QMetaMethod::MethodType mtype, const char* signature, const char* type);
     void removeMethod(QMetaMethod::MethodType mtype, uint index);
-    void addSignal(const char* signal, const char* type = 0);
-    void addSlot(const char* slot, const char* type = 0);
-    void addProperty(const char* property, PyObject* data);
+    int addSignal(const char* signal, const char* type = 0);
+    int addSlot(const char* slot, const char* type = 0);
+    int addProperty(const char* property, PyObject* data);
     void addInfo(const char* key, const char* value);
     void addInfo(QMap<QByteArray, QByteArray> info);
 
@@ -51,12 +51,15 @@ public:
     void removeSlot(uint index);
     void removeProperty(uint index);
 
+    const QMetaObject* update() const;
+
 private:
     class DynamicQMetaObjectPrivate;
     DynamicQMetaObjectPrivate* m_d;
 
     void parsePythonType(PyTypeObject* type);
 };
+
 
 }
 #endif

@@ -168,6 +168,7 @@ void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base, const s
     //create DynamicMetaObject based on python type
     TypeUserData* userData = new TypeUserData(reinterpret_cast<PyTypeObject*>(type), base);
     userData->cppObjSize = cppObjSize;
+    userData->mo.update();
     Shiboken::ObjectType::setTypeUserData(type, userData, Shiboken::callCppDestructor<TypeUserData>);
 
     //initialize staticQMetaObject property
@@ -196,6 +197,7 @@ void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
         if (PyType_IsSubtype(base, qObjType)) {
             baseMo = reinterpret_cast<QMetaObject*>(Shiboken::ObjectType::getTypeUserData(reinterpret_cast<SbkObjectType*>(base)));
             qobjBase = reinterpret_cast<SbkObjectType*>(base);
+            reinterpret_cast<DynamicQMetaObject*>(baseMo)->update();
             break;
         }
     }
@@ -216,9 +218,9 @@ PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* nam
 
     if (attr && Property::isPropertyType(attr)) {
         PyObject *value = Property::getValue(reinterpret_cast<PySideProperty*>(attr), self);
+        Py_DECREF(attr);
         if (!value)
             return 0;
-        Py_DECREF(attr);
         Py_INCREF(value);
         attr = value;
     }

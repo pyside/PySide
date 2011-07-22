@@ -162,6 +162,8 @@ GlobalReceiver::GlobalReceiver()
 {
     //slot used to be notifyed of object destrouction
     m_metaObject.addSlot(RECEIVER_DESTROYED_SLOT_NAME);
+    m_metaObject.update();
+    setObjectName("GLOBAL RECEIVER");
 }
 
 GlobalReceiver::~GlobalReceiver()
@@ -198,13 +200,12 @@ void GlobalReceiver::disconnectNotify(QObject* source, int slotId)
 
 const QMetaObject* GlobalReceiver::metaObject() const
 {
-    return &m_metaObject;
+    return m_metaObject.update();
 }
 
-void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
+int GlobalReceiver::addSlot(const char* slot, PyObject* callback)
 {
-    m_metaObject.addSlot(slot);
-    int slotId = m_metaObject.indexOfSlot(slot);
+    int slotId = m_metaObject.addSlot(slot);
     if (!m_slotReceivers.contains(slotId))
         m_slotReceivers[slotId] = new DynamicSlotData(slotId, callback, this);
 
@@ -219,8 +220,8 @@ void GlobalReceiver::addSlot(const char* slot, PyObject* callback)
     if (isShortCircuit)
         m_shortCircuitSlots << slotId;
 
-
     Q_ASSERT(slotId >= QObject::staticMetaObject.methodCount());
+    return slotId;
 }
 
 void GlobalReceiver::removeSlot(int slotId)
@@ -248,7 +249,7 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
 {
     Q_ASSERT(call == QMetaObject::InvokeMetaMethod);
     Q_ASSERT(id >= QObject::staticMetaObject.methodCount());
-    QMetaMethod slot = m_metaObject.method(id);
+    QMetaMethod slot = metaObject()->method(id);
     Q_ASSERT(slot.methodType() == QMetaMethod::Slot);
 
     if (strcmp(slot.signature(), RECEIVER_DESTROYED_SLOT_NAME) == 0) {
