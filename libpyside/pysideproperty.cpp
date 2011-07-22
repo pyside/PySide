@@ -40,6 +40,19 @@ static PyObject* qpropertyTpNew(PyTypeObject* subtype, PyObject* args, PyObject*
 static int qpropertyTpInit(PyObject*, PyObject*, PyObject*);
 static void qpropertyFree(void*);
 
+//methods
+static PyObject* qPropertyCall(PyObject*, PyObject*, PyObject*);
+static PyObject* qPropertySetter(PyObject*, PyObject*);
+static PyObject* qPropertyGetter(PyObject*, PyObject*);
+
+static PyMethodDef PySidePropertyMethods[] = {
+    {"setter", (PyCFunction)qPropertySetter, METH_O},
+    {"write", (PyCFunction)qPropertySetter, METH_O},
+    {"getter", (PyCFunction)qPropertyGetter, METH_O},
+    {"read", (PyCFunction)qPropertyGetter, METH_O},
+    {0}
+};
+
 PyTypeObject PySidePropertyType = {
     PyObject_HEAD_INIT(0)
     0,                         /*ob_size*/
@@ -56,7 +69,7 @@ PyTypeObject PySidePropertyType = {
     0,                         /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
-    0,                         /*tp_call*/
+    qPropertyCall,             /*tp_call*/
     0,                         /*tp_str*/
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
@@ -69,7 +82,7 @@ PyTypeObject PySidePropertyType = {
     0,                         /*tp_weaklistoffset */
     0,                         /*tp_iter */
     0,                         /*tp_iternext */
-    0,                         /*tp_methods */
+    PySidePropertyMethods,     /*tp_methods */
     0,                         /*tp_members */
     0,                         /*tp_getset */
     0,                         /*tp_base */
@@ -160,7 +173,7 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
                                    "designable", "scriptable", "stored", "user",
                                    "constant", "final", 0};
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
-                                     "OO|OOOsObbbbbb:QtCore.QProperty", (char**) kwlist,
+                                     "O|OOOOsObbbbbb:QtCore.QProperty", (char**) kwlist,
                                      /*OO*/     &type, &(pData->fget),
                                      /*OOO*/    &(pData->fset), &(pData->freset), &(pData->fdel),
                                      /*s*/      &(pData->doc),
@@ -213,6 +226,57 @@ void qpropertyFree(void *self)
     pySelf->ob_type->tp_base->tp_free(self);
 }
 
+PyObject* qPropertyCall(PyObject* self, PyObject* args, PyObject* kw)
+{
+    PyObject *callback = PyTuple_GetItem(args, 0);
+    if (PyFunction_Check(callback)) {
+        PySideProperty *prop = reinterpret_cast<PySideProperty*>(self);
+        PySidePropertyPrivate* pData = prop->d;
+
+        Py_INCREF(callback);
+        pData->fget = callback;
+
+        Py_INCREF(self);
+        return self;
+    } else {
+        PyErr_SetString(PyExc_TypeError, "Invalid property usage.");
+        return 0;
+    }
+}
+
+PyObject* qPropertySetter(PyObject* self, PyObject* callback)
+{
+    if (PyFunction_Check(callback)) {
+        PySideProperty *prop = reinterpret_cast<PySideProperty*>(self);
+        PySidePropertyPrivate* pData = prop->d;
+
+        Py_INCREF(callback);
+        pData->fset = callback;
+
+        Py_INCREF(callback);
+        return callback;
+    } else {
+        PyErr_SetString(PyExc_TypeError, "Invalid property setter agument.");
+        return 0;
+    }
+}
+
+PyObject* qPropertyGetter(PyObject* self, PyObject* callback)
+{
+    if (PyFunction_Check(callback)) {
+        PySideProperty *prop = reinterpret_cast<PySideProperty*>(self);
+        PySidePropertyPrivate* pData = prop->d;
+
+        Py_INCREF(callback);
+        pData->fget = callback;
+
+        Py_INCREF(callback);
+        return callback;
+    } else {
+        PyErr_SetString(PyExc_TypeError, "Invalid property getter agument.");
+        return 0;
+    }
+}
 
 } // extern "C"
 
