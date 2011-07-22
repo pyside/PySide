@@ -92,6 +92,11 @@ public:
     int m_propertyOffset;
     int m_count;
 
+    uint* m_data;
+    char* m_stringdata;
+
+    DynamicQMetaObjectPrivate() : m_data(0), m_stringdata(0) {}
+    ~DynamicQMetaObjectPrivate() { free(m_data); free(m_stringdata); }
     void updateMetaObject(QMetaObject* metaObj);
     void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int nullIndex, int flags);
 };
@@ -99,10 +104,10 @@ public:
 static int registerString(const QByteArray& s, QList<QByteArray>* strings)
 {
     int idx = 0;
-    foreach(QByteArray str, *strings) {
-        if (str == s)
+    foreach(const char* str, *strings) {
+        if (strcmp(str, s) == 0)
             return idx;
-        idx += str.length() + 1;
+        idx += strlen(str) + 1;
     }
     strings->append(s);
     return idx;
@@ -289,9 +294,9 @@ DynamicQMetaObject::DynamicQMetaObject(PyTypeObject* type, const QMetaObject* ba
     : m_d(new DynamicQMetaObjectPrivate)
 {
     d.superdata = base;
-    d.stringdata = 0;
-    d.data = 0;
-    d.extradata = 0;
+    d.stringdata = NULL;
+    d.data = NULL;
+    d.extradata = NULL;
 
     m_d->m_className = QByteArray(type->tp_name).split('.').last();
     m_d->m_invalid = true;
@@ -318,8 +323,10 @@ DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject*
 
 DynamicQMetaObject::~DynamicQMetaObject()
 {
-    delete[] d.stringdata;
-    delete[] d.data;
+    /*
+    free(const_cast<char*>(d.stringdata));
+    free(const_cast<unsigned int*>(d.data));
+    */
     delete m_d;
 }
 
@@ -533,10 +540,11 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
     header[5] = HEADER_LENGHT;
     // header size + 5 indexes per method + an ending zero
-    delete[] metaObj->d.data;
-    unsigned int* data;
-    data = new unsigned int[HEADER_LENGHT + n_methods*5 + n_properties*4 + n_info*2 + 1];
-    std::memcpy(data, header, sizeof(header));
+
+
+    const int dataSize = HEADER_LENGHT + n_methods*5 + n_properties*4 + n_info*2 + 1;
+    m_data = reinterpret_cast<uint*>(realloc(m_data, dataSize * sizeof(uint)));
+    std::memcpy(m_data, header, sizeof(header));
 
     QList<QByteArray> strings;
     registerString(m_className, &strings); // register class string
@@ -545,40 +553,40 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
 
     //write class info
     if (n_info) {
-        data[3] = index;
+        m_data[3] = index;
         QMap<QByteArray, QByteArray>::const_iterator i = m_info.constBegin();
         while (i != m_info.constEnd()) {
             int valueIndex = registerString(i.value(), &strings);
             int keyIndex = registerString(i.key(), &strings);
-            data[index++] = keyIndex;
-            data[index++] = valueIndex;
+            m_data[index++] = keyIndex;
+            m_data[index++] = valueIndex;
             i++;
         }
     }
 
     //write signals/slots
     if (n_methods)
-        writeMethodsData(m_methods, &data, &strings, &index, NULL_INDEX, AccessPublic);
+        writeMethodsData(m_methods, &m_data, &strings, &index, NULL_INDEX, AccessPublic);
 
     if (m_properties.size())
-        data[7] = index;
+        m_data[7] = index;
 
     //write properties
     foreach(PropertyData pp, m_properties) {
         if (pp.isValid())
-            data[index++] = registerString(pp.name(), &strings); // name
+            m_data[index++] = registerString(pp.name(), &strings); // name
         else
-            data[index++] = NULL_INDEX;
+            m_data[index++] = NULL_INDEX;
 
-        data[index++] = (pp.isValid() ? registerString(pp.type(), &strings) :  NULL_INDEX); // normalized type
-        data[index++] = pp.flags();
+        m_data[index++] = (pp.isValid() ? registerString(pp.type(), &strings) :  NULL_INDEX); // normalized type
+        m_data[index++] = pp.flags();
     }
 
     //write properties notify
     foreach(PropertyData pp, m_properties)
-        data[index++] = pp.notifyId() >= 0 ? pp.notifyId() : 0; //signal notify index
+        m_data[index++] = pp.notifyId() >= 0 ? pp.notifyId() : 0; //signal notify index
 
-    data[index++] = 0; // the end
+    m_data[index++] = 0; // the end
 
     // create the m_metadata string
     QByteArray str;
@@ -587,9 +595,9 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
         str.append(char(0));
     }
 
-    delete[] metaObj->d.stringdata;
-    char* stringData = new char[str.count()];
-    std::copy(str.begin(), str.end(), stringData);
-    metaObj->d.data = data;
-    metaObj->d.stringdata = stringData;
+    m_stringdata = reinterpret_cast<char*>(realloc(m_stringdata, str.count() * sizeof(char)));
+    std::copy(str.begin(), str.end(), m_stringdata);
+
+    metaObj->d.data = m_data;
+    metaObj->d.stringdata = m_stringdata;
 }
