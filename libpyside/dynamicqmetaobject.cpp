@@ -100,11 +100,11 @@ static int registerString(const QByteArray& s, QList<QByteArray>* strings)
 {
     int idx = 0;
     QList<QByteArray>::const_iterator it = strings->begin();
-    QList<QByteArray>::const_iterator it_end = strings->end();
-    while(it != it_end) {
+    QList<QByteArray>::const_iterator itEnd = strings->end();
+    while (it != itEnd) {
         if (strcmp(*it, s) == 0)
             return idx;
-        idx += (*it).size() + 1;
+        idx += it->size() + 1;
         ++it;
     }
     strings->append(s);
@@ -209,31 +209,16 @@ MethodData::MethodData()
 }
 
 MethodData::MethodData(QMetaMethod::MethodType mtype, const char* signature, const char* type)
-    : m_signature(signature), m_type(type), m_mtype(mtype)
+    : m_signature(signature), m_mtype(mtype)
 {
+    if (qstrcmp(type, "void"))
+        m_type = type;
 }
 
 void MethodData::clear()
 {
     m_signature = m_emptySig;
     m_type.clear();
-}
-
-bool MethodData::operator==(const MethodData& other) const
-{
-    return ((m_signature == other.signature()) && (m_mtype == other.methodType()));
-}
-
-QByteArray MethodData::signature() const
-{
-    return m_signature;
-}
-
-QByteArray MethodData::type() const
-{
-    if (m_type == "void")
-        return QByteArray();
-    return m_type;
 }
 
 bool MethodData::isValid() const
@@ -265,11 +250,6 @@ QByteArray PropertyData::type() const
 bool PropertyData::isValid() const
 {
     return !m_name.isEmpty();
-}
-
-QByteArray PropertyData::name() const
-{
-    return m_name;
 }
 
 int PropertyData::notifyId() const
@@ -304,7 +284,7 @@ DynamicQMetaObject::DynamicQMetaObject(PyTypeObject* type, const QMetaObject* ba
     parsePythonType(type);
 }
 
-DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject) 
+DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject* metaObject)
     : m_d(new DynamicQMetaObjectPrivate)
 {
     d.superdata = metaObject;

@@ -43,8 +43,8 @@ namespace PySide
         MethodData(QMetaMethod::MethodType mtype, const char* signature, const char* type = 0);
         void clear();
         bool isValid() const;
-        QByteArray signature() const;
-        QByteArray type() const;
+        const QByteArray& signature() const { return m_signature; }
+        const QByteArray& type() const { return m_type; }
         QMetaMethod::MethodType methodType() const;
         bool operator==(const MethodData& other) const;
 
@@ -60,7 +60,7 @@ namespace PySide
     public:
         PropertyData();
         PropertyData(const char* name, int notifyId=0, PySideProperty* data = 0);
-        QByteArray name() const;
+        const QByteArray& name() const { return m_name; }
         QByteArray type() const;
         uint flags() const;
         bool isValid() const;
@@ -73,6 +73,12 @@ namespace PySide
         int m_notifyId;
         PySideProperty* m_data;
     };
+
+inline bool MethodData::operator==(const MethodData& other) const
+{
+    return m_mtype == other.methodType() && m_signature == other.signature();
+}
+
 }
 
 #endif
