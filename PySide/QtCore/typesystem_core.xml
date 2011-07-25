@@ -2880,7 +2880,7 @@
       <include file-name="QDateTime" location="global"/>
     </extra-includes>
   </object-type>
-  <value-type name="QTextStreamManipulator">
+  <value-type name="QTextStreamManipulator" default-constructor="QTextStreamManipulator(0, 0)">
     <modify-function signature="exec(QTextStream &amp;)" rename="exec_"/>
   </value-type>
   <object-type name="QTextStream" stream="yes">
