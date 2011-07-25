@@ -93,14 +93,14 @@ public:
     int m_count;
 
     void updateMetaObject(QMetaObject* metaObj);
-    void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QList<QByteArray>* strings, int* prtIndex, int nullIndex, int flags);
+    void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QLinkedList<QByteArray>* strings, int* prtIndex, int nullIndex, int flags);
 };
 
-static int registerString(const QByteArray& s, QList<QByteArray>* strings)
+static int registerString(const QByteArray& s, QLinkedList<QByteArray>* strings)
 {
     int idx = 0;
-    QList<QByteArray>::const_iterator it = strings->begin();
-    QList<QByteArray>::const_iterator itEnd = strings->end();
+    QLinkedList<QByteArray>::const_iterator it = strings->begin();
+    QLinkedList<QByteArray>::const_iterator itEnd = strings->end();
     while (it != itEnd) {
         if (strcmp(*it, s) == 0)
             return idx;
@@ -421,7 +421,7 @@ const QMetaObject* DynamicQMetaObject::update() const
 
 void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList<MethodData>& methods,
                                                                      unsigned int** data,
-                                                                     QList<QByteArray>* strings,
+                                                                     QLinkedList<QByteArray>* strings,
                                                                      int* prtIndex,
                                                                      int nullIndex,
                                                                      int flags)
@@ -451,7 +451,7 @@ void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
     Py_ssize_t pos = 0;
 
     typedef std::pair<const char*, PyObject*> PropPair;
-    QList<PropPair> properties;
+    QLinkedList<PropPair> properties;
 
     Shiboken::AutoDecRef slotAttrName(PyString_FromString(PYSIDE_SLOT_LIST_ATTR));
 
@@ -519,7 +519,7 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
     uint* data = reinterpret_cast<uint*>(realloc(const_cast<uint*>(metaObj->d.data), dataSize * sizeof(uint)));
     std::memcpy(data, header, sizeof(header));
 
-    QList<QByteArray> strings;
+    QLinkedList<QByteArray> strings;
     registerString(m_className, &strings); // register class string
     const int NULL_INDEX = registerString("", &strings); // register a null string
     int index = HEADER_LENGHT;
