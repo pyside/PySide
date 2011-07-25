@@ -61,15 +61,57 @@ static PyObject* signalInstanceGetItem(PyObject*, PyObject*);
 static PyObject* signalInstanceCall(PyObject* self, PyObject* args, PyObject* kw);
 static PyObject* signalCall(PyObject*, PyObject*, PyObject*);
 
+static PyObject* metaSignalCheck(PyObject*, PyObject*);
+
 static PyMappingMethods Signal_as_mapping = {
     0,
     signalGetItem,
     0
 };
 
+static PyMethodDef Signal_methods[] = {
+    {"__instancecheck__", (PyCFunction)metaSignalCheck, METH_O, NULL},
+    {0}
+};
+
+PyTypeObject PySideSignalMetaType = {
+    PyObject_HEAD_INIT(0)
+    /*ob_size*/             0,
+    /*tp_name*/             "PySide.QtCore.MetaSignal",
+    /*tp_basicsize*/        sizeof(PyTypeObject),
+    /*tp_itemsize*/         0,
+    /*tp_dealloc*/          0,
+    /*tp_print*/            0,
+    /*tp_getattr*/          0,
+    /*tp_setattr*/          0,
+    /*tp_compare*/          0,
+    /*tp_repr*/             0,
+    /*tp_as_number*/        0,
+    /*tp_as_sequence*/      0,
+    /*tp_as_mapping*/       0,
+    /*tp_hash*/             0,
+    /*tp_call*/             0,
+    /*tp_str*/              0,
+    /*tp_getattro*/         0,
+    /*tp_setattro*/         0,
+    /*tp_as_buffer*/        0,
+    /*tp_flags*/            Py_TPFLAGS_DEFAULT,
+    /*tp_doc*/              0,
+    /*tp_traverse*/         0,
+    /*tp_clear*/            0,
+    /*tp_richcompare*/      0,
+    /*tp_weaklistoffset*/   0,
+    /*tp_iter*/             0,
+    /*tp_iternext*/         0,
+    /*tp_methods*/          Signal_methods,
+    /*tp_members*/          0,
+    /*tp_getset*/           0,
+    /*tp_base*/             &PyType_Type,
+};
 
 PyTypeObject PySideSignalType = {
-    PyObject_HEAD_INIT(0)
+    PyObject_HEAD_INIT(&PySideSignalMetaType)
+    //PyObject_HEAD_INIT(0)
     /*ob_size*/             0,
     /*tp_name*/             "PySide.QtCore."SIGNAL_CLASS_NAME,
     /*tp_basicsize*/        sizeof(PySideSignal),
@@ -456,12 +498,24 @@ PyObject* signalInstanceCall(PyObject* self, PyObject* args, PyObject* kw)
     return PyCFunction_Call(homonymousMethod, args, kw);
 }
 
+
+static PyObject* metaSignalCheck(PyObject* klass, PyObject* args)
+{
+    if (PyType_IsSubtype(args->ob_type, &PySideSignalInstanceType))
+        Py_RETURN_TRUE;
+    else
+        Py_RETURN_FALSE;
+}
+
 } // extern "C"
 
 namespace PySide { namespace Signal {
 
 void init(PyObject* module)
 {
+    if (PyType_Ready(&PySideSignalMetaType) < 0)
+        return;
+
     if (PyType_Ready(&PySideSignalType) < 0)
         return;
 
