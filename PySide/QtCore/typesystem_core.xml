@@ -2816,11 +2816,16 @@
     <modify-function signature="operator&lt;&lt;(unsigned int)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(unsigned short)" remove="all"/>
 
+    <modify-function signature="operator&gt;&gt;(char*)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(char&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(qlonglong&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(qulonglong&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(signed long&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(signed int&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(signed short&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned long&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned int&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned short&amp;)" remove="all"/>
     <!-- Removed because it expect QChar to be mutable -->
