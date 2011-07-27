@@ -49,6 +49,16 @@
         <enum-type name="PropertyFlag" flags="PropertyFlags"/>
         <enum-type name="ResolveFlag" flags="ResolveFlags"/>
         <enum-type name="SpecialValue"/>
+        <add-function signature="__repr__" return-type="PyObject*">
+            <inject-code class="target" position="beginning">
+                if (%CPPSELF.isVariant() || %CPPSELF.isString()) {
+                    QString format = QString().sprintf("%s(\"%s\")", ((PyObject*)%PYSELF)->ob_type->tp_name, qPrintable(%CPPSELF.toString()));
+                    %PYARG_0 = PyString_FromString(qPrintable(format));
+                 } else {
+                    %PYARG_0 = PyObject_Str((PyObject*)%PYSELF);
+                }
+            </inject-code>
+        </add-function>
         <add-function signature="__mgetitem__">
             <inject-code>
                 Shiboken::AutoDecRef key(PyObject_Str(_key));
