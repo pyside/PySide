@@ -1,12 +1,12 @@
 import unittest
-from PySide.QtCore import *
-from PySide.QtScript import *
+import PySide
+from PySide.QtScript import QScriptEngine, QScriptValue
 
-class TestQScriptValue (unittest.TestCase):
+from helper import UsesQApplication
+
+class TestQScriptValue (UsesQApplication):
 
     def testOperator(self):
-        app = QCoreApplication([])
-
         engine = QScriptEngine()
         value = engine.evaluate('x = {"a": 1, "b":2}')
         self.assertEqual(value['a'], 1)
@@ -15,6 +15,10 @@ class TestQScriptValue (unittest.TestCase):
         self.assertEqual(value[2], 'z')
         self.assertRaises(IndexError, value.__getitem__, 23)
 
+    def testRepr(self):
+        value = QScriptValue("somePerson = { firstName: 'John', lastName: 'Doe' }")
+        value2 = eval(repr(value))
+        self.assertEqual(value.toString(), value2.toString())
 
 if __name__ == '__main__':
     unittest.main()
