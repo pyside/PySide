@@ -4,30 +4,23 @@
     <load-typesystem name="typesystem_gui.xml" generate="no"/>
     <object-type name="TestObject" />
 
-    <inject-code>
+    <inject-code position="end">
+        Shiboken::TypeResolver::createObjectTypeResolver&lt; ::PySideCPP2::TestObjectWithoutNamespace>("TestObjectWithoutNamespace*");
+        Shiboken::TypeResolver::createValueTypeResolver&lt; ::PySideCPP2::PySideLong>("PySideLong");
+        Shiboken::TypeResolver::createObjectTypeResolver&lt; ::PySideCPP::TestObjectWithNamespace>("TestObjectWithNamespace*");
+        Shiboken::TypeResolver::createValueTypeResolver&lt; ::PySideInt>("PySideInt");
         qRegisterMetaType&lt;PySideInt>("PySideInt");
         qRegisterMetaType&lt;PySideCPP2::PySideLong>("PySideLong");
     </inject-code>
 
     <namespace-type name="PySideCPP">
-        <object-type name="TestObjectWithNamespace" >
-            <modify-function signature="emitSignal(PySideCPP::TestObjectWithNamespace*)">
-              <modify-argument index="1">
-                <replace-type modified-type="TestObjectWithNamespace*"/>
-              </modify-argument>
-            </modify-function>
-        </object-type>
+        <object-type name="TestObjectWithNamespace" />
     </namespace-type>
 
     <namespace-type name="PySideCPP2" generate="no">
         <enum-type name="Enum1" />
         <object-type name="TestObjectWithoutNamespace" >
             <enum-type name="Enum2" />
-            <modify-function signature="emitSignalWithNamespace(PySideCPP2::TestObjectWithoutNamespace*)">
-              <modify-argument index="1">
-                <replace-type modified-type="PySideCPP2::TestObjectWithoutNamespace*"/>
-              </modify-argument>
-            </modify-function>
         </object-type>
     </namespace-type>
 
