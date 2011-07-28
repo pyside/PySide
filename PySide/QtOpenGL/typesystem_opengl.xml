@@ -95,40 +95,20 @@
   <template name="callArrayFunction">
       int _size = PySequence_Size(%PYARG_2);
       if (_size) {
-          %ATTR_TYPE *_list = new %ATTR_TYPE[_size];
+          $ATTR_TYPE *_list = new $ATTR_TYPE[_size];
           if (_size) {
             Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_2, "Failed to parse sequence with type %VECTOR_TYPE."));
             for(int i=0; i &lt; _size; i++) {
                 PyObject* pv = PySequence_Fast_GET_ITEM(fast.object(), i);
-                _list[i] = %CONVERTTOCPP[ %ATTR_TYPE ](pv);
+                _list[i] = %CONVERTTOCPP[$ATTR_TYPE](pv);
             }
           }
-          %CPPSELF.%FUNCTION_NAME(%1, _list, %3);
+          %CPPSELF.%FUNCTION_NAME(%1, _list, $ARG0);
           delete[] _list;
        } else {
-          %CPPSELF.%FUNCTION_NAME(%1, NULL, %3);
-       }
-
-  </template>
-
-  <template name="callArrayFunctionWithCount">
-      int _size = PySequence_Size(%PYARG_2);
-      if (size) {
-          %ATTR_TYPE *_list = new %ATTR_TYPE[_size];
-          if (_size) {
-            Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_2, "Failed to parse sequence with type %VECTOR_TYPE."));
-            for(int i=0; i &lt; _size; i++) {
-                PyObject* pv = PySequence_Fast_GET_ITEM(fast.object(), i);
-                _list[i] = %CONVERTTOCPP[ %ATTR_TYPE ](pv);
-            }
-          }
-          %CPPSELF.%FUNCTION_NAME(%1, _list, _size);
-          delete[] _list;
-       } else {
-          %CPPSELF.%FUNCTION_NAME(%1, NULL, 0);
+          %CPPSELF.%FUNCTION_NAME(%1, ($ATTR_TYPE*)NULL, $ARG1);
        }
   </template>
-
 
   <object-type name="QGLShaderProgram" since="4.6">
     <!-- setAttributeArray -->
@@ -138,7 +118,9 @@
         </modify-argument>
         <inject-code>
             <insert-template name="callArrayFunction">
-                <replace from="%ATTR_TYPE" to="QVector2D"/>
+                <replace from="$ARG0" to="%3" />
+                <replace from="$ARG1" to="%3" />
+                <replace from="$ATTR_TYPE" to="QVector2D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -149,7 +131,9 @@
         </modify-argument>
         <inject-code>
             <insert-template name="callArrayFunction">
-                <replace from="%ATTR_TYPE" to="QVector3D"/>
+                <replace from="$ARG0" to="%3" />
+                <replace from="$ARG1" to="%3" />
+                <replace from="$ATTR_TYPE" to="QVector3D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -160,7 +144,9 @@
         </modify-argument>
         <inject-code>
             <insert-template name="callArrayFunction">
-                <replace from="%ATTR_TYPE" to="QVector4D"/>
+                <replace from="$ARG0" to="%3" />
+                <replace from="$ARG1" to="%3" />
+                <replace from="$ATTR_TYPE" to="QVector4D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -171,7 +157,9 @@
         </modify-argument>
         <inject-code>
             <insert-template name="callArrayFunction">
-                <replace from="%ATTR_TYPE" to="QVector2D"/>
+                <replace from="$ARG0" to="%3" />
+                <replace from="$ARG1" to="%3" />
+                <replace from="$ATTR_TYPE" to="QVector2D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -182,7 +170,9 @@
         </modify-argument>
         <inject-code>
             <insert-template name="callArrayFunction">
-                <replace from="%ATTR_TYPE" to="QVector3D"/>
+                <replace from="$ARG0" to="%3" />
+                <replace from="$ARG1" to="%3" />
+                <replace from="$ATTR_TYPE" to="QVector3D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -193,7 +183,9 @@
         </modify-argument>
         <inject-code>
             <insert-template name="callArrayFunction">
-                <replace from="%ATTR_TYPE" to="QVector4D"/>
+                <replace from="$ARG0" to="%3" />
+                <replace from="$ARG1" to="%3" />
+                <replace from="$ATTR_TYPE" to="QVector4D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -208,8 +200,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="GLint"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="GLint"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -222,8 +216,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="GLuint"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="GLuint"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -236,8 +232,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QVector2D"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QVector2D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -250,8 +248,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QVector3D"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QVector3D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -264,8 +264,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QVector4D"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QVector4D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -278,8 +280,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix2x2"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix2x2"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -292,8 +296,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix2x3"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix2x3"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -306,8 +312,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix2x4"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix2x4"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -320,8 +328,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix3x2"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix3x2"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -334,8 +344,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix3x3"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix3x3"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -348,8 +360,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix3x4"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix3x4"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -362,8 +376,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix4x2"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix4x2"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -376,8 +392,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix4x3"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix4x3"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -390,8 +408,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix4x4"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix4x4"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -404,8 +424,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="GLint"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="GLint"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -418,8 +440,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="GLuint"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="GLuint"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -432,8 +456,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QVector2D"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QVector2D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -446,8 +472,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QVector3D"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QVector3D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -460,8 +488,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QVector4D"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QVector4D"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -474,8 +504,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix2x2"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix2x2"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -488,8 +520,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix2x3"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix2x3"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -502,8 +536,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix2x4"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix2x4"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -516,8 +552,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix3x2"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix3x2"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -530,8 +568,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix3x3"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix3x3"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -544,8 +584,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix3x4"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix3x4"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -558,8 +600,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix4x2"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix4x2"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -572,8 +616,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix4x3"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix4x3"/>
             </insert-template>
         </inject-code>
     </modify-function>
@@ -586,8 +632,10 @@
              <remove-argument />
         </modify-argument>
         <inject-code>
-            <insert-template name="callArrayFunctionWithCount">
-                <replace from="%ATTR_TYPE" to="QMatrix4x4"/>
+            <insert-template name="callArrayFunction">
+                <replace from="$ARG0" to="_size" />
+                <replace from="$ARG1" to="0" />
+                <replace from="$ATTR_TYPE" to="QMatrix4x4"/>
             </insert-template>
         </inject-code>
     </modify-function>
