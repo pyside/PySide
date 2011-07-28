@@ -731,6 +731,59 @@ PySideSignal* newObject(const char* name, ...)
     return self;
 }
 
+template<typename T>
+static typename T::value_type join(T t, const char* sep)
+{
+    typename T::value_type res;
+    if (!t.size())
+        return res;
+
+    typename T::const_iterator it = t.begin();
+    typename T::const_iterator end = t.end();
+    res += *it;
+    ++it;
+
+    while (it != end) {
+        res += sep;
+        res += *it;
+        ++it;
+    }
+    return res;
+}
+
+void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject)
+{
+    typedef QHash<QByteArray, QList<QByteArray> > SignalSigMap;
+    SignalSigMap signalsFound;
+    for(int i = metaObject->methodOffset(), max = metaObject->methodCount(); i < max; ++i) {
+        QMetaMethod method = metaObject->method(i);
+        QByteArray methodName(method.signature());
+        methodName.chop(methodName.size() - methodName.indexOf('('));
+
+        if (method.methodType() == QMetaMethod::Signal)
+            signalsFound[methodName] << join(method.parameterTypes(), ",");
+    }
+
+    SignalSigMap::Iterator it = signalsFound.begin();
+    SignalSigMap::Iterator end = signalsFound.end();
+    for (; it != end; ++it) {
+        PySideSignal* self = PyObject_New(PySideSignal, &PySideSignalType);
+        self->signalName = strdup(it.key().constData());
+        self->signaturesSize = 0;
+        self->signatures = 0;
+        self->initialized = 0;
+        self->homonymousMethod = 0;
+
+        qSort(it.value().begin(), it.value().end());
+        SignalSigMap::mapped_type::const_iterator j = it.value().begin();
+        SignalSigMap::mapped_type::const_iterator endJ = it.value().end();
+        for (; j != endJ; ++j)
+            appendSignature(self, strdup(j->constData()));
+        addSignalToWrapper(pyObj, it.key(), self);
+        Py_DECREF((PyObject*) self);
+    }
+}
+
 
 PyObject* buildQtCompatible(const char* signature)
 {

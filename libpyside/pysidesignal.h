@@ -57,8 +57,14 @@ PYSIDE_API bool checkType(PyObject* type);
  * @param   name of the Signal to be registered on meta object
  * @param   signatures a list of signatures supported by this signal, ended with a NULL pointer
  * @return  Return a new reference to PyObject* of type  PySideSignal
+ * @deprecated Use registerSignals
  **/
 PYSIDE_API PySideSignal* newObject(const char* name, ...);
+
+/**
+ * Register all C++ signals of a QObject on Python type.
+ */
+PYSIDE_API void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject);
 
 /**
  * This function creates a Signal object which stay attached to QObject class based on a list of QMetaMethod
@@ -104,10 +110,7 @@ PYSIDE_API const char* getSignature(PySideSignalInstance* signal);
 PYSIDE_API void updateSourceObject(PyObject* source);
 
 /**
- * This function is used to retrieve the signal signature
- *
- * @param   self The Signal object
- * @return  Return the signal signature
+ * @deprecated Use registerSignals
  **/
 PYSIDE_API void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal);
 
