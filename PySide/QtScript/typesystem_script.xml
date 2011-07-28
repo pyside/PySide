@@ -72,7 +72,28 @@
                 }
             </inject-code>
         </add-function>
+        <add-function signature="__iter__()" return-type="PyObject*">
+            <inject-code>
+                %PYARG_0 = Shiboken::createWrapper(new QScriptValueIterator(*%CPPSELF), true, true);
+            </inject-code>
+        </add-function>
     </value-type>
-    <object-type name="QScriptValueIterator"/>
+    <object-type name="QScriptValueIterator">
+        <add-function signature="__iter__()" return-type="PyObject*">
+            <inject-code>
+                <insert-template name="__iter__" />
+            </inject-code>
+        </add-function>
+        <add-function signature="__next__()" return-type="PyObject*">
+            <inject-code>
+                if (%CPPSELF.hasNext()) {
+                    %CPPSELF.next();
+                    %PYARG_0 = Shiboken::makeTuple(%CPPSELF.name(), %CPPSELF.value().toVariant());
+                } else {
+                    PyErr_SetNone(PyExc_StopIteration);
+                }
+            </inject-code>
+        </add-function>
+    </object-type>
 </typesystem>
 
