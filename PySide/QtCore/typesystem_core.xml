@@ -99,26 +99,26 @@
   <primitive-type name="qreal"/>
   <primitive-type name="float"/>
   <primitive-type name="qint64"/>
-  <primitive-type name="unsigned long long" default-constructor="0"/>
-  <primitive-type name="long long" default-constructor="0"/>
+  <primitive-type name="unsigned long long"/>
+  <primitive-type name="long long"/>
   <primitive-type name="qlonglong" target-lang-api-name="PyLong" />
   <primitive-type name="qulonglong" target-lang-api-name="PyLong" />
   <primitive-type name="short"/>
-  <primitive-type name="signed short" default-constructor="0"/>
+  <primitive-type name="signed short"/>
   <primitive-type name="ushort" target-lang-api-name="PyInt" />
-  <primitive-type name="unsigned short" default-constructor="0"/>
+  <primitive-type name="unsigned short"/>
   <primitive-type name="char"/>
-  <primitive-type name="signed char" default-constructor="0"/>
+  <primitive-type name="signed char"/>
   <primitive-type name="uchar"/>
-  <primitive-type name="unsigned char" default-constructor="0"/>
+  <primitive-type name="unsigned char"/>
   <primitive-type name="int"/>
-  <primitive-type name="signed int" default-constructor="0"/>
+  <primitive-type name="signed int"/>
   <primitive-type name="uint"/>
   <primitive-type name="ulong"/>
-  <primitive-type name="unsigned int" default-constructor="0"/>
-  <primitive-type name="signed long" default-constructor="0"/>
+  <primitive-type name="unsigned int"/>
+  <primitive-type name="signed long"/>
   <primitive-type name="long"/>
-  <primitive-type name="unsigned long" default-constructor="0">
+  <primitive-type name="unsigned long">
     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
     <include file-name="signalmanager.h" location="global"/>
   </primitive-type>
@@ -132,7 +132,7 @@
     <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
 
-  <primitive-type name="QString" default-constructor="QString()">
+  <primitive-type name="QString">
     <include file-name="QString" location="global"/>
     <conversion-rule file="qstring_conversions.h" />
   </primitive-type>
@@ -2816,11 +2816,16 @@
     <modify-function signature="operator&lt;&lt;(unsigned int)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(unsigned short)" remove="all"/>
 
+    <modify-function signature="operator&gt;&gt;(char*)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(char&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(float&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(double&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(qlonglong&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(qulonglong&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(signed long&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(signed int&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(signed short&amp;)" remove="all"/>
+    <modify-function signature="operator&gt;&gt;(unsigned long&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned int&amp;)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(unsigned short&amp;)" remove="all"/>
     <!-- Removed because it expect QChar to be mutable -->
