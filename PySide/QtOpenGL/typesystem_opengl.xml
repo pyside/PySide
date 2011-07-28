@@ -94,28 +94,39 @@
 
   <template name="callArrayFunction">
       int _size = PySequence_Size(%PYARG_2);
-      %ATTR_TYPE _list[_size];
       if (_size) {
-        Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_2, "Failed to parse sequence with type %VECTOR_TYPE."));
-        for(int i=0; i &lt; _size; i++) {
-            PyObject* pv = PySequence_Fast_GET_ITEM(fast.object(), i);
-            _list[i] = %CONVERTTOCPP[ %ATTR_TYPE ](pv);
-        }
-      }
-      %CPPSELF.%FUNCTION_NAME(%1, _list, %3);
+          %ATTR_TYPE *_list = new %ATTR_TYPE[_size];
+          if (_size) {
+            Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_2, "Failed to parse sequence with type %VECTOR_TYPE."));
+            for(int i=0; i &lt; _size; i++) {
+                PyObject* pv = PySequence_Fast_GET_ITEM(fast.object(), i);
+                _list[i] = %CONVERTTOCPP[ %ATTR_TYPE ](pv);
+            }
+          }
+          %CPPSELF.%FUNCTION_NAME(%1, _list, %3);
+          delete[] _list;
+       } else {
+          %CPPSELF.%FUNCTION_NAME(%1, NULL, %3);
+       }
+
   </template>
 
   <template name="callArrayFunctionWithCount">
       int _size = PySequence_Size(%PYARG_2);
-      %ATTR_TYPE _list[_size];
-      if (_size) {
-        Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_2, "Failed to parse sequence with type %VECTOR_TYPE."));
-        for(int i=0; i &lt; _size; i++) {
-            PyObject* pv = PySequence_Fast_GET_ITEM(fast.object(), i);
-            _list[i] = %CONVERTTOCPP[ %ATTR_TYPE ](pv);
-        }
-      }
-      %CPPSELF.%FUNCTION_NAME(%1, _list, _size);
+      if (size) {
+          %ATTR_TYPE *_list = new %ATTR_TYPE[_size];
+          if (_size) {
+            Shiboken::AutoDecRef fast(PySequence_Fast(%PYARG_2, "Failed to parse sequence with type %VECTOR_TYPE."));
+            for(int i=0; i &lt; _size; i++) {
+                PyObject* pv = PySequence_Fast_GET_ITEM(fast.object(), i);
+                _list[i] = %CONVERTTOCPP[ %ATTR_TYPE ](pv);
+            }
+          }
+          %CPPSELF.%FUNCTION_NAME(%1, _list, _size);
+          delete[] _list;
+       } else {
+          %CPPSELF.%FUNCTION_NAME(%1, NULL, 0);
+       }
   </template>
 
 
