@@ -79,17 +79,11 @@
     <div id="header_container">
         <div id="logo"><a href="http://www.pyside.org"><img alt="PySide" src="{{ pathto('_static/pysidelogo.png', 1) }}" width="199" height="102" /></a></div>
         <ul id="relbar">
-            {%- for rellink in rellinks %}
-            <li class="right">
-            <a href="{{ pathto(rellink[0]) }}" title="{{ rellink[1]|striptags }}"
-                {{ accesskey(rellink[2]) }}>{{ rellink[3] }}</a>
-            {%- if not loop.first %}{{ reldelim2 }}{% endif %}</li>
-            {%- endfor %}
             {%- block rootrellink %}
-            <li><a href="{{ pathto(master_doc) }}">{{ shorttitle|e }}</a>{{ reldelim1 }}</li>
+            <li><a href="{{ pathto( 'index' ) }}">{{ shorttitle|e }}</a></li>
             {%- endblock %}
             {%- for parent in parents %}
-            <li><a href="{{ parent.link|e }}" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ parent.title }}</a>{{ reldelim1 }}</li>
+            <li>{{ reldelim1 }} <a href="{{ parent.link|e }}" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ parent.title }}</a></li>
             {%- endfor %}
             {%- block relbaritems %} {% endblock %}
         </ul>
