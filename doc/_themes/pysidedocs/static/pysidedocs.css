@@ -414,13 +414,32 @@ table.footnote {
 }
 
 tt.descname {
+    font-size: 120%;
     font-weight: bold;
 }
 
-dl.method {
-    border-top: 1px solid #c2c2c2;
-    margin-right: -100px;
-    position: relative;
-    left: -50px;
-    padding: 10px 50px 0px 50px;
+#functions ul, #virtual-functions ul, #slots ul, #signals ul, #static-functions ul {
+    list-style: none;
+    margin: 0px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -khtml-border-radius:10px;
+}
+
+#synopsis span.pre {
+    color: #009491;
+    font-weight: bolder;
+}
+
+#detailed-description .class dt, #detailed-description .method dt, #detailed-description .attribute dt  {
+    margin: 0px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -khtml-border-radius:10px;
 }
