@@ -562,7 +562,7 @@
             </conversion-rule>
             <conversion-rule class="native">
                 Py_ssize_t bufferLen;
-                char* %out = (char*) Shiboken::Buffer::getPointer(arg, &amp;bufferLen);
+                char* %out = (char*) Shiboken::Buffer::getPointer(%PYARG_1, &amp;bufferLen);
             </conversion-rule>
         </modify-argument>
         <modify-argument index="2">

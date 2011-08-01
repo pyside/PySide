@@ -1664,7 +1664,7 @@
     <modify-function signature="operator+(QByteArray,QString)" remove="all" />
     <add-function signature="operator+(PyUnicode)">
         <inject-code>
-            Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(arg));
+            Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(%PYARG_1));
             if (!str.isNull()) {
                 QByteArray b(PyString_AS_STRING(str.object()), PyString_GET_SIZE(str.object()));
                 b.prepend(*%CPPSELF);
@@ -1674,7 +1674,7 @@
     </add-function>
     <add-function signature="operator+(PyUnicode, QByteArray)">
         <inject-code>
-            Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(arg));
+            Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(%PYARG_1));
             if (!str.isNull()) {
                 QByteArray b(PyString_AS_STRING(str.object()), PyString_GET_SIZE(str.object()));
                 b.append(*%CPPSELF);
@@ -1684,7 +1684,7 @@
     </add-function>
     <add-function signature="operator+(PyString, QByteArray)">
         <inject-code>
-            QByteArray b(PyString_AS_STRING(arg), PyString_GET_SIZE(arg));
+            QByteArray b(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1));
             %PYARG_0 = %CONVERTTOPYTHON[QByteArray](b + *%CPPSELF);
         </inject-code>
     </add-function>
@@ -1712,7 +1712,7 @@
     <modify-function signature="QByteArray(const char *)">
         <!-- Keep \x00 bytes passed in python strings -->
         <inject-code class="target" position="beginning">
-            int size = PyString_GET_SIZE(pyargs[0]);
+            int size = PyString_GET_SIZE(%PYARG_1);
             %0 = new QByteArray(%1, size);
         </inject-code>
     </modify-function>
@@ -2244,7 +2244,7 @@
                                     const_cast&lt;char*>("OsO"),
                                     pyTimer,
                                     SIGNAL(timeout()),
-                                    pyargs[1])
+                                    %PYARG_2)
             );
         }
 
