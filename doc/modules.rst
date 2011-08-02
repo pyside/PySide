@@ -1,7 +1,10 @@
 PySide modules
 **************
 
+Qt is splitted in several modules.
+
 .. toctree::
+    :maxdepth: 1
 
     PySide/QtCore/index.rst
     PySide/QtDeclarative/index.rst
