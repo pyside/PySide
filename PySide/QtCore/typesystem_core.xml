@@ -3078,6 +3078,27 @@
 
   <object-type name="QHistoryState" since="4.6">
     <enum-type name="HistoryType" />
+    <modify-documentation xpath='description/code'>
+        &lt;code>machine = QStateMachine()
+
+s1 = new QState()
+s11 = new QState(s1)
+s12 = new QState(s1)
+
+s1h = QHistoryState(s1)
+s1h.setDefaultState(s11)
+
+machine.addState(s1)
+
+s2 = QState()
+machine.addState(s2)
+
+button = QPushButton()
+# Clicking the button will cause the state machine to enter the child state
+# that s1 was in the last time s1 was exited, or the history state's default
+# state if s1 has never been entered.
+s1.addTransition(button.clicked, s1h)&lt;/code>
+    </modify-documentation>
   </object-type>
 
   <value-type name="QMargins" since="4.6"/>
