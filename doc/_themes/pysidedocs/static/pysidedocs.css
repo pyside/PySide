@@ -92,7 +92,7 @@ h1 {
     padding-bottom: 15px;
     padding-top: 15px;
     border-bottom: 1px solid #c2c2c2;
-    text-transform:uppercase;
+/*     text-transform:uppercase; */
     margin-right: -100px;
     position: relative;
     left: -50px;
@@ -138,7 +138,6 @@ pre * {
 
 .pre {
     font: 100% monospace;
-    color: black;
 }
 
 .headerlink {
@@ -443,3 +442,28 @@ tt.descname {
     -webkit-border-radius:10px;
     -khtml-border-radius:10px;
 }
+
+.pysidetoc ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.pysidetoc em {
+    font-style: normal;
+}
+
+.pysidetoc strong {
+    display: block;
+    padding: 5px;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    -khtml-border-radius:6px;
+}
+
+.hide {
+    display: none;
+}
+
