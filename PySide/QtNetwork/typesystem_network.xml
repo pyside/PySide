@@ -53,10 +53,6 @@
         <enum-type name="State"/>
         <enum-type name="TransferMode"/>
         <enum-type name="TransferType"/>
-        <extra-includes>
-            <include file-name="autoarraypointer.h" location="global"/>
-        </extra-includes>
-
         <modify-function signature="connectToHost(const QString&amp;, quint16)" allow-thread="yes" />
         <modify-function signature="login(const QString&amp;, const QString&amp;)" allow-thread="yes" />
         <modify-function signature="close()" allow-thread="yes" />
@@ -88,10 +84,6 @@
         <enum-type name="ConnectionMode"/>
         <enum-type name="Error"/>
         <enum-type name="State"/>
-        <extra-includes>
-            <include file-name="autoarraypointer.h" location="global"/>
-        </extra-includes>
-
         <modify-function signature="readAll()" allow-thread="yes"/>
         <modify-function signature="read(char*, qint64)" allow-thread="yes">
           <modify-argument index="return">
@@ -129,10 +121,6 @@
     <object-type name="QTcpSocket"/>
     <object-type name="QUdpSocket">
         <enum-type name="BindFlag" flags="BindMode"/>
-        <extra-includes>
-            <include file-name="autoarraypointer.h" location="global"/>
-        </extra-includes>
-
         <modify-function signature="readDatagram(char*, qint64, QHostAddress*, quint16*)" allow-thread="yes">
             <modify-argument index="1">
                 <remove-argument/>
