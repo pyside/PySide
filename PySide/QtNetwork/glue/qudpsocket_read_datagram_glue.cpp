@@ -1,4 +1,4 @@
-    PySide::AutoArrayPointer<char> data(%ARGUMENT_NAMES);
+    Shiboken::AutoArrayPointer<char> data(%ARGUMENT_NAMES);
     QHostAddress ha;
     quint16 port;
 
