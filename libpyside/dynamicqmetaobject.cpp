@@ -85,29 +85,46 @@ class DynamicQMetaObject::DynamicQMetaObjectPrivate
 public:
     QList<MethodData> m_methods;
     QList<PropertyData> m_properties;
+
+    // methods added/remove not writed on metadata yet
+    int m_lastMethod;
+    int m_lastProperty;
+    int m_lastInfo;
+
     QMap<QByteArray, QByteArray> m_info;
     QByteArray m_className;
-    bool m_invalid;
+    bool m_updated; // when the meta data is not update
+    bool m_invalid; // when the object need to be reconstructed
     int m_methodOffset;
     int m_propertyOffset;
     int m_count;
+    int m_dataSize;
+    int m_stringDataSize;
+    int m_emptyMethod;
+    int m_nullIndex;
 
+    DynamicQMetaObjectPrivate()
+        : m_lastMethod(0), m_lastProperty(0), m_lastInfo(0),
+          m_updated(false), m_invalid(true), m_methodOffset(0), m_propertyOffset(0),
+          m_count(0), m_dataSize(0), m_stringDataSize(0), m_emptyMethod(-1), m_nullIndex(0) {}
+
+    int createMetaData(QMetaObject* metaObj, QLinkedList<QByteArray> &strings);
     void updateMetaObject(QMetaObject* metaObj);
-    void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QLinkedList<QByteArray>* strings, int* prtIndex, int nullIndex, int flags);
+    void writeMethodsData(const QList<MethodData>& methods, unsigned int** data, QLinkedList<QByteArray>& strings, int* prtIndex, int nullIndex, int flags);
 };
 
-static int registerString(const QByteArray& s, QLinkedList<QByteArray>* strings)
+static int registerString(const QByteArray& s, QLinkedList<QByteArray>& strings)
 {
     int idx = 0;
-    QLinkedList<QByteArray>::const_iterator it = strings->begin();
-    QLinkedList<QByteArray>::const_iterator itEnd = strings->end();
+    QLinkedList<QByteArray>::const_iterator it = strings.begin();
+    QLinkedList<QByteArray>::const_iterator itEnd = strings.end();
     while (it != itEnd) {
         if (strcmp(*it, s) == 0)
             return idx;
         idx += it->size() + 1;
         ++it;
     }
-    strings->append(s);
+    strings.append(s);
     return idx;
 }
 
@@ -223,7 +240,7 @@ void MethodData::clear()
 
 bool MethodData::isValid() const
 {
-    return m_signature.size();
+    return m_signature != m_emptySig;
 }
 
 QMetaMethod::MethodType MethodData::methodType() const
@@ -277,10 +294,8 @@ DynamicQMetaObject::DynamicQMetaObject(PyTypeObject* type, const QMetaObject* ba
     d.extradata = NULL;
 
     m_d->m_className = QByteArray(type->tp_name).split('.').last();
-    m_d->m_invalid = true;
     m_d->m_methodOffset = base->methodCount() - 1;
     m_d->m_propertyOffset = base->propertyCount() - 1;
-    m_d->m_count = 0;
     parsePythonType(type);
 }
 
@@ -291,8 +306,6 @@ DynamicQMetaObject::DynamicQMetaObject(const char* className, const QMetaObject*
     d.stringdata = 0;
     d.data = 0;
     d.extradata = 0;
-    m_d->m_count = 0;
-    m_d->m_invalid = true;
     m_d->m_className = className;
     m_d->m_methodOffset = metaObject->methodCount() - 1;
     m_d->m_propertyOffset = metaObject->propertyCount() - 1;
@@ -309,26 +322,28 @@ int DynamicQMetaObject::addMethod(QMetaMethod::MethodType mtype, const char* sig
 {
     int index = -1;
     int counter = 0;
-    MethodData blank;
 
     QList<MethodData>::iterator it = m_d->m_methods.begin();
     for (; it != m_d->m_methods.end(); ++it) {
         if ((it->signature() == signature) && (it->methodType() == mtype))
             return m_d->m_methodOffset + counter;
-        else if (*it == blank)
+        else if (!it->isValid()) {
             index = counter;
+            m_d->m_invalid = true; // need rewrite all methods again
+        }
         counter++;
     }
 
     //has blank method
     if (index != -1) {
         m_d->m_methods[index] = MethodData(mtype, signature, type);
+        index++;
     } else {
         m_d->m_methods << MethodData(mtype, signature, type);
         index = m_d->m_methods.size();
     }
 
-    m_d->m_invalid = true;
+    m_d->m_updated = false;
     return m_d->m_methodOffset + index;
 }
 
@@ -387,11 +402,12 @@ int DynamicQMetaObject::addProperty(const char* propertyName, PyObject* data)
     index = m_d->m_properties.indexOf(blank);
     if (index != -1) {
         m_d->m_properties[index] = PropertyData(propertyName, notifyId, property);
+        m_d->m_invalid = true;
     } else {
         m_d->m_properties << PropertyData(propertyName, notifyId, property);
         index = m_d->m_properties.size();
     }
-    m_d->m_invalid = true;
+    m_d->m_updated = false;
     return  m_d->m_propertyOffset + index;
 }
 
@@ -407,40 +423,47 @@ void DynamicQMetaObject::addInfo(QMap<QByteArray, QByteArray> info)
         m_d->m_info[i.key()] = i.value();
         ++i;
     }
-    m_d->m_invalid = true;
+    m_d->m_updated = false;
 }
 
 const QMetaObject* DynamicQMetaObject::update() const
 {
-    if (m_d->m_invalid) {
+    if (!m_d->m_updated || m_d->m_invalid) {
         m_d->updateMetaObject(const_cast<DynamicQMetaObject*>(this));
-        m_d->m_invalid = false;
+        m_d->m_updated = true;
     }
     return this;
 }
 
 void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList<MethodData>& methods,
                                                                      unsigned int** data,
-                                                                     QLinkedList<QByteArray>* strings,
+                                                                     QLinkedList<QByteArray>& strings,
                                                                      int* prtIndex,
                                                                      int nullIndex,
                                                                      int flags)
 {
     int index = *prtIndex;
-    int emptyIndex = registerString(EMPTY_META_METHOD, strings);
-    QList<MethodData>::const_iterator it = methods.begin();
+    //skip to last registered method
+    QList<MethodData>::const_iterator it = methods.begin() + m_lastMethod;
+
+    if (m_emptyMethod == -1)
+        m_emptyMethod = registerString(EMPTY_META_METHOD, strings) + m_stringDataSize;
 
     for (; it != methods.end(); ++it) {
         if (it->signature() != EMPTY_META_METHOD)
-            (*data)[index++] = registerString(it->signature(), strings); // func name
+            (*data)[index++] = registerString(it->signature(), strings) + m_stringDataSize; // func name
         else
-            (*data)[index++] = emptyIndex; // func name
+            (*data)[index++] = m_emptyMethod; // func name
+
         (*data)[index++] = nullIndex; // arguments
         (*data)[index++] = (it->type().size() > 0 ? registerString(it->type(), strings) : nullIndex); // normalized type
         (*data)[index++] = nullIndex; // tags
         (*data)[index++] = flags  |  (it->methodType() == QMetaMethod::Signal ? MethodSignal : MethodSlot);
     }
     *prtIndex = index;
+
+    //update last registered method
+    m_lastMethod = methods.size();
 }
 
 void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
@@ -496,7 +519,7 @@ void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
 
 }
 
-void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject* metaObj)
+int DynamicQMetaObject::DynamicQMetaObjectPrivate::createMetaData(QMetaObject* metaObj, QLinkedList<QByteArray> &strings)
 {
     uint n_methods = m_methods.size();
     uint n_properties = m_properties.size();
@@ -511,66 +534,134 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject
                     0};                 // flags
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
-    header[5] = HEADER_LENGHT;
-    // header size + 5 indexes per method + an ending zero
 
-
-    const int dataSize = HEADER_LENGHT + n_methods*5 + n_properties*4 + n_info*2 + 1;
-    uint* data = reinterpret_cast<uint*>(realloc(const_cast<uint*>(metaObj->d.data), dataSize * sizeof(uint)));
+    m_dataSize = HEADER_LENGHT + n_methods*5 + n_properties*4 + n_info*2 + 1;
+    uint* data = reinterpret_cast<uint*>(realloc(const_cast<uint*>(metaObj->d.data), m_dataSize * sizeof(uint)));
+    Q_ASSERT(data);
     std::memcpy(data, header, sizeof(header));
 
-    QLinkedList<QByteArray> strings;
-    registerString(m_className, &strings); // register class string
-    const int NULL_INDEX = registerString("", &strings); // register a null string
-    int index = HEADER_LENGHT;
+    registerString(m_className, strings); // register class string
+    m_nullIndex = registerString("", strings); // register a null string
 
-    //write class info
-    if (n_info) {
-        data[3] = index;
-        QMap<QByteArray, QByteArray>::const_iterator i = m_info.constBegin();
-        while (i != m_info.constEnd()) {
-            int valueIndex = registerString(i.value(), &strings);
-            int keyIndex = registerString(i.key(), &strings);
-            data[index++] = keyIndex;
-            data[index++] = valueIndex;
-            i++;
+    metaObj->d.data = data;
+
+    return HEADER_LENGHT;
+}
+
+
+void DynamicQMetaObject::DynamicQMetaObjectPrivate::updateMetaObject(QMetaObject* metaObj)
+{
+    uint *data = const_cast<uint*>(metaObj->d.data);
+    int index = m_dataSize - 1; // remove the last 0
+    QLinkedList<QByteArray> strings;
+
+    if (!data || m_invalid) {
+        if (m_invalid) {
+            strings.clear();
+            m_dataSize = m_stringDataSize = 0;
+            m_lastMethod = m_lastInfo = m_lastProperty = 0;
+            m_invalid = false;
+        }
+
+        index = createMetaData(metaObj, strings);
+        data = const_cast<uint*>(metaObj->d.data);
+    } else {
+        int n_methods = m_methods.size() - m_lastMethod;
+        int n_info = m_info.size() - m_lastInfo;
+        uint n_properties = m_properties.size() - m_lastProperty;
+
+        int extraSize = n_methods*5 + n_properties*4 + n_info*2;
+        if (extraSize > 0) {
+            m_dataSize += extraSize;
+            //realloc data
+            data = reinterpret_cast<uint*>(realloc(const_cast<uint*>(metaObj->d.data), m_dataSize * sizeof(uint)));
+            Q_ASSERT(data);
+
+
+            data[2] = m_info.size(); //update info size
+            data[4] = m_methods.size(); //update number of methods
+            data[6] = m_properties.size(); // update property size
+            metaObj->d.data = data;
+        } else {
+            data = const_cast<uint*>(metaObj->d.data);
         }
     }
 
-    //write signals/slots
-    if (n_methods)
-        writeMethodsData(m_methods, &data, &strings, &index, NULL_INDEX, AccessPublic);
+    //write class info
+    if (m_info.size()) {
+        if (data[3] == 0)
+            data[3] = index;
 
-    if (m_properties.size())
-        data[7] = index;
+        QMap<QByteArray, QByteArray>::const_iterator i = m_info.constBegin() + m_lastInfo; //TODO: info is a hash this can fail
+        while (i != m_info.constEnd()) {
+            int valueIndex = registerString(i.value(), strings);
+            int keyIndex = registerString(i.key(), strings);
+            data[index++] = keyIndex + m_stringDataSize;
+            data[index++] = valueIndex + m_stringDataSize;
+            i++;
+        }
 
-    //write properties
-    foreach(PropertyData pp, m_properties) {
-        if (pp.isValid())
-            data[index++] = registerString(pp.name(), &strings); // name
-        else
-            data[index++] = NULL_INDEX;
-
-        data[index++] = (pp.isValid() ? registerString(pp.type(), &strings) :  NULL_INDEX); // normalized type
-        data[index++] = pp.flags();
+        m_lastInfo = m_info.size();
     }
 
-    //write properties notify
-    foreach(PropertyData pp, m_properties)
-        data[index++] = pp.notifyId() >= 0 ? pp.notifyId() : 0; //signal notify index
+    //write properties
+    if (m_properties.size()) {
+        if (data[7] == 0)
+            data[7] = index;
+
+        QList<PropertyData>::const_iterator i = m_properties.constBegin() + m_lastProperty;
+        while(i != m_properties.constEnd()) {
+            if (i->isValid()) {
+                data[index++] = registerString(i->name(), strings) + m_stringDataSize; // name
+            } else
+                data[index++] = m_nullIndex;
+
+            data[index++] = (i->isValid() ? (registerString(i->type(), strings) + m_stringDataSize) :  m_nullIndex); // normalized type
+            data[index++] = i->flags();
+            i++;
+        }
+
+        //write properties notify
+        i = m_properties.constBegin() + m_lastProperty;
+        while(i != m_properties.constEnd()) {
+            data[index++] = i->notifyId() >= 0 ? i->notifyId() : 0; //signal notify index
+            i++;
+        }
+
+        m_lastProperty = m_properties.size();
+    }
+
+    //write signals/slots
+    if (m_methods.size()) {
+        if (data[5] == 0)
+            data[5] = index;
+
+        writeMethodsData(m_methods, &data, strings, &index, m_nullIndex, AccessPublic);
+    }
 
     data[index++] = 0; // the end
 
     // create the m_metadata string
     QByteArray str;
+    QByteArray debugStr;
     foreach(QByteArray field, strings) {
+
+        debugStr.append(field);
+        debugStr.append('|');
+
         str.append(field);
         str.append(char(0));
     }
 
-    char *stringdata = reinterpret_cast<char*>(realloc(const_cast<char*>(metaObj->d.stringdata), str.count() * sizeof(char)));
+    int newSize = (m_stringDataSize + str.count()) * sizeof(char);
+    char *stringdata = reinterpret_cast<char*>(realloc(const_cast<char*>(metaObj->d.stringdata), newSize));
+    Q_ASSERT(stringdata);
+
+    metaObj->d.stringdata = stringdata;
+
+    stringdata += m_stringDataSize; //shift to the end of old position
     std::copy(str.begin(), str.end(), stringdata);
 
+    m_stringDataSize = newSize;
     metaObj->d.data = data;
-    metaObj->d.stringdata = stringdata;
 }
