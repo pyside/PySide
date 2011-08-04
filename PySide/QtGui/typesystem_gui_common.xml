@@ -225,7 +225,7 @@
         <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
-    <add-function signature="quadToQuad(const QPolygonF&amp;, const QPolygonF&amp;)" return-type="PyObject*" static="true">
+    <add-function signature="quadToQuad(QPolygonF&amp;, QPolygonF&amp;)" return-type="PyObject*" static="true">
       <inject-code>
         QTransform _result;
         if (QTransform::quadToQuad(%1, %2, _result)) {
@@ -236,7 +236,7 @@
         }
       </inject-code>
     </add-function>
-    <add-function signature="quadToSquare(const QPolygonF &amp;)" return-type="PyObject*" static="true">
+    <add-function signature="quadToSquare(QPolygonF &amp;)" return-type="PyObject*" static="true">
       <inject-code>
         QTransform _result;
         if (QTransform::quadToSquare(%1, _result)) {
@@ -248,7 +248,7 @@
       </inject-code>
     </add-function>
 
-    <add-function signature="squareToQuad(const QPolygonF &amp;)" return-type="PyObject*" static="true">
+    <add-function signature="squareToQuad(QPolygonF &amp;)" return-type="PyObject*" static="true">
       <inject-code>
         QTransform _result;
         if (QTransform::squareToQuad(%1, _result)) {
@@ -1008,14 +1008,14 @@
         </inject-code>
     </modify-function>
 
-    <add-function signature="QImage(QString,int,int,int,QImage::Format)">
+    <add-function signature="QImage(QString&amp;,int,int,int,QImage::Format)">
         <inject-code>
             <insert-template name="qimage_buffer_constructor">
                 <replace from="%ARGS" to="%2, %3, %4, %5" />
             </insert-template>
         </inject-code>
     </add-function>
-    <add-function signature="QImage(QString,int,int,QImage::Format)">
+    <add-function signature="QImage(QString&amp;,int,int,QImage::Format)">
         <inject-code>
             <insert-template name="qimage_buffer_constructor">
                 <replace from="%ARGS" to="%2, %3, %4" />
@@ -2371,7 +2371,7 @@
     <!-- ### "setNoReplayFor(QWidget*)" is an internal method. -->
     <modify-function signature="setNoReplayFor(QWidget*)" remove="all" />
 
-    <add-function signature="addAction(const QString&amp;, PyObject*, const QKeySequence&amp;)">
+    <add-function signature="addAction(QString&amp;, PyObject*, QKeySequence&amp;)">
       <modify-argument index="3">
         <replace-default-expression with="0" />
       </modify-argument>
@@ -2384,7 +2384,7 @@
       </inject-code>
     </add-function>
 
-    <add-function signature="addAction(const QIcon&amp;, const QString&amp;, PyObject*, const QKeySequence&amp;)">
+    <add-function signature="addAction(QIcon&amp;, QString&amp;, PyObject*, QKeySequence&amp;)">
       <modify-argument index="4">
         <replace-default-expression with="0" />
       </modify-argument>
@@ -2487,7 +2487,7 @@
   </object-type>
   <object-type name="QPixmapCache">
     <value-type name="Key"/>
-    <add-function signature="find(QPixmapCache::Key)">
+    <add-function signature="find(QPixmapCache::Key&amp;)">
         <inject-code>
             QPixmap p;
             if (%CPPSELF.%FUNCTION_NAME(%1, &amp;p)) {
@@ -2522,7 +2522,7 @@
   </object-type>
 
   <object-type name="QShortcut">
-    <add-function signature="QShortcut(const QKeySequence&amp;, QWidget*, PyCallable*, Qt::ShortcutContext)">
+    <add-function signature="QShortcut(QKeySequence&amp;, QWidget*, PyCallable*, Qt::ShortcutContext)">
       <modify-argument index="4">
         <replace-default-expression with="Qt::WindowShortcut"/>
       </modify-argument>
