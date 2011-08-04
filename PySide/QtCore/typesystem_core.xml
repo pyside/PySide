@@ -599,7 +599,31 @@
   <value-type name="QBasicTimer"/>
   <value-type name="QByteArrayMatcher"/>
   <value-type name="QDate" hash-function="PySide::hash" >
-    <conversion-rule file="qdate_conversions.h"/>
+    <template name="pydatetime_importandcheck_function">
+    static bool PyDateTime_ImportAndCheck(PyObject* pyIn) {
+        if (!PyDateTimeAPI)
+            PyDateTime_IMPORT;
+        return $DATETIMETYPE_Check(pyIn);
+    }
+    </template>
+    <inject-code class="native" position="beginning">
+        <insert-template name="pydatetime_importandcheck_function">
+            <replace from="$DATETIMETYPE" to="PyDate" />
+        </insert-template>
+    </inject-code>
+    <conversion-rule file="qdate_conversions.h">
+        <target-to-native>
+            <add-conversion type='Py_None' check='%in == Py_None'>
+            %out = %OUTTYPE();
+            </add-conversion>
+            <add-conversion type='PyDate' check='PyDateTime_ImportAndCheck(%in)'>
+            int day = PyDateTime_GET_DAY(%in);
+            int month = PyDateTime_GET_MONTH(%in);
+            int year = PyDateTime_GET_YEAR(%in);
+            %out = %OUTTYPE(year, month, day);
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
     <extra-includes>
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
@@ -663,7 +687,28 @@
     <modify-function signature="julianToGregorian(uint,int&amp;,int&amp;,int&amp;)" remove="all"/>
   </value-type>
   <value-type name="QDateTime" hash-function="PySide::hash">
-    <conversion-rule file="qdatetime_conversions.h"/>
+    <inject-code class="native" position="beginning">
+        <insert-template name="pydatetime_importandcheck_function">
+            <replace from="$DATETIMETYPE" to="PyDateTime" />
+        </insert-template>
+    </inject-code>
+    <conversion-rule file="qdatetime_conversions.h">
+        <target-to-native>
+            <add-conversion type='Py_None' check='%in == Py_None'>
+            %out = %OUTTYPE();
+            </add-conversion>
+            <add-conversion type='PyDateTime' check='PyDateTime_ImportAndCheck(%in)'>
+            int day = PyDateTime_GET_DAY(%in);
+            int month = PyDateTime_GET_MONTH(%in);
+            int year = PyDateTime_GET_YEAR(%in);
+            int hour = PyDateTime_DATE_GET_HOUR(%in);
+            int min = PyDateTime_DATE_GET_MINUTE(%in);
+            int sec = PyDateTime_DATE_GET_SECOND(%in);
+            int usec = PyDateTime_DATE_GET_MICROSECOND(%in);
+            %out = %OUTTYPE(QDate(year, month, day), QTime(hour, min, sec, usec/1000));
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
     <extra-includes>
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
@@ -1008,7 +1053,26 @@
   </value-type>
 
   <value-type name="QTime" hash-function="PySide::hash">
-    <conversion-rule file="qtime_conversions.h"/>
+    <inject-code class="native" position="beginning">
+        <insert-template name="pydatetime_importandcheck_function">
+            <replace from="$DATETIMETYPE" to="PyTime" />
+        </insert-template>
+    </inject-code>
+    <conversion-rule file="qtime_conversions.h">
+        <target-to-native>
+            <add-conversion type='Py_None' check='%in == Py_None'>
+            %out = %OUTTYPE();
+            </add-conversion>
+            <add-conversion type='PyTime' check='PyDateTime_ImportAndCheck(%in)'>
+            int hour = PyDateTime_TIME_GET_HOUR(%in);
+            int min = PyDateTime_TIME_GET_MINUTE(%in);
+            int sec = PyDateTime_TIME_GET_SECOND(%in);
+            int usec = PyDateTime_TIME_GET_MICROSECOND(%in);
+            %out = %OUTTYPE(hour, min, sec, usec/1000);
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+
     <extra-includes>
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
@@ -1683,7 +1747,16 @@
     </add-function>
   </value-type>
   <value-type name="QByteArray" hash-function="qHash">
-    <conversion-rule file="qbytearray_conversions.h"/>
+    <conversion-rule file="qbytearray_conversions.h">
+        <target-to-native>
+            <add-conversion type='Py_None' check='%in == Py_None'>
+            %out = %OUTTYPE();
+            </add-conversion>
+            <add-conversion type='PyString' check='PyString_Check(%in)'>
+            %out = %OUTTYPE(PyString_AS_STRING(%in), PyString_GET_SIZE(%in));
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
 
     <extra-includes>
       <include file-name="QNoImplicitBoolCast" location="global"/>
