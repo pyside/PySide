@@ -638,7 +638,9 @@
         </inject-code>
     </modify-function>
   </value-type>
-  <value-type name="QTextBlockFormat" />
+  <value-type name="QTextBlockFormat">
+    <enum-type name="LineHeightTypes" since="4.8" revision="4800"/>
+  </value-type>
   <value-type name="QTextTableCellFormat" />
   <value-type name="QTextCharFormat" >
     <enum-type name="UnderlineStyle"/>
@@ -949,6 +951,7 @@
     <enum-type name="StyleHint" />
     <enum-type name="StyleStrategy"/>
     <enum-type name="Weight"/>
+    <enum-type name="HintingPreference" since="4.8" revision="4800"/>
     <extra-includes>
       <include file-name="QStringList" location="global"/>
     </extra-includes>
@@ -2115,6 +2118,7 @@
   <object-type name="QItemSelectionModel">
       <enum-type name="SelectionFlag" flags="SelectionFlags"/>
   </object-type>
+  <primitive-type name="QModelIndexList"/>
   <object-type name="QListView">
       <enum-type name="Flow"/>
       <enum-type name="LayoutMode"/>
@@ -6852,7 +6856,11 @@
       </modify-argument>
     </modify-function>
   </object-type>
+
   <!-- The above entries may be present in the system or not. Keep this section organized. -->
+
+  <!-- This enum is present on QtCore -->
+  <suppress-warning text="enum 'QCoreApplication::ApplicationFlags' is specified in typesystem, but not declared" />
 
 </typesystem>
 
