@@ -81,6 +81,9 @@
     <!-- Qt 4.6 -->
     <enum-type name="ErrorDomain" since="4.6"/>
     <enum-type name="Extension"/>
+    <!-- Qt 4.8 -->
+    <enum-type name="Feature" since="4.8" revision="4800" />
+    <enum-type name="PermissionPolicy" since="4.8" revision="4800" />
 
    <value-type name="ChooseMultipleFilesExtensionOption" />
    <value-type name="ChooseMultipleFilesExtensionReturn" />

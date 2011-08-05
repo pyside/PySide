@@ -322,6 +322,7 @@
     <enum-type name="WindowModality"/>
     <enum-type name="WindowState" flags="WindowStates"/>
     <enum-type name="WindowType" flags="WindowFlags"/>
+    <enum-type name="CursorMoveStyle" since="4.8" revision="4800"/>
 
    <!--### These functions are part of QtGui, not QtCore -->
     <modify-function signature="codecForHtml(const QByteArray &amp;)" remove="all"/>
@@ -1028,6 +1029,9 @@
     <enum-type name="Language" />
     <enum-type name="MeasurementSystem"/>
     <enum-type name="NumberOption" flags="NumberOptions"/>
+    <enum-type name="Script" since="4.8" revision="4800"/>
+    <enum-type name="CurrencySymbolFormat" since="4.8" revision="4800"/>
+    <enum-type name="QuotationStyle" since="4.8" revision="4800"/>
     <!--### All those C++ number types have the same representation in Python -->
     <modify-function signature="toString(qulonglong) const" remove="all"/>
     <modify-function signature="toString(ushort) const" remove="all"/>
@@ -1252,7 +1256,7 @@
             .. warning:: Because of some Qt/Python itegration rules, the ptr argument do not get the reference incremented during the QModelIndex life time. So it is necessary to keep the object used on ptr argument alive during the whole process. Do not destroy the object if you are not sure about that.
         </inject-documentation>
     </add-function>
-    <modify-function signature="mimeData(QList&lt;QModelIndex&gt;) const">
+    <modify-function signature="mimeData(QModelIndexList) const">
       <modify-argument index="return">
         <define-ownership class="native" owner="c++"/>
         <define-ownership class="target" owner="default"/>
@@ -1978,6 +1982,7 @@
     <enum-type name="FileError"/>
     <enum-type name="MemoryMapFlags"/>
     <enum-type name="Permission" flags="Permissions"/>
+    <enum-type name="FileHandleFlag" flags="FileHandleFlags" since="4.8" revision="4800"/>
     <extra-includes>
       <include file-name="QAbstractFileEngine" location="global"/>
     </extra-includes>
@@ -2457,6 +2462,7 @@
 
   <object-type name="QCoreApplication">
     <enum-type name="Encoding" />
+    <enum-type identified-by-value="ApplicationFlags" since="4.8" revision="4800"/>
     <extra-includes>
       <include file-name="QStringList" location="global"/>
       <include file-name="QTranslator" location="global"/>
@@ -3401,8 +3407,12 @@ s1.addTransition(button.clicked, s1h)&lt;/code>
   <suppress-warning text="signature 'operator*(QByteArray,const char*)' for function modification in 'QByteArray' not found. Possible candidates: *"/>
   <suppress-warning text="signature 'operator+(QByteArray,QString)' for function modification in 'QByteArray' not found. Possible candidates: *"/>
 
+  <!-- This enum is intenaly used -->
+  <suppress-warning text="enum 'PM_CbaIconHeight' does not have a type entry or is not an enum" />
+
   <!-- TODO: this need be removed -->
   <suppress-warning text="skipping function '*', unmatched return type '*'"/>
   <suppress-warning text="skipping function '*', unmatched parameter type '*'"/>
+  
 
 </typesystem>

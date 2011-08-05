@@ -40,6 +40,8 @@
     <object-type name="QScriptEngine">
         <enum-type name="QObjectWrapOption" flags="QObjectWrapOptions"/>
         <enum-type name="ValueOwnership"/>
+        <!-- Not supported BUG #957-->
+        <modify-function signature="scriptValueFromQMetaObject()" remove="all" />
     </object-type>
     <object-type name="QScriptExtensionInterface"/>
     <object-type name="QScriptExtensionPlugin"/>
