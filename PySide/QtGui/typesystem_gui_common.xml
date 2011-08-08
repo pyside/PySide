@@ -719,11 +719,13 @@
     <modify-function signature="serialNumber()const" remove="all"/>
     <modify-function signature="QIcon(QIconEngineV2 *)">
       <modify-argument index="1">
+        <no-null-pointer/>
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="QIcon(QIconEngine *)">
       <modify-argument index="1">
+        <no-null-pointer/>
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
