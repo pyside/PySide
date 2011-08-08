@@ -25,9 +25,6 @@
 
   <namespace-type name="WebCore"/>
 
-  <!-- unsuported property with type QList<MimeType> -->
-  <rejection class="QWebPluginFactory::Plugin" field-name="mimeTypes"/>
-
   <object-type name="QWebView">
     <modify-function signature="setPage(QWebPage*)">
         <modify-argument index="1">
@@ -163,6 +160,12 @@
     <enum-type name="Extension"/>
     <value-type name="Plugin"/>
     <value-type name="MimeType"/>
+    <modify-function signature="create(const QString &amp;, const QUrl &amp;, const QStringList &amp;, const QStringList &amp;) const">
+        <modify-argument index="return">
+            <define-ownership class="native" owner="c++"/>
+            <define-ownership class="target" owner="target"/>
+        </modify-argument>
+    </modify-function>
   </object-type>
   <value-type name="QWebDatabase"/>
   <value-type name="QWebHistoryItem"/>
