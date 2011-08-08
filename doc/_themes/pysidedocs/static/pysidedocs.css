@@ -19,7 +19,7 @@ strong {
     font-weight:bold;
 }
 
-#body {
+.document {
     padding-bottom: 90px;
 }
 
@@ -31,8 +31,8 @@ strong {
     background-color: white;
 }
 
-#footer {
-    position:absolute;
+.footer {
+    position: absolute;
     bottom: 0px;
     margin-top: 50px;
     text-align:center;
@@ -43,40 +43,40 @@ strong {
     width: 100%;
 }
 
-#footer img {
+.footer img {
     margin-left: 8px;
     margin-right: 8px;
 }
 
-#sidebar {
+.sphinxsidebar {
     float: left;
     width: 250px;
     padding: 0px 10px 0px 10px;
     text-align: left;
 }
 
-#sidebar ul {
+.sphinxsidebar ul {
     padding: 0px;
     margin: 0px;
     list-style-position: inside;
 }
 
-#sidebar > ul {
+.sphinxsidebar > ul {
     padding: 0px;
     margin: 0px;
 }
 
-#sidebar ul li {
+.sphinxsidebar ul li {
     margin-left: 10px;
     padding: 0px;
 }
 
-#sidebar h3, #sidebar h3 a {
+.sphinxsidebar h3, .sphinxsidebar h3 a {
     font-weight: bold;
     color: #333;
 }
 
-#body > div.section {
+.documentwrapper {
     margin-left: 270px;
     text-align: left;
     background-color: #ffffff;
@@ -265,24 +265,24 @@ hr {
 }
 
 /******************* TOPO *****************************/
-#header {
+.header {
     background-image: url(bg_topo.jpg);
     background-repeat: repeat-x;
     height: 147px;
 }
 
-#header_container {
+.header_container {
     background-image: url(bg_header.png);
     background-repeat: no-repeat;
     background-position: 100px 0px;
 }
 
-#logo {
+.logo {
     text-align: left;
     margin-bottom: 10px;
 }
 
-#search_box {
+#searchbox {
     border-top: 1px solid #989898;
     padding-top: 10px;
     margin-left: -10px;
@@ -350,29 +350,37 @@ em {
 
 /********   REL bar     *********/
 
-#relbar {
-    padding: 0px 10px 0px 10px;
+.related {
+    display: inline;
+}
+
+.related ul {
+    padding: 0px 0px 0px 10px;
     margin: 0px;
     text-align: left;
     background-image: url(relbar_bg.png);
 }
 
-#relbar li {
+.related li {
     display: inline;
     color: white;
     font-weight: bold;
 }
 
-#relbar li a {
+.related li a {
     color: inherit;
     line-height: 35px;
     font-weight: bold;
     vertical-align: middle;
 }
 
-#relbar li.right {
+.related li.right {
     float: right;
     margin-right: 5px;
+}
+
+.related h3 {
+    display: none;
 }
 
 .align-center {
