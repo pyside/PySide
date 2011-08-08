@@ -1,4 +1,5 @@
 
+import os
 import sys
 import unittest
 
@@ -46,7 +47,7 @@ class TestPlugin(UsesQApplication):
         view.page().setPluginFactory(fac)
         QWebSettings.globalSettings().setAttribute(QWebSettings.PluginsEnabled, True)
 
-        view.load(QUrl('./qmlplugin/index.html'))
+        view.load(QUrl(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'qmlplugin', 'index.html')))
 
         view.resize(840, 600)
         view.show()
