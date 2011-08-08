@@ -1,0 +1,31 @@
+{% extends "!layout.html" %}
+
+# Invert sidebars
+{%- block sidebar1 %}{{ sidebar() }}{%- endblock %}
+{%- block sidebar2 %}{%- endblock %}
+
+{%- block header %}
+<div id="container">
+<div class="header">
+    <div class="header_container">
+        <div class="logo"><a href="http://www.pyside.org"><img alt="PySide" src="{{ pathto('_static/pysidelogo.png', 1) }}" width="199" height="102" /></a></div>
+  {{ relbar() }}
+    </div>
+</div>
+{%- endblock -%}
+
+{%- block footer %}
+    <div class="footer">
+    <a href="http://www.indt.org.br"><img src="{{ pathto('_static/logo_indt.jpg', 1) }}" alt="Indt" border="0" /></a>
+    <a href="http://www.openbossa.org"><img src="{{ pathto('_static/logo_openbossa.png', 1) }}" alt="Openbossa" border="0" /></a>
+    <a href="http://qt.nokia.com/"><img src="{{ pathto('_static/logo_qt.png', 1) }}" alt="Qt" border="0" /></a>
+    <a href="http://www.python.org"><img src="{{ pathto('_static/logo_python.jpg', 1) }}" alt="Python" border="0" /></a>
+    </div>
+</div>
+{%- endblock %}
+
+# No top relbar.
+{%- block relbar1 %}{%- endblock %}
+
+# No bottom relbar.
+{%- block relbar2 %}{%- endblock %}
