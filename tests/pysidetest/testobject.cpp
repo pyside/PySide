@@ -24,3 +24,9 @@ TestObject::emitSignalWithDefaultValue_bool()
     emit signalWithDefaultValue(true);
 }
 
+void
+TestObject::emitSignalWithTypedefValue(int value)
+{
+    emit signalWithTypedefValue(TypedefValue(value));
+}
+

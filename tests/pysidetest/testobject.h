@@ -10,6 +10,17 @@
 #endif
 #include "pysidemacros.h"
 
+class IntValue
+{
+public:
+
+    IntValue(int val): value(val){};
+    IntValue() : value(0) {};
+    int value;
+};
+
+typedef IntValue TypedefValue;
+
 class PYSIDE_API TestObject : public QObject
 {
     Q_OBJECT
@@ -28,12 +39,15 @@ public:
     void emitSignalWithDefaultValue_void();
     void emitSignalWithDefaultValue_bool();
 
+    void emitSignalWithTypedefValue(int value);
+
 signals:
     void idValue(int newValue);
     void justASignal();
     void staticMethodDouble();
     void childrenChanged(const QList<QObject*>&);
     void signalWithDefaultValue(bool value = false);
+    void signalWithTypedefValue(TypedefValue value);
 
 private:
     int m_idValue;
