@@ -77,8 +77,7 @@ template<typename T>
 struct initQtMetaType<T, false> {
 };
 
-/// \deprecated
-PYSIDE_API void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base);
+PYSIDE_DEPRECATED(PYSIDE_API void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base));
 PYSIDE_API void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base, const std::size_t& cppObjSize);
 PYSIDE_API void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds);
 
