@@ -2,6 +2,8 @@
 <typesystem package="testbinding">
     <load-typesystem name="typesystem_core.xml" generate="no" />
     <load-typesystem name="typesystem_gui.xml" generate="no"/>
+    <value-type name="IntValue"/>
+    <primitive-type name="TypedefValue"/>
     <object-type name="TestObject" />
 
     <inject-code position="end">
