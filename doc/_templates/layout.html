@@ -9,7 +9,17 @@
 <div class="header">
     <div class="header_container">
         <div class="logo"><a href="http://www.pyside.org"><img alt="PySide" src="{{ pathto('_static/pysidelogo.png', 1) }}" width="199" height="102" /></a></div>
-  {{ relbar() }}
+        <div class="related">
+            <ul>
+                {%- block rootrellink %}
+                <li><a href="{{ pathto( 'index' ) }}">{{ shorttitle|e }}</a></li>
+                {%- endblock %}
+                {%- for parent in parents %}
+                <li>{{ reldelim1 }} <a href="{{ parent.link|e }}" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ parent.title }}</a></li>
+                {%- endfor %}
+                {%- block relbaritems %} {% endblock %}
+            </ul>
+        </div>
     </div>
 </div>
 {%- endblock -%}
