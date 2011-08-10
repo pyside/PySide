@@ -8,11 +8,12 @@
 namespace PySide
 {
 class DestroyListenerPrivate;
+/// \deprecated This class is deprecated and isn't used by libpyside anymore.
 class PYSIDE_API DestroyListener : public QObject
 {
     Q_OBJECT
     public:
-        static DestroyListener* instance();
+        PYSIDE_DEPRECATED(static DestroyListener* instance());
         static void destroy();
         void listen(QObject* obj);
 

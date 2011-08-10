@@ -34,7 +34,7 @@ namespace PySide
 class DynamicQMetaObject : public QMetaObject
 {
 public:
-    DynamicQMetaObject(const char* className, const QMetaObject* metaObject); //deprecated
+    DynamicQMetaObject(const char* className, const QMetaObject* metaObject);
     DynamicQMetaObject(PyTypeObject* type, const QMetaObject* metaobject);
     ~DynamicQMetaObject();
 
