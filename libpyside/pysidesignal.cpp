@@ -751,6 +751,17 @@ static typename T::value_type join(T t, const char* sep)
     return res;
 }
 
+static void _addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal)
+{
+    PyObject* typeDict = wrapperType->super.ht_type.tp_dict;
+    PyObject* homonymousMethod;
+    if ((homonymousMethod = PyDict_GetItemString(typeDict, signalName))) {
+        Py_INCREF(homonymousMethod);
+        signal->homonymousMethod = homonymousMethod;
+    }
+    PyDict_SetItemString(typeDict, signalName, reinterpret_cast<PyObject*>(signal));
+}
+
 void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject)
 {
     typedef QHash<QByteArray, QList<QByteArray> > SignalSigMap;
@@ -779,7 +790,7 @@ void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject)
         SignalSigMap::mapped_type::const_iterator endJ = it.value().end();
         for (; j != endJ; ++j)
             appendSignature(self, strdup(j->constData()));
-        addSignalToWrapper(pyObj, it.key(), self);
+        _addSignalToWrapper(pyObj, it.key(), self);
         Py_DECREF((PyObject*) self);
     }
 }
@@ -795,13 +806,7 @@ PyObject* buildQtCompatible(const char* signature)
 
 void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal)
 {
-    PyObject* typeDict = wrapperType->super.ht_type.tp_dict;
-    PyObject* homonymousMethod;
-    if ((homonymousMethod = PyDict_GetItemString(typeDict, signalName))) {
-        Py_INCREF(homonymousMethod);
-        signal->homonymousMethod = homonymousMethod;
-    }
-    PyDict_SetItemString(typeDict, signalName, reinterpret_cast<PyObject*>(signal));
+    _addSignalToWrapper(wrapperType, signalName, signal);
 }
 
 PyObject* getObject(PySideSignalInstance* signal)
