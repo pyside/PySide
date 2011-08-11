@@ -90,28 +90,31 @@
    <value-type name="ExtensionReturn" />
 
    <modify-function signature="extension(QWebPage::Extension, const QWebPage::ExtensionOption*, QWebPage::ExtensionReturn*)">
-       <modify-argument index="2" invalidate-after-use="yes">
+        <template name="qwebpage_extension_argument_conversion">
+        PyObject* %out = 0;
+        // Cast the parameters according to the extension type
+        if (extension == QWebPage::ChooseMultipleFilesExtension) {
+            const ChooseMultipleFilesExtension$TYPE_SUFFIX* _in = reinterpret_cast&lt;const ChooseMultipleFilesExtension$TYPE_SUFFIX*>(%in);
+            %out = %CONVERTTOPYTHON[const ChooseMultipleFilesExtension$TYPE_SUFFIX*](_in);
+        #if QT_VERSION >= 0x040600
+        } else if (extension == QWebPage::ErrorPageExtension) {
+            const ErrorPageExtension$TYPE_SUFFIX* _in = reinterpret_cast&lt;const ErrorPageExtension$TYPE_SUFFIX*>(%in);
+            %out = %CONVERTTOPYTHON[const ErrorPageExtension$TYPE_SUFFIX*](_in);
+        #endif
+        }
+        </template>
+        <modify-argument index="2" invalidate-after-use="yes">
             <conversion-rule class="target">
-                PyObject* %out = 0;
-                // Cast the parameters according to the extension type
-                if (extension == QWebPage::ChooseMultipleFilesExtension)
-                    %out = %CONVERTTOPYTHON[ChooseMultipleFilesExtensionOption*](reinterpret_cast&lt;const ChooseMultipleFilesExtensionOption*>(option));
-                #if QT_VERSION >= 0x040600
-                else if (extension == QWebPage::ErrorPageExtension)
-                    %out = %CONVERTTOPYTHON[ErrorPageExtensionOption*](reinterpret_cast&lt;const ErrorPageExtensionOption*>(option));
-                #endif
+                <insert-template name="qwebpage_extension_argument_conversion">
+                    <replace from="$TYPE_SUFFIX" to="Option"/>
+                </insert-template>
             </conversion-rule>
         </modify-argument>
         <modify-argument index="3" invalidate-after-use="yes">
             <conversion-rule class="target">
-                PyObject* %out = 0;
-                // Cast the parameters according to the extension type
-                if (extension == QWebPage::ChooseMultipleFilesExtension)
-                    %out = %CONVERTTOPYTHON[ChooseMultipleFilesExtensionReturn*](reinterpret_cast&lt;const ChooseMultipleFilesExtensionReturn*>(output));
-                #if QT_VERSION >= 0x040600
-                else if (extension == QWebPage::ErrorPageExtension)
-                    %out = %CONVERTTOPYTHON[ErrorPageExtensionReturn*](reinterpret_cast&lt;const ErrorPageExtensionReturn*>(output));
-                #endif
+                <insert-template name="qwebpage_extension_argument_conversion">
+                    <replace from="$TYPE_SUFFIX" to="Return"/>
+                </insert-template>
             </conversion-rule>
         </modify-argument>
    </modify-function>
@@ -181,16 +184,17 @@
   <value-type name="QWebElementCollection" since="4.6">
     <add-function signature="__len__">
         <inject-code>
-            return %CPPSELF.count();
+        return %CPPSELF.count();
         </inject-code>
     </add-function>
     <add-function signature="__getitem__">
         <inject-code>
-            if (_i &lt; 0 || _i >= %CPPSELF.count()) {
-                PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                return 0;
-            }
-            return %CONVERTTOPYTHON[QWebElement](%CPPSELF.at(_i));
+        if (_i &lt; 0 || _i >= %CPPSELF.count()) {
+            PyErr_SetString(PyExc_IndexError, "index out of bounds");
+            return 0;
+        }
+        QWebElement element = %CPPSELF.at(_i);
+        return %CONVERTTOPYTHON[QWebElement](element);
         </inject-code>
     </add-function>
   </value-type>
