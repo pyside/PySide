@@ -26,7 +26,8 @@
     if (size == 1) {
         char *str = PyString_AS_STRING(%PYARG_1);
         QChar ch(str[0]);
-        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(ch));
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(ch);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
     } else {
         PyErr_SetString(PyExc_TypeError, "String must have only one character");
     }
@@ -419,7 +420,8 @@
       </modify-argument>
       <inject-code>
         uchar* buffer = (uchar*) Shiboken::Buffer::getPointer(%PYARG_2);
-        %PYARG_0 = %CONVERTTOPYTHON[QBitmap](QBitmap::fromData(%1, buffer, %3));
+        QBitmap %0 = QBitmap::fromData(%1, buffer, %3);
+        %PYARG_0 = %CONVERTTOPYTHON[QBitmap](%0);
       </inject-code>
     </modify-function>
   </value-type>
@@ -522,7 +524,8 @@
                 PyErr_SetString(PyExc_IndexError, "index out of bounds");
                 return 0;
             }
-            return %CONVERTTOPYTHON[int]((*%CPPSELF)[_i]);
+            int item = (*%CPPSELF)[_i];
+            return %CONVERTTOPYTHON[int](item);
         </inject-code>
     </add-function>
 
@@ -670,7 +673,8 @@
             for (int i = 0, max = %CPPSELF.count(); i &lt; max; ++i){
                 int x, y;
                 %CPPSELF.point(i, &amp;x, &amp;y);
-                PyList_SET_ITEM(points, i, %CONVERTTOPYTHON[QPoint](QPoint(x, y)));
+                QPoint pt = QPoint(x, y);
+                PyList_SET_ITEM(points, i, %CONVERTTOPYTHON[QPoint](pt));
             }
             <insert-template name="reduce_code">
               <replace from="%REDUCE_FORMAT" to="N" />
@@ -744,15 +748,18 @@
     </add-function>
     <add-function signature="__next__()" return-type="PyObject*">
       <inject-code class="target" position="beginning">
-        if (**%CPPSELF)
-            %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItemIterator*](new QTreeWidgetItemIterator((*%CPPSELF)++));
+      if (**%CPPSELF) {
+          QTreeWidgetItemIterator* %0 = new QTreeWidgetItemIterator((*%CPPSELF)++);
+          %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItemIterator*](%0);
+      }
       </inject-code>
     </add-function>
 
     <add-function signature="value()" return-type="QTreeWidgetItem*">
         <inject-code>
-            %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItem*](%CPPSELF.operator*());
-            Shiboken::Object::releaseOwnership(%PYARG_0);
+        QTreeWidgetItem* %0 = %CPPSELF.operator*();
+        %PYARG_0 = %CONVERTTOPYTHON[QTreeWidgetItem*](%0);
+        Shiboken::Object::releaseOwnership(%PYARG_0);
         </inject-code>
     </add-function>
     <enum-type name="IteratorFlag" flags="IteratorFlags"/>
@@ -1671,12 +1678,16 @@
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-      <modify-function signature="scene() const">
+    <template name="scene_return_parenting">
+    if (%0) {
+        QObject* parent = %0->parent();
+        Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QObject*](parent));
+        Shiboken::Object::setParent(pyParent, %PYARG_0);
+    }
+    </template>
+    <modify-function signature="scene() const">
         <inject-code position="end">
-            if (%0) {
-                Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QObject*](%0->parent()));
-                Shiboken::Object::setParent(pyParent, %PYARG_0);
-            }
+            <insert-template name="scene_return_parenting"/>
         </inject-code>
         <modify-argument index="this">
           <parent index="return" action="add"/>
@@ -2944,7 +2955,8 @@
   <object-type name="QKeyEvent" copyable= "false" polymorphic-id-expression="%1-&gt;type() == QEvent::KeyPress || %1-&gt;type() == QEvent::KeyRelease || %1-&gt;type() == QEvent::ShortcutOverride">
       <add-function signature="operator!=(QKeySequence::StandardKey)">
           <inject-code class="target">
-              %PYARG_0 = %CONVERTTOPYTHON[bool](!(&amp;%CPPSELF == %1));
+          bool ret = !(&amp;%CPPSELF == %1);
+          %PYARG_0 = %CONVERTTOPYTHON[bool](ret);
           </inject-code>
       </add-function>
   </object-type>
@@ -3280,10 +3292,7 @@
     </modify-function>
     <modify-function signature="scene()const">
         <inject-code position="end">
-            if (%0) {
-                Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QObject*](%0->parent()));
-                Shiboken::Object::setParent(pyParent, %PYARG_0);
-            }
+            <insert-template name="scene_return_parenting"/>
         </inject-code>
         <modify-argument index="return">
             <define-ownership owner="default"/>
@@ -3425,14 +3434,15 @@
 
     <modify-function signature="destroyItemGroup(QGraphicsItemGroup*)">
         <inject-code>
-            Shiboken::AutoDecRef parent(%CONVERTTOPYTHON[QGraphicsItem*](%1->parentItem()));
-            foreach (QGraphicsItem* item, %1->children())
-                Shiboken::Object::setParent(parent, %CONVERTTOPYTHON[QGraphicsItem*](item));
-            %BEGIN_ALLOW_THREADS
-            %CPPSELF.%FUNCTION_NAME(%1);
-            %END_ALLOW_THREADS
-            // the arg was destroyed by Qt.
-            Shiboken::Object::invalidate(%PYARG_1);
+        QGraphicsItem* parentItem = %1->parentItem();
+        Shiboken::AutoDecRef parent(%CONVERTTOPYTHON[QGraphicsItem*](parentItem));
+        foreach (QGraphicsItem* item, %1->children())
+            Shiboken::Object::setParent(parent, %CONVERTTOPYTHON[QGraphicsItem*](item));
+        %BEGIN_ALLOW_THREADS
+        %CPPSELF.%FUNCTION_NAME(%1);
+        %END_ALLOW_THREADS
+        // the arg was destroyed by Qt.
+        Shiboken::Object::invalidate(%PYARG_1);
         </inject-code>
     </modify-function>
 
@@ -3558,8 +3568,9 @@
     <modify-function signature="addWidget(QWidget*,QFlags&lt;Qt::WindowType&gt;)">
         <!-- TODO: Add a keeper attribute to reference-count tag to do what this inject code do. -->
         <inject-code>
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2));
-            Shiboken::Object::keepReference((SbkObject*)%PYARG_0, "setWidget(QWidget*)1", %PYARG_1);
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, %2);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
+        Shiboken::Object::keepReference((SbkObject*)%PYARG_0, "setWidget(QWidget*)1", %PYARG_1);
         </inject-code>
     </modify-function>
 
@@ -4379,7 +4390,8 @@
     <modify-function signature="clear()">
         <inject-code class="target" position="beginning">
             for (int i = 0; i &lt; %CPPSELF.count(); i++) {
-                Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](%CPPSELF.widget(i)));
+                QWidget* widget = %CPPSELF.widget(i);
+                Shiboken::AutoDecRef pyWidget(%CONVERTTOPYTHON[QWidget*](widget));
                 Shiboken::Object::setParent(0, pyWidget);
             }
             %CPPSELF.%FUNCTION_NAME();
@@ -5106,7 +5118,8 @@
         <remove-argument />
       </modify-argument>
       <inject-code>
-        %PYARG_0 = %CONVERTTOPYTHON[QAction*](%CPPSELF.addAction(%1, %2));
+        QAction* action = %CPPSELF.addAction(%1, %2);
+        %PYARG_0 = %CONVERTTOPYTHON[QAction*](action);
         Shiboken::AutoDecRef result(PyObject_CallMethod(%PYARG_0, "connect", "OsO", %PYARG_0, SIGNAL(triggered()), %PYARG_3));
       </inject-code>
     </modify-function>
@@ -5118,7 +5131,8 @@
         <remove-argument />
       </modify-argument>
       <inject-code>
-        %PYARG_0 = %CONVERTTOPYTHON[QAction*](%CPPSELF.addAction(%1));
+        QAction* action = %CPPSELF.addAction(%1);
+        %PYARG_0 = %CONVERTTOPYTHON[QAction*](action);
         Shiboken::AutoDecRef result(PyObject_CallMethod(%PYARG_0, "connect", "OsO", %PYARG_0, SIGNAL(triggered()), %PYARG_2));
       </inject-code>
     </modify-function>
@@ -5165,13 +5179,11 @@
         foreach(QToolButton* child, %CPPSELF.findChildren&lt;QToolButton*&gt;()) {
             if (bm.hasWrapper(child)) {
                 PyObject* pyChild = %CONVERTTOPYTHON[QToolButton*](child);
-            	Shiboken::Object::setParent(0, pyChild);
+                Shiboken::Object::setParent(0, pyChild);
                 lst &lt;&lt; pyChild;
             }
         }
-
         %CPPSELF.clear();
-
         foreach(PyObject* obj, lst) {
             Shiboken::Object::invalidate(reinterpret_cast&lt;SbkObject* &gt;(obj));
             Py_XDECREF(obj);
@@ -6006,24 +6018,42 @@
       </inject-code>
     </add-function>
     <add-function signature="operator!=(const QMatrix2x2&amp;)" return-type="bool" />
+
+    <template name="inplace_add">
+    *%CPPSELF += %1;
+    return %CONVERTTOPYTHON[%RETURN_TYPE](*%CPPSELF);
+    </template>
+    <template name="inplace_sub">
+    *%CPPSELF -= %1;
+    return %CONVERTTOPYTHON[%RETURN_TYPE](*%CPPSELF);
+    </template>
+    <template name="inplace_mult">
+    *%CPPSELF *= %1;
+    return %CONVERTTOPYTHON[%RETURN_TYPE](*%CPPSELF);
+    </template>
+    <template name="inplace_div">
+    *%CPPSELF /= %1;
+    return %CONVERTTOPYTHON[%RETURN_TYPE](*%CPPSELF);
+    </template>
+
     <add-function signature="operator*=(qreal)" return-type="QMatrix2x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix2x2&amp;)" return-type="QMatrix2x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix2x2&amp;)" return-type="QMatrix2x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix2x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x2](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix2x2&amp;)" return-type="bool" />
@@ -6078,22 +6108,22 @@
     <add-function signature="operator!=(const QMatrix2x3&amp;)" return-type="bool" />
     <add-function signature="operator*=(qreal)" return-type="QMatrix2x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix2x3&amp;)" return-type="QMatrix2x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix2x3&amp;)" return-type="QMatrix2x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix2x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x3](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix2x3&amp;)" return-type="bool" />
@@ -6148,22 +6178,22 @@
     <add-function signature="operator!=(const QMatrix2x4&amp;)" return-type="bool" />
     <add-function signature="operator*=(qreal)" return-type="QMatrix2x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix2x4&amp;)" return-type="QMatrix2x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix2x4&amp;)" return-type="QMatrix2x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix2x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix2x4](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix2x4&amp;)" return-type="bool" />
@@ -6218,22 +6248,22 @@
     <add-function signature="operator!=(const QMatrix3x2&amp;)" return-type="bool" />
     <add-function signature="operator*=(qreal)" return-type="QMatrix3x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix3x2&amp;)" return-type="QMatrix3x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix3x2&amp;)" return-type="QMatrix3x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix3x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x2](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix3x2&amp;)" return-type="bool" />
@@ -6288,22 +6318,22 @@
     <add-function signature="operator!=(const QMatrix3x3&amp;)" return-type="bool" />
     <add-function signature="operator*=(qreal)" return-type="QMatrix3x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix3x3&amp;)" return-type="QMatrix3x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix3x3&amp;)" return-type="QMatrix3x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix3x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x3](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix3x3&amp;)" return-type="bool" />
@@ -6358,22 +6388,22 @@
     <add-function signature="operator!=(const QMatrix3x4&amp;)" return-type="bool" />
     <add-function signature="operator*=(qreal)" return-type="QMatrix3x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix3x4&amp;)" return-type="QMatrix3x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix3x4&amp;)" return-type="QMatrix3x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix3x4" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix3x4](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix3x4&amp;)" return-type="bool" />
@@ -6428,22 +6458,22 @@
     <add-function signature="operator!=(const QMatrix4x2&amp;)" return-type="bool" />
     <add-function signature="operator*=(qreal)" return-type="QMatrix4x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix4x2&amp;)" return-type="QMatrix4x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix4x2&amp;)" return-type="QMatrix4x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix4x2" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x2](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix4x2&amp;)" return-type="bool" />
@@ -6498,22 +6528,22 @@
     <add-function signature="operator!=(const QMatrix4x3&amp;)" return-type="bool" />
     <add-function signature="operator*=(qreal)" return-type="QMatrix4x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF *= %1);
+        <insert-template name="inplace_mult"/>
       </inject-code>
     </add-function>
     <add-function signature="operator+=(const QMatrix4x3&amp;)" return-type="QMatrix4x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF += %1);
+        <insert-template name="inplace_add"/>
       </inject-code>
     </add-function>
     <add-function signature="operator-=(const QMatrix4x3&amp;)" return-type="QMatrix4x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF -= %1);
+        <insert-template name="inplace_sub"/>
       </inject-code>
     </add-function>
     <add-function signature="operator/=(qreal)" return-type="QMatrix4x3" >
       <inject-code class="target" position="beginning">
-        return %CONVERTTOPYTHON[QMatrix4x3](*%CPPSELF /= %1);
+        <insert-template name="inplace_div"/>
       </inject-code>
     </add-function>
     <add-function signature="operator==(const QMatrix4x3&amp;)" return-type="bool" />
@@ -6600,7 +6630,8 @@
                  PyObject* posy = PySequence_Fast_GET_ITEM(key.object(), 1);
                  Py_ssize_t x = PyInt_AsSsize_t(posx);
                  Py_ssize_t y = PyInt_AsSsize_t(posy);
-                 return %CONVERTTOPYTHON[qreal]((*%CPPSELF)(x,y));
+                 qreal ret = (*%CPPSELF)(x,y);
+                 return %CONVERTTOPYTHON[qreal](ret);
              }
          }
          PyErr_SetString(PyExc_IndexError, "Invalid matrix index.");
