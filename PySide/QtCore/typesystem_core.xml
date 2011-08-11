@@ -331,7 +331,8 @@
 
   <add-function signature="qAbs(double)" return-type="double">
     <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[double](qAbs(%1));
+    double _abs = qAbs(%1);
+    %PYARG_0 = %CONVERTTOPYTHON[double](_abs);
     </inject-code>
   </add-function>
 
@@ -528,8 +529,9 @@
         </inject-code>
     </modify-function>
     <template name="QResource_registerResource">
-        uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1);
-        %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>(ptr), %2));
+    uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1);
+    %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>(ptr), %2);
+    %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
     </template>
 
     <modify-function signature="unregisterResource(const uchar*, const QString&amp;)" rename="unregisterResourceData">
@@ -1140,11 +1142,12 @@
     </add-function>
     <add-function signature="__getitem__">
         <inject-code class="target" position="beginning">
-            if (_i &lt; 0 || _i >= %CPPSELF.size()) {
-                PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                return 0;
-            }
-            return %CONVERTTOPYTHON[bool](%CPPSELF.at(_i));
+        if (_i &lt; 0 || _i >= %CPPSELF.size()) {
+            PyErr_SetString(PyExc_IndexError, "index out of bounds");
+            return 0;
+        }
+        bool ret = %CPPSELF.at(_i);
+        return %CONVERTTOPYTHON[bool](ret);
         </inject-code>
     </add-function>
     <add-function signature="__setitem__">
@@ -1233,7 +1236,8 @@
             <rename to="ptr"/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3));
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, %2, %PYARG_3);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
         <inject-documentation mode="append" format="target">
             Creates a model index for the given row and column with the internal pointer ptr.
@@ -1264,7 +1268,8 @@
     </extra-includes>
     <modify-function signature="metaObject() const">
       <inject-code class="target" position="beginning">
-        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME());
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME();
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
       </inject-code>
       <modify-argument index="return">
         <reference-count action="set"/>
@@ -1311,7 +1316,8 @@
         </modify-argument>
         <inject-code class="target" position="beginning" file="">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnect(%1, %2, %CPPSELF, %3, %4));
+        %RETURN_TYPE %0 = qobjectConnect(%1, %2, %CPPSELF, %3, %4);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
     <modify-function signature="connect(const QObject*, const char*, const QObject*, const char *, Qt::ConnectionType)">
@@ -1320,7 +1326,8 @@
         </modify-argument>
         <inject-code class="target" position="beginning" file="">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnect(%1, %2, %3, %4, %5));
+        %RETURN_TYPE %0 = qobjectConnect(%1, %2, %3, %4, %5);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
     <inject-code class="native" position="beginning" file="glue/qobject_connect.cpp" />
@@ -1331,7 +1338,8 @@
         </modify-argument>
         <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnectCallback(%1, %2, %PYARG_3, %4));
+        %RETURN_TYPE %0 = qobjectConnectCallback(%1, %2, %PYARG_3, %4);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </add-function>
     <!-- static version -->
@@ -1342,7 +1350,8 @@
         </modify-argument>
         <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnectCallback(%CPPSELF, %1, %PYARG_2, %3));
+        %RETURN_TYPE %0 = qobjectConnectCallback(%CPPSELF, %1, %PYARG_2, %3);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </add-function>
     <add-function signature="connect(const char*, const QObject*, const char *, Qt::ConnectionType)" return-type="bool">
@@ -1352,30 +1361,35 @@
         </modify-argument>
         <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectConnect(%CPPSELF, %1, %2, %3, %4));
+        %RETURN_TYPE %0 = qobjectConnect(%CPPSELF, %1, %2, %3, %4);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </add-function>
     <add-function signature="emit(const char*, ...)" return-type="bool">
         <inject-code class="target" position="beginning">
-            %PYARG_0 = %CONVERTTOPYTHON[bool](PySide::SignalManager::instance().emitSignal(%CPPSELF, %1, %PYARG_2));
+        %RETURN_TYPE %0 = PySide::SignalManager::instance().emitSignal(%CPPSELF, %1, %PYARG_2);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </add-function>
     <add-function signature="disconnect(const char *, PyCallable*)" return-type="bool">
          <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectDisconnectCallback(%CPPSELF, %1, %2));
+        %RETURN_TYPE %0 = qobjectDisconnectCallback(%CPPSELF, %1, %2);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </add-function>
     <add-function signature="disconnect(const QObject*, const char*, PyCallable*)" return-type="bool" static="yes">
          <inject-code class="target" position="beginning">
         // %FUNCTION_NAME() - disable generation of function call.
-        %PYARG_0 = %CONVERTTOPYTHON[bool](qobjectDisconnectCallback(%1, %2, %3));
+        %RETURN_TYPE %0 = qobjectDisconnectCallback(%1, %2, %3);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </add-function>
     <inject-code class="native" file="glue/qobject_findchild.cpp"/>
     <add-function signature="findChild(PyTypeObject*, const QString&amp;)" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            %PYARG_0 = %CONVERTTOPYTHON[QObject*](_findChildHelper(%CPPSELF, %2, (PyTypeObject*)%PYARG_1));
+        QObject* child = _findChildHelper(%CPPSELF, %2, (PyTypeObject*)%PYARG_1);
+        %PYARG_0 = %CONVERTTOPYTHON[QObject*](child);
         </inject-code>
       <modify-argument index="return">
         <parent index="this" action="add"/>
@@ -1683,8 +1697,8 @@
     </add-function>
     <add-function signature="operator+(PyString, QByteArray)">
         <inject-code>
-            QByteArray b(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1));
-            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](b + *%CPPSELF);
+        QByteArray ba = QByteArray(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1)) + *%CPPSELF;
+        %PYARG_0 = %CONVERTTOPYTHON[QByteArray](ba);
         </inject-code>
     </add-function>
     <!-- ### -->
@@ -1845,7 +1859,8 @@
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](%CPPSELF.%FUNCTION_NAME(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1)));
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1));
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
     <modify-function signature="toDouble(bool*)const">
@@ -1902,10 +1917,10 @@
             Py_ssize_t max = %CPPSELF.count();
             _i1 = qBound(Py_ssize_t(0), _i1, max);
             _i2 = qBound(Py_ssize_t(0), _i2, max);
-
-            if (_i1 >= _i2)
-                return %CONVERTTOPYTHON[QByteArray](QByteArray());
-            return %CONVERTTOPYTHON[QByteArray](%CPPSELF.mid(_i1, _i2 - _i1));
+            QByteArray ba;
+            if (_i1 &lt; _i2)
+                ba = %CPPSELF.mid(_i1, _i2 - _i1);
+            return %CONVERTTOPYTHON[QByteArray](ba);
         </inject-code>
     </add-function>
   </value-type>
@@ -1941,7 +1956,8 @@
         </modify-argument>
         <inject-code>
         uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1);
-        %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(ptr));
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(ptr);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
     <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)">
@@ -1979,7 +1995,8 @@
     <modify-function signature="write(const char *,qint64)" remove="all"/>
     <modify-function signature="write(const char *)">
         <inject-code>
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%CPPSELF.%FUNCTION_NAME(%1, PyString_GET_SIZE(%PYARG_1)));
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, PyString_GET_SIZE(%PYARG_1));
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
     <modify-function signature="getChar(char *)">
@@ -2090,12 +2107,14 @@
             <rename to="parent" />
         </modify-argument>
         <inject-code>
-            Shiboken::AutoDecRef fileNo(PyObject_GetAttrString(%PYARG_1, "fileno"));
-            if (!fileNo.isNull()) {
-                Shiboken::AutoDecRef fileNoValue(PyObject_CallObject(fileNo, 0));
-                if (%CHECKTYPE[int](fileNoValue))
-                    %0 = new %TYPE(%CONVERTTOCPP[int](fileNoValue), %2, %3);
+        Shiboken::AutoDecRef fileNo(PyObject_GetAttrString(%PYARG_1, "fileno"));
+        if (!fileNo.isNull()) {
+            Shiboken::AutoDecRef fileNoValue(PyObject_CallObject(fileNo, 0));
+            if (%CHECKTYPE[int](fileNoValue)) {
+                int cppFileNoValue = %CONVERTTOCPP[int](fileNoValue);
+                %0 = new %TYPE(cppFileNoValue, %2, %3);
             }
+        }
         </inject-code>
     </add-function>
   </object-type>
@@ -2170,9 +2189,10 @@
             <remove-argument />
         </modify-argument>
         <inject-code>
-            Py_ssize_t size;
-            uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1, &amp;size);
-            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>(ptr), size));
+        Py_ssize_t size;
+        uchar* ptr = (uchar*) Shiboken::Buffer::getPointer(%PYARG_1, &amp;size);
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(const_cast&lt;const uchar*>(ptr), size);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
   </object-type>
@@ -2297,8 +2317,9 @@
             <replace-type modified-type="PyBuffer"/>
         </modify-argument>
         <inject-code>
-            uchar* ptr = (uchar*)Shiboken::Buffer::getPointer(%PYARG_1);
-            %PYARG_0 = %CONVERTTOPYTHON[bool](%CPPSELF.%FUNCTION_NAME(ptr));
+        uchar* ptr = (uchar*)Shiboken::Buffer::getPointer(%PYARG_1);
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(ptr);
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
     <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)">
@@ -3014,12 +3035,13 @@
 
     <modify-function signature="clear()" >
         <inject-code class="target" position="beginning">
-            for(int counter = 0; counter &lt; %CPPSELF.animationCount(); ++counter ) {
-                    PyObject* obj = %CONVERTTOPYTHON[QAbstractAnimation*](%CPPSELF.animationAt(counter));
-                    Shiboken::Object::setParent(NULL, obj);
-                    Py_DECREF(obj);
-            }
-            %CPPSELF.clear();
+        for(int counter = 0; counter &lt; %CPPSELF.animationCount(); ++counter ) {
+            QAbstractAnimation* animation = %CPPSELF.animationAt(counter);
+            PyObject* obj = %CONVERTTOPYTHON[QAbstractAnimation*](animation);
+            Shiboken::Object::setParent(NULL, obj);
+            Py_DECREF(obj);
+        }
+        %CPPSELF.clear();
         </inject-code>
     </modify-function>
   </object-type>
@@ -3138,13 +3160,14 @@ s1.addTransition(button.clicked, s1h)&lt;/code>
         <parent index="this" action="add"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        QString signalName(%2);
-        if (PySide::SignalManager::registerMetaMethod(%1, signalName.mid(1).toAscii().data(), QMetaMethod::Signal)) {
-          %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->addTransition(%1, %2, %3));
-        } else {
+      QString signalName(%2);
+      if (PySide::SignalManager::registerMetaMethod(%1, signalName.mid(1).toAscii().data(), QMetaMethod::Signal)) {
+          QSignalTransition* %0 = %CPPSELF->addTransition(%1, %2, %3);
+          %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%0);
+      } else {
           Py_INCREF(Py_None);
           %PYARG_0 = Py_None;
-        }
+      }
       </inject-code>
     </modify-function>
     <modify-function signature="addTransition(QAbstractState*)">
@@ -3161,15 +3184,16 @@ s1.addTransition(button.clicked, s1h)&lt;/code>
         <parent index="this" action="add"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        // Obviously the label used by the following goto is a very awkward solution,
-        // since it refers to a name very tied to the generator implementation.
-        // Check bug #362 for more information on this
-        // http://bugs.openbossa.org/show_bug.cgi?id=362
-        if (!PyObject_TypeCheck(%1, &amp;PySideSignalInstanceType))
-            goto Sbk_%TYPEFunc_%FUNCTION_NAME_TypeError;
-        PySideSignalInstance* signalInstance = reinterpret_cast&lt;PySideSignalInstance*&gt;(%1);
-        QObject* sender = %CONVERTTOCPP[QObject*](PySide::Signal::getObject(signalInstance));
-        %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%CPPSELF->%FUNCTION_NAME(sender, PySide::Signal::getSignature(signalInstance), %2));
+      // Obviously the label used by the following goto is a very awkward solution,
+      // since it refers to a name very tied to the generator implementation.
+      // Check bug #362 for more information on this
+      // http://bugs.openbossa.org/show_bug.cgi?id=362
+      if (!PyObject_TypeCheck(%1, &amp;PySideSignalInstanceType))
+          goto Sbk_%TYPEFunc_%FUNCTION_NAME_TypeError;
+      PySideSignalInstance* signalInstance = reinterpret_cast&lt;PySideSignalInstance*&gt;(%1);
+      QObject* sender = %CONVERTTOCPP[QObject*](PySide::Signal::getObject(signalInstance));
+      QSignalTransition* %0 = %CPPSELF->%FUNCTION_NAME(sender, PySide::Signal::getSignature(signalInstance), %2);
+      %PYARG_0 = %CONVERTTOPYTHON[QSignalTransition*](%0);
       </inject-code>
     </add-function>
 
@@ -3281,12 +3305,14 @@ s1.addTransition(button.clicked, s1h)&lt;/code>
   </inject-code>
   <add-function signature="qRegisterResourceData(int, const char *, const char *, const char *)" return-type="bool">
     <inject-code class="target" position="beginning">
-    %PYARG_0 = %CONVERTTOPYTHON[bool](%FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4));
+    %RETURN_TYPE %0 = %FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4);
+    %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
     </inject-code>
   </add-function>
   <add-function signature="qUnregisterResourceData(int, const char *, const char *, const char *)" return-type="bool">
     <inject-code class="target" position="beginning">
-    %PYARG_0 = %CONVERTTOPYTHON[bool](%FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4));
+    %RETURN_TYPE %0 = %FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4);
+    %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
     </inject-code>
   </add-function>
 

@@ -191,10 +191,10 @@
     <template name="read_wrapper">
         Shiboken::AutoArrayPointer&lt;char&gt; _data(%2);
         qint64 _size = %CPPSELF.%FUNCTION_NAME(_data, %2);
+        QByteArray ba;
         if (_size > 0)
-            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](QByteArray(_data, _size));
-        else
-            %PYARG_0 = %CONVERTTOPYTHON[QByteArray](QByteArray());
+            ba = QByteArray(_data, _size);
+        %PYARG_0 = %CONVERTTOPYTHON[QByteArray](ba);
     </template>
     <template name="fix_return_args,int*">
         RETURNTYPE _ret;
@@ -326,7 +326,8 @@
     </template>
 
     <template name="matrix_transposed_function">
-        return %CONVERTTOPYTHON[%TRANSPOSED_TYPE](%CPPSELF.transposed());
+        %TRANSPOSED_TYPE transp = %CPPSELF.transposed();
+        return %CONVERTTOPYTHON[%TRANSPOSED_TYPE](transp);
     </template>
 
     <!-- Replace '#' for the argument number you want. -->
@@ -342,12 +343,15 @@
     </template>
 
     <template name="__iter_parent__">
-        %PYARG_0 = %CONVERTTOPYTHON[%CPPSELF_TYPE](%CPPSELF.begin());
+        %CPPSELF_TYPE _tmp = %CPPSELF.begin();
+        %PYARG_0 = %CONVERTTOPYTHON[%CPPSELF_TYPE](_tmp);
     </template>
 
     <template name="__next__">
-        if (!%CPPSELF.atEnd())
-            %PYARG_0 = %CONVERTTOPYTHON[%CPPSELF_TYPE]((*%CPPSELF)++);
+        if (!%CPPSELF.atEnd()) {
+            %PYARG_0 = %CONVERTTOPYTHON[%CPPSELF_TYPE](*%CPPSELF);
+            ++(*%CPPSELF);
+        }
     </template>
 
     <template name="convertFromMultiMap">
