@@ -29,7 +29,8 @@
           <define-ownership owner="target"/>
         </modify-argument>
         <inject-code>
-          %PYARG_0 = %CONVERTTOPYTHON[QXmlSchema*](new QXmlSchema(%CPPSELF.schema()));
+          QXmlSchema* %0 = new QXmlSchema(%CPPSELF.schema());
+          %PYARG_0 = %CONVERTTOPYTHON[QXmlSchema*](%0);
         </inject-code>
       </modify-function>
     </object-type>
