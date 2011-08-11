@@ -94,6 +94,7 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     using namespace Shiboken;
 
     static PyTypeObject* qobjectType = TypeResolver::get("QObject*")->pythonType();
+    static PyTypeObject* qdeclarativeType = TypeResolver::get("QDeclarativeItem*")->pythonType();
     assert(qobjectType);
     static int nextType = 0;
 
@@ -107,6 +108,8 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
         return -1;
     }
 
+    bool isDeclarativeType = PySequence_Contains(((PyTypeObject*)pyObj)->tp_mro, (PyObject*)qdeclarativeType);
+
     QMetaObject* metaObject = reinterpret_cast<QMetaObject*>(ObjectType::getTypeUserData(reinterpret_cast<SbkObjectType*>(pyObj)));
     Q_ASSERT(metaObject);
 
@@ -116,8 +119,26 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     // Init proxy object static meta object
     QDeclarativePrivate::RegisterType type;
     type.version = 0;
-    type.typeId = qMetaTypeId<QObject*>();
-    type.listId = qMetaTypeId<QDeclarativeListProperty<QObject> >();
+    if (isDeclarativeType) {
+        type.typeId = qMetaTypeId<QDeclarativeItem*>();
+        type.listId = qMetaTypeId<QDeclarativeListProperty<QDeclarativeItem> >();
+
+        type.attachedPropertiesFunction = QDeclarativePrivate::attachedPropertiesFunc<QDeclarativeItem>();
+        type.attachedPropertiesMetaObject = QDeclarativePrivate::attachedPropertiesMetaObject<QDeclarativeItem>();
+
+        type.parserStatusCast = QDeclarativePrivate::StaticCastSelector<QDeclarativeItem, QDeclarativeParserStatus>::cast();
+        type.valueSourceCast = QDeclarativePrivate::StaticCastSelector<QDeclarativeItem, QDeclarativePropertyValueSource>::cast();
+        type.valueInterceptorCast = QDeclarativePrivate::StaticCastSelector<QDeclarativeItem, QDeclarativePropertyValueInterceptor>::cast();
+    } else {
+        type.typeId = qMetaTypeId<QObject*>();
+        type.listId = qMetaTypeId<QDeclarativeListProperty<QObject> >();
+        type.attachedPropertiesFunction = QDeclarativePrivate::attachedPropertiesFunc<QObject>();
+        type.attachedPropertiesMetaObject = QDeclarativePrivate::attachedPropertiesMetaObject<QObject>();
+
+        type.parserStatusCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativeParserStatus>::cast();
+        type.valueSourceCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativePropertyValueSource>::cast();
+        type.valueInterceptorCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativePropertyValueInterceptor>::cast();
+    }
     type.objectSize = PySide::getSizeOfQObject(reinterpret_cast<SbkObjectType*>(pyObj));
     type.create = createFuncs[nextType];
     type.uri = uri;
@@ -125,13 +146,6 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     type.versionMinor = versionMinor;
     type.elementName = qmlName;
     type.metaObject = metaObject;
-
-    type.attachedPropertiesFunction = QDeclarativePrivate::attachedPropertiesFunc<QObject>();
-    type.attachedPropertiesMetaObject = QDeclarativePrivate::attachedPropertiesMetaObject<QObject>();
-
-    type.parserStatusCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativeParserStatus>::cast();
-    type.valueSourceCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativePropertyValueSource>::cast();
-    type.valueInterceptorCast = QDeclarativePrivate::StaticCastSelector<QObject, QDeclarativePropertyValueInterceptor>::cast();
 
     type.extensionObjectCreate = 0;
     type.extensionMetaObject = 0;
