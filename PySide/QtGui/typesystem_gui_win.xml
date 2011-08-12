@@ -21,7 +21,16 @@
 <typesystem package="PySide.QtGui">
   <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject" />
   <primitive-type name="WId" target-lang-api-name="PyObject">
-    <conversion-rule file="glue/wid_conversions.h"/>
+    <conversion-rule file="glue/wid_conversions.h">
+        <native-to-target>
+        return PyCObject_FromVoidPtr(%in, 0);
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyCObject">
+            %out = (%OUTTYPE)PyCObject_AsVoidPtr(%in);
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </primitive-type>
   <enum-type name="QPixmap::HBitmapFormat" />
 </typesystem>

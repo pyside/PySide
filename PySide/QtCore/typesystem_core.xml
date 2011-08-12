@@ -157,35 +157,363 @@
     <include file-name="QTextDocument" location="global"/>
   </primitive-type>
   <primitive-type name="QBool" target-lang-api-name="PyBool">
-    <conversion-rule file="qbool_conversions.h"/>
+    <conversion-rule file="qbool_conversions.h">
+        <native-to-target>
+        return PyBool_FromLong((bool)%in);
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyBool">
+            %out = %OUTTYPE(%in == Py_True);
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
     <!-- FIXME This is a workaround to include some headers needed by some includes (nothing to do with QBool) -->
     <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
-
   <primitive-type name="QString">
     <include file-name="QString" location="global"/>
-    <conversion-rule file="qstring_conversions.h" />
+    <conversion-rule file="qstring_conversions.h">
+        <type-check check="PyUnicode_Check(%in) || PyString_Check(%in) || %in == Py_None"/>
+        <native-to-target>
+        const int N = %in.length();
+        wchar_t* str = new wchar_t[N];
+        %in.toWCharArray(str);
+        PyObject* %out = PyUnicode_FromWideChar(str, N);
+        delete[] str;
+        return %out;
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyUnicode">
+            Py_UNICODE* unicode = PyUnicode_AS_UNICODE(%in);
+            #if defined(Py_UNICODE_WIDE)
+            // cast as Py_UNICODE can be a different type
+            %out = QString::fromUcs4((const uint*)unicode);
+            #else
+            %out = QString::fromUtf16(unicode, PyUnicode_GET_SIZE(%in));
+            #endif
+            </add-conversion>
+            <add-conversion type="PyString">
+            const char* str = %CONVERTTOCPP[const char*](%in);
+            %out = %OUTTYPE(str);
+            </add-conversion>
+            <add-conversion type="Py_None">
+            %out = %OUTTYPE();
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </primitive-type>
+  <primitive-type name="QStringRef">
+    <include file-name="datetime.h" location="global"/>
+    <conversion-rule file="qstringref_conversions.h">
+        <native-to-target>
+        const int N = %in.toString().length();
+        wchar_t* str = new wchar_t[N];
+        %in.toString().toWCharArray(str);
+        PyObject* %out = PyUnicode_FromWideChar(str, N);
+        delete[] str;
+        return %out;
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyObject" check="PyUnicode_Check(%in)||PyString_Check(%in)||%in == Py_None">
+            %out = %OUTTYPE();
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+  </primitive-type>
+  <primitive-type name="QChar">
+    <conversion-rule file="qchar_conversions.h">
+        <native-to-target>
+        wchar_t c = (wchar_t)%in.unicode();
+        return PyUnicode_FromWideChar(&amp;c, 1);
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyString" check="PyString_Check(%in) &amp;&amp; PyString_Size(%in) == 1">
+            char c = %CONVERTTOCPP[char](%in);
+            %out = %OUTTYPE(c);
+            </add-conversion>
+            <add-conversion type="PyInt">
+            int i = %CONVERTTOCPP[int](%in);
+            %out = %OUTTYPE(i);
+            </add-conversion>
+            <add-conversion type="Py_None">
+            %out = %OUTTYPE();
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+  </primitive-type>
+
+  <primitive-type name="QVariant" target-lang-api-name="PyObject">
+    <include file-name="typeresolver.h" location="global"/>
+    <conversion-rule file="qvariant_conversions.h">
+        <native-to-target>
+        if (!%in.isValid())
+            Py_RETURN_NONE;
+        if (qstrcmp(%in.typeName(), "QVariantList") == 0)
+            return %CONVERTTOPYTHON[QList&lt;QVariant&gt;](%in.value&lt;QVariantList&gt;());
+        if (qstrcmp(%in.typeName(), "QStringList") == 0)
+            return %CONVERTTOPYTHON[QList&lt;QString&gt;](%in.value&lt;QStringList&gt;());
+        if (qstrcmp(%in.typeName(), "QVariantMap") == 0)
+            return %CONVERTTOPYTHON[QMap&lt;QString, QVariant&gt;](%in.value&lt;QVariantMap&gt;());
+        Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(%in.typeName());
+        if (tr)
+            return tr->toPython(const_cast&lt;void*&gt;(%in.data()));
+        // TODO-CONVERTERS: SET ERROR
+        return 0;
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyBool">
+            %out = %OUTTYPE(%in == Py_True);
+            </add-conversion>
+            <add-conversion type="Py_None">
+            %out = %OUTTYPE();
+            </add-conversion>
+            <add-conversion type="PyString" check="%CHECKTYPE[QString](%in)">
+            QString in = %CONVERTTOCPP[QString](%in);
+            %out = %OUTTYPE(in);
+            </add-conversion>
+            <add-conversion type="QByteArray" check="%CHECKTYPE[QByteArray](%in)">
+            QByteArray in = %CONVERTTOCPP[QByteArray](%in);
+            %out = %OUTTYPE(in);
+            </add-conversion>
+            <add-conversion type="PyFloat" check="PyFloat_CheckExact(%in)">
+            double in = %CONVERTTOCPP[double](%in);
+            %out = %OUTTYPE(in);
+            </add-conversion>
+            <add-conversion type="PyInt">
+            int in = %CONVERTTOCPP[int](%in);
+            %out = %OUTTYPE(in);
+            </add-conversion>
+            <add-conversion type="PyLong" check="PyLong_CheckExact(%in)">
+            qlonglong in = %CONVERTTOCPP[qlonglong](%in);
+            %out = %OUTTYPE(in);
+            </add-conversion>
+            <add-conversion type="SbkEnumType">
+            int in = %CONVERTTOCPP[int](%in);
+            %out = %OUTTYPE(in);
+            </add-conversion>
+            <add-conversion type="SbkObject">
+            // a class supported by QVariant?
+            int typeCode;
+            const char* typeName = QVariant_resolveMetaType(%in->ob_type, &amp;typeCode);
+            if (typeCode &amp;&amp; typeName) {
+                Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(typeName);
+                QVariant var(typeCode, (void*)0);
+                void* args[] = { var.data() };
+                tr->toCpp(%in, args);
+                %out = var;
+            }
+            </add-conversion>
+            <add-conversion type="PyDict">
+            QVariant ret = QVariant_convertToVariantMap(%in);
+            if (ret.isValid())
+                %out = ret;
+            %out = QVariant::fromValue&lt;PySide::PyObjectWrapper&gt;(%in);
+            </add-conversion>
+            <add-conversion type="PySequence">
+            %out = QVariant_convertToVariantList(%in);
+            </add-conversion>
+            <add-conversion type="PyObject">
+            // Is a shiboken type not known by Qt
+            %out = QVariant::fromValue&lt;PySide::PyObjectWrapper&gt;(%in);
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+  </primitive-type>
+    <inject-code class="native" position="beginning">
+    static const char* QVariant_resolveMetaType(PyTypeObject* type, int* typeId)
+    {
+        if (PyObject_TypeCheck(type, &amp;SbkObjectType_Type)) {
+            SbkObjectType* sbkType = (SbkObjectType*)type;
+            const char* typeName = Shiboken::ObjectType::getOriginalName(sbkType);
+            if (!typeName)
+                return 0;
+            bool valueType = '*' != typeName[qstrlen(typeName) - 1];
+            // Do not convert user type of value
+            if (valueType &amp;&mp; Shiboken::ObjectType::isUserType(type))
+                return 0;
+            int obTypeId = QMetaType::type(typeName);
+            if (obTypeId) {
+                *typeId = obTypeId;
+                return typeName;
+            }
+            // Do not resolve types to value type
+            if (valueType)
+                return 0;
+            // find in base types
+            if (type->tp_base) {
+                return QVariant_resolveMetaType(type->tp_base, typeId);
+            } else if (type->tp_bases) {
+                for(int i = 0; i &lt; PyTuple_GET_SIZE(type->tp_bases); ++i) {
+                    const char* derivedName = QVariant_resolveMetaType((PyTypeObject*)PyTuple_GET_ITEM(type->tp_bases, i), typeId);
+                    if (derivedName)
+                        return derivedName;
+                }
+            }
+        }
+        *typeId = 0;
+        return 0;
+    }
+    static QVariant QVariant_convertToValueList(PyObject* list)
+    {
+        if (PySequence_Size(list) &lt; 1)
+            return QVariant();
+        Shiboken::AutoDecRef element(PySequence_GetItem(list, 0));
+        int typeId;
+        const char* typeName = QVariant_resolveMetaType(element.cast&lt;PyTypeObject*&gt;(), &amp;typeId);
+        if (typeName) {
+            QByteArray listTypeName("QList&lt;");
+            listTypeName += typeName;
+            listTypeName += '>';
+            typeId = QMetaType::type(listTypeName);
+            if (typeId &gt; 0) {
+                Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(listTypeName);
+                if (!tr) {
+                    qWarning() &lt;&lt; "TypeResolver for :" &lt;&lt; listTypeName &lt;&lt; "not registered.";
+                } else {
+                    QVariant var(typeId, (void*)0);
+                    void* args[] = { var.data(), 0 };
+                    tr->toCpp(list, args);
+                    return var;
+                }
+            }
+        }
+        return QVariant();
+    }
+    static bool QVariant_isStringList(PyObject *list)
+    {
+        bool allString = true;
+        Shiboken::AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
+        Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
+        for(int i = 0; i &lt; size; ++i) {
+            PyObject* item = PySequence_Fast_GET_ITEM(fast.object(), i);
+            if (!%CHECKTYPE[QString](item)) {
+                allString = false;
+                break;
+            }
+        }
+        return allString;
+    }
+    static QVariant QVariant_convertToVariantMap(PyObject* map)
+    {
+        Py_ssize_t pos = 0;
+        Shiboken::AutoDecRef keys(PyDict_Keys(map));
+        if (!QVariant_isStringList(keys))
+            return QVariant();
+        PyObject* key;
+        PyObject* value;
+        QMap&lt;QString,QVariant&gt; ret;
+        while (PyDict_Next(map, &amp;pos, &amp;key, &amp;value)) {
+            QString cppKey = %CONVERTTOCPP[QString](key);
+            QVariant cppValue = %CONVERTTOCPP[QVariant](value);
+            ret.insert(cppKey, cppValue);
+        }
+        return QVariant(ret);
+    }
+    static QVariant QVariant_convertToVariantList(PyObject* list)
+    {
+        bool allString = QVariant_isStringList(list);
+        if (allString) {
+            QStringList lst = %CONVERTTOCPP[QList&lt;QString&gt;](list);
+            return QVariant(lst);
+        } else {
+            QVariant valueList = QVariant_convertToValueList(list);
+            if (valueList.isValid())
+                return valueList;
+            QList&lt;QVariant&gt; lst;
+            Shiboken::AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
+            Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
+            for (int i = 0; i &lt; size; ++i) {
+                PyObject* pyItem = PySequence_Fast_GET_ITEM(fast.object(), i);
+                QVariant item = %CONVERTTOCPP[QVariant](pyItem);
+                lst.append(item);
+            }
+            return QVariant(lst);
+        }
+        Q_ASSERT(false);
+    }
+    </inject-code>
+
+  <primitive-type name="QVariant::Type" default-constructor="QVariant::Invalid">
+    <conversion-rule file="qvariant_type_conversions.h">
+        <native-to-target>
+        const char* typeName = QVariant::typeToName(%in);
+        PyObject* %out;
+        if (!typeName) {
+            %out = Py_None;
+        } else {
+            Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(typeName);
+            %out = tr ? (PyObject*)tr->pythonType() : Py_None;
+        }
+        Py_INCREF(%out);
+        return %out;
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="Py_None">
+            %out = QVariant::Invalid;
+            </add-conversion>
+            <add-conversion type="PyTypeObject">
+            const char* typeName;
+            if (%in == (PyObject*)&amp;PyString_Type || %in == (PyObject*)&amp;PyUnicode_Type)
+                typeName = "QString";
+            else if (%in == (PyObject*)&amp;PyFloat_Type)
+                typeName = "double"; // float is a UserType in QVariant.
+            else if (%in == (PyObject*)&amp;PyLong_Type)
+                typeName = "int";    // long is a UserType in QVariant.
+            else if (%in->ob_type == &amp;SbkObjectType_Type)
+                typeName = Shiboken::ObjectType::getOriginalName((SbkObjectType*)%in);
+            else
+                typeName = ((PyTypeObject*)%in)->tp_name;
+            %out = QVariant::nameToType(typeName);
+            </add-conversion>
+            <add-conversion type="PyString">
+            %out = QVariant::nameToType(PyString_AS_STRING(%in));
+            </add-conversion>
+            <add-conversion type="PyUnicode">
+            %out = QVariant::nameToType(PyString_AsString(%in));
+            </add-conversion>
+            <add-conversion type="PyDict" check="PyDict_Check(%in) &amp;&amp; QVariantType_checkAllStringKeys(%in)">
+            %out = QVariant::nameToType("QVariantMap");
+            </add-conversion>
+            <add-conversion type="PySequence">
+            const char* typeName;
+            if (QVariantType_isStringList(%in))
+                typeName = "QStringList";
+            else
+                typeName = "QVariantList";
+            %out = QVariant::nameToType(typeName);
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+  </primitive-type>
+
+  <primitive-type name="QVariantMap" />
+
+  <inject-code class="native" position="beginning">
+  static bool QVariantType_isStringList(PyObject* list)
+  {
+      bool allString = true;
+      Shiboken::AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
+      Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
+      for(int i=0; i &lt; size; i++) {
+          PyObject* item = PySequence_Fast_GET_ITEM(fast.object(), i);
+          if (!%CHECKTYPE[QString](item)) {
+              allString = false;
+              break;
+          }
+      }
+      return allString;
+  }
+  static bool QVariantType_checkAllStringKeys(PyObject* dict)
+  {
+      Shiboken::AutoDecRef keys(PyDict_Keys(dict));
+      return QVariantType_isStringList(keys);
+  }
+  </inject-code>
+
   <primitive-type name="QStringList">
     <include file-name="QStringList" location="global"/>
     <conversion-rule file="qstringlist_conversions.h" />
   </primitive-type>
-  <primitive-type name="QStringRef">
-    <include file-name="datetime.h" location="global"/>
-    <conversion-rule file="qstringref_conversions.h" />
-  </primitive-type>
-  <primitive-type name="QChar">
-    <conversion-rule file="qchar_conversions.h" />
-  </primitive-type>
-  <primitive-type name="QVariant">
-    <conversion-rule file="qvariant_conversions.h" />
-    <include file-name="typeresolver.h" location="global"/>
-  </primitive-type>
-
-  <primitive-type name="QVariant::Type" default-constructor="QVariant::Invalid">
-    <conversion-rule file="qvariant_type_conversions.h" />
-  </primitive-type>
-  <primitive-type name="QVariantMap" />
 
   <container-type name="QSet" type="set">
     <conversion-rule file="qset_conversions.h"/>
@@ -613,10 +941,10 @@
     </inject-code>
     <conversion-rule file="qdate_conversions.h">
         <target-to-native>
-            <add-conversion type='Py_None' check='%in == Py_None'>
+            <add-conversion type="Py_None">
             %out = %OUTTYPE();
             </add-conversion>
-            <add-conversion type='PyDate' check='PyDateTime_ImportAndCheck(%in)'>
+            <add-conversion type="PyDate" check="PyDateTime_ImportAndCheck(%in)">
             int day = PyDateTime_GET_DAY(%in);
             int month = PyDateTime_GET_MONTH(%in);
             int year = PyDateTime_GET_YEAR(%in);
@@ -628,7 +956,7 @@
       <include file-name="datetime.h" location="global"/>
     </extra-includes>
     <enum-type name="MonthNameType"/>
-    <add-function signature="__repr__" return-type="PyObject*">
+    <add-function signature="__repr__" return-type="PyObject">
         <inject-code class="target" position="beginning">
             <insert-template name="repr_code">
                <replace from="%REPR_FORMAT" to="%i, %i, %i" />
@@ -637,7 +965,7 @@
         </inject-code>
     </add-function>
 
-    <add-function signature="__reduce__" return-type="PyObject*">
+    <add-function signature="__reduce__" return-type="PyObject">
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
               <replace from="%REDUCE_FORMAT" to="iii" />
@@ -694,10 +1022,10 @@
     </inject-code>
     <conversion-rule file="qdatetime_conversions.h">
         <target-to-native>
-            <add-conversion type='Py_None' check='%in == Py_None'>
+            <add-conversion type="Py_None">
             %out = %OUTTYPE();
             </add-conversion>
-            <add-conversion type='PyDateTime' check='PyDateTime_ImportAndCheck(%in)'>
+            <add-conversion type="PyDateTime" check="PyDateTime_ImportAndCheck(%in)">
             int day = PyDateTime_GET_DAY(%in);
             int month = PyDateTime_GET_MONTH(%in);
             int year = PyDateTime_GET_YEAR(%in);
@@ -1060,10 +1388,10 @@
     </inject-code>
     <conversion-rule file="qtime_conversions.h">
         <target-to-native>
-            <add-conversion type='Py_None' check='%in == Py_None'>
+            <add-conversion type="Py_None">
             %out = %OUTTYPE();
             </add-conversion>
-            <add-conversion type='PyTime' check='PyDateTime_ImportAndCheck(%in)'>
+            <add-conversion type="PyTime" check="PyDateTime_ImportAndCheck(%in)">
             int hour = PyDateTime_TIME_GET_HOUR(%in);
             int min = PyDateTime_TIME_GET_MINUTE(%in);
             int sec = PyDateTime_TIME_GET_SECOND(%in);
@@ -1749,10 +2077,10 @@
   <value-type name="QByteArray" hash-function="qHash">
     <conversion-rule file="qbytearray_conversions.h">
         <target-to-native>
-            <add-conversion type='Py_None' check='%in == Py_None'>
+            <add-conversion type="Py_None">
             %out = %OUTTYPE();
             </add-conversion>
-            <add-conversion type='PyString' check='PyString_Check(%in)'>
+            <add-conversion type="PyString">
             %out = %OUTTYPE(PyString_AS_STRING(%in), PyString_GET_SIZE(%in));
             </add-conversion>
         </target-to-native>
