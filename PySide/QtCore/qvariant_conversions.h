@@ -98,7 +98,7 @@ struct Converter<QVariant>
                 }
         }
 
-        //sequence and dictornay
+        // Sequence and dictionary
         if (PyDict_Check(pyObj)) {
             QVariant ret = convertToVariantMap(pyObj);
             if (ret.isValid())

@@ -21,6 +21,8 @@ struct Converter<QVariant::Type>
 
         if (Shiboken::String::checkType(reinterpret_cast<PyTypeObject*>(pyObj)))
             typeName = "QString";
+
+
         else if (pyObj == reinterpret_cast<PyObject*>(&PyFloat_Type))
             typeName = "double"; // float is a UserType in QVariant.
         else if (pyObj == reinterpret_cast<PyObject*>(&PyLong_Type))

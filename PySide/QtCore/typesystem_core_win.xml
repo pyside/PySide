@@ -20,7 +20,16 @@
 -->
 <typesystem package="PySide.QtCore">
   <primitive-type name="HWND">
-      <conversion-rule file="glue/hwnd_conversions.h"/>
+      <conversion-rule file="glue/hwnd_conversions.h">
+          <native-to-target>
+          return PyCObject_FromVoidPtr(%in, 0);
+          </native-to-target>
+          <target-to-native>
+              <add-conversion type="PyCObject">
+              %out = (%OUTTYPE*)PyCObject_AsVoidPtr(%in);
+              </add-conversion>
+          </target-to-native>
+      </conversion-rule>
   </primitive-type>
   <value-type name="POINT">
       <include file-name="wtypes.h" location="global"/>
@@ -32,4 +41,3 @@
   <suppress-warning text="class not found for setup inheritance 'tagMSG'"/>
   <load-typesystem name="typesystem_core.xml" generate="yes"/>
 </typesystem>
-
