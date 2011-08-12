@@ -384,7 +384,7 @@ PySideProperty* getObject(PyObject* source, PyObject* name)
     }
 
     attr = getFromType(source->ob_type, name);
-    if (attr && isPropertyType(attr)) {
+    if (attr && checkType(attr)) {
         Py_INCREF(attr);
         return reinterpret_cast<PySideProperty*>(attr);
     }

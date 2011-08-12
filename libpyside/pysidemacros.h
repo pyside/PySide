@@ -33,11 +33,14 @@
             #define PYSIDE_API __declspec(dllimport)
         #endif
     #endif
+    #define PYSIDE_DEPRECATED(func) __declspec(deprecated) func
 #else
     #if __GNUC__ >= 4
         #define PYSIDE_API __attribute__ ((visibility("default")))
+        #define PYSIDE_DEPRECATED(func) func __attribute__ ((deprecated))
     #else
         #define PYSIDE_API
+        #define DEPRECATED(func) func
     #endif
 #endif
 

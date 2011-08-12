@@ -80,7 +80,7 @@ bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds
                     Shiboken::AutoDecRef retval(PyObject_CallObject(propSetter, args));
                 } else {
                     PyObject* attr = PyObject_GenericGetAttr(qObj, key);
-                    if (PySide::Property::isPropertyType(attr))
+                    if (PySide::Property::checkType(attr))
                         PySide::Property::setValue(reinterpret_cast<PySideProperty*>(attr), qObj, value);
                 }
             } else {
@@ -216,7 +216,7 @@ PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* nam
     if (!Shiboken::Object::isValid(reinterpret_cast<SbkObject*>(self), false))
         return attr;
 
-    if (attr && Property::isPropertyType(attr)) {
+    if (attr && Property::checkType(attr)) {
         PyObject *value = Property::getValue(reinterpret_cast<PySideProperty*>(attr), self);
         Py_DECREF(attr);
         if (!value)

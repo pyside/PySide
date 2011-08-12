@@ -59,7 +59,7 @@ PYSIDE_API bool checkType(PyObject* type);
  * @return  Return a new reference to PyObject* of type  PySideSignal
  * @deprecated Use registerSignals
  **/
-PYSIDE_API PySideSignal* newObject(const char* name, ...);
+PYSIDE_DEPRECATED(PYSIDE_API PySideSignal* newObject(const char* name, ...));
 
 /**
  * Register all C++ signals of a QObject on Python type.
@@ -112,7 +112,7 @@ PYSIDE_API void updateSourceObject(PyObject* source);
 /**
  * @deprecated Use registerSignals
  **/
-PYSIDE_API void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal);
+PYSIDE_DEPRECATED(PYSIDE_API void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal));
 
 /**
  * This function verify if the signature is a QtSignal base on SIGNAL flag
