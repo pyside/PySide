@@ -323,11 +323,13 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     PyObject* pp_name = 0;
     QMetaProperty mp;
     PyObject* pySelf = 0;
+    int methodCount = metaObject->methodCount();
+    int propertyCount = metaObject->propertyCount();
 
     if (call != QMetaObject::InvokeMetaMethod) {
         mp = metaObject->property(id);
         if (!mp.isValid())
-            return id - metaObject->methodCount();
+            return id - methodCount;
 
         Shiboken::GilState gil;
         pySelf = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(object);
@@ -337,7 +339,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
         if (!pp) {
             qWarning("Invalid property: %s.", mp.name());
             Py_XDECREF(pp_name);
-            return id - metaObject->methodCount();
+            return id - methodCount;
         }
     }
 
@@ -362,10 +364,13 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
             qWarning("Unsupported meta invocation type.");
     }
 
+    // WARNING Isn't safe to call any metaObject and/or object methods beyond this point
+    //         because the object can be deleted inside the called slot.
+
     if (call == QMetaObject::InvokeMetaMethod)
-        id = id - metaObject->methodCount();
+        id = id - methodCount;
     else
-        id = id - metaObject->propertyCount();
+        id = id - propertyCount;
 
     if (pp || pp_name) {
         Shiboken::GilState gil;
