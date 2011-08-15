@@ -103,7 +103,6 @@
         </modify-argument>
         <modify-argument index="return">
            <define-ownership class="target" owner="target"/>
-           <parent index="2" action="add" />
         </modify-argument>
         <inject-code>
             // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
@@ -122,7 +121,6 @@
         </modify-argument>
         <modify-argument index="return">
           <define-ownership class="target" owner="target"/>
-           <parent index="2" action="add" />
         </modify-argument>
         <inject-code>
             // Avoid calling the original function: %CPPSELF.%FUNCTION_NAME()
