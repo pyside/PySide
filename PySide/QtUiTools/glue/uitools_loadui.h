@@ -33,12 +33,6 @@ static PyObject* QUiLoadedLoadUiFromDevice(QUiLoader* self, QIODevice* dev, QWid
     if (wdg) {
         PyObject* pyWdg = Shiboken::Converter<QWidget*>::toPython(wdg);
 
-        if (!parent)
-            parent = wdg;
-
-        if (parent->layout())
-            parent->layout()->deleteLater();
-
         createChildrenNameAttributes(pyWdg, wdg);
         if (parent) {
             Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
