@@ -1131,7 +1131,7 @@
         case QColor::Hsl:
         {
             qreal h, s, l, a;
-            %CPPSELF.getHsvF(&amp;h, &amp;s, &amp;l, &amp;a);
+            %CPPSELF.getHslF(&amp;h, &amp;s, &amp;l, &amp;a);
             QString repr = QString().sprintf("PySide.QtGui.QColor.fromHslF(%.6f, %.6f, %.6f, %.6f)", h, s, l, a);
             %PYARG_0 = PyString_FromString(qPrintable(repr));
             break;
@@ -1156,7 +1156,7 @@
             <insert-template name="qcolor_repr" />
         </inject-code>
     </add-function>
-    <add-function signature="__reduce__" return-type="PyObject*">
+    <add-function signature="__reduce__" return-type="PyObject">
         <inject-code class="target" position="beginning">
           PyObject *createFunction = 0;
 
@@ -1190,7 +1190,7 @@
             {
                 qreal h, s, l, a;
                 createFunction = PyObject_GetAttrString(%PYSELF, "fromHslF");
-                %CPPSELF.getHsvF(&amp;h, &amp;s, &amp;l, &amp;a);
+                %CPPSELF.getHslF(&amp;h, &amp;s, &amp;l, &amp;a);
                 %PYARG_0 = Py_BuildValue("(N(ffff))", createFunction, h, s, l, a);
                 break;
             }
@@ -1201,7 +1201,7 @@
         </inject-code>
     </add-function>
 
-    <add-function signature="toTuple" return-type="PyObject*">
+    <add-function signature="toTuple" return-type="PyObject">
         <inject-code class="target" position="beginning">
           switch(%CPPSELF.spec()) {
           case QColor::Rgb:
@@ -1228,7 +1228,7 @@
           case QColor::Hsl:
           {
                 int h, s, l, a;
-                %CPPSELF.getHsv(&amp;h, &amp;s, &amp;l, &amp;a);
+                %CPPSELF.getHsl(&amp;h, &amp;s, &amp;l, &amp;a);
                 %PYARG_0 = Py_BuildValue("iiii", h, s, l, a);
                 break;
           }
