@@ -1851,8 +1851,6 @@
     <modify-function signature="selectionCommand(QModelIndex,const QEvent*)const">
       <modify-argument index="2" invalidate-after-use="yes"/>
     </modify-function>
-    <!-- ### because the CursorAction enum is protected -->
-    <modify-function signature="moveCursor(QAbstractItemView::CursorAction,QFlags&lt;Qt::KeyboardModifier&gt;)" remove="all"/>
   </object-type>
   <object-type name="QAbstractSlider">
     <enum-type name="SliderAction"/>
