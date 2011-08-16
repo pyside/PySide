@@ -1,6 +1,7 @@
 
 import unittest
 import colorsys
+import PySide
 
 from PySide.QtCore import Qt, qFuzzyCompare
 from PySide.QtGui import QColor
@@ -67,6 +68,17 @@ class QColorCopy(unittest.TestCase):
         self.assertEqual(original, copy)
         del original
         self.assertEqual(copy, QColor(0, 0, 255))
+
+class QColorRepr(unittest.TestCase):
+    def testReprFunction(self):
+        c = QColor(100, 120, 200)
+        c2 = eval(c.__repr__())
+        self.assertEqual(c, c2)
+
+    def testStrFunction(self):
+        c = QColor('red')
+        c2 = eval(c.__str__())
+        self.assertEqual(c, c2)
 
 if __name__ == '__main__':
     unittest.main()
