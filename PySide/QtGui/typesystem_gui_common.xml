@@ -1100,11 +1100,62 @@
       <include file-name="QPixmap" location="global"/>
     </extra-includes>
   </value-type>
+
+  <template name="qcolor_repr">
+      switch(%CPPSELF.spec()) {
+        case QColor::Rgb:
+        {
+            qreal r, g, b, a;
+            %CPPSELF.getRgbF(&amp;r, &amp;g, &amp;b, &amp;a);
+            QString repr = QString().sprintf("PySide.QtGui.QColor.fromRgbF(%.6f, %.6f, %.6f, %.6f)", r, g, b, a);
+            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            break;
+        }
+        case QColor::Hsv:
+        {
+            qreal h, s, v, a;
+            %CPPSELF.getHsvF(&amp;h, &amp;s, &amp;v, &amp;a);
+            QString repr = QString().sprintf("PySide.QtGui.QColor.fromHsvF(%.6f, %.6f, %.6f, %.6f)", h, s, v, a);
+            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            break;
+        }
+        case QColor::Cmyk:
+        {
+            qreal c, m, y, k, a;
+            %CPPSELF.getCmykF(&amp;c, &amp;m, &amp;y, &amp;k, &amp;a);
+            QString repr = QString().sprintf("PySide.QtGui.QColor.fromCmykF(%.6f, %.6f, %.6f, %.6f, %.6f)", c, m, y, k, a);
+            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            break;
+        }
+        #if QT_VERSION >= 0x040600
+        case QColor::Hsl:
+        {
+            qreal h, s, l, a;
+            %CPPSELF.getHsvF(&amp;h, &amp;s, &amp;l, &amp;a);
+            QString repr = QString().sprintf("PySide.QtGui.QColor.fromHslF(%.6f, %.6f, %.6f, %.6f)", h, s, l, a);
+            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            break;
+        }
+        #endif
+        default:
+            %PYARG_0 = 0;
+     }
+  </template>
   <value-type name="QColor">
     <enum-type name="Spec"/>
     <extra-includes>
       <include file-name="QVariant" location="global"/>
     </extra-includes>
+    <add-function signature="__repr__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="qcolor_repr" />
+        </inject-code>
+    </add-function>
+    <add-function signature="__str__" return-type="PyObject*">
+        <inject-code class="target" position="beginning">
+            <insert-template name="qcolor_repr" />
+        </inject-code>
+    </add-function>
     <add-function signature="__reduce__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
           PyObject *createFunction = 0;
