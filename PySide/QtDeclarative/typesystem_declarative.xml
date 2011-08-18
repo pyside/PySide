@@ -46,7 +46,8 @@
         </inject-documentation>
 
         <inject-code class="target">
-            %PYARG_0 = %CONVERTTOPYTHON[int](PySide::qmlRegisterType(%1, %2, %3, %4, %5));
+        int %0 = PySide::qmlRegisterType(%ARGUMENT_NAMES);
+        %PYARG_0 = %CONVERTTOPYTHON[int](%0);
         </inject-code>
     </add-function>
 
