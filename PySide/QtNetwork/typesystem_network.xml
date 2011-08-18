@@ -233,17 +233,17 @@
                 return 16;
             </inject-code>
         </add-function>
-                <add-function signature="__getitem__">
+        <add-function signature="__getitem__">
             <inject-code class="target" position="beginning">
-                if (_i >= 16) {
-                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                    return 0;
-                }
+            if (_i >= 16) {
+                PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                return 0;
+            }
+            if (_i &lt; 0)
+                _i = 16 - qAbs(_i);
 
-                if (_i &lt; 0)
-                    _i = 16 - qAbs(_i);
-
-                return %CONVERTTOPYTHON[uint](%CPPSELF->c[_i]);
+            uint item = %CPPSELF.c[_i];
+            return %CONVERTTOPYTHON[uint](item);
             </inject-code>
         </add-function>
         <add-function signature="__len__">
@@ -253,17 +253,15 @@
         </add-function>
         <add-function signature="__setitem__">
             <inject-code class="target" position="beginning">
-                if (_i >= 16) {
-                    PyErr_SetString(PyExc_IndexError, "index out of bounds");
-                    return -1;
-                }
-
-                if (_i &lt; 0)
-                    _i = 16 - qAbs(_i);
-
-                %CPPSELF->c[_i] = %CONVERTTOCPP[quint8](_value);
-
-                return 0;
+            if (_i >= 16) {
+                PyErr_SetString(PyExc_IndexError, "index out of bounds");
+                return -1;
+            }
+            if (_i &lt; 0)
+                _i = 16 - qAbs(_i);
+            quint8 item = %CONVERTTOCPP[quint8](_value);
+            %CPPSELF.c[_i] = item;
+            return 0;
             </inject-code>
         </add-function>
     </value-type>
