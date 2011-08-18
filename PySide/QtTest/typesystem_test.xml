@@ -49,6 +49,7 @@
   <rejection class="QTest" function-name="toString&lt;uint>"/>
   <rejection class="QTest" function-name="toString&lt;ulong>"/>
   <rejection class="QTest" function-name="toString&lt;ushort>"/>
+  <rejection class="QTest" function-name="qt_snprintf"/>
 
   <rejection class="QTest" function-name="compare_helper"/>
   <rejection class="QTest" function-name="touchEvent"/>
