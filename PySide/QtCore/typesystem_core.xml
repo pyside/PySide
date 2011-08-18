@@ -1497,10 +1497,9 @@
      <inject-code class="target" position="beginning">
        // Avoid return +1 because SignalManager connect to "destroyed()" signal to control object timelife
        int ret = %CPPSELF.%FUNCTION_NAME(%1);
-       if (ret > 0 &amp;&amp; ((strcmp(%1, SIGNAL(destroyed())) == 0) || (strcmp(%1, SIGNAL(destroyed(QObject*))) == 0))) {
-           if (PySide::SignalManager::instance().hasConnectionWith(%CPPSELF))
-             ret--;
-       }
+       if (ret > 0 &amp;&amp; ((strcmp(%1, SIGNAL(destroyed())) == 0) || (strcmp(%1, SIGNAL(destroyed(QObject*))) == 0)))
+       ret -= PySide::SignalManager::instance().countConnectionsWith(%CPPSELF);
+
        %PYARG_0 = %CONVERTTOPYTHON[int](ret);
      </inject-code>
    </modify-function>
@@ -1515,6 +1514,19 @@
       <modify-argument index="return">
          <define-ownership owner="default"/>
       </modify-argument>
+  </modify-function>
+
+   <!-- This is not supported due the lack of information durring the call with no arguments,  this can cause a memory leak -->
+   <modify-function signature="disconnect(const char*, const QObject *, const char *)"> 
+       <modify-argument index="1">
+           <remove-default-expression />
+       </modify-argument>
+       <modify-argument index="2">
+           <remove-default-expression />
+       </modify-argument>
+       <modify-argument index="3">
+           <remove-default-expression />
+       </modify-argument>
    </modify-function>
   </object-type>
   <object-type name="QAbstractListModel" polymorphic-id-expression="qobject_cast&lt;QAbstractListModel*&gt;(%1)">

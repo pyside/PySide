@@ -43,6 +43,7 @@
 #endif
 #define PYSIDE_SLOT '1'
 #define PYSIDE_SIGNAL '2'
+#include "globalreceiverv2.h"
 #include "globalreceiver.h"
 
 #define PYTHON_TYPE "PyObject"
@@ -177,7 +178,26 @@ using namespace PySide;
 
 struct SignalManager::SignalManagerPrivate
 {
+    SharedMap m_globalReceivers;
+
+    //Deprecated
     GlobalReceiver m_globalReceiver;
+
+    SignalManagerPrivate()
+    {
+        m_globalReceivers = SharedMap( new QMap<QByteArray, GlobalReceiverV2*>() );
+    }
+
+    ~SignalManagerPrivate()
+    {
+        if (!m_globalReceivers.isNull()) {
+            QList<GlobalReceiverV2*> values = m_globalReceivers->values();
+            m_globalReceivers->clear();
+            if (values.size()) {
+                qDeleteAll(values);
+            }
+        }
+    }
 };
 
 static void clearSignalManager()
@@ -243,6 +263,50 @@ void SignalManager::addGlobalSlot(const char* slot, PyObject* callback)
 int SignalManager::addGlobalSlotGetIndex(const char* slot, PyObject* callback)
 {
     return m_d->m_globalReceiver.addSlot(slot, callback);
+}
+
+QObject* SignalManager::globalReceiver(QObject *sender, PyObject *callback)
+{
+    SharedMap globalReceivers = m_d->m_globalReceivers;
+    QByteArray hash = GlobalReceiverV2::hash(callback);
+    GlobalReceiverV2* gr = 0;
+    if (!globalReceivers->contains(hash) && sender) {
+        gr = (*globalReceivers)[hash] = new GlobalReceiverV2(callback, globalReceivers);
+        gr->incRef(sender); // create a link reference
+        gr->decRef(); // remove extra reference
+    } else {
+        gr = (*globalReceivers)[hash];
+        if (sender)
+            gr->incRef(sender);
+    }
+
+    return reinterpret_cast<QObject*>(gr);
+}
+
+int SignalManager::countConnectionsWith(const QObject *object)
+{
+    int count = 0;
+    foreach(GlobalReceiverV2* g, m_d->m_globalReceivers->values()) {
+        if (g->refCount(object))
+            count++;
+    }
+    return count;
+}
+
+void SignalManager::notifyGlobalReceiver(QObject* receiver)
+{
+    reinterpret_cast<GlobalReceiverV2*>(receiver)->notify();
+}
+
+void SignalManager::releaseGlobalReceiver(const QObject* source, QObject* receiver)
+{
+    GlobalReceiverV2* gr = reinterpret_cast<GlobalReceiverV2*>(receiver);
+    gr->decRef(source);
+}
+
+int SignalManager::globalReceiverSlotIndex(QObject* receiver, const char* signature) const
+{
+    return reinterpret_cast<GlobalReceiverV2*>(receiver)->addSlot(signature);
 }
 
 static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args)
@@ -480,6 +544,7 @@ bool SignalManager::hasConnectionWith(const QObject *object)
     return m_d->m_globalReceiver.hasConnectionWith(object);
 }
 
+
 const QMetaObject* SignalManager::retriveMetaObject(PyObject *self)
 {
     Shiboken::GilState gil;
@@ -497,4 +562,5 @@ const QMetaObject* SignalManager::retriveMetaObject(PyObject *self)
     mo->update();
     return mo;
 }
+
 
