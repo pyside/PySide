@@ -8,7 +8,7 @@ static bool isDecorator(PyObject* method, PyObject* self)
            reinterpret_cast<PyMethodObject*>(method)->im_func;
 }
 
-static bool getReceiver(PyObject* callback, QObject** receiver, PyObject** self)
+static bool getReceiver(QObject *source, PyObject* callback, QObject** receiver, PyObject** self)
 {
     bool forceGlobalReceiver = false;
     if (PyMethod_Check(callback)) {
@@ -29,7 +29,7 @@ static bool getReceiver(PyObject* callback, QObject** receiver, PyObject** self)
     bool usingGlobalReceiver = !*receiver || forceGlobalReceiver;
     if (usingGlobalReceiver) {
         PySide::SignalManager& signalManager = PySide::SignalManager::instance();
-        *receiver = signalManager.globalReceiver();
+        *receiver = signalManager.globalReceiver(source, callback);
     }
 
     return usingGlobalReceiver;
@@ -68,7 +68,7 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     // Extract receiver from callback
     QObject* receiver = 0;
     PyObject* self = 0;
-    bool usingGlobalReceiver = getReceiver(callback, &receiver, &self);
+    bool usingGlobalReceiver = getReceiver(source, callback, &receiver, &self);
     if (receiver == 0 && self == 0)
         return false;
 
@@ -79,20 +79,27 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     if (slotIndex == -1) {
         if (!usingGlobalReceiver && self && !Shiboken::Object::hasCppWrapper((SbkObject*)self)) {
             qWarning() << "You can't add dynamic slots on an object originated from C++.";
+            if (usingGlobalReceiver)
+                signalManager.releaseGlobalReceiver(source, receiver);
+
             return false;
         }
 
         if (usingGlobalReceiver)
-            slotIndex = signalManager.addGlobalSlotGetIndex(slot, callback);
+            slotIndex = signalManager.globalReceiverSlotIndex(receiver, slot);
         else
             slotIndex = PySide::SignalManager::registerMetaMethodGetIndex(receiver, slot, QMetaMethod::Slot);
 
-        if (slotIndex == -1)
+        if (slotIndex == -1) {
+            if (usingGlobalReceiver)
+                signalManager.releaseGlobalReceiver(source, receiver);
+
             return false;
+        }
     }
     if (QMetaObject::connect(source, signalIndex, receiver, slotIndex, type)) {
         if (usingGlobalReceiver)
-            signalManager.globalReceiverConnectNotify(source, slotIndex);
+            signalManager.notifyGlobalReceiver(receiver);
         #ifndef AVOID_PROTECTED_HACK
             source->connectNotify(signal - 1);
         #else
@@ -103,6 +110,10 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
 
         return true;
     }
+
+    if (usingGlobalReceiver)
+        signalManager.releaseGlobalReceiver(source, receiver);
+
     return false;
 }
 
@@ -117,27 +128,30 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
     // Extract receiver from callback
     QObject* receiver = 0;
     PyObject* self = 0;
-    bool usingGlobalReceiver = getReceiver(callback, &receiver, &self);
+    bool usingGlobalReceiver = getReceiver(NULL, callback, &receiver, &self);
     if (receiver == 0 && self == 0)
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
+    int signalIndex = source->metaObject()->indexOfSignal(++signal);
+    int slotIndex = -1;
+
     const QByteArray callbackSig = PySide::Signal::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
     QByteArray qtSlotName(callbackSig);
-    qtSlotName = qtSlotName.prepend('1');
 
-    if (QObject::disconnect(source, signal, receiver, qtSlotName.constData())) {
-        if (usingGlobalReceiver) {
-            int slotIndex = metaObject->indexOfSlot(callbackSig.constData());
-            signalManager.globalReceiverDisconnectNotify(source, slotIndex);
+    slotIndex = metaObject->indexOfSlot(qtSlotName);
+
+    if (QMetaObject::disconnectOne(source, signalIndex, receiver, slotIndex)) {
+        if (usingGlobalReceiver)
+            signalManager.releaseGlobalReceiver(source, receiver);
+
         #ifndef AVOID_PROTECTED_HACK
-            source->disconnectNotify(signal - 1);
+            source->disconnectNotify(qtSlotName);
         #else
             // Need to cast to QObjectWrapper* and call the public version of
             // connectNotify when avoiding the protected hack.
-            reinterpret_cast<QObjectWrapper*>(source)->disconnectNotify(signal - 1);
+            reinterpret_cast<QObjectWrapper*>(source)->disconnectNotify(qtSlotName);
         #endif
-        }
         return true;
     }
     return false;

@@ -297,3 +297,4 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
 
     return -1;
 }
+

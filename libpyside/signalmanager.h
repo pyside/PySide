@@ -57,15 +57,14 @@ class PYSIDE_API SignalManager
 {
 public:
     static SignalManager& instance();
-    QObject* globalReceiver();
+
+    QObject* globalReceiver(QObject* sender, PyObject* callback);
+    void releaseGlobalReceiver(const QObject* sender, QObject* receiver);
+    int globalReceiverSlotIndex(QObject* sender, const char* slotSignature) const;
+    void notifyGlobalReceiver(QObject* receiver);
+
     bool emitSignal(QObject* source, const char* signal, PyObject* args);
-
     static int qt_metacall(QObject* object, QMetaObject::Call call, int id, void** args);
-    void addGlobalSlot(const char* slot, PyObject* callback);
-    int addGlobalSlotGetIndex(const char* slot, PyObject* callback);
-
-    void globalReceiverConnectNotify(QObject *sender, int slotIndex);
-    void globalReceiverDisconnectNotify(QObject *sender, int slotIndex);
 
     // Used to register a new signal/slot on QMetaobject of source.
     static bool registerMetaMethod(QObject* source, const char* signature, QMetaMethod::MethodType type);
@@ -75,10 +74,20 @@ public:
     static const QMetaObject* retriveMetaObject(PyObject* self);
 
     // Used to discovery if SignalManager was connected with object "destroyed()" signal.
-    bool hasConnectionWith(const QObject *object);
+    int countConnectionsWith(const QObject *object);
 
     // Disconnect all signals managed by Globalreceiver
     void clear();
+
+
+    PYSIDE_DEPRECATED(QObject* globalReceiver());
+    PYSIDE_DEPRECATED(void addGlobalSlot(const char* slot, PyObject* callback));
+    PYSIDE_DEPRECATED(int addGlobalSlotGetIndex(const char* slot, PyObject* callback));
+
+    PYSIDE_DEPRECATED(void globalReceiverConnectNotify(QObject *sender, int slotIndex));
+    PYSIDE_DEPRECATED(void globalReceiverDisconnectNotify(QObject *sender, int slotIndex));
+    PYSIDE_DEPRECATED(bool hasConnectionWith(const QObject *object));
+
 private:
     struct SignalManagerPrivate;
     SignalManagerPrivate* m_d;
