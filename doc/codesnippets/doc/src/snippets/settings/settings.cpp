@@ -68,11 +68,11 @@ void snippet_ctor2()
 //! [5]
     settings.setValue("editor/wrapMargin", 68)
 //! [5] //! [6]
-    margin = settings.value("editor/wrapMargin").toInt()
+    margin = int(settings.value("editor/wrapMargin"))
 //! [6]
     {
 //! [7]
-    margin = settings.value("editor/wrapMargin", 80).toInt()
+    margin = int(settings.value("editor/wrapMargin", 80))
 //! [7]
     }
 
