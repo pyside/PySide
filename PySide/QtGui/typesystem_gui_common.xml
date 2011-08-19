@@ -5827,9 +5827,13 @@
       </modify-argument>
     </modify-function>
     <modify-function signature="setWidget(QWidget*)">
-      <modify-argument index="1">
-        <reference-count action="set"/>
-      </modify-argument>
+      <inject-code>
+          QWidget* _old = %CPPSELF.widget();
+          if (_old)
+             Shiboken::Object::setParent(NULL, %CONVERTTOPYTHON[QWidget*](_old));
+          %CPPSELF.%FUNCTION_NAME(%1);
+          Shiboken::Object::setParent(%PYSELF, %PYARG_1);
+      </inject-code>
     </modify-function>
   </object-type>
   <!-- a QObject so main-thread delete redundant -->
