@@ -8,6 +8,7 @@ set(libpyside_SRC
     destroylistener.cpp
     signalmanager.cpp
     globalreceiver.cpp
+    globalreceiverv2.cpp
     pysideclassinfo.cpp
     pysidemetafunction.cpp
     pysidesignal.cpp
