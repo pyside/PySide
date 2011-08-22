@@ -1145,7 +1145,9 @@
         }
         #endif
         default:
-            %PYARG_0 = 0;
+        {
+            %PYARG_0 = PyString_FromString("PySide.QtGui.QColor()");
+        }
      }
   </template>
   <value-type name="QColor">
@@ -1203,7 +1205,9 @@
             }
             #endif
             default:
-                %PYARG_0 = 0;
+            {
+                %PYARG_0 = Py_BuildValue("(N(O))", PyObject_Type(%PYSELF), Py_None);
+            }
           }
         </inject-code>
     </add-function>
@@ -1240,8 +1244,10 @@
                 break;
           }
           default:
+          {
                 %PYARG_0 = 0;
           }
+        }
         </inject-code>
     </add-function>
     <!-- ### "QColor(QColor::Spec)" is an internal method. -->

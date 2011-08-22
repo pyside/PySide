@@ -3,7 +3,7 @@ import unittest
 import colorsys
 import PySide
 
-from PySide.QtCore import Qt, qFuzzyCompare
+from PySide.QtCore import Qt
 from PySide.QtGui import QColor
 
 
@@ -68,6 +68,17 @@ class QColorCopy(unittest.TestCase):
         self.assertEqual(original, copy)
         del original
         self.assertEqual(copy, QColor(0, 0, 255))
+
+    def testEmptyCopy(self):
+        from copy import deepcopy
+
+        original = QColor()
+        copy = deepcopy([original])[0]
+        self.assert_(original is not copy)
+        self.assertEqual(original, copy)
+        del original
+        self.assertEqual(copy, QColor())
+
 
 class QColorRepr(unittest.TestCase):
     def testReprFunction(self):
