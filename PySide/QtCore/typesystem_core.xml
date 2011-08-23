@@ -155,6 +155,8 @@
   <primitive-type name="QVariant::Type" default-constructor="QVariant::Invalid">
     <conversion-rule file="qvariant_type_conversions.h" />
   </primitive-type>
+  <primitive-type name="QVariantMap"/>
+
   <container-type name="QSet" type="set">
     <conversion-rule file="qset_conversions.h"/>
     <include file-name="QSet" location="global"/>
