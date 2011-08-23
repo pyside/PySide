@@ -8,9 +8,14 @@ add_custom_target(qdoc3
                 COMMENT "Running qdoc3 against Qt source code..."
                 SOURCE "pyside.qdocconf")
 
+
+find_program(SPHINX_BUILD NAMES sphinx-build)
+if (${SPHINX_BUILD} MATCHES "SPHINX_BUILD-NOTFOUND")
+    message(FATAL_ERROR "sphinx-build command not found.")
+endif()
 add_custom_target(apidoc
                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/rst
-                  COMMAND sphinx-build -b html  ${CMAKE_CURRENT_BINARY_DIR}/rst html
+                  COMMAND ${SHIBOKEN_PYTHON_INTERPRETER} ${SPHINX_BUILD} -b html  ${CMAKE_CURRENT_BINARY_DIR}/rst html
                  )
 
 # create conf.py based on conf.py.in
