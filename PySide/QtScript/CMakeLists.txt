@@ -1,10 +1,10 @@
 project(QtScript)
 
-if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
-    set (QtCore_46_SRC )
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 7)
+    set (QtScript_47_SRC )
 else()
-    set(QtScript_46_SRC
-    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptprogram_wrapper.cpp
+    set(QtScript_47_SRC
+        ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptprogram_wrapper.cpp
     )
 endif()
 
@@ -22,7 +22,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptextensionplugin_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptstring_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptvalue_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptvalueiterator_wrapper.cpp
-${QtScript_46_SRC}
+${QtScript_47_SRC}
 )
 
 set(QtScript_typesystem_path "${QtCore_SOURCE_DIR}")
