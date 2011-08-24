@@ -2370,6 +2370,10 @@
       <modify-argument index="3">
         <replace-default-expression with="0" />
       </modify-argument>
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+
       <inject-code class="target" position="beginning">
         %PYARG_0 = addActionWithPyObject(%CPPSELF, QIcon(), %1, %2, %3);
       </inject-code>
@@ -2379,10 +2383,24 @@
       <modify-argument index="4">
         <replace-default-expression with="0" />
       </modify-argument>
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+
       <inject-code class="target" position="beginning">
         %PYARG_0 = addActionWithPyObject(%CPPSELF, %1, %2, %3, %4);
       </inject-code>
     </add-function>
+
+    <modify-function signature="clear()">
+      <inject-code>
+          foreach(QAction *act, %CPPSELF.actions()) {
+            Shiboken::AutoDecRef pyAct(%CONVERTTOPYTHON[QAction*](act));
+            Shiboken::Object::setParent(NULL, pyAct);
+            Shiboken::Object::invalidate(pyAct);
+          }
+      </inject-code>
+    </modify-function>
 
   </object-type>
 
@@ -2433,6 +2451,15 @@
       <modify-argument index="return">
         <parent index="this" action="add"/>
       </modify-argument>
+    </modify-function>
+    <modify-function signature="clear()">
+      <inject-code>
+          foreach(QAction *act, %CPPSELF.actions()) {
+            Shiboken::AutoDecRef pyAct(%CONVERTTOPYTHON[QAction*](act));
+            Shiboken::Object::setParent(NULL, pyAct);
+            Shiboken::Object::invalidate(pyAct);
+          }
+      </inject-code>
     </modify-function>
   </object-type>
   <object-type name="QMotifStyle">
@@ -5123,6 +5150,10 @@
       <modify-argument index="4">
         <remove-argument />
       </modify-argument>
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
+      </modify-argument>
+
       <inject-code>
         QAction* action = %CPPSELF.addAction(%1, %2);
         %PYARG_0 = %CONVERTTOPYTHON[QAction*](action);
@@ -5135,6 +5166,9 @@
       </modify-argument>
       <modify-argument index="3">
         <remove-argument />
+      </modify-argument>
+      <modify-argument index="return">
+        <parent index="this" action="add"/>
       </modify-argument>
       <inject-code>
         QAction* action = %CPPSELF.addAction(%1);
@@ -5189,6 +5223,14 @@
                 lst &lt;&lt; pyChild;
             }
         }
+
+        //Remove actions
+        foreach(QAction *act, %CPPSELF.actions()) {
+            Shiboken::AutoDecRef pyAct(%CONVERTTOPYTHON[QAction*](act));
+            Shiboken::Object::setParent(NULL, pyAct);
+            Shiboken::Object::invalidate(pyAct);
+        }
+
         %CPPSELF.clear();
         foreach(PyObject* obj, lst) {
             Shiboken::Object::invalidate(reinterpret_cast&lt;SbkObject* &gt;(obj));
