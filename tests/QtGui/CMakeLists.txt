@@ -1,5 +1,6 @@
 #Keep this in alphabetical sort
 
+PYSIDE_TEST(action_clear.py)
 PYSIDE_TEST(api2_test.py)
 PYSIDE_TEST(add_action_test.py)
 PYSIDE_TEST(bug_172.py)
