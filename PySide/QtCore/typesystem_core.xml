@@ -1518,7 +1518,7 @@
   </modify-function>
 
    <!-- This is not supported due the lack of information durring the call with no arguments,  this can cause a memory leak -->
-   <modify-function signature="disconnect(const char*, const QObject *, const char *)"> 
+   <modify-function signature="disconnect(const char*, const QObject *, const char *)">
        <modify-argument index="1">
            <remove-default-expression />
        </modify-argument>
