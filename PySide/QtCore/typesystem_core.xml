@@ -104,7 +104,9 @@
   <primitive-type name="qulonglong" target-lang-api-name="PyLong" />
   <primitive-type name="short"/>
   <primitive-type name="signed short"/>
+  <primitive-type name="signed short int"/>
   <primitive-type name="ushort" target-lang-api-name="PyInt" />
+  <primitive-type name="unsigned short int" />
   <primitive-type name="unsigned short"/>
   <primitive-type name="char"/>
   <primitive-type name="signed char"/>
@@ -116,7 +118,9 @@
   <primitive-type name="ulong"/>
   <primitive-type name="unsigned int"/>
   <primitive-type name="signed long"/>
+  <primitive-type name="signed long int"/>
   <primitive-type name="long"/>
+  <primitive-type name="unsigned long int" />
   <primitive-type name="unsigned long">
     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
     <include file-name="signalmanager.h" location="global"/>
