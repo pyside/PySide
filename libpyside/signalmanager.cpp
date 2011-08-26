@@ -275,10 +275,12 @@ QObject* SignalManager::globalReceiver(QObject *sender, PyObject *callback)
     SharedMap globalReceivers = m_d->m_globalReceivers;
     QByteArray hash = GlobalReceiverV2::hash(callback);
     GlobalReceiverV2* gr = 0;
-    if (!globalReceivers->contains(hash) && sender) {
+    if (!globalReceivers->contains(hash)) {
         gr = (*globalReceivers)[hash] = new GlobalReceiverV2(callback, globalReceivers);
-        gr->incRef(sender); // create a link reference
-        gr->decRef(); // remove extra reference
+        if (sender) {
+            gr->incRef(sender); // create a link reference
+            gr->decRef(); // remove extra reference
+        }
     } else {
         gr = (*globalReceivers)[hash];
         if (sender)
