@@ -163,6 +163,27 @@
           </conversion-rule>
       </modify-argument>
     </modify-function>
+
+    <add-function signature="qt_metacall()">
+        <inject-code class="native">
+            static int _signalIndex = -1;
+            static QMetaMethod _m;
+
+            if (_signalIndex == -1) {
+                _signalIndex = QWebPage::staticMetaObject.indexOfSlot("shouldInterruptJavaScript()");
+                _m = QWebPage::staticMetaObject.method(_signalIndex);
+            }
+
+            if (_signalIndex == id) {
+                Shiboken::GilState gil;
+                PyObject* self = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(this);
+                if (self) {
+                    Shiboken::AutoDecRef _pyMethod(PyObject_GetAttrString(self, "shouldInterruptJavaScript"));
+                    return PySide::SignalManager::callPythonMetaMethod(_m, args, _pyMethod, false);
+                }
+            }
+        </inject-code>
+    </add-function>
   </object-type>
   <object-type name="QWebHistory"/>
   <object-type name="QWebHistoryInterface"/>
