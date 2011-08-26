@@ -8,37 +8,31 @@ class JSFuncs(QObject):
     functionID = -1
     @Slot(unicode,result=unicode)
     def slot_str_str(self, x):
-        print "slot_str_str(%r)"%x
         JSFuncs.functionID = 0
         return x.upper()
 
     @Slot(unicode,result='QVariant')
     def slot_str_list(self, x):
-        print "slot_str_list(%r)"%x
         JSFuncs.functionID = 1
         return [x, x]
 
     @Slot('QStringList',result=unicode)
     def slot_strlist_str(self, x):
-        print "slot_strlist_str(%r)"%x
         JSFuncs.functionID = 2
         return x[-1]
 
     @Slot('QVariant',result=unicode)
     def slot_variant_str(self, x):
-        print "slot_variant_str(%r)"%x
         JSFuncs.functionID = 3
         return unicode(x)
 
     @Slot('QVariantList',result=unicode)
     def slot_variantlist_str(self, x):
-        print "slot_variantlist_str(%r)"%x
         JSFuncs.functionID = 4
         return unicode(x[-1])
 
     @Slot('QVariantMap',result=unicode)
     def slot_variantmap_str(self, x):
-        print "slot_variantmap_str(%r)"%x
         JSFuncs.functionID = 5
         return unicode(x["foo"])
 
