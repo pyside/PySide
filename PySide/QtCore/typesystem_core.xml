@@ -62,7 +62,6 @@
   <rejection class="*" function-name="tr" />
   <rejection class="*" function-name="trUtf8" />
   <rejection class="*" function-name="qt_metacast" />
-  <rejection class="*" function-name="qt_metacall" />
   <!-- From Qt4.6 -->
   <rejection class="*" field-name="d_ptr"/>
   <rejection class="*" field-name="staticQtMetaObject"/>
