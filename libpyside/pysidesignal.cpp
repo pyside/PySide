@@ -374,9 +374,14 @@ PyObject* signalInstanceConnect(PyObject* self, PyObject* args, PyObject* kwds)
     if (match) {
         Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
         Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->d->source, "connect"));
-        return PyObject_CallObject(pyMethod, tupleArgs);
+        PyObject* result = PyObject_CallObject(pyMethod, tupleArgs);
+        if (result == Py_True)
+            return result;
+        else
+            Py_DECREF(result);
     }
 
+    PyErr_Format(PyExc_RuntimeError, "Fail to connect signal %s.", source->d->signature);
     return 0;
 }
 
@@ -416,7 +421,6 @@ PyObject* signalInstanceGetItem(PyObject* self, PyObject* key)
     }
     PyErr_Format(PyExc_IndexError, "Signature %s not found for signal: %s", sig, sigName);
     free(sig);
-
     return 0;
 }
 
@@ -460,9 +464,14 @@ PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
     if (match) {
         Shiboken::AutoDecRef tupleArgs(PyList_AsTuple(pyArgs));
         Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(source->d->source, "disconnect"));
-        return PyObject_CallObject(pyMethod, tupleArgs);
+        PyObject* result = PyObject_CallObject(pyMethod, tupleArgs);
+        if (result == Py_True)
+            return result;
+        else
+            Py_DECREF(result);
     }
 
+    PyErr_Format(PyExc_RuntimeError, "Fail to disconnect signal %s.", source->d->signature);
     return 0;
 }
 
@@ -674,7 +683,13 @@ bool connect(PyObject* source, const char* signal, PyObject* callback)
 
     Shiboken::AutoDecRef pySignature(PyString_FromString(signal));
     Shiboken::AutoDecRef pyArgs(PyTuple_Pack(3, source, pySignature.object(), callback));
-    return PyObject_CallObject(pyMethod, pyArgs);
+    PyObject* result =  PyObject_CallObject(pyMethod, pyArgs);
+    if (result == Py_False) {
+        PyErr_Format(PyExc_RuntimeError, "Fail to connect signal %s, to python callable object.", signal);
+        Py_DECREF(result);
+        result = 0;
+    }
+    return result;
 }
 
 PySideSignalInstance* newObjectFromMethod(PyObject* source, const QList<QMetaMethod>& methodList)
