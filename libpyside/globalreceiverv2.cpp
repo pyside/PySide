@@ -52,7 +52,7 @@ class DynamicSlotDataV2
 
         int addSlot(const char* signature);
         int id(const char* signature) const;
-        PyObject* call(PyObject* args);
+        PyObject* callback();
         QByteArray hash() const;
         void notify();
 
@@ -115,20 +115,17 @@ QByteArray DynamicSlotDataV2::hash(PyObject* callback)
         return QByteArray::number((qlonglong)PyObject_Hash(callback));
 }
 
-PyObject* DynamicSlotDataV2::call(PyObject* args)
+PyObject* DynamicSlotDataV2::callback()
 {
     PyObject* callback = m_callback;
 
     //create a callback based on method data
     if (m_isMethod)
         callback = PyMethod_New(m_callback, m_pythonSelf, m_pyClass);
+    else
+        Py_INCREF(callback);
 
-    PyObject* result =  PyObject_CallObject(callback, args);
-
-    if (m_isMethod)
-        Py_DECREF(callback);
-
-    return result;
+    return callback;
 }
 
 int DynamicSlotDataV2::id(const char* signature) const
@@ -282,26 +279,9 @@ int GlobalReceiverV2::qt_metacall(QMetaObject::Call call, int id, void** args)
         m_refs.removeAll(obj); // remove all refs to this object
         decRef(); //remove the safe ref
     } else {
-        Shiboken::GilState gil;
-        PyObject* retval = 0;
-
-        bool isShortCurt = (strstr(slot.signature(), "(") == 0);
-        if (isShortCurt) {
-            retval = m_data->call(reinterpret_cast<PyObject*>(args[1]));
-        } else {
-            QList<QByteArray> paramTypes = slot.parameterTypes();
-            Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
-            for (int i = 0, max = paramTypes.count(); i < max; ++i) {
-                PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]); // Do not increment the reference
-                PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
-            }
-            retval = m_data->call(preparedArgs);
-        }
-
-        if (!retval)
-            PyErr_Print();
-        else
-            Py_DECREF(retval);
+        bool isShortCuit = (strstr(slot.signature(), "(") == 0);
+        Shiboken::AutoDecRef callback(m_data->callback());
+        SignalManager::callPythonMetaMethod(slot, args, callback, isShortCuit);
     }
 
     return -1;

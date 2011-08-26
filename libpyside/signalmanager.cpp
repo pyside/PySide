@@ -50,6 +50,12 @@
 
 namespace {
     static PyObject *metaObjectAttr = 0;
+
+    static int callMethod(QObject* object, int id, void** args);
+    static PyObject* parseArguments(QList<QByteArray> paramTypese, void** args);
+    static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args);
+    static bool emitNormalSignal(QObject* source, int signalIndex, const char* signal, PyObject* args, const QStringList& argTypes);
+
     static void destroyMetaObject(void* obj)
     {
         delete reinterpret_cast<PySide::DynamicQMetaObject*>(obj);
@@ -58,7 +64,6 @@ namespace {
 
 namespace PySide {
 
-static int callMethod(QObject* object, int id, void** args);
 
 PyObjectWrapper::PyObjectWrapper()
     :m_me(Py_None)
@@ -309,58 +314,6 @@ int SignalManager::globalReceiverSlotIndex(QObject* receiver, const char* signat
     return reinterpret_cast<GlobalReceiverV2*>(receiver)->addSlot(signature);
 }
 
-static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args)
-{
-    void* signalArgs[2] = {0, args};
-    source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
-    return true;
-}
-
-static bool emitNormalSignal(QObject* source, int signalIndex, const char* signal, PyObject* args, const QStringList& argTypes)
-{
-    Shiboken::AutoDecRef sequence(PySequence_Fast(args, 0));
-    int argsGiven = PySequence_Fast_GET_SIZE(sequence.object());
-
-    if (argsGiven != argTypes.count()) {
-        PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", signal, argTypes.count(), argsGiven);
-        return false;
-    }
-
-    QVariant* signalValues = new QVariant[argsGiven];
-    void** signalArgs = new void*[argsGiven + 1];
-    signalArgs[0] = 0;
-
-    int i;
-    for (i = 0; i < argsGiven; ++i) {
-        QByteArray typeName = argTypes[i].toAscii();
-        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
-        if (typeResolver) {
-            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType) {
-                int typeId = QMetaType::type(typeName);
-                if (!typeId) {
-                    PyErr_Format(PyExc_TypeError, "Value type used on signal needs to be registered on meta type: %s", typeName.data());
-                    break;
-                }
-                signalValues[i] = QVariant(typeId, (void*) 0);
-            }
-            signalArgs[i+1] = signalValues[i].data();
-            typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i), &signalArgs[i+1]);
-        } else {
-            PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", qPrintable(argTypes[i]));
-            break;
-        }
-    }
-
-    bool ok = i == argsGiven;
-    if (ok)
-        source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
-
-    delete[] signalArgs;
-    delete[] signalValues;
-
-    return ok;
-}
-
 bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* args)
 {
     if (!Signal::checkQtSignal(signal))
@@ -444,60 +397,36 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
     return id;
 }
 
-static int PySide::callMethod(QObject* object, int id, void** args)
+int SignalManager::callPythonMetaMethod(const QMetaMethod& method, void** args, PyObject* pyMethod, bool isShortCuit)
 {
-    const QMetaObject* metaObject = object->metaObject();
-    QMetaMethod method = metaObject->method(id);
+    Q_ASSERT(pyMethod);
 
-    if (method.methodType() == QMetaMethod::Signal) {
-        // emit python signal
-        QMetaObject::activate(object, id, args);
+    Shiboken::GilState gil;
+    PyObject* pyArguments = NULL;
+
+    if (isShortCuit)
+        pyArguments = reinterpret_cast<PyObject*>(args[1]);
+    else
+        pyArguments = parseArguments(method.parameterTypes(), args);
+
+    //keep the returnType this call be destroyed after method call
+    QByteArray returnType = method.typeName();
+
+    Shiboken::AutoDecRef retval(PyObject_CallObject(pyMethod, pyArguments));
+
+    if (!isShortCuit)
+        Py_XDECREF(pyArguments);
+
+    if (retval.isNull()) {
+        PyErr_Print();
     } else {
-        // call python slot
-        Shiboken::GilState gil;
-        QList<QByteArray> paramTypes = method.parameterTypes();
-        PyObject* self = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(object);
-        PyObject* preparedArgs = NULL;
-        Py_ssize_t argsSize = paramTypes.count();
-
-        if (argsSize)
-            preparedArgs = PyTuple_New(argsSize);
-
-        for (int i = 0, max = paramTypes.count(); i < max; ++i) {
-            void* data = args[i+1];
-            const char* dataType = paramTypes[i].constData();
-
-            Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(dataType);
-            if (tr) {
-                PyObject* arg = tr->toPython(data);
-                PyTuple_SET_ITEM(preparedArgs, i, arg);
-            } else {
-                PyErr_Format(PyExc_TypeError, "Can't call meta function because I have no idea how to handle %s", dataType);
-                return -1;
-            }
-        }
-
-        QString methodName = method.signature();
-        methodName = methodName.left(methodName.indexOf('('));
-
-        Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(self, qPrintable(methodName)));
-        if (!pyMethod.isNull()) {
-            Shiboken::AutoDecRef retval(PyObject_CallObject(pyMethod, preparedArgs));
-            if (retval.isNull()) {
-                qWarning() << "Error calling slot" << methodName;
-                PyErr_Print();
-            } else {
-                const char* returnType = method.typeName();
-                if (returnType && (strlen(returnType) > 0))
-                    Shiboken::TypeResolver::get(returnType)->toCpp(retval, &args[0]);
-            }
-        } else {
-            qWarning() << "Dynamic slot" << methodName << "not found!";
-        }
-        Py_XDECREF(preparedArgs);
+        if (returnType.size() > 0)
+            Shiboken::TypeResolver::get(returnType)->toCpp(retval, &args[0]);
     }
+
     return -1;
 }
+
 bool SignalManager::registerMetaMethod(QObject* source, const char* signature, QMetaMethod::MethodType type)
 {
     int ret = registerMetaMethodGetIndex(source, signature, type);
@@ -544,7 +473,6 @@ bool SignalManager::hasConnectionWith(const QObject *object)
     return m_d->m_globalReceiver.hasConnectionWith(object);
 }
 
-
 const QMetaObject* SignalManager::retriveMetaObject(PyObject *self)
 {
     Shiboken::GilState gil;
@@ -563,4 +491,104 @@ const QMetaObject* SignalManager::retriveMetaObject(PyObject *self)
     return mo;
 }
 
+namespace {
 
+static int callMethod(QObject* object, int id, void** args)
+{
+    const QMetaObject* metaObject = object->metaObject();
+    QMetaMethod method = metaObject->method(id);
+
+    if (method.methodType() == QMetaMethod::Signal) {
+        // emit python signal
+        QMetaObject::activate(object, id, args);
+    } else {
+        Shiboken::GilState gil;
+        PyObject* self = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(object);
+        QByteArray methodName = method.signature();
+        methodName = methodName.left(methodName.indexOf('('));
+        Shiboken::AutoDecRef pyMethod(PyObject_GetAttrString(self, methodName));
+        SignalManager::callPythonMetaMethod(method, args, pyMethod, false);
+    }
+    return -1;
+}
+
+
+static PyObject* parseArguments(QList<QByteArray> paramTypes, void** args)
+{
+    PyObject* preparedArgs = NULL;
+    Py_ssize_t argsSize = paramTypes.count();
+
+    if (argsSize)
+        preparedArgs = PyTuple_New(argsSize);
+
+    for (int i = 0, max = paramTypes.count(); i < max; ++i) {
+        void* data = args[i+1];
+        const char* dataType = paramTypes[i].constData();
+
+        Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(dataType);
+        if (tr) {
+            PyObject* arg = tr->toPython(data);
+            PyTuple_SET_ITEM(preparedArgs, i, arg);
+        } else {
+            PyErr_Format(PyExc_TypeError, "Can't call meta function because I have no idea how to handle %s", dataType);
+            Py_DECREF(preparedArgs);
+            return NULL;
+        }
+    }
+
+    return preparedArgs;
+}
+
+static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args)
+{
+    void* signalArgs[2] = {0, args};
+    source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
+    return true;
+}
+
+static bool emitNormalSignal(QObject* source, int signalIndex, const char* signal, PyObject* args, const QStringList& argTypes)
+{
+    Shiboken::AutoDecRef sequence(PySequence_Fast(args, 0));
+    int argsGiven = PySequence_Fast_GET_SIZE(sequence.object());
+
+    if (argsGiven != argTypes.count()) {
+        PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", signal, argTypes.count(), argsGiven);
+        return false;
+    }
+
+    QVariant* signalValues = new QVariant[argsGiven];
+    void** signalArgs = new void*[argsGiven + 1];
+    signalArgs[0] = 0;
+
+    int i;
+    for (i = 0; i < argsGiven; ++i) {
+        QByteArray typeName = argTypes[i].toAscii();
+        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
+        if (typeResolver) {
+            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType) {
+                int typeId = QMetaType::type(typeName);
+                if (!typeId) {
+                    PyErr_Format(PyExc_TypeError, "Value type used on signal needs to be registered on meta type: %s", typeName.data());
+                    break;
+                }
+                signalValues[i] = QVariant(typeId, (void*) 0);
+            }
+            signalArgs[i+1] = signalValues[i].data();
+            typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i), &signalArgs[i+1]);
+        } else {
+            PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", qPrintable(argTypes[i]));
+            break;
+        }
+    }
+
+    bool ok = i == argsGiven;
+    if (ok)
+        source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
+
+    delete[] signalArgs;
+    delete[] signalValues;
+
+    return ok;
+}
+
+} //namespace
