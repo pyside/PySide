@@ -1,3 +1,7 @@
+#define PySideDateTime_IMPORT \
+    PyDateTimeAPI = (PyDateTime_CAPI*) PyCObject_Import((char*)"datetime", \
+                                                        (char*)"datetime_CAPI")
+
 namespace Shiboken {
 
 inline bool Converter<QDate>::checkType(PyObject* pyObj)
@@ -16,7 +20,7 @@ inline bool Converter<QDate>::isConvertible(PyObject* pyObj)
         return true;
 
     if (!PyDateTimeAPI)
-        PyDateTime_IMPORT;
+        PySideDateTime_IMPORT;
 
     SbkObjectType* shiboType = reinterpret_cast<SbkObjectType*>(SbkType< ::QDate >());
     return PyDate_Check(pyObj) || ObjectType::isExternalConvertible(shiboType, pyObj);
@@ -25,7 +29,7 @@ inline bool Converter<QDate>::isConvertible(PyObject* pyObj)
 inline QDate Converter<QDate>::toCpp(PyObject* pyObj)
 {
     if (!PyDateTimeAPI)
-        PyDateTime_IMPORT;
+        PySideDateTime_IMPORT;
 
     if (pyObj == Py_None) {
         return QDate();
