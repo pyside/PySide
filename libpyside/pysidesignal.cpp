@@ -768,11 +768,12 @@ void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject)
     SignalSigMap signalsFound;
     for(int i = metaObject->methodOffset(), max = metaObject->methodCount(); i < max; ++i) {
         QMetaMethod method = metaObject->method(i);
-        QByteArray methodName(method.signature());
-        methodName.chop(methodName.size() - methodName.indexOf('('));
 
-        if (method.methodType() == QMetaMethod::Signal)
+        if (method.methodType() == QMetaMethod::Signal) {
+            QByteArray methodName(method.signature());
+            methodName.chop(methodName.size() - methodName.indexOf('('));
             signalsFound[methodName] << join(method.parameterTypes(), ",");
+        }
     }
 
     SignalSigMap::Iterator it = signalsFound.begin();
