@@ -777,6 +777,12 @@ static void _addSignalToWrapper(SbkObjectType* wrapperType, const char* signalNa
     PyDict_SetItemString(typeDict, signalName, reinterpret_cast<PyObject*>(signal));
 }
 
+// This function is used by qStableSort to promote empty signatures
+static bool compareSignals(const QByteArray& sig1, const QByteArray& sig2)
+{
+    return sig1.isEmpty();
+}
+
 void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject)
 {
     typedef QHash<QByteArray, QList<QByteArray> > SignalSigMap;
@@ -801,7 +807,8 @@ void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject)
         self->initialized = 0;
         self->homonymousMethod = 0;
 
-        qSort(it.value().begin(), it.value().end());
+        // Empty signatures comes first! So they will be the default signal signature
+        qStableSort(it.value().begin(), it.value().end(), &compareSignals);
         SignalSigMap::mapped_type::const_iterator j = it.value().begin();
         SignalSigMap::mapped_type::const_iterator endJ = it.value().end();
         for (; j != endJ; ++j)
