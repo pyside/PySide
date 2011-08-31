@@ -23,10 +23,21 @@
   <rejection class="" function-name="qt_x11_getX11InfoForWindow"/>
   <rejection class="QX11Info" field-name="x11data"/>
   <value-type name="QX11Info">
-    <!-- ### Both methods return void pointers, for which particular cases no handling was discussed. -->
-    <modify-function signature="visual()const" remove="all"/>
-    <modify-function signature="appVisual(int)" remove="all"/>
-    <!-- ### -->
+    <add-function signature="display()" return-type="unsigned long" static="yes">
+        <inject-code>
+            %PYARG_0 = PyLong_FromVoidPtr(%TYPE::%FUNCTION_NAME());
+        </inject-code>
+    </add-function>
+    <modify-function signature="visual()const">
+        <inject-code>
+            %PYARG_0 = PyLong_FromVoidPtr(%CPPSELF.%FUNCTION_NAME());
+        </inject-code>
+    </modify-function>
+    <modify-function signature="appVisual(int)">
+        <inject-code>
+            %PYARG_0 = PyLong_FromVoidPtr(%CPPSELF.%FUNCTION_NAME());
+        </inject-code>
+    </modify-function>
   </value-type>
   <object-type name="QX11EmbedContainer">
     <enum-type name="Error"/>
