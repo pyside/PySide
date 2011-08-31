@@ -139,10 +139,10 @@
     <include file-name="QString" location="global"/>
     <conversion-rule file="qstring_conversions.h" />
   </primitive-type>
-  <container-type name="QStringList" type="list">
+  <primitive-type name="QStringList">
     <include file-name="QStringList" location="global"/>
     <conversion-rule file="qstringlist_conversions.h" />
-  </container-type>
+  </primitive-type>
   <primitive-type name="QStringRef">
     <include file-name="datetime.h" location="global"/>
     <conversion-rule file="qstringref_conversions.h" />
