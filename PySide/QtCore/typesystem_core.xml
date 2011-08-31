@@ -173,7 +173,6 @@
   <primitive-type name="QString">
     <include file-name="QString" location="global"/>
     <conversion-rule file="qstring_conversions.h">
-        <type-check check="PyUnicode_Check(%in) || PyString_Check(%in) || %in == Py_None"/>
         <native-to-target>
         const int N = %in.length();
         wchar_t* str = new wchar_t[N];
@@ -202,6 +201,7 @@
         </target-to-native>
     </conversion-rule>
   </primitive-type>
+
   <primitive-type name="QStringRef">
     <include file-name="datetime.h" location="global"/>
     <conversion-rule file="qstringref_conversions.h">
@@ -248,12 +248,18 @@
         <native-to-target>
         if (!%in.isValid())
             Py_RETURN_NONE;
-        if (qstrcmp(%in.typeName(), "QVariantList") == 0)
-            return %CONVERTTOPYTHON[QList&lt;QVariant&gt;](%in.value&lt;QVariantList&gt;());
-        if (qstrcmp(%in.typeName(), "QStringList") == 0)
-            return %CONVERTTOPYTHON[QList&lt;QString&gt;](%in.value&lt;QStringList&gt;());
-        if (qstrcmp(%in.typeName(), "QVariantMap") == 0)
-            return %CONVERTTOPYTHON[QMap&lt;QString, QVariant&gt;](%in.value&lt;QVariantMap&gt;());
+        if (qstrcmp(%in.typeName(), "QVariantList") == 0) {
+            QList&lt;QVariant&gt; var = %in.value&lt;QVariantList&gt;();
+            return %CONVERTTOPYTHON[QList&lt;QVariant&gt;](var);
+        }
+        if (qstrcmp(%in.typeName(), "QStringList") == 0) {
+            QStringList var = %in.value&lt;QStringList&gt;();
+            return %CONVERTTOPYTHON[QList&lt;QString&gt;](var);
+        }
+        if (qstrcmp(%in.typeName(), "QVariantMap") == 0) {
+            QMap&lt;QString, QVariant&gt; var = %in.value&lt;QVariantMap&gt;();
+            return %CONVERTTOPYTHON[QMap&lt;QString, QVariant&gt;](var);
+        }
         Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(%in.typeName());
         if (tr)
             return tr->toPython(const_cast&lt;void*&gt;(%in.data()));
@@ -413,8 +419,8 @@
     {
         bool allString = QVariant_isStringList(list);
         if (allString) {
-            QStringList lst = %CONVERTTOCPP[QList&lt;QString&gt;](list);
-            return QVariant(lst);
+            QList&lt;QString &gt; lst = %CONVERTTOCPP[QList&lt;QString&gt;](list);
+            return QVariant(QStringList(lst));
         } else {
             QVariant valueList = QVariant_convertToValueList(list);
             if (valueList.isValid())
@@ -510,50 +516,206 @@
   }
   </inject-code>
 
+  <template name="cpplist_to_pylist_convertion">
+    PyObject* %out = PyList_New((int) %in.size());
+    %INTYPE::const_iterator it = %in.begin();
+    for (int idx = 0; it != %in.end(); ++it, ++idx) {
+        %INTYPE_0 cppItem(*it);
+        PyList_SET_ITEM(%out, idx, %CONVERTTOPYTHON[%INTYPE_0](cppItem));
+    }
+    return %out;
+  </template>
+  <template name="pyseq_to_cpplist_convertion">
+    for (int i = 0; i &lt; PySequence_Size(%in); i++) {
+        Shiboken::AutoDecRef pyItem(PySequence_GetItem(%in, i));
+        %OUTTYPE_0 cppItem = %CONVERTTOCPP[%OUTTYPE_0](pyItem);
+        %out &lt;&lt; cppItem;
+    }
+  </template>
+
   <primitive-type name="QStringList">
     <include file-name="QStringList" location="global"/>
-    <conversion-rule file="qstringlist_conversions.h" />
+    <conversion-rule file="qstringlist_conversions.h">
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion">
+                <replace from="%INTYPE_0" to="QString" />
+            </insert-template>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion">
+                    <replace from="%OUTTYPE_0" to="QString" />
+                </insert-template>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </primitive-type>
 
   <container-type name="QSet" type="set">
-    <conversion-rule file="qset_conversions.h"/>
     <include file-name="QSet" location="global"/>
+    <conversion-rule file="qset_conversions.h">
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </container-type>
 
   <container-type name="QList" type="list">
-    <conversion-rule file="qlist_conversions.h"/>
     <include file-name="QList" location="global"/>
+    <conversion-rule file="qlist_conversions.h">
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </container-type>
 
   <container-type name="QVector" type="vector">
-    <conversion-rule file="qvector_conversions.h"/>
     <include file-name="QVector" location="global"/>
+    <conversion-rule file="qvector_conversions.h">
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+
   </container-type>
 
-  <container-type name="QStack" type="vector">
+  <container-type name="QStack" type="stack">
     <include file-name="QStack" location="global"/>
-    <conversion-rule file="qstack_conversion.h"/>
+    <conversion-rule file="qstack_conversion.h">
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </container-type>
 
-  <container-type name="QQueue" type="queue"/>
+  <container-type name="QQueue" type="queue">
+    <include file-name="QQueue" location="global"/>
+    <conversion-rule>
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+  </container-type>
+
+  <container-type name="QLinkedList" type="linked-list">
+    <include file-name="QLinkedList" location="global"/>
+    <conversion-rule>
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+  </container-type>
+
+  <template name="cppmap_to_pymap_convertion">
+    PyObject* %out = PyDict_New();
+    %INTYPE::const_iterator it = %in.begin();
+    for (; it != %in.end(); ++it) {
+        %INTYPE_0 key = it.key();
+        %INTYPE_1 value = it.value();
+        PyDict_SetItem(%out,
+                       %CONVERTTOPYTHON[%INTYPE_0](key),
+                       %CONVERTTOPYTHON[%INTYPE_1](value));
+    }
+    return %out;
+  </template>
+  <template name="pydict_to_cppmap_convertion">
+    PyObject* key;
+    PyObject* value;
+    Py_ssize_t pos = 0;
+    while (PyDict_Next(%in, &amp;pos, &amp;key, &amp;value)) {
+        %OUTTYPE_0 cppKey = %CONVERTTOCPP[%OUTTYPE_0](key);
+        %OUTTYPE_1 cppValue = %CONVERTTOCPP[%OUTTYPE_1](value);
+        %out.insert(cppKey, cppValue);
+    }
+  </template>
 
   <container-type name="QHash" type="hash">
-    <conversion-rule file="qhash_conversions.h"/>
     <include file-name="QHash" location="global"/>
     <include file-name="pysideconversions.h" location="global"/>
+    <conversion-rule file="qhash_conversions.h">
+        <native-to-target>
+            <insert-template name="cppmap_to_pymap_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyDict">
+                <insert-template name="pydict_to_cppmap_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </container-type>
-  <container-type name="QLinkedList" type="linked-list"/>
   <container-type name="QMap" type="map">
-    <conversion-rule file="qmap_conversions.h"/>
     <include file-name="QMap" location="global"/>
+    <conversion-rule file="qmap_conversions.h">
+        <native-to-target>
+            <insert-template name="cppmap_to_pymap_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyDict">
+                <insert-template name="pydict_to_cppmap_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </container-type>
   <container-type name="QMultiMap" type="multi-map">
-    <conversion-rule file="qmultimap_conversions.h"/>
     <include file-name="QMultiMap" location="global"/>
+    <conversion-rule file="qmultimap_conversions.h">
+        <native-to-target>
+            <insert-template name="cppmap_to_pymap_convertion"/>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PyDict">
+                <insert-template name="pydict_to_cppmap_convertion"/>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </container-type>
+
   <container-type name="QPair" type="pair">
-    <conversion-rule file="qpair_conversions.h"/>
     <include file-name="QPair" location="global"/>
+    <conversion-rule file="qpair_conversions.h">
+        <native-to-target>
+        PyObject* %out = PyTuple_New(2);
+        PyTuple_SET_ITEM(%out, 0, %CONVERTTOPYTHON[%INTYPE_0](%in.first));
+        PyTuple_SET_ITEM(%out, 1, %CONVERTTOPYTHON[%INTYPE_1](%in.second));
+        return %out;
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+            %out.first = %CONVERTTOCPP[%OUTTYPE_0](PySequence_Fast_GET_ITEM(%in, 0));
+            %out.second = %CONVERTTOCPP[%OUTTYPE_1](PySequence_Fast_GET_ITEM(%in, 1));
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
   </container-type>
 
   <rejection class="*" function-name="d_func"/>
@@ -2444,6 +2606,9 @@
         </inject-code>
     </modify-function>
     <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject"/>
+        </modify-argument>
         <inject-code>
             %PYARG_0 = Shiboken::Buffer::newObject(%CPPSELF.%FUNCTION_NAME(%1, %2, %3), %2, Shiboken::Buffer::ReadWrite);
         </inject-code>
@@ -2648,6 +2813,10 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <!-- fromUnicode(QString) does the job -->
+    <modify-function signature="fromUnicode(const QChar*,int)" remove="all" />
+    <modify-function signature="fromUnicode(const QChar*,int,QTextCodec::ConverterState*)const" remove="all" />
+    <modify-function signature="convertFromUnicode(const QChar*,int,QTextCodec::ConverterState*)const" remove="all" />
   </object-type>
   <object-type name="QTextDecoder">
     <!-- ### toUnicode(QByteArray) to the job -->
@@ -2656,7 +2825,7 @@
     <!-- ### -->
   </object-type>
   <object-type name="QTextEncoder">
-    <!-- fromUnicode(String) do the job -->
+    <!-- fromUnicode(QString) does the job -->
     <modify-function signature="fromUnicode(const QChar*,int)" remove="all" />
   </object-type>
   <object-type name="QTimeLine">
@@ -2807,6 +2976,9 @@
         </inject-code>
     </modify-function>
     <modify-function signature="map(qint64,qint64,QFile::MemoryMapFlags)">
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject"/>
+        </modify-argument>
         <inject-code>
             %PYARG_0 = Shiboken::Buffer::newObject(%CPPSELF.%FUNCTION_NAME(%1, %2, %3), %2, Shiboken::Buffer::ReadWrite);
         </inject-code>
@@ -3298,9 +3470,10 @@
     <enum-type name="RealNumberNotation"/>
     <enum-type name="Status"/>
     <!-- Removed because it expect QString to be mutable -->
-    <modify-function signature="QTextStream(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" />
-    <!-- Remvoed because we use the non-const version -->
+    <modify-function signature="QTextStream(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+    <!-- Removed because we use the non-const version -->
     <modify-function signature="QTextStream(const QByteArray&amp;, QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
+
     <!-- Removed because it expect QString to be mutable -->
     <modify-function signature="setString(QString*,QFlags&lt;QIODevice::OpenModeFlag&gt;)" remove="all"/>
 
@@ -3332,6 +3505,15 @@
     <!-- Removed because it expect QString to be mutable -->
     <modify-function signature="operator&gt;&gt;(QString&amp;)" remove="all"/>
 
+    <modify-function signature="string()const">
+      <modify-argument index="return">
+        <!--<replace-type modified-type="QString" />-->
+        <conversion-rule class="target">
+        QString&amp; res = *%0;
+        %PYARG_0 = %CONVERTTOPYTHON[QString](res);
+        </conversion-rule>
+      </modify-argument>
+    </modify-function>
 
     <modify-function signature="flush()" allow-thread="yes"/>
     <modify-function signature="read(qint64)" allow-thread="yes"/>
