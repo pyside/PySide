@@ -154,6 +154,13 @@ class QByteArrayBug720(unittest.TestCase):
         self.assertEqual(str(ba), "32\"1\x00123")
         self.assertEqual(repr(ba), "PySide.QtCore.QByteArray('32\"1\\x00123')")
 
+class QByteArrayImplicitConvert(unittest.TestCase):
+    def testString(self):
+        # No implicit conversions from QByteArray to python string
+        ba = QByteArray("object name")
+        obj = QObject()
+        self.assertRaises(TypeError, obj.setObjectName, ba)
+
 
 if __name__ == '__main__':
     unittest.main()
