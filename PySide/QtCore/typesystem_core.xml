@@ -2544,6 +2544,11 @@
         <define-ownership class="target" owner="default"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="value(const QString&amp;, const QVariant&amp;)const">
+        <inject-documentation mode="append" format="target">
+            .. warning:: QSettings.value can return different types (QVariant types) depending on the platform it's running on, so the safest way to use it is always casting the result to the desired type, e.g.: int(settings.value("myKey"))
+        </inject-documentation>
+    </modify-function>
   </object-type>
   <object-type name="QEvent"  polymorphic-id-expression="%1-&gt;type() == QEvent::None">
     <enum-type name="Type" extensible="yes" />
