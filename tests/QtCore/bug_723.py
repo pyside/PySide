@@ -5,7 +5,7 @@ class MyFileEngine (QAbstractFileEngine):
 
     def __init__(self):
         QAbstractFileEngine.__init__(self)
-        self.contents = "Foo bar for the win!"
+        self.contents = "Foo \0bar for the win!"
         self.pos = 0
 
     def open(self, mode):
@@ -27,7 +27,6 @@ class MyFileEngine (QAbstractFileEngine):
 class MyFileEngineHandler (QAbstractFileEngineHandler):
 
     def create(self, fileName):
-        print "hey ho: ", fileName
         if fileName.startswith("foo:/"):
             return MyFileEngine()
         return None
@@ -42,7 +41,7 @@ class TestBug723 (unittest.TestCase):
 
         assert(f.open(QFile.ReadOnly | QFile.Text))
         contents = f.readAll()
-        self.assertEqual(contents, "Foo bar for the win!")
+        self.assertEqual(contents, "Foo \0bar for the win!")
         f.close()
 
 
