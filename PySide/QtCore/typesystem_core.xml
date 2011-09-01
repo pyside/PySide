@@ -2074,7 +2074,7 @@
                     %out = -1;
                 } else {
                     %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
-                    qstrncpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out + 1);
+                    memcpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out);
                 }
             </conversion-rule>
         </modify-argument>
