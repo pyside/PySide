@@ -246,10 +246,12 @@
         %END_ALLOW_THREADS
         %PYARG_0 = Shiboken::makeTuple(retval_, %5);
     </template>
-   <template name="set_qapp_parent_for_orphan">
-        SbkObject* _pySelf = reinterpret_cast&lt;SbkObject*&gt;(%PYARG_0);
-        if (!Shiboken::Object::hasParentInfo(_pySelf))
-            Shiboken::Object::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
+    <template name="set_qapp_parent_for_orphan">
+        if (%PYARG_0 &amp;&amp; (%PYARG_0 != Py_None)) {
+            SbkObject* _pySelf = reinterpret_cast&lt;SbkObject*&gt;(%PYARG_0);
+            if (!Shiboken::Object::hasParentInfo(_pySelf))
+                Shiboken::Object::setParent(%CONVERTTOPYTHON[QApplication*](qApp), %PYARG_0);
+        }
     </template>
     <!-- templates for __repr__ -->
     <template name="repr_code">
