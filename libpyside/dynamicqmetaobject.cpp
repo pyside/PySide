@@ -481,7 +481,9 @@ void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
     while (PyDict_Next(attrs, &pos, &key, &value)) {
         if (Property::checkType(value)) {
             // Leave the properties to be register after signals because they may depend on notify signals
-            properties << PropPair(PyString_AS_STRING(key), value);
+            int index = d.superdata->indexOfProperty(PyString_AS_STRING(key));
+            if (index == -1)
+                properties << PropPair(PyString_AS_STRING(key), value);
         } else if (Signal::checkType(value)) { // Register signals
             PySideSignal* data = reinterpret_cast<PySideSignal*>(value);
             const char* signalName = PyString_AS_STRING(key);
