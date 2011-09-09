@@ -4217,6 +4217,12 @@
             This value may change at run-time. An event with type PySide.QtCore.QEvent.WinIdChange will be sent to the widget following a change in window system identifier.
         </inject-documentation>
     </modify-function>
+
+    <modify-function signature="window()const">
+      <modify-argument index="return">
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
   </object-type>
   <object-type name="QMessageBox">
     <enum-type name="ButtonRole"/>
