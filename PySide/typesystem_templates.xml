@@ -72,6 +72,13 @@
         %END_ALLOW_THREADS
         %PYARG_0 = Shiboken::makeTuple(retval_, ok_);
     </template>
+    <template name="fix_bool*,arg,arg,arg,arg">
+        bool ok_;
+        %BEGIN_ALLOW_THREADS
+        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;ok_, %2, %3, %4, %5);
+        %END_ALLOW_THREADS
+        %PYARG_0 = Shiboken::makeTuple(retval_, ok_);
+    </template>
     <template name="fix_arg,arg,arg,arg,arg,arg,arg,bool*,arg">
         bool ok_;
         %BEGIN_ALLOW_THREADS
