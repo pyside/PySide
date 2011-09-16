@@ -688,7 +688,7 @@
     <!-- ### "QPolygon(int, const int*)" is an internal constructor. -->
     <modify-function signature="QPolygon(int, const int *)" remove="all"/>
     <!-- ### A QVector parameter, for no defined type, will generate wrong code. -->
-    <modify-function signature="operator+=(QVector)" remove="all"/>
+    <modify-function signature="operator+=(QVector&lt;QPoint&gt;)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(QPoint)">
         <inject-code>
             // %FUNCTION_NAME()
@@ -711,7 +711,7 @@
       <include file-name="QTransform" location="global"/>
     </extra-includes>
     <!-- ### A QVector parameter, for no defined type, will generate wrong code. -->
-    <modify-function signature="operator+=(QVector)" remove="all"/>
+    <modify-function signature="operator+=(QVector&lt;QPointF&gt;)" remove="all"/>
     <!-- ### See bug 776 -->
     <modify-function signature="operator&lt;&lt;(QPointF)" remove="all"/>
     <!-- ### See bug 777 -->
@@ -1068,11 +1068,17 @@
         <inject-code>
             %PYARG_0 = Shiboken::Buffer::newObject(%CPPSELF.%FUNCTION_NAME(%1), %CPPSELF.bytesPerLine());
         </inject-code>
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
     </modify-function>
     <modify-function signature="scanLine(int)">
         <inject-code>
             %PYARG_0 = Shiboken::Buffer::newObject(%CPPSELF.%FUNCTION_NAME(%1), %CPPSELF.bytesPerLine(), Shiboken::Buffer::ReadWrite);
         </inject-code>
+        <modify-argument index="return">
+            <replace-type modified-type="PyObject" />
+        </modify-argument>
     </modify-function>
     <!--
         Only the non-const version of bits() and scanLine() is exported to Python
@@ -1774,6 +1780,18 @@
         %PYARG_0 = Shiboken::makeTuple(retval_, item_);
       </inject-code>
     </modify-function>
+    <modify-function signature="itemTransform(const QGraphicsItem*,bool*)const">
+        <modify-argument index="2">
+            <remove-argument />
+            <remove-default-expression />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="(QTransform, bool ok)"/>
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_args,bool*" />
+        </inject-code>
+    </modify-function>
     <modify-function signature="isObscuredBy(const QGraphicsItem*)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -2063,6 +2081,17 @@
         </modify-argument>
         <inject-code class="target" position="beginning">
             <insert-template name="fix_bool*,arg,arg,arg"/>
+        </inject-code>
+    </modify-function>
+    <modify-function signature="getFont(bool*,QFont,QWidget*,QString,QFlags&lt;QFontDialog::FontDialogOption&gt;)">
+        <modify-argument index="1">
+            <remove-argument />
+        </modify-argument>
+        <modify-argument index="return">
+            <replace-type modified-type="PyTuple" />
+        </modify-argument>
+        <inject-code class="target" position="beginning">
+            <insert-template name="fix_bool*,arg,arg,arg,arg"/>
         </inject-code>
     </modify-function>
   </object-type>
@@ -6704,6 +6733,18 @@
           PyObject *v = PyFloat_FromDouble(values[i]);
           PyTuple_SET_ITEM(%PYARG_0, i, v);
         }
+      </inject-code>
+    </modify-function>
+
+    <modify-function signature="inverted(bool*)const">
+      <modify-argument index="1">
+        <remove-argument/>
+      </modify-argument>
+      <modify-argument index="return">
+        <replace-type modified-type="PyTuple"/>
+      </modify-argument>
+      <inject-code class="target" position="beginning">
+        <insert-template name="fix_bool*"/>
       </inject-code>
     </modify-function>
 

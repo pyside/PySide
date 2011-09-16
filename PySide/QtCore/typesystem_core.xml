@@ -2814,7 +2814,6 @@
       </modify-argument>
     </modify-function>
     <!-- fromUnicode(QString) does the job -->
-    <modify-function signature="fromUnicode(const QChar*,int)" remove="all" />
     <modify-function signature="fromUnicode(const QChar*,int,QTextCodec::ConverterState*)const" remove="all" />
     <modify-function signature="convertFromUnicode(const QChar*,int,QTextCodec::ConverterState*)const" remove="all" />
   </object-type>
@@ -3557,7 +3556,7 @@
     <modify-function signature="pop_front()" remove="all"/>
     <modify-function signature="toList() const" remove="all"/>
     <modify-function signature="fromList(const QList&lt;QXmlStreamAttribute&gt; &amp;)" remove="all"/>
-    <modify-function signature="operator+=(QVector)" remove="all" />
+    <modify-function signature="operator+=(QVector&lt;QXmlStreamAttribute&gt;)" remove="all" />
   </value-type>
   <value-type name="QXmlStreamNamespaceDeclaration"/>
   <value-type name="QXmlStreamNotationDeclaration"/>
