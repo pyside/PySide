@@ -3237,6 +3237,14 @@
     <extra-includes>
       <include file-name="glue/qlayout_help_functions.h" location="local"/>
     </extra-includes>
+    <modify-function signature="itemAtPosition (int, int) const">
+      <modify-argument index="return">
+        <define-ownership owner="default"/>
+      </modify-argument>
+      <inject-code class="target" position="end">
+        addLayoutOwnership(%CPPSELF, %0);
+      </inject-code>
+    </modify-function>
     <modify-function signature="addWidget(QWidget *, int, int, QFlags&lt;Qt::AlignmentFlag&gt;)">
       <modify-argument index="4">
         <rename to="alignment"/>

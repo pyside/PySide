@@ -63,9 +63,8 @@ inline void addLayoutOwnership(QLayout* layout, QLayoutItem* item)
             addLayoutOwnership(layout, l);
     }
 
-    Shiboken::AutoDecRef pyParent(Shiboken::Converter<QLayout*>::toPython(layout));
     Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayoutItem*>::toPython(item));
-    Shiboken::Object::setParent(pyParent, pyChild);
+    Shiboken::Object::releaseOwnership(pyChild);
 }
 
 #endif
