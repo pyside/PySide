@@ -3100,6 +3100,17 @@
       </inject-code>
     </modify-function>
 
+    <modify-function signature="removeWidget(QWidget*)">
+      <inject-code class="target" position="beginning">
+        removeLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
+    </modify-function>
+    <modify-function signature="removeItem(QLayoutItem*)">
+      <inject-code class="target" position="beginning">
+        removeLayoutOwnership(%CPPSELF, %1);
+      </inject-code>
+    </modify-function>
+
     <modify-function signature="parentWidget()const">
       <modify-argument index="this">
         <parent index="return" action="add"/>
