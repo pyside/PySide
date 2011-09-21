@@ -87,7 +87,11 @@
     </value-type>
 
     <value-type name="QXmlQuery">
+        <!-- ### TODO: must evaluate if anything other than removal is needed. -->
         <enum-type name="QueryLanguage" />
+        <modify-function signature="evaluateTo(QStringList*)const" remove="all" />
+        <modify-function signature="evaluateTo(QString*)const" remove="all" />
+        <!-- ### -->
     </value-type>
     <object-type name="QXmlResultItems" />
     <object-type name="QXmlSerializer" />
