@@ -199,6 +199,7 @@
         <!-- ### QHostAddress(QIPv6Address) does this -->
         <modify-function signature="QHostAddress(quint8*)" remove="all" />
         <!-- ### -->
+        <modify-function signature="setAddress(quint8*)" remove="all" />
     </value-type>
 
     <value-type name="QHostInfo">
