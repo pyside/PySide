@@ -92,9 +92,33 @@
                 <parent index="this" action="add" />
             </modify-argument>
         </modify-function>
+        <modify-function signature="importPlugin(QString,QString,QString*)">
+            <modify-argument index="3">
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="(ok, errorString)" />
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+            QString errorString;
+            %BEGIN_ALLOW_THREADS
+            %RETURN_TYPE ok_ = %CPPSELF.%FUNCTION_NAME(%1, %2, &amp;errorString);
+            %END_ALLOW_THREADS
+            %PYARG_0 = Shiboken::makeTuple(ok_, errorString);
+            </inject-code>
+        </modify-function>
     </object-type>
     <value-type name="QDeclarativeError" />
-    <object-type name="QDeclarativeExpression" />
+    <object-type name="QDeclarativeExpression">
+        <modify-function signature="evaluate(bool*)">
+            <modify-argument index="1">
+                <remove-argument/>
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                <insert-template name="fix_bool*"/>
+            </inject-code>
+        </modify-function>
+    </object-type>
     <object-type name="QDeclarativeExtensionPlugin" />
     <object-type name="QDeclarativeImageProvider">
         <enum-type name="ImageType" />
