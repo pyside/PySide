@@ -190,7 +190,6 @@
         </inject-code>
     </modify-function>
 
-
     <!-- setUniformValueArray -->
     <modify-function signature="setUniformValueArray(int, const int*, int)" rename="setUniformValueArrayInt">
         <modify-argument index="2" >
@@ -639,6 +638,13 @@
             </insert-template>
         </inject-code>
     </modify-function>
+
+    <!-- ### TODO: must evaluate if anything other than removal should be done. -->
+    <modify-function signature="setAttributeArray(int,const float*,int,int)" remove="all" />
+    <modify-function signature="setAttributeArray(const char*,const float*,int,int)" remove="all" />
+    <modify-function signature="setUniformValueArray(int,const float*,int,int)" remove="all" />
+    <modify-function signature="setUniformValueArray(const char*,const float*,int,int)" remove="all" />
+    <!-- ### -->
 
     <!-- ### Use QMatrixZxY overloads -->
     <modify-function signature="setUniformValue(int,Array)" remove="all" />
