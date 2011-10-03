@@ -1446,7 +1446,7 @@
             if (QCoreApplication::instance()) {
                 PyObject *klass = PyObject_GetAttrString(%PYSELF, "__class__");
                 PyObject *cname = PyObject_GetAttrString(klass, "__name__");
-                result = QString(QCoreApplication::instance()->translate(PyString_AsString(cname), %1, %2, QCoreApplication::CodecForTr, %3));
+                result = QString(QCoreApplication::instance()->translate(Shiboken::String::toCString(cname), %1, %2, QCoreApplication::CodecForTr, %3));
 
                 Py_DECREF(klass);
                 Py_DECREF(cname);
@@ -1462,7 +1462,7 @@
         Shiboken::AutoDecRef klass(PyObject_GetAttrString(%PYSELF, "__class__"));
         Shiboken::AutoDecRef cname(PyObject_GetAttrString(klass, "__name__"));
         $DEFINE_SECOND_VAR
-        QString result = QCoreApplication::instance()->translate(PyString_AS_STRING(cname.object()), $SECOND_VAR, %2, QCoreApplication::UnicodeUTF8, %3);
+        QString result = QCoreApplication::instance()->translate(Shiboken::String::toCString(cname.object()), $SECOND_VAR, %2, QCoreApplication::UnicodeUTF8, %3);
         %PYARG_0 = %CONVERTTOPYTHON[QString](result);
     } else {
         Py_INCREF(%PYARG_1);
@@ -1493,7 +1493,7 @@
         <inject-code class="target" position="beginning">
             <insert-template name="translate_utf8">
                 <replace from="$DEFINE_SECOND_VAR" to="Shiboken::AutoDecRef str(PyUnicode_AsUTF8String(%1));" />
-                <replace from="$SECOND_VAR" to="PyString_AS_STRING(str.object())" />
+                <replace from="$SECOND_VAR" to="Shiboken::String::toCString(str.object())" />
             </insert-template>
         </inject-code>
     </add-function>
@@ -1704,7 +1704,7 @@
         <inject-code>
             Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(%PYARG_1));
             if (!str.isNull()) {
-                QByteArray b(PyString_AS_STRING(str.object()), PyString_GET_SIZE(str.object()));
+                QByteArray b(PyBytes_AS_STRING(str.object()), PyBytes_GET_SIZE (str.object()));
                 b.prepend(*%CPPSELF);
                 %PYARG_0 = %CONVERTTOPYTHON[QByteArray](b);
             }
@@ -1714,15 +1714,15 @@
         <inject-code>
             Shiboken::AutoDecRef str(PyUnicode_AsASCIIString(%PYARG_1));
             if (!str.isNull()) {
-                QByteArray b(PyString_AS_STRING(str.object()), PyString_GET_SIZE(str.object()));
+                QByteArray b(PyBytes_AS_STRING(str.object()), PyBytes_GET_SIZE(str.object()));
                 b.append(*%CPPSELF);
                 %PYARG_0 = %CONVERTTOPYTHON[QByteArray](b);
             }
         </inject-code>
     </add-function>
-    <add-function signature="operator+(PyString, QByteArray)">
+    <add-function signature="operator+(PyBytes, QByteArray)">
         <inject-code>
-        QByteArray ba = QByteArray(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1)) + *%CPPSELF;
+        QByteArray ba = QByteArray(PyBytes_AS_STRING(%PYARG_1), PyBytes_GET_SIZE(%PYARG_1)) + *%CPPSELF;
         %PYARG_0 = %CONVERTTOPYTHON[QByteArray](ba);
         </inject-code>
     </add-function>
@@ -1731,11 +1731,16 @@
     <add-function signature="__repr__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
             QByteArray b(((PyObject*)%PYSELF)->ob_type->tp_name);
-            b += '(';
-            Shiboken::AutoDecRef contents(PyObject_Repr(PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size())));
-            b += PyString_AS_STRING(contents.object());
-            b += ")";
-            %PYARG_0 = PyString_FromStringAndSize(b.constData(), b.size());
+            PyObject* aux = Shiboken::String::fromStringAndSize(%CPPSELF.constData(), %CPPSELF.size());
+            if (PyUnicode_CheckExact(aux)) {
+                PyObject* tmp = PyUnicode_AsASCIIString(aux);
+                Py_DECREF(aux);
+                aux = tmp;
+            }
+            b += "('";
+            b += QByteArray(PyBytes_AS_STRING(aux), PyBytes_GET_SIZE(aux));
+            b += "')";
+            %PYARG_0 = Shiboken::String::fromStringAndSize(b.constData(), b.size());
         </inject-code>
     </add-function>
 
@@ -1743,15 +1748,21 @@
         <inject-code class="target" position="beginning">
             <insert-template name="reduce_code">
                 <replace from="%REDUCE_FORMAT" to="N" />
-                <replace from="%REDUCE_ARGS" to="PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size())" />
+                <replace from="%REDUCE_ARGS" to="PyBytes_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size())" />
             </insert-template>
         </inject-code>
     </add-function>
     <modify-function signature="QByteArray(const char *)">
         <!-- Keep \x00 bytes passed in python strings -->
         <inject-code class="target" position="beginning">
-            int size = PyString_GET_SIZE(%PYARG_1);
-            %0 = new QByteArray(%1, size);
+            if (PyBytes_Check(%PYARG_1)) {
+                %0 = new QByteArray(PyBytes_AsString(%PYARG_1), PyBytes_GET_SIZE(%PYARG_1));
+            } if (PyUnicode_CheckExact(%PYARG_1)) {
+                Shiboken::AutoDecRef data(PyUnicode_AsASCIIString(%PYARG_1));
+                %0 = new QByteArray(PyBytes_AsString(data.object()), PyBytes_GET_SIZE(data.object()));
+            } else if (Shiboken::String::check(%PYARG_1)) {
+                %0 = new QByteArray(Shiboken::String::toCString(%PYARG_1), Shiboken::String::len(%PYARG_1));
+            }
         </inject-code>
     </modify-function>
     <!-- buffer protocol -->
@@ -1765,7 +1776,7 @@
 
    <modify-function signature="data()">
        <inject-code class="target" position="beginning">
-           %PYARG_0 = PyString_FromStringAndSize(%CPPSELF.%FUNCTION_NAME(), %CPPSELF.size());
+           %PYARG_0 = PyBytes_FromStringAndSize(%CPPSELF.%FUNCTION_NAME(), %CPPSELF.size());
        </inject-code>
    </modify-function>
 
@@ -1880,11 +1891,14 @@
     <!-- QByteArray(const char *) do the job of this constructor -->
     <modify-function signature="QByteArray(const char*,int)" remove="all"/>
     <modify-function signature="fromRawData(const char*,int)">
+        <modify-argument index="1">
+            <replace-type modified-type="PyBytes"/>
+        </modify-argument>
         <modify-argument index="2">
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1));
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(PyBytes_AsString(%PYARG_1), PyBytes_GET_SIZE(%PYARG_1));
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
@@ -1906,7 +1920,7 @@
     </modify-function>
     <add-function signature="__str__" return-type="PyObject*">
         <inject-code class="target" position="beginning">
-            %PYARG_0 = PyString_FromStringAndSize(%CPPSELF.constData(), %CPPSELF.size());
+            %PYARG_0 = Shiboken::String::fromStringAndSize(%CPPSELF.constData(), %CPPSELF.size());
         </inject-code>
     </add-function>
     <add-function signature="__len__">
@@ -1923,7 +1937,7 @@
                     char res[2];
                     res[0] = %CPPSELF.at(_i);
                     res[1] = 0;
-                    return PyString_FromStringAndSize(res, 1);
+                    return PyBytes_FromStringAndSize(res, 1);
                 }
         </inject-code>
     </add-function>
@@ -2020,7 +2034,7 @@
     <modify-function signature="write(const char *,qint64)" remove="all"/>
     <modify-function signature="write(const char *)">
         <inject-code>
-        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, PyString_GET_SIZE(%PYARG_1));
+        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, Shiboken::String::len(%PYARG_1));
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
         </inject-code>
     </modify-function>
@@ -2047,11 +2061,12 @@
             <replace-type modified-type="PyObject"/>
             <conversion-rule class="native">
                 %RETURN_TYPE %out;
-                if (!PyString_Check(%PYARG_0)) {
-                    %out = -1;
-                } else {
-                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
-                    memcpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out);
+                if (PyBytes_Check(%PYARG_0)) {
+                    %out = PyBytes_GET_SIZE((PyObject*)%PYARG_0);
+                    memcpy(%1, PyBytes_AS_STRING((PyObject*)%PYARG_0), %out);
+                } else if (Shiboken::String::check(%PYARG_0)) {
+                    %out = Shiboken::String::len((PyObject*)%PYARG_0);
+                    memcpy(%1, Shiboken::String::toCString((PyObject*)%PYARG_0), %out);
                 }
             </conversion-rule>
         </modify-argument>
@@ -2070,11 +2085,11 @@
             <replace-type modified-type="PyObject"/>
             <conversion-rule class="native">
                 %RETURN_TYPE %out;
-                if (!PyString_Check(%PYARG_0)) {
+                if (!PyBytes_Check(%PYARG_0)) {
                     %out = -1;
                 } else {
-                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
-                    memcpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out);
+                    %out = PyBytes_GET_SIZE((PyObject*)%PYARG_0);
+                    memcpy(%1, PyBytes_AS_STRING((PyObject*)%PYARG_0), %out);
                 }
             </conversion-rule>
         </modify-argument>
@@ -2086,8 +2101,8 @@
         <modify-argument index="2">
             <remove-argument />
         </modify-argument>
-        <inject-code>
-            %CPPSELF.%FUNCTION_NAME(PyString_AS_STRING(%PYARG_1), PyString_GET_SIZE(%PYARG_1));
+        <inject-code>            
+            %CPPSELF.%FUNCTION_NAME(Shiboken::String::toCString(%PYARG_1), Shiboken::String::len(%PYARG_1));
         </inject-code>
     </modify-function>
   </object-type>
@@ -2271,7 +2286,7 @@
 
         if (PyObject_TypeCheck(%2, &amp;PySideSignalInstanceType)) {
             PySideSignalInstance* signalInstance = reinterpret_cast&lt;PySideSignalInstance*&gt;(%2);
-            Shiboken::AutoDecRef signalSignature(PyString_FromFormat("2%s", PySide::Signal::getSignature(signalInstance)));
+            Shiboken::AutoDecRef signalSignature(Shiboken::String::fromFormat("2%s", PySide::Signal::getSignature(signalInstance)));
             Shiboken::AutoDecRef result(
                 PyObject_CallMethod(pyTimer,
                                     const_cast&lt;char*>("connect"),
@@ -2358,7 +2373,7 @@
             QByteArray ba;
             ba.resize(%2);
             %CPPSELF.%FUNCTION_NAME(ba.data(), ba.size());
-            %PYARG_0 = PyString_FromStringAndSize(ba.constData(), ba.size());
+            %PYARG_0 = PyBytes_FromStringAndSize(ba.constData(), ba.size());
         </inject-code>
         <modify-argument index="1">
             <remove-argument />
@@ -2367,11 +2382,11 @@
             <replace-type modified-type="PyObject"/>
             <conversion-rule class="native">
                 %RETURN_TYPE %out;
-                if (!PyString_Check(%PYARG_0)) {
+                if (!Shiboken::String::check(%PYARG_0)) {
                     %out = -1;
                 } else {
-                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
-                    memcpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out);
+                    %out = PyBytes_GET_SIZE((PyObject*)%PYARG_0);
+                    memcpy(%1, PyBytes_AS_STRING((PyObject*)%PYARG_0), %out);
                 }
             </conversion-rule>
         </modify-argument>
@@ -2381,7 +2396,7 @@
             QByteArray ba;
             ba.resize(%2);
             %CPPSELF.%FUNCTION_NAME(ba.data(), ba.size());
-            %PYARG_0 = PyString_FromStringAndSize(ba.constData(), ba.size());
+            %PYARG_0 = PyBytes_FromStringAndSize(ba.constData(), ba.size());
         </inject-code>
         <modify-argument index="1">
             <remove-argument />
@@ -2390,11 +2405,11 @@
             <replace-type modified-type="PyObject"/>
             <conversion-rule class="native">
                 %RETURN_TYPE %out;
-                if (!PyString_Check(%PYARG_0)) {
+                if (!Shiboken::String::check(%PYARG_0)) {
                     %out = -1;
                 } else {
-                    %out = PyString_GET_SIZE((PyObject*)%PYARG_0);
-                    memcpy(%1, PyString_AS_STRING((PyObject*)%PYARG_0), %out);
+                    %out = PyBytes_GET_SIZE((PyObject*)%PYARG_0);
+                    memcpy(%1, PyBytes_AS_STRING((PyObject*)%PYARG_0), %out);
                 }
             </conversion-rule>
         </modify-argument>
@@ -2687,7 +2702,7 @@
                 Py_INCREF(Py_None);
                 %PYARG_0 = Py_None;
             } else {
-                %PYARG_0 = PyString_FromStringAndSize(data.data(), result);
+                %PYARG_0 = PyBytes_FromStringAndSize(data.data(), result);
             }
         </inject-code>
     </modify-function>
@@ -2696,7 +2711,7 @@
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-            int r = %CPPSELF.%FUNCTION_NAME(%1, PyString_GET_SIZE(%PYARG_1));
+            int r = %CPPSELF.%FUNCTION_NAME(%1, Shiboken::String::len(%PYARG_1));
             %PYARG_0 = %CONVERTTOPYTHON[int](r);
         </inject-code>
     </modify-function>
@@ -3282,15 +3297,15 @@ s1.addTransition(button.clicked, s1h)&lt;/code>
 
   <!-- From Qt4.6 ^^^ -->
 
-  <add-function signature="SIGNAL(const char*)" return-type="PyString*">
+  <add-function signature="SIGNAL(const char*)" return-type="str">
     <inject-code class="target" position="beginning">
-      %PYARG_0 = PyString_FromFormat("2%s", QMetaObject::normalizedSignature(%1).constData());
+      %PYARG_0 = Shiboken::String::fromFormat("2%s", QMetaObject::normalizedSignature(%1).constData());
     </inject-code>
   </add-function>
 
-  <add-function signature="SLOT(const char*)" return-type="PyString*">
+  <add-function signature="SLOT(const char*)" return-type="str">
     <inject-code class="target" position="beginning">
-      %PYARG_0 = PyString_FromFormat("1%s", QMetaObject::normalizedSignature(%1).constData());
+      %PYARG_0 = Shiboken::String::fromFormat("1%s", QMetaObject::normalizedSignature(%1).constData());
     </inject-code>
   </add-function>
 
@@ -3333,16 +3348,20 @@ s1.addTransition(button.clicked, s1h)&lt;/code>
                             const unsigned char *,
                             const unsigned char *);
   </inject-code>
-  <add-function signature="qRegisterResourceData(int, const char *, const char *, const char *)" return-type="bool">
+  <add-function signature="qRegisterResourceData(int, PyBytes, PyBytes, PyBytes)" return-type="bool">
     <inject-code class="target" position="beginning">
-    %RETURN_TYPE %0 = %FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4);
-    %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
+        %RETURN_TYPE %0 = %FUNCTION_NAME(%1, (uchar*)PyBytes_AS_STRING(%PYARG_2),
+                                             (uchar*)PyBytes_AS_STRING(%PYARG_3),
+                                             (uchar*)PyBytes_AS_STRING(%PYARG_4));
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
     </inject-code>
   </add-function>
-  <add-function signature="qUnregisterResourceData(int, const char *, const char *, const char *)" return-type="bool">
+  <add-function signature="qUnregisterResourceData(int, PyBytes, PyBytes, PyBytes)" return-type="bool">
     <inject-code class="target" position="beginning">
-    %RETURN_TYPE %0 = %FUNCTION_NAME(%1, (uchar*)%2, (uchar*)%3, (uchar*)%4);
-    %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
+        %RETURN_TYPE %0 = %FUNCTION_NAME(%1, (uchar*)PyBytes_AS_STRING(%PYARG_2),
+                                             (uchar*)PyBytes_AS_STRING(%PYARG_3),
+                                             (uchar*)PyBytes_AS_STRING(%PYARG_4));
+        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
     </inject-code>
   </add-function>
 

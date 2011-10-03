@@ -2,14 +2,14 @@
 '''Test cases for QFlags'''
 
 import unittest
-from PySide.QtCore import *
+from PySide.QtCore import Qt, QTemporaryFile, QFile, QIODevice, QObject
 
 class QFlagTest(unittest.TestCase):
     '''Test case for usage of flags'''
 
     def testCallFunction(self):
         f = QTemporaryFile()
-        self.assert_(f.open())
+        self.assertTrue(f.open())
         fileName = f.fileName()
         f.close()
 
@@ -19,7 +19,7 @@ class QFlagTest(unittest.TestCase):
         self.assertEqual(om & QIODevice.Truncate, QIODevice.Truncate)
         self.assertEqual(om & QIODevice.Text, QIODevice.Text)
         self.assertEqual(om & QIODevice.ReadWrite, QIODevice.ReadWrite)
-        self.assert_(om == QIODevice.Truncate | QIODevice.Text | QIODevice.ReadWrite)
+        self.assertTrue(om == QIODevice.Truncate | QIODevice.Text | QIODevice.ReadWrite)
         f.close()
 
 
@@ -41,9 +41,12 @@ class QFlagOperatorTest(unittest.TestCase):
     def testIOr(self):
         '''QFlags |= (ior) operator'''
         flag = Qt.WindowFlags()
-        self.assert_(flag & Qt.Widget == 0)
+        self.assertTrue(Qt.Widget == 0)
+        self.assertFalse(flag & Qt.Widget)
+        result = flag & Qt.Widget
+        self.assertTrue(result == 0)
         flag |= Qt.WindowMinimizeButtonHint
-        self.assert_(flag & Qt.WindowMinimizeButtonHint)
+        self.assertTrue(flag & Qt.WindowMinimizeButtonHint)
 
     def testInvertOr(self):
         '''QFlags ~ (invert) operator over the result of an | (or) operator'''
@@ -60,7 +63,7 @@ class QFlagOperatorTest(unittest.TestCase):
         '''QFlags & QFlags'''
         flags = Qt.NoItemFlags | Qt.ItemIsUserCheckable
         newflags = Qt.NoItemFlags | Qt.ItemIsUserCheckable
-        self.assert_(flags & newflags)
+        self.assertTrue(flags & newflags)
 
     def testOperatorDifferentOrder(self):
         '''Different ordering of arguments'''
@@ -76,11 +79,12 @@ class QFlagsOnQVariant(unittest.TestCase):
 class QFlagsWrongType(unittest.TestCase):
     def testWrongType(self):
         '''Wrong type passed to QFlags binary operators'''
-        self.assertRaises(TypeError, lambda :Qt.NoItemFlags | '43')
-        self.assertRaises(TypeError, lambda :Qt.NoItemFlags & '43')
-        self.assertRaises(TypeError, lambda :'jabba' & Qt.NoItemFlags)
-        self.assertRaises(TypeError, lambda :'hut' & Qt.NoItemFlags)
-        self.assertRaises(TypeError, lambda :Qt.NoItemFlags & QObject())
+
+        self.assertRaises(TypeError, Qt.NoItemFlags | '43')
+        self.assertRaises(TypeError, Qt.NoItemFlags & '43')
+        self.assertRaises(TypeError, 'jabba' & Qt.NoItemFlags)
+        self.assertRaises(TypeError, 'hut' & Qt.NoItemFlags)
+        self.assertRaises(TypeError, Qt.NoItemFlags & QObject())
 
 if __name__ == '__main__':
     unittest.main()

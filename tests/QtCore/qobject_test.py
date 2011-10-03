@@ -3,6 +3,7 @@
 '''Test cases for QObject methods'''
 
 import unittest
+import py3kcompat as py3k
 
 from PySide.QtCore import QObject
 
@@ -31,8 +32,7 @@ class ObjectNameCase(unittest.TestCase):
         self.assertEqual('', obj.objectName())
 
     def testUnicode(self):
-        #QObject.setObjectName(unicode)
-        name = u'diseño'
+        name = py3k.unicode('diseño')
         #FIXME Strange error on upstream when using equal(name, obj)
         obj = QObject()
         obj.setObjectName(name)

@@ -14,7 +14,7 @@ class MyThread (QThread):
         self.owner=owner;
 
     def run(self):
-        for i in xrange(3):
+        for i in range(3):
             e=MyEvent(i);
             QCoreApplication.postEvent(self.owner,e)
 
@@ -38,7 +38,7 @@ class CheckForEventsTypes(unittest.TestCase):
         o.app = QCoreApplication(sys.argv)
         o.app.exec_()
         for e in o.events:
-            self.assert_(isinstance(e, MyEvent))
+            self.assertTrue(isinstance(e, MyEvent))
         o.app = None
 
 if __name__ == '__main__':

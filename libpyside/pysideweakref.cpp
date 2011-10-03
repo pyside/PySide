@@ -12,8 +12,7 @@ typedef struct {
 static PyObject* CallableObject_call(PyObject* callable_object, PyObject* args, PyObject* kw);
 
 static PyTypeObject PySideCallableObjectType = {
-    PyObject_HEAD_INIT(0)
-    0,
+    PyVarObject_HEAD_INIT(0, 0)
     const_cast<char*>("PySide.Callable"),
     sizeof(PySideCallableObject),    /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -52,9 +51,9 @@ PyObject* create(PyObject* obj, PySideWeakRefFunction func, void* userData)
     if (obj == Py_None)
         return 0;
 
-    if (PySideCallableObjectType.ob_type == 0)
+    if (Py_TYPE(&PySideCallableObjectType) == 0)
     {
-        PySideCallableObjectType.ob_type = &PyType_Type;
+        Py_TYPE(&PySideCallableObjectType) = &PyType_Type;
         PyType_Ready(&PySideCallableObjectType);
     }
 

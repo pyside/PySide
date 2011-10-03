@@ -3,14 +3,15 @@
 
 import unittest
 import os
+import py3kcompat as py3k
 
 from PySide.QtCore import *
 
 class TestQProcess (unittest.TestCase):
     def testStartDetached(self):
         value, pid = QProcess.startDetached("dir", [], os.getcwd())
-        self.assert_(isinstance(value, bool))
-        self.assert_(isinstance(pid, long))
+        self.assertTrue(isinstance(value, bool))
+        self.assertTrue(isinstance(pid, py3k.long))
 
     def testPid(self):
         p = QProcess()
@@ -22,7 +23,7 @@ class TestQProcess (unittest.TestCase):
         if p.state() == QProcess.Running:
             self.assertNotEqual(pid, 0)
         else:
-            print "PROCESS ALREADY DEAD :-/"
+            print("PROCESS ALREADY DEAD :-/")
 
 if __name__ == '__main__':
     unittest.main()

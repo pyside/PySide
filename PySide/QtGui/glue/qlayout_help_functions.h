@@ -7,7 +7,7 @@ void removeLayoutOwnership(QLayout* layout, QWidget* widget);
 inline QByteArray retrieveObjectName(PyObject* obj)
 {
     Shiboken::AutoDecRef objName(PyObject_Str(obj));
-    return PyString_AsString(objName);
+    return Shiboken::String::toCString(objName);
 }
 
 inline void addLayoutOwnership(QLayout* layout, QWidget* widget)

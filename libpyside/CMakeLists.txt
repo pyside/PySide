@@ -14,6 +14,7 @@ set(libpyside_SRC
     pysidesignal.cpp
     pysideslot.cpp
     pysideproperty.cpp
+    pysideqflags.cpp
     pysideweakref.cpp
     pyside.cpp
     ${DESTROYLISTENER_MOC}
@@ -51,6 +52,7 @@ set(libpyside_HEADERS
     pysidemetafunction.h
     pysidesignal.h
     pysideproperty.h
+    pysideqflags.h
     pysideweakref.h
 )
 

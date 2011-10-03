@@ -82,6 +82,9 @@ struct Converter<QVariant>
         } else if (Shiboken::isShibokenEnum(pyObj)) {
             // QVariant(enum)
             return QVariant(Converter<int>::toCpp(pyObj));
+        } else if (PyNumber_Check(pyObj)) {
+            Shiboken::AutoDecRef pyValue(PyNumber_Long(pyObj));
+            return QVariant((int)PyLong_AsLong(pyValue.object()));
         } else if (Shiboken::Object::checkType(pyObj)) {
             // a class supported by QVariant?
                 int typeCode;

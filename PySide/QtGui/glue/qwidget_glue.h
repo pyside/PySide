@@ -1,7 +1,7 @@
 static QString retrieveObjectName(PyObject *obj)
 {
     Shiboken::AutoDecRef objName(PyObject_Str(obj));
-    return QString(PyString_AsString(objName));
+    return QString(Shiboken::String::toCString(objName));
 }
 
 

@@ -11,14 +11,12 @@ struct Converter<QString>
 {
     static bool checkType(PyObject* pyObj)
     {
-        return PyString_Check(pyObj) || PyUnicode_Check(pyObj);
+        return Shiboken::String::check(pyObj);
     }
 
     static bool isConvertible(PyObject* pyObj)
     {
-        return PyString_Check(pyObj)
-                || PyUnicode_Check(pyObj)
-                || pyObj == Py_None;
+        return Shiboken::String::convertible(pyObj);
     }
 
     static QString toCpp(PyObject* pyObj)
@@ -31,8 +29,8 @@ struct Converter<QString>
     #else
             return QString::fromUtf16(unicode, PyUnicode_GET_SIZE(pyObj));
     #endif
-        } else if (PyString_Check(pyObj)) {
-            return QString(Converter<const char * >::toCpp(pyObj));
+        } else if (Shiboken::String::check(pyObj)) {
+            return QString(Shiboken::String::toCString(pyObj));
         }
         return QString();
     }

@@ -3,11 +3,10 @@
 
 import unittest
 import ctypes
-import sys
 import pickle
-import cStringIO
+import py3kcompat as py3k
 
-from PySide.QtCore import *
+from PySide.QtCore import QByteArray, QSettings, QObject
 
 class QByteArrayTestToNumber(unittest.TestCase):
     def testToNumberInt(self):
@@ -30,7 +29,7 @@ class QByteArrayTestToNumber(unittest.TestCase):
 
     def testSetNum(self):
         b = QByteArray()
-        b.setNum(-124124L)
+        b.setNum(py3k.long(-124124))
         self.assertEqual(b, "-124124")
         b = QByteArray()
         b.setNum(-124124)
@@ -61,13 +60,13 @@ class QByteArrayData(unittest.TestCase):
 
     def testData(self):
         url = QByteArray("http://web.openbossa.org/")
-        self.assertEqual(url.data(), "http://web.openbossa.org/")
+        self.assertEqual(url.data(), py3k.b("http://web.openbossa.org/"))
 
     def testDataWithZeros(self):
         s1 = "123\000321"
         ba = QByteArray(s1)
         s2 = ba.data()
-        self.assertEqual(s1, s2)
+        self.assertEqual(py3k.b(s1), s2)
         self.assertEqual(s1, ba)
 
 class QByteArrayOperatorAtSetter(unittest.TestCase):
@@ -127,15 +126,16 @@ class QByteArrayOnQVariant(unittest.TestCase):
 class TestBug666(unittest.TestCase):
     '''QByteArray does not support slices'''
     def testIt(self):
-        ba = QByteArray('1234567890')
-        self.assertEqual(ba[2:4], '34')
-        self.assertEqual(ba[:4], '1234')
-        self.assertEqual(ba[4:], '567890')
-        self.assertEqual(len(ba[4:1]), 0)
+        if not py3k.IS_PY3K:
+            ba = QByteArray('1234567890')
+            self.assertEqual(ba[2:4], '34')
+            self.assertEqual(ba[:4], '1234')
+            self.assertEqual(ba[4:], '567890')
+            self.assertEqual(len(ba[4:1]), 0)
 
 class QByteArrayBug514(unittest.TestCase):
     def testIt(self):
-        data = "foobar"
+        data = py3k.b("foobar")
         a = QByteArray.fromRawData(data)
         self.assertEqual(type(a), QByteArray)
         self.assertEqual(a.data(), data)
@@ -143,16 +143,15 @@ class QByteArrayBug514(unittest.TestCase):
 class TestPickler(unittest.TestCase):
     def testIt(self):
         ba = QByteArray("321\x00123")
-        output = cStringIO.StringIO()
-        pickle.dump(ba, output)
-        ba2 = pickle.loads(output.getvalue())
+        output = pickle.dumps(str(ba))
+        ba2 = pickle.loads(output)
         self.assertEqual(ba, ba2)
 
 class QByteArrayBug720(unittest.TestCase):
     def testIt(self):
-        ba = QByteArray("32\"1\x00123")
+        ba = QByteArray(b"32\"1\x00123")
         self.assertEqual(str(ba), "32\"1\x00123")
-        self.assertEqual(repr(ba), "PySide.QtCore.QByteArray('32\"1\\x00123')")
+        self.assertEqual(repr(ba), "PySide.QtCore.QByteArray('32\"1\x00123')")
 
 class QByteArrayImplicitConvert(unittest.TestCase):
     def testString(self):

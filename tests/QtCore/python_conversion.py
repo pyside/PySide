@@ -2,14 +2,13 @@
 '''Test cases for QLineF'''
 
 import unittest
-import os
 import datetime
 
-from PySide.QtCore import *
+from PySide.QtCore import QTime, QDateTime, QDate
 
 class TestDateTimeConversions (unittest.TestCase):
     def testQDate(self):
-        date = datetime.date(2010, 04, 23)
+        date = datetime.date(2010, 4, 23)
         other = QDate(date)
         self.assertEqual(date.year, other.year())
         self.assertEqual(date.month, other.month())
@@ -18,7 +17,7 @@ class TestDateTimeConversions (unittest.TestCase):
         self.assertEqual(date, other.toPython())
 
     def testQTime(self):
-        time = datetime.time(11, 14, 00, 1000)
+        time = datetime.time(11, 14, 0, 1000)
         other = QTime(time)
         self.assertEqual(time.hour, other.hour())
         self.assertEqual(time.minute, other.minute())
@@ -28,7 +27,7 @@ class TestDateTimeConversions (unittest.TestCase):
         self.assertEqual(time, other.toPython())
 
     def testQDateTime(self):
-        dateTime = datetime.datetime(2010, 04, 23, 11, 14, 00, 1000)
+        dateTime = datetime.datetime(2010, 4, 23, 11, 14, 0, 1000)
         other = QDateTime(dateTime)
 
         otherDate = other.date()
@@ -45,7 +44,7 @@ class TestDateTimeConversions (unittest.TestCase):
         self.assertEqual(dateTime, other.toPython())
 
         # with 6 arguments
-        other = QDateTime(2010, 04, 23, 11, 14, 01)
+        other = QDateTime(2010, 4, 23, 11, 14, 1)
 
         otherDate = other.date()
         self.assertEqual(2010, otherDate.year())

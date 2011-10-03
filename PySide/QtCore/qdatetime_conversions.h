@@ -1,6 +1,10 @@
+#ifdef IS_PY3K
+#define PySideDateTime_IMPORT PyDateTime_IMPORT
+#else
 #define PySideDateTime_IMPORT \
         PyDateTimeAPI = (PyDateTime_CAPI*) PyCObject_Import((char*)"datetime", \
                                                             (char*)"datetime_CAPI")
+#endif
 namespace Shiboken {
 
 inline bool Converter<QDateTime>::checkType(PyObject* pyObj)

@@ -1,8 +1,6 @@
-
 import unittest
-import new
 
-from PySide.QtCore import *
+from PySide.QtCore import QByteArray
 from helper.docmodifier import DocModifier
 
 class BaseQByteArrayOperatorIAdd(object):

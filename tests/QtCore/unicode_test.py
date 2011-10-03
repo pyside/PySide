@@ -4,6 +4,7 @@
 '''Unit tests for QString conversion to/from Python Unicode'''
 
 import unittest
+import py3kcompat as py3k
 
 from PySide.QtCore import QObject
 
@@ -20,13 +21,13 @@ class UnicodeConversion(unittest.TestCase):
         #Set regular Python string retrieve unicode
         obj = QObject()
         obj.setObjectName('test')
-        self.assertEqual(obj.objectName(), u'test')
+        self.assertEqual(obj.objectName(), py3k.unicode('test'))
 
     def testSetUnicodeRetrieveUnicode(self):
         #Set Python unicode string and retrieve unicode
         obj = QObject()
-        obj.setObjectName(u'ümlaut')
-        self.assertEqual(obj.objectName(), u'ümlaut')
+        obj.setObjectName(py3k.unicode('ümlaut'))
+        self.assertEqual(obj.objectName(), py3k.unicode('ümlaut'))
 
 if __name__ == '__main__':
     unittest.main()

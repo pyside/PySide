@@ -83,7 +83,9 @@ DynamicSlotDataV2::DynamicSlotDataV2(PyObject* callback, GlobalReceiverV2* paren
         //Can not store calback pointe because this will be destroyed at the end of the scope
         //To avoid increment intance reference keep the callback information
         m_callback = PyMethod_GET_FUNCTION(callback);
+#ifndef IS_PY3K
         m_pyClass = PyMethod_GET_CLASS(callback);
+#endif
         m_pythonSelf = PyMethod_GET_SELF(callback);
 
         //monitor class from method lifetime
@@ -121,7 +123,11 @@ PyObject* DynamicSlotDataV2::callback()
 
     //create a callback based on method data
     if (m_isMethod)
+#ifdef IS_PY3K
+        callback = PyMethod_New(m_callback, m_pythonSelf);
+#else
         callback = PyMethod_New(m_callback, m_pythonSelf, m_pyClass);
+#endif
     else
         Py_INCREF(callback);
 

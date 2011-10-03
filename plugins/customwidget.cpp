@@ -119,7 +119,7 @@ QWidget* PyCustomWidget::createWidget(QWidget* parent)
         else
             Shiboken::Object::setParent(pyParent, reinterpret_cast<PyObject*>(result));
 
-        widget = reinterpret_cast<QWidget*>(Shiboken::Object::cppPointer(result, result->ob_type));
+        widget = reinterpret_cast<QWidget*>(Shiboken::Object::cppPointer(result, Py_TYPE(result)));
     }
 
     return widget;

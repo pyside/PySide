@@ -68,8 +68,8 @@ bool fillQtProperties(PyObject* qObj, const QMetaObject* metaObj, PyObject* kwds
     Py_ssize_t pos = 0;
 
     while (PyDict_Next(kwds, &pos, &key, &value)) {
-        if (!blackListSize || !std::binary_search(blackList, blackList + blackListSize, std::string(PyString_AS_STRING(key)))) {
-            QByteArray propName(PyString_AS_STRING(key));
+        if (!blackListSize || !std::binary_search(blackList, blackList + blackListSize, std::string(Shiboken::String::toCString(key)))) {
+            QByteArray propName(Shiboken::String::toCString(key));
             if (metaObj->indexOfProperty(propName) != -1) {
                 propName[0] = std::toupper(propName[0]);
                 propName.prepend("set");
@@ -185,7 +185,7 @@ void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base)
 void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
 {
     PyTypeObject* qObjType = Shiboken::TypeResolver::get("QObject*")->pythonType();
-    QByteArray className(PyString_AS_STRING(PyTuple_GET_ITEM(args, 0)));
+    QByteArray className(Shiboken::String::toCString(PyTuple_GET_ITEM(args, 0)));
 
     PyObject* bases = PyTuple_GET_ITEM(args, 1);
     int numBases = PyTuple_GET_SIZE(bases);
@@ -233,9 +233,9 @@ PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* nam
     }
 
     //search on metaobject (avoid internal attributes started with '__')
-    if (!attr && !QString(PyString_AS_STRING(name)).startsWith("__")) {
+    if (!attr && !QString(Shiboken::String::toCString(name)).startsWith("__")) {
         const QMetaObject* metaObject = cppSelf->metaObject();
-        QByteArray cname(PyString_AS_STRING(name));
+        QByteArray cname(Shiboken::String::toCString(name));
         cname += '(';
         //signal
         QList<QMetaMethod> signalList;

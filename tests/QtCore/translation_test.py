@@ -4,9 +4,9 @@
 '''Unit tests to test QTranslator and translation in general.'''
 
 import os
-import glob
 import unittest
-from PySide.QtCore import *
+import py3kcompat as py3k
+from PySide.QtCore import QObject, QTranslator, QCoreApplication
 
 from helper import UsesQCoreApplication
 
@@ -25,7 +25,7 @@ class TranslationTest(UsesQCoreApplication):
 
         obj = QObject()
         obj.setObjectName(obj.tr('Hello World!'))
-        self.assertEqual(obj.objectName(), u'Orbis, te saluto!')
+        self.assertEqual(obj.objectName(), py3k.unicode('Orbis, te saluto!'))
 
     def testRussian(self):
         #Set string value to Russian
@@ -35,7 +35,7 @@ class TranslationTest(UsesQCoreApplication):
 
         obj = QObject()
         obj.setObjectName(obj.tr('Hello World!'))
-        self.assertEqual(obj.objectName(), u'привет мир!')
+        self.assertEqual(obj.objectName(), py3k.unicode('привет мир!'))
 
     def testUtf8(self):
         translator = QTranslator()
@@ -44,12 +44,12 @@ class TranslationTest(UsesQCoreApplication):
 
         obj = QObject()
         obj.setObjectName(obj.trUtf8('Hello World!'))
-        self.assertEqual(obj.objectName(), u'привет мир!')
+        self.assertEqual(obj.objectName(), py3k.unicode('привет мир!'))
 
     def testTranslateWithNoneDisambiguation(self):
         value = 'String here'
         obj = QCoreApplication.translate('context', value, None, QCoreApplication.UnicodeUTF8)
-        self.assert_(isinstance(obj, unicode))
+        self.assertTrue(isinstance(obj, py3k.unicode))
         self.assertEqual(obj, value)
 
 if __name__ == '__main__':

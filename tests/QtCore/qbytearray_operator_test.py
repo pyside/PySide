@@ -3,8 +3,9 @@
 '''Test cases for QByteArray operators'''
 
 import unittest
+import py3kcompat as py3k
 
-from PySide.QtCore import *
+from PySide.QtCore import QByteArray
 
 class QByteArrayOperatorEqual(unittest.TestCase):
     '''TestCase for operator QByteArray == QByteArray'''
@@ -39,7 +40,7 @@ class QByteArrayOperatorAt(unittest.TestCase):
         obj = QByteArray(string)
 
         for i in range(len(string)):
-            self.assertEqual(obj[i], string[i])
+            self.assertEqual(obj[i], py3k.b(string[i]))
 
     def testInRangeReverse(self):
         #QByteArray[x] where x is a valid index (reverse order)
@@ -47,7 +48,7 @@ class QByteArrayOperatorAt(unittest.TestCase):
         obj = QByteArray(string)
 
         for i in range(len(string)-1, 0, -1):
-            self.assertEqual(obj[i], string[i])
+            self.assertEqual(obj[i], py3k.b(string[i]))
 
 
     def testOutOfRange(self):
@@ -59,7 +60,7 @@ class QByteArrayOperatorAt(unittest.TestCase):
     def testNullStrings(self):
         ba = QByteArray('\x00')
         self.assertEqual(ba.at(0), '\x00')
-        self.assertEqual(ba[0], '\x00')
+        self.assertEqual(ba[0], py3k.b('\x00'))
 
 class QByteArrayOperatorLen(unittest.TestCase):
     '''Test case for __len__ operator of QByteArray'''

@@ -2,8 +2,9 @@
 '''Unit tests for QTextStream'''
 
 import unittest
+import py3kcompat as py3k
 
-from PySide.QtCore import *
+from PySide.QtCore import QByteArray, QTextStream, QIODevice, QTextCodec, QFile
 
 class QTextStreamShiftTest(unittest.TestCase):
 
@@ -18,7 +19,7 @@ class QTextStreamShiftTest(unittest.TestCase):
         self.write << '4'
         self.write.flush()
         res = self.read.readLine()
-        self.assert_(isinstance(res, unicode))
+        self.assertTrue(isinstance(res, py3k.unicode))
         self.assertEqual(res, '4')
 
 class QTextStreamGetSet(unittest.TestCase):
@@ -52,7 +53,7 @@ class QTextStreamInitialization(unittest.TestCase):
         self.assertEqual(obj.device(), None)
         self.assertEqual(obj.string(), None)
 
-        self.assert_(obj.atEnd())
+        self.assertTrue(obj.atEnd())
         self.assertEqual(obj.readAll(), '')
 
 class QTextStreamReadLinesFromDevice(unittest.TestCase):

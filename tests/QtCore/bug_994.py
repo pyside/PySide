@@ -1,12 +1,14 @@
 import unittest
-from PySide.QtCore import *
+import py3kcompat as py3k
+from PySide.QtCore import QIODevice, QTextStream
+
 
 class MyIODevice (QIODevice):
     def readData(self, amount):
-        return "\0a" * (amount/2)
+        return py3k.b("\0a" * int(amount/2))
 
     def readLineData(self, maxSize):
-        return "\0b" * 4
+        return py3k.b("\0b" * 4)
 
     def atEnd(self):
         return False
