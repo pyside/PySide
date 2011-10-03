@@ -39,8 +39,7 @@ static void classInfoFree(void*);
 static PyObject* classCall(PyObject*, PyObject*, PyObject*);
 
 PyTypeObject PySideClassInfoType = {
-    PyObject_HEAD_INIT(0)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     CLASSINFO_CLASS_NAME,      /*tp_name*/
     sizeof(PySideClassInfo),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -119,8 +118,8 @@ int classInfoTpInit(PyObject* self, PyObject* args, PyObject* kwds)
     PyObject* value;
     Py_ssize_t pos = 0;
     while (PyDict_Next(kwds, &pos, &key, &value)) {
-        if (PyString_Check(key) && PyString_Check(value))
-            pData->m_data[PyString_AS_STRING(key)] = PyString_AS_STRING(value);
+        if (Shiboken::String::check(key) && Shiboken::String::check(value))
+            pData->m_data[Shiboken::String::toCString(key)] = Shiboken::String::toCString(value);
     }
 
     return PyErr_Occurred() ? -1 : 1;

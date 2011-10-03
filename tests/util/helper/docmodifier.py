@@ -1,13 +1,13 @@
 
 '''Helper metaclass do 'decorate' docstrings from base test case classes'''
 
-import new
+import types
 
 
 def copy_func(func):
     '''Helper function to copy a function object (except docstring)'''
-    return new.function(func.func_code, func.func_globals, func.func_name,
-                        func.func_defaults, func.func_closure)
+    return types.FunctionType(func.func_code, func.func_globals, func.func_name,
+                              func.func_defaults, func.func_closure)
 
 
 class DocModifier(type):

@@ -41,8 +41,7 @@ static void         functionFree(void*);
 static PyObject*    functionCall(PyObject*, PyObject*, PyObject*);
 
 PyTypeObject PySideMetaFunctionType = {
-    PyObject_HEAD_INIT(0)
-    /*ob_size*/             0,
+    PyVarObject_HEAD_INIT(0, 0)
     /*tp_name*/             "PySide.MetaFunction",
     /*tp_basicsize*/        sizeof(PySideMetaFunction),
     /*tp_itemsize*/         0,

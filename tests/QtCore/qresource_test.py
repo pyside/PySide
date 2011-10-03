@@ -3,7 +3,6 @@
 '''Test cases for QResource usage'''
 
 import unittest
-import os
 from helper import adjust_filename
 from PySide.QtCore import QFile, QIODevice
 import resources_mc
@@ -18,7 +17,8 @@ class ResourcesUsage(unittest.TestCase):
         f.close()
 
         f = QFile(':/quote.txt')
-        f.open(QIODevice.ReadOnly|QIODevice.Text)
+        f.open(QIODevice.ReadOnly) #|QIODevice.Text)
+        print("Error:", f.errorString())
         copy = f.readAll()
         f.close()
         self.assertEqual(orig, copy)

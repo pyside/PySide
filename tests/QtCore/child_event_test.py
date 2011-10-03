@@ -39,16 +39,13 @@ class TestChildEvent(UsesQCoreApplication):
         parent = ExtQObject()
         child = QObject()
         child.setParent(parent)
-        print "parent seted"
-        #self.assert_(parent.child_event_received)
+        self.assertTrue(parent.child_event_received)
 
-    """
     def testQTimer(self):
         parent = ExtQTimer()
         child = QObject()
         child.setParent(parent)
         self.assert_(parent.child_event_received)
-    """
 
 if __name__ == '__main__':
     unittest.main()

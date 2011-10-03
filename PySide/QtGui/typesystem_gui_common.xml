@@ -22,9 +22,9 @@
   <load-typesystem name="typesystem_core.xml" generate="no"/>
 
   <template name="QFontCharFix">
-    int size = PyString_GET_SIZE(%PYARG_1);
+    int size = Shiboken::String::len(%PYARG_1);
     if (size == 1) {
-        char *str = PyString_AS_STRING(%PYARG_1);
+        const char *str = Shiboken::String::toCString(%PYARG_1);
         QChar ch(str[0]);
         %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(ch);
         %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
@@ -777,7 +777,7 @@
         Shiboken::AutoDecRef strList(PySequence_Fast(%PYARG_1, "Invalid sequence."));
         int lineCount = PySequence_Fast_GET_SIZE(strList.object());
         for (int line = 0; line &lt; lineCount; ++line) {
-            if (!PyString_Check(PySequence_Fast_GET_ITEM(strList.object(), line))) {
+            if (!Shiboken::String::check(PySequence_Fast_GET_ITEM(strList.object(), line))) {
                 PyErr_SetString(PyExc_TypeError, "The argument must be a sequence of strings.");
                 break;
             }
@@ -785,7 +785,7 @@
 
         const char** xpm = (const char**) malloc (lineCount * sizeof(const char**));
         for (int line = 0; line &lt; lineCount; ++line)
-            xpm[line] = PyString_AS_STRING(PySequence_Fast_GET_ITEM(strList.object(), line));
+            xpm[line] = Shiboken::String::toCString(PySequence_Fast_GET_ITEM(strList.object(), line));
 
         %BEGIN_ALLOW_THREADS
         %0 = new %TYPE(xpm);
@@ -820,15 +820,15 @@
 
     <modify-function signature="loadFromData(const uchar*,uint,const char*,QFlags&lt;Qt::ImageConversionFlag&gt;)">
       <modify-argument index="1">
-        <replace-type modified-type="const char*"/>
+        <replace-type modified-type="PyBytes"/>
         <conversion-rule class="native">
-          const uchar* %out = reinterpret_cast&lt;const uchar*>(PyString_AS_STRING(%PYARG_1));
+          const uchar* %out = reinterpret_cast&lt;const uchar*>(PyBytes_AS_STRING(%PYARG_1));
         </conversion-rule>
       </modify-argument>
       <modify-argument index="2">
         <remove-argument/>
         <conversion-rule class="native">
-          uint %out = static_cast&lt;uint>(PyString_GET_SIZE(%PYARG_1));
+          uint %out = static_cast&lt;uint>(PyBytes_Size(%PYARG_1));
         </conversion-rule>
       </modify-argument>
     </modify-function>
@@ -1115,7 +1115,7 @@
             qreal r, g, b, a;
             %CPPSELF.getRgbF(&amp;r, &amp;g, &amp;b, &amp;a);
             QString repr = QString().sprintf("PySide.QtGui.QColor.fromRgbF(%.6f, %.6f, %.6f, %.6f)", r, g, b, a);
-            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            %PYARG_0 = Shiboken::String::fromCString(qPrintable(repr));
             break;
         }
         case QColor::Hsv:
@@ -1123,7 +1123,7 @@
             qreal h, s, v, a;
             %CPPSELF.getHsvF(&amp;h, &amp;s, &amp;v, &amp;a);
             QString repr = QString().sprintf("PySide.QtGui.QColor.fromHsvF(%.6f, %.6f, %.6f, %.6f)", h, s, v, a);
-            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            %PYARG_0 = Shiboken::String::fromCString(qPrintable(repr));
             break;
         }
         case QColor::Cmyk:
@@ -1131,7 +1131,7 @@
             qreal c, m, y, k, a;
             %CPPSELF.getCmykF(&amp;c, &amp;m, &amp;y, &amp;k, &amp;a);
             QString repr = QString().sprintf("PySide.QtGui.QColor.fromCmykF(%.6f, %.6f, %.6f, %.6f, %.6f)", c, m, y, k, a);
-            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            %PYARG_0 = Shiboken::String::fromCString(qPrintable(repr));
             break;
         }
         #if QT_VERSION >= 0x040600
@@ -1140,13 +1140,13 @@
             qreal h, s, l, a;
             %CPPSELF.getHslF(&amp;h, &amp;s, &amp;l, &amp;a);
             QString repr = QString().sprintf("PySide.QtGui.QColor.fromHslF(%.6f, %.6f, %.6f, %.6f)", h, s, l, a);
-            %PYARG_0 = PyString_FromString(qPrintable(repr));
+            %PYARG_0 = Shiboken::String::fromCString(qPrintable(repr));
             break;
         }
         #endif
         default:
         {
-            %PYARG_0 = PyString_FromString("PySide.QtGui.QColor()");
+            %PYARG_0 = Shiboken::String::fromCString("PySide.QtGui.QColor()");
         }
      }
   </template>
@@ -1462,7 +1462,7 @@
 
     <modify-function signature="boundingRect(QChar)const" rename="boundingRectChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyString"/>
+        <replace-type modified-type="PyBytes"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
@@ -1471,7 +1471,7 @@
 
     <modify-function signature="width(QChar)const" rename="widthChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyString"/>
+        <replace-type modified-type="PyBytes"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
@@ -1538,7 +1538,7 @@
 
     <modify-function signature="boundingRect(QChar)const" rename="boundingRectChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyString"/>
+        <replace-type modified-type="PyBytes"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
@@ -1547,7 +1547,7 @@
 
     <modify-function signature="width(QChar)const" rename="widthChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyString"/>
+        <replace-type modified-type="PyBytes"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
@@ -3641,7 +3641,7 @@
             foreach (QGraphicsItem* item, items) {
                 SbkObject* obj = bm.retrieveWrapper(item);
                 if (obj) {
-                    if (obj->ob_refcnt > 1) // If the refcnt is 1 the object will vannish anyway.
+                    if (reinterpret_cast&lt;PyObject*&gt;(obj)->ob_refcnt > 1) // If the refcnt is 1 the object will vannish anyway.
                         Shiboken::Object::invalidate(obj);
                     Shiboken::Object::removeParent(obj);
                 }

@@ -19,7 +19,7 @@ struct Converter<QVariant::Type>
         if (pyObj == Py_None)
             return QVariant::Invalid;
 
-        if (pyObj == reinterpret_cast<PyObject*>(&PyString_Type) || pyObj == reinterpret_cast<PyObject*>(&PyUnicode_Type))
+        if (Shiboken::String::checkType(reinterpret_cast<PyTypeObject*>(pyObj)))
             typeName = "QString";
         else if (pyObj == reinterpret_cast<PyObject*>(&PyFloat_Type))
             typeName = "double"; // float is a UserType in QVariant.
@@ -31,10 +31,8 @@ struct Converter<QVariant::Type>
             else
                 typeName = reinterpret_cast<PyTypeObject*>(pyObj)->tp_name;
         }
-        else if (PyString_Check(pyObj))
-            typeName = PyString_AS_STRING(pyObj);
-        else if (PyUnicode_Check(pyObj))
-            typeName = PyString_AsString(pyObj);
+        else if (Shiboken::String::check(pyObj))
+            typeName = Shiboken::String::toCString(pyObj);
         else if (PyDict_Check(pyObj) && checkAllStringKeys(pyObj))
             typeName = "QVariantMap";
         else if (PySequence_Check(pyObj))

@@ -4,8 +4,15 @@
 
 import unittest
 import types
-from PySide.QtCore import QObject, QEvent
+import sys
+from PySide.QtCore import QObject
 from helper import UsesQCoreApplication
+
+def MethodType(func, instance, instanceType):
+    if sys.version_info[0] == 3:
+        return types.MethodType(func, instance)
+    else:
+        return types.MethodType(func, instance, instanceType)
 
 class Duck(QObject):
     def __init__(self):
@@ -32,7 +39,7 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
         parent = QObject()
         def childEvent(obj, event):
             self.duck_childEvent_called = True
-        parent.childEvent = types.MethodType(childEvent, parent, QObject)
+        parent.childEvent = MethodType(childEvent, parent, QObject)
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)
@@ -51,7 +58,7 @@ class TestDuckPunchingOnQObjectInstance(UsesQCoreApplication):
             self.duck_childEvent_called = True
         child = QObject()
         child.setParent(parent)
-        parent.childEvent = types.MethodType(childEvent, parent, QObject)
+        parent.childEvent = MethodType(childEvent, parent, QObject)
         child = QObject()
         child.setParent(parent)
         self.assert_(self.duck_childEvent_called)

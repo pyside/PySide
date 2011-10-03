@@ -56,10 +56,18 @@ namespace {
     static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args);
     static bool emitNormalSignal(QObject* source, int signalIndex, const char* signal, PyObject* args, const QStringList& argTypes);
 
+#ifdef IS_PY3K
+    static void destroyMetaObject(PyObject* obj)
+    {
+        delete reinterpret_cast<PySide::DynamicQMetaObject*>(PyCapsule_GetPointer(obj, 0));
+    }
+
+#else
     static void destroyMetaObject(void* obj)
     {
         delete reinterpret_cast<PySide::DynamicQMetaObject*>(obj);
     }
+#endif
 }
 
 namespace PySide {
@@ -118,9 +126,15 @@ QDataStream &operator<<(QDataStream& out, const PyObjectWrapper& myObj)
     }
     Shiboken::AutoDecRef repr(PyObject_CallFunctionObjArgs(reduce_func, (PyObject*)myObj, NULL));
     if (repr.object()) {
-        char* buff;
-        Py_ssize_t size;
-        PyString_AsStringAndSize(repr.object(), &buff, &size);
+        const char* buff;
+        Py_ssize_t size  = 0;
+        if (PyBytes_Check(repr.object())) {
+            buff = PyBytes_AS_STRING(repr.object());
+            size = PyBytes_GET_SIZE(repr.object());
+        } else if (Shiboken::String::check(repr.object())) {
+            buff = Shiboken::String::toCString(repr.object());
+            size = Shiboken::String::len(repr.object());
+        }
         QByteArray data(buff, size);
         out << data;
     }
@@ -144,7 +158,7 @@ QDataStream &operator>>(QDataStream& in, PyObjectWrapper& myObj)
 
     QByteArray repr;
     in >> repr;
-    Shiboken::AutoDecRef pyCode(PyString_FromStringAndSize(repr.data(), repr.size()));
+    Shiboken::AutoDecRef pyCode(PyBytes_FromStringAndSize(repr.data(), repr.size()));
     Shiboken::AutoDecRef value(PyObject_CallFunctionObjArgs(eval_func, pyCode.object(), 0));
     if (!value.object()) {
         value = Py_None;
@@ -225,7 +239,7 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
     PySide::registerCleanupFunction(clearSignalManager);
 
     if (!metaObjectAttr)
-        metaObjectAttr = PyString_FromString("__METAOBJECT__");
+        metaObjectAttr = Shiboken::String::fromCString("__METAOBJECT__");
 }
 
 void SignalManager::clear()
@@ -353,7 +367,7 @@ int SignalManager::qt_metacall(QObject* object, QMetaObject::Call call, int id, 
         Shiboken::GilState gil;
         pySelf = (PyObject*)Shiboken::BindingManager::instance().retrieveWrapper(object);
         Q_ASSERT(pySelf);
-        pp_name = PyString_FromString(mp.name());
+        pp_name = Shiboken::String::fromCString(mp.name());
         pp = Property::getObject(pySelf, pp_name);
         if (!pp) {
             qWarning("Invalid property: %s.", mp.name());
@@ -454,7 +468,12 @@ int SignalManager::registerMetaMethodGetIndex(QObject* source, const char* signa
             // Create a instance meta object
             if (!dict || !PyDict_Contains(dict, metaObjectAttr)) {
                 dmo = new DynamicQMetaObject(pySelf->ob_type, metaObject);
+#ifdef IS_PY3K
+                PyObject *pyDmo = PyCapsule_New(dmo, 0, destroyMetaObject);
+#else
                 PyObject *pyDmo = PyCObject_FromVoidPtr(dmo, destroyMetaObject);
+#endif
+
                 PyObject_SetAttr(pySelf, metaObjectAttr, pyDmo);
                 Py_DECREF(pyDmo);
             } else {
@@ -484,7 +503,12 @@ const QMetaObject* SignalManager::retriveMetaObject(PyObject *self)
     PyObject* dict = reinterpret_cast<SbkObject*>(self)->ob_dict;
     if (dict && PyDict_Contains(dict, metaObjectAttr)) {
         PyObject *pyMo = PyDict_GetItem(dict, metaObjectAttr);
+
+#ifdef IS_PY3K
+        mo = reinterpret_cast<DynamicQMetaObject*>(PyCapsule_GetPointer(pyMo, 0));
+#else
         mo = reinterpret_cast<DynamicQMetaObject*>(PyCObject_AsVoidPtr(pyMo));
+#endif
     } else {
         mo = reinterpret_cast<DynamicQMetaObject*>(Shiboken::Object::getTypeUserData(reinterpret_cast<SbkObject*>(self)));
     }

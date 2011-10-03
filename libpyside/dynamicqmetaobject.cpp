@@ -476,17 +476,17 @@ void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
     typedef std::pair<const char*, PyObject*> PropPair;
     QLinkedList<PropPair> properties;
 
-    Shiboken::AutoDecRef slotAttrName(PyString_FromString(PYSIDE_SLOT_LIST_ATTR));
+    Shiboken::AutoDecRef slotAttrName(Shiboken::String::fromCString(PYSIDE_SLOT_LIST_ATTR));
 
     while (PyDict_Next(attrs, &pos, &key, &value)) {
         if (Property::checkType(value)) {
             // Leave the properties to be register after signals because they may depend on notify signals
-            int index = d.superdata->indexOfProperty(PyString_AS_STRING(key));
+            int index = d.superdata->indexOfProperty(Shiboken::String::toCString(key));
             if (index == -1)
-                properties << PropPair(PyString_AS_STRING(key), value);
+                properties << PropPair(Shiboken::String::toCString(key), value);
         } else if (Signal::checkType(value)) { // Register signals
             PySideSignal* data = reinterpret_cast<PySideSignal*>(value);
-            const char* signalName = PyString_AS_STRING(key);
+            const char* signalName = Shiboken::String::toCString(key);
             data->signalName = strdup(signalName);
             QByteArray sig;
             sig.reserve(128);
@@ -504,7 +504,7 @@ void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
                 PyObject* signatureList = PyObject_GetAttr(value, slotAttrName);
                 for(Py_ssize_t i = 0, i_max = PyList_Size(signatureList); i < i_max; ++i) {
                     PyObject* signature = PyList_GET_ITEM(signatureList, i);
-                    QByteArray sig(PyString_AS_STRING(signature));
+                    QByteArray sig(Shiboken::String::toCString(signature));
                     //slot the slot type and signature
                     QList<QByteArray> slotInfo = sig.split(' ');
                     int index = d.superdata->indexOfSlot(slotInfo[1]);

@@ -54,8 +54,7 @@ static PyMethodDef PySidePropertyMethods[] = {
 };
 
 PyTypeObject PySidePropertyType = {
-    PyObject_HEAD_INIT(0)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     QPROPERTY_CLASS_NAME,      /*tp_name*/
     sizeof(PySideProperty),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -444,7 +443,7 @@ const char* getNotifyName(PySideProperty* self)
 {
     if (!self->d->notifySignature) {
         PyObject* str = PyObject_Str(self->d->notify);
-        self->d->notifySignature = strdup(PyString_AsString(str));
+        self->d->notifySignature = strdup(Shiboken::String::toCString(str));
         Py_DECREF(str);
     }
 

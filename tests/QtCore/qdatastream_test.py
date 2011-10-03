@@ -2,8 +2,9 @@
 '''Unit tests for QDataStream'''
 
 import unittest
+import py3kcompat as py3k
 
-from PySide.QtCore import *
+from PySide.QtCore import QBitArray, QByteArray, QIODevice, QDataStream, QDate, QTime, QDateTime
 
 def create_bitarray(string):
     array = QBitArray(len(string))
@@ -22,7 +23,7 @@ class QDataStreamWrite(unittest.TestCase):
     def testWriteUInt8(self):
         '''QDataStream.writeUInt8 (accepting str of size 1)'''
         x = 0xFF
-        self.write.writeUInt8(chr(x))
+        self.write.writeUInt8(x)
         y = self.read.readUInt8()
         self.assertEqual(x, y)
 
@@ -65,7 +66,6 @@ class QDataStreamWrite(unittest.TestCase):
         y = int(self.read.readUInt32())
         self.assertEqual(x, y)
 
-
 class QDataStreamShift(unittest.TestCase):
     '''Test case for << and >> operators'''
 
@@ -79,14 +79,14 @@ class QDataStreamShift(unittest.TestCase):
         self.stream.writeQChar(42)
 
         res = self.read_stream.readQChar()
-        self.assertEqual(res, unichr(42))
+        self.assertEqual(res, py3k.unichr(42))
 
     def testQCharNull(self):
         '''QDataStream <<>> QChar - null'''
         self.stream.writeQChar(None)
 
         res = self.read_stream.readQChar()
-        self.assertEqual(res, u'\x00')
+        self.assertEqual(res, py3k.unicode('\x00'))
 
     def testQByteArrayValid(self):
         '''QDataStream <<>> QByteArray - valid'''
@@ -105,8 +105,8 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QByteArray(""))
-        self.assert_(res.isEmpty())
-        self.assert_(not res.isNull())
+        self.assertTrue(res.isEmpty())
+        self.assertFalse(res.isNull())
 
     def testQByteArrayNull(self):
         '''QDataStream <<>> QByteArray - null'''
@@ -116,29 +116,29 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QByteArray())
-        self.assert_(res.isEmpty())
-        self.assert_(res.isNull())
+        self.assertTrue(res.isEmpty())
+        self.assertTrue(res.isNull())
 
     def testQStringValid(self):
         '''QDataStream <<>> QString - valid'''
         self.stream.writeQString('Ka-boom')
 
         res = self.read_stream.readQString()
-        self.assertEqual(res, u'Ka-boom')
+        self.assertEqual(res, py3k.unicode('Ka-boom'))
 
     def testQStringEmpty(self):
         '''QDataStream <<>> QString - empty'''
         self.stream.writeQString('')
 
         res = self.read_stream.readQString()
-        self.assertEqual(res, u'')
+        self.assertEqual(res, py3k.unicode(''))
 
     def testQStringNull(self):
         '''QDataStream <<>> QString - null'''
         self.stream.writeQString(None)
 
         res = self.read_stream.readQString()
-        self.assertEqual(res, u'')
+        self.assertEqual(res, py3k.unicode(''))
 
     def testQBitArrayNull(self):
         '''QDataStream <<>> QBitArray - null'''
@@ -166,8 +166,8 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QDate())
-        self.assert_(not res.isValid())
-        self.assert_(res.isNull())
+        self.assertFalse(res.isValid())
+        self.assertTrue(res.isNull())
 
     def testQDateValid(self):
         '''QDataStream <<>> QDate - valid'''
@@ -177,8 +177,8 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QDate(2012, 12, 21))
-        self.assert_(res.isValid())
-        self.assert_(not res.isNull())
+        self.assertTrue(res.isValid())
+        self.assertFalse(res.isNull())
 
 
     def testQTimeNull(self):
@@ -189,8 +189,8 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QTime())
-        self.assert_(not res.isValid())
-        self.assert_(res.isNull())
+        self.assertFalse(res.isValid())
+        self.assertTrue(res.isNull())
 
     def testQTimeValid(self):
         '''QDataStream <<>> QTime - valid'''
@@ -200,8 +200,8 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QTime(12, 12, 21))
-        self.assert_(res.isValid())
-        self.assert_(not res.isNull())
+        self.assertTrue(res.isValid())
+        self.assertFalse(res.isNull())
 
     def testQDateTimeNull(self):
         '''QDataStream <<>> QDateTime - null'''
@@ -212,13 +212,13 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QDateTime())
-        self.assert_(not res.isValid())
-        self.assert_(res.isNull())
+        self.assertFalse(res.isValid())
+        self.assertTrue(res.isNull())
 
     def testQDateTimeValid(self):
         '''QDataStream <<>> QDateTime - valid'''
         time = QTime(23, 23, 23)
-        date = QDate(2009, 01, 01)
+        date = QDate(2009, 1, 1)
 
         self.stream << QDateTime(date, time)
 
@@ -226,8 +226,8 @@ class QDataStreamShift(unittest.TestCase):
 
         self.read_stream >> res
         self.assertEqual(res, QDateTime(date, time))
-        self.assert_(res.isValid())
-        self.assert_(not res.isNull())
+        self.assertTrue(res.isValid())
+        self.assertFalse(res.isNull())
 
 
 class QDataStreamShiftBitArray(unittest.TestCase):
@@ -316,10 +316,11 @@ class QDataStreamRawData(unittest.TestCase):
         ba = QByteArray()
         data = QDataStream(ba, QIODevice.WriteOnly)
         data.writeRawData('AB\x00C')
-        self.assertEqual(ba.data(), 'AB\x00C')
+        self.assertEqual(ba.data(), py3k.b('AB\x00C'))
 
         data = QDataStream(ba)
-        self.assertEqual(data.readRawData(4), 'AB\x00C')
+        self.assertEqual(data.readRawData(4), py3k.b('AB\x00C'))
 
 if __name__ == '__main__':
     unittest.main()
+

@@ -24,8 +24,9 @@
 #define PYSIDECONVERSIONS_H
 
 #include <Python.h>
-#include <conversions.h>
 #include <QFlag>
+#include <conversions.h>
+#include <pysideqflags.h>
 
 template <typename QtDict>
 struct QtDictConverter
@@ -211,6 +212,7 @@ struct QSequenceConverter
     }
 };
 
+
 template <typename T>
 struct QFlagsConverter
 {
@@ -232,17 +234,23 @@ struct QFlagsConverter
 
     static inline PyObject* toPython(const T& cppObj)
     {
-        PyObject* qflags = Shiboken::SbkType<T>()->tp_alloc(Shiboken::SbkType<T>(), 0);
-        reinterpret_cast<PyIntObject*>(qflags)->ob_ival = cppObj;
-        return qflags;
+        return reinterpret_cast<PyObject*>(PySide::QFlags::newObject(cppObj, Shiboken::SbkType<T>()));
     }
 
     static inline T toCpp(PyObject* pyObj)
     {
-        if (Shiboken::isShibokenEnum(pyObj))
-            return T(QFlag(Shiboken::Enum::getValue(pyObj)));
-        else
-            return T(QFlag(reinterpret_cast<PyIntObject*>(pyObj)->ob_ival));
+        long val = 0;
+        if (Shiboken::Enum::check(pyObj)) {
+            val = Shiboken::Enum::getValue(pyObj);
+        } else if (PyObject_TypeCheck(pyObj, Shiboken::SbkType<T>())) {
+            val = PySide::QFlags::getValue(reinterpret_cast<PySideQFlagsObject*>(pyObj));
+        } else if (PyNumber_Check(pyObj)) {
+            Shiboken::AutoDecRef pyLong(PyNumber_Long(pyObj));
+            val = PyLong_AsLong(pyLong.object());
+        } else {
+            PyErr_BadArgument();
+        }
+        return T(QFlag(val));
     }
 };
 

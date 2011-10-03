@@ -46,8 +46,7 @@ static PyObject* slotCall(PyObject*, PyObject*, PyObject*);
 
 // Class Definition -----------------------------------------------
 static PyTypeObject PySideSlotType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     "PySide.QtCore."SLOT_DEC_NAME, /*tp_name*/
     sizeof(PySideSlot),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -150,7 +149,7 @@ PyObject* slotCall(PyObject* self, PyObject* args, PyObject* kw)
 
         if (!data->slotName) {
             PyObject *funcName = reinterpret_cast<PyFunctionObject*>(callback)->func_name;
-            data->slotName = strdup(PyString_AS_STRING(funcName));
+            data->slotName = strdup(Shiboken::String::toCString(funcName));
         }
 
 
@@ -159,9 +158,9 @@ PyObject* slotCall(PyObject* self, PyObject* args, PyObject* kw)
         signature = returnType + " " + signature;
 
         if (!pySlotName)
-            pySlotName = PyString_FromString(PYSIDE_SLOT_LIST_ATTR);
+            pySlotName = Shiboken::String::fromCString(PYSIDE_SLOT_LIST_ATTR);
 
-        PyObject *pySignature = PyString_FromString(signature);
+        PyObject *pySignature = Shiboken::String::fromCString(signature);
         PyObject *signatureList = 0;
         if (PyObject_HasAttr(callback, pySlotName)) {
             signatureList = PyObject_GetAttr(callback, pySlotName);

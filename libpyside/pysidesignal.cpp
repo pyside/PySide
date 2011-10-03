@@ -75,8 +75,7 @@ static PyMethodDef Signal_methods[] = {
 };
 
 PyTypeObject PySideSignalMetaType = {
-    PyObject_HEAD_INIT(0)
-    /*ob_size*/             0,
+    PyVarObject_HEAD_INIT(0, 0)
     /*tp_name*/             "PySide.QtCore.MetaSignal",
     /*tp_basicsize*/        sizeof(PyTypeObject),
     /*tp_itemsize*/         0,
@@ -110,9 +109,7 @@ PyTypeObject PySideSignalMetaType = {
 };
 
 PyTypeObject PySideSignalType = {
-    PyObject_HEAD_INIT(&PySideSignalMetaType)
-    //PyObject_HEAD_INIT(0)
-    /*ob_size*/             0,
+    PyVarObject_HEAD_INIT(&PySideSignalMetaType, 0)
     /*tp_name*/             "PySide.QtCore."SIGNAL_CLASS_NAME,
     /*tp_basicsize*/        sizeof(PySideSignal),
     /*tp_itemsize*/         0,
@@ -174,8 +171,7 @@ static PyMappingMethods SignalInstance_as_mapping = {
 };
 
 PyTypeObject PySideSignalInstanceType = {
-    PyObject_HEAD_INIT(0)
-    /*ob_size*/             0,
+    PyVarObject_HEAD_INIT(0, 0)
     /*tp_name*/             "PySide.QtCore."SIGNAL_INSTANCE_NAME,
     /*tp_basicsize*/        sizeof(PySideSignalInstance),
     /*tp_itemsize*/         0,
@@ -244,7 +240,7 @@ int signalTpInit(PyObject* self, PyObject* args, PyObject* kwds)
 
     for(Py_ssize_t i = 0, i_max = PyTuple_Size(args); i < i_max; i++) {
         PyObject *arg = PyTuple_GET_ITEM(args, i);
-        if (PySequence_Check(arg) && !PyString_Check(arg)) {
+        if (PySequence_Check(arg) && !Shiboken::String::check(arg)) {
             tupledArgs = true;
             PySide::Signal::appendSignature(data, PySide::Signal::parseSignature(arg));
         }
@@ -290,7 +286,7 @@ PyObject* signalGetItem(PyObject* self, PyObject* key)
     }
     char* sig = PySide::Signal::buildSignature(data->signalName, sigKey);
     free(sigKey);
-    PyObject* pySignature = PyString_FromString(sig);
+    PyObject* pySignature = Shiboken::String::fromCString(sig);
     free(sig);
     return pySignature;
 }
@@ -573,7 +569,7 @@ char* getTypeName(PyObject* type)
         } else {
             // Translate python types to Qt names
             PyTypeObject *objType = reinterpret_cast<PyTypeObject*>(type);
-            if ((objType == &PyString_Type)  ||  (objType == &PyUnicode_Type))
+            if (Shiboken::String::checkType(objType))
                 typeName = strdup("QString");
             else if (objType == &PyInt_Type)
                 typeName = strdup("int");
@@ -583,14 +579,14 @@ char* getTypeName(PyObject* type)
                 typeName = strdup("double");
             else if (objType == &PyBool_Type)
                 typeName = strdup("bool");
-            else if (objType->ob_type == &SbkEnumType_Type)
+            else if (Py_TYPE(objType) == &SbkEnumType_Type)
                 typeName = strdup(Shiboken::Enum::getCppName(objType));
             else
                 typeName = strdup("PyObject");
         }
         return typeName;
-    } else if (PyString_Check(type)) {
-        return strdup(PyString_AS_STRING(type));
+    } else if (Shiboken::String::check(type)) {
+        return strdup(Shiboken::String::toCString(type));
     } else if (type == Py_None) {
         return strdup("void");
     }
@@ -609,7 +605,7 @@ char* buildSignature(const char *name, const char *signature)
 char* parseSignature(PyObject *args)
 {
     char *signature = 0;
-    if (args && (PyString_Check(args) || !PySequence_Check(args)))
+    if (args && (Shiboken::String::check(args) || !PySequence_Check(args)))
         return getTypeName(args);
 
     for(Py_ssize_t i = 0, i_max = PySequence_Size(args); i < i_max; i++) {
@@ -656,7 +652,7 @@ void instanceInitialize(PySideSignalInstance* self, PyObject* name, PySideSignal
     if (data->signalName)
         selfPvt->signalName = strdup(data->signalName);
     else {
-        selfPvt->signalName = strdup(PyString_AsString(name));
+        selfPvt->signalName = strdup(Shiboken::String::toCString(name));
         data->signalName = strdup(selfPvt->signalName);
     }
 
@@ -681,7 +677,7 @@ bool connect(PyObject* source, const char* signal, PyObject* callback)
     if (pyMethod.isNull())
         return false;
 
-    Shiboken::AutoDecRef pySignature(PyString_FromString(signal));
+    Shiboken::AutoDecRef pySignature(Shiboken::String::fromCString(signal));
     Shiboken::AutoDecRef pyArgs(PyTuple_Pack(3, source, pySignature.object(), callback));
     PyObject* result =  PyObject_CallObject(pyMethod, pyArgs);
     if (result == Py_False) {
@@ -824,7 +820,7 @@ PyObject* buildQtCompatible(const char* signature)
     QByteArray ba;
     ba.append(QT_SIGNAL_SENTINEL);
     ba.append(signature);
-    return PyString_FromStringAndSize(ba, ba.size());
+    return Shiboken::String::fromStringAndSize(ba, ba.size());
 }
 
 void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal)
@@ -882,7 +878,7 @@ QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* ca
     if (isMethod || isFunction) {
         PyObject* function = isMethod ? PyMethod_GET_FUNCTION(callback) : callback;
         PyCodeObject* objCode = reinterpret_cast<PyCodeObject*>(PyFunction_GET_CODE(function));
-        functionName = PyString_AS_STRING(reinterpret_cast<PyFunctionObject*>(function)->func_name);
+        functionName = Shiboken::String::toCString(reinterpret_cast<PyFunctionObject*>(function)->func_name);
         useSelf = isMethod;
         numArgs = objCode->co_flags & CO_VARARGS ? -1 : objCode->co_argcount;
     } else if (PyCFunction_Check(callback)) {
