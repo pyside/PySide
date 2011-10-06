@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import unittest
+import py3kcompat as py3k
 from testbinding import TestView
 from PySide.QtCore import QAbstractListModel, QObject, QModelIndex
 
@@ -62,7 +63,7 @@ class ModelViewTest(unittest.TestCase):
         model = ListModelThatReturnsString()
         view = TestView(model)
         obj = view.getData()
-        self.assertEqual(type(obj), unicode)
+        self.assertEqual(type(obj), py3k.unicode)
         self.assertEqual(obj, 'string')
 
 if __name__ == '__main__':

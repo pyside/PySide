@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-import sys
 import unittest
-import functools
 
-from PySide.QtCore import *
+from PySide.QtCore import QObject, Slot, SIGNAL, SLOT
 
 class MyObject(QObject):
     def __init__(self, parent=None):
@@ -24,7 +22,7 @@ class MyObject(QObject):
     def foo(self):
         self._slotCalledCount = self._slotCalledCount + 1
 
-    @Slot(unicode, int)
+    @Slot(str, int)
     def mySlot4(self, a, b):
         self._slotCalledCount = self._slotCalledCount + 1
 
@@ -41,17 +39,17 @@ class StaticMetaObjectTest(unittest.TestCase):
     def testSignalPropagation(self):
         o = MyObject()
         m = o.metaObject()
-        self.assert_(m.indexOfSlot('mySlot()') > 0)
-        self.assert_(m.indexOfSlot('mySlot2(int)') > 0)
-        self.assert_(m.indexOfSlot('mySlot2(QString)') > 0)
-        self.assert_(m.indexOfSlot('mySlot3()') > 0)
-        self.assert_(m.indexOfSlot('mySlot4(QString,int)') > 0)
+        self.assertTrue(m.indexOfSlot('mySlot()') > 0)
+        self.assertTrue(m.indexOfSlot('mySlot2(int)') > 0)
+        self.assertTrue(m.indexOfSlot('mySlot2(QString)') > 0)
+        self.assertTrue(m.indexOfSlot('mySlot3()') > 0)
+        self.assertTrue(m.indexOfSlot('mySlot4(QString,int)') > 0)
 
     def testEmission(self):
         o = MyObject()
         o.connect(SIGNAL("mySignal()"), o, SLOT("mySlot()"))
         o.emit(SIGNAL("mySignal()"))
-        self.assert_(o._slotCalledCount == 1)
+        self.assertTrue(o._slotCalledCount == 1)
 
     def testResult(self):
         o = MyObject()
