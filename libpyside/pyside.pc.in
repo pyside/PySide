@@ -8,7 +8,7 @@ pythonpath=@SITE_PACKAGE@
 Name: PySide@pyside_SUFFIX@
 Description: Support library for Python bindings of Qt-based libraries.
 Version: @BINDING_API_VERSION_FULL@
-Libs: -L${libdir} -lpyside@pyside_SUFFIX@-@SHIBOKEN_PYTHON_BASENAME@@LIBRARY_OUTPUT_SUFFIX@
+Libs: -L${libdir} -lpyside@pyside_SUFFIX@@SHIBOKEN_PYTHON_SUFFIX@@LIBRARY_OUTPUT_SUFFIX@
 Cflags: -I${includedir}
 Requires: shiboken
 
