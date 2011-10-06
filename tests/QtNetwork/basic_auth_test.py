@@ -26,7 +26,7 @@ class testAuthenticationSignal(UsesQCoreApplication):
         self.httpd = None
 
     def onAuthRequest(self, hostname, port, auth):
-        self.assert_(isinstance(auth, QAuthenticator))
+        self.assertTrue(isinstance(auth, QAuthenticator))
         self._resultOk = True
         self.goAway()
 
@@ -36,7 +36,7 @@ class testAuthenticationSignal(UsesQCoreApplication):
         path = QUrl.toPercentEncoding("/index.html", "!$&'()*+,;=:@/")
         data = http.get(str(path))
         self.app.exec_()
-        self.assert_(self._resultOk)
+        self.assertTrue(self._resultOk)
 
     def testwaitSignal2(self):
         http = QHttp('127.0.0.1', self.httpd.port())
@@ -45,7 +45,7 @@ class testAuthenticationSignal(UsesQCoreApplication):
         path = QUrl.toPercentEncoding("/index.html", "!$&'()*+,;=:@/")
         data = http.get(str(path))
         self.app.exec_()
-        self.assert_(self._resultOk)
+        self.assertTrue(self._resultOk)
 
 if __name__ == '__main__':
     unittest.main()

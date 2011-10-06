@@ -1,10 +1,16 @@
-import SocketServer
-import BaseHTTPServer
 import os
 import sys
 import threading
 import select
 import random
+import py3kcompat as py3k
+
+if py3k.IS_PY3K:
+    import socketserver as SocketServer
+    import http.server as BaseHTTPServer
+else:
+    import SocketServer
+    import BaseHTTPServer
 
 class TestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     DATA = "PySide Server"
@@ -29,7 +35,7 @@ class TestSecureHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.send_head()
-        self.wfile.write(TestHandler.DATA)
+        self.wfile.write(py3k.b(TestHandler.DATA))
 
     def do_HEAD(self):
         self.send_head()
