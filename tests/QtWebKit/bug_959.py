@@ -1,40 +1,40 @@
 from PySide.QtCore import QObject, Slot, QTimer
-from PySide.QtWebKit import QWebView, QWebPage
+from PySide.QtWebKit import QWebView
 
 import unittest
 from helper import UsesQApplication
 
 class JSFuncs(QObject):
     functionID = -1
-    @Slot(unicode,result=unicode)
+    @Slot(str,result=str)
     def slot_str_str(self, x):
         JSFuncs.functionID = 0
         return x.upper()
 
-    @Slot(unicode,result='QVariant')
+    @Slot(str,result='QVariant')
     def slot_str_list(self, x):
         JSFuncs.functionID = 1
         return [x, x]
 
-    @Slot('QStringList',result=unicode)
+    @Slot('QStringList',result=str)
     def slot_strlist_str(self, x):
         JSFuncs.functionID = 2
         return x[-1]
 
-    @Slot('QVariant',result=unicode)
+    @Slot('QVariant',result=str)
     def slot_variant_str(self, x):
         JSFuncs.functionID = 3
-        return unicode(x)
+        return str(x)
 
-    @Slot('QVariantList',result=unicode)
+    @Slot('QVariantList',result=str)
     def slot_variantlist_str(self, x):
         JSFuncs.functionID = 4
-        return unicode(x[-1])
+        return str(x[-1])
 
-    @Slot('QVariantMap',result=unicode)
+    @Slot('QVariantMap',result=str)
     def slot_variantmap_str(self, x):
         JSFuncs.functionID = 5
-        return unicode(x["foo"])
+        return str(x["foo"])
 
 
 
