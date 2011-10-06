@@ -25,7 +25,7 @@ class TranslationTest(UsesQCoreApplication):
 
         obj = QObject()
         obj.setObjectName(obj.tr('Hello World!'))
-        self.assertEqual(obj.objectName(), py3k.unicode('Orbis, te saluto!'))
+        self.assertEqual(obj.objectName(), py3k.unicode_('Orbis, te saluto!'))
 
     def testRussian(self):
         #Set string value to Russian
@@ -35,7 +35,7 @@ class TranslationTest(UsesQCoreApplication):
 
         obj = QObject()
         obj.setObjectName(obj.tr('Hello World!'))
-        self.assertEqual(obj.objectName(), py3k.unicode('привет мир!'))
+        self.assertEqual(obj.objectName(), py3k.unicode_('привет мир!'))
 
     def testUtf8(self):
         translator = QTranslator()
@@ -44,7 +44,7 @@ class TranslationTest(UsesQCoreApplication):
 
         obj = QObject()
         obj.setObjectName(obj.trUtf8('Hello World!'))
-        self.assertEqual(obj.objectName(), py3k.unicode('привет мир!'))
+        self.assertEqual(obj.objectName(), py3k.unicode_('привет мир!'))
 
     def testTranslateWithNoneDisambiguation(self):
         value = 'String here'

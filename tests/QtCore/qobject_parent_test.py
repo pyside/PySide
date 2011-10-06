@@ -87,7 +87,7 @@ class ParentCase(unittest.TestCase):
             child.setObjectName(name % i)
 
         child = parent.findChild(QObject)
-        self.assert_(isinstance(child, QObject))
+        self.assertTrue(isinstance(child, QObject))
 
     def testFindChildren(self):
         #QObject.findChildren() with all QObject
@@ -105,8 +105,7 @@ class ParentCase(unittest.TestCase):
         # Emulates findChildren with the intended outcome
         target_children = [x for x in children if x.objectName() == target_name]
         test_children = parent.findChildren(QObject, target_name)
-
-        self.assertEqual(sorted(target_children), sorted(test_children))
+        self.assertEqual(target_children, test_children)
 
         # test findChildren default value
         res = parent.findChildren(QTimer)
@@ -114,7 +113,7 @@ class ParentCase(unittest.TestCase):
 
         # test findChildre with a regex
         res = parent.findChildren(QObject, QRegExp("^fo+"))
-        self.assertEqual(sorted(res), sorted(test_children))
+        self.assertEqual(res, test_children)
 
 
     def testParentEquality(self):
@@ -218,7 +217,7 @@ class ReparentingTest(unittest.TestCase):
             object_list.append(obj)
             obj.setParent(parent)
         for child in parent.children():
-            self.assert_(child in object_list)
+            self.assertTrue(child in object_list)
 
     def testParentedExtQObjectType(self):
         object_list = []
@@ -241,7 +240,7 @@ class ReparentingTest(unittest.TestCase):
         for obj in object_list:
             obj.setParent(new_parent)
         for child in new_parent.children():
-            self.assert_(child in object_list)
+            self.assertTrue(child in object_list)
 
     def testReparentedExtQObjectType(self):
         object_list = []

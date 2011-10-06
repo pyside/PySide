@@ -21,13 +21,13 @@ class UnicodeConversion(unittest.TestCase):
         #Set regular Python string retrieve unicode
         obj = QObject()
         obj.setObjectName('test')
-        self.assertEqual(obj.objectName(), py3k.unicode('test'))
+        self.assertEqual(obj.objectName(), py3k.unicode_('test'))
 
     def testSetUnicodeRetrieveUnicode(self):
         #Set Python unicode string and retrieve unicode
         obj = QObject()
-        obj.setObjectName(py3k.unicode('ümlaut'))
-        self.assertEqual(obj.objectName(), py3k.unicode('ümlaut'))
+        obj.setObjectName(py3k.unicode_('ümlaut'))
+        self.assertEqual(obj.objectName(), py3k.unicode_('ümlaut'))
 
 if __name__ == '__main__':
     unittest.main()

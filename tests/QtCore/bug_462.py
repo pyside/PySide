@@ -5,6 +5,7 @@ from PySide.QtCore import QObject, QCoreApplication, QEvent, QThread
 
 class MyEvent(QEvent):
     def __init__(self,i):
+        print("TYPE:", type(QEvent.User))
         super(MyEvent,self).__init__(QEvent.Type(QEvent.User + 100 ))
         self.i = i
 
@@ -42,4 +43,6 @@ class CheckForEventsTypes(unittest.TestCase):
         o.app = None
 
 if __name__ == '__main__':
-    unittest.main()
+    print int(QEvent.User)
+    val = QEvent.User + 100
+    #unittest.main()
