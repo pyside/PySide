@@ -36,7 +36,7 @@ class QGLBufferTest(UsesQApplication):
             self.assertTrue(result)
             self.assertEqual('A', rdata.data())
         else:
-            print " memory mapping is not possible in this OpenGL implementation."
+            print(" memory mapping is not possible in this OpenGL implementation.")
         b.release()
 
 if __name__ == '__main__':
