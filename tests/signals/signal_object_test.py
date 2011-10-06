@@ -1,18 +1,16 @@
 #!/usr/bin/env python
 
-import sys
 import unittest
-import functools
 
-from PySide.QtCore import *
+from PySide.QtCore import QTimer, Signal, QObject, Slot, Qt
 from helper import UsesQCoreApplication
 
 class MyObject(QTimer):
     sig1 = Signal()
     sig2 = Signal(int, name='rangeChanged')
     sig3 = Signal(int)
-    sig4 = Signal((int,), (unicode,))
-    sig5 = Signal((unicode,), (int,))
+    sig4 = Signal((int,), (str,))
+    sig5 = Signal((str,), (int,))
     sig6 = Signal(QObject)
 
     @Slot(int)
@@ -38,7 +36,7 @@ class SignalObjectTest(UsesQCoreApplication):
         o = MyObject()
         o.sig1.connect(o.slot1)
         o.sig1.emit()
-        self.assert_(o._called)
+        self.assertTrue(o._called)
 
     def testSignalWithArgs(self):
         o = MyObject()
@@ -53,8 +51,8 @@ class SignalObjectTest(UsesQCoreApplication):
 
     def testDictOperator(self):
         o = MyObject()
-        o.sig4[unicode].connect(o.slotString)
-        o.sig4[unicode].emit("PySide")
+        o.sig4[str].connect(o.slotString)
+        o.sig4[str].emit("PySide")
         self.assertEqual(o._s, "PySide")
 
     def testGeneretedSignal(self):
@@ -62,19 +60,19 @@ class SignalObjectTest(UsesQCoreApplication):
         o.timeout.connect(self.cb)
         o.start(100)
         self.app.exec_()
-        self.assert_(self._cb_called)
+        self.assertTrue(self._cb_called)
 
     def testConnectionType(self):
         o = MyObject()
         o.timeout.connect(self.cb, type=Qt.DirectConnection)
         o.start(100)
         self.app.exec_()
-        self.assert_(self._cb_called)
+        self.assertTrue(self._cb_called)
 
     def testSignalWithSignal(self):
         o = MyObject()
         o.sig2.connect(o.myRange)
-        print "sig->sig", o.sig5.connect(o.sig2)
+        o.sig5.connect(o.sig2)
         o.sig5[int].emit(10)
         self.assertEqual(o._range, 10)
 
