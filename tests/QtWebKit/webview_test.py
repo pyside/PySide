@@ -2,10 +2,11 @@
 '''Test cases for QWebView'''
 
 import unittest
+import py3kcompat as py3k
 import sys
 
 from PySide.QtCore import QObject, SIGNAL, QUrl
-from PySide.QtWebKit import *
+from PySide.QtWebKit import QWebPage, QWebView
 from PySide.QtNetwork import QNetworkRequest
 
 from helper import adjust_filename, TimedQApplication
@@ -61,9 +62,6 @@ class TestLoadFinished(TimedQApplication):
         self.app.quit()
         if ok:
             self.called = True
-
-    def testNamedArgumentTypeChecking(self):
-        self.assertRaises(TypeError, self.view.load, QNetworkRequest(), body=unicode('foo'))
 
 if __name__ == '__main__':
     unittest.main()
