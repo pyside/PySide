@@ -1,9 +1,8 @@
 '''Test cases for Virtual functions with wrong return type'''
 
 import unittest
-
-from PySide import QtCore, QtGui
-
+import py3kcompat as py3k
+from PySide import QtGui
 from helper import UsesQApplication
 
 import warnings
@@ -21,7 +20,11 @@ class testCase(UsesQApplication):
 
     def testVirtualReturn(self):
         w = MyWidget()
-        self.assertRaises(RuntimeWarning, w.show)
+        if py3k.IS_PY3K:
+            self.assertWarns(RuntimeWarning, w.show)
+        else:
+            self.assertRaises(RuntimeWarning, w.show)
+
 
 if __name__ == '__main__':
     unittest.main()

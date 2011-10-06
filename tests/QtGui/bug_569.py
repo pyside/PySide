@@ -9,9 +9,9 @@ class TestBug569(unittest.TestCase):
         types = (QTableWidgetItem, QListWidgetItem, QTreeWidgetItem)
         for t in types:
             a = t()
-            a.__lt__ = lambda(other) : True
+            a.__lt__ = lambda other : True
             b = t()
-            b.__lt__ = lambda(other) : False
+            b.__lt__ = lambda other : False
             self.assertTrue(a < b)
             self.assertFalse(b < a)
 

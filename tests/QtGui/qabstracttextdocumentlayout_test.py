@@ -1,8 +1,8 @@
 import unittest
-import colorsys
+import py3kcompat as py3k
 
-from PySide.QtCore import *
-from PySide.QtGui import *
+from PySide.QtCore import QSizeF, QTimer
+from PySide.QtGui import QTextFormat, QTextCharFormat, QTextEdit, QPyTextObject
 from helper import UsesQApplication
 
 class Foo(QPyTextObject):
@@ -24,7 +24,7 @@ class QAbstractTextDocumentLayoutTest(UsesQApplication):
         fmt.setObjectType(QAbstractTextDocumentLayoutTest.objectType)
 
         cursor = self.textEdit.textCursor()
-        cursor.insertText(unichr(0xfffc), fmt)
+        cursor.insertText(py3k.unichr(0xfffc), fmt)
         self.textEdit.setTextCursor(cursor)
         self.textEdit.close()
 

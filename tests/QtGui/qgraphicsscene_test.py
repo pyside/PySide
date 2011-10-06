@@ -21,7 +21,7 @@ class Constructor(unittest.TestCase):
     def testConstructor(self):
         #QGraphicsScene constructor
         obj = QGraphicsScene()
-        self.assert_(isinstance(obj, QGraphicsScene))
+        self.assertTrue(isinstance(obj, QGraphicsScene))
 
 
 class ConstructorWithRect(unittest.TestCase):
@@ -65,49 +65,49 @@ class AddItem(UsesQApplication):
     def testEllipse(self):
         #QGraphicsScene.addEllipse
         item = self.scene.addEllipse(100, 100, 100, 100)
-        self.assert_(isinstance(item, QGraphicsEllipseItem))
+        self.assertTrue(isinstance(item, QGraphicsEllipseItem))
 
     def testLine(self):
         #QGraphicsScene.addLine
         item = self.scene.addLine(100, 100, 200, 200)
-        self.assert_(isinstance(item, QGraphicsLineItem))
+        self.assertTrue(isinstance(item, QGraphicsLineItem))
 
     def testPath(self):
         #QGraphicsScene.addPath
         item = self.scene.addPath(QPainterPath())
-        self.assert_(isinstance(item, QGraphicsPathItem))
+        self.assertTrue(isinstance(item, QGraphicsPathItem))
 
     def testPixmap(self):
         #QGraphicsScene.addPixmap
         item = self.scene.addPixmap(QPixmap())
-        self.assert_(isinstance(item, QGraphicsPixmapItem))
+        self.assertTrue(isinstance(item, QGraphicsPixmapItem))
 
     def testPolygon(self):
         #QGraphicsScene.addPolygon
         points = [QPointF(0, 0), QPointF(100, 100), QPointF(0, 100)]
         item = self.scene.addPolygon(QPolygonF(points))
-        self.assert_(isinstance(item, QGraphicsPolygonItem))
+        self.assertTrue(isinstance(item, QGraphicsPolygonItem))
 
     def testRect(self):
         #QGraphicsScene.addRect
         item = self.scene.addRect(100, 100, 100, 100)
-        self.assert_(isinstance(item, QGraphicsRectItem))
+        self.assertTrue(isinstance(item, QGraphicsRectItem))
 
     def testSimpleText(self):
         #QGraphicsScene.addSimpleText
         item = self.scene.addSimpleText('Monty Python 42')
-        self.assert_(isinstance(item, QGraphicsSimpleTextItem))
+        self.assertTrue(isinstance(item, QGraphicsSimpleTextItem))
 
     def testText(self):
         #QGraphicsScene.addText
         item = self.scene.addText('Monty Python 42')
-        self.assert_(isinstance(item, QGraphicsTextItem))
+        self.assertTrue(isinstance(item, QGraphicsTextItem))
 
     def testWidget(self):
         #QGraphicsScene.addWidget
         # XXX: printing some X11 error when using under PyQt4
         item = self.scene.addWidget(QPushButton())
-        self.assert_(isinstance(item, QGraphicsProxyWidget))
+        self.assertTrue(isinstance(item, QGraphicsProxyWidget))
 
 
 class ItemRetrieve(UsesQApplication):
@@ -139,7 +139,8 @@ class ItemRetrieve(UsesQApplication):
     def testItems(self):
         #QGraphicsScene.items()
         items = self.scene.items()
-        self.assertEqual(items.sort(), self.items.sort())
+        for i in items:
+            self.assertTrue(i in self.items)
 
     def testItemAt(self):
         #QGraphicsScene.itemAt()
