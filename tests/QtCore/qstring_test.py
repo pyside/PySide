@@ -12,11 +12,11 @@ class QStringConstructor(unittest.TestCase):
     def testQStringDefault(self):
         obj = QObject()
         obj.setObjectName('foo')
-        self.assertEqual(obj.objectName(), py3k.unicode('foo'))
-        obj.setObjectName(py3k.unicode('áâãà'))
-        self.assertEqual(obj.objectName(), py3k.unicode('áâãà'))
+        self.assertEqual(obj.objectName(), py3k.unicode_('foo'))
+        obj.setObjectName(py3k.unicode_('áâãà'))
+        self.assertEqual(obj.objectName(), py3k.unicode_('áâãà'))
         obj.setObjectName(None)
-        self.assertEqual(obj.objectName(), py3k.unicode(''))
+        self.assertEqual(obj.objectName(), py3k.unicode_(''))
 
 if __name__ == '__main__':
     unittest.main()

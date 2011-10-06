@@ -32,7 +32,7 @@ class ObjectNameCase(unittest.TestCase):
         self.assertEqual('', obj.objectName())
 
     def testUnicode(self):
-        name = py3k.unicode('diseño')
+        name = py3k.unicode_('não')
         #FIXME Strange error on upstream when using equal(name, obj)
         obj = QObject()
         obj.setObjectName(name)

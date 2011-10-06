@@ -86,7 +86,7 @@ class QDataStreamShift(unittest.TestCase):
         self.stream.writeQChar(None)
 
         res = self.read_stream.readQChar()
-        self.assertEqual(res, py3k.unicode('\x00'))
+        self.assertEqual(res, py3k.unicode_('\x00'))
 
     def testQByteArrayValid(self):
         '''QDataStream <<>> QByteArray - valid'''
@@ -124,21 +124,21 @@ class QDataStreamShift(unittest.TestCase):
         self.stream.writeQString('Ka-boom')
 
         res = self.read_stream.readQString()
-        self.assertEqual(res, py3k.unicode('Ka-boom'))
+        self.assertEqual(res, py3k.unicode_('Ka-boom'))
 
     def testQStringEmpty(self):
         '''QDataStream <<>> QString - empty'''
         self.stream.writeQString('')
 
         res = self.read_stream.readQString()
-        self.assertEqual(res, py3k.unicode(''))
+        self.assertEqual(res, py3k.unicode_(''))
 
     def testQStringNull(self):
         '''QDataStream <<>> QString - null'''
         self.stream.writeQString(None)
 
         res = self.read_stream.readQString()
-        self.assertEqual(res, py3k.unicode(''))
+        self.assertEqual(res, py3k.unicode_(''))
 
     def testQBitArrayNull(self):
         '''QDataStream <<>> QBitArray - null'''
