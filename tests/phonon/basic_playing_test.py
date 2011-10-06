@@ -11,7 +11,7 @@ def checkBackendCapabilities(func):
         if Phonon.BackendCapabilities.isMimeTypeAvailable('audio/x-wav'):
             func(self, *args, **kw)
         else:
-            print 'Wav format not supported! Playback test skipped!'
+            print('Wav format not supported! Playback test skipped!')
     return function
 
 
@@ -60,7 +60,7 @@ class TestSimplePlaying(UsesQCoreApplication):
         self.media.stateChanged['Phonon::State', 'Phonon::State'].connect(self.state_cb)
         self.media.play()
         self.app.exec_()
-        self.assert_(self.called)
+        self.assertTrue(self.called)
 
 
 if __name__ == '__main__':
