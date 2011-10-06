@@ -50,7 +50,7 @@ class PieChart (QDeclarativeItem):
 
     def __init__(self, parent = None):
         QDeclarativeItem.__init__(self, parent)
-        self._name = u''
+        self._name = ''
         self._slices = []
 
     def getName(self):
@@ -59,7 +59,7 @@ class PieChart (QDeclarativeItem):
     def setName(self, value):
         self._name = value
 
-    name = Property(unicode, getName, setName)
+    name = Property(str, getName, setName)
 
     def appendSlice(self, _slice):
         global appendCalled

@@ -41,7 +41,6 @@ class TestQDeclarativeView(TimedQApplication):
 
 
     def testModelExport(self):
-        print "TEST"
         view = QDeclarativeView()
         dataList = [MyObject("Item 1"), MyObject("Item 2"), MyObject("Item 3"), MyObject("Item 4")]
 
