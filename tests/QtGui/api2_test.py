@@ -4,8 +4,7 @@
 import unittest
 import sys
 
-from PySide.QtCore import QObject
-from PySide.QtGui import *
+from PySide.QtGui import QWidget, QIntValidator, QSpinBox, QValidator, QApplication
 
 from helper import UsesQApplication
 
@@ -19,7 +18,7 @@ class WidgetValidatorQSpinBox(QSpinBox):
         QSpinBox.__init__(self, parent)
 
     def fixup(self, text):
-        print "It was called!"
+        print("It was called!")
 
 class DoubleQObjectInheritanceTest(UsesQApplication):
 

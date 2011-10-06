@@ -3,9 +3,9 @@
 '''Tests conversions of QString to and from QKeySequence.'''
 
 import unittest
+import py3kcompat as py3k
 from helper import UsesQApplication
 
-from PySide.QtCore import *
 from PySide.QtGui import QKeySequence, QAction
 
 class QStringQKeySequenceTest(UsesQApplication):
@@ -19,7 +19,7 @@ class QStringQKeySequenceTest(UsesQApplication):
 
     def testPythonStringAsQKeySequence(self):
         '''Passes a Python string to an argument expecting a QKeySequence.'''
-        keyseq = u'Ctrl+A'
+        keyseq = py3k.unicode_('Ctrl+A')
         action = QAction(None)
         action.setShortcut(keyseq)
         shortcut = action.shortcut()

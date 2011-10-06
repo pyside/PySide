@@ -19,7 +19,8 @@ class QPixmapCacheTest(UsesQApplication):
         pm3 = QPixmap()
         ok = QPixmapCache.find('img', pm3)
         self.assertTrue(ok)
-
+        b1 = QPixmapCache.find('img').toImage().bits()
+        b2 = pm3.toImage().bits()
         self.assertEqual(QPixmapCache.find('img').toImage().bits(), pm3.toImage().bits())
 
     def testWithKey(self):

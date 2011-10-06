@@ -1,5 +1,5 @@
-from PySide.QtCore import *
-from PySide.QtGui import *
+from PySide.QtCore import Qt, QEvent
+from PySide.QtGui import QApplication, QKeyEvent, QKeySequence
 import unittest
 
 
@@ -12,6 +12,7 @@ class TestBug569(unittest.TestCase):
         ev1 = QKeyEvent(QEvent.KeyRelease, Qt.Key_Delete, Qt.NoModifier)
         ev2 = QKeyEvent(QEvent.KeyRelease, Qt.Key_Copy, Qt.NoModifier)
         ks = QKeySequence.Delete
+
         self.assertEqual(ev1, ks)
         self.assertEqual(ks, ev1)
         self.assertNotEqual(ev2, ks)

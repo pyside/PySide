@@ -2,6 +2,7 @@
 '''Test cases for QImage'''
 
 import unittest
+import py3kcompat as py3k
 from PySide.QtGui import *
 from helper import UsesQApplication, adjust_filename
 
@@ -254,14 +255,14 @@ class QImageTest(UsesQApplication):
         data1 = img0.scanLine(0)
         data2 = img1.scanLine(0)
         self.assertEqual(data1, data2)
-        self.assertEquals(str(data1), img0.bits()[:img0.bytesPerLine()])
-        self.assertEquals(str(data2), img0.bits()[:img0.bytesPerLine()])
+        self.assertEqual(data1, py3k.buffer(img0.bits()[:img0.bytesPerLine()]))
+        self.assertEqual(data2, py3k.buffer(img0.bits()[:img0.bytesPerLine()]))
 
     def testEmptyBuffer(self):
-        img = QImage(buffer(''), 100, 100, QImage.Format_ARGB32)
+        img = QImage(py3k.buffer(''), 100, 100, QImage.Format_ARGB32)
 
     def testEmptyStringAsBuffer(self):
-        img = QImage('', 100, 100, QImage.Format_ARGB32)
+        img = QImage(py3k.b(''), 100, 100, QImage.Format_ARGB32)
 
     def testXpmConstructor(self):
         label = QLabel()

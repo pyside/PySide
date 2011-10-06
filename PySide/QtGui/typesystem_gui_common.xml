@@ -1462,7 +1462,7 @@
 
     <modify-function signature="boundingRect(QChar)const" rename="boundingRectChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyBytes"/>
+        <replace-type modified-type="char"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
@@ -1471,7 +1471,7 @@
 
     <modify-function signature="width(QChar)const" rename="widthChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyBytes"/>
+        <replace-type modified-type="char"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
@@ -1538,7 +1538,7 @@
 
     <modify-function signature="boundingRect(QChar)const" rename="boundingRectChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyBytes"/>
+        <replace-type modified-type="char"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
@@ -1547,7 +1547,7 @@
 
     <modify-function signature="width(QChar)const" rename="widthChar">
       <modify-argument index="1">
-        <replace-type modified-type="PyBytes"/>
+        <replace-type modified-type="char"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
         <insert-template name="QFontCharFix"/>
