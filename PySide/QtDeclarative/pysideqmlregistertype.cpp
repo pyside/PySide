@@ -197,12 +197,11 @@ void propListTpFree(void* self)
     PySideProperty* pySelf = reinterpret_cast<PySideProperty*>(self);
     delete reinterpret_cast<DeclarativeListProperty*>(PySide::Property::userData(pySelf));
     // calls base type constructor
-    pySelf->ob_type->tp_base->tp_free(self);
+    Py_TYPE(pySelf)->tp_base->tp_free(self);
 }
 
 PyTypeObject PropertyListType = {
-    PyObject_HEAD_INIT(0)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     "ListProperty",            /*tp_name*/
     sizeof(PySideProperty),    /*tp_basicsize*/
     0,                         /*tp_itemsize*/

@@ -9,5 +9,5 @@ view.resize(200, 200)
 item = view.itemAt(100, 100)
 
 # it CAN NOT crash here
-print item
+print(item)
 
