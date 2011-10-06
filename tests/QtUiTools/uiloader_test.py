@@ -2,8 +2,8 @@ import unittest
 import os
 from helper import UsesQApplication
 
-from PySide.QtGui import *
-from PySide.QtUiTools import *
+from PySide.QtGui import QWidget
+from PySide.QtUiTools import QUiLoader
 
 def get_file_path():
     for path in file_path:
@@ -26,7 +26,7 @@ class QUioaderTeste(UsesQApplication):
         self.assertEqual(w.findChild(QWidget, "grandson_object"), child.findChild(QWidget, "grandson_object"))
 
     def testLoadFileUnicodeFilePath(self):
-        filePath = unicode(os.path.join(os.path.dirname(__file__), 'test.ui'))
+        filePath = str(os.path.join(os.path.dirname(__file__), 'test.ui'))
         loader = QUiLoader()
         parent = QWidget()
         w = loader.load(filePath, parent)
