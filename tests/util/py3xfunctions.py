@@ -1,4 +1,6 @@
 def b(s):
+    if type(s) == bytes:
+        return s
     return bytes(s, "UTF8")
 
 def buffer_(s):
@@ -6,6 +8,8 @@ def buffer_(s):
         return None
     elif type(s) == str:
         return bytes(s, "UTF8")
+    elif type(s) == bytes:
+        return s
     else:
         memoryview(s)
 
