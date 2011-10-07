@@ -43,6 +43,4 @@ class CheckForEventsTypes(unittest.TestCase):
         o.app = None
 
 if __name__ == '__main__':
-    print int(QEvent.User)
-    val = QEvent.User + 100
-    #unittest.main()
+    unittest.main()
