@@ -4,36 +4,43 @@ from PySide.QtWebKit import QWebView
 import unittest
 from helper import UsesQApplication
 
+functionID = -1
+
 class JSFuncs(QObject):
-    functionID = -1
     @Slot(str,result=str)
     def slot_str_str(self, x):
-        JSFuncs.functionID = 0
+        global functionID
+        functionID = 0
         return x.upper()
 
     @Slot(str,result='QVariant')
     def slot_str_list(self, x):
-        JSFuncs.functionID = 1
+        global functionID
+        functionID = 1
         return [x, x]
 
     @Slot('QStringList',result=str)
     def slot_strlist_str(self, x):
-        JSFuncs.functionID = 2
+        global functionID
+        functionID = 2
         return x[-1]
 
     @Slot('QVariant',result=str)
     def slot_variant_str(self, x):
-        JSFuncs.functionID = 3
+        global functionID
+        functionID = 3
         return str(x)
 
     @Slot('QVariantList',result=str)
     def slot_variantlist_str(self, x):
-        JSFuncs.functionID = 4
+        global functionID
+        functionID = 4
         return str(x[-1])
 
     @Slot('QVariantMap',result=str)
     def slot_variantmap_str(self, x):
-        JSFuncs.functionID = 5
+        global functionID
+        functionID = 5
         return str(x["foo"])
 
 
@@ -54,9 +61,10 @@ class TestJsCall(UsesQApplication):
         super(TestJsCall, self).setUpClass()
 
     def createInstance(self):
+        global functionID
         self._view = QWebView()
         self._jsfuncs = JSFuncs()
-        JSFuncs.functionID = -1
+        functionID = -1
         self._view.page().mainFrame().addToJavaScriptWindowObject("jsfuncs", self._jsfuncs)
         self._view.loadFinished[bool].connect(self.onLoadFinished)
         self._view.load(PAGE_DATA % FUNCTIONS_LIST[self._functionID])
@@ -68,8 +76,9 @@ class TestJsCall(UsesQApplication):
         self.app.exec_()
 
     def onLoadFinished(self, result):
-        self.assertEqual(self._functionID, JSFuncs.functionID)
-        if self._functionID == len(FUNCTIONS_LIST) - 1:
+        global functionID
+        self.assertEqual(self._functionID, functionID)
+        if self._functionID == (len(FUNCTIONS_LIST) - 1):
             QTimer.singleShot(300, self.app.quit)
         else:
             #new test
