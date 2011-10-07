@@ -255,8 +255,12 @@ class QImageTest(UsesQApplication):
         data1 = img0.scanLine(0)
         data2 = img1.scanLine(0)
         self.assertEqual(data1, data2)
-        self.assertEqual(data1, py3k.buffer(img0.bits()[:img0.bytesPerLine()]))
-        self.assertEqual(data2, py3k.buffer(img0.bits()[:img0.bytesPerLine()]))
+
+        # PySide python 3.x does not support slice yet
+        if not py3k.IS_PY3K:
+            buff = py3k.buffer(img0.bits()[:img0.bytesPerLine()])
+            self.assertEqual(data1, buff)
+            self.assertEqual(data2, buff)
 
     def testEmptyBuffer(self):
         img = QImage(py3k.buffer(''), 100, 100, QImage.Format_ARGB32)
