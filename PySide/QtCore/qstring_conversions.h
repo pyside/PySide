@@ -16,7 +16,7 @@ struct Converter<QString>
 
     static bool isConvertible(PyObject* pyObj)
     {
-        return Shiboken::String::convertible(pyObj);
+        return Shiboken::String::isConvertible(pyObj);
     }
 
     static QString toCpp(PyObject* pyObj)
