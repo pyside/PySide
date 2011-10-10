@@ -126,7 +126,7 @@ QDataStream &operator<<(QDataStream& out, const PyObjectWrapper& myObj)
     }
     Shiboken::AutoDecRef repr(PyObject_CallFunctionObjArgs(reduce_func, (PyObject*)myObj, NULL));
     if (repr.object()) {
-        const char* buff;
+        const char* buff = 0;
         Py_ssize_t size  = 0;
         if (PyBytes_Check(repr.object())) {
             buff = PyBytes_AS_STRING(repr.object());
