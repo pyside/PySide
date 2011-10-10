@@ -1,4 +1,4 @@
-#include <Python.h>
+#include <sbkpython.h>
 #include "destroylistener.h"
 
 #include <QObject>

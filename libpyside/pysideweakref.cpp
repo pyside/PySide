@@ -1,6 +1,6 @@
 #include "pysideweakref.h"
 
-#include <Python.h>
+#include <sbkpython.h>
 
 typedef struct {
     PyObject_HEAD

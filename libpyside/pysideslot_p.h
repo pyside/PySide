@@ -22,7 +22,7 @@
 #ifndef PYSIDE_SLOT_P_H
 #define PYSIDE_SLOT_P_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #define PYSIDE_SLOT_LIST_ATTR "_slots"
 
 namespace PySide { namespace Slot {

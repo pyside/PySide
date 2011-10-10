@@ -2,7 +2,7 @@
 #define __PYSIDEWEAKREF__
 
 #include <pysidemacros.h>
-#include <Python.h>
+#include <sbkpython.h>
 
 typedef void (*PySideWeakRefFunction)(void* userData);
 
