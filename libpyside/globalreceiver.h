@@ -23,7 +23,7 @@
 #ifndef GLOBALRECEIVER_H
 #define GLOBALRECEIVER_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #include <QObject>
 #include <QHash>
 #include <QSet>

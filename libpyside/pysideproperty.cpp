@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <Python.h>
+#include <sbkpython.h>
 #include "pysideproperty.h"
 #include "pysideproperty_p.h"
 #include "dynamicqmetaobject_p.h"

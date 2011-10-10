@@ -23,7 +23,7 @@
 #ifndef DYNAMICMETAPROPERTY_P_H
 #define DYNAMICMETAPROPERTY_P_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #include <QByteArray>
 #include <QMetaMethod>
 

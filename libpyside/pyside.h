@@ -23,7 +23,7 @@
 #ifndef PYSIDE_H
 #define PYSIDE_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #include <pysidemacros.h>
 #include <QMetaType>
 #include <QHash>

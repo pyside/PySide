@@ -24,7 +24,7 @@
 #define PYSIDE_CLASSINFO_H
 
 #include <pysidemacros.h>
-#include <Python.h>
+#include <sbkpython.h>
 #include <QMap>
 #include <QByteArray>
 
