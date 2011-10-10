@@ -23,7 +23,7 @@
 #ifndef PYSIDE_CLASSINFO_P_H
 #define PYSIDE_CLASSINFO_P_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #include <QMetaObject>
 #include "pysideclassinfo.h"
 

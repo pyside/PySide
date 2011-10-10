@@ -23,7 +23,7 @@
 #ifndef PYSIDECONVERSIONS_H
 #define PYSIDECONVERSIONS_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #include <QFlag>
 #include <conversions.h>
 #include <pysideqflags.h>

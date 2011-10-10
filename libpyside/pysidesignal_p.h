@@ -23,7 +23,7 @@
 #ifndef PYSIDE_QSIGNAL_P_H
 #define PYSIDE_QSIGNAL_P_H
 
-#include <Python.h>
+#include <sbkpython.h>
 
 extern "C"
 {

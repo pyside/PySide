@@ -23,7 +23,7 @@
 #ifndef PYSIDE_QPROPERTY_P_H
 #define PYSIDE_QPROPERTY_P_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #include <QMetaObject>
 #include "pysideproperty.h"
 

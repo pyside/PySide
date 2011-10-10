@@ -24,7 +24,7 @@
 #define SIGNALMANAGER_H
 
 #include "pysidemacros.h"
-#include <Python.h>
+#include <sbkpython.h>
 #include <Qt>
 #include <QStringList>
 #include <QMetaMethod>

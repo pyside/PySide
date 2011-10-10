@@ -23,7 +23,7 @@
 #ifndef PYSIDE_METAFUNCTION_P_H
 #define PYSIDE_METAFUNCTION_P_H
 
-#include <Python.h>
+#include <sbkpython.h>
 
 namespace PySide { namespace MetaFunction {
 

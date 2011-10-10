@@ -28,7 +28,7 @@
 #include <QStringList>
 
 #include <pysidemacros.h>
-#include <Python.h>
+#include <sbkpython.h>
 
 extern "C"
 {

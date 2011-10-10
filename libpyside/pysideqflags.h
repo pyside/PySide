@@ -23,7 +23,7 @@
 #ifndef PYSIDE_QFLAGS_H
 #define PYSIDE_QFLAGS_H
 
-#include <Python.h>
+#include <sbkpython.h>
 #include <pysidemacros.h>
 
 
