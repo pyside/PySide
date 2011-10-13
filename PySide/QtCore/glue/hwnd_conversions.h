@@ -1,6 +1,6 @@
 namespace Shiboken {
 template <>
-struct Converter<HWND__>
+struct Converter<HWND>
 {
     static bool checkType(PyObject* pyObj)
     {
@@ -19,14 +19,14 @@ struct Converter<HWND__>
         return 0;
     }
 
-    static PyObject* toPython(HWND__ cppobj)
+    static PyObject* toPython(HWND cppobj)
     {
-        return PyCObject_FromVoidPtr(&cppobj, 0);
+        return PyCObject_FromVoidPtr(cppobj, 0);
     }
 
-    static HWND__ toCpp(PyObject* pyobj)
+    static HWND toCpp(PyObject* pyobj)
     {
-        return *((HWND__*) PyCObject_AsVoidPtr(pyobj));
+        return (HWND)PyCObject_AsVoidPtr(pyobj);
     }
 };
 }
