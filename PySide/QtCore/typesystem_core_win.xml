@@ -19,7 +19,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 -->
 <typesystem package="PySide.QtCore">
-  <primitive-type name="HWND__">
+  <primitive-type name="HWND">
       <conversion-rule file="glue/hwnd_conversions.h"/>
   </primitive-type>
   <value-type name="POINT">

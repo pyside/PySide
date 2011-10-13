@@ -1,3 +1,4 @@
+#ifndef Q_WS_WIN
 namespace Shiboken {
 template <>
 struct Converter<WId>
@@ -30,3 +31,4 @@ struct Converter<WId>
     }
 };
 }
+#endif
