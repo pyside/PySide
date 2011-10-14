@@ -21,8 +21,20 @@
 */
 
 #include "pysideqflags.h"
+#include <sbkenum.h>
 
 extern "C" {
+    struct SbkConverter;
+
+    /**
+     * Type of all QFlags
+     */
+    struct PySideQFlagsType
+    {
+        PyHeapTypeObject super;
+        SbkConverter* converter;
+    };
+
     #define PYSIDE_QFLAGS(X) reinterpret_cast<PySideQFlagsObject*>(X)
 
     PyObject* PySideQFlagsNew(PyTypeObject *type, PyObject *args, PyObject *kwds)
@@ -89,6 +101,24 @@ namespace PySide
 {
 namespace QFlags
 {
+    PyTypeObject* create(const char* name, PyNumberMethods* numberMethods)
+    {
+        PyTypeObject* type = reinterpret_cast<PyTypeObject*>(new PySideQFlagsType);
+        ::memset(type, 0, sizeof(PySideQFlagsType));
+        Py_TYPE(type) = &PyType_Type;
+        type->tp_basicsize = sizeof(PySideQFlagsObject);
+        type->tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_CHECKTYPES;
+        type->tp_name = name;
+        type->tp_new = &PySideQFlagsNew;
+        type->tp_as_number = numberMethods;
+        type->tp_richcompare = &PySideQFlagsRichCompare;
+
+        if (PyType_Ready(type) < 0)
+            return 0;
+
+        return type;
+    }
+
     PySideQFlagsObject* newObject(long value, PyTypeObject* type)
     {
         PySideQFlagsObject* qflags = PyObject_New(PySideQFlagsObject, type);
