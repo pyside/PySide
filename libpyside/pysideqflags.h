@@ -24,10 +24,10 @@
 #define PYSIDE_QFLAGS_H
 
 #include <sbkpython.h>
-#include <pysidemacros.h>
+#include "pysidemacros.h"
 
 
-extern "C" 
+extern "C"
 {
     struct PYSIDE_API PySideQFlagsObject {
         PyObject_HEAD
@@ -43,7 +43,17 @@ namespace PySide
 {
 namespace QFlags
 {
+    /**
+     * Creates a new QFlags type.
+     */
+    PYSIDE_API PyTypeObject* create(const char* name, PyNumberMethods* numberMethods);
+    /**
+     * Creates a new QFlags instance of type \p type and value \p value.
+     */
     PYSIDE_API PySideQFlagsObject* newObject(long value, PyTypeObject* type);
+    /**
+     * Returns the value held by a QFlag.
+     */
     PYSIDE_API long getValue(PySideQFlagsObject* self);
 }
 }
