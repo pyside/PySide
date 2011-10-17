@@ -3444,9 +3444,10 @@
             <conversion-rule class="target">
                 Shiboken::AutoDecRef option_object(PyList_New(0));
                 for (int i=0, max=numItems; i &lt; max; i++) {
-                    PyList_Append(option_object, %CONVERTTOPYTHON[QStyleOptionGraphicsItem](%in[i]));
+                    const QStyleOptionGraphicsItem* item = &amp;%in[i];
+                    PyList_Append(option_object, %CONVERTTOPYTHON[QStyleOptionGraphicsItem](item));
                 }
-                PyObject *%out = option_object.object();
+                PyObject* %out = option_object.object();
             </conversion-rule>
 
             <conversion-rule class="native">
