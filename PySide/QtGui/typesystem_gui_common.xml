@@ -2399,10 +2399,15 @@
 
     <modify-function signature="clear()">
       <inject-code>
-          foreach(QAction *act, %CPPSELF.actions()) {
-            Shiboken::AutoDecRef pyAct(%CONVERTTOPYTHON[QAction*](act));
-            Shiboken::Object::setParent(NULL, pyAct);
-            Shiboken::Object::invalidate(pyAct);
+          Shiboken::BindingManager&amp; bm = Shiboken::BindingManager::instance();
+          PyObject* pyObj;
+          foreach(QAction* act, %CPPSELF.actions()) {
+            if ((pyObj = (PyObject*)bm.retrieveWrapper(act)) != 0) {
+                Py_INCREF(pyObj);
+                Shiboken::Object::setParent(NULL, pyObj);
+                Shiboken::Object::invalidate(pyObj);
+                Py_DECREF(pyObj);
+            }
           }
       </inject-code>
     </modify-function>
