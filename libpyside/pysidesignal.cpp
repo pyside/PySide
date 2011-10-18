@@ -585,10 +585,10 @@ char* getTypeName(PyObject* type)
                 typeName = strdup("PyObject");
         }
         return typeName;
+    } else if (type == Py_None) { // Must be checked before as Shiboken::String::check accepts Py_None
+        return strdup("void");
     } else if (Shiboken::String::check(type)) {
         return strdup(Shiboken::String::toCString(type));
-    } else if (type == Py_None) {
-        return strdup("void");
     }
     return 0;
 }
