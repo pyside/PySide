@@ -66,7 +66,8 @@
                     QString format = QString().sprintf("%s(\"%s\")", ((PyObject*)%PYSELF)->ob_type->tp_name, qPrintable(%CPPSELF.toString()));
                     %PYARG_0 = Shiboken::String::fromCString(qPrintable(format));
                  } else {
-                    %PYARG_0 = PyObject_Str((PyObject*)%PYSELF);
+                    %PYARG_0 = Shiboken::String::fromCString(
+                                    ((PyObject* )%PYSELF)->ob_type->tp_name);
                 }
             </inject-code>
         </add-function>
