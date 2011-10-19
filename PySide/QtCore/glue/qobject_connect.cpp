@@ -8,7 +8,7 @@ static bool isDecorator(PyObject* method, PyObject* self)
            reinterpret_cast<PyMethodObject*>(method)->im_func;
 }
 
-static bool getReceiver(QObject *source, PyObject* callback, QObject** receiver, PyObject** self)
+static bool getReceiver(QObject *source, const char* signal, PyObject* callback, QObject** receiver, PyObject** self, QByteArray* callbackSig)
 {
     bool forceGlobalReceiver = false;
     if (PyMethod_Check(callback)) {
@@ -27,9 +27,20 @@ static bool getReceiver(QObject *source, PyObject* callback, QObject** receiver,
     }
 
     bool usingGlobalReceiver = !*receiver || forceGlobalReceiver;
+
+    // Check if this callback is a overwrite of a non-virtual Qt slot.
+    if (!usingGlobalReceiver && receiver && self) {
+        *callbackSig = PySide::Signal::getCallbackSignature(signal, *receiver, callback, usingGlobalReceiver).toAscii();
+        const QMetaObject* metaObject = (*receiver)->metaObject();
+        int slotIndex = metaObject->indexOfSlot(callbackSig->constData());
+        if (slotIndex != -1 && slotIndex < metaObject->methodOffset() && PyMethod_Check(callback))
+            usingGlobalReceiver = true;
+    }
+
     if (usingGlobalReceiver) {
         PySide::SignalManager& signalManager = PySide::SignalManager::instance();
         *receiver = signalManager.globalReceiver(source, callback);
+        *callbackSig = PySide::Signal::getCallbackSignature(signal, *receiver, callback, usingGlobalReceiver).toAscii();
     }
 
     return usingGlobalReceiver;
@@ -68,14 +79,15 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
     // Extract receiver from callback
     QObject* receiver = 0;
     PyObject* self = 0;
-    bool usingGlobalReceiver = getReceiver(source, callback, &receiver, &self);
+    QByteArray callbackSig;
+    bool usingGlobalReceiver = getReceiver(source, signal, callback, &receiver, &self, &callbackSig);
     if (receiver == 0 && self == 0)
         return false;
 
     const QMetaObject* metaObject = receiver->metaObject();
-    const QByteArray callbackSig = PySide::Signal::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
     const char* slot = callbackSig.constData();
     int slotIndex = metaObject->indexOfSlot(slot);
+
     if (slotIndex == -1) {
         if (!usingGlobalReceiver && self && !Shiboken::Object::hasCppWrapper((SbkObject*)self)) {
             qWarning() << "You can't add dynamic slots on an object originated from C++.";
@@ -128,7 +140,8 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
     // Extract receiver from callback
     QObject* receiver = 0;
     PyObject* self = 0;
-    bool usingGlobalReceiver = getReceiver(NULL, callback, &receiver, &self);
+    QByteArray callbackSig;
+    bool usingGlobalReceiver = getReceiver(NULL, signal, callback, &receiver, &self, &callbackSig);
     if (receiver == 0 && self == 0)
         return false;
 
@@ -136,21 +149,18 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
     int signalIndex = source->metaObject()->indexOfSignal(++signal);
     int slotIndex = -1;
 
-    const QByteArray callbackSig = PySide::Signal::getCallbackSignature(signal, receiver, callback, usingGlobalReceiver).toAscii();
-    QByteArray qtSlotName(callbackSig);
-
-    slotIndex = metaObject->indexOfSlot(qtSlotName);
+    slotIndex = metaObject->indexOfSlot(callbackSig);
 
     if (QMetaObject::disconnectOne(source, signalIndex, receiver, slotIndex)) {
         if (usingGlobalReceiver)
             signalManager.releaseGlobalReceiver(source, receiver);
 
         #ifndef AVOID_PROTECTED_HACK
-            source->disconnectNotify(qtSlotName);
+            source->disconnectNotify(callbackSig);
         #else
             // Need to cast to QObjectWrapper* and call the public version of
             // connectNotify when avoiding the protected hack.
-            reinterpret_cast<QObjectWrapper*>(source)->disconnectNotify(qtSlotName);
+            reinterpret_cast<QObjectWrapper*>(source)->disconnectNotify(callbackSig);
         #endif
         return true;
     }
