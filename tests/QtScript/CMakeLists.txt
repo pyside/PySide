@@ -1,4 +1,5 @@
 PYSIDE_TEST(base_test.py)
+PYSIDE_TEST(bug_1022.py)
 PYSIDE_TEST(engine_test.py)
 PYSIDE_TEST(property_test.py)
 PYSIDE_TEST(qscriptvalue_test.py)
