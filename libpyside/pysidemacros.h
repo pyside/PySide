@@ -40,7 +40,7 @@
         #define PYSIDE_DEPRECATED(func) func __attribute__ ((deprecated))
     #else
         #define PYSIDE_API
-        #define DEPRECATED(func) func
+        #define PYSIDE_DEPRECATED(func) func
     #endif
 #endif
 
