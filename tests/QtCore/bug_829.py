@@ -4,14 +4,19 @@
 import unittest
 from PySide.QtCore import QSettings
 from helper import adjust_filename
+import tempfile
 
 class QVariantConversions(unittest.TestCase):
     def testDictionary(self):
-        s = QSettings(adjust_filename('bug_829.conf', __file__), QSettings.IniFormat)
-        #Save value 
+        confFile = tempfile.NamedTemporaryFile()
+        s = QSettings(confFile.name, QSettings.IniFormat)
+        # Save value
         s.setValue('x', {1: 'a'})
         s.sync()
-        #Restore value
+        del s
+
+        # Restore value
+        s = QSettings(confFile.name, QSettings.IniFormat)
         self.assertEqual(s.value('x'), {1: 'a'})
 
 if __name__ == '__main__':
