@@ -516,23 +516,6 @@
   }
   </inject-code>
 
-  <template name="cpplist_to_pylist_convertion">
-    PyObject* %out = PyList_New((int) %in.size());
-    %INTYPE::const_iterator it = %in.begin();
-    for (int idx = 0; it != %in.end(); ++it, ++idx) {
-        %INTYPE_0 cppItem(*it);
-        PyList_SET_ITEM(%out, idx, %CONVERTTOPYTHON[%INTYPE_0](cppItem));
-    }
-    return %out;
-  </template>
-  <template name="pyseq_to_cpplist_convertion">
-    for (int i = 0; i &lt; PySequence_Size(%in); i++) {
-        Shiboken::AutoDecRef pyItem(PySequence_GetItem(%in, i));
-        %OUTTYPE_0 cppItem = %CONVERTTOCPP[%OUTTYPE_0](pyItem);
-        %out &lt;&lt; cppItem;
-    }
-  </template>
-
   <primitive-type name="QStringList">
     <include file-name="QStringList" location="global"/>
     <conversion-rule file="qstringlist_conversions.h">
@@ -545,6 +528,24 @@
             <add-conversion type="PySequence">
                 <insert-template name="pyseq_to_cpplist_convertion">
                     <replace from="%OUTTYPE_0" to="QString" />
+                </insert-template>
+            </add-conversion>
+        </target-to-native>
+    </conversion-rule>
+  </primitive-type>
+
+  <primitive-type name="QModelIndexList">
+    <include file-name="qabstractitemmodel.h" location="global"/>
+    <conversion-rule>
+        <native-to-target>
+            <insert-template name="cpplist_to_pylist_convertion">
+                <replace from="%INTYPE_0" to="QModelIndex" />
+            </insert-template>
+        </native-to-target>
+        <target-to-native>
+            <add-conversion type="PySequence">
+                <insert-template name="pyseq_to_cpplist_convertion">
+                    <replace from="%OUTTYPE_0" to="QModelIndex" />
                 </insert-template>
             </add-conversion>
         </target-to-native>

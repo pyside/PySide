@@ -2216,7 +2216,6 @@
   <object-type name="QItemSelectionModel">
       <enum-type name="SelectionFlag" flags="SelectionFlags"/>
   </object-type>
-  <primitive-type name="QModelIndexList"/>
   <object-type name="QListView">
       <enum-type name="Flow"/>
       <enum-type name="LayoutMode"/>
