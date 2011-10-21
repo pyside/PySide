@@ -76,7 +76,7 @@ class QFlagsOnQVariant(unittest.TestCase):
     def testQFlagsOnQVariant(self):
         o = QObject()
         o.setProperty("foo", QIODevice.ReadOnly | QIODevice.WriteOnly)
-        self.assertEqual(type(o.property("foo")), int)
+        self.assertEqual(type(o.property("foo")), QIODevice.OpenMode)
 
 class QFlagsWrongType(unittest.TestCase):
     def testWrongType(self):
