@@ -33,6 +33,7 @@ extern "C" {
     struct PySideQFlagsType
     {
         PyHeapTypeObject super;
+        SbkConverter** converterPtr;
         SbkConverter* converter;
     };
 
@@ -127,6 +128,9 @@ namespace QFlags
         type->tp_as_number = numberMethods;
         type->tp_richcompare = &PySideQFlagsRichCompare;
 
+        PySideQFlagsType* flagsType = reinterpret_cast<PySideQFlagsType*>(type);
+        flagsType->converterPtr = &flagsType->converter;
+
         if (PyType_Ready(type) < 0)
             return 0;
 
@@ -146,4 +150,3 @@ namespace QFlags
     }
 }
 }
-
