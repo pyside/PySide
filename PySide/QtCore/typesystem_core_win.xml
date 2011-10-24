@@ -26,7 +26,7 @@
           </native-to-target>
           <target-to-native>
               <add-conversion type="PyCObject">
-              %out = (%OUTTYPE*)PyCObject_AsVoidPtr(%in);
+              %out = *((%OUTTYPE*)PyCObject_AsVoidPtr(%in));
               </add-conversion>
           </target-to-native>
       </conversion-rule>
