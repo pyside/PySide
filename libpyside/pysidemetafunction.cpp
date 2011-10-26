@@ -21,6 +21,7 @@
  */
 #include <sbkpython.h>
 #include "pysidemetafunction.h"
+#include "pysidemetafunction_p.h"
 
 #include <shiboken.h>
 #include <QObject>
@@ -98,67 +99,10 @@ void functionFree(void *self)
 PyObject* functionCall(PyObject* self, PyObject* args, PyObject* kw)
 {
     PySideMetaFunction* function = reinterpret_cast<PySideMetaFunction*>(self);
-    QMetaMethod method = function->d->method;
-    QList<QByteArray> argTypes = method.parameterTypes();
 
-    // args given plus return type
-    int numArgs = PyTuple_GET_SIZE(args) + 1;
-
-    if (numArgs - 1 != argTypes.count()) {
-        PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", method.signature(), argTypes.count(), numArgs);
+    PyObject* retVal;
+    if (!PySide::MetaFunction::call(function->d->qobject, function->d->method.methodIndex(), args, &retVal))
         return 0;
-    }
-
-    QVariant* methValues = new QVariant[numArgs];
-    void** methArgs = new void*[numArgs];
-
-    // Prepare room for return type
-    const char* returnType = method.typeName();
-    if (returnType)
-        argTypes.prepend(returnType);
-    else
-        argTypes.prepend(QByteArray());
-
-    int i;
-    for (i = 0; i < numArgs; ++i) {
-        const QByteArray& typeName = argTypes[i];
-        // This must happen only when the method hasn't return type.
-        if (typeName.isEmpty()) {
-            methArgs[i] = 0;
-            continue;
-        }
-
-        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
-        if (typeResolver) {
-            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType) {
-                int typeId = QMetaType::type(typeName);
-                if (!typeId) {
-                    PyErr_Format(PyExc_TypeError, "Value type used on signal needs to be registered on meta type: %s", typeName.data());
-                    break;
-                }
-                methValues[i] = QVariant(typeId, (void*) 0);
-            }
-            methArgs[i] = methValues[i].data();
-            if (i != 0) // Don't do this for return type
-                typeResolver->toCpp(PyTuple_GET_ITEM(args, i - 1), &methArgs[i]);
-        } else {
-            PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", argTypes[i].constData());
-            break;
-        }
-    }
-
-    bool ok = i == numArgs;
-    if (ok)
-        QMetaObject::metacall(function->d->qobject, QMetaObject::InvokeMetaMethod, method.methodIndex(), methArgs);
-
-    static Shiboken::TypeResolver* qVariantTypeResolver = Shiboken::TypeResolver::get("QVariant");
-    Q_ASSERT(qVariantTypeResolver);
-
-    PyObject* retVal = qVariantTypeResolver->toPython(&methValues[0]);
-
-    delete[] methArgs;
-    delete[] methValues;
-
     return retVal;
 }
 
@@ -190,6 +134,84 @@ PySideMetaFunction* newObject(QObject* source, int methodIndex)
     }
     return 0;
 }
+
+bool call(QObject* self, int methodIndex, PyObject* args, PyObject** retVal)
+{
+
+    QMetaMethod method = self->metaObject()->method(methodIndex);
+    QList<QByteArray> argTypes = method.parameterTypes();
+
+    // args given plus return type
+    Shiboken::AutoDecRef sequence(PySequence_Fast(args, 0));
+    int numArgs = PySequence_Fast_GET_SIZE(sequence.object()) + 1;
+
+    if (numArgs - 1 != argTypes.count()) {
+        PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", method.signature(), argTypes.count(), numArgs);
+        return false;
+    }
+
+    QVariant* methValues = new QVariant[numArgs];
+    void** methArgs = new void*[numArgs];
+
+    // Prepare room for return type
+    const char* returnType = method.typeName();
+    if (returnType)
+        argTypes.prepend(returnType);
+    else
+        argTypes.prepend(QByteArray());
+
+    int i;
+    for (i = 0; i < numArgs; ++i) {
+        const QByteArray& typeName = argTypes[i];
+        // This must happen only when the method hasn't return type.
+        if (typeName.isEmpty()) {
+            methArgs[i] = 0;
+            continue;
+        }
+
+        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
+        if (typeResolver) {
+            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType) {
+                int typeId = QMetaType::type(typeName);
+                if (!typeId) {
+                    PyErr_Format(PyExc_TypeError, "Value types used on meta functions (including signals) need to be "
+                                                  "registered on meta type: %s", typeName.data());
+                    break;
+                }
+                methValues[i] = QVariant(typeId, (void*) 0);
+            }
+            methArgs[i] = methValues[i].data();
+            if (i != 0) // Don't do this for return type
+                typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i - 1), &methArgs[i]);
+        } else {
+            PyErr_Format(PyExc_TypeError, "Unknown type used to call meta function (that may be a signal): %s", argTypes[i].constData());
+            break;
+        }
+    }
+
+    bool ok = i == numArgs;
+    if (ok) {
+        QMetaObject::metacall(self, QMetaObject::InvokeMetaMethod, method.methodIndex(), methArgs);
+
+        if (retVal) {
+            if (methArgs[0]) {
+                static Shiboken::TypeResolver* qVariantTypeResolver = Shiboken::TypeResolver::get("QVariant");
+                Q_ASSERT(qVariantTypeResolver);
+
+                *retVal = qVariantTypeResolver->toPython(&methValues[0]);
+            } else {
+                *retVal = Py_None;
+                Py_INCREF(*retVal);
+            }
+        }
+    }
+
+    delete[] methArgs;
+    delete[] methValues;
+
+    return ok;
+}
+
 
 } //namespace MetaFunction
 } //namespace PySide

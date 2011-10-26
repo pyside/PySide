@@ -26,6 +26,7 @@
 #include "pysideproperty_p.h"
 #include "pyside.h"
 #include "dynamicqmetaobject.h"
+#include "pysidemetafunction_p.h"
 
 #include <QHash>
 #include <QStringList>
@@ -34,6 +35,7 @@
 #include <gilstate.h>
 #include <QDebug>
 #include <limits>
+#include <algorithm>
 #include <typeresolver.h>
 #include <basewrapper.h>
 #include <conversions.h>
@@ -54,7 +56,6 @@ namespace {
     static int callMethod(QObject* object, int id, void** args);
     static PyObject* parseArguments(QList<QByteArray> paramTypese, void** args);
     static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args);
-    static bool emitNormalSignal(QObject* source, int signalIndex, const char* signal, PyObject* args, const QStringList& argTypes);
 
 #ifdef IS_PY3K
     static void destroyMetaObject(PyObject* obj)
@@ -338,13 +339,14 @@ bool SignalManager::emitSignal(QObject* source, const char* signal, PyObject* ar
 
     int signalIndex = source->metaObject()->indexOfSignal(signal);
     if (signalIndex != -1) {
-        bool isShortCircuit;
-        QStringList argTypes = Signal::getArgsFromSignature(signal, &isShortCircuit);
-
+        // cryptic but works!
+        // if the signature doesn't have a '(' it's a shor circuited signal, i.e. std::find
+        // returned the string null terminator.
+        bool isShortCircuit = !*std::find(signal, signal + std::strlen(signal), '(');
         if (isShortCircuit)
             return emitShortCircuitSignal(source, signalIndex, args);
         else
-            return emitNormalSignal(source, signalIndex, signal, args, argTypes);
+            return MetaFunction::call(source, signalIndex, args);
     }
     return false;
 }
@@ -570,51 +572,6 @@ static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* a
     void* signalArgs[2] = {0, args};
     source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
     return true;
-}
-
-static bool emitNormalSignal(QObject* source, int signalIndex, const char* signal, PyObject* args, const QStringList& argTypes)
-{
-    Shiboken::AutoDecRef sequence(PySequence_Fast(args, 0));
-    int argsGiven = PySequence_Fast_GET_SIZE(sequence.object());
-
-    if (argsGiven != argTypes.count()) {
-        PyErr_Format(PyExc_TypeError, "%s only accepts %d arguments, %d given!", signal, argTypes.count(), argsGiven);
-        return false;
-    }
-
-    QVariant* signalValues = new QVariant[argsGiven];
-    void** signalArgs = new void*[argsGiven + 1];
-    signalArgs[0] = 0;
-
-    int i;
-    for (i = 0; i < argsGiven; ++i) {
-        QByteArray typeName = argTypes[i].toAscii();
-        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
-        if (typeResolver) {
-            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType) {
-                int typeId = QMetaType::type(typeName);
-                if (!typeId) {
-                    PyErr_Format(PyExc_TypeError, "Value type used on signal needs to be registered on meta type: %s", typeName.data());
-                    break;
-                }
-                signalValues[i] = QVariant(typeId, (void*) 0);
-            }
-            signalArgs[i+1] = signalValues[i].data();
-            typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i), &signalArgs[i+1]);
-        } else {
-            PyErr_Format(PyExc_TypeError, "Unknown type used to emit a signal: %s", qPrintable(argTypes[i]));
-            break;
-        }
-    }
-
-    bool ok = i == argsGiven;
-    if (ok)
-        source->qt_metacall(QMetaObject::InvokeMetaMethod, signalIndex, signalArgs);
-
-    delete[] signalArgs;
-    delete[] signalValues;
-
-    return ok;
 }
 
 } //namespace
