@@ -34,7 +34,7 @@ extern "C"
 struct PySideMetaFunctionPrivate
 {
     QObject* qobject;
-    QMetaMethod method;
+    int methodIndex;
 };
 
 //methods
@@ -101,7 +101,7 @@ PyObject* functionCall(PyObject* self, PyObject* args, PyObject* kw)
     PySideMetaFunction* function = reinterpret_cast<PySideMetaFunction*>(self);
 
     PyObject* retVal;
-    if (!PySide::MetaFunction::call(function->d->qobject, function->d->method.methodIndex(), args, &retVal))
+    if (!PySide::MetaFunction::call(function->d->qobject, function->d->methodIndex, args, &retVal))
         return 0;
     return retVal;
 }
@@ -129,7 +129,7 @@ PySideMetaFunction* newObject(QObject* source, int methodIndex)
         PySideMetaFunction* function = PyObject_New(PySideMetaFunction, &PySideMetaFunctionType);
         function->d = new PySideMetaFunctionPrivate();
         function->d->qobject = source;
-        function->d->method = method;
+        function->d->methodIndex = methodIndex;
         return function;
     }
     return 0;
