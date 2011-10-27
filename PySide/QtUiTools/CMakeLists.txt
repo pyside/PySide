@@ -23,10 +23,10 @@ set(QtUiTools_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
 set(QtUiTools_libraries     pyside
                             uiplugin
                             ${SHIBOKEN_PYTHON_LIBRARIES}
-                            ${QT_QTCORE_LIBRARY}
-                            ${QT_QTGUI_LIBRARY}
+                            ${QT_QTUITOOLS_LIBRARY}
                             ${QT_QTDESIGNER_LIBRARY}
-                            ${QT_QTUITOOLS_LIBRARY})
+                            ${QT_QTCORE_LIBRARY}
+                            ${QT_QTGUI_LIBRARY})
 set(QtUiTools_deps QtGui QtXml)
 create_pyside_module(QtUiTools
                      QtUiTools_include_dirs
