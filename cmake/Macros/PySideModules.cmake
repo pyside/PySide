@@ -39,7 +39,7 @@ macro(create_pyside_module module_name module_include_dir module_libraries modul
         set_target_properties(${module_name} PROPERTIES SUFFIX ".pyd")
         set(${module_name}_suffix ".pyd")
     else()
-        set(${module_name}_suffix ".so")
+        set(${module_name}_suffix ${CMAKE_SHARED_MODULE_SUFFIX})
     endif()
     target_link_libraries(${module_name} ${${module_libraries}})
     if(${module_deps})

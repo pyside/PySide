@@ -23,7 +23,7 @@ struct Converter<QString>
     {
         if (PyUnicode_Check(pyObj)) {
             Py_UNICODE* unicode = PyUnicode_AS_UNICODE(pyObj);
-    #if defined(Py_UNICODE_WIDE)
+    #if defined(Py_UNICODE_WIDE) || defined(__CYGWIN__)
             // cast as Py_UNICODE can be a different type
             return QString::fromUcs4(reinterpret_cast<const uint*>(unicode));
     #else
