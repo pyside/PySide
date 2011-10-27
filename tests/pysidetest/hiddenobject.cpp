@@ -20,29 +20,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "testobject.h"
+#include "hiddenobject.h"
 
-void TestObject::emitIdValueSignal()
+void HiddenObject::callMe()
 {
-    emit idValue(m_idValue);
+    m_called = true;
 }
 
-void TestObject::emitStaticMethodDoubleSignal()
+bool HiddenObject::wasCalled()
 {
-    emit staticMethodDouble();
+    return m_called;
 }
 
-void TestObject::emitSignalWithDefaultValue_void()
+QObject* getHiddenObject()
 {
-    emit signalWithDefaultValue();
-}
-
-void TestObject::emitSignalWithDefaultValue_bool()
-{
-    emit signalWithDefaultValue(true);
-}
-
-void TestObject::emitSignalWithTypedefValue(int value)
-{
-    emit signalWithTypedefValue(TypedefValue(value));
+    return new HiddenObject();
 }

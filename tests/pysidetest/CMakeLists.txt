@@ -12,11 +12,13 @@ add_definitions(-DRXX_ALLOCATOR_INIT_0)
 set(pysidetest_SRC
 testobject.cpp
 testview.cpp
+hiddenobject.cpp
 )
 
 set(pysidetest_MOC_HEADERS
 testobject.h
 testview.h
+hiddenobject.h
 )
 
 qt4_wrap_cpp(pysidetest_MOC_SRC ${pysidetest_MOC_HEADERS})
@@ -86,3 +88,4 @@ PYSIDE_TEST(signalwithdefaultvalue_test.py)
 PYSIDE_TEST(signalemissionfrompython_test.py)
 PYSIDE_TEST(version_test.py)
 PYSIDE_TEST(typedef_signal_test.py)
+PYSIDE_TEST(bug_1016.py)

@@ -38,6 +38,7 @@
 #include <typeresolver.h>
 #include <bindingmanager.h>
 #include <algorithm>
+#include <cstring>
 #include <cctype>
 #include <QStack>
 #include <QCoreApplication>
@@ -233,30 +234,34 @@ PyObject* getMetaDataFromQObject(QObject* cppSelf, PyObject* self, PyObject* nam
     }
 
     //search on metaobject (avoid internal attributes started with '__')
-    if (!attr && !QString(Shiboken::String::toCString(name)).startsWith("__")) {
-        const QMetaObject* metaObject = cppSelf->metaObject();
-        QByteArray cname(Shiboken::String::toCString(name));
-        cname += '(';
-        //signal
-        QList<QMetaMethod> signalList;
-        for(int i=0, i_max = metaObject->methodCount(); i < i_max; i++) {
-            QMetaMethod method = metaObject->method(i);
-            if (QString(method.signature()).startsWith(cname)) {
-                if (method.methodType() == QMetaMethod::Signal) {
-                    signalList.append(method);
-                } else {
-                    PySideMetaFunction* func = MetaFunction::newObject(cppSelf, i);
-                    if (func) {
-                        PyObject_SetAttr(self, name, (PyObject*)func);
-                        return (PyObject*)func;
+    if (!attr) {
+        const char* cname = Shiboken::String::toCString(name);
+        uint cnameLen = qstrlen(cname);
+        if (std::strncmp("__", cname, 2)) {
+            const QMetaObject* metaObject = cppSelf->metaObject();
+            //signal
+            QList<QMetaMethod> signalList;
+            for(int i=0, i_max = metaObject->methodCount(); i < i_max; i++) {
+                QMetaMethod method = metaObject->method(i);
+                const char* methSig = method.signature();
+                bool methMacth = !std::strncmp(cname, methSig, cnameLen) && methSig[cnameLen] == '(';
+                if (methMacth) {
+                    if (method.methodType() == QMetaMethod::Signal) {
+                        signalList.append(method);
+                    } else {
+                        PySideMetaFunction* func = MetaFunction::newObject(cppSelf, i);
+                        if (func) {
+                            PyObject_SetAttr(self, name, (PyObject*)func);
+                            return (PyObject*)func;
+                        }
                     }
                 }
             }
-        }
-        if (signalList.size() > 0) {
-            PyObject* pySignal = reinterpret_cast<PyObject*>(Signal::newObjectFromMethod(self, signalList));
-            PyObject_SetAttr(self, name, pySignal);
-            return pySignal;
+            if (signalList.size() > 0) {
+                PyObject* pySignal = reinterpret_cast<PyObject*>(Signal::newObjectFromMethod(self, signalList));
+                PyObject_SetAttr(self, name, pySignal);
+                return pySignal;
+            }
         }
     }
     return attr;

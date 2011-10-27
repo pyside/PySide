@@ -6,6 +6,8 @@
     <primitive-type name="TypedefValue"/>
     <object-type name="TestObject" />
 
+    <function signature="getHiddenObject()" />
+
     <inject-code position="end">
         Shiboken::TypeResolver::createObjectTypeResolver&lt; ::PySideCPP2::TestObjectWithoutNamespace>("TestObjectWithoutNamespace*");
         Shiboken::TypeResolver::createValueTypeResolver&lt; ::PySideCPP2::PySideLong>("PySideLong");

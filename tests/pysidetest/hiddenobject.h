@@ -20,29 +20,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "testobject.h"
+#ifndef HIDDENOBJECT_H
+#define HIDDENOBJECT_H
 
-void TestObject::emitIdValueSignal()
-{
-    emit idValue(m_idValue);
-}
+#ifdef pysidetest_EXPORTS
+#define PYSIDE_EXPORTS 1
+#endif
+#include "pysidemacros.h"
+#include <QObject>
 
-void TestObject::emitStaticMethodDoubleSignal()
+// This class shouldn't be exported!
+class HiddenObject : public QObject
 {
-    emit staticMethodDouble();
-}
+    Q_OBJECT
+public:
+    HiddenObject() : m_called(false) {}
+    Q_INVOKABLE void callMe();
+public slots:
+    bool wasCalled();
+private:
+    bool m_called;
+};
 
-void TestObject::emitSignalWithDefaultValue_void()
-{
-    emit signalWithDefaultValue();
-}
+// Return a instance of HiddenObject
+PYSIDE_API QObject* getHiddenObject();
 
-void TestObject::emitSignalWithDefaultValue_bool()
-{
-    emit signalWithDefaultValue(true);
-}
 
-void TestObject::emitSignalWithTypedefValue(int value)
-{
-    emit signalWithTypedefValue(TypedefValue(value));
-}
+#endif
