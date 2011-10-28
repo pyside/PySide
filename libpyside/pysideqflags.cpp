@@ -22,6 +22,7 @@
 
 #include "pysideqflags.h"
 #include <sbkenum.h>
+#include <autodecref.h>
 
 extern "C" {
     struct SbkConverter;
@@ -39,8 +40,21 @@ extern "C" {
 
     PyObject* PySideQFlagsNew(PyTypeObject *type, PyObject *args, PyObject *kwds)
     {
+        long val = 0;
+        if (PyTuple_GET_SIZE(args)) {
+            PyObject* arg = PyTuple_GET_ITEM(args, 0);
+            if (Shiboken::isShibokenEnum(arg)) {// faster call
+                val = Shiboken::Enum::getValue(arg);
+            } else if (PyNumber_Check(arg)) {
+                Shiboken::AutoDecRef number(PyNumber_Long(arg));
+                val = PyLong_AsLong(number);
+            } else {
+                PyErr_SetString(PyExc_TypeError,"QFlags must be created using enums or numbers.");
+                return 0;
+            }
+        }
         PySideQFlagsObject* self = PyObject_New(PySideQFlagsObject, type);
-        self->ob_value = 0;
+        self->ob_value = val;
         return reinterpret_cast<PyObject*>(self);
     }
 
