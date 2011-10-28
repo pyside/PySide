@@ -54,7 +54,7 @@ namespace {
     static PyObject *metaObjectAttr = 0;
 
     static int callMethod(QObject* object, int id, void** args);
-    static PyObject* parseArguments(QList<QByteArray> paramTypese, void** args);
+    static PyObject* parseArguments(const QList< QByteArray >& paramTypes, void** args);
     static bool emitShortCircuitSignal(QObject* source, int signalIndex, PyObject* args);
 
 #ifdef IS_PY3K
@@ -420,27 +420,33 @@ int SignalManager::callPythonMetaMethod(const QMetaMethod& method, void** args, 
     Q_ASSERT(pyMethod);
 
     Shiboken::GilState gil;
-    PyObject* pyArguments = NULL;
+    PyObject* pyArguments = 0;
 
     if (isShortCuit)
         pyArguments = reinterpret_cast<PyObject*>(args[1]);
     else
         pyArguments = parseArguments(method.parameterTypes(), args);
 
-    //keep the returnType this call be destroyed after method call
-    QByteArray returnType = method.typeName();
+    if (pyArguments) {
+        Shiboken::AutoDecRef retval(PyObject_CallObject(pyMethod, pyArguments));
 
-    Shiboken::AutoDecRef retval(PyObject_CallObject(pyMethod, pyArguments));
+        if (!isShortCuit && pyArguments)
+            Py_DECREF(pyArguments);
 
-    if (!isShortCuit)
-        Py_XDECREF(pyArguments);
-
-    if (retval.isNull()) {
-        PyErr_Print();
-    } else {
-        if (returnType.size() > 0)
-            Shiboken::TypeResolver::get(returnType)->toCpp(retval, &args[0]);
+        if (!retval.isNull() && retval != Py_None && !PyErr_Occurred()) {
+            const char* returnType = method.typeName();
+            if (returnType && std::strcmp("", returnType)) {
+                Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(returnType);
+                if (typeResolver)
+                    typeResolver->toCpp(retval, &args[0]);
+                else
+                    PyErr_Format(PyExc_RuntimeError, "Can't fidn type resolver \"%s\" to call Python meta method.", returnType);
+            }
+        }
     }
+
+    if (PyErr_Occurred())
+        PyErr_Print();
 
     return -1;
 }
@@ -471,9 +477,9 @@ int SignalManager::registerMetaMethodGetIndex(QObject* source, const char* signa
             if (!dict || !PyDict_Contains(dict, metaObjectAttr)) {
                 dmo = new DynamicQMetaObject(pySelf->ob_type, metaObject);
 #ifdef IS_PY3K
-                PyObject *pyDmo = PyCapsule_New(dmo, 0, destroyMetaObject);
+                PyObject* pyDmo = PyCapsule_New(dmo, 0, destroyMetaObject);
 #else
-                PyObject *pyDmo = PyCObject_FromVoidPtr(dmo, destroyMetaObject);
+                PyObject* pyDmo = PyCObject_FromVoidPtr(dmo, destroyMetaObject);
 #endif
 
                 PyObject_SetAttr(pySelf, metaObjectAttr, pyDmo);
@@ -541,15 +547,12 @@ static int callMethod(QObject* object, int id, void** args)
 }
 
 
-static PyObject* parseArguments(QList<QByteArray> paramTypes, void** args)
+static PyObject* parseArguments(const QList<QByteArray>& paramTypes, void** args)
 {
-    PyObject* preparedArgs = NULL;
-    Py_ssize_t argsSize = paramTypes.count();
+    int argsSize = paramTypes.count();
+    PyObject* preparedArgs = PyTuple_New(argsSize);
 
-    if (argsSize)
-        preparedArgs = PyTuple_New(argsSize);
-
-    for (int i = 0, max = paramTypes.count(); i < max; ++i) {
+    for (int i = 0, max = argsSize; i < max; ++i) {
         void* data = args[i+1];
         const char* dataType = paramTypes[i].constData();
 
@@ -558,12 +561,12 @@ static PyObject* parseArguments(QList<QByteArray> paramTypes, void** args)
             PyObject* arg = tr->toPython(data);
             PyTuple_SET_ITEM(preparedArgs, i, arg);
         } else {
+
             PyErr_Format(PyExc_TypeError, "Can't call meta function because I have no idea how to handle %s", dataType);
             Py_DECREF(preparedArgs);
-            return NULL;
+            return 0;
         }
     }
-
     return preparedArgs;
 }
 

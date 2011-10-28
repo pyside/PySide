@@ -456,7 +456,7 @@ void DynamicQMetaObject::DynamicQMetaObjectPrivate::writeMethodsData(const QList
             (*data)[index++] = m_emptyMethod; // func name
 
         (*data)[index++] = nullIndex; // arguments
-        (*data)[index++] = (it->type().size() > 0 ? registerString(it->type(), strings) : nullIndex); // normalized type
+        (*data)[index++] = !it->type().isEmpty() ? registerString(it->type(), strings) : nullIndex; // normalized type
         (*data)[index++] = nullIndex; // tags
         (*data)[index++] = flags  |  (it->methodType() == QMetaMethod::Signal ? MethodSignal : MethodSlot);
     }
