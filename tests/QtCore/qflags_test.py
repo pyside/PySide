@@ -59,6 +59,8 @@ class QFlagOperatorTest(unittest.TestCase):
         flag_type = (flags & Qt.WindowType_Mask)
         self.assertEqual(flag_type, Qt.Window)
 
+        self.assertEqual(Qt.KeyboardModifiers(Qt.ControlModifier), Qt.ControlModifier)
+
     def testOperatorBetweenFlags(self):
         '''QFlags & QFlags'''
         flags = Qt.NoItemFlags | Qt.ItemIsUserCheckable
