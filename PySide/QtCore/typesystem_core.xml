@@ -3010,7 +3010,13 @@
     <enum-type name="State"/>
   </object-type>
 
-  <object-type name="QAbstractState" since="4.6" />
+  <object-type name="QAbstractState" since="4.6">
+    <modify-function signature="machine() const">
+        <modify-argument index="this">
+            <parent index="return" action="add"/>
+        </modify-argument>
+    </modify-function>
+  </object-type>
 
   <object-type name="QAbstractTransition" since="4.6">
     <modify-function signature="QAbstractTransition(QState*)">
