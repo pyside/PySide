@@ -10,7 +10,7 @@ param = []
 
 def handler(msgt, msg):
     global param
-    param = [msgt, msg]
+    param = [msgt, msg.strip()]
 
 def handleruseless(msgt, msg):
     pass
