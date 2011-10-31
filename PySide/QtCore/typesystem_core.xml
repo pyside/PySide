@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
     This file is part of PySide project.
-    Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2009-2011 Nokia Corporation and/or its subsidiary(-ies).
     Contact: PySide team <contact@pyside.org>
 
     This library is free software; you can redistribute it and/or
@@ -26,13 +26,10 @@
     <function signature="qAtan(qreal)" since="4.6" />
     <function signature="qAtan2(qreal,qreal)" since="4.6" />
     <function signature="qChecksum(const char*,uint)" />
-    <function signature="qCritical(const char*)" />
-    <function signature="qDebug(const char*)" />
     <function signature="qExp(qreal)" since="4.6" />
     <function signature="qFabs(qreal)" since="4.6" />
     <function signature="qFastCos(qreal)" since="4.6"/>
     <function signature="qFastSin(qreal)" since="4.6" />
-    <function signature="qFatal(const char*)" />
     <function signature="qFuzzyCompare(double,double)" />
     <function signature="qFuzzyIsNull(double)" since="4.6" />
     <function signature="qIsFinite(double)" />
@@ -43,9 +40,39 @@
     <function signature="qTan(qreal)" since="4.6" />
     <function signature="qtTrId(const char *, int)" since="4.6" />
     <function signature="qVersion()" />
-    <function signature="qWarning(const char*)" />
     <function signature="qrand()" />
     <function signature="qsrand(uint)" />
+
+    <template name="use_stream_for_format_security">
+        // Uses the stream version for security reasons
+        // see gcc man page at -Wformat-security
+        %FUNCTION_NAME() &lt;&lt; %1;
+    </template>
+
+    <add-function signature="qDebug(const char*)">
+        <inject-code>
+            <insert-template name="use_stream_for_format_security" />
+        </inject-code>
+    </add-function>
+    <add-function signature="qCritical(const char*)">
+        <inject-code>
+            <insert-template name="use_stream_for_format_security" />
+        </inject-code>
+    </add-function>
+    <add-function signature="qFatal(const char*)">
+        <inject-code>
+            // qFatal doesn't have a stream version, so we do a
+            // qWarning call followed by a qFatal() call using a
+            // literal.
+            qWarning() &lt;&lt; %1;
+            qFatal("[A qFatal() call was made from Python code]");
+        </inject-code>
+    </add-function>
+    <add-function signature="qWarning(const char*)">
+        <inject-code>
+            <insert-template name="use_stream_for_format_security" />
+        </inject-code>
+    </add-function>
 
     <!-- TODO: We do not support void* or const void* as arg -->
     <rejection class="QMetaObject" function-name="activate"/>
@@ -2098,7 +2125,7 @@
         <modify-argument index="2">
             <remove-argument />
         </modify-argument>
-        <inject-code>            
+        <inject-code>
             %CPPSELF.%FUNCTION_NAME(Shiboken::String::toCString(%PYARG_1), Shiboken::String::len(%PYARG_1));
         </inject-code>
     </modify-function>
@@ -3413,6 +3440,6 @@ s1.addTransition(button.clicked, s1h)&lt;/code>
   <!-- TODO: this need be removed -->
   <suppress-warning text="skipping function '*', unmatched return type '*'"/>
   <suppress-warning text="skipping function '*', unmatched parameter type '*'"/>
-  
+
 
 </typesystem>
