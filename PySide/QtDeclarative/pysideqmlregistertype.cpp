@@ -113,6 +113,9 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
     QMetaObject* metaObject = reinterpret_cast<QMetaObject*>(ObjectType::getTypeUserData(reinterpret_cast<SbkObjectType*>(pyObj)));
     Q_ASSERT(metaObject);
 
+    // Inc ref the type object, don't worry about dec ref them because there's no way to unregister a QML type
+    Py_INCREF(pyObj);
+
     // All ready... now the ugly code begins... :-)
     pyTypes[nextType] = pyObj;
 
