@@ -3,27 +3,46 @@
     <load-typesystem name="typesystem_core.xml" generate="no" />
     <load-typesystem name="typesystem_gui.xml" generate="no"/>
     <value-type name="IntValue"/>
-    <primitive-type name="TypedefValue"/>
+    <primitive-type name="TypedefValue">
+        <!--
+        A conversion rule is used here because ApiExtractor can't associate
+        a primitive typedef to a non-primitive type. That would be a good
+        improvement to ApiExtractor.
+        -->
+        <conversion-rule>
+            <native-to-target>
+            return %CONVERTTOPYTHON[IntValue](%in);
+            </native-to-target>
+            <target-to-native>
+                <add-conversion type="IntValue">
+                IntValue value = %CONVERTTOCPP[IntValue](%in);
+                %out = %OUTTYPE(value);
+                </add-conversion>
+            </target-to-native>
+        </conversion-rule>
+    </primitive-type>
     <object-type name="TestObject" />
+
+    <primitive-type name="PySideInt"/>
+    <primitive-type name="PySideCPP2::PySideLong"/>
+    <!--<primitive-type name="PySideLong"/>-->
 
     <function signature="getHiddenObject()" />
 
     <inject-code position="end">
-        Shiboken::TypeResolver::createObjectTypeResolver&lt; ::PySideCPP2::TestObjectWithoutNamespace>("TestObjectWithoutNamespace*");
-        Shiboken::TypeResolver::createValueTypeResolver&lt; ::PySideCPP2::PySideLong>("PySideLong");
-        Shiboken::TypeResolver::createObjectTypeResolver&lt; ::PySideCPP::TestObjectWithNamespace>("TestObjectWithNamespace*");
-        Shiboken::TypeResolver::createValueTypeResolver&lt; ::PySideInt>("PySideInt");
-        qRegisterMetaType&lt;PySideInt>("PySideInt");
-        qRegisterMetaType&lt;PySideCPP2::PySideLong>("PySideLong");
+    Shiboken::Conversions::registerConverterName(Shiboken::Conversions::PrimitiveTypeConverter&lt;long&gt;(), "PySideLong");
+    Shiboken::Conversions::registerConverterName(Shiboken::Conversions::PrimitiveTypeConverter&lt;long&gt;(), "PySideCPP2::PySideLong");
+    qRegisterMetaType&lt;PySideInt>("PySideInt");
+    qRegisterMetaType&lt;PySideCPP2::PySideLong>("PySideLong");
     </inject-code>
 
     <namespace-type name="PySideCPP">
-        <object-type name="TestObjectWithNamespace" />
+        <object-type name="TestObjectWithNamespace"/>
     </namespace-type>
 
     <namespace-type name="PySideCPP2" generate="no">
         <enum-type name="Enum1" />
-        <object-type name="TestObjectWithoutNamespace" >
+        <object-type name="TestObjectWithoutNamespace">
             <enum-type name="Enum2" />
         </object-type>
     </namespace-type>
@@ -36,4 +55,3 @@
         </modify-function>
     </object-type>
 </typesystem>
-

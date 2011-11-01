@@ -38,6 +38,7 @@
 #include <algorithm>
 #include <typeresolver.h>
 #include <basewrapper.h>
+#include <sbkconverter.h>
 #include <conversions.h>
 
 #if QSLOT_CODE != 1 || QSIGNAL_CODE != 2
@@ -225,6 +226,22 @@ static void clearSignalManager()
     PySide::SignalManager::instance().clear();
 }
 
+static void PyObject_PythonToCpp_PyObject_PTR(PyObject* pyIn, void* cppOut)
+{
+    *((PyObject**)cppOut) = pyIn;
+}
+static PythonToCppFunc is_PyObject_PythonToCpp_PyObject_PTR_Convertible(PyObject* pyIn)
+{
+    return PyObject_PythonToCpp_PyObject_PTR;
+}
+static PyObject* PyObject_PTR_CppToPython_PyObject(const void* cppIn)
+{
+    PyObject* pyOut = (PyObject*)cppIn;
+    if (pyOut)
+        Py_INCREF(pyOut);
+    return pyOut;
+}
+
 SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
 {
     // Register Qt primitive typedefs used on signals.
@@ -234,9 +251,14 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
     qRegisterMetaType<PyObjectWrapper>(PYTHON_TYPE);
     qRegisterMetaTypeStreamOperators<PyObjectWrapper>(PYTHON_TYPE);
 
-    TypeResolver::createValueTypeResolver<PyObjectWrapper>(PYTHON_TYPE);
-    TypeResolver::createValueTypeResolver<PyObjectWrapper>("object");
-    TypeResolver::createValueTypeResolver<PyObjectWrapper>("PySide::PyObjectWrapper");
+    SbkConverter* converter = Shiboken::Conversions::createConverter(&PyBaseObject_Type, 0);
+    Shiboken::Conversions::setCppPointerToPythonFunction(converter, PyObject_PTR_CppToPython_PyObject);
+    Shiboken::Conversions::setPythonToCppPointerFunctions(converter, PyObject_PythonToCpp_PyObject_PTR, is_PyObject_PythonToCpp_PyObject_PTR_Convertible);
+    Shiboken::Conversions::registerConverterName(converter, PYTHON_TYPE);
+    Shiboken::Conversions::registerConverterName(converter, "object");
+    Shiboken::Conversions::registerConverterName(converter, "PyObjectWrapper");
+    Shiboken::Conversions::registerConverterName(converter, "PySide::PyObjectWrapper");
+
     PySide::registerCleanupFunction(clearSignalManager);
 
     if (!metaObjectAttr)
@@ -436,11 +458,12 @@ int SignalManager::callPythonMetaMethod(const QMetaMethod& method, void** args, 
         if (!retval.isNull() && retval != Py_None && !PyErr_Occurred()) {
             const char* returnType = method.typeName();
             if (returnType && std::strcmp("", returnType)) {
-                Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(returnType);
-                if (typeResolver)
-                    typeResolver->toCpp(retval, &args[0]);
+                Shiboken::Conversions::SpecificConverter converter(returnType);
+                if (converter)
+                    converter.toCpp(retval, args[0]);
                 else
-                    PyErr_Format(PyExc_RuntimeError, "Can't fidn type resolver \"%s\" to call Python meta method.", returnType);
+                    PyErr_Format(PyExc_RuntimeError, "Can't find converter for '%s' to call Python meta method.", returnType);
+
             }
         }
     }
@@ -555,13 +578,10 @@ static PyObject* parseArguments(const QList<QByteArray>& paramTypes, void** args
     for (int i = 0, max = argsSize; i < max; ++i) {
         void* data = args[i+1];
         const char* dataType = paramTypes[i].constData();
-
-        Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(dataType);
-        if (tr) {
-            PyObject* arg = tr->toPython(data);
-            PyTuple_SET_ITEM(preparedArgs, i, arg);
+        Shiboken::Conversions::SpecificConverter converter(dataType);
+        if (converter) {
+            PyTuple_SET_ITEM(preparedArgs, i, converter.toPython(data));
         } else {
-
             PyErr_Format(PyExc_TypeError, "Can't call meta function because I have no idea how to handle %s", dataType);
             Py_DECREF(preparedArgs);
             return 0;

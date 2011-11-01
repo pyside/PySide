@@ -170,7 +170,7 @@
     <!-- FIXME This is a workaround to include some headers needed by some includes (nothing to do with QBool) -->
     <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
-  <primitive-type name="QString">
+  <primitive-type name="QString" target-lang-api-name="PyUnicode">
     <include file-name="QString" location="global"/>
     <conversion-rule file="qstring_conversions.h">
         <native-to-target>
@@ -248,22 +248,28 @@
         <native-to-target>
         if (!%in.isValid())
             Py_RETURN_NONE;
+
         if (qstrcmp(%in.typeName(), "QVariantList") == 0) {
             QList&lt;QVariant&gt; var = %in.value&lt;QVariantList&gt;();
             return %CONVERTTOPYTHON[QList&lt;QVariant&gt;](var);
         }
+
         if (qstrcmp(%in.typeName(), "QStringList") == 0) {
             QStringList var = %in.value&lt;QStringList&gt;();
             return %CONVERTTOPYTHON[QList&lt;QString&gt;](var);
         }
+
         if (qstrcmp(%in.typeName(), "QVariantMap") == 0) {
             QMap&lt;QString, QVariant&gt; var = %in.value&lt;QVariantMap&gt;();
             return %CONVERTTOPYTHON[QMap&lt;QString, QVariant&gt;](var);
         }
-        Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(%in.typeName());
-        if (tr)
-            return tr->toPython(const_cast&lt;void*&gt;(%in.data()));
-        // TODO-CONVERTERS: SET ERROR
+
+        Shiboken::Conversions::SpecificConverter converter(cppInRef.typeName());
+        if (converter) {
+           void* ptr = cppInRef.data();
+           return converter.toPython(ptr);
+        }
+        PyErr_Format(PyExc_RuntimeError, "Can't find converter for '%s'.", %in.typeName());
         return 0;
         </native-to-target>
         <target-to-native>
@@ -273,11 +279,11 @@
             <add-conversion type="Py_None">
             %out = %OUTTYPE();
             </add-conversion>
-            <add-conversion type="PyString" check="%CHECKTYPE[QString](%in)">
+            <add-conversion type="QString" check="Shiboken::String::check(%in)">
             QString in = %CONVERTTOCPP[QString](%in);
             %out = %OUTTYPE(in);
             </add-conversion>
-            <add-conversion type="QByteArray" check="%CHECKTYPE[QByteArray](%in)">
+            <add-conversion type="QByteArray">
             QByteArray in = %CONVERTTOCPP[QByteArray](%in);
             %out = %OUTTYPE(in);
             </add-conversion>
@@ -301,19 +307,16 @@
             // a class supported by QVariant?
             int typeCode;
             const char* typeName = QVariant_resolveMetaType(%in->ob_type, &amp;typeCode);
-            if (typeCode &amp;&amp; typeName) {
-                Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(typeName);
-                QVariant var(typeCode, (void*)0);
-                void* args[] = { var.data() };
-                tr->toCpp(%in, args);
-                %out = var;
-            }
+            if (!typeCode || !typeName)
+                return;
+            QVariant var(typeCode, (void*)0);
+            Shiboken::Conversions::SpecificConverter converter(typeName);
+            converter.toCpp(pyIn, var.data());
+            %out = var;
             </add-conversion>
             <add-conversion type="PyDict">
             QVariant ret = QVariant_convertToVariantMap(%in);
-            if (ret.isValid())
-                %out = ret;
-            %out = QVariant::fromValue&lt;PySide::PyObjectWrapper&gt;(%in);
+            %out = ret.isValid() ? ret : QVariant::fromValue&lt;PySide::PyObjectWrapper&gt;(%in);
             </add-conversion>
             <add-conversion type="PySequence">
             %out = QVariant_convertToVariantList(%in);
@@ -372,15 +375,13 @@
             listTypeName += '>';
             typeId = QMetaType::type(listTypeName);
             if (typeId &gt; 0) {
-                Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(listTypeName);
-                if (!tr) {
-                    qWarning() &lt;&lt; "TypeResolver for :" &lt;&lt; listTypeName &lt;&lt; "not registered.";
-                } else {
+                Shiboken::Conversions::SpecificConverter converter(listTypeName);
+                if (converter) {
                     QVariant var(typeId, (void*)0);
-                    void* args[] = { var.data(), 0 };
-                    tr->toCpp(list, args);
+                    converter.toCpp(list, &amp;var);
                     return var;
                 }
+                qWarning() &lt;&lt; "Type converter for :" &lt;&lt; listTypeName &lt;&lt; "not registered.";
             }
         }
         return QVariant();
@@ -417,25 +418,22 @@
     }
     static QVariant QVariant_convertToVariantList(PyObject* list)
     {
-        bool allString = QVariant_isStringList(list);
-        if (allString) {
+        if (QVariant_isStringList(list)) {
             QList&lt;QString &gt; lst = %CONVERTTOCPP[QList&lt;QString&gt;](list);
             return QVariant(QStringList(lst));
-        } else {
-            QVariant valueList = QVariant_convertToValueList(list);
-            if (valueList.isValid())
-                return valueList;
-            QList&lt;QVariant&gt; lst;
-            Shiboken::AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
-            Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
-            for (int i = 0; i &lt; size; ++i) {
-                PyObject* pyItem = PySequence_Fast_GET_ITEM(fast.object(), i);
-                QVariant item = %CONVERTTOCPP[QVariant](pyItem);
-                lst.append(item);
-            }
-            return QVariant(lst);
         }
-        Q_ASSERT(false);
+        QVariant valueList = QVariant_convertToValueList(list);
+        if (valueList.isValid())
+            return valueList;
+        QList&lt;QVariant&gt; lst;
+        Shiboken::AutoDecRef fast(PySequence_Fast(list, "Failed to convert QVariantList"));
+        Py_ssize_t size = PySequence_Fast_GET_SIZE(fast.object());
+        for (int i = 0; i &lt; size; ++i) {
+            PyObject* pyItem = PySequence_Fast_GET_ITEM(fast.object(), i);
+            QVariant item = %CONVERTTOCPP[QVariant](pyItem);
+            lst.append(item);
+        }
+        return QVariant(lst);
     }
     </inject-code>
 
@@ -444,12 +442,10 @@
         <native-to-target>
         const char* typeName = QVariant::typeToName(%in);
         PyObject* %out;
-        if (!typeName) {
-            %out = Py_None;
-        } else {
-            Shiboken::TypeResolver* tr = Shiboken::TypeResolver::get(typeName);
-            %out = tr ? (PyObject*)tr->pythonType() : Py_None;
-        }
+        PyTypeObject* pyType = 0;
+        if (typeName)
+            pyType = Shiboken::Conversions::getPythonTypeObject(typeName);
+        %out = pyType ? ((PyObject*)pyType) : Py_None;
         Py_INCREF(%out);
         return %out;
         </native-to-target>
@@ -492,7 +488,10 @@
     </conversion-rule>
   </primitive-type>
 
-  <primitive-type name="QVariantMap" />
+  <primitive-type name="QVariantMap" target-lang-api-name="PyDict"/>
+  <inject-code class="target" position="end">
+  Shiboken::Conversions::registerConverterName(SbkPySide_QtCoreTypeConverters[SBK_QTCORE_QMAP_QSTRING_QVARIANT_IDX], "QVariantMap");
+  </inject-code>
 
   <inject-code class="native" position="beginning">
   static bool QVariantType_isStringList(PyObject* list)
@@ -920,9 +919,10 @@
 
   <!--signal/slot-->
   <inject-code class="target" position="end">
-    Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("unicode");
-    Shiboken::TypeResolver::createValueTypeResolver&lt;QString>("str");
-    Shiboken::TypeResolver::createValueTypeResolver&lt;QVariantList>("QVariantList");
+    Shiboken::Conversions::registerConverterName(SbkPySide_QtCoreTypeConverters[SBK_QSTRING_IDX], "unicode");
+    Shiboken::Conversions::registerConverterName(SbkPySide_QtCoreTypeConverters[SBK_QSTRING_IDX], "str");
+    Shiboken::Conversions::registerConverterName(SbkPySide_QtCoreTypeConverters[SBK_QTCORE_QLIST_QVARIANT_IDX], "QVariantList");
+
     PySide::init(module);
     Py_AtExit(QtCoreModuleExit);
   </inject-code>

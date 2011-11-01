@@ -169,10 +169,10 @@ bool call(QObject* self, int methodIndex, PyObject* args, PyObject** retVal)
             continue;
         }
 
-        Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(typeName);
-        if (typeResolver) {
-            if (Shiboken::TypeResolver::getType(typeName) == Shiboken::TypeResolver::ValueType) {
-                int typeId = QMetaType::type(typeName);
+        Shiboken::Conversions::SpecificConverter converter(typeName);
+        if (converter) {
+            int typeId = QMetaType::type(typeName);
+            if (!Shiboken::Conversions::pythonTypeIsObjectType(converter)) {
                 if (!typeId) {
                     PyErr_Format(PyExc_TypeError, "Value types used on meta functions (including signals) need to be "
                                                   "registered on meta type: %s", typeName.data());
@@ -181,8 +181,15 @@ bool call(QObject* self, int methodIndex, PyObject* args, PyObject** retVal)
                 methValues[i] = QVariant(typeId, (void*) 0);
             }
             methArgs[i] = methValues[i].data();
-            if (i != 0) // Don't do this for return type
-                typeResolver->toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i - 1), &methArgs[i]);
+            if (i == 0) // Don't do this for return type
+                continue;
+            if (typeId == QVariant::String) {
+                QString tmp;
+                converter.toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i - 1), &tmp);
+                methValues[i] = tmp;
+            } else {
+                converter.toCpp(PySequence_Fast_GET_ITEM(sequence.object(), i - 1), methArgs[i]);
+            }
         } else {
             PyErr_Format(PyExc_TypeError, "Unknown type used to call meta function (that may be a signal): %s", argTypes[i].constData());
             break;
@@ -195,10 +202,10 @@ bool call(QObject* self, int methodIndex, PyObject* args, PyObject** retVal)
 
         if (retVal) {
             if (methArgs[0]) {
-                static Shiboken::TypeResolver* qVariantTypeResolver = Shiboken::TypeResolver::get("QVariant");
-                Q_ASSERT(qVariantTypeResolver);
-
-                *retVal = qVariantTypeResolver->toPython(&methValues[0]);
+                static SbkConverter* qVariantTypeConverter = Shiboken::Conversions::getConverter("QVariant");
+                Q_ASSERT(qVariantTypeConverter);
+                *retVal = Shiboken::Conversions::copyToPython(qVariantTypeConverter, &methValues[0]);
+                SbkDbg() << (*retVal);
             } else {
                 *retVal = Py_None;
                 Py_INCREF(*retVal);

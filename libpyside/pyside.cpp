@@ -35,6 +35,7 @@
 
 #include <basewrapper.h>
 #include <conversions.h>
+#include <sbkconverter.h>
 #include <typeresolver.h>
 #include <bindingmanager.h>
 #include <algorithm>
@@ -141,7 +142,7 @@ void destroyQCoreApplication()
 
     Shiboken::BindingManager& bm = Shiboken::BindingManager::instance();
     SbkObject* pyQApp = bm.retrieveWrapper(app);
-    PyTypeObject* pyQObjectType = Shiboken::TypeResolver::get("QObject*")->pythonType();
+    PyTypeObject* pyQObjectType = Shiboken::Conversions::getPythonTypeObject("QObject*");
     assert(pyQObjectType);
 
     void* data[2] = {pyQApp, pyQObjectType};
@@ -174,7 +175,10 @@ void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base, const s
 
     //initialize staticQMetaObject property
     void* metaObjectPtr = &userData->mo;
-    Shiboken::AutoDecRef pyMetaObject(Shiboken::TypeResolver::get("QMetaObject*")->toPython(&metaObjectPtr));
+    static SbkConverter* converter = Shiboken::Conversions::getConverter("QMetaObject");
+    if (!converter)
+        return;
+    Shiboken::AutoDecRef pyMetaObject(Shiboken::Conversions::pointerToPython(converter, metaObjectPtr));
     PyObject_SetAttrString(reinterpret_cast<PyObject*>(type), "staticMetaObject", pyMetaObject);
 }
 
@@ -185,7 +189,7 @@ void initDynamicMetaObject(SbkObjectType* type, const QMetaObject* base)
 
 void initQObjectSubType(SbkObjectType* type, PyObject* args, PyObject* kwds)
 {
-    PyTypeObject* qObjType = Shiboken::TypeResolver::get("QObject*")->pythonType();
+    PyTypeObject* qObjType = Shiboken::Conversions::getPythonTypeObject("QObject*");
     QByteArray className(Shiboken::String::toCString(PyTuple_GET_ITEM(args, 0)));
 
     PyObject* bases = PyTuple_GET_ITEM(args, 1);

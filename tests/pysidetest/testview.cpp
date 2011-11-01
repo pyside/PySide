@@ -1,5 +1,6 @@
 #include "testview.h"
 
+#include <QDebug>
 #include <QWidget>
 #include <QAbstractListModel>
 #include <QAbstractItemDelegate>
@@ -21,4 +22,3 @@ TestView::getEditorWidgetFromItemDelegate() const
     QStyleOptionViewItem options;
     return m_delegate->createEditor(0, options, index);
 }
-

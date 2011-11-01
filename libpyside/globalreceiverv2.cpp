@@ -111,7 +111,7 @@ QByteArray DynamicSlotDataV2::hash(PyObject* callback)
 {
     Shiboken::GilState gil;
     if (PyMethod_Check(callback))
-        return  QByteArray::number((qlonglong)PyObject_Hash(PyMethod_GET_FUNCTION(callback))) 
+        return  QByteArray::number((qlonglong)PyObject_Hash(PyMethod_GET_FUNCTION(callback)))
               + QByteArray::number((qlonglong)PyObject_Hash(PyMethod_GET_SELF(callback)));
     else
         return QByteArray::number((qlonglong)PyObject_Hash(callback));
