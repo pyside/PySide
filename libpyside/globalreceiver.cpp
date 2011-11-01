@@ -29,6 +29,7 @@
 #include <QEvent>
 #include <QLinkedList>
 #include <autodecref.h>
+#include <sbkconverter.h>
 #include <gilstate.h>
 
 #include "typeresolver.h"
@@ -293,8 +294,9 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
         QList<QByteArray> paramTypes = slot.parameterTypes();
         Shiboken::AutoDecRef preparedArgs(PyTuple_New(paramTypes.count()));
         for (int i = 0, max = paramTypes.count(); i < max; ++i) {
-            PyObject* arg = Shiboken::TypeResolver::get(paramTypes[i].constData())->toPython(args[i+1]); // Do not increment the reference
-            PyTuple_SET_ITEM(preparedArgs.object(), i, arg);
+            const QByteArray& paramType = paramTypes[i];
+            Shiboken::Conversions::SpecificConverter converter(paramType.constData());
+            PyTuple_SET_ITEM(preparedArgs.object(), i, converter.toPython(args[i+1]));
         }
         retval = data->call(preparedArgs);
     }
@@ -306,4 +308,3 @@ int GlobalReceiver::qt_metacall(QMetaObject::Call call, int id, void** args)
 
     return -1;
 }
-

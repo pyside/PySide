@@ -60,8 +60,7 @@
     </enum-type>
 
     <inject-code class="target" position="end">
-        Shiboken::TypeResolver::createValueTypeResolver&lt; QList&lt;QObject*&gt; &gt;("QList&lt;QObject*&gt;");
-        PySide::initQmlSupport(module);
+    PySide::initQmlSupport(module);
     </inject-code>
 
     <object-type name="QDeclarativeExtensionInterface"/>

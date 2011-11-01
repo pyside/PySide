@@ -23,14 +23,32 @@
   <primitive-type name="WId" target-lang-api-name="PyObject">
     <conversion-rule file="glue/wid_conversions.h">
         <native-to-target>
+        #ifdef IS_PY3K
+        return PyCapsule_New(%in, 0, 0);
+        #else
         return PyCObject_FromVoidPtr(%in, 0);
+        #endif
         </native-to-target>
         <target-to-native>
-            <add-conversion type="PyCObject">
+            <add-conversion type="checkPyCapsuleOrPyCObject">
+            #ifdef IS_PY3K
+            %out = (%OUTTYPE)PyCapsule_GetPointer(%in, 0);
+            #else
             %out = (%OUTTYPE)PyCObject_AsVoidPtr(%in);
+            #endif
             </add-conversion>
         </target-to-native>
     </conversion-rule>
   </primitive-type>
+  <inject-code class="native" position="beginning">
+  static bool checkPyCapsuleOrPyCObject(PyObject* pyObj)
+  {
+      #ifdef IS_PY3K
+      return PyCapsule_CheckExact(pyObj);
+      #else
+      return PyCObject_Check(pyObj);
+      #endif
+  }
+  </inject-code>
   <enum-type name="QPixmap::HBitmapFormat" />
 </typesystem>

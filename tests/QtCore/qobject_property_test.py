@@ -3,7 +3,7 @@
 
 import unittest
 
-from PySide.QtCore import *
+from PySide.QtCore import QObject, Property, Signal
 
 class MyObjectWithNotifyProperty(QObject):
     def __init__(self, parent=None):
@@ -31,7 +31,12 @@ class PropertyWithNotify(unittest.TestCase):
         obj.myProperty = 10
         self.assert_(self.called_)
 
+    def testHasProperty(self):
+        o = MyObjectWithNotifyProperty()
+        o.setProperty("myProperty", 10)
+        self.assertEqual(o.myProperty, 10)
+        self.assertEqual(o.property("myProperty"), 10)
+
 
 if __name__ == '__main__':
     unittest.main()
-

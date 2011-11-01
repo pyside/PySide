@@ -81,9 +81,6 @@
         <include file-name="QSqlField" location="global"/>
     </extra-includes>
     <modify-function signature="append(QSqlField)" access="non-final"/>
-    <inject-code position="end">
-        Shiboken::TypeResolver::createReferenceTypeResolver&lt; ::QSqlRecord >("QSqlRecord&amp;");
-    </inject-code>
   </value-type>
 
   <value-type name="QSqlError">

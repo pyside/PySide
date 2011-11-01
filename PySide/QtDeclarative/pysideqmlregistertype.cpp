@@ -93,8 +93,8 @@ int PySide::qmlRegisterType(PyObject* pyObj, const char* uri, int versionMajor, 
 {
     using namespace Shiboken;
 
-    static PyTypeObject* qobjectType = TypeResolver::get("QObject*")->pythonType();
-    static PyTypeObject* qdeclarativeType = TypeResolver::get("QDeclarativeItem*")->pythonType();
+    static PyTypeObject* qobjectType = Shiboken::Conversions::getPythonTypeObject("QObject*");
+    static PyTypeObject* qdeclarativeType = Shiboken::Conversions::getPythonTypeObject("QDeclarativeItem*");
     assert(qobjectType);
     static int nextType = 0;
 

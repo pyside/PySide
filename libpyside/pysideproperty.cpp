@@ -104,8 +104,10 @@ PyTypeObject PySidePropertyType = {
 
 static void qpropertyMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::Call call, void** args)
 {
-    Shiboken::TypeResolver* typeResolver = Shiboken::TypeResolver::get(pp->d->typeName);
-    Q_ASSERT(typeResolver);
+    Shiboken::Conversions::SpecificConverter converter(pp->d->typeName);
+    Q_ASSERT(converter);
+
+    QByteArray type(pp->d->typeName);
 
     switch(call) {
         case QMetaObject::ReadProperty:
@@ -113,7 +115,7 @@ static void qpropertyMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::C
             Shiboken::GilState gil;
             PyObject* value = PySide::Property::getValue(pp, self);
             if (value) {
-                typeResolver->toCpp(value, &args[0]);
+                converter.toCpp(value, args[0]);
                 Py_DECREF(value);
             } else if (PyErr_Occurred()) {
                 PyErr_Print(); // Clear any errors but print them to stderr
@@ -124,7 +126,7 @@ static void qpropertyMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::C
         case QMetaObject::WriteProperty:
         {
             Shiboken::GilState gil;
-            Shiboken::AutoDecRef value(typeResolver->toPython(args[0]));
+            Shiboken::AutoDecRef value(converter.toPython(args[0]));
             PySide::Property::setValue(pp, self, value);
             break;
         }
