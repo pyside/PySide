@@ -5,7 +5,6 @@ class QtKeyPressListener(QObject):
     def __init__(self, obj):
         QObject.__init__(self)
         obj.installEventFilter(self)
-        self.fConnections = {}
 
     def eventFilter(self, obj, event):
         # This used to crash here due to a misbehaviour of type discovery!
