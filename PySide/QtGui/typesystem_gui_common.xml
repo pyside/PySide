@@ -1855,6 +1855,13 @@
         <define-ownership class="target" owner="default"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="selectionModel() const">
+      <modify-argument index="return">
+        <!-- Defining ownership as "default" avoids the object to be automatically
+             set as parent of the returned pointer. -->
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
     <modify-function signature="setIndexWidget(const QModelIndex &amp;, QWidget *)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
@@ -2762,6 +2769,17 @@
   </object-type>
   <object-type name="QToolTip"/>
   <object-type name="QTreeView">
+    <inject-code class="native" file="glue/qtree_stuff_warning_test.cpp" position="beginning"/>
+    <modify-function signature="QTreeView()">
+        <inject-code>
+            omitTimerWarningMessages();
+        </inject-code>
+    </modify-function>
+    <modify-function signature="QTreeView(QWidget*)">
+        <inject-code>
+            omitTimerWarningMessages();
+        </inject-code>
+    </modify-function>
     <modify-function signature="drawBranches(QPainter*,QRect,QModelIndex)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
@@ -3687,6 +3705,17 @@
     </modify-function>
   </object-type>
   <object-type name="QTreeWidget">
+    <inject-code class="native" file="glue/qtree_stuff_warning_test.cpp" position="beginning"/>
+    <modify-function signature="QTreeWidget()">
+        <inject-code>
+            omitTimerWarningMessages();
+        </inject-code>
+    </modify-function>
+    <modify-function signature="QTreeWidget(QWidget*)">
+        <inject-code>
+            omitTimerWarningMessages();
+        </inject-code>
+    </modify-function>
     <modify-function signature="dropMimeData(QTreeWidgetItem*,int,const QMimeData*,Qt::DropAction)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
