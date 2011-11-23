@@ -33,13 +33,13 @@ inline void registerCustomWidget(PyObject* obj)
     if (plugin == 0) {
         foreach(QObject* o, QPluginLoader::staticInstances()) {
             plugin = qobject_cast<PyCustomWidgets*>(o);
-            if (o)
+            if (plugin)
                 break;
         }
     }
 
     if (!plugin)
-        qDebug() << "Fail to load uiloader plugin";
+        qDebug() << "Failed to load uiloader plugin.";
     else
         plugin->registerWidgetType(obj);
 }
