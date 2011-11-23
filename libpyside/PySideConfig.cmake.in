@@ -1,5 +1,5 @@
 if (NOT PYTHON_BASENAME)
-    message(STATUS "Using default python: @PYTHON_BASENAME@")
-    SET(PYTHON_BASENAME @PYTHON_BASENAME@)
+    message(STATUS "Using default python: @SHIBOKEN_PYTHON_SUFFIX@")
+    SET(PYTHON_BASENAME @SHIBOKEN_PYTHON_SUFFIX@)
 endif()
-include(@LIB_INSTALL_DIR@/cmake/PySide-@BINDING_API_VERSION@/PySideConfig${SHIBOKEN_PYTHON_SUFFIX}.cmake)
+include(@LIB_INSTALL_DIR@/cmake/PySide-@BINDING_API_VERSION@/PySideConfig${PYTHON_BASENAME}.cmake)
