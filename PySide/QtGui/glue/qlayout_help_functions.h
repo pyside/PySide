@@ -63,6 +63,9 @@ inline void addLayoutOwnership(QLayout* layout, QLayout* other)
 
 inline void addLayoutOwnership(QLayout* layout, QLayoutItem* item)
 {
+    if (!item)
+        return;
+
     QWidget* w = item->widget();
     if (w)
         addLayoutOwnership(layout, w);
