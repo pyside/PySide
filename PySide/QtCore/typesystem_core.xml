@@ -2666,55 +2666,51 @@
     <modify-function signature="operator&lt;&lt;(double)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
     <!-- ### -->
+    <add-function signature="operator&lt;&lt;(const QString&amp;)">
+        <inject-code class="target" position="end">
+            <insert-template name="stream_write_method"/>
+        </inject-code>
+    </add-function>
     <add-function signature="writeQString(const QString&amp;)">
-        <inject-code class="target">
-            *(%CPPSELF) &lt;&lt; %1;
+        <inject-code class="target" position="end">
+            <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readQString()" return-type="QString">
-        <inject-code class="target">
-            %RETURN_TYPE val;
-            *(%CPPSELF) &gt;&gt; val;
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        <inject-code class="target" position="end">
+            <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeQChar(const QChar&amp;)">
-        <inject-code class="target">
-            *(%CPPSELF) &lt;&lt; %1;
+        <inject-code class="target" position="end">
+            <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readQChar()" return-type="QChar">
-        <inject-code class="target">
-            %RETURN_TYPE val;
-            *(%CPPSELF) &gt;&gt; val;
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        <inject-code class="target" position="end">
+            <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeQStringList(const QStringList&amp;)">
-        <inject-code class="target">
-            *(%CPPSELF) &lt;&lt; %1;
+        <inject-code class="target" position="end">
+            <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readQStringList()" return-type="QStringList">
-        <inject-code class="target">
-            %RETURN_TYPE val;
-            *(%CPPSELF) &gt;&gt; val;
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        <inject-code class="target" position="end">
+            <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
     <add-function signature="writeQVariant(const QVariant&amp;)">
-        <inject-code class="target">
-            *(%CPPSELF) &lt;&lt; %1;
+        <inject-code class="target" position="end">
+            <insert-template name="stream_write_method"/>
         </inject-code>
     </add-function>
     <add-function signature="readQVariant()" return-type="QVariant">
-        <inject-code class="target">
-            %RETURN_TYPE val;
-            *(%CPPSELF) &gt;&gt; val;
-            %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](val);
+        <inject-code class="target" position="end">
+            <insert-template name="stream_read_method"/>
         </inject-code>
     </add-function>
-
     <modify-function signature="readRawData(char*,int)">
         <modify-argument index="1">
             <remove-argument />
