@@ -136,7 +136,19 @@
             <modify-argument index="return">
                 <replace-type modified-type="(data, address, port)"/>
             </modify-argument>
-            <inject-code class="target" position="beginning" file="glue/qudpsocket_read_datagram_glue.cpp"/>
+            <inject-code class="target" position="beginning">
+            Shiboken::AutoArrayPointer&lt;char&gt; data(%ARGUMENT_NAMES);
+            QHostAddress ha;
+            quint16 port;
+            %BEGIN_ALLOW_THREADS
+            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(data, %ARGUMENT_NAMES, &amp;ha, &amp;port);
+            %END_ALLOW_THREADS
+            QByteArray ba(data, retval);
+            PyObject* %PYARG_0 = PyTuple_New(3);
+            PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[QByteArray](ba));
+            PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[QHostAddress](ha));
+            PyTuple_SET_ITEM(%PYARG_0, 2, %CONVERTTOPYTHON[quint16](port));
+            </inject-code>
         </modify-function>
         <modify-function signature="writeDatagram(const QByteArray&amp;, const QHostAddress&amp;, quint16)" allow-thread="yes"/>
         <!-- ### writeDatagram(QByteArray, ...) does the trick -->
