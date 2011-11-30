@@ -98,12 +98,16 @@
         </add-function>
         <add-function signature="__next__()" return-type="PyObject*">
             <inject-code>
-                if (%CPPSELF.hasNext()) {
-                    %CPPSELF.next();
-                    %PYARG_0 = Shiboken::makeTuple(%CPPSELF.name(), %CPPSELF.value().toVariant());
-                } else {
-                    PyErr_SetNone(PyExc_StopIteration);
-                }
+            if (%CPPSELF.hasNext()) {
+                %CPPSELF.next();
+                QString name = %CPPSELF.name();
+                QVariant value = %CPPSELF.value().toVariant();
+                %PYARG_0 = PyTuple_New(2);
+                PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[QString](name));
+                PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[QVariant](value));
+            } else {
+                PyErr_SetNone(PyExc_StopIteration);
+            }
             </inject-code>
         </add-function>
     </object-type>
