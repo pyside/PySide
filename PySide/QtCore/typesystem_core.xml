@@ -891,7 +891,15 @@
     qAddPostRoutine(PySide::globalPostRoutineCallback);
   </inject-code>
 
-  <inject-code class="target" position="end" file="glue/qt_version.cpp" />
+  <inject-code class="target" position="end">
+  QList&lt;QByteArray&gt; version = QByteArray(qVersion()).split('.');
+  PyObject* pyQtVersion = PyTuple_New(3);
+  for (int i = 0; i &lt; 3; ++i)
+      PyTuple_SET_ITEM(pyQtVersion, i, PyInt_FromLong(version[i].toInt()));
+  PyModule_AddObject(module, "__version_info__", pyQtVersion);
+  PyModule_AddStringConstant(module, "__version__", qVersion());
+  </inject-code>
+
   <inject-code class="target" position="end">
     { // Avoid name clash
         Shiboken::AutoDecRef atexit(Shiboken::Module::import("atexit"));
