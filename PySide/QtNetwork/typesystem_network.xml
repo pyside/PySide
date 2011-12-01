@@ -144,7 +144,7 @@
             %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(data, %ARGUMENT_NAMES, &amp;ha, &amp;port);
             %END_ALLOW_THREADS
             QByteArray ba(data, retval);
-            PyObject* %PYARG_0 = PyTuple_New(3);
+            %PYARG_0 = PyTuple_New(3);
             PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[QByteArray](ba));
             PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[QHostAddress](ha));
             PyTuple_SET_ITEM(%PYARG_0, 2, %CONVERTTOPYTHON[quint16](port));

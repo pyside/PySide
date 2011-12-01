@@ -937,7 +937,9 @@
     static void msgHandlerCallback(QtMsgType type, const char* msg)
     {
         Shiboken::GilState state;
-        Shiboken::AutoDecRef arglist(Shiboken::makeTuple(type, msg));
+        Shiboken::AutoDecRef arglist(PyTuple_New(2));
+        PyTuple_SET_ITEM(arglist, 0, %CONVERTTOPYTHON[QtMsgType](type));
+        PyTuple_SET_ITEM(arglist, 1, %CONVERTTOPYTHON[const char*](msg));
         Shiboken::AutoDecRef ret(PyObject_CallObject(qtmsghandler, arglist));
     }
     static void QtCoreModuleExit()
@@ -1047,9 +1049,11 @@
             <replace-type modified-type="(intersectType, intersectionPoint)" />
         </modify-argument>
         <inject-code class="target" position="beginning">
-            QPointF p;
-            %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;p);
-            %PYARG_0 = Shiboken::makeTuple(retval, p);
+        QPointF p;
+        %RETURN_TYPE retval = %CPPSELF.%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;p);
+        %PYARG_0 = PyTuple_New(2);
+        PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[%RETURN_TYPE](retval));
+        PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[QPointF](p));
         </inject-code>
     </modify-function>
   </value-type>
@@ -1165,8 +1169,13 @@
         </modify-argument>
         <inject-code class="target" position="beginning">
         int year, month, day;
+        %BEGIN_ALLOW_THREADS
         %CPPSELF.%FUNCTION_NAME(&amp;year, &amp;month, &amp;day);
-        %PYARG_0 = Shiboken::makeTuple(year, month, day);
+        %END_ALLOW_THREADS
+        %PYARG_0 = PyTuple_New(3);
+        PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[int](year));
+        PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[int](month));
+        PyTuple_SET_ITEM(%PYARG_0, 2, %CONVERTTOPYTHON[int](day));
         </inject-code>
     </modify-function>
     <modify-function signature="weekNumber(int*)const" >
@@ -1178,8 +1187,12 @@
         </modify-argument>
         <inject-code class="target" position="beginning">
         int yearNumber;
+        %BEGIN_ALLOW_THREADS
         int week = %CPPSELF.%FUNCTION_NAME(&amp;yearNumber);
-        %PYARG_0 = Shiboken::makeTuple(week, yearNumber);
+        %END_ALLOW_THREADS
+        %PYARG_0 = PyTuple_New(2);
+        PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[int](week));
+        PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[int](yearNumber));
         </inject-code>
     </modify-function>
     <!-- This function isn't part of Qt public API -->
@@ -1357,6 +1370,7 @@
           }
       };
     </inject-code>
+
     <modify-function signature="getCoords(int*,int*,int*,int*)const">
         <modify-argument index="return">
             <replace-type modified-type="PyObject" />
@@ -1374,9 +1388,9 @@
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-            int a, b, c, d;
-            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
-            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getRect(int*,int*,int*,int*)const">
@@ -1396,9 +1410,9 @@
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-            int a, b, c, d;
-            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
-            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
         </inject-code>
     </modify-function>
   </value-type>
@@ -1441,9 +1455,9 @@
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-            qreal a, b, c, d;
-            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
-            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getRect(qreal*,qreal*,qreal*,qreal*)const">
@@ -1463,9 +1477,9 @@
             <remove-argument />
         </modify-argument>
         <inject-code class="target">
-            qreal a, b, c, d;
-            %CPPSELF.%FUNCTION_NAME(&amp;a, &amp;b, &amp;c, &amp;d);
-            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+            <insert-template name="fix_number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
   </value-type>
@@ -3055,7 +3069,9 @@
         <inject-code class="target" position="beginning">
         qint64 pid;
         %RETURN_TYPE retval = %TYPE::%FUNCTION_NAME(%1, %2, %3, &amp;pid);
-        %PYARG_0 = Shiboken::makeTuple(retval, pid);
+        %PYARG_0 = PyTuple_New(2);
+        PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[%RETURN_TYPE](retval));
+        PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[qint64](pid));
         </inject-code>
     </modify-function>
     <!-- Function removed because on windows it returns a win32 specific structure -->
@@ -3163,8 +3179,10 @@
         </conversion-rule>
       </modify-argument>
       <inject-code position="end">
-            %PYARG_0 = Shiboken::makeTuple(%0, *result_out);
-            delete result_out;
+      %PYARG_0 = PyTuple_New(2);
+      PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[%RETURN_TYPE](%0));
+      PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[long](*result_out));
+      delete result_out;
       </inject-code>
     </modify-function>
   </object-type>

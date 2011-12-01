@@ -448,10 +448,12 @@
             <replace-type modified-type="PyObject" />
         </modify-argument>
         <inject-code class="target" position="beginning">
-            %BEGIN_ALLOW_THREADS
-            %RETURN_TYPE %0 = %CPPSELF->::%TYPE::%FUNCTION_NAME(&amp;%1, %2);
-            %END_ALLOW_THREADS
-            %PYARG_0 = Shiboken::makeTuple(%0, %1);
+        %BEGIN_ALLOW_THREADS
+        %RETURN_TYPE %0 = %CPPSELF->::%TYPE::%FUNCTION_NAME(&amp;%1, %2);
+        %END_ALLOW_THREADS
+        %PYARG_0 = PyTuple_New(2);
+        PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[%RETURN_TYPE](%0));
+        PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[%ARG1_TYPE](%1));
         </inject-code>
     </modify-function>
     <modify-function signature="xToCursor(qreal,QTextLine::CursorPosition)const">
@@ -911,9 +913,11 @@
         </inject-code>
     </add-function>
     <template name="qmatrix_map">
-        %ARG1_TYPE a, b;
-        %CPPSELF.%FUNCTION_NAME(%1, %2, &amp;a, &amp;b);
-        %PYARG_0 = Shiboken::makeTuple(a, b);
+    %ARG1_TYPE a, b;
+    %CPPSELF.%FUNCTION_NAME(%1, %2, &amp;a, &amp;b);
+    %PYARG_0 = PyTuple_New(2);
+    PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[%ARG1_TYPE](a));
+    PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[%ARG1_TYPE](b));
     </template>
     <modify-function signature="map(int,int,int*,int*)const">
         <modify-argument index="3">
@@ -1296,7 +1300,9 @@
         </modify-argument>
 
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_int*,int*,int*,int*,int*"/>
+            <insert-template name="fix_number*,number*,number*,number*,number*">
+                <replace from="$TYPE" to="int" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getCmykF(qreal*,qreal*,qreal*,qreal*,qreal*)">
@@ -1321,7 +1327,9 @@
         </modify-argument>
 
         <inject-code class="target" position="beginning">
-            <insert-template name="fix_qreal*,qreal*,qreal*,qreal*,qreal*"/>
+            <insert-template name="fix_number*,number*,number*,number*,number*">
+                <replace from="$TYPE" to="qreal" />
+            </insert-template>
         </inject-code>
     </modify-function>
     <modify-function signature="getHsl(int*,int*,int*,int*)const" since="4.6">
@@ -1775,9 +1783,11 @@
         <replace-type modified-type="(retval, blockingPanel)"/>
       </modify-argument>
       <inject-code class="target" position="beginning">
-        QGraphicsItem *item_ = NULL;
-        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;item_);
-        %PYARG_0 = Shiboken::makeTuple(retval_, item_);
+      QGraphicsItem *item_ = NULL;
+      %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(&amp;item_);
+      %PYARG_0 = PyTuple_New(2);
+      PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[%RETURN_TYPE](retval_));
+      PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[QGraphicsItem*](item_));
       </inject-code>
     </modify-function>
     <modify-function signature="itemTransform(const QGraphicsItem*,bool*)const">
@@ -3362,9 +3372,13 @@
             <remove-default-expression/>
         </modify-argument>
         <inject-code class="target" position="beginning">
-            int a, b, c, d;
-            %CPPSELF.%FUNCTION_NAME(%1, &amp;a, &amp;b, &amp;c, &amp;d);
-            %PYARG_0 = Shiboken::makeTuple(a, b, c, d);
+        int a, b, c, d;
+        %CPPSELF.%FUNCTION_NAME(%1, &amp;a, &amp;b, &amp;c, &amp;d);
+        %PYARG_0 = PyTuple_New(4);
+        PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[int](a));
+        PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[int](b));
+        PyTuple_SET_ITEM(%PYARG_0, 2, %CONVERTTOPYTHON[int](c));
+        PyTuple_SET_ITEM(%PYARG_0, 3, %CONVERTTOPYTHON[int](d));
         </inject-code>
     </modify-function>
   </object-type>
@@ -4860,8 +4874,12 @@
         <replace-type modified-type="(retval, subtype)"/>
       </modify-argument>
       <inject-code class="target" position="end">
-        %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);
-        %PYARG_0 = Shiboken::makeTuple(retval_, %1);
+      %BEGIN_ALLOW_THREADS
+      %RETURN_TYPE retval_ = %CPPSELF.%FUNCTION_NAME(%1, %2);
+      %END_ALLOW_THREADS
+      %PYARG_0 = PyTuple_New(2);
+      PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[%RETURN_TYPE](retval_));
+      PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[%ARG1_TYPE](%1));
       </inject-code>
     </modify-function>
   </object-type>
@@ -5678,12 +5696,14 @@
     <enum-type name="RowWrapPolicy"/>
 
     <template name="fix_args,int*,ItemRole*">
-        int _row;
-        QFormLayout::ItemRole _role;
-        %BEGIN_ALLOW_THREADS
-        %CPPSELF->%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_row, &amp;_role);
-        %END_ALLOW_THREADS
-        %PYARG_0 = Shiboken::makeTuple(_row, _role);
+    int _row;
+    QFormLayout::ItemRole _role;
+    %BEGIN_ALLOW_THREADS
+    %CPPSELF->%FUNCTION_NAME(%ARGUMENT_NAMES, &amp;_row, &amp;_role);
+    %END_ALLOW_THREADS
+    %PYARG_0 = PyTuple_New(2);
+    PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[int](_row));
+    PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[QFormLayout::ItemRole](_role));
     </template>
 
     <modify-function signature="getLayoutPosition(QLayout*,int*,QFormLayout::ItemRole*)const">

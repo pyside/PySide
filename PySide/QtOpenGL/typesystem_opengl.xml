@@ -701,7 +701,9 @@
         QByteArray ret;
         if (result)
             ret.append((const char*)data, %3);
-        %PYARG_0 = Shiboken::makeTuple(result, ret);
+        %PYARG_0 = PyTuple_New(2);
+        PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[bool](result));
+        PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[QByteArray](ret));
         delete[] data;
       </inject-code>
     </modify-function>
