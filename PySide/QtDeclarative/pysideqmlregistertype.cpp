@@ -258,7 +258,10 @@ PyTypeObject PropertyListType = {
 void propListAppender(QDeclarativeListProperty<QDeclarativeItem>* propList, QDeclarativeItem* item)
 {
     Shiboken::GilState state;
-    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object, item));
+
+    Shiboken::AutoDecRef args(PyTuple_New(2));
+    PyTuple_SET_ITEM(args, 0, Shiboken::Conversions::pointerToPython((SbkObjectType*)SbkPySide_QtCoreTypes[SBK_QOBJECT_IDX], propList->object));
+    PyTuple_SET_ITEM(args, 1, Shiboken::Conversions::pointerToPython((SbkObjectType*)SbkPySide_QtDeclarativeTypes[SBK_QDECLARATIVEITEM_IDX], item));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
     Shiboken::AutoDecRef retVal(PyObject_CallObject(data->append, args));
@@ -271,7 +274,9 @@ void propListAppender(QDeclarativeListProperty<QDeclarativeItem>* propList, QDec
 int propListCount(QDeclarativeListProperty<QDeclarativeItem>* propList)
 {
     Shiboken::GilState state;
-    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object));
+
+    Shiboken::AutoDecRef args(PyTuple_New(1));
+    PyTuple_SET_ITEM(args, 0, Shiboken::Conversions::pointerToPython((SbkObjectType*)SbkPySide_QtCoreTypes[SBK_QOBJECT_IDX], propList->object));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
     Shiboken::AutoDecRef retVal(PyObject_CallObject(data->count, args));
@@ -289,7 +294,10 @@ int propListCount(QDeclarativeListProperty<QDeclarativeItem>* propList)
 QDeclarativeItem* propListAt(QDeclarativeListProperty<QDeclarativeItem>* propList, int index)
 {
     Shiboken::GilState state;
-    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object, index));
+
+    Shiboken::AutoDecRef args(PyTuple_New(2));
+    PyTuple_SET_ITEM(args, 0, Shiboken::Conversions::pointerToPython((SbkObjectType*)SbkPySide_QtCoreTypes[SBK_QOBJECT_IDX], propList->object));
+    PyTuple_SET_ITEM(args, 1, Shiboken::Conversions::copyToPython(Shiboken::Conversions::PrimitiveTypeConverter<int>(), &index));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
     Shiboken::AutoDecRef retVal(PyObject_CallObject(data->at, args));
@@ -306,7 +314,9 @@ QDeclarativeItem* propListAt(QDeclarativeListProperty<QDeclarativeItem>* propLis
 void propListClear(QDeclarativeListProperty<QDeclarativeItem>* propList)
 {
     Shiboken::GilState state;
-    Shiboken::AutoDecRef args(Shiboken::makeTuple(propList->object));
+
+    Shiboken::AutoDecRef args(PyTuple_New(1));
+    PyTuple_SET_ITEM(args, 0, Shiboken::Conversions::pointerToPython((SbkObjectType*)SbkPySide_QtCoreTypes[SBK_QOBJECT_IDX], propList->object));
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
     Shiboken::AutoDecRef retVal(PyObject_CallObject(data->clear, args));
