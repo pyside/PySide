@@ -8,9 +8,6 @@ class QVariantTypeTest(unittest.TestCase):
         f = QSqlField("name", str)
         self.assertEqual(f.type(), py3k.unicode)
 
-        f = QSqlField("name", str)
-        self.assertEqual(f.type(), py3k.unicode)
-
         f = QSqlField("name", "QString")
         self.assertEqual(f.type(),  py3k.unicode)
 
