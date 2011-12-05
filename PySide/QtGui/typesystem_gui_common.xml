@@ -2685,6 +2685,11 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="document() const">
+      <modify-argument index="this">
+        <parent index="return" action="add"/>
+      </modify-argument>
+    </modify-function>
   </object-type>
   <object-type name="QTableView">
     <modify-function signature="setHorizontalHeader(QHeaderView*)">
