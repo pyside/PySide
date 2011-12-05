@@ -170,6 +170,18 @@
     <!-- FIXME This is a workaround to include some headers needed by some includes (nothing to do with QBool) -->
     <include file-name="QtConcurrentFilter" location="global"/>
   </primitive-type>
+
+  <inject-code class="native" position="beginning">
+    bool py2kStrCheck(PyObject* obj)
+    {
+    #ifdef IS_PY3K
+        return false;
+    #else
+        return PyString_Check(obj);
+    #endif
+    }
+  </inject-code>
+
   <primitive-type name="QString" target-lang-api-name="PyUnicode">
     <include file-name="QString" location="global"/>
     <conversion-rule file="qstring_conversions.h">
@@ -191,9 +203,11 @@
             %out = QString::fromUtf16(unicode, PyUnicode_GET_SIZE(%in));
             #endif
             </add-conversion>
-            <add-conversion type="PyString">
+            <add-conversion type="PyString" check="py2kStrCheck(%in)">
+            #ifndef IS_PY3K
             const char* str = %CONVERTTOCPP[const char*](%in);
             %out = %OUTTYPE(str);
+            #endif
             </add-conversion>
             <add-conversion type="Py_None">
             %out = %OUTTYPE();
@@ -214,7 +228,7 @@
         return %out;
         </native-to-target>
         <target-to-native>
-            <add-conversion type="PyObject" check="PyUnicode_Check(%in)||PyString_Check(%in)||%in == Py_None">
+            <add-conversion type="PyObject" check="Shiboken::String::check(%in) || %in == Py_None">
             %out = %OUTTYPE();
             </add-conversion>
         </target-to-native>
@@ -227,7 +241,7 @@
         return PyUnicode_FromWideChar(&amp;c, 1);
         </native-to-target>
         <target-to-native>
-            <add-conversion type="PyString" check="PyString_Check(%in) &amp;&amp; PyString_Size(%in) == 1">
+            <add-conversion type="PyString" check="Shiboken::String::checkChar(%in)">
             char c = %CONVERTTOCPP[char](%in);
             %out = %OUTTYPE(c);
             </add-conversion>
@@ -455,7 +469,7 @@
             </add-conversion>
             <add-conversion type="PyTypeObject">
             const char* typeName;
-            if (%in == (PyObject*)&amp;PyString_Type || %in == (PyObject*)&amp;PyUnicode_Type)
+            if (Shiboken::String::checkType((PyTypeObject*)%in))
                 typeName = "QString";
             else if (%in == (PyObject*)&amp;PyFloat_Type)
                 typeName = "double"; // float is a UserType in QVariant.
@@ -467,11 +481,8 @@
                 typeName = ((PyTypeObject*)%in)->tp_name;
             %out = QVariant::nameToType(typeName);
             </add-conversion>
-            <add-conversion type="PyString">
-            %out = QVariant::nameToType(PyString_AS_STRING(%in));
-            </add-conversion>
-            <add-conversion type="PyUnicode">
-            %out = QVariant::nameToType(PyString_AsString(%in));
+            <add-conversion type="PyString" check="Shiboken::String::check(%in)">
+            %out = QVariant::nameToType(Shiboken::String::toCString(%in));
             </add-conversion>
             <add-conversion type="PyDict" check="PyDict_Check(%in) &amp;&amp; QVariantType_checkAllStringKeys(%in)">
             %out = QVariant::nameToType("QVariantMap");
@@ -2257,8 +2268,13 @@
             <add-conversion type="Py_None">
             %out = %OUTTYPE();
             </add-conversion>
-            <add-conversion type="PyString">
-            %out = %OUTTYPE(PyString_AS_STRING(%in), PyString_GET_SIZE(%in));
+            <add-conversion type="PyString" check="Shiboken::String::check(%in)">
+            %out = %OUTTYPE(Shiboken::String::toCString(%in), Shiboken::String::len(%in));
+            </add-conversion>
+            <add-conversion type="PyBytes">
+            #ifdef IS_PY3K
+            %out = %OUTTYPE(PyBytes_AS_STRING(%in), PyBytes_GET_SIZE(%in));
+            #endif
             </add-conversion>
         </target-to-native>
     </conversion-rule>
