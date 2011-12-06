@@ -9,9 +9,6 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in"
                "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" @ONLY)
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/private.py"
-                                                              "${CMAKE_BINARY_DIR}/PySide/private.py")
-
 HAS_QT_MODULE(QT_QTCORE_FOUND QtCore)
 HAS_QT_MODULE(QT_QTGUI_FOUND QtGui)
 HAS_QT_MODULE(QT_QTNETWORK_FOUND QtNetwork)
@@ -34,7 +31,7 @@ HAS_QT_MODULE(QT_PHONON_FOUND phonon)
 HAS_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)
 
 # install
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" "${CMAKE_CURRENT_BINARY_DIR}/private.py"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/__init__.py"
         DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}${pyside_SUFFIX}")
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_templates.xml
         DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
