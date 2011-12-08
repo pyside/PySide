@@ -2901,6 +2901,7 @@
     <modify-function signature="operator&lt;&lt;(QBool)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(unsigned int)" remove="all"/>
     <modify-function signature="operator&lt;&lt;(unsigned short)" remove="all"/>
+    <modify-function signature="operator&lt;&lt;(const char*)" remove="all"/>
 
     <modify-function signature="operator&gt;&gt;(char*)" remove="all"/>
     <modify-function signature="operator&gt;&gt;(char&amp;)" remove="all"/>
