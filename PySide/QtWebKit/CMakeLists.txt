@@ -13,6 +13,12 @@ else ()
     )
 endif ()
 
+if(ENABLE_SIMULATOR)
+    set(QtWebKit_typesystem "typesystem_webkit_simulator.xml")
+else()
+    set(QtWebKit_typesystem "typesystem_webkit.xml")
+endif()
+
 set(QtWebKit_SRC
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qtwebkit_module_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtWebKit/qwebdatabase_wrapper.cpp
@@ -64,5 +70,6 @@ create_pyside_module(QtWebKit
                      QtWebKit_deps
                      QtWebKit_typesystem_path
                      QtWebKit_SRC
-                     "")
+                     ""
+                     ${CMAKE_CURRENT_SOURCE_DIR}/${QtWebKit_typesystem})
 
