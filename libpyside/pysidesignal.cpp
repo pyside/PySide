@@ -230,7 +230,7 @@ int signalTpInit(PyObject* self, PyObject* args, PyObject* kwds)
         emptyTuple = PyTuple_New(0);
 
     if (!PyArg_ParseTupleAndKeywords(emptyTuple, kwds,
-        "|s:QtCore."SIGNAL_CLASS_NAME, (char**) kwlist, &argName))
+        "|s:QtCore."SIGNAL_CLASS_NAME, const_cast<char**>(kwlist), &argName))
         return 0;
 
     bool tupledArgs = false;
@@ -325,7 +325,7 @@ PyObject* signalInstanceConnect(PyObject* self, PyObject* args, PyObject* kwds)
     static const char* kwlist[] = {"slot", "type", 0};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
-        "O|O:"SIGNAL_INSTANCE_NAME, (char**) kwlist, &slot, &type))
+        "O|O:"SIGNAL_INSTANCE_NAME, const_cast<char**>(kwlist), &slot, &type))
         return 0;
 
     PySideSignalInstance* source = reinterpret_cast<PySideSignalInstance*>(self);
@@ -632,9 +632,9 @@ void appendSignature(PySideSignal* self, char* signature)
     self->signaturesSize++;
 
     if (self->signaturesSize > 1) {
-        self->signatures = (char**)realloc(self->signatures, sizeof(char**) * self->signaturesSize);
+        self->signatures = reinterpret_cast<char**>(realloc(self->signatures, sizeof(char**) * self->signaturesSize));
     } else {
-        self->signatures = (char**)malloc(sizeof(char**));
+        self->signatures = reinterpret_cast<char**>(malloc(sizeof(char**)));
     }
     self->signatures[self->signaturesSize - 1] = signature;
 }
@@ -844,7 +844,7 @@ const char** getSignatures(PyObject* signal, int* size)
 {
     PySideSignal* self = reinterpret_cast<PySideSignal*>(signal);
     *size = self->signaturesSize;
-    return (const char**) self->signatures;
+    return const_cast<const char**>(self->signatures);
 }
 
 QStringList getArgsFromSignature(const char* signature, bool* isShortCircuit)
