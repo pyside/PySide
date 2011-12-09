@@ -36,7 +36,7 @@ extern "C"
     extern PYSIDE_API PyTypeObject PySideSignalType;
     extern PYSIDE_API PyTypeObject PySideSignalInstanceType;
 
-    //Internal object
+    // Internal object
     struct PYSIDE_API PySideSignal;
 
     struct PySideSignalInstancePrivate;
@@ -45,14 +45,15 @@ extern "C"
         PyObject_HEAD
         PySideSignalInstancePrivate* d;
     };
-}; //extern "C"
+}; // extern "C"
 
-namespace PySide { namespace Signal {
+namespace PySide {
+namespace Signal {
 
 PYSIDE_API bool checkType(PyObject* type);
 
 /**
- * This function creates a Signal object which stay attached to QObject class
+ * This function creates a Signal object which stays attached to QObject class
  *
  * @param   name of the Signal to be registered on meta object
  * @param   signatures a list of signatures supported by this signal, ended with a NULL pointer
@@ -67,7 +68,7 @@ PYSIDE_DEPRECATED(PYSIDE_API PySideSignal* newObject(const char* name, ...));
 PYSIDE_API void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObject);
 
 /**
- * This function creates a Signal object which stay attached to QObject class based on a list of QMetaMethod
+ * This function creates a Signal object which stays attached to QObject class based on a list of QMetaMethods
  *
  * @param   source of the Signal to be registered on meta object
  * @param   methods a list of QMetaMethod wich contains the supported signature
@@ -76,20 +77,20 @@ PYSIDE_API void registerSignals(SbkObjectType* pyObj, const QMetaObject* metaObj
 PYSIDE_API PySideSignalInstance* newObjectFromMethod(PyObject* source, const QList<QMetaMethod>& methods);
 
 /**
- * This function initializes the Signal object creating a PySideSignalInstance
+ * This function initializes the Signal object by creating a PySideSignalInstance
  *
  * @param   self a Signal object used as base to PySideSignalInstance
  * @param   name the name to be used on PySideSignalInstance
  * @param   object the PyObject where the signal will be attached
  * @return  Return a new reference to PySideSignalInstance
  **/
-PYSIDE_API PySideSignalInstance* initialize(PySideSignal* signal, PyObject* name, PyObject *object);
+PYSIDE_API PySideSignalInstance* initialize(PySideSignal* signal, PyObject* name, PyObject* object);
 
 /**
- * This function is used to retrieve the object in which the sigal is attached
+ * This function is used to retrieve the object in which the signal is attached
  *
  * @param   self The Signal object
- * @return  Return the internal reference to parent object of the signal
+ * @return  Return the internal reference to the parent object of the signal
  **/
 PYSIDE_API PyObject* getObject(PySideSignalInstance* signal);
 
@@ -115,39 +116,41 @@ PYSIDE_API void updateSourceObject(PyObject* source);
 PYSIDE_DEPRECATED(PYSIDE_API void addSignalToWrapper(SbkObjectType* wrapperType, const char* signalName, PySideSignal* signal));
 
 /**
- * This function verify if the signature is a QtSignal base on SIGNAL flag
+ * This function verifies if the signature is a QtSignal base on SIGNAL flag
  * @param   signature   The signal signature
- * @return  Return true if this is a Qt Signal of false if not
+ * @return  Return true if this is a Qt Signal, otherwise return false
  **/
 PYSIDE_API bool isQtSignal(const char* signature);
 
 /**
- * This function is similar as isQtSignal but this reaise a Python error if this faisl
+ * This function is similar to isQtSignal, however if it fails, it'll raise a Python error instead.
+ *
  * @param   signature   The signal signature
- * @return  Return true if this is a Qt Signal of false if not
+ * @return  Return true if this is a Qt Signal, otherwise return false
  **/
 PYSIDE_API bool checkQtSignal(const char* signature);
 
 /**
  * This function is used to retrieve the signature base on Signal and receiver callback
  * @param   signature   The signal signature
- * @param   receiver    The QObject which will receiver the signal
- * @param   callback    Callback function which will connect with signal
+ * @param   receiver    The QObject which will receive the signal
+ * @param   callback    Callback function which will connect to the signal
  * @param   encodeName  Used to specify if the returned signature will be encoded with Qt signal/slot style
  * @return  Return the callback signature
  **/
 PYSIDE_API QString getCallbackSignature(const char* signal, QObject* receiver, PyObject* callback, bool encodeName);
 
 /**
- * Function to parese the signature and return a list of argument types
+ * This function parses the signature and then returns a list of argument types.
+ *
  * @param   signature       The signal signature
  * @param   isShortCircuit  If this is a shortCircuit(python<->python) signal
- * @return  Return true if this is a Qt Signal of false if not
- * @todo    replace return type to QList<QByteArray>
+ * @return  Return true if this is a Qt Signal, otherwise return false
+ * @todo    replace return type by QList<QByteArray>
  **/
 QStringList getArgsFromSignature(const char* signature, bool* isShortCircuit = 0);
 
-} //namespace Signal
-} //namespace PySide
+} // namespace Signal
+} // namespace PySide
 
 #endif
