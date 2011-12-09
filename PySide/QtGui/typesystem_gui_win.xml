@@ -30,7 +30,10 @@
         #endif
         </native-to-target>
         <target-to-native>
-            <add-conversion type="checkPyCapsuleOrPyCObject">
+            <add-conversion type="PyNone">
+            %out = 0;
+            </add-conversion>
+            <add-conversion check="checkPyCapsuleOrPyCObject(%in)" type="PyObject">
             #ifdef IS_PY3K
             %out = (%OUTTYPE)PyCapsule_GetPointer(%in, 0);
             #else
