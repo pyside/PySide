@@ -4245,7 +4245,7 @@
 
             If a widget is non-native (alien) and winId() is invoked on it, that widget will be provided a native handle.
 
-            On X11 the type returned is long, on other platforms it's a PyCObject.
+            On X11 the type returned is long, on other platforms it's void pointer casted to a Python long long.
 
             This value may change at run-time. An event with type PySide.QtCore.QEvent.WinIdChange will be sent to the widget following a change in window system identifier.
         </inject-documentation>
