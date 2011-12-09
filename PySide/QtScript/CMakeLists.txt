@@ -25,7 +25,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript/qscriptvalueiterator_wrapper.cpp
 ${QtScript_47_SRC}
 )
 
-set(QtScript_typesystem_path "${QtCore_SOURCE_DIR}")
+set(QtScript_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtCore_BINARY_DIR}")
 set(QtScript_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtScript
                             ${QT_INCLUDE_DIR}

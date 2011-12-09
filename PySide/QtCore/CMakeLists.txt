@@ -37,14 +37,12 @@ else()
 endif()
 
 if(ENABLE_WIN)
-    set(QtCore_typesystem "typesystem_core_win.xml")
-    set(QtCore_extra_SRC
+    set(SPECIFIC_OS_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/msg_wrapper.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/point_wrapper.cpp
     )
 else()
-    set(QtCore_typesystem "typesystem_core.xml")
-    set(QtCore_extra_SRC "")
+    set(SPECIFIC_OS_FILES "")
 endif()
 
 set(QtCore_SRC
@@ -146,10 +144,14 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamreader_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtCore/qxmlstreamwriter_wrapper.cpp
 ${QtCore_46_SRC}
 ${QtCore_47_SRC}
-${QtCore_extra_SRC}
+${SPECIFIC_OS_FILES}
 )
 
-set(QtCore_typesystem_path "")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_core.xml.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/typesystem_core.xml" @ONLY)
+
+set(QtCore_typesystem_path "${QtCore_SOURCE_DIR}")
+
 set(QtCore_include_dirs ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtCore/
                         ${QT_INCLUDE_DIR}
@@ -168,4 +170,4 @@ create_pyside_module(QtCore
                      QtCore_typesystem_path
                      QtCore_SRC
                      QtCore_gluecode
-                     ${CMAKE_CURRENT_SOURCE_DIR}/${QtCore_typesystem})
+                     ${CMAKE_CURRENT_BINARY_DIR}/typesystem_core.xml)

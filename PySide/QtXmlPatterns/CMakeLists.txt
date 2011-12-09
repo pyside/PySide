@@ -26,7 +26,7 @@ set(QtXmlPatterns_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXmlPatterns/qxmlserializer_wrapper.cpp
     ${QtXmlPatterns_46_SRC}
 )
-set(QtXmlPatterns_typesystem_path "${QtCore_SOURCE_DIR}")
+set(QtXmlPatterns_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtCore_BINARY_DIR}")
 set(QtXmlPatterns_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                                 ${QT_QTCORE_INCLUDE_DIR}
                                 ${QT_QTXMLPATTERNS_INCLUDE_DIR}

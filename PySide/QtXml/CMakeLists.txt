@@ -35,7 +35,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml/qxmlreader_wrapper.cpp
 ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml/qxmlsimplereader_wrapper.cpp
 )
 
-set(QtXml_typesystem_path "${QtCore_SOURCE_DIR}")
+set(QtXml_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtCore_BINARY_DIR}")
 set(QtXml_include_dirs      ${CMAKE_CURRENT_SOURCE_DIR}
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtXml
                             ${CMAKE_SOURCE_DIR}
