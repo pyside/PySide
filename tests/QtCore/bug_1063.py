@@ -4,6 +4,7 @@ import unittest
 import tempfile
 from PySide import QtCore
 import os
+import py3kcompat as py3k
 
 class QTextStreamTestCase(unittest.TestCase):
     def setUp(self):
@@ -11,7 +12,7 @@ class QTextStreamTestCase(unittest.TestCase):
         self.temp_file.close()
         self.f = QtCore.QFile(self.temp_file.name)
         self.f.open(QtCore.QIODevice.WriteOnly)
-        self.strings = (u'foo', u'bar')
+        self.strings = (py3k.unicode_('foo'), py3k.unicode_('bar'))
         self.stream = QtCore.QTextStream(self.f)
 
     def testIt(self):
@@ -21,7 +22,7 @@ class QTextStreamTestCase(unittest.TestCase):
         self.f.close()
 
         # make sure we didn't get an empty file
-        self.assertNotEqual(QtCore.QFile(self.temp_file.name).size(), 0L)
+        self.assertNotEqual(QtCore.QFile(self.temp_file.name).size(), 0)
 
         os.unlink(self.temp_file.name)
 
