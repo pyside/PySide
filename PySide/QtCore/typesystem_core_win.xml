@@ -43,6 +43,9 @@
         </target-to-native>
       </conversion-rule>
   </primitive-type>
+  <inject-code class="native" position="beginning">
+    <insert-template name="checkPyCapsuleOrPyCObject_func"/>
+  </inject-code>
   <value-type name="POINT">
       <include file-name="wtypes.h" location="global"/>
   </value-type>
