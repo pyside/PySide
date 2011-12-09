@@ -56,7 +56,7 @@ ${QtNetwork_47_SRC}
 ${QtNetwork_OPTIONAL_SRC}
 )
 
-set(QtNetwork_typesystem_path "${QtCore_SOURCE_DIR}")
+set(QtNetwork_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtCore_BINARY_DIR}")
 set(QtNetwork_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                             ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtNetwork/
                             ${QT_INCLUDE_DIR}

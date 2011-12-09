@@ -11,7 +11,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5/qmaemo5valuebutton_wrapper.
 ${CMAKE_CURRENT_BINARY_DIR}/${BINDING_NAME}/QtMaemo5/qtmaemo5_module_wrapper.cpp
 )
 
-set(QtMaemo5_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtMaemo5_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
+set(QtMaemo5_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtCore_BINARY_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtMaemo5_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 
 # QT_QTMAEMO5_* variables are not defined by CMake
 if(NOT QT_QTMAEMO5_INCLUDE_DIR)

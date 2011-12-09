@@ -404,7 +404,8 @@ ${QtGui_OPTIONAL_SRC}
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/typesystem_gui.xml.in"
                "${CMAKE_CURRENT_BINARY_DIR}/typesystem_gui.xml" @ONLY)
 
-set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}")
+set(QtGui_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtCore_BINARY_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}")
+
 set(QtGui_include_dirs  ${CMAKE_CURRENT_SOURCE_DIR}
                         ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/
                         ${pyside_SOURCE_DIR}

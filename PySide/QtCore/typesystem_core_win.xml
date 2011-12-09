@@ -19,6 +19,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 -->
 <typesystem package="PySide.QtCore">
+  <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject" />
   <primitive-type name="HWND">
       <conversion-rule file="glue/hwnd_conversions.h">
         <native-to-target>
@@ -50,5 +51,4 @@
   </value-type>
   <suppress-warning text="class 'MSG' inherits from unknown base class 'tagMSG'"/>
   <suppress-warning text="class not found for setup inheritance 'tagMSG'"/>
-  <load-typesystem name="typesystem_core.xml" generate="yes"/>
 </typesystem>

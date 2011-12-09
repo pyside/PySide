@@ -32,7 +32,7 @@ set(QtOpenGL_SRC
     ${QtOpenGL_47_SRC}
 )
 
-set(QtOpenGL_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtOpenGL_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
+set(QtOpenGL_typesystem_path "${QtCore_SOURCE_DIR}${PATH_SEP}${QtCore_BINARY_DIR}${PATH_SEP}${QtGui_SOURCE_DIR}${PATH_SEP}${QtOpenGL_SOURCE_DIR}${PATH_SEP}${QtGui_BINARY_DIR}")
 set(QtOpenGL_include_dirs   ${CMAKE_CURRENT_SOURCE_DIR}
                             ${QT_QTCORE_INCLUDE_DIR}
                             ${QT_QTGUI_INCLUDE_DIR}
