@@ -405,7 +405,7 @@
     { // Avoid name clash
         Shiboken::AutoDecRef atexit(Shiboken::Module::import("atexit"));
         Shiboken::AutoDecRef regFunc(PyObject_GetAttrString(atexit, "register"));
-        Shiboken::AutoDecRef shutDownFunc(PyObject_GetAttrString(module, "__moduleShutdown"));
+        PyObject* shutDownFunc = PyObject_GetAttrString(module, "__moduleShutdown");
         Shiboken::AutoDecRef args(PyTuple_New(1));
         PyTuple_SET_ITEM(args, 0, shutDownFunc);
         Shiboken::AutoDecRef retval(PyObject_Call(regFunc, args, 0));
