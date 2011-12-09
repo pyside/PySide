@@ -43,14 +43,7 @@
     </conversion-rule>
   </primitive-type>
   <inject-code class="native" position="beginning">
-  static bool checkPyCapsuleOrPyCObject(PyObject* pyObj)
-  {
-      #ifdef IS_PY3K
-      return PyCapsule_CheckExact(pyObj);
-      #else
-      return PyCObject_Check(pyObj);
-      #endif
-  }
+    <insert-template name="checkPyCapsuleOrPyCObject_func"/>
   </inject-code>
   <enum-type name="QPixmap::HBitmapFormat" />
 </typesystem>
