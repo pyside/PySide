@@ -1,6 +1,6 @@
 // Init qApp macro to None.
 if (qApp) {
-    PyObject* pyApp = Shiboken::Converter<QApplication*>::toPython(qApp);
+    PyObject* pyApp = %CONVERTTOPYTHON[QApplication*](qApp);
     Py_INCREF(pyApp);
     PyModule_AddObject(module, "qApp", pyApp);
 } else {

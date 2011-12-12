@@ -93,7 +93,7 @@ qreal PySideEasingCurveFunctor::operator()(qreal progress)
     PyObject* result = PyObject_CallObject(m_func, args);
     qreal cppResult = 0.0;
     if (result) {
-        cppResult = Shiboken::Converter<qreal>::toCpp(result);
+        Shiboken::Conversions::pythonToCppCopy(Shiboken::Conversions::PrimitiveTypeConverter<qreal>(), result, &cppResult);
         Py_DECREF(result);
     }
     Py_DECREF(args);

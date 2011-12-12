@@ -98,11 +98,11 @@
         // Cast the parameters according to the extension type
         if (extension == QWebPage::ChooseMultipleFilesExtension) {
             const ChooseMultipleFilesExtension$TYPE_SUFFIX* _in = reinterpret_cast&lt;const ChooseMultipleFilesExtension$TYPE_SUFFIX*>(%in);
-            %out = %CONVERTTOPYTHON[const ChooseMultipleFilesExtension$TYPE_SUFFIX*](_in);
+            %out = %CONVERTTOPYTHON[const QWebPage::ChooseMultipleFilesExtension$TYPE_SUFFIX*](_in);
         #if QT_VERSION >= 0x040600
         } else if (extension == QWebPage::ErrorPageExtension) {
             const ErrorPageExtension$TYPE_SUFFIX* _in = reinterpret_cast&lt;const ErrorPageExtension$TYPE_SUFFIX*>(%in);
-            %out = %CONVERTTOPYTHON[const ErrorPageExtension$TYPE_SUFFIX*](_in);
+            %out = %CONVERTTOPYTHON[const QWebPage::ErrorPageExtension$TYPE_SUFFIX*](_in);
         #endif
         }
         </template>

@@ -1,4 +1,3 @@
-
 inline PyObject* addActionWithPyObject(QMenu* self, const QIcon& icon, const QString& text, PyObject* callback, const QKeySequence& shortcut)
 {
     QAction* act = new QAction(text, self);
@@ -11,7 +10,7 @@ inline PyObject* addActionWithPyObject(QMenu* self, const QIcon& icon, const QSt
 
     self->addAction(act);
 
-    PyObject* pyAct = Shiboken::Converter<QAction*>::toPython(act);
+    PyObject* pyAct = %CONVERTTOPYTHON[QAction*](act);
     Shiboken::AutoDecRef result(PyObject_CallMethod(pyAct, "connect", "OsO", pyAct, SIGNAL(triggered()), callback));
     if (result.isNull()) {
         Py_DECREF(pyAct);

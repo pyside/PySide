@@ -5,7 +5,7 @@ addActionWithPyObject(QMenuBar* self, const QString& text, PyObject* callback)
 
     self->addAction(act);
 
-    PyObject* pyAct = Shiboken::Converter<QAction*>::toPython(act);
+    PyObject* pyAct = %CONVERTTOPYTHON[QAction*](act);
     PyObject* result = PyObject_CallMethod(pyAct, "connect", "OsO", pyAct,
                                            SIGNAL(triggered(bool)), callback);
 
