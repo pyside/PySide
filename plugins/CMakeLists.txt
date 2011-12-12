@@ -5,7 +5,7 @@ set(ui_plugin_src
     customwidget.cpp
 )
 
-set (ui_plugin_moc
+set(ui_plugin_moc
     customwidget.h
     customwidgets.h
 )

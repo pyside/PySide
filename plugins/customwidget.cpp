@@ -95,11 +95,12 @@ QWidget* PyCustomWidget::createWidget(QWidget* parent)
     bool unkowParent = false;
     if (parent) {
         pyParent = reinterpret_cast<PyObject*>(Shiboken::BindingManager::instance().retrieveWrapper(parent));
-        if (!pyParent) {
-            pyParent = Shiboken::Converter<QWidget*>::toPython(parent);
-            unkowParent = true;
-        } else {
+        if (pyParent) {
             Py_INCREF(pyParent);
+        } else {
+            static Shiboken::Conversions::SpecificConverter converter("QWidget*");
+            pyParent = converter.toPython(&parent);
+            unkowParent = true;
         }
     } else {
         Py_INCREF(Py_None);
@@ -129,4 +130,3 @@ void PyCustomWidget::initialize(QDesignerFormEditorInterface* core)
 {
     m_data->initialized = true;
 }
-
