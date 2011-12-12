@@ -38,12 +38,14 @@ extern "C"
 
 static PyObject* qpropertyTpNew(PyTypeObject* subtype, PyObject* args, PyObject* kwds);
 static int qpropertyTpInit(PyObject*, PyObject*, PyObject*);
-static void qpropertyFree(void*);
+static void qpropertyDeAlloc(PyObject* self);
 
 //methods
 static PyObject* qPropertyCall(PyObject*, PyObject*, PyObject*);
 static PyObject* qPropertySetter(PyObject*, PyObject*);
 static PyObject* qPropertyGetter(PyObject*, PyObject*);
+static int qpropertyTraverse(PyObject* self, visitproc visit, void* arg);
+static int qpropertyClear(PyObject* self);
 
 static PyMethodDef PySidePropertyMethods[] = {
     {"setter", (PyCFunction)qPropertySetter, METH_O},
@@ -58,7 +60,7 @@ PyTypeObject PySidePropertyType = {
     QPROPERTY_CLASS_NAME,      /*tp_name*/
     sizeof(PySideProperty),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/
-    0,                         /*tp_dealloc*/
+    qpropertyDeAlloc,          /*tp_dealloc*/
     0,                         /*tp_print*/
     0,                         /*tp_getattr*/
     0,                         /*tp_setattr*/
@@ -73,10 +75,10 @@ PyTypeObject PySidePropertyType = {
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC,        /*tp_flags*/
     0,                         /*tp_doc */
-    0,                         /*tp_traverse */
-    0,                         /*tp_clear */
+    qpropertyTraverse,         /*tp_traverse */
+    qpropertyClear,            /*tp_clear */
     0,                         /*tp_richcompare */
     0,                         /*tp_weaklistoffset */
     0,                         /*tp_iter */
@@ -92,7 +94,7 @@ PyTypeObject PySidePropertyType = {
     qpropertyTpInit,           /*tp_init */
     0,                         /*tp_alloc */
     qpropertyTpNew,            /*tp_new */
-    qpropertyFree,             /*tp_free */
+    0,                         /*tp_free */
     0,                         /*tp_is_gc */
     0,                         /*tp_bases */
     0,                         /*tp_mro */
@@ -208,23 +210,10 @@ int qpropertyTpInit(PyObject* self, PyObject* args, PyObject* kwds)
     }
 }
 
-void qpropertyFree(void *self)
+void qpropertyDeAlloc(PyObject* self)
 {
-    PyObject *pySelf = reinterpret_cast<PyObject*>(self);
-    PySideProperty *data = reinterpret_cast<PySideProperty*>(self);
-    PySidePropertyPrivate* pData = data->d;
-
-    Py_XDECREF(pData->fget);
-    Py_XDECREF(pData->fset);
-    Py_XDECREF(pData->freset);
-    Py_XDECREF(pData->fdel);
-    Py_XDECREF(pData->notify);
-
-    free(pData->typeName);
-    free(pData->doc);
-    free(pData->notifySignature);
-    delete data->d;
-    pySelf->ob_type->tp_base->tp_free(self);
+    qpropertyClear(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 PyObject* qPropertyCall(PyObject* self, PyObject* args, PyObject* kw)
@@ -277,6 +266,41 @@ PyObject* qPropertyGetter(PyObject* self, PyObject* callback)
         PyErr_SetString(PyExc_TypeError, "Invalid property getter agument.");
         return 0;
     }
+}
+
+static int qpropertyTraverse(PyObject* self, visitproc visit, void* arg)
+{
+    PySidePropertyPrivate* data = reinterpret_cast<PySideProperty*>(self)->d;
+    if (!data)
+        return 0;
+
+    Py_VISIT(data->fget);
+    Py_VISIT(data->fset);
+    Py_VISIT(data->freset);
+    Py_VISIT(data->fdel);
+    Py_VISIT(data->notify);
+    return 0;
+}
+
+static int qpropertyClear(PyObject* self)
+{
+    PySidePropertyPrivate* data = reinterpret_cast<PySideProperty*>(self)->d;
+    if (!data)
+        return 0;
+
+    Py_CLEAR(data->fget);
+    Py_CLEAR(data->fset);
+    Py_CLEAR(data->freset);
+    Py_CLEAR(data->fdel);
+    Py_CLEAR(data->notify);
+
+
+    free(data->typeName);
+    free(data->doc);
+    free(data->notifySignature);
+    delete data;
+    reinterpret_cast<PySideProperty*>(self)->d = 0;
+    return 0;
 }
 
 } // extern "C"
