@@ -21,6 +21,21 @@
 <typesystem package="PySide.QtOpenGL">
   <load-typesystem name="typesystem_gui.xml" generate="no" />
 
+  <primitive-type name="GLbitfield"/>
+  <primitive-type name="GLboolean"/>
+  <primitive-type name="GLbyte"/>
+  <primitive-type name="GLclampd"/>
+  <primitive-type name="GLclampf"/>
+  <primitive-type name="GLdouble"/>
+  <primitive-type name="GLenum"/>
+  <primitive-type name="GLfloat"/>
+  <primitive-type name="GLint"/>
+  <primitive-type name="GLshort"/>
+  <primitive-type name="GLsizei"/>
+  <primitive-type name="GLubyte"/>
+  <primitive-type name="GLuint"/>
+  <primitive-type name="GLushort"/>
+
   <rejection class="QGLColormap::QGLColormapData"/>
   <rejection class="QGLContext" field-name="currentCtx"/>
 
@@ -191,7 +206,7 @@
     </modify-function>
 
     <!-- setUniformValueArray -->
-    <modify-function signature="setUniformValueArray(int, const int*, int)" rename="setUniformValueArrayInt">
+    <modify-function signature="setUniformValueArray(int, const GLint*, int)" rename="setUniformValueArrayInt">
         <modify-argument index="2" >
             <replace-type modified-type="PySequence" />
         </modify-argument>
@@ -207,7 +222,7 @@
         </inject-code>
     </modify-function>
 
-    <modify-function signature="setUniformValueArray(int, const uint*, int)" rename="setUniformValueArrayUint">
+    <modify-function signature="setUniformValueArray(int, const GLuint*, int)" rename="setUniformValueArrayUint">
         <modify-argument index="2" >
             <replace-type modified-type="PySequence" />
         </modify-argument>
@@ -415,7 +430,7 @@
         </inject-code>
     </modify-function>
 
-    <modify-function signature="setUniformValueArray(const char*, const int*, int)" rename="setUniformValueArrayInt">
+    <modify-function signature="setUniformValueArray(const char*, const GLint*, int)" rename="setUniformValueArrayInt">
         <modify-argument index="2" >
             <replace-type modified-type="PySequence" />
         </modify-argument>
@@ -431,7 +446,7 @@
         </inject-code>
     </modify-function>
 
-    <modify-function signature="setUniformValueArray(const char*, const uint*, int)" rename="setUniformValueArrayUint">
+    <modify-function signature="setUniformValueArray(const char*, const GLuint*, int)" rename="setUniformValueArrayUint">
         <modify-argument index="2" >
             <replace-type modified-type="PySequence" />
         </modify-argument>
@@ -640,19 +655,19 @@
     </modify-function>
 
     <!-- ### TODO: must evaluate if anything other than removal should be done. -->
-    <modify-function signature="setAttributeArray(int,const float*,int,int)" remove="all" />
-    <modify-function signature="setAttributeArray(const char*,const float*,int,int)" remove="all" />
-    <modify-function signature="setUniformValueArray(int,const float*,int,int)" remove="all" />
-    <modify-function signature="setUniformValueArray(const char*,const float*,int,int)" remove="all" />
+    <modify-function signature="setAttributeArray(int,const GLfloat*,int,int)" remove="all" />
+    <modify-function signature="setAttributeArray(const char*,const GLfloat*,int,int)" remove="all" />
+    <modify-function signature="setUniformValueArray(int,const GLfloat*,int,int)" remove="all" />
+    <modify-function signature="setUniformValueArray(const char*,const GLfloat*,int,int)" remove="all" />
     <!-- ### -->
 
     <!-- ### Use QMatrixZxY overloads -->
     <modify-function signature="setUniformValue(int,Array)" remove="all" />
     <modify-function signature="setUniformValue(const char*,Array)" remove="all" />
-    <modify-function signature="setAttributeValue(int,const float*,int,int)" remove="all" />
-    <modify-function signature="setAttributeValue(const char*,const float*,int,int)" remove="all" />
-    <modify-function signature="setAttributeArray(int, uint, const void*, int, int)" remove="all" since="4.7" />
-    <modify-function signature="setAttributeArray(const char*, uint, const void*, int, int)" remove="all" since="4.7" />
+    <modify-function signature="setAttributeValue(int,const GLfloat*,int,int)" remove="all" />
+    <modify-function signature="setAttributeValue(const char*,const GLfloat*,int,int)" remove="all" />
+    <modify-function signature="setAttributeArray(int, GLenum, const void*, int, int)" remove="all" since="4.7" />
+    <modify-function signature="setAttributeArray(const char*, GLenum, const void*, int, int)" remove="all" since="4.7" />
     <!-- ### -->
   </object-type>
 
