@@ -17,7 +17,7 @@ static void createChildrenNameAttributes(PyObject* root, QObject* object)
         if (!name.isEmpty() && !name.startsWith("_") && !name.startsWith("qt_")) {
             bool hasAttr = PyObject_HasAttrString(root, name.constData());
             if (!hasAttr) {
-                Shiboken::AutoDecRef pyChild(Shiboken::Converter<QObject*>::toPython(child));
+                Shiboken::AutoDecRef pyChild(%CONVERTTOPYTHON[QObject*](child));
                 PyObject_SetAttrString(root, name.constData(), pyChild);
             }
             createChildrenNameAttributes(root, child);
@@ -31,14 +31,12 @@ static PyObject* QUiLoadedLoadUiFromDevice(QUiLoader* self, QIODevice* dev, QWid
     QWidget* wdg = self->load(dev, parent);
 
     if (wdg) {
-        PyObject* pyWdg = Shiboken::Converter<QWidget*>::toPython(wdg);
-
+        PyObject* pyWdg = %CONVERTTOPYTHON[QWidget*](wdg);
         createChildrenNameAttributes(pyWdg, wdg);
         if (parent) {
-            Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
+            Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QWidget*](parent));
             Shiboken::Object::setParent(pyParent, pyWdg);
         }
-
         return pyWdg;
     }
 

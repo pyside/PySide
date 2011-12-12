@@ -21,7 +21,7 @@
 <typesystem package="PySide.QtCore">
   <primitive-type name="Qt::HANDLE" target-lang-api-name="PyObject" />
   <primitive-type name="HWND">
-      <conversion-rule file="glue/hwnd_conversions.h">
+      <conversion-rule>
         <native-to-target>
         #ifdef IS_PY3K
         return PyCapsule_New(%in, 0, 0);

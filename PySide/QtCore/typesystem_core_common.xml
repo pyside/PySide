@@ -153,7 +153,7 @@
     <include file-name="signalmanager.h" location="global"/>
   </primitive-type>
   <primitive-type name="QBool" target-lang-api-name="PyBool">
-    <conversion-rule file="qbool_conversions.h">
+    <conversion-rule>
         <native-to-target>
         return PyBool_FromLong((bool)%in);
         </native-to-target>
@@ -180,7 +180,7 @@
 
   <primitive-type name="QString" target-lang-api-name="PyUnicode">
     <include file-name="QString" location="global"/>
-    <conversion-rule file="qstring_conversions.h">
+    <conversion-rule>
         <native-to-target>
         const int N = %in.length();
         wchar_t* str = new wchar_t[N];
@@ -213,8 +213,7 @@
   </primitive-type>
 
   <primitive-type name="QStringRef">
-    <include file-name="datetime.h" location="global"/>
-    <conversion-rule file="qstringref_conversions.h">
+    <conversion-rule>
         <native-to-target>
         const int N = %in.toString().length();
         wchar_t* str = new wchar_t[N];
@@ -231,7 +230,7 @@
     </conversion-rule>
   </primitive-type>
   <primitive-type name="QChar">
-    <conversion-rule file="qchar_conversions.h">
+    <conversion-rule>
         <native-to-target>
         wchar_t c = (wchar_t)%in.unicode();
         return PyUnicode_FromWideChar(&amp;c, 1);
@@ -254,7 +253,7 @@
 
   <primitive-type name="QVariant" target-lang-api-name="PyObject">
     <include file-name="typeresolver.h" location="global"/>
-    <conversion-rule file="qvariant_conversions.h">
+    <conversion-rule>
         <native-to-target>
         if (!%in.isValid())
             Py_RETURN_NONE;
@@ -448,7 +447,7 @@
     </inject-code>
 
   <primitive-type name="QVariant::Type" default-constructor="QVariant::Invalid">
-    <conversion-rule file="qvariant_type_conversions.h">
+    <conversion-rule>
         <native-to-target>
         const char* typeName = QVariant::typeToName(%in);
         PyObject* %out;
@@ -524,7 +523,7 @@
 
   <primitive-type name="QStringList">
     <include file-name="QStringList" location="global"/>
-    <conversion-rule file="qstringlist_conversions.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cpplist_to_pylist_convertion">
                 <replace from="%INTYPE_0" to="QString" />
@@ -560,7 +559,7 @@
 
   <container-type name="QSet" type="set">
     <include file-name="QSet" location="global"/>
-    <conversion-rule file="qset_conversions.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cpplist_to_pylist_convertion"/>
         </native-to-target>
@@ -574,7 +573,7 @@
 
   <container-type name="QList" type="list">
     <include file-name="QList" location="global"/>
-    <conversion-rule file="qlist_conversions.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cpplist_to_pylist_convertion"/>
         </native-to-target>
@@ -588,7 +587,7 @@
 
   <container-type name="QVector" type="vector">
     <include file-name="QVector" location="global"/>
-    <conversion-rule file="qvector_conversions.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cpplist_to_pylist_convertion"/>
         </native-to-target>
@@ -603,7 +602,7 @@
 
   <container-type name="QStack" type="stack">
     <include file-name="QStack" location="global"/>
-    <conversion-rule file="qstack_conversion.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cpplist_to_pylist_convertion"/>
         </native-to-target>
@@ -669,7 +668,7 @@
   <container-type name="QHash" type="hash">
     <include file-name="QHash" location="global"/>
     <include file-name="pysideconversions.h" location="global"/>
-    <conversion-rule file="qhash_conversions.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cppmap_to_pymap_convertion"/>
         </native-to-target>
@@ -682,7 +681,7 @@
   </container-type>
   <container-type name="QMap" type="map">
     <include file-name="QMap" location="global"/>
-    <conversion-rule file="qmap_conversions.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cppmap_to_pymap_convertion"/>
         </native-to-target>
@@ -695,7 +694,7 @@
   </container-type>
   <container-type name="QMultiMap" type="multi-map">
     <include file-name="QMultiMap" location="global"/>
-    <conversion-rule file="qmultimap_conversions.h">
+    <conversion-rule>
         <native-to-target>
             <insert-template name="cppmap_to_pymap_convertion"/>
         </native-to-target>
@@ -709,7 +708,7 @@
 
   <container-type name="QPair" type="pair">
     <include file-name="QPair" location="global"/>
-    <conversion-rule file="qpair_conversions.h">
+    <conversion-rule>
         <native-to-target>
         PyObject* %out = PyTuple_New(2);
         PyTuple_SET_ITEM(%out, 0, %CONVERTTOPYTHON[%INTYPE_0](%in.first));
@@ -1110,9 +1109,15 @@
   <value-type name="QByteArrayMatcher"/>
   <value-type name="QDate" hash-function="PySide::hash" >
     <template name="pydatetime_importandcheck_function">
+    #ifdef IS_PY3K
+    #define PySideDateTime_IMPORT PyDateTime_IMPORT
+    #else
+    #define PySideDateTime_IMPORT \
+                (PyDateTimeAPI = (PyDateTime_CAPI*) PyCObject_Import((char*)"datetime", \
+                                                                 (char*)"datetime_CAPI"))
+    #endif
     static bool PyDateTime_ImportAndCheck(PyObject* pyIn) {
-        if (!PyDateTimeAPI)
-            PyDateTime_IMPORT;
+        if (!PyDateTimeAPI) PySideDateTime_IMPORT;
         return $DATETIMETYPE_Check(pyIn);
     }
     </template>
@@ -1121,7 +1126,7 @@
             <replace from="$DATETIMETYPE" to="PyDate" />
         </insert-template>
     </inject-code>
-    <conversion-rule file="qdate_conversions.h">
+    <conversion-rule>
         <target-to-native>
             <add-conversion type="Py_None">
             %out = %OUTTYPE();
@@ -1157,8 +1162,8 @@
     </add-function>
     <add-function signature="toPython()" return-type="PyObject">
         <inject-code class="target" position="beginning">
-            if (!PyDateTimeAPI) PyDateTime_IMPORT;
-            %PYARG_0 = PyDate_FromDate(%CPPSELF.year(), %CPPSELF.month(), %CPPSELF.day());
+        if (!PyDateTimeAPI) PySideDateTime_IMPORT;
+        %PYARG_0 = PyDate_FromDate(%CPPSELF.year(), %CPPSELF.month(), %CPPSELF.day());
         </inject-code>
     </add-function>
     <modify-function signature="getDate(int*,int*,int*)" >
@@ -1211,7 +1216,7 @@
             <replace from="$DATETIMETYPE" to="PyDateTime" />
         </insert-template>
     </inject-code>
-    <conversion-rule file="qdatetime_conversions.h">
+    <conversion-rule>
         <target-to-native>
             <add-conversion type="Py_None">
             %out = %OUTTYPE();
@@ -1268,10 +1273,10 @@
     </add-function>
     <add-function signature="toPython()" return-type="PyObject">
         <inject-code class="target" position="beginning">
-            QDate date = %CPPSELF.date();
-            QTime time = %CPPSELF.time();
-            if (!PyDateTimeAPI) PyDateTime_IMPORT;
-            %PYARG_0 = PyDateTime_FromDateAndTime(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second(), time.msec()*1000);
+        QDate date = %CPPSELF.date();
+        QTime time = %CPPSELF.time();
+        if (!PyDateTimeAPI) PySideDateTime_IMPORT;
+        %PYARG_0 = PyDateTime_FromDateAndTime(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second(), time.msec()*1000);
         </inject-code>
     </add-function>
   </value-type>
@@ -1578,7 +1583,7 @@
             <replace from="$DATETIMETYPE" to="PyTime" />
         </insert-template>
     </inject-code>
-    <conversion-rule file="qtime_conversions.h">
+    <conversion-rule>
         <target-to-native>
             <add-conversion type="Py_None">
             %out = %OUTTYPE();
@@ -1615,8 +1620,8 @@
     </add-function>
     <add-function signature="toPython()" return-type="PyObject">
         <inject-code class="target" position="beginning">
-            if (!PyDateTimeAPI) PyDateTime_IMPORT;
-            %PYARG_0 = PyTime_FromTime(%CPPSELF.hour(), %CPPSELF.minute(), %CPPSELF.second(), %CPPSELF.msec()*1000);
+        if (!PyDateTimeAPI) PySideDateTime_IMPORT;
+        %PYARG_0 = PyTime_FromTime(%CPPSELF.hour(), %CPPSELF.minute(), %CPPSELF.second(), %CPPSELF.msec()*1000);
         </inject-code>
     </add-function>
   </value-type>
@@ -2267,7 +2272,7 @@
     </add-function>
   </value-type>
   <value-type name="QByteArray" hash-function="qHash">
-    <conversion-rule file="qbytearray_conversions.h">
+    <conversion-rule>
         <target-to-native>
             <add-conversion type="Py_None">
             %out = %OUTTYPE();

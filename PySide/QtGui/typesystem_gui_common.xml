@@ -798,7 +798,14 @@
         free(xpm);
   </template>
   <value-type name="QPixmap" >
-    <conversion-rule file="qpixmap_conversion.h" />
+    <!--<conversion-rule>-->
+        <!--<target-to-native replace="no">-->
+            <!--<add-conversion type="QVariant" check="%CHECKTYPE[QVariant](%in)">-->
+            <!--QVariant in = %CONVERTTOCPP[QVariant](%in);-->
+            <!--%out = in.value&lt;%OUTTYPE&gt;();-->
+            <!--</add-conversion>-->
+        <!--</target-to-native>-->
+    <!--</conversion-rule>-->
     <add-function signature="QPixmap(const QImage&amp;)">
         <modify-argument index="1">
             <rename to="image"/>
@@ -2357,9 +2364,7 @@
     </modify-function>
   </object-type>
   <object-type name="QMenu">
-    <extra-includes>
-      <include file-name="glue/qmenu_glue.h" location="local"/>
-    </extra-includes>
+    <inject-code class="native" position="beginning" file="glue/qmenu_glue.cpp"/>
 
     <modify-function signature="exec()" rename="exec_" allow-thread="yes" />
     <modify-function signature="exec(const QPoint&amp;, QAction*)" rename="exec_" allow-thread="yes" />
@@ -2453,9 +2458,7 @@
   </object-type>
 
   <object-type name="QMenuBar">
-    <extra-includes>
-      <include file-name="glue/qmenubar_glue.h" location="local"/>
-    </extra-includes>
+    <inject-code class="native" position="beginning" file="glue/qmenubar_glue.cpp"/>
     <modify-function signature="addAction(const QString&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add"/>
@@ -3136,10 +3139,7 @@
     <modify-function signature="getColor(const QColor&amp;, QWidget*, const QString&amp;, QFlags&lt;QColorDialog::ColorDialogOption>)" allow-thread="yes" />
   </object-type>
   <object-type name="QLayout">
-
-    <extra-includes>
-      <include file-name="glue/qlayout_help_functions.h" location="local"/>
-    </extra-includes>
+    <inject-code class="native" position="beginning" file="glue/qlayout_help_functions.cpp"/>
 
     <enum-type name="SizeConstraint"/>
 
@@ -3239,9 +3239,7 @@
   </object-type>
 
   <object-type name="QStackedLayout">
-    <extra-includes>
-      <include file-name="glue/qlayout_help_functions.h" location="local"/>
-    </extra-includes>
+    <inject-code class="native" position="beginning" file="glue/qlayout_help_functions.cpp"/>
     <enum-type name="StackingMode"/>
     <modify-function signature="insertWidget(int,QWidget*)">
       <inject-code class="target" position="beginning">
@@ -3251,9 +3249,7 @@
   </object-type>
 
   <object-type name="QBoxLayout">
-    <extra-includes>
-      <include file-name="glue/qlayout_help_functions.h" location="local"/>
-    </extra-includes>
+    <inject-code class="native" position="beginning" file="glue/qlayout_help_functions.cpp"/>
 
     <enum-type name="Direction" />
 
@@ -3297,9 +3293,7 @@
   </object-type>
 
   <object-type name="QGridLayout">
-    <extra-includes>
-      <include file-name="glue/qlayout_help_functions.h" location="local"/>
-    </extra-includes>
+    <inject-code class="native" position="beginning" file="glue/qlayout_help_functions.cpp"/>
     <modify-function signature="itemAtPosition (int, int) const">
       <modify-argument index="return">
         <define-ownership owner="default"/>
@@ -4027,8 +4021,9 @@
     <extra-includes>
       <include file-name="QIcon" location="global"/>
       <include file-name="QMessageBox" location="global"/>
-      <include file-name="glue/qwidget_glue.h" location="local"/>
     </extra-includes>
+
+    <inject-code class="native" file="glue/qwidget_glue.cpp" position="beginning" />
 
     <enum-type name="RenderFlag" flags="RenderFlags"/>
 
@@ -5687,9 +5682,7 @@
     </modify-function>
   </object-type>
   <object-type name="QFormLayout">
-    <extra-includes>
-      <include file-name="glue/qlayout_help_functions.h" location="local"/>
-    </extra-includes>
+    <inject-code class="native" position="beginning" file="glue/qlayout_help_functions.cpp"/>
 
     <enum-type name="FieldGrowthPolicy"/>
     <enum-type name="ItemRole"/>

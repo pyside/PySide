@@ -13,13 +13,13 @@ static bool getReceiver(QObject *source, const char* signal, PyObject* callback,
     bool forceGlobalReceiver = false;
     if (PyMethod_Check(callback)) {
         *self = PyMethod_GET_SELF(callback);
-        if (Shiboken::Converter<QObject*>::checkType(*self))
-            *receiver = Shiboken::Converter<QObject*>::toCpp(*self);
+        if (%CHECKTYPE[QObject*](*self))
+            *receiver = %CONVERTTOCPP[QObject*](*self);
         forceGlobalReceiver = isDecorator(callback, *self);
     } else if (PyCFunction_Check(callback)) {
         *self = PyCFunction_GET_SELF(callback);
-        if (*self && Shiboken::Converter<QObject*>::checkType(*self))
-            *receiver = Shiboken::Converter<QObject*>::toCpp(*self);
+        if (*self && %CHECKTYPE[QObject*](*self))
+            *receiver = %CONVERTTOCPP[QObject*](*self);
     } else if (PyCallable_Check(callback)) {
         // Ok, just a callable object
         *receiver = 0;

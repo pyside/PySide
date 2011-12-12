@@ -26,6 +26,7 @@
       <extra-includes>
         <include file-name="glue/plugins.h" location="local"/>
       </extra-includes>
+      <inject-code class="native" position="beginning" file="glue/uitools_loadui.cpp"/>
       <inject-code>
           Q_IMPORT_PLUGIN(uiplugin);
       </inject-code>
@@ -94,9 +95,6 @@
       </modify-function>
 
       <modify-function signature="load(QIODevice*, QWidget*)">
-        <extra-includes>
-          <include file-name="glue/uitools_loadui.h" location="local"/>
-        </extra-includes>
         <modify-argument index="2">
           <replace-default-expression with="0" />
           <rename to="parentWidget" />
@@ -112,9 +110,6 @@
 
       <!-- Syntax sugar -->
       <add-function signature="load(QString, QWidget*)" return-type="QWidget*">
-        <extra-includes>
-          <include file-name="glue/uitools_loadui.h" location="local"/>
-        </extra-includes>
         <modify-argument index="2">
           <replace-default-expression with="0" />
           <rename to="parentWidget" />

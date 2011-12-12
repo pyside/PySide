@@ -10,7 +10,7 @@ static QString retrieveObjectName(PyObject *obj)
  **/
 static inline void qwidgetReparentLayout(QWidget *parent, QLayout *layout)
 {
-    Shiboken::AutoDecRef pyParent(Shiboken::Converter<QWidget*>::toPython(parent));
+    Shiboken::AutoDecRef pyParent(%CONVERTTOPYTHON[QWidget*](parent));
 
     for (int i=0; i < layout->count(); i++) {
         QLayoutItem* item = layout->itemAt(i);
@@ -21,7 +21,7 @@ static inline void qwidgetReparentLayout(QWidget *parent, QLayout *layout)
         if (w) {
             QWidget* pw = w->parentWidget();
             if (pw != parent) {
-                Shiboken::AutoDecRef pyChild(Shiboken::Converter<QWidget*>::toPython(w));
+                Shiboken::AutoDecRef pyChild(%CONVERTTOPYTHON[QWidget*](w));
                 Shiboken::Object::setParent(pyParent, pyChild);
             }
         } else {
@@ -31,7 +31,7 @@ static inline void qwidgetReparentLayout(QWidget *parent, QLayout *layout)
         }
     }
 
-    Shiboken::AutoDecRef pyChild(Shiboken::Converter<QLayout*>::toPython(layout));
+    Shiboken::AutoDecRef pyChild(%CONVERTTOPYTHON[QLayout*](layout));
     Shiboken::Object::setParent(pyParent, pyChild);
     //remove previous references
     Shiboken::Object::keepReference(reinterpret_cast<SbkObject*>(pyChild.object()), qPrintable(retrieveObjectName(pyChild)), Py_None);
@@ -46,7 +46,7 @@ static inline void qwidgetSetLayout(QWidget *self, QLayout *layout)
     if (oldParent && oldParent != self) {
         if (oldParent->isWidgetType()) {
             // remove old parent policy
-            Shiboken::AutoDecRef pyLayout(Shiboken::Converter<QLayout*>::toPython(layout));
+            Shiboken::AutoDecRef pyLayout(%CONVERTTOPYTHON[QLayout*](layout));
             Shiboken::Object::setParent(Py_None, pyLayout);
         } else {
             PyErr_Format(PyExc_RuntimeError, "QWidget::setLayout: Attempting to set QLayout \"%s\" on %s \"%s\", when the QLayout already has a parent",

@@ -282,12 +282,13 @@ int propListCount(QDeclarativeListProperty<QDeclarativeItem>* propList)
     Shiboken::AutoDecRef retVal(PyObject_CallObject(data->count, args));
 
     // Check return type
+    int cppResult = 0;
+    PythonToCppFunc pythonToCpp;
     if (PyErr_Occurred())
         PyErr_Print();
-    else if (Shiboken::Converter<int>::isConvertible(retVal))
-        return Shiboken::Converter<int>::toCpp(retVal);
-
-    return 0;
+    else if ((pythonToCpp = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<int>(), retVal)))
+        pythonToCpp(retVal, &cppResult);
+    return cppResult;
 }
 
 // Implementation of QDeclarativeListProperty<T>::AtFunction callback
@@ -302,12 +303,12 @@ QDeclarativeItem* propListAt(QDeclarativeListProperty<QDeclarativeItem>* propLis
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(propList->data);
     Shiboken::AutoDecRef retVal(PyObject_CallObject(data->at, args));
 
+    QDeclarativeItem* result = 0;
     if (PyErr_Occurred())
         PyErr_Print();
     else if (PyType_IsSubtype(Py_TYPE(retVal), data->type))
-        return Shiboken::Converter<QDeclarativeItem*>::toCpp(retVal);
-
-    return 0;
+        Shiboken::Conversions::pythonToCppPointer((SbkObjectType*)SbkPySide_QtCoreTypes[SBK_QDECLARATIVEITEM_IDX], retVal, &result);
+    return result;
 }
 
 // Implementation of QDeclarativeListProperty<T>::ClearFunction callback
@@ -332,7 +333,9 @@ static void propListMetaCall(PySideProperty* pp, PyObject* self, QMetaObject::Ca
         return;
 
     DeclarativeListProperty* data = reinterpret_cast<DeclarativeListProperty*>(PySide::Property::userData(pp));
-    QDeclarativeListProperty<QDeclarativeItem> declProp(Shiboken::Converter<QObject*>::toCpp(self), data, &propListAppender);
+    QObject* qobj;
+    Shiboken::Conversions::pythonToCppPointer((SbkObjectType*)SbkPySide_QtCoreTypes[SBK_QOBJECT_IDX], self, &qobj);
+    QDeclarativeListProperty<QDeclarativeItem> declProp(qobj, data, &propListAppender);
 
     if (data->count)
         declProp.count = &propListCount;
