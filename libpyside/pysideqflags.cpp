@@ -39,7 +39,7 @@ extern "C" {
 
     #define PYSIDE_QFLAGS(X) reinterpret_cast<PySideQFlagsObject*>(X)
 
-    PyObject* PySideQFlagsNew(PyTypeObject *type, PyObject *args, PyObject *kwds)
+    PyObject* PySideQFlagsNew(PyTypeObject* type, PyObject* args, PyObject* kwds)
     {
         long val = 0;
         if (PyTuple_GET_SIZE(args)) {
@@ -61,13 +61,11 @@ extern "C" {
 
     static long getNumberValue(PyObject* v)
     {
-        PyObject* number = PyNumber_Long(v);
-        long result = PyLong_AsLong(number);
-        Py_XDECREF(number);
-        return result;
+        Shiboken::AutoDecRef number(PyNumber_Long(v));
+        return PyLong_AsLong(number);
     }
 
-    PyObject* PySideQFlagsRichCompare(PyObject *self, PyObject *other, int op)
+    PyObject* PySideQFlagsRichCompare(PyObject* self, PyObject* other, int op)
     {
         int result = 0;
         if (!PyNumber_Check(other)) {
