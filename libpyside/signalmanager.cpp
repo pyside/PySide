@@ -250,6 +250,8 @@ SignalManager::SignalManager() : m_d(new SignalManagerPrivate)
     // Register PyObject type to use in queued signal and slot connections
     qRegisterMetaType<PyObjectWrapper>(PYTHON_TYPE);
     qRegisterMetaTypeStreamOperators<PyObjectWrapper>(PYTHON_TYPE);
+    qRegisterMetaTypeStreamOperators<PyObjectWrapper>("PyObjectWrapper");
+    qRegisterMetaTypeStreamOperators<PyObjectWrapper>("PySide::PyObjectWrapper");
 
     SbkConverter* converter = Shiboken::Conversions::createConverter(&PyBaseObject_Type, 0);
     Shiboken::Conversions::setCppPointerToPythonFunction(converter, PyObject_PTR_CppToPython_PyObject);
