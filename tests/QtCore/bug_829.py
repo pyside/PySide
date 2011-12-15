@@ -3,12 +3,11 @@
 
 import unittest
 from PySide.QtCore import QSettings
-from helper import adjust_filename
 import tempfile
 
 class QVariantConversions(unittest.TestCase):
     def testDictionary(self):
-        confFile = tempfile.NamedTemporaryFile()
+        confFile = tempfile.NamedTemporaryFile(delete=False)
         s = QSettings(confFile.name, QSettings.IniFormat)
         # Save value
         s.setValue('x', {1: 'a'})
