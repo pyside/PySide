@@ -2666,20 +2666,15 @@
     <modify-function signature="waitForReadyRead(int)" allow-thread="yes"/>
     <modify-function signature="waitForBytesWritten(int)" allow-thread="yes"/>
     <!-- ### peek(qint64) do the job -->
-    <modify-function signature="peek(char *,qint64)" remove="all"/>
+    <modify-function signature="peek(char*, qint64)" remove="all"/>
     <!-- ### read(qint64) do the job -->
-    <modify-function signature="read(char *,qint64)" remove="all"/>
+    <modify-function signature="read(char*, qint64)" remove="all"/>
     <!-- ### readLine(qint64) do the job -->
-    <modify-function signature="readLine(char *,qint64)" remove="all"/>
+    <modify-function signature="readLine(char*, qint64)" remove="all"/>
     <!-- ### write(str) do the job -->
-    <modify-function signature="write(const char *,qint64)" remove="all"/>
-    <modify-function signature="write(const char *)">
-        <inject-code>
-        %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1, Shiboken::String::len(%PYARG_1));
-        %PYARG_0 = %CONVERTTOPYTHON[%RETURN_TYPE](%0);
-        </inject-code>
-    </modify-function>
-    <modify-function signature="getChar(char *)">
+    <modify-function signature="write(const char*, qint64)" remove="all"/>
+    <modify-function signature="write(const char*)" remove="all"/>
+    <modify-function signature="getChar(char*)">
         <modify-argument index="1">
             <remove-argument />
             <remove-default-expression />
@@ -2688,7 +2683,7 @@
             <insert-template name="fix_char*" />
         </inject-code>
     </modify-function>
-    <modify-function signature="readData(char *,qint64)">
+    <modify-function signature="readData(char*, qint64)">
         <inject-code class="target">
             QByteArray ba;
             ba.resize(%2);
@@ -2712,7 +2707,7 @@
             </conversion-rule>
         </modify-argument>
     </modify-function>
-    <modify-function signature="readLineData(char *,qint64)">
+    <modify-function signature="readLineData(char*, qint64)">
         <inject-code class="target">
             QByteArray ba;
             ba.resize(%2);
