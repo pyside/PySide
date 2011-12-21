@@ -3470,7 +3470,7 @@
   <object-type name="QInputDialog">
     <enum-type name="InputDialogOption"/>
     <enum-type name="InputMode"/>
-    <modify-function signature="getInteger(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+    <modify-function signature="getInteger(QWidget*, const QString&amp;, const QString&amp;, int, int, int, int, bool*, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
       <modify-argument index="8">
         <remove-default-expression/>
         <remove-argument/>
@@ -3479,7 +3479,7 @@
         <insert-template name="fix_arg,arg,arg,arg,arg,arg,arg,bool*,arg"/>
       </inject-code>
     </modify-function>
-    <modify-function signature="getInt(QWidget *, const QString &amp;, const QString &amp;, int, int, int, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+    <modify-function signature="getInt(QWidget*, const QString&amp;, const QString&amp;, int, int, int, int, bool*, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
       <modify-argument index="8">
         <remove-default-expression/>
         <remove-argument/>
@@ -3488,7 +3488,7 @@
         <insert-template name="fix_arg,arg,arg,arg,arg,arg,arg,bool*,arg"/>
       </inject-code>
     </modify-function>
-    <modify-function signature="getItem(QWidget *, const QString &amp;, const QString &amp;, const QStringList &amp;, int, bool, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+    <modify-function signature="getItem(QWidget*, const QString&amp;, const QString&amp;, const QStringList&amp;, int, bool, bool*, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
       <modify-argument index="7">
         <remove-default-expression/>
         <remove-argument/>
@@ -3497,7 +3497,7 @@
         <insert-template name="fix_arg,arg,arg,arg,arg,arg,bool*,arg"/>
       </inject-code>
     </modify-function>
-    <modify-function signature="getText(QWidget *, const QString &amp;, const QString &amp;, QLineEdit::EchoMode, const QString &amp;, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+    <modify-function signature="getText(QWidget *, const QString&amp;, const QString&amp;, QLineEdit::EchoMode, const QString&amp;, bool*, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
       <modify-argument index="6">
         <remove-default-expression/>
         <remove-argument/>
@@ -3506,7 +3506,7 @@
         <insert-template name="fix_arg,arg,arg,arg,arg,bool*,arg"/>
       </inject-code>
     </modify-function>
-    <modify-function signature="getDouble(QWidget *, const QString &amp;, const QString &amp;, double, double, double, int, bool *, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
+    <modify-function signature="getDouble(QWidget*, const QString&amp;, const QString&amp;, double, double, double, int, bool*, QFlags&lt;Qt::WindowType&gt;)" allow-thread="yes">
       <modify-argument index="8">
         <remove-default-expression/>
         <remove-argument/>
@@ -3604,24 +3604,24 @@
     <modify-function signature="wheelEvent(QGraphicsSceneWheelEvent*)">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="addItem(QGraphicsItem *)">
+    <modify-function signature="addItem(QGraphicsItem*)">
       <modify-argument index="1">
         <parent index="this" action="add" />
       </modify-argument>
    </modify-function>
 
-    <modify-function signature="addEllipse(const QRectF &amp;, const QPen &amp;, const QBrush &amp;)">
+    <modify-function signature="addEllipse(const QRectF&amp;, const QPen&amp;, const QBrush&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="addEllipse(qreal, qreal, qreal, qreal, const QPen &amp;, const QBrush &amp;)">
+    <modify-function signature="addEllipse(qreal, qreal, qreal, qreal, const QPen&amp;, const QBrush&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="addLine(const QLineF &amp;, const QPen &amp;)">
+    <modify-function signature="addLine(const QLineF&amp;, const QPen&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
@@ -3632,38 +3632,38 @@
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="addPath(const QPainterPath &amp;, const QPen &amp;, const QBrush &amp;)">
+    <modify-function signature="addPath(const QPainterPath&amp;, const QPen&amp;, const QBrush&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="addPixmap(const QPixmap &amp;)">
+    <modify-function signature="addPixmap(const QPixmap&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="addPolygon(const QPolygonF &amp;, const QPen &amp;, const QBrush &amp;)">
+    <modify-function signature="addPolygon(const QPolygonF&amp;, const QPen&amp;, const QBrush&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="addRect(const QRectF &amp;, const QPen &amp;, const QBrush &amp;)">
+    <modify-function signature="addRect(const QRectF&amp;, const QPen&amp;, const QBrush&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="addRect(qreal, qreal, qreal, qreal, const QPen &amp;, const QBrush &amp;)">
+    <modify-function signature="addRect(qreal, qreal, qreal, qreal, const QPen&amp;, const QBrush&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="addText(const QString &amp;, const QFont &amp;)">
+    <modify-function signature="addText(const QString&amp;, const QFont&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="addSimpleText(const QString &amp;, const QFont &amp;)">
+    <modify-function signature="addSimpleText(const QString&amp;, const QFont&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add" />
       </modify-argument>
@@ -3759,7 +3759,7 @@
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setHeaderItem(QTreeWidgetItem *)">
+    <modify-function signature="setHeaderItem(QTreeWidgetItem*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
@@ -3821,17 +3821,17 @@
   </object-type>
   <object-type name="QListWidgetItem" >
     <enum-type name="ItemType"/>
-    <modify-function signature="QListWidgetItem(const QString &amp;, QListWidget *, int)">
+    <modify-function signature="QListWidgetItem(const QString&amp;, QListWidget*, int)">
       <modify-argument index="this">
         <parent index="2" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QListWidgetItem(const QIcon &amp;, const QString &amp;, QListWidget *, int)">
+    <modify-function signature="QListWidgetItem(const QIcon&amp;, const QString&amp;, QListWidget*, int)">
       <modify-argument index="this">
         <parent index="3" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QListWidgetItem(QListWidget *, int)">
+    <modify-function signature="QListWidgetItem(QListWidget*, int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
@@ -3868,17 +3868,17 @@
   <object-type name="QCompleter">
     <enum-type name="CompletionMode"/>
     <enum-type name="ModelSorting"/>
-    <modify-function signature="setModel(QAbstractItemModel *)">
+    <modify-function signature="setModel(QAbstractItemModel*)">
       <modify-argument index="1">
         <reference-count action="set"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setPopup(QAbstractItemView *)">
+    <modify-function signature="setPopup(QAbstractItemView*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setWidget(QWidget *)">
+    <modify-function signature="setWidget(QWidget*)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
@@ -3893,17 +3893,17 @@
     <modify-function signature="write(QDataStream&amp;)const">
       <modify-argument index="1" invalidate-after-use="yes"/>
     </modify-function>
-    <modify-function signature="QTreeWidgetItem(QTreeWidget *,int)">
+    <modify-function signature="QTreeWidgetItem(QTreeWidget*, int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QTreeWidgetItem(QTreeWidget *,const QStringList&amp;,int)">
+    <modify-function signature="QTreeWidgetItem(QTreeWidget*, const QStringList&amp;, int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QTreeWidgetItem(QTreeWidget *,QTreeWidgetItem *,int)">
+    <modify-function signature="QTreeWidgetItem(QTreeWidget*, QTreeWidgetItem*, int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
@@ -3913,12 +3913,12 @@
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QTreeWidgetItem(QTreeWidgetItem *,const QStringList &amp;,int)">
+    <modify-function signature="QTreeWidgetItem(QTreeWidgetItem*, const QStringList &amp;, int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QTreeWidgetItem(QTreeWidgetItem *,QTreeWidgetItem *,int)">
+    <modify-function signature="QTreeWidgetItem(QTreeWidgetItem*, QTreeWidgetItem*, int)">
       <modify-argument index="this">
         <parent index="1" action="add"/>
       </modify-argument>
@@ -3994,12 +3994,12 @@
         <parent index="1" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="addItem(QListWidgetItem *)">
+    <modify-function signature="addItem(QListWidgetItem*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="insertItem(int, QListWidgetItem *)">
+    <modify-function signature="insertItem(int, QListWidgetItem*)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
       </modify-argument>
@@ -4247,7 +4247,7 @@
             </insert-template>
         </inject-code>
     </modify-function>
-    <modify-function signature="insertAction(QAction *, QAction *)">
+    <modify-function signature="insertAction(QAction*, QAction*)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
       </modify-argument>
@@ -4529,7 +4529,7 @@
         <define-ownership owner="target"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setMimeData(QMimeData *)">
+    <modify-function signature="setMimeData(QMimeData*)">
       <modify-argument index="1">
         <!-- TODO: maybe this is not the best solution -->
         <parent index="this" action="add"/>
@@ -4540,7 +4540,7 @@
   </object-type>
   <object-type name="QDateTimeEdit">
     <enum-type name="Section" flags="Sections"/>
-    <modify-function signature="setCalendarWidget(QCalendarWidget *)">
+    <modify-function signature="setCalendarWidget(QCalendarWidget*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
@@ -4555,7 +4555,7 @@
       <include file-name="QStringList" location="global"/>
       <include file-name="QSize" location="global"/>
     </extra-includes>
-    <modify-function signature="setSourceModel(QAbstractItemModel *)">
+    <modify-function signature="setSourceModel(QAbstractItemModel*)">
       <modify-argument index="1">
         <reference-count action="set"/>
       </modify-argument>
@@ -4731,29 +4731,29 @@
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="appendRow(const QList&lt;QStandardItem *&gt;&amp;)">
+    <modify-function signature="appendRow(const QList&lt;QStandardItem*&gt;&amp;)">
       <modify-argument index="1">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="appendRow(QStandardItem *)">
+    <modify-function signature="appendRow(QStandardItem*)">
       <modify-argument index="1">
         <parent index="this" action="add" />
       </modify-argument>
   </modify-function>
 
-    <modify-function signature="insertRow(int, QStandardItem *)">
+    <modify-function signature="insertRow(int, QStandardItem*)">
       <modify-argument index="2">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="setHorizontalHeaderItem(int, QStandardItem *)">
+    <modify-function signature="setHorizontalHeaderItem(int, QStandardItem*)">
       <modify-argument index="2">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="setItem(int, int, QStandardItem *)">
+    <modify-function signature="setItem(int, int, QStandardItem*)">
       <inject-code class="target" position="beginning">
         // Clear parent from the old child
         QStandardItem* _i = %CPPSELF->item(%1, %2);
@@ -4766,7 +4766,7 @@
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="setItem(int, QStandardItem *)">
+    <modify-function signature="setItem(int, QStandardItem*)">
       <inject-code class="target" position="beginning">
         // Clear parent from the old child
         QStandardItem* _i = %CPPSELF->item(%1);
@@ -4779,13 +4779,13 @@
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
-    <modify-function signature="setItemPrototype(const QStandardItem *)">
+    <modify-function signature="setItemPrototype(const QStandardItem*)">
       <modify-argument index="1">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="setVerticalHeaderItem(int, QStandardItem *)">
+    <modify-function signature="setVerticalHeaderItem(int, QStandardItem*)">
       <inject-code class="target" position="beginning">
         // Clear parent from the old child
         QStandardItem* _i = %CPPSELF->verticalHeaderItem(%1);
@@ -4817,19 +4817,19 @@
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="insertColumn(int, const QList&lt;QStandardItem *&gt;&amp;)">
+    <modify-function signature="insertColumn(int, const QList&lt;QStandardItem*&gt;&amp;)">
       <modify-argument index="2">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="insertRow(int, const QList&lt;QStandardItem *&gt;&amp;)">
+    <modify-function signature="insertRow(int, const QList&lt;QStandardItem*&gt;&amp;)">
       <modify-argument index="2">
         <parent index="this" action="add" />
       </modify-argument>
     </modify-function>
 
-    <modify-function signature="appendColumn(const QList&lt;QStandardItem *&gt;&amp;)">
+    <modify-function signature="appendColumn(const QList&lt;QStandardItem*&gt;&amp;)">
       <modify-argument index="1">
         <parent index="this" action="add" />
       </modify-argument>
@@ -5086,18 +5086,18 @@
   <object-type name="QDial" />
   <object-type name="QLineEdit">
     <enum-type name="EchoMode"/>
-    <modify-function signature="setCompleter(QCompleter *)">
+    <modify-function signature="setCompleter(QCompleter*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setValidator(const QValidator *)">
+    <modify-function signature="setValidator(const QValidator*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
     <modify-function signature="del()" rename="del_" />
-    <modify-function signature="getTextMargins(int *, int *, int *, int *) const">
+    <modify-function signature="getTextMargins(int*, int*, int*, int*) const">
         <modify-argument index="0">
             <replace-type modified-type="PyObject *" />
         </modify-argument>
@@ -5200,13 +5200,13 @@
   <object-type name="QTextBrowser"/>
   <object-type name="QDoubleSpinBox"/>
   <object-type name="QButtonGroup">
-   <modify-function signature="addButton(QAbstractButton *)">
+   <modify-function signature="addButton(QAbstractButton*)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="addButton(QAbstractButton *, int)">
+    <modify-function signature="addButton(QAbstractButton*, int)">
       <modify-argument index="1">
         <parent index="this" action="add"/>
         <no-null-pointer/>
@@ -5258,12 +5258,12 @@
         Shiboken::AutoDecRef result(PyObject_CallMethod(%PYARG_0, "connect", "OsO", %PYARG_0, SIGNAL(triggered()), %PYARG_2));
       </inject-code>
     </modify-function>
-    <modify-function signature="addAction(const QString &amp;)">
+    <modify-function signature="addAction(const QString&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="addAction(const QIcon &amp;, const QString &amp;)">
+    <modify-function signature="addAction(const QIcon&amp;, const QString&amp;)">
       <modify-argument index="return">
         <parent index="this" action="add"/>
       </modify-argument>
@@ -5425,9 +5425,12 @@
     <enum-type name="CompositionMode"/>
     <enum-type name="PixmapFragmentHint" flags="PixmapFragmentHints" since="4.7"/>
     <enum-type name="RenderHint" flags="RenderHints"/>
+    <value-type name="PixmapFragment" since="4.7">
+        <include file-name="QPainter" location="global"/>
+    </value-type>
 
     <!-- ### "drawText(...)" is an internal method. -->
-    <modify-function signature="drawText(const QPointF &amp;, const QString &amp;, int, int)" remove="all"/>
+    <modify-function signature="drawText(const QPointF&amp;, const QString&amp;, int, int)" remove="all"/>
 
     <template name="qpainter_drawlist">
         %BEGIN_ALLOW_THREADS
@@ -5435,39 +5438,39 @@
         %END_ALLOW_THREADS
     </template>
 
-    <modify-function signature="drawConvexPolygon(const QPoint *, int)" remove="all" />
+    <modify-function signature="drawConvexPolygon(const QPoint*, int)" remove="all" />
     <add-function signature="drawConvexPolygon(QVector&lt;QPoint>)">
         <inject-code>
             <insert-template name="qpainter_drawlist" />
         </inject-code>
     </add-function>
-    <modify-function signature="drawConvexPolygon(const QPointF *, int)" remove="all" />
+    <modify-function signature="drawConvexPolygon(const QPointF*, int)" remove="all" />
     <add-function signature="drawConvexPolygon(QVector&lt;QPointF>)">
         <inject-code>
             <insert-template name="qpainter_drawlist" />
         </inject-code>
     </add-function>
     <!-- ### Overloads using QVector<T> does the job of these methods -->
-    <modify-function signature="drawLines(const QLine *, int)" remove="all" />
-    <modify-function signature="drawLines(const QLineF *, int)" remove="all" />
-    <modify-function signature="drawLines(const QPoint *, int)" remove="all" />
-    <modify-function signature="drawLines(const QPointF *, int)" remove="all" />
-    <modify-function signature="drawRects(const QRect *, int)" remove="all" />
-    <modify-function signature="drawRects(const QRectF *, int)" remove="all" />
+    <modify-function signature="drawLines(const QLine*, int)" remove="all" />
+    <modify-function signature="drawLines(const QLineF*, int)" remove="all" />
+    <modify-function signature="drawLines(const QPoint*, int)" remove="all" />
+    <modify-function signature="drawLines(const QPointF*, int)" remove="all" />
+    <modify-function signature="drawRects(const QRect*, int)" remove="all" />
+    <modify-function signature="drawRects(const QRectF*, int)" remove="all" />
     <!-- ### -->
-    <modify-function signature="drawPoints(const QPoint *, int)" remove="all" />
+    <modify-function signature="drawPoints(const QPoint*, int)" remove="all" />
     <add-function signature="drawPoints(QVector&lt;QPoint>)">
         <inject-code>
             <insert-template name="qpainter_drawlist" />
         </inject-code>
     </add-function>
-    <modify-function signature="drawPoints(const QPointF *, int)" remove="all" />
+    <modify-function signature="drawPoints(const QPointF*, int)" remove="all" />
     <add-function signature="drawPoints(QVector&lt;QPointF>)">
         <inject-code>
             <insert-template name="qpainter_drawlist" />
         </inject-code>
     </add-function>
-    <modify-function signature="drawPolygon(const QPoint *, int, Qt::FillRule)" remove="all" />
+    <modify-function signature="drawPolygon(const QPoint*, int, Qt::FillRule)" remove="all" />
     <add-function signature="drawPolygon(QVector&lt;QPoint>, Qt::FillRule)">
         <inject-code>
             %BEGIN_ALLOW_THREADS
@@ -5475,7 +5478,7 @@
             %END_ALLOW_THREADS
         </inject-code>
     </add-function>
-    <modify-function signature="drawPolygon(const QPointF *, int, Qt::FillRule)" remove="all" />
+    <modify-function signature="drawPolygon(const QPointF*, int, Qt::FillRule)" remove="all" />
     <add-function signature="drawPolygon(QVector&lt;QPointF>, Qt::FillRule)">
         <inject-code>
             %BEGIN_ALLOW_THREADS
@@ -5483,13 +5486,13 @@
             %END_ALLOW_THREADS
         </inject-code>
     </add-function>
-    <modify-function signature="drawPolyline(const QPoint *, int)" remove="all" />
+    <modify-function signature="drawPolyline(const QPoint*, int)" remove="all" />
     <add-function signature="drawPolyline(QVector&lt;QPoint>)">
         <inject-code>
             <insert-template name="qpainter_drawlist" />
         </inject-code>
     </add-function>
-    <modify-function signature="drawPolyline(const QPointF *, int)" remove="all" />
+    <modify-function signature="drawPolyline(const QPointF*, int)" remove="all" />
     <add-function signature="drawPolyline(QVector&lt;QPointF>)">
         <inject-code>
             <insert-template name="qpainter_drawlist" />
@@ -5503,32 +5506,32 @@
         <rename to="yRound"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="drawTiledPixmap(const QRect &amp;,const QPixmap &amp;, const QPoint &amp;)">
+    <modify-function signature="drawTiledPixmap(const QRect&amp;,const QPixmap&amp;, const QPoint&amp;)">
       <modify-argument index="3">
         <rename to="pos"/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="QPainter(QPaintDevice *)">
+    <modify-function signature="QPainter(QPaintDevice*)">
       <modify-argument index="1">
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="begin(QPaintDevice *)">
+    <modify-function signature="begin(QPaintDevice*)">
       <modify-argument index="1">
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="initFrom(const QWidget *)">
+    <modify-function signature="initFrom(const QWidget*)">
       <modify-argument index="1">
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="setRedirected(const QPaintDevice *, QPaintDevice *, const QPoint &amp;)">
+    <modify-function signature="setRedirected(const QPaintDevice*, QPaintDevice*, const QPoint&amp;)">
       <modify-argument index="1">
         <no-null-pointer/>
       </modify-argument>
     </modify-function>
-    <modify-function signature="restoreRedirected(const QPaintDevice *)">
+    <modify-function signature="restoreRedirected(const QPaintDevice*)">
       <modify-argument index="1">
         <no-null-pointer/>
       </modify-argument>
