@@ -15,7 +15,6 @@ if(ENABLE_X11)
     endif()
 endif()
 
-
 if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 6)
     set(QtGui_46_SRC "")
 else()
@@ -59,6 +58,14 @@ else()
     ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qvector4d_wrapper.cpp
     )
 endif ()
+
+if (${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} LESS 7)
+    set(QtGui_47_SRC "")
+else()
+    set(QtGui_47_SRC
+    ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qpainter_pixmapfragment_wrapper.cpp
+    )
+endif()
 
 set(QtGui_OPTIONAL_SRC )
 set(QtGui_DROPPED_ENTRIES )
@@ -398,6 +405,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/PySide/QtGui/qworkspace_wrapper.cpp
 ${SPECIFIC_OS_FILES}
 ${QPYTEXTOBJECT_MOC}
 ${QtGui_46_SRC}
+${QtGui_47_SRC}
 ${QtGui_OPTIONAL_SRC}
 )
 
