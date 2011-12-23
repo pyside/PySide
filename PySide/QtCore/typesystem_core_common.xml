@@ -21,6 +21,16 @@
 <typesystem package="PySide.QtCore">
     <load-typesystem name="typesystem_templates.xml" generate="no"/>
 
+    <custom-type name="str" />
+    <custom-type name="PyBytes" />
+    <custom-type name="PyCallable" />
+    <custom-type name="PyObject" />
+    <custom-type name="PySequence" />
+    <custom-type name="PyTypeObject" />
+    <custom-type name="PyUnicode" />
+    <custom-type name="list of QAbstractAnimation" />
+    <custom-type name="list of QAbstractState" />
+
     <function signature="qAcos(qreal)" />
     <function signature="qAsin(qreal)" since="4.6" />
     <function signature="qAtan(qreal)" since="4.6" />
