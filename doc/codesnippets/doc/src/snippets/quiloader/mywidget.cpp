@@ -47,7 +47,7 @@
 //! [0]
 class MyWidget(QWidget):
     def __init__(self, parent):
-        super(QWidget, self).__init__(parent)
+        super(MyWidget, self).__init__(parent)
         loader = QUiLoader()
         file = QFile(":/forms/myform.ui")
         file.open(QFile.ReadOnly)
