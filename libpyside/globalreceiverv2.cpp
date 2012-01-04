@@ -78,6 +78,8 @@ using namespace PySide;
 DynamicSlotDataV2::DynamicSlotDataV2(PyObject* callback, GlobalReceiverV2* parent)
     : m_pythonSelf(0), m_pyClass(0), m_weakRef(0), m_parent(parent)
 {
+    Shiboken::GilState gil;
+
     m_isMethod = PyMethod_Check(callback);
     if (m_isMethod) {
         //Can not store calback pointe because this will be destroyed at the end of the scope
@@ -271,6 +273,7 @@ const QMetaObject* GlobalReceiverV2::metaObject() const
 
 int GlobalReceiverV2::qt_metacall(QMetaObject::Call call, int id, void** args)
 {
+    Shiboken::GilState gil;
     Q_ASSERT(call == QMetaObject::InvokeMetaMethod);
     Q_ASSERT(id >= QObject::staticMetaObject.methodCount());
 
