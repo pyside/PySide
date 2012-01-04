@@ -78,6 +78,8 @@ using namespace PySide;
 DynamicSlotDataV2::DynamicSlotDataV2(PyObject* callback, GlobalReceiverV2* parent)
     : m_pythonSelf(0), m_pyClass(0), m_weakRef(0), m_parent(parent)
 {
+    Shiboken::GilState gil;
+
     m_isMethod = PyMethod_Check(callback);
     if (m_isMethod) {
         //Can not store calback pointe because this will be destroyed at the end of the scope
@@ -122,6 +124,7 @@ PyObject* DynamicSlotDataV2::callback()
     PyObject* callback = m_callback;
 
     //create a callback based on method data
+    Shiboken::GilState gil;
     if (m_isMethod)
 #ifdef IS_PY3K
         callback = PyMethod_New(m_callback, m_pythonSelf);
