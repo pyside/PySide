@@ -124,7 +124,6 @@ PyObject* DynamicSlotDataV2::callback()
     PyObject* callback = m_callback;
 
     //create a callback based on method data
-    Shiboken::GilState gil;
     if (m_isMethod)
 #ifdef IS_PY3K
         callback = PyMethod_New(m_callback, m_pythonSelf);
@@ -274,6 +273,7 @@ const QMetaObject* GlobalReceiverV2::metaObject() const
 
 int GlobalReceiverV2::qt_metacall(QMetaObject::Call call, int id, void** args)
 {
+    Shiboken::GilState gil;
     Q_ASSERT(call == QMetaObject::InvokeMetaMethod);
     Q_ASSERT(id >= QObject::staticMetaObject.methodCount());
 
