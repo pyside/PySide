@@ -1,6 +1,6 @@
 //! [0]
-fileName = QFileDialog.getOpenFileName(self,
-    tr("Open Image"), "/home/jana", tr("Image Files (*.png *.jpg *.bmp)"))
+fileName, filter = QFileDialog.getOpenFileName(self,
+    "Open Image", "/home/jana", "Image Files (*.png *.jpg *.bmp)")
 //! [0]
 
 
@@ -16,7 +16,7 @@ dialog.setFileMode(QFileDialog.AnyFile)
 
 
 //! [3]
-dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"))
+dialog.setNameFilter("Images (*.png *.xpm *.jpg)")
 //! [3]
 
 
@@ -50,14 +50,14 @@ dialog.exec_()
 
 
 //! [8]
-fileName = QFileDialog.getOpenFileName(self, tr("Open File"),
+fileName, filter = QFileDialog.getOpenFileName(self, "Open File",
                                        "/home",
-                                       tr("Images (*.png *.xpm *.jpg)"))
+                                       "Images (*.png *.xpm *.jpg)")
 //! [8]
 
 
 //! [9]
-files = QFileDialog.getOpenFileNames(self,
+files, filter = QFileDialog.getOpenFileNames(self,
                                      "Select one or more files to open",
                                      "/home",
                                      "Images (*.png *.xpm *.jpg)")
@@ -72,14 +72,14 @@ for it in list:
 
 
 //! [11]
-fileName = QFileDialog.getSaveFileName(self, tr("Save F:xile"),
+fileName, filter = QFileDialog.getSaveFileName(self, "Save F:xile",
                                        "/home/jana/untitled.png",
-                                       tr("Images (*.png *.xpm *.jpg)"))
+                                       "Images (*.png *.xpm *.jpg)")
 //! [11]
 
 
 //! [12]
-dir = QFileDialog.getExistingDirectory(self, tr("Open Directory"),
+dir = QFileDialog.getExistingDirectory(self, "Open Directory",
                                        "/home",
                                        QFileDialog.ShowDirsOnly
                                        | QFileDialog.DontResolveSymlinks)
