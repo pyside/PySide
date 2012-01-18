@@ -1,7 +1,7 @@
 /*
  * This file is part of the Shiboken Python Bindings Generator project.
  *
- * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010-2012 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: PySide team <contact@pyside.org>
  *
@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 #include "pysideqmlregistertype.h"
@@ -58,6 +58,12 @@ static QMutex nextQmlElementMutex;
 template<int N>
 struct ElementFactoryBase
 {
+    /* Note: PySide::setNextQObjectMemoryAddr() will only be called with a NULL
+     * argument when the virtual address memory is to be used by any given
+     * specific object. The generator will take care about adding the proper
+     * code to handle this. (the PySide::setNextQObjectMemoryAddr() callers are
+     * met in the Sbk_*_init() functions.
+     */
     static void createInto(void* memory)
     {
         QMutexLocker locker(&nextQmlElementMutex);
@@ -66,7 +72,6 @@ struct ElementFactoryBase
         PyObject* obj = PyObject_CallObject(pyTypes[N], 0);
         if (!obj || PyErr_Occurred())
             PyErr_Print();
-        PySide::setNextQObjectMemoryAddr(0);
     }
 };
 
@@ -174,7 +179,7 @@ struct DeclarativeListProperty
 
 static int propListTpInit(PyObject* self, PyObject* args, PyObject* kwds)
 {
-    static const char *kwlist[] = {"type", "append", "at", "clear", "count", 0};
+    static const char* kwlist[] = {"type", "append", "at", "clear", "count", 0};
     PySideProperty* pySelf = reinterpret_cast<PySideProperty*>(self);
     DeclarativeListProperty* data = new DeclarativeListProperty;
     memset(data, 0, sizeof(DeclarativeListProperty));
