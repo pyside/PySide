@@ -310,8 +310,8 @@
             double in = %CONVERTTOCPP[double](%in);
             %out = %OUTTYPE(in);
             </add-conversion>
-            <add-conversion type="PyInt">
-            int in = %CONVERTTOCPP[int](%in);
+            <add-conversion type="PyInt" check="PyInt_CheckExact(%in)">
+            qlonglong in = %CONVERTTOCPP[qlonglong](%in);
             %out = %OUTTYPE(in);
             </add-conversion>
             <add-conversion type="PyLong" check="PyLong_CheckExact(%in)">
