@@ -2675,6 +2675,11 @@
       </modify-argument>
     </modify-function>
 
+    <modify-function signature="model() const">
+      <modify-argument index="return">
+        <define-ownership owner="default"/>
+      </modify-argument>
+    </modify-function>
     <!-- ??? -->
     <modify-function signature="operator&lt;(QStandardItem)const" remove="all"/>
   </object-type>
