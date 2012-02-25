@@ -73,18 +73,21 @@
       <modify-function signature="createAction(QObject*, const QString&amp;)">
         <modify-argument index="return">
           <parent index="1" action="add"/>
+          <define-ownership class="target" owner="default"/>
         </modify-argument>
       </modify-function>
 
       <modify-function signature="createActionGroup(QObject*, const QString&amp;)">
         <modify-argument index="return">
           <parent index="1" action="add"/>
+          <define-ownership class="target" owner="default"/>
         </modify-argument>
       </modify-function>
 
       <modify-function signature="createLayout(const QString&amp;, QObject*, const QString&amp;)">
         <modify-argument index="return">
           <parent index="2" action="add"/>
+          <define-ownership class="target" owner="default"/>
         </modify-argument>
       </modify-function>
 
