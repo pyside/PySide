@@ -474,7 +474,7 @@ void DynamicQMetaObject::parsePythonType(PyTypeObject* type)
     Py_ssize_t pos = 0;
 
     Shiboken::GilState gil;
-        
+
     typedef std::pair<const char*, PyObject*> PropPair;
     QLinkedList<PropPair> properties;
 
