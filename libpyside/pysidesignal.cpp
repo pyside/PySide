@@ -465,11 +465,13 @@ PyObject* signalInstanceDisconnect(PyObject* self, PyObject* args)
         PyObject* result = PyObject_CallObject(pyMethod, tupleArgs);
         if (result == Py_True)
             return result;
-        else
-            Py_DECREF(result);
+
+        Py_XDECREF(result);
     }
 
-    PyErr_Format(PyExc_RuntimeError, "Failed to disconnect signal %s.", source->d->signature);
+    if (!PyErr_Occurred())
+        PyErr_Format(PyExc_RuntimeError, "Failed to disconnect signal %s.", source->d->signature);
+
     return 0;
 }
 
