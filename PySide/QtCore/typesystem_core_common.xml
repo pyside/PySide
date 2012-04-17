@@ -1634,7 +1634,7 @@
         </inject-code>
     </add-function>
   </value-type>
-  <value-type name="QPersistentModelIndex">
+  <value-type name="QPersistentModelIndex" hash-function="PySide::hash">
     <modify-function signature="internalPointer()const">
         <inject-code class="target" position="beginning">
             <insert-template name="return_internal_pointer" />
@@ -1645,6 +1645,13 @@
             <parent index="this" action="add"/>
         </modify-argument>
     </modify-function>
+    <inject-code class="native" position="beginning">
+      namespace PySide {
+          template&lt;&gt; inline uint hash(const QPersistentModelIndex&amp; v) {
+              return qHash(v.internalId());
+          }
+      };
+    </inject-code>
   </value-type>
   <value-type name="QUuid">
     <enum-type name="Variant"/>
@@ -3623,7 +3630,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <value-type name="QModelIndex">
+  <value-type name="QModelIndex" hash-function="PySide::hash">
     <modify-function signature="internalPointer()const">
         <inject-code class="target" position="beginning">
             <insert-template name="return_internal_pointer" />
@@ -3634,6 +3641,13 @@
         <define-ownership class="target" owner="default"/>
       </modify-argument>
     </modify-function>
+    <inject-code class="native" position="beginning">
+      namespace PySide {
+          template&lt;&gt; inline uint hash(const QModelIndex&amp; v) {
+              return qHash(v.internalId());
+          }
+      };
+    </inject-code>
   </value-type>
 
   <value-type name="QGenericArgument">
