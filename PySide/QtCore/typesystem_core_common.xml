@@ -1634,7 +1634,7 @@
         </inject-code>
     </add-function>
   </value-type>
-  <value-type name="QPersistentModelIndex">
+  <value-type name="QPersistentModelIndex" hash-function="qHash">
     <modify-function signature="internalPointer()const">
         <inject-code class="target" position="beginning">
             <insert-template name="return_internal_pointer" />
@@ -3623,7 +3623,7 @@
       </modify-argument>
     </modify-function>
   </object-type>
-  <value-type name="QModelIndex">
+  <value-type name="QModelIndex" hash-function="qHash">
     <modify-function signature="internalPointer()const">
         <inject-code class="target" position="beginning">
             <insert-template name="return_internal_pointer" />
