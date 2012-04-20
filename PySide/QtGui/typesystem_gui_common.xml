@@ -1890,6 +1890,13 @@
         <define-ownership class="target" owner="default"/>
       </modify-argument>
     </modify-function>
+    <modify-function signature="selectionModel() const">
+      <modify-argument index="return">
+        <!-- Defining ownership as "default" avoids the object to be automatically
+             set as parent of the returned pointer. -->
+        <define-ownership class="target" owner="default"/>
+      </modify-argument>
+    </modify-function>
     <modify-function signature="setIndexWidget(const QModelIndex &amp;, QWidget *)">
       <modify-argument index="2">
         <parent index="this" action="add"/>
