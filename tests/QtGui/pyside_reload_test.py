@@ -23,13 +23,13 @@ def increment_module_value():
     modfile.write('Sentinel.value += 1' + os.linesep)
     modfile.flush()
     modfile.close()
-    if py3k.IS_PY3K:
-        import imp
-        cacheFile = imp.cache_from_source(dst)
-    else:
-        cacheFile = dst + 'c'
-
-    os.remove(cacheFile)
+    if not sys.dont_write_bytecode:
+        if py3k.IS_PY3K:
+            import imp
+            cacheFile = imp.cache_from_source(dst)
+        else:
+            cacheFile = dst + 'c'
+        os.remove(cacheFile)
 
 class TestModuleReloading(unittest.TestCase):
 
