@@ -535,13 +535,13 @@
     <include file-name="QStringList" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion">
+            <insert-template name="cpplist_to_pylist_conversion">
                 <replace from="%INTYPE_0" to="QString" />
             </insert-template>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion">
+                <insert-template name="pyseq_to_cpplist_conversion">
                     <replace from="%OUTTYPE_0" to="QString" />
                 </insert-template>
             </add-conversion>
@@ -553,13 +553,13 @@
     <include file-name="qabstractitemmodel.h" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion">
+            <insert-template name="cpplist_to_pylist_conversion">
                 <replace from="%INTYPE_0" to="QModelIndex" />
             </insert-template>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion">
+                <insert-template name="pyseq_to_cpplist_conversion">
                     <replace from="%OUTTYPE_0" to="QModelIndex" />
                 </insert-template>
             </add-conversion>
@@ -571,11 +571,11 @@
     <include file-name="QSet" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion"/>
+            <insert-template name="cpplist_to_pylist_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion"/>
+                <insert-template name="pyseq_to_cpplist_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
@@ -585,11 +585,11 @@
     <include file-name="QList" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion"/>
+            <insert-template name="cpplist_to_pylist_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion"/>
+                <insert-template name="pyseq_to_cpplist_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
@@ -599,7 +599,7 @@
     <include file-name="QVector" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion"/>
+            <insert-template name="cpplist_to_pylist_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
@@ -614,11 +614,11 @@
     <include file-name="QStack" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion"/>
+            <insert-template name="cpplist_to_pylist_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion"/>
+                <insert-template name="pyseq_to_cpplist_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
@@ -628,11 +628,11 @@
     <include file-name="QQueue" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion"/>
+            <insert-template name="cpplist_to_pylist_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion"/>
+                <insert-template name="pyseq_to_cpplist_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
@@ -642,17 +642,17 @@
     <include file-name="QLinkedList" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_convertion"/>
+            <insert-template name="cpplist_to_pylist_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion"/>
+                <insert-template name="pyseq_to_cpplist_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
   </container-type>
 
-  <template name="cppmap_to_pymap_convertion">
+  <template name="cppmap_to_pymap_conversion">
     PyObject* %out = PyDict_New();
     %INTYPE::const_iterator it = %in.begin();
     for (; it != %in.end(); ++it) {
@@ -664,7 +664,7 @@
     }
     return %out;
   </template>
-  <template name="pydict_to_cppmap_convertion">
+  <template name="pydict_to_cppmap_conversion">
     PyObject* key;
     PyObject* value;
     Py_ssize_t pos = 0;
@@ -680,11 +680,11 @@
     <include file-name="pysideconversions.h" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cppmap_to_pymap_convertion"/>
+            <insert-template name="cppmap_to_pymap_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PyDict">
-                <insert-template name="pydict_to_cppmap_convertion"/>
+                <insert-template name="pydict_to_cppmap_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
@@ -693,11 +693,11 @@
     <include file-name="QMap" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cppmap_to_pymap_convertion"/>
+            <insert-template name="cppmap_to_pymap_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PyDict">
-                <insert-template name="pydict_to_cppmap_convertion"/>
+                <insert-template name="pydict_to_cppmap_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
@@ -706,11 +706,11 @@
     <include file-name="QMultiMap" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cppmap_to_pymap_convertion"/>
+            <insert-template name="cppmap_to_pymap_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PyDict">
-                <insert-template name="pydict_to_cppmap_convertion"/>
+                <insert-template name="pydict_to_cppmap_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
