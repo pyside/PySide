@@ -413,6 +413,15 @@
         %out &lt;&lt; cppItem;
     }
     </template>
+    <template name="pyseq_to_cppvector_conversion">
+    int the_size = PySequence_Size(%in);
+    %out.reserve(the_size);
+    for (int i = 0; i &lt; the_size; ++i) {
+        Shiboken::AutoDecRef pyItem(PySequence_GetItem(%in, i));
+        %OUTTYPE_0 cppItem = %CONVERTTOCPP[%OUTTYPE_0](pyItem);
+        %out &lt;&lt; cppItem;
+    }
+    </template>
 
     <template name="checkPyCapsuleOrPyCObject_func">
     static bool checkPyCapsuleOrPyCObject(PyObject* pyObj)

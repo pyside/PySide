@@ -603,7 +603,7 @@
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
-                <insert-template name="pyseq_to_cpplist_convertion"/>
+                <insert-template name="pyseq_to_cppvector_conversion"/>
             </add-conversion>
         </target-to-native>
     </conversion-rule>
