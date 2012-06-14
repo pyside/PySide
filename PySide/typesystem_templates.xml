@@ -413,13 +413,22 @@
         %out &lt;&lt; cppItem;
     }
     </template>
+    <template name="cppvector_to_pylist_conversion">
+    %INTYPE::size_type vectorSize = %in.size();
+    PyObject* %out = PyList_New((int) vectorSize);
+    for (%INTYPE::size_type idx = 0; idx &lt; vectorSize; ++idx) {
+        %INTYPE_0 cppItem(%in[idx]);
+        PyList_SET_ITEM(%out, idx, %CONVERTTOPYTHON[%INTYPE_0](cppItem));
+    }
+    return %out;
+    </template>
     <template name="pyseq_to_cppvector_conversion">
-    int the_size = PySequence_Size(%in);
-    %out.reserve(the_size);
-    for (int i = 0; i &lt; the_size; ++i) {
-        Shiboken::AutoDecRef pyItem(PySequence_GetItem(%in, i));
+    int vectorSize = PySequence_Size(%in);
+    %out.reserve(vectorSize);
+    for (int idx = 0; idx &lt; vectorSize; ++idx) {
+        Shiboken::AutoDecRef pyItem(PySequence_GetItem(%in, idx));
         %OUTTYPE_0 cppItem = %CONVERTTOCPP[%OUTTYPE_0](pyItem);
-        %out &lt;&lt; cppItem;
+        %out.push_back(cppItem);
     }
     </template>
 

@@ -599,7 +599,7 @@
     <include file-name="QVector" location="global"/>
     <conversion-rule>
         <native-to-target>
-            <insert-template name="cpplist_to_pylist_conversion"/>
+            <insert-template name="cppvector_to_pylist_conversion"/>
         </native-to-target>
         <target-to-native>
             <add-conversion type="PySequence">
