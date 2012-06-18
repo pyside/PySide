@@ -2,6 +2,7 @@ import unittest
 import sys
 
 from PySide.QtGui import QStandardItemModel, QWidget, QStandardItem
+import shiboken
 
 from helper import UsesQApplication
 
@@ -20,6 +21,13 @@ class QStandardItemModelTest(UsesQApplication):
     def testInsertRow(self):
         # bug #227
         self.model.insertRow(0)
+
+    def testClear(self):
+
+        model = QStandardItemModel()
+        root = model.invisibleRootItem()
+        model.clear()
+        self.assertFalse(shiboken.isValid(root))
 
 
 class QStandardItemModelRef(UsesQApplication):

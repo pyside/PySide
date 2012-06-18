@@ -4844,6 +4844,12 @@
 
     <modify-function signature="clear()">
         <inject-code class="target" position="beginning">
+          Shiboken::BindingManager&amp; bm = Shiboken::BindingManager::instance();
+          SbkObject* pyRoot = bm.retrieveWrapper(%CPPSELF.invisibleRootItem());
+          if (pyRoot) {
+            Shiboken::Object::destroy(pyRoot, %CPPSELF.invisibleRootItem());
+          }
+
           for(int r=0, r_max = %CPPSELF.rowCount(); r &lt; r_max; r++) {
             QList&lt;QStandardItem *&gt; ri = %CPPSELF.takeRow(0);
 
