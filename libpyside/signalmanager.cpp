@@ -452,22 +452,25 @@ int SignalManager::callPythonMetaMethod(const QMetaMethod& method, void** args, 
         pyArguments = parseArguments(method.parameterTypes(), args);
 
     if (pyArguments) {
+        Shiboken::Conversions::SpecificConverter* retConverter = NULL;
+        const char* returnType = method.typeName();
+        if (returnType && std::strcmp("", returnType)) {
+            retConverter = new Shiboken::Conversions::SpecificConverter(returnType);
+            if (!retConverter || !*retConverter) {
+                PyErr_Format(PyExc_RuntimeError, "Can't find converter for '%s' to call Python meta method.", returnType);
+                PyErr_Print();
+                return -1;
+            }
+        }
+
         Shiboken::AutoDecRef retval(PyObject_CallObject(pyMethod, pyArguments));
 
         if (!isShortCuit && pyArguments)
             Py_DECREF(pyArguments);
 
-        if (!retval.isNull() && retval != Py_None && !PyErr_Occurred()) {
-            const char* returnType = method.typeName();
-            if (returnType && std::strcmp("", returnType)) {
-                Shiboken::Conversions::SpecificConverter converter(returnType);
-                if (converter)
-                    converter.toCpp(retval, args[0]);
-                else
-                    PyErr_Format(PyExc_RuntimeError, "Can't find converter for '%s' to call Python meta method.", returnType);
-
-            }
-        }
+        if (!retval.isNull() && retval != Py_None && !PyErr_Occurred() && retConverter)
+            retConverter->toCpp(retval, args[0]);
+        delete retConverter;
     }
 
     if (PyErr_Occurred())
