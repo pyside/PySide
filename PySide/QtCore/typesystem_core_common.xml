@@ -658,9 +658,11 @@
     for (; it != %in.end(); ++it) {
         %INTYPE_0 key = it.key();
         %INTYPE_1 value = it.value();
-        PyDict_SetItem(%out,
-                       %CONVERTTOPYTHON[%INTYPE_0](key),
-                       %CONVERTTOPYTHON[%INTYPE_1](value));
+        PyObject* pyKey = %CONVERTTOPYTHON[%INTYPE_0](key);
+        PyObject* pyValue = %CONVERTTOPYTHON[%INTYPE_1](value);
+        PyDict_SetItem(%out, pyKey, pyValue);
+        Py_DECREF(pyKey);
+        Py_DECREF(pyValue);
     }
     return %out;
   </template>
