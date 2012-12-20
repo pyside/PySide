@@ -117,6 +117,8 @@ PYSIDE_API bool inherits(PyTypeObject* self, const char* class_name);
 PYSIDE_API void* nextQObjectMemoryAddr();
 PYSIDE_API void setNextQObjectMemoryAddr(void* addr);
 
+PYSIDE_API PyObject* getWrapperForQObject(QObject* cppSelf, SbkObjectType* sbk_type);
+
 } //namespace PySide
 
 
