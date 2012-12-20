@@ -61,13 +61,22 @@ namespace {
 #ifdef IS_PY3K
     static void destroyMetaObject(PyObject* obj)
     {
-        delete reinterpret_cast<PySide::DynamicQMetaObject*>(PyCapsule_GetPointer(obj, 0));
+        void* ptr = PyCapsule_GetPointer(obj, 0);
+        PySide::DynamicQMetaObject* meta = reinterpret_cast<PySide::DynamicQMetaObject*>(ptr);
+        SbkObject* wrapper = Shiboken::BindingManager::instance().retrieveWrapper(meta);
+        if (wrapper)
+            Shiboken::BindingManager::instance().releaseWrapper(wrapper);
+        delete meta;
     }
 
 #else
     static void destroyMetaObject(void* obj)
     {
-        delete reinterpret_cast<PySide::DynamicQMetaObject*>(obj);
+        PySide::DynamicQMetaObject* meta = reinterpret_cast<PySide::DynamicQMetaObject*>(obj);
+        SbkObject* wrapper = Shiboken::BindingManager::instance().retrieveWrapper(meta);
+        if (wrapper)
+            Shiboken::BindingManager::instance().releaseWrapper(wrapper);
+        delete meta;
     }
 #endif
 }
