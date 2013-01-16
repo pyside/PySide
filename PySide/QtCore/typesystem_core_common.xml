@@ -206,7 +206,7 @@
             // cast as Py_UNICODE can be a different type
             %out = QString::fromUcs4((const uint*)unicode);
             #else
-            %out = QString::fromUtf16(unicode, PyUnicode_GET_SIZE(%in));
+            %out = QString::fromUtf16((const ushort*)unicode, PyUnicode_GET_SIZE(%in));
             #endif
             </add-conversion>
             <add-conversion type="PyString" check="py2kStrCheck(%in)">
