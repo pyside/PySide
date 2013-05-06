@@ -1,3 +1,19 @@
 __all__ = ['QtCore', 'QtGui', 'QtNetwork', 'QtOpenGL', 'QtSql', 'QtSvg', 'QtTest', 'QtWebKit', 'QtScript']
 __version__         = "@BINDING_API_VERSION_FULL@"
 __version_info__    = (@BINDING_API_MAJOR_VERSION@, @BINDING_API_MINOR_VERSION@, @BINDING_API_MICRO_VERSION@, "@BINDING_API_RELEASE_LEVEL@", @BINDING_API_SERIAL@)
+
+
+def _setupQtDirectories():
+    from . import QtCore
+    import os
+
+    # Look first in the PySide package for Qt's plugins folder if it exists,
+    # instead of just the default of looking in Qt's install or build folder.
+    pluginsDir = os.path.join(
+        os.path.abspath(os.path.dirname(QtCore.__file__)), 'plugins')
+    if os.path.exists(pluginsDir) and \
+            pluginsDir not in QtCore.QCoreApplication.libraryPaths():
+        QtCore.QCoreApplication.addLibraryPath(pluginsDir)
+
+
+_setupQtDirectories()
