@@ -4,15 +4,32 @@ __version_info__    = (@BINDING_API_MAJOR_VERSION@, @BINDING_API_MINOR_VERSION@,
 
 
 def _setupQtDirectories():
-    from . import QtCore
+    import sys
     import os
 
-    # Look first in the PySide package for Qt's plugins folder if it exists,
-    # instead of just the default of looking in Qt's install or build folder.
-    pluginsDir = os.path.join(
-        os.path.abspath(os.path.dirname(QtCore.__file__)), 'plugins')
+    pysideDir = os.path.abspath(os.path.dirname(__file__))
+
+    # On Windows add the PySide\openssl folder (if it exists) to the
+    # PATH so the SSL DLLs can be found when Qt tries to dynamically
+    # load them.  Tell Qt to load them and then reset the PATH.
+    if sys.platform == 'win32':
+        opensslDir = os.path.join(pysideDir, 'openssl')
+        if os.path.exists(opensslDir):
+            path = os.environ['PATH']
+            try:
+                os.environ['PATH'] = opensslDir + os.pathsep + path
+                from . import QtNetwork
+                QtNetwork.QSslSocket.supportsSsl()
+            finally:
+                os.environ['PATH'] = path
+
+    # Tell Qt to look for plugins in the PySide package, if the
+    # plugins folder exists there, instead of just the default of
+    # looking only in Qt's install or build folder.
+    from . import QtCore
+    pluginsDir = os.path.join(pysideDir, 'plugins')
     if os.path.exists(pluginsDir) and \
-            pluginsDir not in QtCore.QCoreApplication.libraryPaths():
+           pluginsDir not in QtCore.QCoreApplication.libraryPaths():
         QtCore.QCoreApplication.addLibraryPath(pluginsDir)
 
 
