@@ -18,19 +18,27 @@ def _setupQtDirectories():
             path = os.environ['PATH']
             try:
                 os.environ['PATH'] = opensslDir + os.pathsep + path
-                from . import QtNetwork
-                QtNetwork.QSslSocket.supportsSsl()
+                try:
+                    from . import QtNetwork
+                except ImportError:
+                    pass
+                else:
+                    QtNetwork.QSslSocket.supportsSsl()
             finally:
                 os.environ['PATH'] = path
 
     # Tell Qt to look for plugins in the PySide package, if the
     # plugins folder exists there, instead of just the default of
     # looking only in Qt's install or build folder.
-    from . import QtCore
-    pluginsDir = os.path.join(pysideDir, 'plugins')
-    if os.path.exists(pluginsDir) and \
-           pluginsDir not in QtCore.QCoreApplication.libraryPaths():
-        QtCore.QCoreApplication.addLibraryPath(pluginsDir)
+    try:
+        from . import QtCore
+    except ImportError:
+        pass
+    else:
+        pluginsDir = os.path.join(pysideDir, 'plugins')
+        if os.path.exists(pluginsDir) and \
+               pluginsDir not in QtCore.QCoreApplication.libraryPaths():
+            QtCore.QCoreApplication.addLibraryPath(pluginsDir)
 
 
 _setupQtDirectories()
