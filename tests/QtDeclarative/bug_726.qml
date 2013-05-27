@@ -1,7 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
-** All rights reserved.
+** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: PySide Team (pyside@openbossa.org)
 **
 ** This file is part of the examples of PySide: Python for Qt.

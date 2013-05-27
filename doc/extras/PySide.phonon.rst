@@ -23,9 +23,9 @@ This file is part of the KDE project
 * Copyright (C) 2004-2009 Matthias Kretz <kretz@kde.org>
 * Copyright (C) 2008 Ian Monroe <ian@monroe.nu>
 * Copyright (C) 2007-2008 Trolltech ASA
-* Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 
-Contact: Nokia Corporation (qt-info@nokia.com)
+Contact: http://www.qt-project.org/legal
 
 This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License version 2 as published by the Free Software Foundation.
 

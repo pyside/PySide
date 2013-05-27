@@ -2,7 +2,7 @@
 
 # This file is part of PySide: Python for Qt
 #
-# Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+# Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 #
 # Contact: PySide team <contact@pyside.org>
 #
