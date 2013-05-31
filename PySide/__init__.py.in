@@ -6,8 +6,9 @@ __version_info__    = (@BINDING_API_MAJOR_VERSION@, @BINDING_API_MINOR_VERSION@,
 def _setupQtDirectories():
     import sys
     import os
+    from . import _utils
 
-    pysideDir = os.path.abspath(os.path.dirname(__file__))
+    pysideDir = _utils.get_pyside_dir()
 
     # On Windows add the PySide\openssl folder (if it exists) to the
     # PATH so the SSL DLLs can be found when Qt tries to dynamically
@@ -39,6 +40,16 @@ def _setupQtDirectories():
         if os.path.exists(pluginsDir) and \
                pluginsDir not in QtCore.QCoreApplication.libraryPaths():
             QtCore.QCoreApplication.addLibraryPath(pluginsDir)
+
+    # Tell Qt to look for qml imports in the PySide package, if the
+    # imports folder exists there.
+    importsDir = os.path.join(pysideDir, 'imports')
+    if os.path.exists(importsDir):
+        if 'QML_IMPORT_PATH' in os.environ:
+            qml_import_path = os.environ['QML_IMPORT_PATH']
+            os.environ['QML_IMPORT_PATH'] = importsDir + os.pathsep + qml_import_path
+        else:
+            os.environ['QML_IMPORT_PATH'] = importsDir
 
 
 _setupQtDirectories()

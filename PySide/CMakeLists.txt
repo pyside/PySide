@@ -9,6 +9,9 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/global.h.in"
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in"
                "${CMAKE_CURRENT_BINARY_DIR}/__init__.py" @ONLY)
 
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/_utils.py.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/_utils.py" @ONLY)
+
 HAS_QT_MODULE(QT_QTCORE_FOUND QtCore)
 HAS_QT_MODULE(QT_QTGUI_FOUND QtGui)
 HAS_QT_MODULE(QT_QTNETWORK_FOUND QtNetwork)
@@ -32,6 +35,8 @@ HAS_QT_MODULE(QT_QTDECLARATIVE_FOUND QtDeclarative)
 
 # install
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/__init__.py"
+        DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}${pyside_SUFFIX}")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/_utils.py
         DESTINATION "${SITE_PACKAGE}/${BINDING_NAME}${pyside_SUFFIX}")
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/typesystem_templates.xml
         DESTINATION share/PySide${pyside_SUFFIX}/typesystems)
