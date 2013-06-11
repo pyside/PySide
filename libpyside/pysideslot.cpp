@@ -47,7 +47,7 @@ static PyObject* slotCall(PyObject*, PyObject*, PyObject*);
 // Class Definition -----------------------------------------------
 static PyTypeObject PySideSlotType = {
     PyVarObject_HEAD_INIT(0, 0)
-    "PySide.QtCore."SLOT_DEC_NAME, /*tp_name*/
+    "PySide.QtCore." SLOT_DEC_NAME, /*tp_name*/
     sizeof(PySideSlot),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     0,                         /*tp_dealloc*/
@@ -104,7 +104,7 @@ int slotTpInit(PyObject *self, PyObject *args, PyObject *kw)
     if (emptyTuple == 0)
         emptyTuple = PyTuple_New(0);
 
-    if (!PyArg_ParseTupleAndKeywords(emptyTuple, kw, "|sO:QtCore."SLOT_DEC_NAME, (char**) kwlist, &argName, &argResult))
+    if (!PyArg_ParseTupleAndKeywords(emptyTuple, kw, "|sO:QtCore." SLOT_DEC_NAME, (char**) kwlist, &argName, &argResult))
         return 0;
 
     PySideSlot *data = reinterpret_cast<PySideSlot*>(self);

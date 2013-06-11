@@ -111,7 +111,7 @@ PyTypeObject PySideSignalMetaType = {
 
 PyTypeObject PySideSignalType = {
     PyVarObject_HEAD_INIT(&PySideSignalMetaType, 0)
-    /*tp_name*/             "PySide.QtCore."SIGNAL_CLASS_NAME,
+    /*tp_name*/             "PySide.QtCore." SIGNAL_CLASS_NAME,
     /*tp_basicsize*/        sizeof(PySideSignal),
     /*tp_itemsize*/         0,
     /*tp_dealloc*/          0,
@@ -173,7 +173,7 @@ static PyMappingMethods SignalInstance_as_mapping = {
 
 PyTypeObject PySideSignalInstanceType = {
     PyVarObject_HEAD_INIT(0, 0)
-    /*tp_name*/             "PySide.QtCore."SIGNAL_INSTANCE_NAME,
+    /*tp_name*/             "PySide.QtCore." SIGNAL_INSTANCE_NAME,
     /*tp_basicsize*/        sizeof(PySideSignalInstance),
     /*tp_itemsize*/         0,
     /*tp_dealloc*/          0,
@@ -230,7 +230,7 @@ int signalTpInit(PyObject* self, PyObject* args, PyObject* kwds)
         emptyTuple = PyTuple_New(0);
 
     if (!PyArg_ParseTupleAndKeywords(emptyTuple, kwds,
-        "|s:QtCore."SIGNAL_CLASS_NAME, const_cast<char**>(kwlist), &argName))
+        "|s:QtCore." SIGNAL_CLASS_NAME, const_cast<char**>(kwlist), &argName))
         return 0;
 
     bool tupledArgs = false;
@@ -325,7 +325,7 @@ PyObject* signalInstanceConnect(PyObject* self, PyObject* args, PyObject* kwds)
     static const char* kwlist[] = {"slot", "type", 0};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
-        "O|O:"SIGNAL_INSTANCE_NAME, const_cast<char**>(kwlist), &slot, &type))
+        "O|O:" SIGNAL_INSTANCE_NAME, const_cast<char**>(kwlist), &slot, &type))
         return 0;
 
     PySideSignalInstance* source = reinterpret_cast<PySideSignalInstance*>(self);

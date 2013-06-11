@@ -193,7 +193,7 @@ void GlobalReceiver::connectNotify(QObject* source, int slotId)
     if (m_slotReceivers.contains(slotId)) {
         DynamicSlotData* data = m_slotReceivers[slotId];
         if (!data->hasRefTo(source))
-            QObject::connect(source, SIGNAL(destroyed(QObject*)), this, "1"RECEIVER_DESTROYED_SLOT_NAME);
+            QObject::connect(source, SIGNAL(destroyed(QObject*)), this, "1" RECEIVER_DESTROYED_SLOT_NAME);
         data->addRef(source);
     }
 }
@@ -207,7 +207,7 @@ void GlobalReceiver::disconnectNotify(QObject* source, int slotId)
             removeSlot(slotId);
 
         if (!hasConnectionWith(source))
-            QObject::disconnect(source, SIGNAL(destroyed(QObject*)), this, "1"RECEIVER_DESTROYED_SLOT_NAME);
+            QObject::disconnect(source, SIGNAL(destroyed(QObject*)), this, "1" RECEIVER_DESTROYED_SLOT_NAME);
     }
 }
 
