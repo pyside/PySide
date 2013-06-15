@@ -2413,7 +2413,7 @@
         <inject-code class="target" position="beginning">
             if (PyBytes_Check(%PYARG_1)) {
                 %0 = new QByteArray(PyBytes_AsString(%PYARG_1), PyBytes_GET_SIZE(%PYARG_1));
-            } if (PyUnicode_CheckExact(%PYARG_1)) {
+            } else if (PyUnicode_CheckExact(%PYARG_1)) {
                 Shiboken::AutoDecRef data(PyUnicode_AsASCIIString(%PYARG_1));
                 %0 = new QByteArray(PyBytes_AsString(data.object()), PyBytes_GET_SIZE(data.object()));
             } else if (Shiboken::String::check(%PYARG_1)) {
