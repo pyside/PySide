@@ -1,10 +1,15 @@
 from PySide.QtCore import QObject, Slot, QTimer
 from PySide.QtWebKit import QWebView
+from PySide.QtGui import QApplication
+from PySide import QtCore
 
+import sys
 import unittest
+
 from helper import UsesQApplication
 
 functionID = -1
+currentWebView = None
 
 class JSFuncs(QObject):
     @Slot(str,result=str)
@@ -54,37 +59,42 @@ FUNCTIONS_LIST = ['jsfuncs.slot_str_str("hello")',
                   'jsfuncs.slot_variantmap_str({"foo": "bar"})']
 
 
-class TestJsCall(UsesQApplication):
+def onLoadFinished( result ):
+    QTimer.singleShot( 100, createNextWebView )
 
-    @classmethod
-    def setUpClass(self):
-        super(TestJsCall, self).setUpClass()
+def createNextWebView():
+    global functionID
 
-    def createInstance(self):
-        global functionID
-        self._view = QWebView()
-        self._jsfuncs = JSFuncs()
-        functionID = -1
-        self._view.page().mainFrame().addToJavaScriptWindowObject("jsfuncs", self._jsfuncs)
-        self._view.loadFinished[bool].connect(self.onLoadFinished)
-        self._view.load(PAGE_DATA % FUNCTIONS_LIST[self._functionID])
-        self._view.show()
+    nListCount = len(FUNCTIONS_LIST) - 1
+    functionID = functionID + 1
+    print functionID
 
-    def testJsCall(self):
-        self._functionID = 0
-        self.createInstance()
+    if functionID < nListCount:
+        createWebView( functionID )
+    else:
+        QTimer.singleShot(300, QApplication.instance().quit)
+
+
+def createWebView( nIndex ):
+    global functionID
+    global currentWebView
+
+    functionID = nIndex
+    currentWebView = QWebView()
+    currentWebView._jsfuncs = JSFuncs()
+    currentWebView.page().mainFrame().addToJavaScriptWindowObject("jsfuncs", currentWebView._jsfuncs)
+    QObject.connect( currentWebView, QtCore.SIGNAL('loadFinished( bool )'), onLoadFinished )
+    currentWebView.load(PAGE_DATA % FUNCTIONS_LIST[ nIndex ])
+    currentWebView.show()
+
+class Bug959(UsesQApplication):
+
+    def testJavaScriptInWebViewForCrash( self ):
+        # wait for the webview load to be finished before creating the next webview
+        # don't create the webview inside of onLoadFinished
+        # also call onLoadFinished with the correct number of variables
+        createNextWebView()
         self.app.exec_()
-
-    def onLoadFinished(self, result):
-        global functionID
-        self.assertEqual(self._functionID, functionID)
-        if self._functionID == (len(FUNCTIONS_LIST) - 1):
-            QTimer.singleShot(300, self.app.quit)
-        else:
-            #new test
-            self._functionID += 1
-            self.createInstance()
-
 
 if __name__ == "__main__":
     unittest.main()
