@@ -5,7 +5,7 @@ project(pysidebindings)
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Macros/
                       ${CMAKE_MODULE_PATH})
-find_package(Shiboken 1.1.1 REQUIRED)
+find_package(Shiboken 1.2.0 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 find_file(GL_H "gl.h" PATH_SUFFIXES "GL")
 include(FindQt4Extra)
@@ -61,10 +61,10 @@ endif()
 
 set(BINDING_NAME PySide)
 set(BINDING_API_MAJOR_VERSION "1")
-set(BINDING_API_MINOR_VERSION "1")
-set(BINDING_API_MICRO_VERSION "2")
+set(BINDING_API_MINOR_VERSION "2")
+set(BINDING_API_MICRO_VERSION "0")
 set(BINDING_API_RELEASE_LEVEL "final") # alpha, beta, rc, or final
-set(BINDING_API_SERIAL 1) # leave as 0 when release level is final
+set(BINDING_API_SERIAL 0) # leave as 0 when release level is final
 set(BINDING_API_VERSION "${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}.${BINDING_API_MICRO_VERSION}" CACHE STRING "PySide version" FORCE)
 if (BINDING_API_RELEASE_LEVEL STREQUAL "final")
     set(BINDING_API_VERSION_FULL "${BINDING_API_MAJOR_VERSION}.${BINDING_API_MINOR_VERSION}.${BINDING_API_MICRO_VERSION}"
