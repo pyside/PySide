@@ -104,6 +104,11 @@ PyObjectWrapper::PyObjectWrapper(const PyObjectWrapper &other)
 
 PyObjectWrapper::~PyObjectWrapper()
 {
+    // Check that Python is still initialized as sometimes this is called by a static destructor
+    // after Python interpeter is shutdown.
+    if (!Py_IsInitialized())
+        return;
+
     Shiboken::GilState gil;
     Py_DECREF(m_me);
 }
