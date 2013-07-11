@@ -84,8 +84,18 @@ if sys.platform == 'win32':
         return path
 
     def get_pyside_dir():
-        return _get_win32_case_sensitive_name(os.path.abspath(os.path.dirname(__file__)))
+        try:
+            from . import QtCore
+        except ImportError:
+            return _get_win32_case_sensitive_name(os.path.abspath(os.path.dirname(__file__)))
+        else:
+            return _get_win32_case_sensitive_name(os.path.abspath(os.path.dirname(QtCore.__file__)))
 
 else:
     def get_pyside_dir():
-        return os.path.abspath(os.path.dirname(__file__))
+        try:
+            from . import QtCore
+        except ImportError:
+            return os.path.abspath(os.path.dirname(__file__))
+        else:
+            return os.path.abspath(os.path.dirname(QtCore.__file__))
