@@ -527,14 +527,14 @@ int DynamicQMetaObject::DynamicQMetaObjectPrivate::createMetaData(QMetaObject* m
     uint n_methods = m_methods.size();
     uint n_properties = m_properties.size();
     uint n_info = m_info.size();
-    int header[] = {3,                  // revision
-                    0,                  // class name index in m_metadata
-                    n_info, 0,          // classinfo and classinfo index
-                    n_methods, 0,       // method count and method list index
-                    n_properties, 0,    // prop count and prop indexes
-                    0, 0,               // enum count and enum index
-                    0, 0,               // constructors
-                    0};                 // flags
+    int header[] = {3,                      // revision
+                    0,                      // class name index in m_metadata
+                    int(n_info), 0,         // classinfo and classinfo index
+                    int(n_methods), 0,      // method count and method list index
+                    int(n_properties), 0,   // prop count and prop indexes
+                    0, 0,                   // enum count and enum index
+                    0, 0,                   // constructors
+                    0};                     // flags
 
     const int HEADER_LENGHT = sizeof(header)/sizeof(int);
 
