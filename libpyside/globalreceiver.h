@@ -47,6 +47,10 @@ public:
     void disconnectNotify(QObject* sender, int slotId);
     bool hasConnectionWith(const QObject* object);
 
+protected:
+  using QObject::connectNotify;
+  using QObject::disconnectNotify;
+
 private:
     DynamicQMetaObject m_metaObject;
     QSet<int> m_shortCircuitSlots;
