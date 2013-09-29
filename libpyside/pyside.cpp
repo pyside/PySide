@@ -151,7 +151,12 @@ void destroyQCoreApplication()
     bm.visitAllPyObjects(&destructionVisitor, &data);
 
     // in the end destroy app
+    // Allow threads because the destructor calls
+    // QThreadPool::globalInstance().waitForDone() which may deadlock on the GIL
+    // if there is a worker working with python objects.
+    Py_BEGIN_ALLOW_THREADS
     delete app;
+    Py_END_ALLOW_THREADS
 }
 
 struct TypeUserData {
