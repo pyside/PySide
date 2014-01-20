@@ -45,8 +45,12 @@ if sys.platform == 'win32':
     if PY_2:
         def u(x):
             return unicode(x)
+        def u_fs(x):
+            return unicode(x, sys.getfilesystemencoding())
     else:
         def u(x):
+            return x
+        def u_fs(x):
             return x
 
     def _get_win32_short_name(s):
@@ -54,7 +58,7 @@ if sys.platform == 'win32':
         buf_size = MAX_PATH
         for i in range(2):
             buf = create_unicode_buffer(u('\0') * (buf_size + 1))
-            r = GetShortPathNameW(u(s), buf, buf_size)
+            r = GetShortPathNameW(u_fs(s), buf, buf_size)
             if r == 0:
                 raise WinError()
             if r < buf_size:
@@ -69,7 +73,7 @@ if sys.platform == 'win32':
         buf_size = MAX_PATH
         for i in range(2):
             buf = create_unicode_buffer(u('\0') * (buf_size + 1))
-            r = GetLongPathNameW(u(s), buf, buf_size)
+            r = GetLongPathNameW(u_fs(s), buf, buf_size)
             if r == 0:
                 raise WinError()
             if r < buf_size:
