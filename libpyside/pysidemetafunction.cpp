@@ -198,7 +198,9 @@ bool call(QObject* self, int methodIndex, PyObject* args, PyObject** retVal)
 
     bool ok = i == numArgs;
     if (ok) {
+        Py_BEGIN_ALLOW_THREADS
         QMetaObject::metacall(self, QMetaObject::InvokeMetaMethod, method.methodIndex(), methArgs);
+        Py_END_ALLOW_THREADS
 
         if (retVal) {
             if (methArgs[0]) {

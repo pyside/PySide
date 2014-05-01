@@ -61,7 +61,11 @@ static bool qobjectConnect(QObject* source, const char* signal, QObject* receive
     bool isSignal = PySide::Signal::isQtSignal(slot);
     slot++;
     PySide::SignalManager::registerMetaMethod(receiver, slot, isSignal ? QMetaMethod::Signal : QMetaMethod::Slot);
-    return QObject::connect(source, signal - 1, receiver, slot - 1, type);
+    bool connected;
+    Py_BEGIN_ALLOW_THREADS
+    connected = QObject::connect(source, signal - 1, receiver, slot - 1, type);
+    Py_END_ALLOW_THREADS
+    return connected;
 }
 
 static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject* callback, Qt::ConnectionType type)
@@ -109,7 +113,11 @@ static bool qobjectConnectCallback(QObject* source, const char* signal, PyObject
             return false;
         }
     }
-    if (QMetaObject::connect(source, signalIndex, receiver, slotIndex, type)) {
+    bool connected;
+    Py_BEGIN_ALLOW_THREADS
+    connected = QMetaObject::connect(source, signalIndex, receiver, slotIndex, type);
+    Py_END_ALLOW_THREADS
+    if (connected) {
         if (usingGlobalReceiver)
             signalManager.notifyGlobalReceiver(receiver);
         #ifndef AVOID_PROTECTED_HACK
@@ -151,7 +159,12 @@ static bool qobjectDisconnectCallback(QObject* source, const char* signal, PyObj
 
     slotIndex = metaObject->indexOfSlot(callbackSig);
 
-    if (QMetaObject::disconnectOne(source, signalIndex, receiver, slotIndex)) {
+    bool disconnected;
+    Py_BEGIN_ALLOW_THREADS
+    disconnected = QMetaObject::disconnectOne(source, signalIndex, receiver, slotIndex);
+    Py_END_ALLOW_THREADS
+
+    if (disconnected) {
         if (usingGlobalReceiver)
             signalManager.releaseGlobalReceiver(source, receiver);
 
